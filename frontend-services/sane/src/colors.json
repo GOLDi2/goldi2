@@ -1,0 +1,31 @@
+{
+  "style-day": {
+    "background":{
+      "primary": "#eee",
+      "hover-background": "#eee",
+      "divider": "#ddd",
+      "app-header": "#fff",
+      "drawer-list": "#eee"
+    },
+    "foreground":{
+      "primary": "#0988a4",
+      "secondary": "#043b47",
+      "attention-red": "#C03139"
+    }
+  },
+
+  "style-night": {
+    "background":{
+      "primary": "#222",
+      "hover-background": "#333",
+      "divider": "#333",
+      "app-header": "#000",
+      "drawer-list": "#333"
+    },
+    "foreground":{
+      "primary": "#043b47",
+      "secondary": "#0988a4",
+      "attention-red": "#C03139"
+    }
+  }
+}
