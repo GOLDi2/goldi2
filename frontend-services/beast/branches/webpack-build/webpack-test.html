@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BEAST</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+    <script src="js/plugins/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/ui.fancytree.css">
+    <link rel="stylesheet" href="css/contextMenu.css">
+    <script src="js/plugins/jquery.contextMenu.js"></script>
+    <script src="js/plugins/jquery.fancytree.js"></script>
+    <script src="js/plugins/jquery.fancytree.contextMenu.js"></script>
+    <script src="js/plugins/jquery.fancytree.dnd.js"></script>
+    <script src="js/plugins/jquery.fancytree.edit.js"></script>
+
+    <script src="js/fancytree/fancytree.js"></script>
+
+    <script type="text/javascript" src="js/SVGGraphics.js"></script>
+    <script type="text/javascript" src="js/event_queue.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/simcir.css"/>
+    <script type="text/javascript" src="js/simcir/simcir-builtins.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-basicset.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/simcir-basicset.css"/>
+    <script type="text/javascript" src="js/simcir/simcir-library.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-dso.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-transmitter.js"></script>
+    <script type="text/javascript" src="build/beast.js"></script>
+
+    <link rel="stylesheet" href="css/BEAST-UI.css">
+</head>
+<body>
+
+<div class="container-fluid">
+
+    <div class="row" id="row2">
+
+        <div class="col-md-2 sidebar padding" id="treewrapper">
+            <!--toolbox tree-->
+            <div id="menu_bar">
+                <div class="btn-group" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Project
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">New</a></li>
+                            <li><a href="#">Open</a></li>
+                            <li><a href="#">Save</a></li>
+                            <li><a href="#">Export</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Library
+                            <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">New</a></li>
+                            <li><a href="#">Load</a></li>
+                            <li><a href="#">Export</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Help
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="doc/beast_handbuch_deutsch.pdf" type="application/pdf"
+                                   target="_blank">Deutsch</a></li>
+                            <li><a href="doc/beast_manual_english.pdf" target="_blank">Englisch</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="tree"></div>
+
+            <div id="buttons">
+                <button id="delete" onclick="deleteActiveNodes()" type="button" class="btn btn-info">Delete
+                </button>
+            </div>
+        </div>
+        <div class="col-md-10 main padding">
+            <!--editor-->
+            <ul class="nav nav-tabs" id="tabBar">
+                <li class="active"><a href="#editor" data-toggle="tab">Main Circuit</a></li>
+                <li><a href="#editor" data-toggle="tab">Component 1&nbsp&nbsp</a><span onclick="closeTab(this)">x</span> </li>
+                <li><a href="#editor" data-toggle="tab">Component 2&nbsp&nbsp</a><span onclick="closeTab(this)">x</span> </li>
+                <li><a href="#editor" data-toggle="tab">Component 3&nbsp&nbsp</a><span onclick="closeTab(this)">x</span> </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="editor">
+                    <!--editortoolbar-->
+                    <div class="btn-toolbar" role="toolbar" >
+                        <div class="btn-group btn-group-lg" role="group" >
+                            <input type="checkbox" data-toggle="toggle" data-on="Move" data-off="Select" dat-style="primary">
+                            <input type="checkbox" data-toggle="toggle" data-on="simulaton<br>on" data-off="simulation<br>off">
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Zoom In"><span class="glyphicon glyphicon-zoom-in"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Zoom Out"><span class="glyphicon glyphicon-zoom-out"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Rotate Left"><span class="glyphicon glyphicon-arrow-left"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Rotate Right"><span class="glyphicon glyphicon-arrow-right"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Save"><span class="glyphicon glyphicon-download-alt"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Extract component"><span class="gylphicon glyphicon-share-alt"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Set parameter"><span class="glyphicon glyphicon-cog"></span></button>
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-trash"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simcir">
+                {
+                "width":640,
+                "height":480,
+                "showToolbox": true
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testdatei für Workspaceklasse</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+    <script src="js/plugins/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/ui.fancytree.css">
+    <link rel="stylesheet" href="css/contextMenu.css">
+    <script src="js/plugins/jquery.contextMenu.js"></script>
+    <script src="js/plugins/jquery.fancytree.js"></script>
+    <script src="js/plugins/jquery.fancytree.contextMenu.js"></script>
+    <script src="js/plugins/jquery.fancytree.dnd.js"></script>
+    <script src="js/plugins/jquery.fancytree.edit.js"></script>
+
+    <script src="js/fancytree/fancytree.js"></script>
+
+    <script type="text/javascript" src="js/SVGGraphics.js"></script>
+    <script type="text/javascript" src="js/event_queue.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/simcir.css"/>
+    <!--<script type="text/javascript" src="js/simcir/simcir.js"></script>-->
+
+    <script type="text/javascript" src="js/Dialog.js"></script>
+    <script type="text/javascript" src="js/workspace/ParameterInputs.js"></script>
+    <script type="text/javascript" src="js/workspace/ParameterDialog.js"></script>
+    <script type="text/javascript" src="js/workspace/workspace.js"></script>
+    <script type="text/javascript" src="js/workspace/main.js"></script>
+
+
+    <script type="text/javascript" src="js/simcir/simcir-builtins.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-basicset.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/simcir-basicset.css"/>
+    <script type="text/javascript" src="js/simcir/simcir-library.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-dso.js"></script>
+    <script type="text/javascript" src="js/simcir/simcir-transmitter.js"></script>
+
+
+    <script type="text/javascript" src="js/workspacetest.js"></script>
+
+    <link rel="stylesheet" href="css/BEAST-UI.css">
+</head>
+<body>
+
+<h1>Workspacetestdatei</h1>
+<h4>Meine! (Max)</h4>
+
+
+<button id="removeSelection">Loeschen!</button>
+<button id="parameterDialog">Parameter!</button>
+<button id="exportButton">Alles Exportieren!</button>
+<button id="exportSubcircuit">Auswahl Exportieren!</button>
+<button id="pasteSubcircuit">Teilschaltung einfügen!</button>
+<input id="setshowTooltip" type="checkbox"> Zeige Tooltip
+<input id="setPan" type="checkbox"> Panning
+<input id="setDisplayState" type="checkbox"> Zeige Leitungszustand
+<span id="dirtymarker" style="padding: 5px; text-align: center; margin-left: 30px"></span>
+
+<div id="workspacecontainer" style="width: 80%; height: 100%; min-height: 800px; border: 1px solid red; margin: 10px;"></div>
+
+<br>
+<b>Ausgabe:</b><br>
+<textarea id="outdata" style="background-color: lightgray" rows="30" cols="120"></textarea>
+
+</body>
+</html>

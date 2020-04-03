@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="http://141.24.211.105/BEASTSVN/branches" />
+                  <option value="http://141.24.211.105/BEASTSVN/conf" />
+                  <option value="http://141.24.211.105/BEASTSVN/db" />
+                  <option value="http://141.24.211.105/BEASTSVN/demo" />
+                  <option value="http://141.24.211.105/BEASTSVN/dev-doc" />
+                  <option value="http://141.24.211.105/BEASTSVN/hooks" />
+                  <option value="http://141.24.211.105/BEASTSVN/locks" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="http://141.24.211.105/BEASTSVN/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+</project>

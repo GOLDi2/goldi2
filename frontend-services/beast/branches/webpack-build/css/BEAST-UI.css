@@ -1,0 +1,79 @@
+/**
+ * Created by dorianmueller on 12.05.2017.
+ */
+
+.padding {
+
+    padding: 0;
+}
+
+/*** non-responsive ***/
+#treewrapper {
+
+    height: 480px;
+}
+
+#tree {
+    margin-top: 1em;
+    height: 100%;
+}
+
+#buttons {
+    margin-left: 0.5em;
+    margin-top: 0.6em;
+    position: relative;
+    top: 0;
+
+}
+
+/*** tabStyle ***/
+#tabBar > li {
+    position:relative;
+}
+
+#tabBar > li > a {
+    display:inline-block;
+}
+
+#tabBar > li > span {
+    display:inline-block;
+    cursor:pointer;
+    position:absolute;
+    right: 10px;
+    top: 10px;
+    color: red;
+}
+
+
+/*** workspace parameter dialog ***/
+
+.beast-parameter-invalid {
+    color: red;
+}
+
+/*** workspace parameter tooltip ***/
+
+.beast-parameter-tooltip {
+    background-color: rgba(230,230,230,0.3);
+    text-align: center;
+    border:  1px solid gray;
+    margin: 0.5em;
+    border-radius: 5px;
+}
+
+.beast-parameter-tooltip td.name{
+    text-align: right;
+}
+
+.beast-parameter-tooltip td.value{
+    text-align: left;
+    padding-left: 0.5em;
+    white-space:nowrap;
+}
+
+.beast-parameter-colorpreview {
+    width: 0.8em;
+    height: 0.8em;
+    display: inline-block;
+    margin-left: 0.3em;
+}

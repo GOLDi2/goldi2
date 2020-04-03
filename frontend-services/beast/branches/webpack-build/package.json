@@ -1,0 +1,21 @@
+{
+  "name": "beast",
+  "version": "0.0.1",
+  "description": "BEAST - Blockdiagram Editor And Simulation Tool",
+  "main": "beast.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "webpack": "^2.6.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^2.1.0",
+    "typescript": "^2.3.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
