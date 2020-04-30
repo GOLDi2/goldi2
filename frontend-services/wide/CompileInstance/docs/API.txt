@@ -1,0 +1,33 @@
+/compile: {
+    req (POST): {
+        language: string,
+        files: [],
+        parameters: string,
+        upload: boolean,
+        //experimentId: ,
+        //sessionID: 
+    }
+    res (POST): {
+        [stream]
+    }
+}
+
+/currentLoad: {
+    req (GET): {}
+    res (GET): {
+        "currentLoad": int;
+    }
+}
+
+/availableLanguages: {
+    req (GET): {}
+    res (GET): {
+        "availableLanguages": [
+            {
+                "name": string,
+                "isAvailableOnHost": boolean, 
+                "version":number
+            },
+            ...]
+    }
+}

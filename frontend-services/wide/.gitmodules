@@ -1,0 +1,3 @@
+[submodule "ELWS"]
+	path = ELWS
+	url = https://gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/elws.git

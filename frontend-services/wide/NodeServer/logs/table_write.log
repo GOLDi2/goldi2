@@ -1,0 +1,5 @@
+{"tid":[["table",0]],"msgType":"parse_eq","info":"","dataType":"none","data":{}}
+{"tid":[["tablemodule",0]],"msgType":"test","info":"Tablemodule has been initialized","dataType":"none","data":{}}
+{"tid":[["table.table",0]],"msgType":"address_single","info":"","dataType":"pfw_single","data":{"name":"table.table"}}
+{"tid":[["table",0]],"msgType":"address_single","info":"","dataType":"pfw_single","data":{"name":"table"}}
+{"tid":[["table.table",0],["exportsim.export",0]],"msgType":"full_automata_list","info":"res","dataType":"automaton_desc_list","data":[{"inputVarNames":["FTDI_RXD_var"],"outputVarNames":["IO10_var","IO11_var","IO5_var","IO6_var","IO7_var","IO8_var","IO9_var"],"stateVarNames":["segment_0","x0","digit_0","z0","a","z2","z1","z3","z4","x1","digit_1","x2","digit_2","x3","digit_3","segment_6","segment_5","segment_4","segment_3","segment_2","segment_1"],"initialStateValues":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]}]}

@@ -1,0 +1,521 @@
+{
+    "deviceType": 1,
+    "pinDescriptions": [
+        {
+            "pinName": "BARGRAPH1_6",
+            "pinType": 0,
+            "ucfPortName": "PIN_2",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SUMMER",
+            "pinType": 0,
+            "ucfPortName": "PIN_4",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "FTDI_nCTS_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_5",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "FTDI_nRTS_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_6",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "FTDI_RXD_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_7",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "FTDI_TXT_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_8",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "CLK_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_18",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "FREQGEN_R",
+            "pinType": 0,
+            "ucfPortName": "PIN_20",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "RESET_CPLD",
+            "pinType": 0,
+            "ucfPortName": "PIN_24",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD1_B",
+            "pinType": 0,
+            "ucfPortName": "PIN_43",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD1_A",
+            "pinType": 0,
+            "ucfPortName": "PIN_44",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD1_D",
+            "pinType": 0,
+            "ucfPortName": "PIN_45",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD1_C",
+            "pinType": 0,
+            "ucfPortName": "PIN_48",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD0_B",
+            "pinType": 0,
+            "ucfPortName": "PIN_49",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD0_A",
+            "pinType": 0,
+            "ucfPortName": "PIN_50",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD0_D",
+            "pinType": 0,
+            "ucfPortName": "PIN_51",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "HEXCOD0_C",
+            "pinType": 0,
+            "ucfPortName": "PIN_52",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON7",
+            "pinType": 0,
+            "ucfPortName": "PIN_53",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH7",
+            "pinType": 0,
+            "ucfPortName": "PIN_55",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON6",
+            "pinType": 0,
+            "ucfPortName": "PIN_57",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH6",
+            "pinType": 0,
+            "ucfPortName": "PIN_58",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON5",
+            "pinType": 0,
+            "ucfPortName": "PIN_59",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH5",
+            "pinType": 0,
+            "ucfPortName": "PIN_60",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON4",
+            "pinType": 0,
+            "ucfPortName": "PIN_61",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH4",
+            "pinType": 0,
+            "ucfPortName": "PIN_62",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON3",
+            "pinType": 0,
+            "ucfPortName": "PIN_63",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH3",
+            "pinType": 0,
+            "ucfPortName": "PIN_66",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON2",
+            "pinType": 0,
+            "ucfPortName": "PIN_67",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH2",
+            "pinType": 0,
+            "ucfPortName": "PIN_68",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON1",
+            "pinType": 0,
+            "ucfPortName": "PIN_69",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH1",
+            "pinType": 0,
+            "ucfPortName": "PIN_70",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BUTTON0",
+            "pinType": 0,
+            "ucfPortName": "PIN_71",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "SWITCH0",
+            "pinType": 0,
+            "ucfPortName": "PIN_72",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO10",
+            "pinType": 0,
+            "ucfPortName": "PIN_73",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO9",
+            "pinType": 0,
+            "ucfPortName": "PIN_74",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO8",
+            "pinType": 0,
+            "ucfPortName": "PIN_75",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO7",
+            "pinType": 0,
+            "ucfPortName": "PIN_76",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO6",
+            "pinType": 0,
+            "ucfPortName": "PIN_77",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO5",
+            "pinType": 0,
+            "ucfPortName": "PIN_79",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "INCREMENT0_R",
+            "pinType": 0,
+            "ucfPortName": "PIN_80",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "INCREMENT1_R",
+            "pinType": 0,
+            "ucfPortName": "PIN_81",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_dot",
+            "pinType": 0,
+            "ucfPortName": "PIN_84",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_c",
+            "pinType": 0,
+            "ucfPortName": "PIN_85",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_b",
+            "pinType": 0,
+            "ucfPortName": "PIN_86",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_a",
+            "pinType": 0,
+            "ucfPortName": "PIN_87",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_g",
+            "pinType": 0,
+            "ucfPortName": "PIN_88",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_f",
+            "pinType": 0,
+            "ucfPortName": "PIN_89",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_e",
+            "pinType": 0,
+            "ucfPortName": "PIN_91",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_2_d",
+            "pinType": 0,
+            "ucfPortName": "PIN_93",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO4",
+            "pinType": 0,
+            "ucfPortName": "PIN_94",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO3",
+            "pinType": 0,
+            "ucfPortName": "PIN_95",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_dot",
+            "pinType": 0,
+            "ucfPortName": "PIN_96",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_c",
+            "pinType": 0,
+            "ucfPortName": "PIN_97",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_b",
+            "pinType": 0,
+            "ucfPortName": "PIN_98",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_a",
+            "pinType": 0,
+            "ucfPortName": "PIN_101",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_g",
+            "pinType": 0,
+            "ucfPortName": "PIN_102",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_f",
+            "pinType": 0,
+            "ucfPortName": "PIN_103",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_e",
+            "pinType": 0,
+            "ucfPortName": "PIN_104",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_0_d",
+            "pinType": 0,
+            "ucfPortName": "PIN_105",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO2",
+            "pinType": 0,
+            "ucfPortName": "PIN_106",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO1",
+            "pinType": 0,
+            "ucfPortName": "PIN_107",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_dot",
+            "pinType": 0,
+            "ucfPortName": "PIN_108",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_c",
+            "pinType": 0,
+            "ucfPortName": "PIN_109",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_b",
+            "pinType": 0,
+            "ucfPortName": "PIN_110",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_a",
+            "pinType": 0,
+            "ucfPortName": "PIN_111",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_g",
+            "pinType": 0,
+            "ucfPortName": "PIN_112",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_f",
+            "pinType": 0,
+            "ucfPortName": "PIN_113",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_e",
+            "pinType": 0,
+            "ucfPortName": "PIN_114",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_1_d",
+            "pinType": 0,
+            "ucfPortName": "PIN_117",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_dot",
+            "pinType": 0,
+            "ucfPortName": "PIN_118",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_c",
+            "pinType": 0,
+            "ucfPortName": "PIN_119",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_b",
+            "pinType": 0,
+            "ucfPortName": "PIN_120",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_a",
+            "pinType": 0,
+            "ucfPortName": "PIN_121",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_g",
+            "pinType": 0,
+            "ucfPortName": "PIN_122",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_f",
+            "pinType": 0,
+            "ucfPortName": "PIN_123",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_e",
+            "pinType": 0,
+            "ucfPortName": "PIN_124",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "Hex_3_d",
+            "pinType": 0,
+            "ucfPortName": "PIN_125",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO11",
+            "pinType": 0,
+            "ucfPortName": "PIN_127",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "IO0",
+            "pinType": 0,
+            "ucfPortName": "PIN_129",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH0_0",
+            "pinType": 0,
+            "ucfPortName": "PIN_130",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH0_2",
+            "pinType": 0,
+            "ucfPortName": "PIN_132",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH0_4",
+            "pinType": 0,
+            "ucfPortName": "PIN_134",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH0_6",
+            "pinType": 0,
+            "ucfPortName": "PIN_138",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH1_0",
+            "pinType": 0,
+            "ucfPortName": "PIN_140",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH1_2",
+            "pinType": 0,
+            "ucfPortName": "PIN_142",
+            "ucfPortParams": "LVCMOS33"
+        },
+        {
+            "pinName": "BARGRAPH1_4",
+            "pinType": 0,
+            "ucfPortName": "PIN_144",
+            "ucfPortParams": "LVCMOS33"
+        }
+    ]
+}

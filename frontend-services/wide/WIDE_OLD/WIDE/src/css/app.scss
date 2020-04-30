@@ -1,0 +1,415 @@
+$tui-green: #4f5d6e;
+$tui-orange: #ff6600; 
+$tui-red: #cc0000;
+$color: #ddd;
+
+@import "~@material/button/mdc-button";
+@import "~@material/icon-button/mdc-icon-button";
+@import "~@material/list/mdc-list";
+@import "~@material/ripple/mdc-ripple";
+@import "~@material/snackbar/mdc-snackbar";
+@import "~@material/textfield/mdc-text-field";
+@import "~@material/textfield/icon/mdc-text-field-icon";
+@import "~@material/dialog/mdc-dialog";
+@import "~@material/select/mdc-select";
+@import "~@material/checkbox/mdc-checkbox";
+
+@import "~@material/list/mdc-list";
+@import "~@material/menu-surface/mdc-menu-surface";
+@import "~@material/menu/mdc-menu";
+
+@import "./circular-progress.scss";
+@import "~@material/elevation/mdc-elevation";
+
+
+html, body{
+    height: 100%;
+    margin: 0px;
+}
+
+wide-app{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: 'Helvetica Neue',Helvetica,Arial;
+
+    .main{
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        overflow: auto;
+    }
+
+    button{
+        text-transform: none !important;
+        font-family: 'Helvetica Neue',Helvetica,Arial !important;
+    }
+    
+    .header-button{
+        color: $color !important;
+        @include mdc-button-filled-accessible(darken($tui-green,10%));
+    }
+
+    .mdc-text-field {
+        background-color: transparent !important;
+        color: rgba(0, 0, 0, 0.38) !important;
+    }
+
+    .mdc-text-field__input{
+        border: none;
+        color: $color !important;
+        caret-color:  $color !important;
+    }
+
+    .mdc-text-field__input_snackbar{
+        @extend .mdc-text-field__input;
+        position:relative;
+        top:-7px;
+    }
+}
+
+wide-header{
+    background-color: darken($tui-green,10%);
+    color: $color;
+    display: flex;
+
+    .header-title{
+        margin: 10px;
+        position: relative;
+        top: 2px;
+    }
+
+    .header-right{
+        flex:1;
+        text-align: right;
+    }
+
+    @include mdc-elevation(5)
+}
+
+wide-examples-menu {
+    display: inline-block;
+
+    .config-and-example-view{
+        display: flex;
+        padding: 0px 20px 0px 20px;
+        max-height: 205px;
+    }
+
+    .config-view{
+        display: flex;
+        flex-direction: column;
+        padding-right: 20px;
+    }
+
+    .example-view{
+        display: flex;
+        flex-direction: column;
+        outline-style: auto;
+        outline-color: lightgrey;
+        overflow: scroll;
+    }
+}
+
+wide-save-menu {
+    display: inline-block;
+}
+
+wide-load-menu {
+    display: inline-block;
+}
+
+wide-project-menu {
+    display: inline-block;
+}
+
+wide-board-menu {
+    max-width: 300px;
+    display: inline-block;
+    .board-select{
+        margin: 0 18px 0 18px;
+    }
+    .option-select{
+        margin: 18px 18px 0 18px;
+    }
+    .mdc-dialog__actions{
+        justify-content: center;
+    }
+}
+
+wide-localstorage-menu {
+    display: inline-block;
+
+    .mdc-button.header-button.overflow{
+        color: red !important;
+    }
+
+    .BPUType{
+        align-items: center;
+        margin-bottom: 18px;
+        display: flex;
+    }
+
+    .language{
+        align-items: center;
+        margin-bottom: 18px;
+        display: flex;
+    }
+
+    .PSPUType{
+        align-items: center;
+        display: flex;
+    }
+
+
+    .config-and-project-view{
+        display: flex;
+        padding: 0px 20px 0px 20px;
+        max-height: 205px;
+    }
+
+    .config-view{
+        display: flex;
+        flex-direction: column;
+        padding-right: 20px;
+    }
+
+    .project-view{
+        display: flex;
+        flex-direction: column;
+        outline-style: auto;
+        outline-color: lightgrey;
+        overflow: scroll;
+    }
+}
+
+wide-filetree{
+    overflow: hidden;
+    wide-filetree-directory{
+        display: block;
+        padding-left: 24px;
+    }
+
+    .mdc-list{
+        height: calc(100% - 132px);
+    }
+
+    > ul > wide-filetree-directory{
+        height: 100%;
+        overflow: auto;
+        padding: 0px !important;
+    }
+
+    li {
+        height: 24px!important;
+        color: $color;
+
+        > .mdc-list-item__graphic{
+            color: $color !important;
+            margin-right: 10px;
+            cursor: default;
+            user-select: none;
+        }
+
+        > .mdc-list-item__text{
+            user-select: none;
+        }
+    }
+    
+    .severity-error{
+        .mdc-list-item__graphic{
+            color:$tui-red !important;
+            cursor: default;
+        }
+    }
+
+    .severity-warning{
+        .mdc-list-item__graphic{
+            color:$tui-orange !important;
+            cursor: default;
+        }
+    }
+
+    .mdc-list-item{
+        cursor: default !important;
+    }
+
+    .mdc-list-static-item{
+        @extend .mdc-list-item;
+        cursor: default !important;
+        color: darken($color,10%) !important;
+    }
+
+    .mdc-list-item--selected{
+        cursor: default !important;
+        background-color: darken($tui-orange,10%);
+        color: $color;
+    }
+
+    .mdc-text-field {
+        background-color: transparent !important;
+        color: rgba(0, 0, 0, 0.38) !important;
+    }
+
+    .mdc-text-field__input{
+        border: none;
+        color: $color !important;
+        caret-color:  $color !important;
+    }
+
+    .mdc-text-field__input_name{
+        @extend .mdc-text-field__input;
+        cursor: default;
+        position:relative;
+        top:-5px;
+        left:-15px;
+    }
+
+    @include mdc-elevation(5);
+    background-color: $tui-green;
+
+    .mdc-text-field__icon-color{
+        @extend .mdc-text-field__icon;
+        color:$color !important;
+    }
+
+    wide-file-adder{
+        bottom: 93px;
+        .mdc-text-field {
+            background-color: transparent !important;
+            color: rgba(0, 0, 0, 0.38) !important;
+            width: 100%;
+        }
+        
+        .mdc-floating-label {
+            color: rgba(0, 0, 0, 0.38) !important;
+        }
+
+        .mdc-text-field__input{
+            border: none;
+            color: $color !important;
+            caret-color:  $color !important;
+        }
+    }
+
+    wide-directory-adder{
+        bottom: 37px;
+        .mdc-text-field {
+            background-color: transparent !important;
+            color: rgba(0, 0, 0, 0.38) !important;
+            width: 100%;
+        }
+
+        .mdc-floating-label {
+            color: rgba(0, 0, 0, 0.38) !important;
+        }
+
+        .mdc-text-field__input{
+            border: none;
+            color: $color !important;
+            caret-color:  $color !important;
+        }
+    }
+}
+
+
+wide-editor{
+    flex: 1;
+
+    overflow: hidden;
+    > div{
+        width: 100%;
+        height: 100%;
+    }
+    
+    .monaco-editor{
+        background-color: transparent !important;
+
+        .margin, .monaco-editor-background{
+            background-color: transparent !important;
+        }
+
+        .view-overlays .current-line{
+            border: none;
+        }
+    }
+}
+
+wide-console{
+    overflow: hidden;
+    height: 32px;
+    transition: mdc-animation-enter(height, 0.5s, 0s);
+    @include mdc-elevation(5);
+
+    .wide-console-header {
+        background-color: darken(#4f5d6e,10%);
+        color: $color;
+    
+        display: flex;
+    
+        height: 32px;
+    
+        overflow: hidden;
+        > span{
+            padding: 7px;
+            flex:1;
+        }
+    
+        .mdc-icon-button{
+            color: white !important;
+            align-self: center;
+        }
+    }
+
+    .wide-console-content{
+        background-color: black;
+        color: white;
+        max-height: 50vh;
+        padding: 10px;
+        white-space: pre;
+
+        overflow: auto;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+}
+
+wide-create-menu{
+
+    .mdc-dialog__surface{
+        align-items: center;
+    }
+
+    .mdc-select{
+        width: 80%;
+    }
+
+    .mdc-text-field {
+        background-color: transparent !important;
+        color: rgba(0, 0, 0, 0.38) !important;
+        width: 80%;
+    }
+
+    .mdc-floating-label {
+        color: rgba(0, 0, 0, 0.38) !important;
+    }
+
+    .mdc-text-field__input{
+        border: none;
+        color: rgba(0, 0, 0, 1) !important;
+        caret-color:  rgba(0, 0, 0, 0.38) !important;
+    }
+}
+
+wide-footer{
+    @include mdc-elevation(5);
+    background-color: $tui-green;
+    color: $color;
+    display: flex;
+    justify-content: flex-end;
+
+    .header-button{
+        color: $color !important;
+        @include mdc-button-filled-accessible($tui-green);
+    }
+}
