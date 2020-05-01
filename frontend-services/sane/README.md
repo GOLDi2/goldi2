@@ -8,6 +8,4 @@
 * polymer
 
 ### Instructions
-* npm install
-* tsc -p .
-* polymer serve
+* npm run build-production
