@@ -1,0 +1,332 @@
+{
+    "circuit": {
+        "ID": "project",
+        "name": "TI1 Praktikum Pseudotetradenerkennung",
+        "devices": [
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev0",
+                "x": 280,
+                "y": 208,
+                "rotation": 90,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev1",
+                "x": 344,
+                "y": 208,
+                "rotation": 90,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev2",
+                "x": 408,
+                "y": 208,
+                "rotation": 90,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev3",
+                "x": 472,
+                "y": 208,
+                "rotation": 90,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev4",
+                "x": 448,
+                "y": 40,
+                "color": "#000000",
+                "fontSize": 20,
+                "text": "Pseudotetradenerkennung"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev5",
+                "x": 248,
+                "y": 136,
+                "color": "#000000",
+                "fontSize": 15,
+                "text": "x3"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev6",
+                "x": 312,
+                "y": 136,
+                "color": "#000000",
+                "fontSize": 15,
+                "text": "x2"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev7",
+                "x": 376,
+                "y": 136,
+                "color": "#000000",
+                "fontSize": 15,
+                "text": "x1"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev8",
+                "x": 440,
+                "y": 136,
+                "color": "#000000",
+                "fontSize": 15,
+                "text": "x0"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev9",
+                "x": 520,
+                "y": 352
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev10",
+                "x": 520,
+                "y": 272
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev11",
+                "x": 272,
+                "y": 264,
+                "rotation": 90
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev12",
+                "x": 336,
+                "y": 280,
+                "rotation": 90
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev13",
+                "x": 400,
+                "y": 344,
+                "rotation": 90
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev14",
+                "x": 272,
+                "y": 360,
+                "rotation": 90
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OR"
+                },
+                "id": "dev15",
+                "x": 648,
+                "y": 312
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev16",
+                "x": 592,
+                "y": 280
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev17",
+                "x": 616,
+                "y": 304,
+                "rotation": 90
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev18",
+                "x": 592,
+                "y": 360
+            },
+            {
+                "label": "",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev19",
+                "x": 600,
+                "y": 352,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "LED"
+                },
+                "id": "dev20",
+                "x": 776,
+                "y": 312,
+                "color": "#00ff10",
+                "bgColor": "#000000"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "id": "dev21",
+                "x": 776,
+                "y": 264,
+                "color": "#000000",
+                "fontSize": 15,
+                "text": "k"
+            }
+        ],
+        "connectors": [
+            {
+                "from": "dev9.in0",
+                "to": "dev13.out0"
+            },
+            {
+                "from": "dev9.in1",
+                "to": "dev14.out0"
+            },
+            {
+                "from": "dev10.in0",
+                "to": "dev11.out0"
+            },
+            {
+                "from": "dev10.in1",
+                "to": "dev12.out0"
+            },
+            {
+                "from": "dev11.in0",
+                "to": "dev0.out0"
+            },
+            {
+                "from": "dev12.in0",
+                "to": "dev1.out0"
+            },
+            {
+                "from": "dev13.in0",
+                "to": "dev2.out0"
+            },
+            {
+                "from": "dev14.in0",
+                "to": "dev11.out0"
+            },
+            {
+                "from": "dev15.in0",
+                "to": "dev17.out0"
+            },
+            {
+                "from": "dev15.in1",
+                "to": "dev19.out0"
+            },
+            {
+                "from": "dev16.in0",
+                "to": "dev10.out0"
+            },
+            {
+                "from": "dev17.in0",
+                "to": "dev16.out0"
+            },
+            {
+                "from": "dev18.in0",
+                "to": "dev9.out0"
+            },
+            {
+                "from": "dev19.in0",
+                "to": "dev18.out0"
+            },
+            {
+                "from": "dev20.in0",
+                "to": "dev15.out0"
+            }
+        ]
+    },
+    "version": "0.2.1",
+    "libraries": [
+        {
+            "ID": "beast-deposit",
+            "name": "Deposit",
+            "version": "0.2.1",
+            "components": []
+        }
+    ]
+}
