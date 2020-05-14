@@ -9,7 +9,7 @@
  */
 
 import { setRootPath } from "@polymer/polymer/lib/utils/settings.js";
-setRootPath("/");
+setRootPath("/SANE/");
 
 import "@polymer/iron-media-query/iron-media-query";
 import "@polymer/paper-item/paper-item";

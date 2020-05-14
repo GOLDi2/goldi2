@@ -1,19 +1,19 @@
 {
   "entrypoint": "index.html",
   "shell": "src/sane-app.js",
-  "autoBasePath": true,
+  "autoBasePath": false,
   "fragments": [
 
   ],
   "sources": [
     "src/*.js",
     "src/*.json",
-    "images/**/*",
-    "package.json"
+    "images/**/*"
+
   ],
   "extraDependencies": [
     "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/bundles/**"
+    "node_modules/@webcomponents/webcomponentsjs/**"
   ],
   "lint": {
     "rules": [
