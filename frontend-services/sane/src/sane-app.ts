@@ -60,6 +60,15 @@ import { AppLocalizeBehavior } from "@polymer/app-localize-behavior/app-localize
 import { html, PolymerElement } from "@polymer/polymer/polymer-element.js";
 import { setPassiveTouchGestures } from "@polymer/polymer/lib/utils/settings";
 
+///////
+
+import "./shared-styles";
+
+import { Events } from "./eventlib.js";
+import { importSchematic, IValidationObj, IValidationProp, IValidationWrapper } from "./validationlib.js";
+
+///////
+
 class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 	static get template() {
 		return html`
@@ -562,7 +571,22 @@ class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 		// search if there is a "?" and get anything after "?"
 		const foundsSC = (pageUrl.indexOf("?") > 0) ? pageUrl.indexOf("?") + 1 : undefined;
 		if (foundsSC) {
-			setStartConfig(pageUrl.substr(foundsSC)); // set new start config
+			// setStartConfig(pageUrl.substr(foundsSC)); // set new start config
+
+			const scString = decodeURIComponent(pageUrl.substr(foundsSC)); // decode URI into regular string
+			const dumbassConfig = JSON.parse(scString); // Mimimi shadowed var name Mimimi!
+
+			// this.triggerEvent(Events.importSaneData, {detail: dumbassConfig});
+			setTimeout(() => { this.$.data.importData(dumbassConfig.saneData); }, 500);
+			// window.dispatchEvent(new CustomEvent(Events.importSaneData, {detail: dumbassConfig, bubbles: true, composed: true}));
+
+			// validation
+			// if (this.isValid(importSchematic as IValidationObj, {importDataWrapper: dumbassConfig} as IValidationWrapper)
+			// ) {
+			// 	this.triggerEvent(Events.importSaneData, {detail: dumbassConfig});
+			// } else {
+			// 	this.notifySane(this.localizeSane("error-1102"));
+			// }
 		}
 
 		const listeners: {[key: string]: string} = {
@@ -616,8 +640,8 @@ class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 			// check for views in start configuration
 			const startConfigViews = checkSCViews();
 			// set start configuration values as default if existing
-			const defaultLeft = (startConfigViews) ? startConfigViews.leftDefault : "view1";
-			const defaultRight = (startConfigViews) ? startConfigViews.rightDefault : "view3";
+			const defaultLeft = "view1"; //  (startConfigViews) ? startConfigViews.leftDefault : "view1";
+			const defaultRight = "view3"; // (startConfigViews) ? startConfigViews.rightDefault : "view3";
 			if (localStorage.getItem("pageLeft") === null) {
 				localStorage.setItem("pageLeft", defaultLeft);
 			}
@@ -701,8 +725,8 @@ class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 		this.shadowRoot.querySelectorAll(".selected-right").forEach((element: HTMLElement) => {
 			element.classList.remove("selected-right");
 		});
-		this.shadowRoot.querySelector("a[name=" + localStorage.getItem("pageLeft") + "-left]").classList.add("selected-left");
-		this.shadowRoot.querySelector("a[name=" + localStorage.getItem("pageRight") + "-right]").classList.add("selected-right");
+		// this.shadowRoot.querySelector("a[name=" + localStorage.getItem("pageLeft") + "-left]").classList.add("selected-left");
+		// this.shadowRoot.querySelector("a[name=" + localStorage.getItem("pageRight") + "-right]").classList.add("selected-right");
 	}
 
 	public onIncInputVar() {

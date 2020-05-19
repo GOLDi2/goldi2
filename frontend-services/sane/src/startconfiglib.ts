@@ -127,7 +127,7 @@ function checkSCViews(): ISCVViews | undefined {
  * @returns {any} The result of the check with the value depending on the feature.
  */
 function checkSCBlockedFeatures(blockedFeatureView: string, feature: string): any {
-	let retValue;
+	let retValue: any = "";
 	if (startConfiguration) {
 		if (startConfiguration.hasOwnProperty("bockedFeatures")) {
 			const scbf = startConfiguration.bockedFeatures!;
