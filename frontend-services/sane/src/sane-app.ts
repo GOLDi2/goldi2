@@ -574,19 +574,10 @@ class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 			// setStartConfig(pageUrl.substr(foundsSC)); // set new start config
 
 			const scString = decodeURIComponent(pageUrl.substr(foundsSC)); // decode URI into regular string
-			const dumbassConfig = JSON.parse(scString); // Mimimi shadowed var name Mimimi!
+			const jsonConfig = JSON.parse(scString); // Mimimi shadowed var name Mimimi!
 
-			// this.triggerEvent(Events.importSaneData, {detail: dumbassConfig});
-			setTimeout(() => { this.$.data.importData(dumbassConfig.saneData); }, 500);
-			// window.dispatchEvent(new CustomEvent(Events.importSaneData, {detail: dumbassConfig, bubbles: true, composed: true}));
-
-			// validation
-			// if (this.isValid(importSchematic as IValidationObj, {importDataWrapper: dumbassConfig} as IValidationWrapper)
-			// ) {
-			// 	this.triggerEvent(Events.importSaneData, {detail: dumbassConfig});
-			// } else {
-			// 	this.notifySane(this.localizeSane("error-1102"));
-			// }
+			setTimeout(() => { this.$.data.importData(jsonConfig.saneData); }, 500);
+			window.location.href = pageUrl.substr(0, foundsSC - 1);
 		}
 
 		const listeners: {[key: string]: string} = {
