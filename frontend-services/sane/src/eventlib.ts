@@ -45,7 +45,7 @@ function EventMixin<T extends Constructor<HTMLElement>>(base: T) {
 
 		/**
 		 * Adds a new event.
-		 * @param {enum Events} eventName The name of the event.
+		 * @param {enum} eventName The name of the event.
 		 * @param {{}} detail Event-detail object.
 		 * @param {boolean} bubbles Bubbles property.
 		 * @param {boolean} composed Composed property.

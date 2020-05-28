@@ -1,24 +1,28 @@
 {
   "description": "Schaltsysteme-Arbeitsblätter im Netz",
   "repository": {
-    "type": "svn",
-    "url": "http://141.24.211.105/SANE"
+    "type": "git",
+    "url": "https://gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/gift"
   },
   "name": "sane-app",
   "version": "0.1.0",
-  "license": "http://polymer.github.io/LICENSE.txt",
   "scripts": {
-    "docs": "jsdoc2md src/*.js > doc.md",
+    "docs": "jsdoc2md --files src/* --configure jsdoc2md.json > docs/jsdoc.md",
+    
+    "build:dev": "tsc",
+    "build:pro": "tsc && polymer build",
+    
+    "serve:dev": "polymer serve",
+    "serve:pro": "polymer serve build/es6-bundled",
+
+    "=================": "echo This is a marker and shoud not be executed.",
+  
     "lint": "tslint 'src/*.ts'",
-    "prebuild-dev": "npm run lint",
-    "prebuild-production": "npm run lint",
-    "build-dev": "tsc",
-    "build-production": "tsc && polymer build",
-    "serve": "polymer serve",
-    "serve-production": "polymer serve build/es6-bundled",
+    "prebuild:dev": "npm run lint",
+    "prebuild:pro": "npm run lint",
     "watch": "tsc --watch",
-    "update-dev": "npm update",
-    "preupdate-dev": "npm install",
+    "update:dev": "npm update",
+    "preupdate:dev": "npm install",
     "postinstall": "patch-package",
     "watchserve": "polymer serve | tsc --watch"
   },
@@ -30,6 +34,7 @@
     "@types/node": "12.0.2",
     "css-slam": "^2.1.2",
     "del": "^4.1.1",
+    "jsdoc-to-markdown": "^5.0.3",
     "merge-stream": "^1.0.1",
     "patch-package": "^6.1.2",
     "plylog": "^1.1.0",

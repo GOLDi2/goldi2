@@ -2,12 +2,12 @@
  * @module Boollib function library
  */
 
+import { ISaneData, ISaneDataRow } from "./sane-data.js";
+
 /**
  * A listing of used truth values.
  * @enum
  */
-import { ISaneData, ISaneDataRow } from "./sane-data.js";
-
 enum Value {
 	false,
 	true,

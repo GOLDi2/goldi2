@@ -25,10 +25,6 @@
   "npm": true,
   "builds": [
     {
-      "preset": "es6-bundled",
-      "basePath": "/SANE/"
-    },
-    {
       "preset": "es6-unbundled",
       "basePath": "/SANE/"
     }
