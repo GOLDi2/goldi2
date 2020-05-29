@@ -2,33 +2,29 @@ stages:
   - build
   - test
   - deploy
-
-before_script:
-  # Tell NPM that to run as root user and use the elevated priviliges.
-  - npm config set user 0
-  - npm config set unsafe-perm true
-
-  # Install the Polymer CLI globally, so we can use it from the shell anywhere.
-  - npm install polymer-cli -g
-
-  # Make sure all the packages we need are installed.
-  - npm install
   
 
 build_job:
- stage: build
- script:
-   - npm run build:pro
+  stage: build
+  script:
+    - npm install
+    - npm run build:pro
+  artifacts:
+    when: on_success
+    paths:
+      - build/
+    
 
 test_job:
   stage: test
   script:
-   - npm run test
+    - npm run test
 
 deploy-production_job:
   stage: deploy
   script:
-    - echo "Do something with SFTP or ...."
+    - ssh goldi-experimental "rm -rf /var/local/www/GOLDiWebsite/SANE/*" 
+    - scp -r build/es6-unbundled/* goldi-experimental:/var/local/www/GOLDiWebsite/SANE/
   only:
     - master
 
