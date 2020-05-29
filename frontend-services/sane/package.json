@@ -8,26 +8,23 @@
   "version": "0.1.0",
   "scripts": {
     "docs": "jsdoc2md --files src/* --configure jsdoc2md.json > docs/jsdoc.md",
-    
     "build:dev": "tsc",
     "build:pro": "tsc && polymer build",
-    
     "serve:dev": "polymer serve",
     "serve:pro": "polymer serve build/es6-bundled",
-
-    "=================": "echo This is a marker and shoud not be executed.",
-  
+    "test": "",
+    "=================": "echo THIS IS A MARKER AND SHOUD NOT BE EXECUTED.",
     "lint": "tslint 'src/*.ts'",
+    "update:dev": "npm update",
+    "watch": "tsc --watch",
+    "watchserve": "polymer serve | tsc --watch",
     "prebuild:dev": "npm run lint",
     "prebuild:pro": "npm run lint",
-    "watch": "tsc --watch",
-    "update:dev": "npm update",
     "preupdate:dev": "npm install",
-    "postinstall": "patch-package",
-    "watchserve": "polymer serve | tsc --watch"
+    "postinstall": "patch-package"
   },
   "engines": {
-    "node": "^10.12.0"
+    "node": "*"
   },
   "devDependencies": {
     "@types/d3": "^5.7.2",
