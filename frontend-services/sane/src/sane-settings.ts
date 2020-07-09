@@ -176,6 +176,13 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 						color: #ddd;
 					}
 				}
+
+				#permalink {
+					text-align: left;
+					max-width: 100%;
+					width: 100%;
+				}
+
 			</style>
 			<div id="title">
 				<iron-icon class="drawer-icon" icon="icons:settings"></iron-icon>
@@ -219,6 +226,11 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 							<input id="inputField" on-change="importSaneData" type="file" accept=".json">
 							<paper-icon-button icon="icons:file-upload"></paper-icon-button>
 							<span>[[localize('settings-import')]]</span>
+						</div>
+						<div class="listrow">
+							<paper-input id="permalink" label="Permalink" maxlength="1" always-float-label readonly>
+								<paper-icon-button slot="suffix" icon="content-copy" on-click="copyPermalink"></paper-icon-button>
+							</paper-input>
 						</div>
 						<h3>[[localize('settings-charset-info')]]</h3>
 						<div class="flex-wrap-container">
@@ -336,6 +348,14 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 		event.stopPropagation();
 		(this.$.layoutSwitch as PaperToggleButtonElement).checked = this.isWideLayout();
 		(this.$.settings as IronOverlayBehaviorImpl).open();
+
+		const pageUrl = window.location.href; // get url
+		const foundsSC = (pageUrl.indexOf("?") > 0) ? pageUrl.indexOf("?") : pageUrl.length;
+		const scString = decodeURIComponent(pageUrl.substr(0, foundsSC)); // decode URI into regular string
+		console.log({pageUrl, foundsSC, scString})
+		this.exportSaneData(false);
+		let input = this.shadowRoot?.querySelector("#permalink") as HTMLInputElement;
+		input.value = scString + "?" + this.exportString;
 	}
 
 	/**
@@ -395,13 +415,35 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 	/**
 	 * Sets the exportAttribut to the actual state of Sane.
 	 */
-	private exportSaneData() {
-		this.exportString = "data:text/json;charSet=utf-8," + encodeURIComponent(JSON.stringify({
+	private exportSaneData(forFile: boolean = true) {
+		let exportObject = {
 			color: (this.$.colorSwitch as PaperToggleButtonElement).checked ? "light" : "dark",
 			language: this.language,
 			saneData: this.data,
 			saneVersion: "0.0.0", // TODO: access importSchematic -> prop -> saneVersion
-		}, null, "\t"));
+		};
+
+		if (forFile) {
+			this.exportString = "data:text/json;charSet=utf-8," + encodeURIComponent(JSON.stringify(exportObject, null, "\t"));
+		} else {
+			this.exportString = JSON.stringify(exportObject, null, "");
+		}
+
+
+		// // this.exportString = (prefix ? "data:text/json;charSet=utf-8," : "") + encodeURIComponent(JSON.stringify({
+		// // 	color: (this.$.colorSwitch as PaperToggleButtonElement).checked ? "light" : "dark",
+		// // 	language: this.language,
+		// // 	saneData: this.data,
+		// // 	saneVersion: "0.0.0", // TODO: access importSchematic -> prop -> saneVersion
+		// // }, null, "\t"));
+	}
+
+	private copyPermalink() {
+		let input = this.shadowRoot!.querySelector("#permalink") as HTMLInputElement;
+		
+		if (input !== null) {
+			navigator.clipboard.writeText(input.value);
+		}
 	}
 
 	/**
@@ -505,6 +547,8 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 		// negative base case of recursion, method returns false
 		return false;
 	}
+
+	firstUp
 
 }
 

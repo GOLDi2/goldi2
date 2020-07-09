@@ -577,7 +577,8 @@ class SaneApp extends mixinBehaviors([AppLocalizeBehavior], PolymerElement) {
 			const jsonConfig = JSON.parse(scString); // Mimimi shadowed var name Mimimi!
 
 			setTimeout(() => { this.$.data.importData(jsonConfig.saneData); }, 500);
-			window.location.href = pageUrl.substr(0, foundsSC - 1);
+			// Breaks JSON parsing, because new URL gets read again and has no JSON object anymore.
+			// window.location.href = pageUrl.substr(0, foundsSC - 1);
 		}
 
 		const listeners: {[key: string]: string} = {
