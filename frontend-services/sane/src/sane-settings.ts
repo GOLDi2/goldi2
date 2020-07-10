@@ -352,9 +352,9 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 		const pageUrl = window.location.href; // get url
 		const foundsSC = (pageUrl.indexOf("?") > 0) ? pageUrl.indexOf("?") : pageUrl.length;
 		const scString = decodeURIComponent(pageUrl.substr(0, foundsSC)); // decode URI into regular string
-		console.log({pageUrl, foundsSC, scString})
+		console.log({pageUrl, foundsSC, scString});
 		this.exportSaneData(false);
-		let input = this.shadowRoot?.querySelector("#permalink") as HTMLInputElement;
+		const input = this.shadowRoot?.querySelector("#permalink") as HTMLInputElement;
 		input.value = scString + "?" + this.exportString;
 	}
 
@@ -416,7 +416,7 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 	 * Sets the exportAttribut to the actual state of Sane.
 	 */
 	private exportSaneData(forFile: boolean = true) {
-		let exportObject = {
+		const exportObject = {
 			color: (this.$.colorSwitch as PaperToggleButtonElement).checked ? "light" : "dark",
 			language: this.language,
 			saneData: this.data,
@@ -429,7 +429,6 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 			this.exportString = JSON.stringify(exportObject, null, "");
 		}
 
-
 		// // this.exportString = (prefix ? "data:text/json;charSet=utf-8," : "") + encodeURIComponent(JSON.stringify({
 		// // 	color: (this.$.colorSwitch as PaperToggleButtonElement).checked ? "light" : "dark",
 		// // 	language: this.language,
@@ -439,8 +438,8 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 	}
 
 	private copyPermalink() {
-		let input = this.shadowRoot!.querySelector("#permalink") as HTMLInputElement;
-		
+		const input = this.shadowRoot!.querySelector("#permalink") as HTMLInputElement;
+
 		if (input !== null) {
 			navigator.clipboard.writeText(input.value);
 		}
@@ -547,9 +546,6 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 		// negative base case of recursion, method returns false
 		return false;
 	}
-
-	firstUp
-
 }
 
 // after the element is defined, we register it in polymer
