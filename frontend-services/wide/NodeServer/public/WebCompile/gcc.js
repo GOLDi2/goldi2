@@ -33,8 +33,6 @@ module.exports = {
       let avrPath = path.resolve(nsPath, 'makefiles/avr-gcc');
       let tmpPath = path.resolve(nsPath, tmpName);
       let tmpMkfilePath = path.resolve(nsPath, tmpName + '/Makefile');
-      let makeExePath = path.resolve(nsPath, 'toolchains/make');
-      let toolchainsPath = path.resolve(nsPath, 'toolchains/');
 
       let fqbn = "";
       let arduinocliPath = path.resolve(nsPath, 'makefiles/arduino-cli');
@@ -71,12 +69,9 @@ module.exports = {
                     }
                 }
             }
-      exec(makeExePath + ' all',
+      exec('make all',
           {
-              cwd: tmpPath,
-              env: {
-                  "TOOLCHAINS": toolchainsPath
-              }
+              cwd: tmpPath
           },
           function (error, stdout, stderr) { // wichtig, an dateien immer .c anhängen, weil sonst nivht funktioniert
               gccLogger.info('make.exe stdout: ' + stdout);
@@ -172,7 +167,7 @@ module.exports = {
         } else {
             let bonus_flags = "";
             if (fqbn.includes("goldi:avr:experiment")) {
-                bonus_flags = bonus_flags.concat("--build-properties runtime.tools.avr-gcc.path=" + '"' + path.join(toolchainsPath, "avr-gcc/"));
+                //bonus_flags = bonus_flags.concat("--build-properties runtime.tools.avr-gcc.path=" + '"' + path.join(toolchainsPath, "avr-gcc/"));
             }
             exec('arduino-cli compile -v -b ' + fqbn + ' ' + sketchPath  + ' --build-path "' + path.join(tmpPath, "ArduinoCLIBuild") + '" ' + bonus_flags, {cwd: arduinocliPath},
                 function (error, stdout, stderr) { // wichtig, an dateien immer .ino anhängen, weil sonst nicht funktioniert

@@ -79,7 +79,7 @@ class Header extends LitElement {
                 <wide-save-menu .model="${this.model}"></wide-save-menu>
                 <wide-load-menu .model="${this.model}"></wide-load-menu>
                 <wide-localstorage-menu .projects="${this.model?this.model.projects:[]}"></wide-localstorage-menu>
-                ${this.renderBoardMenu(true)}
+                ${this.renderBoardMenu(false)}
             </div>
             <div class="header-right">
             <button class="mdc-button header-button" @click="${() => {

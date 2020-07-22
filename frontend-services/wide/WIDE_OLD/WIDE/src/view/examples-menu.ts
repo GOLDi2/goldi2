@@ -18,7 +18,13 @@ class ExamplesMenuEntry extends LitElement {
     exampleName;
 
     @property()
+    exampleLanguage;
+
+    @property()
     updateRequested;
+
+    @property()
+    showLanguage;
 
     constructor() {
         super();
@@ -32,13 +38,13 @@ class ExamplesMenuEntry extends LitElement {
     render() {
         return html`
             <li class="mdc-list-item" role="menuitem">
-                <span class="mdc-list-item__text">${this.exampleName}</span>
+                <span class="mdc-list-item__text">${this.exampleName + (this.showLanguage?" " + "(" + this.exampleLanguage.name + ")":"")}</span>
             </li>
         `;
     }
 
     onclick=()=>{
-        let event = new CustomEvent('wide-example-selected', { detail: { examplename: this.exampleName }, bubbles: true });
+        let event = new CustomEvent('wide-example-selected', { detail: { examplename: this.exampleName, examplelanguage: this.exampleLanguage}, bubbles: true });
         this.dispatchEvent(event);
     }
 
@@ -112,7 +118,7 @@ class ExamplesMenu extends LitElement {
                 <div class="mdc-menu mdc-menu-surface" tabindex="-1">
                     <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
                         ${this.model ? this.model.examples.map((example) => {
-                    return html`<wide-examples-menu-entry .exampleName="${example.name}"></wide-examples-menu-entry>`
+                    return html`<wide-examples-menu-entry .exampleName="${example.name}" .exampleLanguage="${example.language}" .showLanguage="${true}"></wide-examples-menu-entry>`
                 }) : ''}
                     </ul>
                 </div>
@@ -185,7 +191,7 @@ class ExamplesMenu extends LitElement {
                       <div class="mdc-menu mdc-menu">
                             <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical">
                                 ${this.displayedExamples ? this.displayedExamples.map((example) => {
-                        return html`<wide-examples-menu-entry data-mdc-dialog-action="yes" .updateRequested="${this.updateRequested}" .exampleName="${example.name}"></wide-examples-menu-entry>`
+                        return html`<wide-examples-menu-entry data-mdc-dialog-action="yes" .updateRequested="${this.updateRequested}" .exampleName="${example.name}" .exampleLanguage="${example.language}" .showLanguage="${false}"></wide-examples-menu-entry>`
                         }) : ''}
                             </ul>
                       </div>

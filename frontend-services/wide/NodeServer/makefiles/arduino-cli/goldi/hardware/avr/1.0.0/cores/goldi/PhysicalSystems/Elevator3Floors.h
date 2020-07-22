@@ -27,7 +27,7 @@
         unsigned Floor3DoorClosed:1;                                                        // x12
         unsigned LightBarrierFloor1:1;                                                      // x13
         unsigned LightBarrierFloor2:1;                                                      // x14
-        unsigned Light_barrier_floor_3:1;                                                   // x15
+        unsigned LightBarrierFloor3:1;                                                   // x15
         unsigned CallButtonFloor1:1;                                                        // x16
         unsigned CallButtonFloor2Up:1;                                                      // x17
         unsigned CallButtonFloor2Down:1;                                                    // x18

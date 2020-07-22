@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function (req, res) {
-    let examplepath = path.join(__dirname, '../examples/');
+    let examplepath = path.join(__dirname, '../../WIDE_OLD/WIDE/examples/');
     let response = [];
     if(req.body.PSPUType === "all"){
         let pspus = fs.readdirSync(examplepath);
@@ -33,9 +33,11 @@ router.post('/', function (req, res) {
     } else {
         let files = [];
         let filenames = [];
-        filenames = fs.readdirSync(examplepath + req.body.PSPUType + '/' + req.body.language.name + '/');
-        filenames.forEach((filename) => {
-            files = files.concat({name: filename, language: req.body.language.name});
+        req.body.languages.forEach((language) => {
+            filenames = fs.readdirSync(examplepath + req.body.PSPUType + '/' + language.name + '/');
+            filenames.forEach((filename) => {
+                files = files.concat({name: filename, language: language.name});
+            });
         });
         response = response.concat(files.map((file) => {
             return ({name: file.name, PSPUType: req.body.PSPUType, language: file.language});
