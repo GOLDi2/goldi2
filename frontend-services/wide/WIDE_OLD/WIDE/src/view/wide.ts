@@ -37,7 +37,6 @@ export class App extends LitElement {
     console: any;
     par = this.parseQueryString();
     standalone = this.par["standalone"]=='true';
-    snackbarDeleteProjectParameters: {name: string, language: ILanguage}
 
     private intervalsnackbar;
     private input: HTMLInputElement;
@@ -304,21 +303,21 @@ export class App extends LitElement {
     }
 
     /**
-     * Save-Zip-Event was declined
+     * Save-Zip-Event was deeclined
      * @param e
      */
     declinedSaveZip(e: Event) {
         clearInterval(this.intervalsnackbar);
     }
 
-    deleteProject(projectname: string, projectlanguage: ILanguage){
-        this.snackbarDeleteProjectParameters = {name: projectname, language: projectlanguage};
+    deleteProject(projectname: string){
+        this.name= projectname;
         this.snackbarDeleteProject.labelText = "Are you sure you want to delete this project?";
         this.snackbarDeleteProject.open();
     }
 
     acceptedDeleteProject(e: Event){
-        let event = new CustomEvent('wide-project-deleted', {detail: {projectname: this.snackbarDeleteProjectParameters.name, projectlanguage: this.snackbarDeleteProjectParameters.language}, bubbles: true});
+        let event = new CustomEvent('wide-project-deleted', {detail: {projectname: this.name}, bubbles: true});
         this.name='';
         this.dispatchEvent(event);
     }

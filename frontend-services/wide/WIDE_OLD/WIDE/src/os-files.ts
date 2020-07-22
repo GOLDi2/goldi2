@@ -174,8 +174,8 @@ function unpack(zipfile,wide,createdialog) {
             });
             if (filenames_allowed == true) {
                 (document.getElementById("input%projectname") as HTMLInputElement).value = pdirname;
-                createdialog.dialog.escapeKeyAction = 'no';
-                createdialog.dialog.scrimClickAction = 'no';
+                createdialog.dialog.escapeKeyAction = '';
+                createdialog.dialog.scrimClickAction = '';
                 createdialog.open();
             } else {
                 (document.getElementById("input%projectname") as HTMLInputElement).value = "";

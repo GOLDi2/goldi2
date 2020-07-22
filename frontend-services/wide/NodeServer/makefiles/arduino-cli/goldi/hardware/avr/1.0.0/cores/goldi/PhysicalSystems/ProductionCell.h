@@ -55,11 +55,11 @@
         unsigned Turntable1DriveBelt:1;                                                     // y7
         unsigned ConveyorBelt2DriveBelt:1;                                                  // y8
         unsigned Turntable2RotateToConveyorBelt2:1;                                         // y9
-        unsigned Turntable2RotateToConveyorBelt3:1;                                         // y10
+        unsigned Turntable2RotateToConveyorBelt_3:1;                                        // y10
         unsigned Turntable2DriveBelt:1;                                                     // y11
         unsigned ConveyorBelt3DriveBelt:1;                                                  // y12
-        unsigned MillingMachineRetreatFromConveyorBelt2:1;                                  // y13
-        unsigned MillingMachineApproachConveyorBelt2:1;                                     // y14
+        unsigned MillingMachineApproachConveyorBelt_2:1;                                    // y13
+        unsigned MillingMachineRetreatFromConveyorBelt2:1;                                  // y14
         unsigned MillingHeadRise:1;                                                         // y15
         unsigned MillingHeadLower:1;                                                        // y16
         unsigned MillingHeadDriveHead:1;                                                    // y17

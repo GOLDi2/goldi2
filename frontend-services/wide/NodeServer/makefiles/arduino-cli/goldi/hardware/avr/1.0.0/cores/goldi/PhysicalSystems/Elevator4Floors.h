@@ -27,11 +27,11 @@
         unsigned Floor3DoorClosed:1;                                                        // x12
         unsigned LightBarrierFloor1:1;                                                      // x13
         unsigned LightBarrierFloor2:1;                                                      // x14
-        unsigned LightBarrierFloor3:1;                                                      // x15
+        unsigned Light_barrier_floor_3:1;                                                   // x15
         unsigned CallButtonFloor1:1;                                                        // x16
         unsigned CallButtonFloor2Up:1;                                                      // x17
         unsigned CallButtonFloor2Down:1;                                                    // x18
-        unsigned CallButtonFloor3Down:1;                                                    // x19
+        unsigned CallButtonFloor3:1;                                                        // x19
         unsigned ElevatorControlFloor1:1;                                                   // x20
         unsigned ElevatorControlFloor2:1;                                                   // x21
         unsigned ElevatorControlFloor3:1;                                                   // x22
@@ -39,7 +39,7 @@
         unsigned ElevatorControlEmergencyStop:1;                                            // x24
         unsigned SimulationOverload:1;                                                      // x25
                                                                                             // Elevator4Floor specific
-        unsigned ElevatorOnFloor4:1;                                                        // x26
+        unsigned ElevatorOnFloor_4:1;                                                       // x26
         unsigned ElevatorAboveFloor3:1;                                                     // x27
         unsigned ElevatorBelowFloor4:1;                                                     // x28
         unsigned Floor4DoorOpen:1;                                                          // x29
@@ -88,10 +88,10 @@
                                                                                             // Elevator4Floor specific
         unsigned DoorFloor4Open:1;                                                          // y24
         unsigned DoorFloor4Close:1;                                                         // y25
-        unsigned CallDisplayFloor3Upward:1;                                                 // y26
+        unsigned CallDisplayFloor3Upwards:1;                                                // y26
         unsigned CallDisplayFloor4:1;                                                       // y27
         unsigned IndicatorDisplayFloor4:1;                                                  // y28
-        unsigned ElevatorControlIndicatorDisplayFloor4:1;                                   // y29
+        unsigned CallDisplayControlElevatorControl:1;                                       // y29
         unsigned Reserve0:1;                                                                // unused
         unsigned Reserve1:1;                                                                // unused
         unsigned int Reserve2;                                                              // unused
