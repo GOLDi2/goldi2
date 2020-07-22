@@ -17,6 +17,7 @@ volatile uint8_t *GOLDiInterfaceInputBuffer;
 
 uint8_t ReceiveIndex;
 uint8_t TmpBuffer[6];
+uint8_t TmpSendBuffer[6];
 
 enum {
     START,
@@ -91,11 +92,15 @@ void GOLDiInterfaceSendData(void)
     switch (CurrentState)
     {
         case START:
+            for(int i = 0; i < 6; i++)
+            {
+                TmpSendBuffer[i] = GOLDiInterfaceOutputBuffer[i];
+            }
             UART0_put_char(0xFF);
             CurrentState = CHECK_SIZE;
             break;
         case CHECK_SIZE:
-            if(GOLDiInterfaceOutputBuffer[SendIndex] >= 0x80)
+            if(TmpSendBuffer[SendIndex] >= 0x80)
             {
                 UART0_put_char(0x80);
                 CurrentState = SIZE_BIG;
@@ -107,12 +112,12 @@ void GOLDiInterfaceSendData(void)
             }
             break;
         case SIZE_BIG:
-            UART0_put_char(GOLDiInterfaceOutputBuffer[SendIndex]-0x80);
+            UART0_put_char(TmpSendBuffer[SendIndex]-0x80);
             CurrentState = CHECK_SIZE;
             SendIndex++;
             break;
         case SIZE_SMALL:
-            UART0_put_char(GOLDiInterfaceOutputBuffer[SendIndex]);
+            UART0_put_char(TmpSendBuffer[SendIndex]);
             CurrentState = CHECK_SIZE;
             SendIndex++;
             break;

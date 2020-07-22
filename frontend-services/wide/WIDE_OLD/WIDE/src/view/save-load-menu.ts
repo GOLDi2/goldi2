@@ -6,9 +6,9 @@ import {IModel, IProject, supportedLanguages} from '../model';
 import {MDCDialog} from "@material/dialog/component";
 
 //let requestURL = 'https://cors.io/?http://x105.theoinf.tu-ilmenau.de/WIDEDEV/index.php?Function=GetPermittedDeviceCombinations&Location=IUTDev';
-//let requestURL = 'http://x105.theoinf.tu-ilmenau.de/WIDEDEV/index.php?Function=GetPermittedDeviceCombinations&Location=IUTDev';
-let scriptPath = window.location.href;
-let requestURL = new URL("../index.php?Function=GetPermittedDeviceCombinations&Location=IUTDev", scriptPath).toString();
+let requestURL = 'http://x105.theoinf.tu-ilmenau.de/WIDEDEV/index.php?Function=GetPermittedDeviceCombinations&Location=IUTDev';
+//let scriptPath = window.location.href;
+//let requestURL = new URL("../../Website/index.php?Function=GetPermittedDeviceCombinations&Location=IUTDev", scriptPath).toString();
 let answer = makeRequest('GET', requestURL);
 
 function makeRequest(method, url) {
@@ -151,7 +151,7 @@ class ProjectMenuEntry extends LitElement {
     render() {
         return html`
             <li class="mdc-list-item" role="menuitem" @click="${this.clicked}">
-                <span class="mdc-list-item__text">${this.projectname + " " + "(" + this.projectlanguage + ")"}</span>
+                <span class="mdc-list-item__text">${this.projectname + " " + "(" + this.projectlanguage.name + ")"}</span>
                 <div class="mdc-list-item__meta">
                     <button class="mdc-icon-button" @click="${this.delete}">
                         <i class="material-icons">delete</i>
@@ -165,7 +165,7 @@ class ProjectMenuEntry extends LitElement {
      * Deletes a project from local storage
      */
     delete() {
-        let event = new CustomEvent('wide-project-deleted-help', { detail: { projectname: this.projectname }, bubbles: true });
+        let event = new CustomEvent('wide-project-deleted-help', { detail: { projectname: this.projectname, projectlanguage: this.projectlanguage }, bubbles: true });
         this.dispatchEvent(event);
     }
 
@@ -173,7 +173,7 @@ class ProjectMenuEntry extends LitElement {
      * Loads a project from local storage into filetree
      */
     clicked() {
-        let event = new CustomEvent('wide-project-selected', { detail: { projectname: this.projectname }, bubbles: true });
+        let event = new CustomEvent('wide-project-selected', { detail: { projectname: this.projectname, projectlanguage: this.projectlanguage }, bubbles: true });
         this.dispatchEvent(event);
     }
 
@@ -222,7 +222,7 @@ class ProjectMenu extends LitElement {
                 return 1;
             }
         }).map((project) => {
-            return html`<wide-project-menu-entry .projectname="${project.name}" .projectlanguage="${project.language.name}"></wide-project-menu-entry>`
+            return html`<wide-project-menu-entry .projectname="${project.name}" .projectlanguage="${project.language}"></wide-project-menu-entry>`
         }) : ''}
                     <li class="mdc-list-item" role="menuitem" @click="${this.openDialog}"  style="justify-content: space-between">
                         <span class="mdc-list-item__text">Create New Project</span>
@@ -595,7 +595,7 @@ class CreateMenu extends LitElement {
                 </li>`;
             }
         }
-        if (this.selectedBPUType != undefined) {
+        if (this.selectedBPUType != undefined && this.standalone != false) {
             this.languageoptions = this.loadLanguageOptions();
             this.PSPUTypeoptions = this.loadPSPUTypeOptions();
         }
@@ -625,7 +625,6 @@ class CreateMenu extends LitElement {
      * Loads physical System -Options for choice when generating new projects in standalone-version
      */
     loadPSPUTypeOptions() {
-
         let devList = this.answer[`${this.selectedBPUType}`];
         let devListReal = devList.Real;
         let devListVirtual = devList.Virtual;

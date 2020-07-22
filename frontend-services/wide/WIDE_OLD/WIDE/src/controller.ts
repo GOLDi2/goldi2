@@ -10,7 +10,9 @@ import './view/wide'
 import * as util from './os-files';
 import { MDCDialog } from "@material/dialog/component";
 
-let backend_uri='http://iut.goldi-labs.net:8081'
+//let backend_uri='http://iut.goldi-labs.net:8081'
+//let backend_uri='http://localhost:8081';
+let backend_uri='http://x105.theoinf.tu-ilmenau.de:8081'
 
 /**
  * Loads Projects from Local Storage, if there any exist
@@ -138,10 +140,10 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
      * Updates the current Project in the filetree
      */
     function updateCurrentProject() {
-        let project = wide.model.projects.find((project) => project.name == wide.model.parentDirectory);
+        let project = wide.model.projects.find((project) => project.name == wide.model.parentDirectory && project.language.name == wide.language.name);
         if (wide.model.parentDirectory != '' && project != undefined) {
-            wide.model.projects.find((project) => project.name == wide.model.parentDirectory).files = wide.model.files;
-            wide.model.currentprojects.find((project) => project.name == wide.model.parentDirectory).files = wide.model.files;
+            wide.model.projects.find((project) => project.name == wide.model.parentDirectory && project.language.name == wide.language.name).files = wide.model.files;
+            wide.model.currentprojects.find((project) => project.name == wide.model.parentDirectory && project.language.name == wide.language.name).files = wide.model.files;
             wide.model.selectedproject = project;
             wide.model.selectedproject.files = wide.model.files;
         }
@@ -152,7 +154,7 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
         if (wide.standalone == true) {
             request = { PSPUType: "all" };
         } else {
-            request = { PSPUType: wide.PSPUType, language: wide.language };
+            request = { PSPUType: wide.PSPUType, languages: supportedLanguages.filter((lang) => lang.BPUType == wide.BPUType) };
         }
         fetch(backend_uri+"/examples", {
             method: 'POST',
@@ -478,9 +480,9 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
     });
 
     wide.addEventListener('wide-example-selected', (event: CustomEvent) => {
-        if (wide.model.projects.find((project) => project.name == event.detail.examplename) == null) {
+        if (wide.model.projects.find((project) => project.name == event.detail.examplename && project.language.name == event.detail.examplelanguage.name) == null) {
             updateCurrentProject();
-            let example = wide.model.examples.find((example) => example.name == event.detail.examplename) || wide.model.examples[0];
+            let example = wide.model.examples.find((example) => example.name == event.detail.examplename && example.language.name == event.detail.examplelanguage.name) || wide.model.examples[0];
             // mark files for reload:
             example.files.forEach((file: any) => {
                 file.reload = true
@@ -506,7 +508,7 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
         updateCurrentProject();
         saveProjects();
         if (wide.model.currentprojects.length > 0) {
-            let project = wide.model.currentprojects.find((project) => project.name == event.detail.projectname) || wide.model.currentprojects[0];
+            let project = wide.model.currentprojects.find((project) => project.name == event.detail.projectname && project.language.name == event.detail.projectlanguage.name) || wide.model.currentprojects[0];
             wide.language = project.language;
             wide.editor.language = wide.language;
             wide.PSPUType = project.PSPUType;
@@ -527,7 +529,7 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
      * Helpful Event for deleting a directory
      */
     wide.addEventListener('wide-project-deleted-help', (event: CustomEvent) => {
-        wide.deleteProject(event.detail.projectname);
+        wide.deleteProject(event.detail.projectname, event.detail.projectlanguage);
     });
 
     /**
@@ -535,19 +537,19 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
      */
     wide.addEventListener('wide-project-deleted', (event: CustomEvent) => {
         if (wide.model.currentprojects.length > 1) {
-            if (wide.model.parentDirectory == event.detail.projectname) {
-                wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname);
-                wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname);
+            if (wide.model.parentDirectory == event.detail.projectname && wide.language.name == event.detail.projectlanguage.name) {
+                wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname || project.language.name != event.detail.projectlanguage.name);
+                wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname  || project.language.name != event.detail.projectlanguage.name);
                 searchProject();
             } else {
-                wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname);
-                wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname);
+                wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname || project.language.name != event.detail.projectlanguage.name);
+                wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname || project.language.name != event.detail.projectlanguage.name);
                 updateCurrentProject();
                 saveProjects();
             }
         } else {
-            wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname);
-            wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname);
+            wide.model.projects = wide.model.projects.filter((project) => project.name != event.detail.projectname || project.language.name != event.detail.projectlanguage.name);
+            wide.model.currentprojects = wide.model.currentprojects.filter((project) => project.name != event.detail.projectname || project.language.name != event.detail.projectlanguage.name);
             wide.model.parentDirectory = '';
             wide.model.files = [];
             updateCurrentProject();
@@ -561,7 +563,7 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
     });
 
     wide.addEventListener('wide-save', () => {
-        let blob = new Blob([JSON.stringify(wide.model.projects.find((project) => project.name == wide.model.parentDirectory))], { type: "data:attachment/application/json" });
+        let blob = new Blob([JSON.stringify(wide.model.selectedproject)], { type: "data:attachment/application/json" });
         util.saveBlob(blob, wide.model.parentDirectory + ".wide");
     });
 
