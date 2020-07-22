@@ -2,7 +2,7 @@ menu.pspu=Experiment
 
 experiment.name=GOLDi Experiment
 
-experiment.build.mcu=atmega644a
+experiment.build.mcu=ATmega644A
 experiment.build.f_cpu=12000000UL
 experiment.build.core=goldi
 experiment.build.variant=goldi

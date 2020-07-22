@@ -54,14 +54,4 @@
     extern Sensor_t Sensors;
     extern Actuator_t Actuators;
 
-    unsigned int getPositionX()
-    {
-        return Sensors.PositionX;
-    }
-
-    unsigned int getPositionY()
-    {
-        return Sensors.PositionY;
-    }
-
 #endif
