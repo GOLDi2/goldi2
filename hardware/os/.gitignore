@@ -1,0 +1,9 @@
+build
+meta-gstreamer
+meta-openembedded
+meta-raspberrypi
+meta-rauc
+meta-rauc-community
+openssl-ca
+pki
+poky

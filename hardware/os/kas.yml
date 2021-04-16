@@ -1,0 +1,58 @@
+header:
+  version: 8
+
+machine: io-board
+distro: goldi-distro
+target:
+  - goldi-dev-image
+  - goldi-dev-update-bundle
+  - goldi-image
+  - goldi-update-bundle
+
+env:
+  PKI_PATH: /home/yocto/goldi/pki
+
+repos:
+  # This repo contains the kas.yml file - there is no need to fetch it again.
+  # It's current revision will be used to perform the build.
+  meta-goldi:
+    path: meta-goldi
+
+  meta-goldi-distro:
+    path: meta-goldi-distro
+
+  meta-goldi-bsp:
+    path: meta-goldi-bsp
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    refspec: d8d88ec51b175872a25153f09e18b6e3af166b46
+    layers:
+      meta:
+      meta-poky:
+
+  meta-raspberrypi:
+    url: https://git.yoctoproject.org/git/meta-raspberrypi
+    refspec: 77190af02d48adc2b28216775e6318e9eeda571c
+
+  meta-gstreamer:
+    url: https://github.com/OSSystems/meta-gstreamer1.0
+    refspec: b489b1ba084544d9c4c08f7c3b3d1c37ffa53c51
+
+  meta-openembedded:
+    url: http://git.openembedded.org/meta-openembedded
+    refspec: 346681e7bf9c78008a845fc89031be4fd4ceb3a1
+    layers:
+      meta-oe:
+      meta-python:
+      meta-multimedia:
+
+  meta-rauc:
+    url: https://github.com/rauc/meta-rauc.git
+    refspec: 100e8852fe9001215f649122d70a62a3fb47a50d
+
+  #meta-rauc-community:
+  #  url: https://github.com/leon-anavi/meta-rauc-community.git
+  #  refspec: 6822740c360bb5a5d542ba7dcbdab01fd35c4a5c
+  #  layers:
+  #    meta-rauc-raspberrypi:
