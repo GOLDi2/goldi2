@@ -1,5 +1,7 @@
 header:
   version: 8
+  includes:
+   - local.yml
 
 machine: io-board
 distro: goldi-distro
@@ -8,9 +10,6 @@ target:
   - goldi-dev-update-bundle
   - goldi-image
   - goldi-update-bundle
-
-env:
-  PKI_PATH: /home/yocto/goldi/pki
 
 repos:
   # This repo contains the kas.yml file - there is no need to fetch it again.

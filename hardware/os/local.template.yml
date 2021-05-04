@@ -1,0 +1,7 @@
+header:
+  version: 8
+local_conf_header:
+  standard: |
+    SSTATE_MIRRORS ?= "file://.* file:///shared/sstate-cache/PATH"
+env:
+  PKI_PATH: /home/goldi-pki

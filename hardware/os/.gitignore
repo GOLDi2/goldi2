@@ -7,3 +7,4 @@ meta-rauc-community
 openssl-ca
 pki
 poky
+local.yml
