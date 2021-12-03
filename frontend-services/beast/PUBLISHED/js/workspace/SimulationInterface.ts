@@ -15,7 +15,7 @@ namespace Workspace {
         protected handlers: Array<(name: string, value: boolean) => (void)> = [];
         
         constructor( protected workspace: SimcirWorkspace) {
-
+            this.updatePorts();
         }
         
          changeHandler = (event) => {
@@ -45,9 +45,15 @@ namespace Workspace {
             this.setExternalManipulation(false);
             this.isActive = false;
         }
+
+        public get paused(): boolean { return this.workspace.eventQueue.paused }
+        public set paused(val: boolean) {
+            this.workspace.eventQueue.paused = val;
+            this.workspace.setPauseTimers(val);
+        }
         
         setInput(name: string, value: boolean) {
-            if (this.isActive) {}
+            if (this.isActive)
                 this.inports[name].setManipulationValue(value ? 1 : null)
         }
         
@@ -69,6 +75,17 @@ namespace Workspace {
     
         offOutputChange(handler: (name: string, value: boolean) => (void)) {
             this.handlers = this.handlers.filter(h => h !== handler);
+        }
+
+        transferCallbacks(newSI: SimulationInterface) {
+            newSI.onOutputChange((name: string, value: boolean) => {
+                for (let handler of this.handlers)
+                    handler(name, value);
+            });
+        }
+
+        postLateCallback(callback: () => (void)) {
+            this.workspace.eventQueue.postLateCallback(callback);
         }
         
         protected updatePorts(){

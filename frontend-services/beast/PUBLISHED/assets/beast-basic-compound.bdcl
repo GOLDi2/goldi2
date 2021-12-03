@@ -650,222 +650,608 @@
     },
     {
       "name": "D-FF",
-      "devices": [
-        {
-          "y": 24,
-          "x": 128,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "In"
-          },
-          "id": "dev0",
-          "label": "D"
-        },
-        {
-          "y": 128,
-          "x": 168,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "In"
-          },
-          "id": "dev1",
-          "label": "C"
-        },
-        {
-          "y": 64,
-          "x": 176,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NOT"
-          },
-          "id": "dev2",
-          "label": "NOT"
-        },
-        {
-          "y": 32,
-          "x": 224,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NAND"
-          },
-          "id": "dev3",
-          "label": "NAND"
-        },
-        {
-          "y": 96,
-          "x": 224,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NAND"
-          },
-          "id": "dev4",
-          "label": "NAND"
-        },
-        {
-          "y": 64,
-          "x": 272,
-          "type": {
-            "libraryID": "beast-basic-compound",
-            "componentID": "RS-FF"
-          },
-          "id": "dev5",
-          "label": "RS-FF"
-        },
-        {
-          "y": 128,
-          "x": 296,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NOT"
-          },
-          "id": "dev6",
-          "label": "NOT"
-        },
-        {
-          "y": 32,
-          "x": 352,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NAND"
-          },
-          "id": "dev7",
-          "label": "NAND"
-        },
-        {
-          "y": 96,
-          "x": 352,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "NAND"
-          },
-          "id": "dev8",
-          "label": "NAND"
-        },
-        {
-          "y": 64,
-          "x": 400,
-          "type": {
-            "libraryID": "beast-basic-compound",
-            "componentID": "RS-FF"
-          },
-          "id": "dev9",
-          "label": "RS-FF"
-        },
-        {
-          "y": 32,
-          "x": 480,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "Out"
-          },
-          "id": "dev10",
-          "label": "Q"
-        },
-        {
-          "y": 96,
-          "x": 480,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "Out"
-          },
-          "id": "dev11",
-          "label": "~Q"
-        },
-        {
-          "y": 24,
-          "x": 80,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "Toggle"
-          },
-          "id": "dev12",
-          "label": "Toggle"
-        },
-        {
-          "y": 128,
-          "x": 80,
-          "type": {
-            "libraryID": "beast-basic",
-            "componentID": "PushOn"
-          },
-          "id": "dev13",
-          "label": "PushOn"
-        }
-      ],
-      "connectors": [
-        {
-          "to": "dev12.out0",
-          "from": "dev0.in0"
-        },
-        {
-          "to": "dev13.out0",
-          "from": "dev1.in0"
-        },
-        {
-          "to": "dev0.out0",
-          "from": "dev2.in0"
-        },
-        {
-          "to": "dev0.out0",
-          "from": "dev3.in0"
-        },
-        {
-          "to": "dev1.out0",
-          "from": "dev3.in1"
-        },
-        {
-          "to": "dev1.out0",
-          "from": "dev4.in0"
-        },
-        {
-          "to": "dev2.out0",
-          "from": "dev4.in1"
-        },
-        {
-          "to": "dev3.out0",
-          "from": "dev5.in0"
-        },
-        {
-          "to": "dev4.out0",
-          "from": "dev5.in1"
-        },
-        {
-          "to": "dev1.out0",
-          "from": "dev6.in0"
-        },
-        {
-          "to": "dev5.out0",
-          "from": "dev7.in0"
-        },
-        {
-          "to": "dev6.out0",
-          "from": "dev7.in1"
-        },
-        {
-          "to": "dev6.out0",
-          "from": "dev8.in0"
-        },
-        {
-          "to": "dev5.out1",
-          "from": "dev8.in1"
-        },
-        {
-          "to": "dev7.out0",
-          "from": "dev9.in0"
-        },
-        {
-          "to": "dev8.out0",
-          "from": "dev9.in1"
-        },
-        {
-          "to": "dev9.out0",
-          "from": "dev10.in0"
-        },
-        {
-          "to": "dev9.out1",
-          "from": "dev11.in0"
-        }
-      ],
+        "devices": [
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev0",
+                "x": 669.1538461538462,
+                "y": 332.0897435897436,
+                "numInputs": 3
+            },
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev1",
+                "x": 669.1538461538462,
+                "y": 436.0897435897436,
+                "numInputs": 3
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev2",
+                "x": 421.15384615384613,
+                "y": 380.0897435897436,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev3",
+                "x": 629.1538461538462,
+                "y": 388.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev4",
+                "x": 637.1538461538462,
+                "y": 372.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev5",
+                "x": 653.1538461538462,
+                "y": 444.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev6",
+                "x": 581.1538461538462,
+                "y": 460.0897435897436,
+                "numInputs": 2
+            },
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev7",
+                "x": 581.1538461538462,
+                "y": 324.0897435897436,
+                "numInputs": 2
+            },
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev8",
+                "x": 805.1538461538462,
+                "y": 348.0897435897436,
+                "numInputs": 2
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev9",
+                "x": 725.1538461538462,
+                "y": 348.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev10",
+                "x": 725.1538461538462,
+                "y": 452.0897435897436
+            },
+            {
+                "label": "NAND",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NAND"
+                },
+                "id": "dev11",
+                "x": 805.1538461538462,
+                "y": 436.0897435897436,
+                "numInputs": 2
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev12",
+                "x": 733.1538461538462,
+                "y": 324.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev13",
+                "x": 573.1538461538462,
+                "y": 316.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev14",
+                "x": 581.1538461538462,
+                "y": 316.0897435897436,
+                "rotation": 180
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev15",
+                "x": 749.1538461538462,
+                "y": 508.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev16",
+                "x": 573.1538461538462,
+                "y": 532.0897435897436,
+                "rotation": 180
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev17",
+                "x": 549.1538461538462,
+                "y": 500.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev18",
+                "x": 733.1538461538462,
+                "y": 428.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev19",
+                "x": 677.1538461538462,
+                "y": 420.0897435897436,
+                "rotation": 180
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev20",
+                "x": 653.1538461538462,
+                "y": 388.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev21",
+                "x": 749.1538461538462,
+                "y": 380.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev22",
+                "x": 725.1538461538462,
+                "y": 404.0897435897436,
+                "rotation": 180
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev23",
+                "x": 717.1538461538462,
+                "y": 404.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev24",
+                "x": 677.1538461538462,
+                "y": 428.0897435897436,
+                "rotation": 180
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev25",
+                "x": 669.1538461538462,
+                "y": 428.0897435897436,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev26",
+                "x": 613.1538461538462,
+                "y": 468.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev27",
+                "x": 549.1538461538462,
+                "y": 364.0897435897436,
+                "rotation": 270
+            },
+            {
+                "label": "/Q",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev28",
+                "x": 909.1538461538462,
+                "y": 436.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev29",
+                "x": 861.1538461538462,
+                "y": 356.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev30",
+                "x": 773.1538461538462,
+                "y": 436.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev31",
+                "x": 853.1538461538462,
+                "y": 444.0897435897436
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev32",
+                "x": 773.1538461538462,
+                "y": 364.0897435897436
+            },
+            {
+                "label": "Q",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev33",
+                "x": 909.1538461538462,
+                "y": 348.0897435897436
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev34",
+                "x": 421.15384615384613,
+                "y": 324.0897435897436,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": "C",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev35",
+                "x": 477.15384615384613,
+                "y": 380.0897435897436
+            },
+            {
+                "label": "D",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev36",
+                "x": 477.15384615384613,
+                "y": 324.0897435897436
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev37",
+                "x": 549.1538461538462,
+                "y": 452.0897435897436,
+                "rotation": 90
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev38",
+                "x": 525.1538461538462,
+                "y": 332.0897435897436
+            }
+        ],
+        "connectors": [
+            {
+                "from": "dev0.in0",
+                "to": "dev7.out0"
+            },
+            {
+                "from": "dev0.in1",
+                "to": "dev4.out0"
+            },
+            {
+                "from": "dev0.in2",
+                "to": "dev20.out0"
+            },
+            {
+                "from": "dev1.in0",
+                "to": "dev25.out0"
+            },
+            {
+                "from": "dev1.in1",
+                "to": "dev5.out0"
+            },
+            {
+                "from": "dev1.in2",
+                "to": "dev26.out0"
+            },
+            {
+                "from": "dev3.in0",
+                "to": "dev35.out0"
+            },
+            {
+                "from": "dev4.in0",
+                "to": "dev3.out0"
+            },
+            {
+                "from": "dev5.in0",
+                "to": "dev3.out0"
+            },
+            {
+                "from": "dev6.in0",
+                "to": "dev37.out0"
+            },
+            {
+                "from": "dev6.in1",
+                "to": "dev17.out0"
+            },
+            {
+                "from": "dev7.in0",
+                "to": "dev13.out0"
+            },
+            {
+                "from": "dev7.in1",
+                "to": "dev27.out0"
+            },
+            {
+                "from": "dev8.in0",
+                "to": "dev9.out0"
+            },
+            {
+                "from": "dev8.in1",
+                "to": "dev32.out0"
+            },
+            {
+                "from": "dev9.in0",
+                "to": "dev0.out0"
+            },
+            {
+                "from": "dev10.in0",
+                "to": "dev1.out0"
+            },
+            {
+                "from": "dev11.in0",
+                "to": "dev30.out0"
+            },
+            {
+                "from": "dev11.in1",
+                "to": "dev10.out0"
+            },
+            {
+                "from": "dev12.in0",
+                "to": "dev9.out0"
+            },
+            {
+                "from": "dev13.in0",
+                "to": "dev14.out0"
+            },
+            {
+                "from": "dev14.in0",
+                "to": "dev12.out0"
+            },
+            {
+                "from": "dev15.in0",
+                "to": "dev10.out0"
+            },
+            {
+                "from": "dev16.in0",
+                "to": "dev15.out0"
+            },
+            {
+                "from": "dev17.in0",
+                "to": "dev16.out0"
+            },
+            {
+                "from": "dev18.in0",
+                "to": "dev10.out0"
+            },
+            {
+                "from": "dev19.in0",
+                "to": "dev18.out0"
+            },
+            {
+                "from": "dev20.in0",
+                "to": "dev19.out0"
+            },
+            {
+                "from": "dev21.in0",
+                "to": "dev9.out0"
+            },
+            {
+                "from": "dev22.in0",
+                "to": "dev21.out0"
+            },
+            {
+                "from": "dev23.in0",
+                "to": "dev22.out0"
+            },
+            {
+                "from": "dev24.in0",
+                "to": "dev23.out0"
+            },
+            {
+                "from": "dev25.in0",
+                "to": "dev24.out0"
+            },
+            {
+                "from": "dev26.in0",
+                "to": "dev6.out0"
+            },
+            {
+                "from": "dev27.in0",
+                "to": "dev26.out0"
+            },
+            {
+                "from": "dev28.in0",
+                "to": "dev31.out0"
+            },
+            {
+                "from": "dev29.in0",
+                "to": "dev8.out0"
+            },
+            {
+                "from": "dev30.in0",
+                "to": "dev29.out0"
+            },
+            {
+                "from": "dev31.in0",
+                "to": "dev11.out0"
+            },
+            {
+                "from": "dev32.in0",
+                "to": "dev31.out0"
+            },
+            {
+                "from": "dev33.in0",
+                "to": "dev29.out0"
+            },
+            {
+                "from": "dev35.in0",
+                "to": "dev2.out0"
+            },
+            {
+                "from": "dev36.in0",
+                "to": "dev34.out0"
+            },
+            {
+                "from": "dev37.in0",
+                "to": "dev38.out0"
+            },
+            {
+                "from": "dev38.in0",
+                "to": "dev36.out0"
+            }
+        ],
       "ID": "D-FF"
     },
     {

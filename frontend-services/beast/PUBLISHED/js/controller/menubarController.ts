@@ -1,20 +1,24 @@
 /**
  * Created by Paul on 22.05.2017.
  */
-    
+
     ///<reference path="../d_ts/jquery.d.ts" />
     ///<reference path="../d_ts/jqueryui.d.ts" />
     ///<reference path="../model/model.ts" />
     ///<reference path="../Dialog.ts" />
+    ///<reference path="../equation_converters/CreateSequenceController.ts" />
+    ///<reference path="../equation_converters/converter.js" />
+    ///<reference path="../equation_converters/fsm_beast.js" />
 
 
 class MenubarController
 {
     beastController : BeastController;
+    createSequenceController: CreateSequenceController;
     public static createAfterWarning : boolean;
     public static openAfterWarning : boolean;
     public static importAfterWarning : boolean;
-    
+
     /**
      * creates new BeastController and PersistenceController
      * defines onclick-methods of Menubar-Buttons
@@ -23,6 +27,7 @@ class MenubarController
     constructor(beastController)
         {
             this.beastController = beastController;
+            this.createSequenceController = new CreateSequenceController();
             $('#createProject')
                 .on('click', {controller : this.beastController}, this.createProject);
             $('#openProject')
@@ -43,12 +48,18 @@ class MenubarController
                 .on('click', {controller : this.beastController}, this.exportLibrary);
             $('#createComponent')
                 .on('click', {controller : this.beastController}, this.createComponent);
+            $('#createComponentFromEquation')
+                .on('click', {controller : this.beastController}, this.createComponentFromEquation);
+            $('#createComponentFromSequence')
+                .on('click',
+                    {sequenceController : this.createSequenceController, beastController: this.beastController},
+                    this.createComponentFromSequence);
             MenubarController.createAfterWarning = false;
             MenubarController.openAfterWarning   = false;
             MenubarController.importAfterWarning = false;
-            
+
         }
-    
+
     /**
      * opens a warning dialog, when the the current project in the session storage is not saved
      * calls "saveProject"-method or creates new project by use of PersistenceController accordingly to user's input
@@ -81,7 +92,7 @@ class MenubarController
             }
             MenubarController.createAfterWarning = false;
         }
-    
+
     /**
      * opens file-open-dialog
      * checks if filetype is correct and starts upload by use of PersistenceController
@@ -148,7 +159,7 @@ class MenubarController
             }
             MenubarController.importAfterWarning = false;
         };
-    
+
     /**
      * opens dialog with a list of all projects in the local storage
      * after selection and confirmation by the user the project is load by use of the PersistenceController
@@ -157,7 +168,7 @@ class MenubarController
     private openProject(event) : void
         {
             const controller : BeastController = event.data.controller;
-            
+
             ListDialog.type               = 'openProject';
             const warning : WarningDialog = new WarningDialog(() =>
                                                               {
@@ -198,8 +209,8 @@ class MenubarController
             }
             MenubarController.openAfterWarning = false;
         }
-    
-    
+
+
     /**
      * opens dialog for name input and saves project in browser's local storage by use of the PersistenceController
      * @param event - event parameter
@@ -232,7 +243,7 @@ class MenubarController
                                                                               .getName(), controller.listProjects());
             saveDialog.show();
         }
-    
+
     /**
      * opens dialog with a list of all projects in the local storage
      * after selection and confirmation by the user the selected projects are deleted from the local storage by use
@@ -242,7 +253,7 @@ class MenubarController
     private deleteProject(event) : void
         {
             const controller : BeastController = event.data.controller;
-            
+
             ListDialog.type           = 'deleteProject';
             const dialog : ListDialog = new ListDialog(() =>
                                                        {
@@ -251,13 +262,13 @@ class MenubarController
                                                                dialog.selectedItems
                                                                      .forEach((value) =>
                                                                               {
-                                                                                  PersistenceController.deleteLocalProject(value);
+                                                                                  controller.persistenceController.deleteLocalProject(value);
                                                                               });
                                                            }
                                                        }, controller.listProjects());
             dialog.show();
         }
-    
+
     /**
      * opens dialog for name input and downloads project by use of the PersistenceController
      * @param event - event param
@@ -290,7 +301,7 @@ class MenubarController
                                                                               .getName(), null);
             exportDialog.show();
         }
-    
+
     /**
      * opens name input dialog, creates new Library-object and adds it to the current project
      * @param event - event parameter
@@ -309,7 +320,7 @@ class MenubarController
                                                          }, 'New Library', null);
             dialog.show();
         }
-    
+
     /**
      * opens file-open-dialog
      * checks if filetype is correct and starts upload by use of PersistenceController
@@ -318,7 +329,7 @@ class MenubarController
     private importLibrary(event) : void
         {
             const controller = event.data.controller;
-            
+
             const fileInput : HTMLInputElement = document.createElement('input');
             fileInput.type                     = 'file';
             fileInput.id                       = 'files';
@@ -329,11 +340,11 @@ class MenubarController
                 .change(function()
                         {
                             const files : FileList = fileInput.files;
-                    
+
                             let invalidFiles : string[]        = [];
                             let nameCollisionFiles : string[]  = [];
                             let unequalVersionFiles : string[] = [];
-                    
+
                             for (let i = 0; i < files.length; i++)
                             {
                                 if (files[i].name.endsWith('.bdcl'))
@@ -355,7 +366,7 @@ class MenubarController
                                                 unequalVersionFiles[unequalVersionFiles.length] = files[i].name;
                                             }
                                         }
-                                
+
                                         if (i == files.length - 1)
                                         {
                                             let message : string = '';
@@ -414,14 +425,14 @@ class MenubarController
                                     });
                                 }
                             }
-                    
+
                             $(fileInput)
                                 .remove();
                         });
-            
+
             fileInput.click();
         }
-    
+
     /**
      * opens dialog for choosing libraries and starts download of chosen libraries by use of the PersistenceController
      * @param event - event parameter
@@ -440,7 +451,7 @@ class MenubarController
                                                        }, controller.getExportableLibraries());
             dialog.show();
         }
-    
+
     private createComponent(event) : void
         {
             const controller           = <BeastController>event.data.controller;
@@ -451,6 +462,50 @@ class MenubarController
                                                          }, 'New Component', null);
             dialog.show();
         }
+
+    private createComponentFromEquation(event) : void
+        {
+            const controller           = <BeastController>event.data.controller;
+            InputDialog.type           = 'createComponent';
+            const dialog : EquationComponentCreationDialog = new EquationComponentCreationDialog((input : string, expression: string) =>
+                                                        {
+                                                            try {
+                                                                const id = PersistenceController.generateComponentId(input);
+                                                                const circuit = new Equation_BEAST_Converter().convert(id, expression);
+                                                                const component = new CompoundComponent(id, input, circuit.devices, circuit.connectors);
+
+                                                                controller.createComponentAndPutInLibrary(component, 'Generated components');
+
+                                                            } catch (error) {
+                                                                InfoDialog.showDialog('Error occured: ' + error.message);
+                                                            }
+
+                                                        }, 'x1 + x2');
+            dialog.show();
+        }
+
+    private createComponentFromSequence(event) : void
+        {
+            const sequenceController : CreateSequenceController = event.data.sequenceController;
+            const beastController : BeastController = event.data.beastController;
+            sequenceController.onSubmit = function (componentName, equations) {
+                try {
+                    const id = PersistenceController.generateComponentId(componentName);
+                    let circuit = new FSM_Equation_BEAST_Converter().convert(componentName, equations);
+                    const component = new CompoundComponent(id, componentName, circuit.devices, circuit.connectors);
+
+                    beastController.createComponentAndPutInLibrary(component, 'Generated components');
+                    sequenceController.close();
+                } catch (error) {
+                    InfoDialog.showDialog('Error occured: ' + error.message);
+                }
+            };
+            sequenceController.onError = function (errors) {
+                InfoDialog.showDialog('Error occured: ' + errors[0]);
+            };
+            sequenceController.show();
+        }
+
 }
 
 class WarningDialog extends Dialog
@@ -459,7 +514,7 @@ class WarningDialog extends Dialog
     protected callbackSave : () => void;
     protected callBackExport : () => void;
     private name : string;
-    
+
     constructor(callbackFunctionContinue : () => void, callbackFunctionSave : () => void, callbackFunctionExport : () => void, projectName : string)
         {
             super();
@@ -468,12 +523,12 @@ class WarningDialog extends Dialog
             this.callBackExport   = callbackFunctionExport;
             this.name             = projectName;
         }
-    
+
     protected getTitle() : string
         {
             return 'Warning';
         }
-    
+
     protected getContent() : JQuery
         {
             let content : JQuery;
@@ -521,7 +576,7 @@ class InputDialog extends Dialog
     private projectList : string[];
     public static type : string;
     private buttonFunction : () => void;
-    
+
     constructor(callbackFunction : (inputValue) => void, defaultText : string, projectList : string[])
         {
             super();
@@ -529,7 +584,7 @@ class InputDialog extends Dialog
             this.defaultText = defaultText;
             this.projectList = projectList;
         }
-    
+
     protected getTitle() : string
         {
             let s : string;
@@ -550,7 +605,7 @@ class InputDialog extends Dialog
             }
             return s;
         }
-    
+
     protected getContent() : JQuery
         {
             const content : JQuery = $('<div></div>');
@@ -559,7 +614,7 @@ class InputDialog extends Dialog
             if (InputDialog.type == 'saveProject')
             {
                 content.append($('<p>Current projects in the local storage:</p>'));
-                
+
                 if (this.projectList.length == 0)
                 {
                     content.append($('<p><br/><i>There are no saved projects.</i></p><br>'));
@@ -585,7 +640,7 @@ class InputDialog extends Dialog
                 }
                 content.append('<p><b>Save as...</b></p>');
             }
-            
+
             this.buttonFunction = () =>
             {
                 const val : string = inputField.prop('value');
@@ -613,7 +668,7 @@ class InputDialog extends Dialog
                     this.close();
                 }
             };
-            
+
             let buttonName : string;
             inputField.val(this.defaultText);
             inputField.prop('autofocus', 'true');
@@ -631,7 +686,7 @@ class InputDialog extends Dialog
             inputField
                 .attr('type', 'text');
             content.append(inputField);
-            
+
             let icon : string;
             switch (InputDialog.type)
             {
@@ -653,12 +708,12 @@ class InputDialog extends Dialog
                     break;
             }
             this.addButton(buttonName, icon, this.buttonFunction);
-            
+
             this.addButton('Cancel', 'glyphicon glyphicon-remove', () =>
             {
                 this.close();
             });
-            
+
             this.registerKeyListener((key : number) =>
                                      {
                                          if (key == 13)
@@ -666,7 +721,7 @@ class InputDialog extends Dialog
                                              this.buttonFunction();
                                          }
                                      });
-            
+
             return content;
         }
 }
@@ -678,7 +733,7 @@ class ListDialog extends Dialog
     public selectedItems : any[];
     public static type : string;
     private buttonFunction : () => void;
-    
+
     constructor(callBackFunction : () => void, list : string[] | Library[])
         {
             super();
@@ -686,7 +741,7 @@ class ListDialog extends Dialog
             this.list          = list;
             this.selectedItems = [];
         }
-    
+
     protected getTitle() : string
         {
             let s : string;
@@ -704,11 +759,11 @@ class ListDialog extends Dialog
             }
             return s;
         }
-    
+
     protected getContent() : JQuery
         {
             const content : JQuery = $('<form></form>');
-            
+
             if (this.list.length == 0)
             {
                 content.append(ListDialog.type == 'exportLibrary' ? '<p><br/><i>There are no libraries you can' +
@@ -751,7 +806,7 @@ class ListDialog extends Dialog
                     });
                 }
                 content.append(itemList);
-                
+
                 let buttonName : string;
                 let icon : string;
                 switch (ListDialog.type)
@@ -769,7 +824,7 @@ class ListDialog extends Dialog
                         icon       = 'glyphicon glyphicon-export';
                         break;
                 }
-                
+
                 this.buttonFunction = () =>
                 {
                     let n = 0;
@@ -801,10 +856,10 @@ class ListDialog extends Dialog
                         this.close();
                     }
                 };
-                
-                
+
+
                 this.addButton(buttonName, icon, this.buttonFunction);
-                
+
                 this.registerKeyListener((key : number) =>
                                          {
                                              if (key == 13)
@@ -813,14 +868,68 @@ class ListDialog extends Dialog
                                              }
                                          });
             }
-            
-            
+
+
             this.addButton('Cancel', 'glyphicon glyphicon-remove', () =>
             {
                 this.close();
             });
-            
-            
+
+
             return content;
         }
 }
+
+class EquationComponentCreationDialog extends Dialog {
+    protected nameInput: JQuery;
+    protected expressionInput: JQuery;
+
+    constructor(protected callbackFunction: (name: string, expression: string) => void, protected defaultExpression: string) {
+        super({
+            width: '700px'
+        });
+    }
+
+    protected getTitle(): string {
+        return 'Create new component';
+    }
+
+    protected getContent(): JQuery {
+        const text = '<p><b>Please choose a name for new component:</b></p>'
+
+        const content: JQuery = $('<div></div>')
+            .append(text);
+        this.nameInput = $('<input type="text"/>');
+        this.nameInput.val('New Component');
+        this.nameInput.addClass('beast-horizontal-fill');
+        content.append(this.nameInput);
+
+        content.append('<p><b>Please type an expression</b></p>')
+        this.expressionInput = $('<input type="text"/>');
+        this.expressionInput .val(this.defaultExpression);
+        this.expressionInput.addClass('beast-horizontal-fill');
+        content.append(this.expressionInput);
+
+        this.addButton('Save', 'glyphicon glyphicon-floppy-disk', this.confimedEvent);
+        this.addButton('Cancel', 'glyphicon glyphicon-remove', () => this.close());
+
+        this.registerKeyListener((key: number) => {
+            //enter
+            if (key == 13) {
+                this.confimedEvent();
+            }
+        });
+
+        return content;
+    }
+
+    confimedEvent = () => {
+        const val: string = this.nameInput.val();
+        if (val.length != 0) {
+            this.callbackFunction(this.nameInput.val(), this.expressionInput.val());
+            this.close();
+        }
+    };
+}
+
+

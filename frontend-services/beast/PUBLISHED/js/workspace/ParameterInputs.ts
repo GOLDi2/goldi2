@@ -3,122 +3,121 @@
  */
 
 namespace workspace {
-    const RGBCOLOR_REGEX  = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
-    
+    const RGBCOLOR_REGEX = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
+
     /**
      * Represents a Parameter input
      */
     export abstract class ParameterInput {
-        ui: JQuery;
-    
+        readonly ui: JQuery;
+        readonly validateFct: (value: any) => boolean;
+
+        protected constructor(ui: JQuery, validateFct: (value: any) => boolean = () => true) {
+            this.ui = ui;
+            this.validateFct = validateFct;
+        }
+
         /** Is called after the ui of the ParameterInput is attached to the DOM */
-        initInput() {}
-    
+        initInput() {
+        }
+
         /**
          * Is called to check whether the entered value is valid for this ParameterInput
          */
-        abstract isValid(): boolean
-    
+        isValid(): boolean {
+            return this.validateFct(this.getValue());
+        }
+
         /**
          * Is called to get the current value
          */
         abstract getValue(): any
     }
-    
+
     /**
      * Defines the constructor of a ParameterInput
      */
     export interface ParameterInputClass {
-        new (currentValue: any): ParameterInput
+        new(currentValue: any, validateFct: (value: any) => boolean): ParameterInput
     }
-    
+
     /**
      * A ParameterInput for strings
      */
-    class StringParameterInput extends ParameterInput{
-        input: JQuery;
-        
-        constructor(currenValue: any) {
-            super();
-            this.ui = this.input = $('<input type="text">');
-            this.input.val(currenValue);
+    class StringParameterInput extends ParameterInput {
+
+        constructor(currentValue: any, validateFct?: (value: any) => boolean) {
+            super($('<input type="text">'), validateFct);
+            this.ui.val(currentValue);
         }
-        
-        isValid() {
-            return true;
-        }
-        
-        getValue() {
-            return this.input.val();
+
+        getValue(): any {
+            return this.ui.val();
         }
     }
-    
-    class MultilineStringInput extends ParameterInput{
-        constructor(currenValue: any) {
-            super();
-            this.ui = $('<textarea rows="4" cols="50"></textarea>');
-            this.ui.val(currenValue);
-    
+
+    class MultiLineStringInput extends ParameterInput {
+        constructor(currentValue: any, validateFct?: (value: any) => boolean) {
+            super($('<textarea rows="4" cols="50"></textarea>'), validateFct);
+            this.ui.val(currentValue);
             //Prevent Enter from closing the dialog unless shift is pressed
-            var keyDownHandler = function (event) {
-                if( event.keyCode == 13 && !event.shiftKey )
+            this.ui.on("keydown", (event) => {
+                if (event.keyCode == 13 && !event.shiftKey)
                     event.stopPropagation();
-            };
-            this.ui.on("keydown", keyDownHandler);
+            });
         }
-    
-        isValid() {
-            return true;
-        }
-    
+
         getValue() {
             return this.ui.val();
         }
     };
-    
-    class ColorParameterInput extends StringParameterInput{
-        constructor(currentValue: any) {
-            super(currentValue);
-        }
+
+    class ColorParameterInput extends StringParameterInput {
         initInput() {
-            this.input.spectrum(
-                {color: this.input.val(),
-                 preferredFormat: "hex"});
+            this.ui.spectrum(
+                {
+                    color: this.getValue(),
+                    preferredFormat: "hex"
+                });
         }
+
         isValid() {
-            return RGBCOLOR_REGEX.test(this.input.val());
+            return RGBCOLOR_REGEX.test(this.getValue()) && super.isValid();
         }
     }
-    
+
     /**
      * A ParameterInput for rational numbers
      */
-    class NumberParameterInput extends StringParameterInput{
+    class NumberParameterInput extends StringParameterInput {
         isValid() {
-            return !isNaN(this.input.val());
+            return !isNaN(this.getValue()) && super.isValid();
         }
+
         getValue() {
-            return parseFloat(this.input.val());
+            return parseFloat(this.ui.val());
         }
     }
-    
+
     /**
      * A integer ParameterInput
      */
-    class IntegerParameterInput extends StringParameterInput{
+    class IntegerParameterInput extends StringParameterInput {
         isValid() {
-            let val = this.input.val();
-            return val == parseInt(val);
+            const val = this.ui.val();
+            return val == parseInt(val) && super.isValid();
         }
+
         getValue() {
-            return parseInt(this.input.val());
+            return parseInt(this.ui.val());
         }
     }
-    
-    export const INPUTTYPES = {
+
+    export const INPUT_TYPES = {
         "string": StringParameterInput,
-        "multilinestring": MultilineStringInput,
+        "multilinestring": MultiLineStringInput,
         "color": ColorParameterInput,
         "number": NumberParameterInput,
-        "integer": IntegerParameterInput};
+        "integer": IntegerParameterInput
+    };
 }

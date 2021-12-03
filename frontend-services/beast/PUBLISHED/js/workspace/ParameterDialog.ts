@@ -23,7 +23,7 @@ class ParameterDialog extends Dialog
      */
     constructor(parameterDescriptions : Array<SimcirParamDescription>, values : object, SetValuesCallback : (newValues : object) => void)
         {
-            super({modal : false, show : false, hide : false});
+            super({modal : true, show : false, hide : false});
             this.parameterDescriptions = parameterDescriptions;
             this.SetValuesCallback     = SetValuesCallback;
             this.values                = values;
@@ -46,8 +46,8 @@ class ParameterDialog extends Dialog
             
             for (let paramDesc of this.parameterDescriptions)
             {
-                const inputClass : ParameterInputClass = workspace.INPUTTYPES[paramDesc.type];
-                const input                            = new inputClass(this.values[paramDesc.name] || paramDesc.defaultValue);
+                const inputClass : ParameterInputClass = workspace.INPUT_TYPES[paramDesc.type];
+                const input                            = new inputClass(this.values[paramDesc.name] || paramDesc.defaultValue, paramDesc.validateFct);
                 
                 const row : JQuery = $('<tr></tr>');
                 row.append($('<td></td>')
@@ -64,7 +64,7 @@ class ParameterDialog extends Dialog
                 this.inputs.push(input);
                 this.rows.push(row);
             }
-            this.addButton('Apply', 'glyphicon glyphicon-ok', () => (this.apply()));
+            this.addButton('Apply', 'glyphicon glyphicon-ok', () => this.apply());
             
             this.registerKeyListener((key) =>
                                      {
@@ -100,12 +100,12 @@ class ParameterDialog extends Dialog
         {
             if (this.validate())
             {
-                let newvalues = {};
+                const newValues = {};
                 for (let i in this.inputs)
                 {
-                    newvalues[this.parameterDescriptions[i].name] = this.inputs[i].getValue();
+                    newValues[this.parameterDescriptions[i].name] = this.inputs[i].getValue();
                 }
-                this.SetValuesCallback(newvalues);
+                this.SetValuesCallback(newValues);
                 this.close();
             }
         }

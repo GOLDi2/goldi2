@@ -33,6 +33,9 @@ namespace Workspace {
         zoom(relative: boolean, zoomfactor:number);
         getPorts(): {inports: Array<SimcirPort>, outports: Array<SimcirPort>};
         selectAll();
+        updatePositions();
+        eventQueue: EventQueue;
+        setPauseTimers(pause: boolean);
     
         markDirty: (stateOnly: boolean) => void,
         openCompound: (identifier: GlobalComponentTypeID) => void
@@ -170,7 +173,7 @@ namespace Workspace {
         
         getSimulationInterface(): SimulationInterface {
             if (this.simulationInterface == null)
-                this.simulationInterface = new SimulationInterface(this.simcirWorkspace)
+                this.simulationInterface = new SimulationInterface(this.simcirWorkspace);
             return this.simulationInterface
         }
         
@@ -186,6 +189,14 @@ namespace Workspace {
         
         selectAll() {
             this.simcirWorkspace.selectAll();
+        }
+
+        /**
+         * Updates the Label positioning - to be called after adding the workspace to the DOM when the it was
+         * not part of the DOM at time of construction
+         */
+        public updatePositions() {
+            this.simcirWorkspace.updatePositions();
         }
     }
     
