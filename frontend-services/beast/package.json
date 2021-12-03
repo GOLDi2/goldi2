@@ -46,7 +46,6 @@
   "devDependencies": {
     "ts-loader": "^2.2.2",
     "typedoc": "^0.7.1",
-    "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^2.4.1",
     "webpack": "^3.0.0"
   }

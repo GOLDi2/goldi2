@@ -3,23 +3,8 @@
  */
 
 var path = require('path');
-var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 module.exports = {
-    plugins: [
-        new TypedocWebpackPlugin({
-            includeDeclarations: false,
-            ignoreCompilerErrors: true,
-            exclude: '**/node_modules/**/*.*',
-            module: 'commonjs',
-            target : 'es6',
-            name : 'BEAST',
-            mode : 'file',
-            theme : 'default',
-        },
-            ['./js'] //input directories
-        )
-    ],
     entry: './js/controller/BeastController.ts',
     module: {
         rules: [
