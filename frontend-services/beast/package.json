@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/webpack --config webpack.config.js"
+    "start": "./node_modules/.bin/webpack --config webpack.config.js",
+    "build": "tsc || node build.js"
   },
   "keywords": [
     "circiut",
@@ -44,6 +45,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "copy": "^0.3.2",
+    "minify": "^8.0.3",
     "ts-loader": "^2.2.2",
     "typedoc": "^0.7.1",
     "typescript": "^2.4.1",
