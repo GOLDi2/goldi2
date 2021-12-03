@@ -1,0 +1,227 @@
+{
+    "circuit": {
+        "ID": "project",
+        "name": "Torschaltung",
+        "devices": [
+            {
+                "label": "Oscilator",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OSC"
+                },
+                "id": "dev0",
+                "x": 248,
+                "y": 176,
+                "freq": "1"
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev1",
+                "x": 368,
+                "y": 184
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OR"
+                },
+                "id": "dev2",
+                "x": 368,
+                "y": 440
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "DSO"
+                },
+                "id": "dev3",
+                "x": 496,
+                "y": 440,
+                "state": {
+                    "playing": true,
+                    "rangeIndex": 0
+                }
+            },
+            {
+                "label": "Oscilator",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OSC"
+                },
+                "id": "dev4",
+                "x": 248,
+                "y": 432,
+                "freq": "1"
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev5",
+                "x": 312,
+                "y": 480,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev6",
+                "x": 304,
+                "y": 560,
+                "rotation": 270,
+                "state": {
+                    "on": false
+                }
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev7",
+                "x": 312,
+                "y": 520,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev8",
+                "x": 312,
+                "y": 264,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev9",
+                "x": 312,
+                "y": 224,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "DSO"
+                },
+                "id": "dev10",
+                "x": 496,
+                "y": 184,
+                "state": {
+                    "playing": true,
+                    "rangeIndex": 0
+                }
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "OR Torschaltung",
+                "id": "dev11",
+                "x": 312,
+                "y": 384
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "AND Torschaltung",
+                "id": "dev12",
+                "x": 304,
+                "y": 136
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Toggle"
+                },
+                "id": "dev13",
+                "x": 304,
+                "y": 312,
+                "rotation": 270,
+                "state": {
+                    "on": false
+                }
+            }
+        ],
+        "connectors": [
+            {
+                "from": "dev1.in0",
+                "to": "dev0.out0"
+            },
+            {
+                "from": "dev1.in1",
+                "to": "dev9.out0"
+            },
+            {
+                "from": "dev2.in0",
+                "to": "dev4.out0"
+            },
+            {
+                "from": "dev2.in1",
+                "to": "dev5.out0"
+            },
+            {
+                "from": "dev3.in0",
+                "to": "dev2.out0"
+            },
+            {
+                "from": "dev3.in3",
+                "to": "dev7.out0"
+            },
+            {
+                "from": "dev5.in0",
+                "to": "dev7.out0"
+            },
+            {
+                "from": "dev7.in0",
+                "to": "dev6.out0"
+            },
+            {
+                "from": "dev8.in0",
+                "to": "dev13.out0"
+            },
+            {
+                "from": "dev9.in0",
+                "to": "dev8.out0"
+            },
+            {
+                "from": "dev10.in0",
+                "to": "dev1.out0"
+            },
+            {
+                "from": "dev10.in3",
+                "to": "dev8.out0"
+            }
+        ]
+    },
+    "version": "1.0.0",
+    "libraries": [
+        {
+            "ID": "beast-deposit",
+            "name": "Deposit",
+            "version": "1.0.0",
+            "components": []
+        }
+    ]
+}
