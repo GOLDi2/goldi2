@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true,
+    "inlineSources": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "js/d_ts/jquery.d.ts",
+    "js/d_ts/jqueryui.d.ts",
+    "js/d_ts/jquery.fancytree.d.ts",
+    "js/d_ts/simcir.d.ts",
+    "js/SVGGraphics.ts",
+    "js/Dialog.ts",
+    "js/controller/common.ts",
+    "js/fancytree/treeController.ts",
+    "js/controller/BeastController.ts",
+    "js/workspace/ParameterInputs.ts",
+    "js/workspace/ParameterDialog.ts",
+    "js/event_queue.ts",
+    "js/workspace/workspace.ts",
+    "js/workspace/SimulationInterface.ts",
+    "js/workspace/main.ts",
+    "js/controller/editorController.ts",
+    "js/controller/workspaceController.ts",
+    "js/model/model.ts",
+    "js/workspacetest.ts",
+    "js/controller/menubarController.ts"
+  ]
+}

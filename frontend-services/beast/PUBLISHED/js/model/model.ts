@@ -41,27 +41,18 @@ class PersistenceController
     private dirty : boolean;
     
     private controller : BeastController;
-
-    private localStoragePrefix: string;
-    private get session_dirty_key() : string { return this.localStoragePrefix + "-" + PersistenceController.SESSION_DIRTY_KEY }
-    private get local_project_prefix() : string { return PersistenceController.LOCAL_PROJECT_PREFIX }
-    private get local_last_project_key() : string { return this.localStoragePrefix + "-" + PersistenceController.LOCAL_LAST_PROJECT_KEY }
-    private get local_project_list_key() : string { return PersistenceController.LOCAL_PROJECT_LIST_KEY }
-    private get local_session_lock_key() : string { return this.localStoragePrefix + "-" + PersistenceController.LOCAL_SESSION_LOCK_KEY }
-
+    
     /**
      * Creates a new PersistenceController
      * @param controller the corresponding Beast Controller instance
-     * @param localStoragePrefix a prefix to project-related keys in the local storage
      */
-    constructor(controller : BeastController, localStoragePrefix: string = "")
+    constructor(controller : BeastController)
         {
             this.controller = controller;
-            this.localStoragePrefix = localStoragePrefix;
             this.dirty      = false;
-            if (localStorage.getItem(this.local_session_lock_key) === null)
+            if (localStorage.getItem(PersistenceController.LOCAL_SESSION_LOCK_KEY) === null)
             {
-                localStorage.setItem(this.local_session_lock_key, '');
+                localStorage.setItem(PersistenceController.LOCAL_SESSION_LOCK_KEY, '');
                 this.currentProject = this.getLastSessionProject();
                 window.addEventListener('beforeunload', () =>
                 {
@@ -106,13 +97,13 @@ class PersistenceController
     private saveSessionProject() : void
         {
             const data : string = JSON.stringify(this.currentProject);
-            sessionStorage.setItem(this.local_last_project_key, data);
-            sessionStorage.setItem(this.session_dirty_key, JSON.stringify(this.dirty));
+            sessionStorage.setItem(PersistenceController.LOCAL_LAST_PROJECT_KEY, data);
+            sessionStorage.setItem(PersistenceController.SESSION_DIRTY_KEY, JSON.stringify(this.dirty));
             if (this.dirty)
             {
-                localStorage.setItem(this.local_last_project_key, data);
+                localStorage.setItem(PersistenceController.LOCAL_LAST_PROJECT_KEY, data);
             }
-            localStorage.removeItem(this.local_session_lock_key);
+            localStorage.removeItem(PersistenceController.LOCAL_SESSION_LOCK_KEY);
         }
     
     /**
@@ -121,19 +112,19 @@ class PersistenceController
      */
     private getLastSessionProject() : Project
         {
-            let data = sessionStorage.getItem(this.local_last_project_key);
+            let data = sessionStorage.getItem(PersistenceController.LOCAL_LAST_PROJECT_KEY);
             if (data === null)
             {
-                data = localStorage.getItem(this.local_last_project_key);
+                data = localStorage.getItem(PersistenceController.LOCAL_LAST_PROJECT_KEY);
             }
-            localStorage.removeItem(this.local_last_project_key);
+            localStorage.removeItem(PersistenceController.LOCAL_LAST_PROJECT_KEY);
             if (data === null)
             {
                 return new Project();
             }
             else
             {
-                const dirtyMarker : string = sessionStorage.getItem(this.session_dirty_key);
+                const dirtyMarker : string = sessionStorage.getItem(PersistenceController.SESSION_DIRTY_KEY);
                 if (dirtyMarker === null)
                 {
                     InfoDialog.showDialog('You didn\'t save your last session!');
@@ -317,19 +308,21 @@ class PersistenceController
      * @param path Path from which is loaded
      * @returns {Library} the library
      */
-    loadStaticLibrary(path : string, callback : Function)
+    loadStaticLibrary(path : string) : Library
         {
+            let libjson = null;
             jQuery.ajax({
                             url     : path,
-                            success : (result) =>
+                            success : function(result)
                             {
-                                callback(this.loadLibraryFromJSON(result));
+                                libjson = result;
                             },
                             error : function(result){
                                 console.log(result);
                             },
-                            async   : true
+                            async   : false
                         });
+            return this.loadLibraryFromJSON(libjson);
         }
     
     /**
@@ -359,25 +352,23 @@ class PersistenceController
      */
     saveCurrentProjectInLocalStorage() : void
         {
-            const list : string[] = this.getProjects();
+            const list : string[] = PersistenceController.getProjects();
             const name            = this.currentProject.getName();
             if (list.indexOf(name) == -1)
             {
                 list.push(name);
             }
-            localStorage.setItem(this.local_project_list_key, JSON.stringify(list));
-            localStorage.setItem(this.local_project_prefix + name, JSON.stringify(this.currentProject));
+            localStorage.setItem(PersistenceController.LOCAL_PROJECT_LIST_KEY, JSON.stringify(list));
+            localStorage.setItem(PersistenceController.LOCAL_PROJECT_PREFIX + name, JSON.stringify(this.currentProject));
             this.dirty = false;
         }
     
     /**
      * Creates a new project and set it as current project
      */
-    public createNewProject(projectModifier?: (project: Project)=>(void)) : void
+    public createNewProject() : void
         {
-            const project = new Project();
-            if (projectModifier) projectModifier(project);
-            this.setCurrentProject(project);
+            this.setCurrentProject(new Project());
         };
     
     /**
@@ -403,24 +394,24 @@ class PersistenceController
      * Deletes the given project from localStorage
      * @param name Name of the project
      */
-    deleteLocalProject(name : string) : void
+    static deleteLocalProject(name : string) : void
         {
-            const arr : string[] = this.getProjects();
+            const arr : string[] = PersistenceController.getProjects();
             const idx : number   = arr.indexOf(name);
             if (idx > -1)
             {
                 arr.splice(idx, 1);
-                localStorage.setItem(this.local_project_list_key, JSON.stringify(arr));
-                localStorage.removeItem(this.local_project_prefix + name);
+                localStorage.setItem(PersistenceController.LOCAL_PROJECT_LIST_KEY, JSON.stringify(arr));
+                localStorage.removeItem(PersistenceController.LOCAL_PROJECT_PREFIX + name);
             }
         }
     
     /**
      * @returns {Array} Array with the names of the projects in the localStorage
      */
-    getProjects() : string[]
+    static getProjects() : string[]
         {
-            const data : string = localStorage.getItem(this.local_project_list_key);
+            const data : string = localStorage.getItem(PersistenceController.LOCAL_PROJECT_LIST_KEY);
             return data === null ? [] : JSON.parse(data);
         }
     
@@ -430,7 +421,7 @@ class PersistenceController
      */
     loadProject(name : string) : void
         {
-            this.setCurrentProject(this.loadProjectFromJSON(localStorage.getItem(this.local_project_prefix + name)));
+            this.setCurrentProject(this.loadProjectFromJSON(localStorage.getItem(PersistenceController.LOCAL_PROJECT_PREFIX + name)));
         }
     
     /**

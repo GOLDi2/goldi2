@@ -93,40 +93,57 @@
 
     // symbol draw functions
     var drawBUF = function (g, x, y, width, height) {
-        g.drawRect(x, y, width, height);
-        g.moveTo(x + (width * 2 / 5), y + (height * 2 / 5));
-        g.lineTo(x + (width * 3 / 5), y + (height * 1 / 5));
-        g.lineTo(x + (width * 3 / 5), y + (height * 4 / 5));
+        g.moveTo(x, y);
+        g.lineTo(x, y + height);
+        g.lineTo(x + width, y + height);
+        g.lineTo(x + width, y);
+        g.lineTo(x , y);
+        g.moveTo(x + (width * 2/5), y + (height * 2/5));
+        g.lineTo(x + (width * 3/5), y + (height * 1/5));
+        g.lineTo(x + (width * 3/5), y + (height * 4/5));
         g.moveTo(x, y);
         g.closePath(true);
     };
 
-    var drawAND = function (g, x, y, width, height) {
-        g.drawText(x + width / 5, y + height / 1.2, 15, "&");
-        g.drawRect(x, y, width, height);
+    var drawAND = function (g, x, y, width, height, ) {
+        g.drawText(x + width/5  , y + height/1.2 , 15, "&");
+        g.moveTo(x, y);
+        g.lineTo(x, y + height);
+        g.lineTo(x + width, y + height);
+        g.lineTo(x + width, y);
+        g.lineTo(x , y);
+        g.closePath(true);
     };
     var drawOR = function (g, x, y, width, height) {
-        g.drawRect(x, y, width, height);
-        g.moveTo(x + (width * 1 / 4), y + (height * 1 / 5));
-        g.lineTo(x + (width * 2 / 4), y + (height * 2 / 5));
-        g.lineTo(x + (width * 1 / 4), y + (height * 3 / 5));
-        g.moveTo(x + (width * 1 / 4), y + (height * 4 / 5));
-        g.lineTo(x + (width * 2 / 4), y + (height * 4 / 5));
-        g.moveTo(x + (width * 3 / 5), y + (height * 2 / 5));
-        g.lineTo(x + (width * 3 / 4), y + (height * 1 / 5));
-        g.lineTo(x + (width * 3 / 4), y + (height * 4 / 5));
+        g.moveTo(x, y);
+        g.lineTo(x, y + height);
+        g.lineTo(x + width, y + height);
+        g.lineTo(x + width, y);
+        g.lineTo(x , y);
+        g.moveTo(x + (width * 1/4), y + (height * 1/5));
+        g.lineTo(x + (width * 2/4), y + (height * 2/5));
+        g.lineTo(x + (width * 1/4), y + (height * 3/5));
+        g.moveTo(x + (width * 1/4), y + (height * 4/5));
+        g.lineTo(x + (width * 2/4), y + (height * 4/5));
+        g.moveTo(x + (width * 3/5), y + (height * 2/5));
+        g.lineTo(x + (width * 3/4), y + (height * 1/5));
+        g.lineTo(x + (width * 3/4), y + (height * 4/5));
         g.moveTo(x, y);
         g.closePath(true);
     };
     var drawXOR = function (g, x, y, width, height) {
-        g.drawRect(x, y, width, height);
-        g.moveTo(x + (width * 1 / 4), y + (height * 2 / 5));
-        g.lineTo(x + (width * 2 / 4), y + (height * 2 / 5));
-        g.moveTo(x + (width * 1 / 4), y + (height * 3 / 5));
-        g.lineTo(x + (width * 2 / 4), y + (height * 3 / 5));
-        g.moveTo(x + (width * 3 / 5), y + (height * 2 / 5));
-        g.lineTo(x + (width * 3 / 4), y + (height * 1 / 5));
-        g.lineTo(x + (width * 3 / 4), y + (height * 4 / 5));
+        g.moveTo(x, y);
+        g.lineTo(x, y + height);
+        g.lineTo(x + width, y + height);
+        g.lineTo(x + width, y);
+        g.lineTo(x , y);
+        g.moveTo(x + (width * 1/4), y + (height * 2/5));
+        g.lineTo(x + (width * 2/4), y + (height * 2/5));
+        g.moveTo(x + (width * 1/4), y + (height * 3/5));
+        g.lineTo(x + (width * 2/4), y + (height * 3/5));
+        g.moveTo(x + (width * 3/5), y + (height * 2/5));
+        g.lineTo(x + (width * 3/4), y + (height * 1/5));
+        g.lineTo(x + (width * 3/4), y + (height * 4/5));
         g.moveTo(x, y);
         g.closePath(true);
     };
@@ -208,13 +225,13 @@
                     event.stopPropagation();
                     if (type == 'PushOn') {
                         on = true;
-                        $button.addClass('simcir-basicset-switch-button-pressed');
+                        $button.addClass( 'simcir-basicset-switch-button-pressed');
                     } else if (type == 'PushOff') {
                         on = false;
-                        $button.addClass('simcir-basicset-switch-button-pressed');
+                        $button.addClass( 'simcir-basicset-switch-button-pressed');
                     } else if (type == 'Toggle') {
                         on = !on;
-                        $button.addClass('simcir-basicset-switch-button-pressed');
+                        $button.addClass( 'simcir-basicset-switch-button-pressed');
                     }
                     updateOutput();
                     $(document).on('mouseup', button_mouseUpHandler);
@@ -223,14 +240,14 @@
                 var button_mouseUpHandler = function (event) {
                     if (type == 'PushOn') {
                         on = false;
-                        $button.removeClass('simcir-basicset-switch-button-pressed');
+                        $button.removeClass( 'simcir-basicset-switch-button-pressed');
                     } else if (type == 'PushOff') {
                         on = true;
-                        $button.removeClass('simcir-basicset-switch-button-pressed');
+                        $button.removeClass( 'simcir-basicset-switch-button-pressed');
                     } else if (type == 'Toggle') {
                         // keep state
                         if (!on) {
-                            $button.removeClass('simcir-basicset-switch-button-pressed');
+                            $button.removeClass(  'simcir-basicset-switch-button-pressed');
                         }
                         device.markDirty(true);
                     }
@@ -238,9 +255,7 @@
                     $(document).off('mouseup', button_mouseUpHandler);
                     $(document).off('touchend', button_mouseUpHandler);
                 };
-                var ignoreEvent = (e) => {
-                    e.stopPropagation(), e.preventDefault()
-                };
+                var ignoreEvent = (e) => {e.stopPropagation(), e.preventDefault()};
 
                 device.$ui.on('deviceAdd', function () {
                     $s.enableEvents($button, true);
@@ -268,12 +283,20 @@
                 device.halfPitch = numInputs > 4;
                 const curNumInputs = device.getInputs().length;
                 if (curNumInputs < numInputs) {
-                    for (var i = curNumInputs; i < numInputs; ++i) {
+                    for (var i = curNumInputs; i < numInputs; i += 1) {
                         device.addInput();
                     }
                 }
-                for (let i = curNumInputs; i > numInputs; --i) {
-                    device.removeInput();
+                if (curNumInputs > numInputs) {
+                    const inputs = device.getInputs()
+                    for (var i = curNumInputs-1; i >= numInputs; i -= 1) {
+                        var outNode = inputs[i].getOutput();
+                        if (outNode != null) {
+                            outNode.disconnectFrom(inputs[i]);
+                        }
+                        inputs[i].$ui.remove();
+                    }
+                    inputs.splice(numInputs, curNumInputs-numInputs)
                 }
                 device.layoutUI();
                 device.$ui.trigger('inputValueChange');
@@ -642,22 +665,19 @@
                 var g = new SVGGraphics.SVGGraphics($knob);
                 g.drawCircle(0, 0, r);
                 g.attr['class'] = 'simcir-basicset-knob-mark';
-                g.moveTo(-0.6 * r, 0);
+                g.moveTo(-0.6*r, 0);
                 g.lineTo(-r, 0);
                 g.closePath();
                 device.$ui.append($knob);
-                var $label = SVGGraphics.createSVGElement('text').text("F").addClass("simcir-basicset-knob-label").css({
-                    "text-anchor": "middle",
-                    "font-size": r + "px"
-                }).attr({x: 0, y: 0});
+                var $label = SVGGraphics.createSVGElement('text').text("F").addClass("simcir-basicset-knob-label").css({"text-anchor": "middle", "font-size": r+"px"}).attr({x: 0, y: 0});
                 var $labelContainer = SVGGraphics.createSVGElement('g');
-                $s.transform($label, 0, parseFloat($label.css("font-size")) * 0.35);
+                $s.transform($label, 0, parseFloat($label.css("font-size"))*0.35);
                 $labelContainer.append($label);
                 $knob.append($labelContainer);
 
                 var _angle = _MIN_ANGLE;
                 var setAngle = function (angle) {
-                    _angle = Math.trunc(normalizeAngle(angle) / angleStep) * angleStep;
+                    _angle = Math.trunc(normalizeAngle(angle)/ angleStep) * angleStep;
                     update();
                     device.markDirty(true);
                 };
@@ -677,11 +697,10 @@
                     var pos = $s.offset($knob, 0, 0, true);
                     var cx = off.left + pos.x;
                     var cy = off.top + pos.y;
-
                     var dx = event.pageX - cx;
                     var dy = event.pageY - cy;
                     if (dx == 0 && dy == 0) return;
-                    setAngle(180 + thetaToAngle(Math.atan2(dy, dx)));
+                    setAngle(180+thetaToAngle(Math.atan2(dy, dx)));
                     valueChanged = true;
                 };
                 var knob_mouseUpHandler = function (event) {
@@ -692,14 +711,14 @@
                             knob_click("l");
                         if (event.which == 3)
                             knob_click("r");
-                        if (event.which == 3 || event.which == 1) {
+                        if (event.which == 3 || event.which == 1){
                             event.preventDefault();
                             event.stopPropagation();
                         }
                     }
                 };
 
-                var knob_click = function (key) {
+                var knob_click = function(key) {
                     const delta = key === "l" ? 1 : -1;
                     setAngle(_angle + delta * angleStep);
                 }
@@ -707,34 +726,24 @@
                 device.$ui.on('deviceAdd', function () {
                     $s.enableEvents($knob, true);
                     $knob.on('mousedown', knob_mouseDownHandler);
-                    $knob.dblclick((ev) => {
-                        ev.stopPropagation();
-                        ev.preventDefault()
-                    });
-                    $knob.bind("contextmenu", () => {
-                        return false;
-                    });
-                    update();
+                    $knob.dblclick((ev) => {ev.stopPropagation(); ev.preventDefault()});
+                    $knob.bind("contextmenu", () => {return false;});
                 });
                 device.$ui.on('deviceRemove', function () {
                     $s.enableEvents($knob, false);
                     $knob.off('mousedown', knob_mouseDownHandler);
                 });
-                device.$ui.on('deviceRotate', function () {
-                    update();
-                });
 
                 var update = function () {
-                    let deviceAngle = $s.transform(device.$ui).rotate;
                     $s.transform($knob, size.width / 2,
-                        size.height / 2, 90 + _angle - deviceAngle);
-                    $s.transform($labelContainer, 0, 0, -(90 + _angle));
+                        size.height / 2, _angle + 90);
+                    $s.transform($labelContainer, 0, 0, -(_angle + 90));
                     var max = 1 << numOutputs;
-                    var value = Math.min(((_angle - _MIN_ANGLE) /
-                        (_MAX_ANGLE - _MIN_ANGLE) * max), max - 1);
+                    var value = Math.min(( (_angle - _MIN_ANGLE) /
+                    (_MAX_ANGLE - _MIN_ANGLE) * max), max - 1);
                     $label.text(value.toString(16).toUpperCase());
                     for (var i = 0; i < numOutputs; i += 1) {
-                        device.getOutputs()[i].setValue((value & (1 << i)) ?
+                        device.getOutputs()[i].setValue((value & (1 << i) ) ?
                             onValue : null);
                     }
                 };
@@ -752,19 +761,19 @@
         };
     };
 
-    function CreateLogicConstantComponent(value) {
+    function CreateLogicConstantComponent(value){
         return function (device) {
             device.addOutput();
             var super_createUI = device.createUI;
             device.createUI = function () {
                 super_createUI();
-                device.$ui.addClass('simcir-basicset-constant-' + value);
+                device.$ui.addClass('simcir-basicset-constant-'+value);
                 const g = new SVGGraphics.SVGGraphics(device.$ui);
                 const size = device.getSize();
-                g.drawText(size.width * 0.25, size.height * 0.8, size.height * 0.9, value.toString())
+                g.drawText(size.width * 0.25, size.height * 0.8, size.height*0.9, value.toString())
             };
             device.$ui.on('deviceAdd', function () {
-                device.getOutputs()[0].setValue(value ? onValue : offValue);
+                device.getOutputs()[0].setValue(value? onValue : offValue);
             });
             device.$ui.on('deviceRemove', function () {
                 device.getOutputs()[0].setValue(null);
@@ -776,150 +785,6 @@
     BeastController.registerDefaultComponent(new BasicComponent('Logic1', "Logic 1", CreateLogicConstantComponent(1)));
 
     BeastController.registerDefaultComponent(new BasicComponent('Logic0', "Logic 0", CreateLogicConstantComponent(0)));
-
-    //Programmable Logic
-    function ProgrammableLogicFactory(type) {
-        return function (device) {
-            const defaultInputs = 3;
-            const defaultOutputs = 2;
-            const defaultColumns = 8;
-            const defaultLinksPerOutput = 3;
-            const inputs = device.deviceDef.inputs || defaultInputs;
-            const outputs = device.deviceDef.outputs || defaultOutputs;
-            const columns = device.deviceDef.columns || defaultColumns;
-            const linksPerOutput = device.deviceDef.links || defaultLinksPerOutput;
-            device.doc = {
-                params: [
-                    {
-                        name: 'inputs', type: 'integer', displayName: "Inputs",
-                        defaultValue: defaultInputs,
-                        description: 'number of inputs', validateFct: (value) => value > 0 && value <= 5
-                    },
-                    {
-                        name: 'outputs', type: 'integer', displayName: "Outputs",
-                        defaultValue: defaultOutputs,
-                        description: 'number of outputs', validateFct: (value) => value > 0 && value <= 16
-                    }
-                ]
-            };
-
-            let grid;
-            switch (type) {
-                case 'ROM':
-                    grid = new ROM(inputs, outputs);
-                    break;
-                case 'PLA':
-                    device.doc.params.push({
-                        name: 'columns', type: 'integer', displayName: "Columns",
-                        defaultValue: defaultColumns,
-                        description: 'number of columns', validateFct: (value) => value > 0 && value <= 32
-                    });
-                    grid = new PLA(inputs, outputs, columns);
-                    break;
-                case 'GAL':
-                    const linksParam = {
-                        name: 'links', type: 'integer', displayName: "Links per Output",
-                        defaultValue: defaultLinksPerOutput,
-                        description: 'number of links per output', validateFct: (value) => value > 0 && value <= 5
-                    };
-                    device.doc.params.push(linksParam);
-                    grid = new GAL(inputs, outputs, linksPerOutput);
-                    break;
-                default:
-                    grid = null;
-            }
-
-            device.getSize = () => grid.getSize();
-            function addNodes(method, amount) {
-                for (let i = amount - 1; i >= 0; --i) {
-                    method('', '', 0);
-                }
-            }
-
-            addNodes(device.addInput, inputs);
-            addNodes(device.addOutput, outputs);
-            device.layoutOutput = () => grid.getOutputPositions();
-            device.layoutInput = () => grid.getInputPositions();
-
-            const updateUI = () => {
-                const outputValues = device.deviceDef.outputValues;
-                const inputValues = device.deviceDef.inputValues;
-                const inputs = device.deviceDef.inputs;
-                const outputs = device.deviceDef.outputs;
-                while (device.getInputs().length < inputs) {
-                    device.addInput("", "", 0);
-                }
-                while (device.getInputs().length > inputs) {
-                    device.removeInput(0);
-                }
-                while (device.getOutputs().length < outputs) {
-                    device.addOutput("", "", 0);
-                }
-                while (device.getOutputs().length > outputs) {
-                    device.removeOutput(0);
-                }
-                let $content = device.$ui.children('.device-content');
-                if ($content.length) {
-                    $content.empty();
-                }
-                else {
-                    $content = SVGGraphics.createSVGElement('g').addClass('device-content');
-                    device.$ui.prepend($content);
-                }
-                grid.drawGrid($content);
-                device.layoutUI();
-                if (inputValues) {
-                    grid.setInputLinks(inputValues);
-                }
-                if (outputValues) {
-                    grid.setOutputLinks(outputValues);
-                }
-            };
-            const super_createUI = device.createUI;
-            device.createUI = () => {
-                updateUI();
-                super_createUI();
-                device.$ui.on('inputValueChange', (event, nodeChange) => {
-                    if (nodeChange) {
-                        if (grid instanceof ROM || grid instanceof PLA) {
-                            device.deviceDef.outputValues = grid.getOutputLinks();
-                        }
-                        if (grid instanceof GAL || grid instanceof PLA) {
-                            device.deviceDef.inputValues = grid.getInputLinks();
-                        }
-                        device.markDirty(true);
-                    }
-                    const inputs = [];
-                    device.getInputs().forEach((value) => {
-                        inputs.push(value.getValue());
-                    });
-                    const out = grid.computeInput(inputs.reverse());
-                    device.getOutputs().forEach((node, idx) => node.setValue(out[idx]));
-                });
-            };
-
-            device.$ui.on('parameterChange', () => {
-                const newInputs = device.deviceDef.inputs;
-                const newOutputs = device.deviceDef.outputs;
-                const newColumns = device.deviceDef.columns;
-                const newLinksPerOutput = device.deviceDef.links;
-                if (grid instanceof ROM) {
-                    grid.setParams(newInputs, newOutputs);
-                }
-                if (grid instanceof PLA) {
-                    grid.setParams(newInputs, newOutputs, newColumns);
-                }
-                if (grid instanceof GAL) {
-                    grid.setParams(newInputs, newOutputs, newLinksPerOutput);
-                }
-                updateUI();
-            });
-        }
-    }
-
-    BeastController.registerDefaultComponent((new BasicComponent('ROM', 'ROM', ProgrammableLogicFactory('ROM'))));
-    BeastController.registerDefaultComponent((new BasicComponent('PLA', 'PLA', ProgrammableLogicFactory('PLA'))));
-    BeastController.registerDefaultComponent((new BasicComponent('GAL', 'GAL', ProgrammableLogicFactory('GAL'))));
 
     // register simple LED
     BeastController.registerDefaultComponent(new BasicComponent("LED", 'LED', function (device) {
@@ -996,30 +861,28 @@
         const DEFAULT_FREQUENCY = 10;
 
         var out1 = device.addOutput();
-        var timer = null;
+        var timerId = null;
         var on = false;
 
-        var timerCallback = function () {
-            out1.setValue(on ? onValue : offValue);
-            on = !on;
-        };
-
-        var setTimer = function () {
+        var setTimer = function() {
             var freq = device.deviceDef.freq || DEFAULT_FREQUENCY;
             var delay = ~~(500 / freq); //Math.floor
-            timer = device.scope.addTimer(delay, () => {
-                timerCallback();
-                setTimer()
-            });
-        };
-        var resetTimer = function () {
-            timer.cancel();
+            timerId = window.setInterval(function () {
+                out1.setValue(on ? onValue : offValue);
+                on = !on;
+            }, delay);
+        }
+        var resetTimer = function() {
+            if (timerId != null) {
+                window.clearInterval(timerId);
+                timerId = null;
+            }
         };
 
         device.$ui.on('deviceAdd', setTimer);
         device.$ui.on('deviceRemove', resetTimer);
         device.$ui.on('parameterChange', function () {
-            if (timer != null) {
+            if (timerId != null) {
                 resetTimer();
                 setTimer();
             }
@@ -1027,7 +890,7 @@
         var super_createUI = device.createUI;
         device.createUI = function () {
             super_createUI();
-            device.$ui.addClass('simcir-basicset-dc');
+            device.$ui.addClass( 'simcir-basicset-dc');
             device.doc = {
                 params: [
                     {
@@ -1041,9 +904,9 @@
     }));
 
     // register LED seg
-    BeastController.registerDefaultComponent(new BasicComponent('7seg', "7 Segment Display", createLEDSegFactory(_7Seg)));
+    BeastController.registerDefaultComponent(new BasicComponent('7seg', "7 Segment Display",createLEDSegFactory(_7Seg)));
     BeastController.registerDefaultComponent(new BasicComponent('16seg', "16 Segment Display", createLEDSegFactory(_16Seg)));
-    BeastController.registerDefaultComponent(new BasicComponent('4bit7seg', '4 bit 7 Segment Display', createLED4bitFactory()));
+    BeastController.registerDefaultComponent(new BasicComponent('4bit7seg', '4 bit 7 Segment Display',createLED4bitFactory()));
 
     // register Rotary Encoder
     BeastController.registerDefaultComponent(new BasicComponent('RotaryEncoder', 'Rotary Encoder', createRotaryEncoderFactory()));
@@ -1057,7 +920,7 @@
         }
         var extractValue = function (busValue, i) {
             return (busValue != null && typeof busValue == 'object' &&
-                typeof busValue[i] != 'undefined') ? busValue[i] : null;
+            typeof busValue[i] != 'undefined') ? busValue[i] : null;
         };
         device.$ui.on('inputValueChange', function () {
             var busValue = device.getInputs()[0].getValue();
@@ -1142,10 +1005,10 @@
                     .css("fill", device.deviceDef.color || defaultColor);//.attr("text-anchor", "start");
 
                 $display.append($content);
-                SVGGraphics.transform($display, unit / 2, unit / 2 + 0.8 * (device.deviceDef.fontSize || defaultTextSize));
+                SVGGraphics.transform($display, unit / 2, unit / 2 + 0.8*(device.deviceDef.fontSize || defaultTextSize));
 
                 for (let line of (device.deviceDef.text || defaultText).split("\n")) {
-                    let tspan = SVGGraphics.createSVGElement('tspan').attr({x: "0", y: dy + "em"}).text(line);
+                    let tspan = SVGGraphics.createSVGElement('tspan').attr({x: "0", y: dy+"em"}).text(line);
                     $content.append(tspan);
                     dy += 1.2;
                 }
@@ -1157,8 +1020,7 @@
                     if (bbox.width != 0 && bbox.height != 0)
                         device.$ui.children('.simcir-device-body').attr('width', bbox.width + unit).attr('height', bbox.height + unit);
                 }
-                catch (err) {
-                }
+                catch(err) {}
 
             }
 

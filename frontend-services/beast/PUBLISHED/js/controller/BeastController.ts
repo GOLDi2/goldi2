@@ -38,26 +38,15 @@ class BeastController
     public basicComplexComponentsLib : Library;
     
     
-    constructor(Callback: Function, localStoragePrefix: string = "")
+    constructor()
         {
-            this.persistenceController = new PersistenceController(this, localStoragePrefix);
-            this.initDefaultProject(() => {
-                this.treeController      = new TreeController(this);
-                this.workspaceController = new WorkspaceController(this);
-                this.menubarController   = new MenubarController(this);
-
-                this.workspaceController.resetEditors();
-
-                if(Callback !== undefined)
-                    Callback();
-            });
-
-            if(window.location.href.search("loadBeastFile") !== -1){
-                $.getJSON(window.location.href.match(/[^?]*\?[^=]*=(.*)/)[1],(data)=> {
-                    if(data !== null)
-                        this.persistenceController.setCurrentProject(this.persistenceController.loadProjectFromJSON(JSON.stringify(data)));
-                });
-            }
+            this.persistenceController = new PersistenceController(this);
+            this.initDefaultProject();
+            this.treeController      = new TreeController(this);
+            this.workspaceController = new WorkspaceController(this);
+            this.menubarController   = new MenubarController(this);
+            
+            this.workspaceController.resetEditors();
         }
     
     /**
@@ -94,7 +83,7 @@ class BeastController
     
     public listProjects() : string[]
         {
-            return this.persistenceController.getProjects();
+            return PersistenceController.getProjects();
         }
     
     /**
@@ -175,13 +164,9 @@ class BeastController
      */
     projectChanged()
         {
-            const oldSI = this.getSimulationInterface();
             this.checkForDepositLibrary();
             this.treeController.reloadTree();
             this.workspaceController.resetEditors();
-
-            const newSI = this.getSimulationInterface();
-            oldSI.transferCallbacks(newSI);
         }
     
     private checkForDepositLibrary()
@@ -202,15 +187,12 @@ class BeastController
      * If the default project is a new empty project, the deposit gets added to the projects
      * persistent libraries.
      */
-    public initDefaultProject(Callback : Function)
+    public initDefaultProject()
         {
             this.basicComponentsLib            = new Library(BeastController.BASIC_LIB_ID, 'Basic Components');
             this.basicComponentsLib.components = BeastController.basicComponents;
-            this.persistenceController.loadStaticLibrary('BEAST/assets/beast-basic-compound.bdcl', (result) => {
-                this.basicComplexComponentsLib = result;
-                this.checkForDepositLibrary();
-                Callback();
-            });
+            this.basicComplexComponentsLib     = this.persistenceController.loadStaticLibrary('assets/beast-basic-compound.bdcl');
+            this.checkForDepositLibrary();
         }
     
     /**
@@ -312,31 +294,7 @@ class BeastController
         {
             this.workspaceController.openComponent(this.createComponent(component));
         }
-
-    /**
-     * Creates a new component and puts it into library with given Name
-     * if the library not exists it will be created
-     * Returns null if component was not created
-     * @return {}
-     */
-    public createComponentAndPutInLibrary(component: CompoundComponent, name: string) : GlobalComponentTypeID
-        {
-
-            let componentGlobalID = this.createComponent(component);
-            if (!componentGlobalID)
-            {
-                return null;
-            }
-
-            let library: Library = this.createOrGetLibraryByName(name);
-            library.addComponent(component);
-
-            let globalID = new GlobalComponentTypeID(library.ID, component.ID);
-            this.treeController.addComponent(globalID);
-            this.persistenceController.markDirty();
-            return componentGlobalID;
-        }
-
+    
     public reorderComponentAfter(startComponentID : GlobalComponentTypeID, insertComponentID : GlobalComponentTypeID) : boolean
         {
             const libArr     = this.resolveLibrary(startComponentID.libraryID).components;
@@ -379,62 +337,30 @@ class BeastController
                 return false;
             }
             
-            let blockingDependencies = [];
-            const currentProject = this.getPersistenceController().getCurrentProject();
-
-            // check if any other component in any other library depends on this component
-            for (let lib of currentProject.libraries)
+            let blockingDependencies : string[] = [];
+            for(let c of containingLib.components)
             {
-                if (lib.ID === BeastController.DEPOSIT_LIB_ID)
+                //Cast is safe because we know it is a user lib at this point
+                let comp : CompoundComponent = <CompoundComponent> c;
+                if(comp.directlyDependsOn(key))
                 {
-                    continue;
-                }
-
-                for(let c of lib.components)
-                {
-                    //Cast is safe because we know it is a user lib at this point
-                    let comp : CompoundComponent = <CompoundComponent> c;
-                    if(comp.directlyDependsOn(key))
-                    {
-                        blockingDependencies.push({
-                            componentID: comp.ID,
-                            libraryName: lib.name
-                        });
-                    }
+                    blockingDependencies.push(comp.ID)
                 }
             }
-
-            // check if project page depends on this component
-            let comp : CompoundComponent = <CompoundComponent> currentProject.circuit;
-            if(comp.directlyDependsOn(key))
-            {
-                blockingDependencies.push({
-                    componentID: comp.ID,
-                });
-            }
-
             if(blockingDependencies.length == 0)
             {
                 containingLib.removeComponent(component);
                 this.persistenceController.markDirty();
                 return true;
-            }
-            else
-            {
-                let msg = 'Can not delete Component "' + component.name +
-                          '" from Library "' + containingLib.name +
-                          '" since following components depend on it: <br>';
-                for(let dependency of blockingDependencies)
+            } else {
+                let msg = 'Can not delete Compoenent ' + component.name +
+                          ' from Library ' + containingLib.name +
+                          ' since following components in Library ' + containingLib.name +
+                          ' depend on it: <br>';
+                for(let ID of blockingDependencies)
                 {
-                    if (!dependency.libraryName)
-                    {
-                        msg = msg.concat('<br> -').concat(' Main project page');
-                    }
-                    else
-                    {
-                        msg = msg.concat('<br> -').concat(' In library "' + dependency.libraryName + '" ');
-                        msg = msg.concat('component - "').concat(dependency.componentID).concat('"');
-                    }
+                    msg = msg.concat('<br>').concat(ID);
+                    
                 }
                 InfoDialog.showDialog(msg);
                 return false;
@@ -595,7 +521,7 @@ class BeastController
             
             return newLib;
         }
-
+    
     /**
      * Creates a new Library in the current project with the given Name and assigns an ID to it.
      * Currently no sanity checks made, but IDs should hav fairly low probability of collision.
@@ -609,39 +535,16 @@ class BeastController
         {
             let newID : string = PersistenceController.generateComponentId(name);
             let newLib         = new Library(newID, name);
-
+            
             if (this.addLibrary(newLib) == null)
             {
                 //could not add Library due to name collision
                 return null;
             }
-
+            
             return newLib;
         }
-
-    /**
-     * Creates a new Library in the current project with the given Name and assigns an ID to it.
-     * Or returns library with given name if it's already exists
-     *
-     * @param name
-     * @returns {Library}
-     */
-    public createOrGetLibraryByName(name: string) : Library
-    {
-        let library: Library = null;
-        for (let lib of this.getLibraries()) {
-            if (lib.name === name) {
-                library = lib;
-                break;
-            }
-        }
-        if (!library) {
-            library = this.createLibrary(name);
-        }
-        return library;
-    }
-
-
+    
     /**
      * Imports the specified file as a new library
      * @param file
@@ -738,8 +641,17 @@ class BeastController
         {
             return this.workspaceController.getSimulationInterface();
         }
-
-    public reinitUI() {
-        this.workspaceController.reinitUI();
-    }
+    
 }
+
+
+/**
+ * creates a new BeastController
+ */
+$(document)
+    .ready(function()
+           {
+               let controller = new BeastController();
+               controller.initVersion();
+           }
+    );

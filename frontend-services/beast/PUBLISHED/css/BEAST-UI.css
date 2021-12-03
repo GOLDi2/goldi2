@@ -7,20 +7,26 @@ html, body {
 }
 
 #treewrapper {
-    width: 24em;
+    width: 25em;
 }
 
 #bodywrapper {
     height: 100%;
-    font-size: 14px;
 }
 
 .padding {
+
     padding: 0;
 }
 
 .sharp-corner {
     border-radius: 0 !important;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
 }
 
 .col-flex-container {
@@ -50,10 +56,6 @@ html, body {
 
 #evilGoldi {
     height: 100%;
-}
-
-ul.fancytree-container {
-    height: 10em;
 }
 
 #tree > ul {
@@ -196,6 +198,11 @@ ul.fancytree-container {
     stroke-width: 0;
 }
 
+/* Prevent text selection */
+* {
+    user-select: none;
+}
+
 .zoom-group {
     width: 15em;
     float: left;
@@ -204,7 +211,6 @@ ul.fancytree-container {
 .zoom-group > input {
     text-align: center;
     cursor:pointer !important;
-    user-select: none;
 }
 
 .flip-glyphicon {
@@ -215,67 +221,3 @@ ul.fancytree-container {
     filter: FlipH;
     -ms-filter: "FlipH";
 }
-
-#bodywrapper .btn{
-    font-size:14px;
-}
-
-.ui-dialog { /* Push Jquery Diologs to front */
-    z-index: 100000 !important;
-}
-
-.toolbar-buttons button {
-    height: 46px;
-}
-
-#sequence-params {
-    /*position: absolute;*/
-    /*margin-top: 46px;*/
-    background: white;
-}
-
-#SequenceReadyBtn {
-    margin-right: 15px;
-}
-
-#ComponentNameInput {
-    display: inline-block;
-    width: 83%;
-    float: left;
-    margin-right: 15px
-}
-
-#sequence-params {
-    height: 600px;
-}
-
-.sequence-wrapper {
-    display: grid;
-    height: 100%;
-}
-
-.equations-wrapper {
-    align-self: start;
-    margin-bottom: 15px;
-}
-
-#SubmitSequenceWrapper {
-    margin-bottom: 15px;
-}
-
-.controlButtons {
-    margin-top: 15px;
-}
-
-.equationsGroup {
-    height: 450px;
-    overflow: auto;
-    margin: 30px 0px 0px;
-}
-
-#states {
-    display: none;
-}
-
-
-

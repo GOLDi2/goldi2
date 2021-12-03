@@ -76,7 +76,7 @@ class WorkspaceController
                            ec.originalComponentID.libraryID === componentID.libraryID;
                 });
                 if (openEditor !== undefined)
-                    this.selectEditor(openEditor);
+                    this.selectEditor(openEditor)
                 else
                     this.openEditor(component, componentID, (componentID.libraryID == BeastController.DEPOSIT_LIB_ID) ? componentID : null, true);
             }
@@ -110,10 +110,4 @@ class WorkspaceController
         {
             this.controller.createAndOpenComponent(component);
         }
-
-    public reinitUI() {
-        for (const editorCOntroller of this.editorControllers) {
-            editorCOntroller.reinitUI();
-        }
-    }
 }

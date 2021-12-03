@@ -7,9 +7,8 @@ class EventQueue
 {
     delay          = 50; // ms
     limit          = 40; // ms
+    //TODO rewrite it so this is never null, maybe use "double buffering"
     private nextQueue = null;
-    private lateCallbackQueue = [];
-    public paused: boolean = false;
     
     constructor()
     {
@@ -24,10 +23,6 @@ class EventQueue
         }
         this.nextQueue.push(event);
     };
-
-    public postLateCallback(callback: () => (void)) {
-        this.lateCallbackQueue.push(callback);
-    }
     
     private dispatchEvent()
     {
@@ -48,21 +43,14 @@ class EventQueue
     private timerHandler()
     {
         let start      = this.getTime();
-        if (!this.paused) {
-            let iterations = 0;
-            //modified for better debugging: made timing-independant
-            //replaced with a static iterations limit to prevent freezing caused by instable circuits
-            while (this.nextQueue != null && iterations < 100)
-            { //original code:  && getTime() - start < limit
-                this.dispatchEvent();
-                iterations += 1;
-            }
-
-            for (const cb of this.lateCallbackQueue)
-                cb();
-            this.lateCallbackQueue = [];
+        let iterations = 0;
+        //modified for better debugging: made timing-independant
+        //replaced with a static iterations limit to prevent freezing caused by instable circuits
+        while (this.nextQueue != null && iterations < 100)
+        { //original code:  && getTime() - start < limit
+            this.dispatchEvent();
+            iterations += 1;
         }
-
         window.setTimeout(() =>this.timerHandler(),
                           Math.max(this.delay - this.limit, this.delay - (this.getTime() - start)));
     };
