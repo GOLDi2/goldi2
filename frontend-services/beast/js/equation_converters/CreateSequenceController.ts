@@ -135,10 +135,6 @@ class CreateSequenceController {
                 name: 'z' + index,
                 expression: value
             });
-            equations.y.push({
-                name: 'z' + index,
-                expression: 'z' + index
-            })
         });
 
         this.onSubmit($('#ComponentNameInput').val(), equations);
