@@ -10,7 +10,7 @@ import './view/wide'
 import * as util from './os-files';
 import { MDCDialog } from "@material/dialog/component";
 
-let backend_uri='http://iut.goldi-labs.net:8081'
+let backend_uri='https://iut.goldi-labs.net/wide'
 
 /**
  * Loads Projects from Local Storage, if there any exist
