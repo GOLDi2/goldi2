@@ -112,15 +112,6 @@ h1 {
   text-transform: uppercase;
 }
 
-.default-link-1 {
-  color: #fff;
-  text-decoration: none;
-}
-
-.default-link-1:hover {
-  text-decoration: underline;
-}
-
 /* Sichtbarkeit Grid-System */
 /* .show-grid {
 background-color: #87ed6d;
@@ -146,126 +137,55 @@ background-color: #81b574;
 /* ========================================================================== */
 /* Header */
 header {
-  height: 5rem;
+  height: 50px;
   width: 100%;
   background-color: var(--blue3);
   display: grid;
-  grid-template-columns: 35% 38% auto;
+  grid-template-columns: 15% 58% auto;
 }
 
-.logo {
-  position: relative;
-  display: block;
-  height: inherit;
-  width: 100%;
-  padding-left: 25%;
-  padding-right: 35%;
-  text-decoration: none;
-}
-
-.logo > img {
+header li {
   display: inline-block;
-  height: 45px;
-  width: auto;
-  margin-top: 1rem;
+  color: #fff;
+  /* color: var(--blue1); */
+  padding: 0 .5rem;
 }
 
-.logo > div {
-  display: inline-block;
-  position: absolute;
-  top: 0
-  left: 0
-  height: inherit;
-  color: var(--orange);
-  font-size: 2rem;
-  font-weight: bold;
-  padding-top: 1.5rem;
-  padding-left: 15px;
-}
-
-.main-nav {
+#logo-container {
+  height: 35px;
   position: relative;
 }
 
-.main-nav > div {
-  display: inline-block;
-  width: 32%;
+#dummy-logo {
   position: absolute;
-  top: 0;
-  left: 33%;
+  right: 0;
+  top: 7.5px;
+  /* height: inherit;
+  width: auto; */
+
+  /* nur für div */
+  background-color: var(--orange);
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
 }
 
-.main-nav > div:first-child {
-  left: 0;
+/* #main-nav {
+  height: 35px;
+  position: relative;
 }
 
-.main-nav > div:last-child {
-  left: 67%
-}
+#account-nav {
+  height: 35px;
+  position: relative;
+} */
 
-.main-nav > div:first-child:hover > .main-nav-dropdown {
-  display: inline-block;
-}
-
-.main-nav > div:nth-child(2):hover > .main-nav-dropdown {
-  display: inline-block;
-}
-
-.main-nav > div:last-child:hover > .main-nav-dropdown {
-  display: inline-block;
-}
-
-.main-nav-header {
-  display: inline-block;
-  color: #fff;
-  font-size: 1.2rem;
-  padding-top: 1.9rem;
-  text-align: center;
-}
-
-.main-nav-dropdown {
-  display: inline-block;
-  background-color: var(--blue3);
-  width: 100%;
-  border-radius: 0 0 10px 10px;
-  display: none;
-}
-
-.main-nav-dropdown > ul {
-  padding: 0 1rem;
-}
-
-.main-nav-dropdown li {
-  display: block;
-  margin-top: .5rem;
-}
-
-.main-nav-link {
-  display: block;
-  width: 100%;
-}
-
-.account-nav > ul {
-  margin: 1.4rem 0;
-  padding: 0 0 0 2rem;
-  border-left: 1px solid #fff;
-}
-
-.account-nav li {
-  display: inline-block;
-  font-size: 1.2rem;
-  color: #fff;
-  padding: .5rem .5rem;
-}
-
-.language-img {
-  height: 1.2rem;
-  width: auto;
+#account-nav li:first-of-type {
+  border-right: 2px solid #fff;
 }
 
 /* ========================================================================== */
 /* Content-Bereich */
-
 #content-area {
   background-color: #fff;
   display: grid;
@@ -334,54 +254,23 @@ header {
 /* Footer */
 
 footer {
-  height: 15rem;
+  height: 50px;
   width: 100%;
-  background-color: var(--grey);
+  background-color: var(--blue3);
   display: grid;
-  grid-template-columns: 45% auto;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  grid-template-columns: 15% auto 15%;
 }
 
-.footer-label {
-  position: relative;
-  border-right: 3px solid #999;
+footer > nav {
+  grid-column: 2 /span 1;
+  grid-row: 1 / span 1;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 
-.footer-label > div:first-child {
-  display: block;
-  position: absolute;
-  top: 1.5rem;
-  right: 5rem;
-  color: #999;
-  font-size: 2rem;
-  font-weight: bold;
-  border-bottom: 3px solid var(--orange);
-}
 
-.footer-label > div:last-child {
-  display: block;
-  position: absolute;
-  top: 4.5rem;
-  right: 5.4rem;
-  color: #999;
-  font-weight: bold;
-}
-
-.footer-nav {
-  padding-top: 1.5rem;
-  width: 500px;
-}
-
-.footer-nav > ul {
-  margin: 0;
-  padding: 0 0 0 5rem;
-}
-
-.footer-nav li {
-  display: inline-block;
-  color: #999;
-  font-size: 1.2rem;
-  padding-bottom: 1rem;
-  padding-right: 4rem;
+footer span {
+  color: #fff;
+  /* color: var(--blue1); */
 }
