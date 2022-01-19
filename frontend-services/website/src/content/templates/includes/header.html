@@ -1,0 +1,81 @@
+<!-- Header -->
+{% set
+    navbar = {
+        primary: [
+            {name: 'Documentation', href: '/documentation/control_units/pld.html'},
+            {name: 'Experiment', href: '/about'},
+            {name: 'Tools', href: '/contact'}
+        ],
+        secondary: [
+            {name: 'Login', href: '/'},
+            {name: 'Register', href: '/about'}
+        ]
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    navbar = {
+        primary: [
+            {name: 'Dokumentation', href: '/documentation.html'},
+            {name: 'Experiment', href: '/about'},
+            {name: 'Werkzeuge', href: '/contact'}
+        ],
+        secondary: [
+            {name: 'Login', href: '/'},
+            {name: 'Registrieren', href: '/about'}
+        ]
+    }
+ %}
+{% endif %}
+
+<nav class="bg-black w-full fixed z-50">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between h-10">
+            <!-- Logo -->
+            <a href='#' class="flex items-center">
+                <img class="h-8 w-8 mr-3 select-none pointer-events-none" src="/img/GOLDi_Logo.png" alt="Logo">
+                <span class="font-bold text-lg text-primary">GOLDi LABS</span>
+            </a>
+            <!-- Primary Navbar Items-->
+            <div class="hidden md:flex items-center space-x-3">
+                {% for item in navbar.primary %}
+                <a href="/{{language}}{{item.href}}"" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+                {% endfor %}
+            </div>
+            <!-- Secondary Navbar items -->
+            <div class="hidden md:flex items-center space-x-3 ">
+                <span class="bg-gray-400 w-px h-6 mr-2"></span>
+                {% for item in navbar.secondary %}
+                <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+                {% endfor %}
+            </div>
+            <!-- Hamburger Menu button -->
+            <div class="md:hidden flex items-center">
+                <button class="outline-none mobile-menu-button">
+                    <svg class=" w-6 h-6 text-gray-500 hover:text-green-500 " x-show="!showMenu" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="hidden mobile-menu">
+        <ul class="">
+            {% for item in navbar.primary %}
+            <a href="" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    </script>
+</nav>
+<div class="mt-10"></div>

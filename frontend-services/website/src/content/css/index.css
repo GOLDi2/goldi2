@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.h-line {
+  @apply w-full h-0.5 bg-primary;
+}
+
+.simple > section {
+  @apply bg-secondary-light p-10 rounded-3xl shadow-lg;
+}
+
+.simple > section > section {
+  @apply bg-secondary-lighter p-5 my-5 rounded-3xl shadow-lg;
+}
+
+
+.simple > h2 {
+  @apply text-secondary-dark text-xl;
+}

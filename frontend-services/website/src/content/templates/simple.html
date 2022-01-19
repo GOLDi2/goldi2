@@ -1,0 +1,43 @@
+{% set
+    simple_text = {
+        interesting: 'That might interest you:'
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    simple_text = {
+        interesting: 'Das könnte dich auch interesieren:'
+    }
+ %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="p-10">
+    <div class="simple max-w-6xl w-full mx-auto space-y-10">
+        <h1 class="text-secondary-dark text-3xl">{{title}}</h1>
+        <div class="h-line"></div>
+        {% block content %}
+
+        {% endblock %}
+
+        {% if interesting %}
+            <div class="h-line"></div>
+            <h2>{{simple_text.interesting}}</h2>
+            <section class="flex gap-10 justify-center w-fit mx-auto flex-wrap">
+                {% for item in interesting %}
+                {% from item+'_preview.html' import preview %}
+                <div class="w-56 h-60 bg-black rounded-lg flex p-5 flex-col text-center gap-3">
+                    <div class="bg-white w-full h-32 rounded">{{preview.image}}</div>
+                    <div class="text-white"><b>{{preview.title}}</b></div>
+                    <div class="text-white">{{preview.subtitle}}</div>
+                </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

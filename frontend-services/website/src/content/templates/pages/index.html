@@ -1,0 +1,138 @@
+{% set
+    text = {
+        start: 'Start',
+        short_description: 'That is a small description of the remote lab. This is just a placholder.',
+
+        description_headline: 'What is GOLDi LABS?',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+
+        teaser:[
+            {
+                headline: 'Für Studierende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            },
+            {
+                headline: 'Für Lehrende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            },
+            {
+                headline: 'Für Studierende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            }
+        ],
+
+        functional_headline: 'How does GOLDi LABS work?',
+        functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+
+        action_headline: 'Now it is your turn.',
+        action_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    text = {
+        start: 'Starten',
+        description: 'Das ist ein kleiner Text, wo in 2 Sätzen erklärt wird, worum es hier geht. Der Text wird noch ausgearbeitet.',
+
+        description_headline: 'Was ist GOLDi LABS?',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+
+        teaser:[
+            {
+                headline: 'Für Studierende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            },
+            {
+                headline: 'Für Lehrende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            },
+            {
+                headline: 'Für Studierende',
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+            }
+        ],
+
+        functional_headline: 'Wie funktionert GOLDi LABS?',
+        functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+
+        action_headline: 'Jetzt bist du dran.',
+        action_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+    }
+ %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+<div class="w-full h-screen -mt-10 pt-10 flex flex-col bg-secondary-dark bg-[url('/img/landing_s.jpg')] bg-[length:72rem_auto] bg-no-repeat bg-bottom md:bg-[url('/img/landing.jpg')] md:bg-contain md:bg-right-bottom">
+    <div class="flex mt-12 w-full md:max-w-6xl md:mx-auto md:my-auto">
+        <div class="flex flex-col space-y-5 w-fit h-fit text-center md:text-left mx-auto md:mx-0">
+            <span class="text-gray-100 text-6xl">GOLDi LABS</span>
+            <div class="h-line"></div>
+            <span class="text-secondary text-4xl"> Real labs at your home</span>
+            <div class="w-80 mr-auto text-gray-100 mx-auto md:mx-0">
+                {{text.short_description}}
+            </div>
+            <div>
+                <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-3xl">
+                    {{text.start}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Was ist GOLDi LABS? -->
+<div class="max-w-6xl w-full mx-auto py-10">
+    <div class="mx-auto flex flex-wrap-reverse justify-center gap-10">
+        <div class="max-w-md px-10">
+            <img class="w-full" src="/img/landing2.png" alt="Logo">
+        </div>
+        <div class="max-w-md px-10 space-y-10">
+            <div class="text-4xl font-bold text-secondary-dark">{{text.description_headline}}</div>
+            <div>{{text.description}}</div>
+            <div class="h-line"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Für... -->
+<div class="w-full bg-secondary mt-10 px-10">
+    <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10">
+        {% for item in text.teaser %}
+        <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-lg text-center">
+            <div class="text-3xl font-bold mx-auto">{{item.headline}}</div>
+            <div>{{item.description}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Wie funktiert GOLDi LABS?-->
+<div class="w-full bg-[url('/img/landing3.jpg')] bg-cover">
+    <div class="max-w-6xl p-20 mx-auto">
+        <div class="max-w-md space-y-10 mx-auto lg:mx-0">
+            <div class="h-line"></div>
+            <div class="text-3xl font-bold text-gray-50">{{text.functional_headline}}</div>
+            <div class="text-gray-50">
+                {{text.functional_description}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Jetzt bist du dran! -->
+<div class="p-10">
+    <div class="w-80 space-y-10 mx-auto text-center">
+        <div class="text-3xl font-bold">{{text.action_headline}}</div>
+        <div class="">
+            {{text.action_description}}
+        </div>
+        <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-3xl">
+            {{text.start}}
+        </button>
+    </div>
+</div>
+
+{% endblock %}
