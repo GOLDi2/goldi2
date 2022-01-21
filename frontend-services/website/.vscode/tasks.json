@@ -6,5 +6,10 @@
                   "script": "start:dev",
                   "label": "Start Frontend Development",
             }
+            {
+                  "type": "npm",
+                  "script": "test",
+                  "label": "Test Frontend",
+            }
 	]
 }
