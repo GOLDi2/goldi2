@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "npm run start:prod",
-    "start:dev": "nodemon src/index.ts",
+    "start:dev": "tsc-watch --onSuccess 'node dist/index.js'",
     "start:prod": "node dist/index.js",
     "build": "tsc && node build.js",
     "build:css": "postcss src/content/styles/index.css -o dist/content/styles/index.css"
@@ -20,12 +20,11 @@
     "autoprefixer": "^10.4.2",
     "browser-sync": "^2.27.7",
     "copy": "^0.3.2",
-    "nodemon": "^2.0.15",
     "postcss": "^8.4.5",
     "postcss-cli": "^9.1.0",
     "postcss-middleware": "^1.1.4",
     "tailwindcss": "^3.0.15",
-    "ts-node": "^10.4.0",
+    "tsc-watch": "^4.6.0",
     "typescript": "^4.5.4"
   },
   "dependencies": {
