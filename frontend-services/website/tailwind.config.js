@@ -13,8 +13,12 @@ module.exports = {
         'light': '#e8eef3',
         'lighter': '#f5f8fc',
         'dark': '#1c355d',
+        'darkblue':'#06152a',
       },
-    }
+    },
+    fontFamily: {
+      body: 'Roboto Condensed',
+    }  
   },
   plugins: [],
 }
