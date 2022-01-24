@@ -4,8 +4,12 @@
             {
                   "type": "npm",
                   "script": "start:dev",
-                  "problemMatcher": [],
                   "label": "Start Frontend Development",
+            }
+            {
+                  "type": "npm",
+                  "script": "test",
+                  "label": "Test Frontend",
             }
 	]
 }

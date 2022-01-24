@@ -1,83 +1,54 @@
-import browserSync from 'browser-sync';
+import { config } from "./config"
 import express, { Response } from 'express';
-import shrinkRay from 'shrink-ray-current';
 import nunjucks from 'nunjucks';
 import path from 'path';
-import fs from 'fs';
-import postcss from 'postcss';
+import { AddressInfo } from "net";
+import { renderPageInit } from "./utils";
 
-const postcssConfig: any = require('../postcss.config');
-const postcssTransformer = postcss(postcssConfig.plugins);
-postcssTransformer.plugins
+
+const content_path = config.NODE_ENV === 'development' ? 'src/content' : 'dist/content';
+const nunjucks_configuration = {
+    autoescape: true,
+    noCache: config.NODE_ENV === 'development'
+}
+const languages = ['en', 'de'];
+
+const renderPage = renderPageInit(content_path, config.DEFAULT_LANGUAGE);
+
+
 
 const app = express();
-const port = 9777; // "xprs" in T9
 
-// you can conditionally add routes and behaviour based on environment
-const isProduction = 'production' === process.env.NODE_ENV;
-
-process.on("SIGHUP", () => {
-    process.exit(1);
-});
-
-app.set('etag', isProduction);
+app.set('etag', config.NODE_ENV !== 'development');
 app.use((_req, res, next) => { res.removeHeader('X-Powered-By'); next(); });
-app.use(shrinkRay());
-app.use('/css', async function (req, res) {
-    let fileSrc=path.join('src/content/css',req.path)
-    let fileDst=path.join('css',req.path)
-    let options = {from: fileSrc, to: fileDst, ...postcssConfig.options}
-    postcssTransformer.process(fs.readFileSync(fileSrc),options).then(result => {res.contentType('css');res.send(result.css)}).catch(err => {console.log(err)})
-});
 
-app.use("/img", express.static(path.join('src/content/img')));
+nunjucks.configure(content_path + '/templates', { ...nunjucks_configuration, express: app });
 
-nunjucks.configure('src/content/templates', {
-    autoescape: true,
-    noCache: true,
-    express: app
-});
-
-function renderPage(page: string, language: string, res: Response){
-    const base_path='src/content/templates';
-    const page_dir='pages';
-    const default_language='en';
-    if (fs.existsSync(path.join(base_path,page_dir,page+'_'+language+'.html'))){
-        res.render(path.join(page_dir,page+'_'+language+'.html'), {language});
-    }else if(fs.existsSync(path.join(base_path,page_dir,page+'_'+default_language+'.html'))){
-        res.render(path.join(page_dir,page+'_'+default_language+'.html'), {language});
-    }else if(fs.existsSync(path.join(base_path,page_dir,page+'.html'))){
-        res.render(path.join(page_dir,page+'.html'), {language});
-    }else{
-        res.render(path.join(page_dir,'404.html'), {language});
-    };
+app.use("/img", express.static(path.join(content_path, 'img')));
+if (config.NODE_ENV === 'development') {
+    // When developing, we dynamically transform the css files with postcss
+    const { postcss_transform } = require("./debug_utils");
+    app.use("/css", postcss_transform(path.join(content_path, 'css')));
+} else {
+    // For production, we use precompiled css files
+    app.use("/css", express.static(path.join(content_path, 'css')));
 }
-
-app.use('/en/', function (req, res) {
-    renderPage(req.path.replace(/\.html$/, ''), 'en', res);
+for (const language of languages) {
+    app.get('/' + language + '/', async (req, res) => { await renderPage('index', language, res); });
+    app.use('/' + language + '/', async (req, res) => { await renderPage(req.path, language, res); });
+}
+app.get('/', function (req, res) {
+    const selected_language = req.acceptsLanguages(languages) || config.DEFAULT_LANGUAGE;
+    res.redirect(307, '/' + selected_language + req.originalUrl);
 });
 
-app.use('/de/', function (req, res) {
-    renderPage(req.path.replace(/\.html$/, ''), 'de', res);
-});
 
-app.use('/', function (req, res) {
-    renderPage(req.path.replace(/\.html$/, ''), 'en', res);
-});
 
-app.listen(port, listening);
-
-function listening() {
-    console.log(`Demo server available on http://localhost:${port}`);
-    if (!isProduction) {
-        // https://ponyfoo.com/articles/a-browsersync-primer#inside-a-node-application
-        browserSync({
-            files: ['src/**/*.{html,js,css}'],
-            online: false,
-            open: false,
-            port: port + 1,
-            proxy: 'localhost:' + port,
-            ui: false,
-        });
-    }
+if (config.NODE_ENV === 'development') {
+    // When developing, we start a browserSync server after listen
+    const { start_browserSync } = require("./debug_utils");
+    const server = app.listen(() => start_browserSync((server.address() as AddressInfo).port));
+} else {
+    // Just listen on the configured port
+    app.listen(config.PORT);
 }
