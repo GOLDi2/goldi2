@@ -53,7 +53,7 @@
             }
         ],
 
-        functional_headline: 'Wie funktionert GOLDi LABS?',
+        functional_headline: 'Wie funktioniert GOLDi LABS?',
         functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
 
         action_headline: 'Jetzt bist du dran.',
@@ -66,7 +66,7 @@
 {% block main %}
 <div class="w-full h-screen -mt-10 pt-10 flex flex-col bg-secondary-dark bg-[url('/img/landing_s.jpg')] bg-[length:72rem_auto] bg-no-repeat bg-bottom md:bg-[url('/img/landing.jpg')] md:bg-contain md:bg-right-bottom">
     <div class="flex mt-12 w-full md:max-w-6xl md:mx-auto md:my-auto">
-        <div class="flex flex-col space-y-5 w-fit h-fit text-center md:text-left mx-auto md:mx-0">
+        <div class="flex flex-col space-y-5 w-fit h-fit text-center md:text-left mx-auto md:mx-0 font-body">
             <span class="text-gray-100 text-6xl">GOLDi LABS</span>
             <div class="h-line"></div>
             <span class="text-secondary text-4xl"> Real labs at your home</span>
@@ -83,7 +83,7 @@
 </div>
 
 <!-- Was ist GOLDi LABS? -->
-<div class="max-w-6xl w-full mx-auto py-10">
+<div class="max-w-6xl w-full mx-auto py-16 font-body">
     <div class="mx-auto flex flex-wrap-reverse justify-center gap-10">
         <div class="max-w-md px-10">
             <img class="w-full" src="/img/landing2.png" alt="Logo">
@@ -98,7 +98,7 @@
 
 <!-- Für... -->
 <div class="w-full bg-secondary mt-10 px-10">
-    <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10">
+    <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
         {% for item in text.teaser %}
         <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-lg text-center">
             <div class="text-3xl font-bold mx-auto">{{item.headline}}</div>
@@ -108,10 +108,10 @@
     </div>
 </div>
 
-<!-- Wie funktiert GOLDi LABS?-->
+<!-- Wie funktioniert GOLDi LABS?-->
 <div class="w-full bg-[url('/img/landing3.jpg')] bg-cover">
     <div class="max-w-6xl p-20 mx-auto">
-        <div class="max-w-md space-y-10 mx-auto lg:mx-0">
+        <div class="max-w-md space-y-5 mx-auto lg:mx-0 font-body">
             <div class="h-line"></div>
             <div class="text-3xl font-bold text-gray-50">{{text.functional_headline}}</div>
             <div class="text-gray-50">
@@ -123,13 +123,13 @@
 
 
 <!-- Jetzt bist du dran! -->
-<div class="p-10">
-    <div class="w-80 space-y-10 mx-auto text-center">
-        <div class="text-3xl font-bold">{{text.action_headline}}</div>
-        <div class="">
+<div class="p-11">
+    <div class="w-80 space-y-3 mx-auto text-center font-body">
+        <div class="text-3xl font-bold pb-2">{{text.action_headline}}</div>
+        <div class="pb-5">
             {{text.action_description}}
         </div>
-        <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-3xl">
+        <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl">
             {{text.start}}
         </button>
     </div>

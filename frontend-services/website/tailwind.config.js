@@ -4,7 +4,7 @@ module.exports = {
   content: ['./src/**/*.html'],
   theme: {
     colors: {
-      black: colors.black,
+      black: '#242728',
       white: colors.white,
       gray: colors.gray,
       primary: '#f2ab55',
