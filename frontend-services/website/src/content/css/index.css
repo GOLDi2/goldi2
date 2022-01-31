@@ -9,14 +9,28 @@
 }
 
 .simple > section {
-  @apply bg-secondary-light p-10 rounded-3xl shadow-lg;
+  @apply bg-secondary-light p-10 rounded-3xl out-shadow-section;
 }
 
 .simple > section > section {
-  @apply bg-secondary-lighter p-5 my-5 rounded-3xl shadow-lg;
+  @apply bg-secondary-lighter p-5 my-5 rounded-3xl inner-shadow-section;
 }
 
 
 .simple > h2 {
   @apply text-secondary-dark text-xl;
+}
+
+.inner-shadow-section {
+  box-shadow: 2px 2px 4px #CCCCCC inset;
+}
+
+.out-shadow-section {
+  box-shadow: 0 4px 6px -2px #CCCCCC;
+}
+
+@layer base {
+  h2 {
+    @apply text-xl font-semibold;
+  }
 }
