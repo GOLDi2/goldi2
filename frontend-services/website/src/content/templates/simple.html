@@ -7,7 +7,7 @@
 {% if language=='de' %}
 {% set
     simple_text = {
-        interesting: 'Das könnte dich auch interesieren:'
+        interesting: 'Das könnte Dich auch interessieren:'
     }
  %}
 {% endif %}
@@ -15,9 +15,9 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<div class="p-10">
+<div class="p-10 font-body">
     <div class="simple max-w-6xl w-full mx-auto space-y-10">
-        <h1 class="text-secondary-dark text-3xl">{{title}}</h1>
+        <h1 class="text-secondary-middle pt-2 text-3xl font-semibold">{{title}}</h1>
         <div class="h-line"></div>
         {% block content %}
 

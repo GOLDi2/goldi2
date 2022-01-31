@@ -12,8 +12,13 @@ module.exports = {
         DEFAULT: '#7ea1c4',
         'light': '#e8eef3',
         'lighter': '#f5f8fc',
+        'light-middle':'#7E9AC4',
+        'middle': '#3F4F8D',
         'dark': '#1c355d',
         'darkblue':'#06152a',
+
+        'primary-hover':'#EF9C01',
+        'light-middle-hover':'#3B65A5',
       },
     },
     fontFamily: {
