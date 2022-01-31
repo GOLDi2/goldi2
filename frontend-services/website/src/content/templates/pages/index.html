@@ -56,7 +56,7 @@
         functional_headline: 'Wie funktioniert GOLDi LABS?',
         functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
 
-        action_headline: 'Jetzt bist du dran.',
+        action_headline: 'Jetzt bist du dran!',
         action_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
     }
  %}
@@ -74,7 +74,7 @@
                 {{text.short_description}}
             </div>
             <div>
-                <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-3xl">
+                <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
                     {{text.start}}
                 </button>
             </div>
@@ -100,8 +100,8 @@
 <div class="w-full bg-secondary mt-10 px-10">
     <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
         {% for item in text.teaser %}
-        <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-lg text-center">
-            <div class="text-3xl font-bold mx-auto">{{item.headline}}</div>
+        <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
+            <div class="text-3xl pb-2 font-bold mx-auto">{{item.headline}}</div>
             <div>{{item.description}}</div>
         </div>
         {% endfor %}
@@ -129,7 +129,7 @@
         <div class="pb-5">
             {{text.action_description}}
         </div>
-        <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl">
+        <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
             {{text.start}}
         </button>
     </div>
