@@ -11,7 +11,7 @@
     "start:prod": "node dist/index.js",
     "build": "npm run build:node && npm run build:docker",
     "build:node": "node build.js",
-    "build:docker": "sudo docker build . -t goldi2/web-frontend:latest",
+    "build:docker": "docker build . -t goldi2/web-frontend:latest",
     "test": "mocha -r ts-node/register 'test/**/*.ts'"
   },
   "devDependencies": {
