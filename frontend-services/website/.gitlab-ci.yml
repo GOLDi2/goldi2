@@ -18,4 +18,4 @@ bridge:
   variables:
     ANSIBLE_HOSTS: development
     ANSIBLE_TAG: web-frontend-deploy
-  trigger: $ci_group/deploymment-scripts
+  trigger: FakIA/fachgebiet-iks/goldi/goldi2/deployment-scripts
