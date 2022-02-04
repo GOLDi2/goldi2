@@ -1,6 +1,6 @@
-image: $CI_REGISTRY/$ci_registry_group/buildimage:latest
+image: $CI_REGISTRY/$ci_group/buildimage:latest
 
-build-test-docker-deploy-job:
+build-test-docker-job:
   stage: build
   script:
     - npm install
@@ -12,3 +12,10 @@ build-test-docker-deploy-job:
     - docker tag goldi2/web-frontend:latest goldi2/web-frontend:staging
     - docker rmi goldi2/web-frontend:latest
     - docker push goldi2/web-frontend:staging
+
+bridge:
+  stage: deploy
+  variables:
+    ANSIBLE_HOSTS: development
+    ANSIBLE_TAG: web-frontend-deploy
+  trigger: $ci_group/deploymment-scripts
