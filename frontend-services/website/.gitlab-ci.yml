@@ -1,26 +1,14 @@
 image: $CI_REGISTRY/$ci_registry_group/buildimage:latest
 
-build-job:
+build-test-docker-deploy-job:
   stage: build
   script:
     - npm install
-    - npm run build
-
-test-job:
-  stage: test
-  script:
+    - npm run build:node
     - npm test
+    - npm run build:docker
 
-change_docker_tag:
-  stage: deploy
-  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker tag goldi2/web-frontend:latest goldi2/web-frontend:staging
     - docker rmi goldi2/web-frontend:latest
-
-upload_to_docker_hub:
-  stage: deploy
-  needs:
-    - change_docker_tag
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push goldi2/web-frontend:staging
