@@ -4,7 +4,7 @@
         primary: [
             {name: 'Documentation', href: '/documentation/control_units/pld.html'},
             {name: 'Experiment', href: '/experiment.html'},
-            {name: 'Tools', href: '/contact'}
+            {name: 'Tools', href: '/faq.html'}
         ],
         secondary: [
             {name: 'Login', href: '/'},
@@ -19,7 +19,7 @@
         primary: [
             {name: 'Dokumentation', href: '/documentation.html'},
             {name: 'Experiment', href: '/experiment.html'},
-            {name: 'Werkzeuge', href: '/contact'}
+            {name: 'Werkzeuge', href: '/faq.html'}
         ],
         secondary: [
             {name: 'Login', href: '/'},
@@ -39,14 +39,13 @@
                 <img class="h-8 w-8 mr-3 select-none pointer-events-none" src="/img/GOLDi_Logo.png" alt="Logo">
                 <span class="font-bold text-2xl text-primary">GOLDi LABS</span>
             </a>
-            <!-- Primary Navbar Items-->
-            <div class="hidden md:flex items-center space-x-10">
-                {% for item in navbar.primary %}
-                <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
-                {% endfor %}
-            </div>
-            <!-- Secondary Navbar items -->
+            <!--Navbar items -->
             <div class="hidden md:flex items-center space-x-3 ">
+                <div class="hidden md:flex items-center space-x-10">
+                    {% for item in navbar.primary %}
+                    <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+                    {% endfor %}
+                </div>
                 <span class="bg-gray-400 w-px h-6 mr-2"></span>
                 {% for item in navbar.secondary %}
                 <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
