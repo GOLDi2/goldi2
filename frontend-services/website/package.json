@@ -7,10 +7,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "npm run start:prod",
-    "start:dev": "tsc-watch --onSuccess 'node dist/index.js'",
+    "start:dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "start:prod": "node dist/index.js",
-    "build": "tsc && node build.js",
-    "build:css": "postcss src/content/styles/index.css -o dist/content/styles/index.css",
+    "build": "npm run build:node && npm run build:docker",
+    "build:node": "node build.js",
+    "build:docker": "docker build . -t goldi2/web-frontend:latest",
     "test": "mocha -r ts-node/register 'test/**/*.ts'"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "mock-fs": "^5.1.2",
     "postcss": "^8.4.5",
     "postcss-cli": "^9.1.0",
-    "postcss-middleware": "^1.1.4",
+    "rimraf": "^3.0.2",
     "tailwindcss": "^3.0.15",
     "ts-node": "^10.4.0",
     "tsc-watch": "^4.6.0",
