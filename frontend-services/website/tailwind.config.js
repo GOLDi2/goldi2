@@ -19,6 +19,8 @@ module.exports = {
 
         'primary-hover':'#EF9C01',
         'light-middle-hover':'#3B65A5',
+
+        'footer-black': '#191616',
       },
     },
     fontFamily: {
