@@ -1,0 +1,96 @@
+{% set
+    text = {
+        heading: 'FAQ',
+        subheading: 'MOST FREQUENT QUESTIONS AND ANSWERS',
+
+        question_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+
+        question_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+
+        question_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    text = {
+        heading: 'FAQ',
+        subheading: 'MOST FREQUENT QUESTIONS AND ANSWERS',
+
+        question_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+
+        question_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+    
+        question_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+        answer_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+    }
+ %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+
+<!-- FAQ Überschrift -->
+<div class="max-w-6xl w-full mx-auto pt-16 font-body">
+    <div class="mx-auto flex justify-center">
+        <div class="max-w-md px-10 space-y-5 text-center">
+            <div class="text-7xl font-bold text-secondary-dark">{{text.heading}}</div>
+            <div class="text-sm">{{text.subheading}}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Questions -->
+<div class="p-10 font-body">
+    <div class="faq max-w-6xl w-2/3 mx-auto">
+
+        <section class="mb-10">
+        <button type="button" class="collapsible">{{text.question_1}}</button>
+            <div class="content">
+                <div class="h-line"></div>
+            <p class="pt-5">{{text.answer_1}}</p>
+        </div>
+        </section>
+
+        <section class="my-10">
+            <button type="button" class="collapsible">{{text.question_2}}</button>
+                <div class="content">
+                    <div class="h-line"></div>
+                <p class="pt-5">{{text.answer_2}}</p>
+            </div>
+        </section>
+
+        <section class="my-10">
+            <button type="button" class="collapsible">{{text.question_3}}</button>
+                <div class="content">
+                    <div class="h-line"></div>
+                <p class="pt-5">{{text.answer_3}}</p>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+    </script>
+
+{% endblock %}
