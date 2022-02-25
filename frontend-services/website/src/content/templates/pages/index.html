@@ -17,7 +17,8 @@
             },
             {
                 headline: 'Für Studierende',
-                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+                description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+                image: '/img/Laptop.png'
             }
         ],
 
@@ -42,17 +43,17 @@
             {
                 headline: 'Für Studierende',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '<img src="/img/Student.png">'
+                image: '/img/Student.png'
             },
             {
                 headline: 'Für Lehrende',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '<img src="/img/Teacher.png">'
+                image: '/img/Teacher.png'
             },
             {
                 headline: 'Für Interessierte',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '<img src="/img/Laptop.png">'
+                image: '/img/Laptop.png'
             }
         ],
 
@@ -124,7 +125,7 @@
     <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
         {% for item in text.teaser %}
         <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
-            <div class="">{{item.image |safe}}</div>
+            <img class="mx-auto" src="{{item.image}}"/>
             <div class="text-3xl pb-2 font-bold mx-auto">{{item.headline}}</div>
             <div>{{item.description}}</div>
         </div>
