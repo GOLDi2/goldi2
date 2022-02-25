@@ -1,0 +1,28 @@
+{% set
+    text = {
+        heading: 'ABOUT US'
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    text = {
+        heading: 'ÜBER UNS'
+    }
+ %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+
+<!-- About Us Überschrift -->
+<div class="max-w-6xl w-full mx-auto pt-16 font-body">
+    <div class="mx-auto flex justify-center">
+        <div class="max-w-md px-10 space-y-5 text-center">
+            <div class="text-7xl font-bold text-secondary-dark">{{text.heading}}</div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
