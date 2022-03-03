@@ -28,6 +28,25 @@ void print_hexstring(char* hexstring, unsigned int length) {
     }
 }
 
+void print_shift_data(SVF_Shift_Data* shift_data) {
+    unsigned int length = (shift_data->length / 8) + ((shift_data->length % 8) > 0);
+    printf("(");
+    printf("%u", shift_data->length);
+    printf(",");
+    if (shift_data->tdi) print_hexstring(shift_data->tdi, length);
+    else printf("NULL");
+    printf(",");
+    if (shift_data->tdo) print_hexstring(shift_data->tdo, length);
+    else printf("NULL");
+    printf(",");
+    if (shift_data->mask) print_hexstring(shift_data->mask, length);
+    else printf("NULL");
+    printf(",");
+    if (shift_data->smask) print_hexstring(shift_data->smask, length);
+    else printf("NULL");
+    printf(")\n");
+}
+
 SVF_Instruction* create_empty_instruction()
 {
     SVF_Instruction* instruction = (SVF_Instruction*) malloc (sizeof(SVF_Instruction));
@@ -385,11 +404,11 @@ int execute_instructions()
         switch (instruction->type)
         {
             case SVF_INSTRUCTION_ENDDR:
-                printf("Executing ENDDR\n");
+                printf("Executing ENDDR ");
                 ENDDR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_ENDIR:
-                printf("Executing ENDIR\n");
+                printf("Executing ENDIR ");
                 ENDIR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_FREQUENCY:
@@ -407,12 +426,14 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_HDR:
-                printf("Executing HDR\n");
+                printf("Executing HDR ");
                 if (set_shift_data(&HDR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&HDR);
                 break;
             case SVF_INSTRUCTION_HIR:
-                printf("Executing HIR\n");
+                printf("Executing HIR ");
                 if (set_shift_data(&HIR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&HIR);
                 break;
             case SVF_INSTRUCTION_PIO:
                 printf("PIO is currently not implemented!\n");
@@ -453,13 +474,15 @@ int execute_instructions()
                 break;
             }
             case SVF_INSTRUCTION_SDR:
-                printf("Executing SDR\n");
+                printf("Executing SDR ");
                 if (set_shift_data(&SDR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&SDR);
                 if (shift_data(&SDR)) return 1;
                 break;
             case SVF_INSTRUCTION_SIR:
-                printf("Executing SIR\n");
+                printf("Executing SIR ");
                 if (set_shift_data(&SIR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&SIR);
                 if (shift_instruction(&SIR)) return 1;
                 break;
             case SVF_INSTRUCTION_STATE:
@@ -484,12 +507,14 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_TDR:
-                printf("Executing TDR\n");
+                printf("Executing TDR ");
                 if (set_shift_data(&TDR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&TDR);
                 break;
             case SVF_INSTRUCTION_TIR:
-                printf("Executing TIR\n");
+                printf("Executing TIR ");
                 if (set_shift_data(&TIR, &instruction->shift_data, instruction->type)) return 1;
+                print_shift_data(&TIR);
                 break;
             case SVF_INSTRUCTION_TRST:
                 printf("TRST is currently not implemented!\n");
