@@ -2,7 +2,7 @@
 #include <errno.h>
 #include "execute.h"
 #include "parser.h"
-#include "dummyGPIO.c"
+#include "bcmGPIO.c"
 
 static List* instruction_list = NULL;
 static int ENDDR = SVF_STATE_IDLE;
