@@ -202,10 +202,11 @@ static int clk(unsigned int tms, unsigned int tdi)
 
 static void reset()
 {
-    while(CURRENT_STATE != SVF_STATE_RESET)
-    {
-        clk(1,0);
-    }
+    clk(1,0);
+    clk(1,0);
+    clk(1,0);
+    clk(1,0);
+    clk(1,0);
 }
 
 /**
