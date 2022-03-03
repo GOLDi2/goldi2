@@ -242,54 +242,55 @@ static int move_to_stable_state(int state)
     switch (CURRENT_STATE)
     {
         case SVF_STATE_RESET:
-            if (state == SVF_STATE_RESET) { clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(0,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(0,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRSHIFT) { clk(0,0); clk(1,0); clk(0,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRSHIFT) { clk(0,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(0,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(0,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRSHIFT) { clk(0,0); clk(1,0); clk(0,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRSHIFT) { clk(0,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
             break;
         case SVF_STATE_IDLE:
-            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(0,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(1,0); clk(0,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(0,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
             break;
         case SVF_STATE_DRPAUSE:
-            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
             break;
         case SVF_STATE_IRPAUSE:
-            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(0,0); break; }
             break;
         case SVF_STATE_DRSHIFT:
-            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
             break;
         case SVF_STATE_IRSHIFT:
-            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); return 0; }
-            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); return 0; }
+            if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
+            if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
             break;
         default:
             printf("Current state is not a stable state!\n");
             return 1;
     }
-    return 1;
+    if (CURRENT_STATE != state) return 1;
+    return 0;
 }
 
 static int _shift(SVF_Shift_Data* instr, char* data, int exit)
