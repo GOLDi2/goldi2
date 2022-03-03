@@ -367,12 +367,15 @@ int execute_instructions()
         switch (instruction->type)
         {
             case SVF_INSTRUCTION_ENDDR:
+                printf("Executing ENDDR\n");
                 ENDDR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_ENDIR:
+                printf("Executing ENDIR\n");
                 ENDIR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_FREQUENCY:
+                printf("Executing FREQUENCY\n");
                 if (instruction->cycles) 
                 {
                     SLEEP_TIME.tv_nsec = (long) (1000000000 / instruction->cycles);
@@ -386,9 +389,11 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_HDR:
+                printf("Executing HDR\n");
                 if (set_shift_data(&HDR, &instruction->shift_data, instruction->type)) return 1;
                 break;
             case SVF_INSTRUCTION_HIR:
+                printf("Executing HIR\n");
                 if (set_shift_data(&HIR, &instruction->shift_data, instruction->type)) return 1;
                 break;
             case SVF_INSTRUCTION_PIO:
@@ -401,6 +406,7 @@ int execute_instructions()
                 break;
             case SVF_INSTRUCTION_RUNTEST:
             {
+                printf("Executing RUNTEST\n");
                 struct timespec start_time;
                 struct timespec current_time;
                 long max_time_nsec = (long) (instruction->max_time * 1000000000);
@@ -424,14 +430,17 @@ int execute_instructions()
                 break;
             }
             case SVF_INSTRUCTION_SDR:
+                printf("Executing SDR\n");
                 if (set_shift_data(&SDR, &instruction->shift_data, instruction->type)) return 1;
                 if (shift_data(&SDR)) return 1;
                 break;
             case SVF_INSTRUCTION_SIR:
+                printf("Executing SIR\n");
                 if (set_shift_data(&SIR, &instruction->shift_data, instruction->type)) return 1;
                 if (shift_instruction(&SIR)) return 1;
                 break;
             case SVF_INSTRUCTION_STATE:
+                printf("Executing STATE\n");
                 if (instruction->path_states == NULL) 
                 {
                     if (move_to_stable_state(instruction->stable_state)) return 1;
@@ -452,9 +461,11 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_TDR:
+                printf("Executing TDR\n");
                 if (set_shift_data(&TDR, &instruction->shift_data, instruction->type)) return 1;
                 break;
             case SVF_INSTRUCTION_TIR:
+                printf("Executing TIR\n");
                 if (set_shift_data(&TIR, &instruction->shift_data, instruction->type)) return 1;
                 break;
             case SVF_INSTRUCTION_TRST:
