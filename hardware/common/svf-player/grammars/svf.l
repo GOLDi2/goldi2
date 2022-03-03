@@ -17,16 +17,49 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 "//"{STRING}\n  
 
 {HEXSTRING}     {
-                    unsigned int size = (strlen(yytext) - 2)/2 + (strlen(yytext) % 2);
-                    char* hexstring = (char*) malloc(strlen(yytext) - 2);
+                    unsigned int special_characters = 0;
+                    for (unsigned int i = 0; i < strlen(yytext); i++)
+                    {
+                        if (yytext[i] == ' ' || yytext[i] == '\t' || yytext[i] == '\n' || yytext[i] == '(' || yytext[i] == ')')
+                        {
+                            special_characters++;
+                        }
+                    }
+                    char* text = (char*) malloc(strlen(yytext) - special_characters + 1);
+                    int offset = 0;
+                    for (int i = 0; i < strlen(yytext) + 1; i++)
+                    {
+                        if (yytext[i] == ' ' || yytext[i] == '\t' || yytext[i] == '\n' || yytext[i] == '(' || yytext[i] == ')')
+                        {
+                            offset--;
+                            continue;
+                        }
+                        text[i+offset] = yytext[i];
+                    }
+
+                    unsigned int size = (strlen(text))/2 + (strlen(text) % 2);
+                    char* hexstring = (char*) malloc(size);
+                    for (unsigned int i = 0; i < size; i++) hexstring[i] = 0;
                     for (unsigned int i = 0; i < size; i++)
                     {
-                        if (yytext[(i*2)+1] > 'F') hexstring[i] = (yytext[(i*2)+1] - 'a' + 10) << 4;
-                        else if (yytext[(i*2)+1] > '9') hexstring[i] = (yytext[(i*2)+1] - 'A' + 10) << 4;
-                        else hexstring[i] = (yytext[(i*2)+1] - '0') << 4;
-                        if (yytext[(i*2)+2] > 'F') hexstring[i] |= (yytext[(i*2)+2] - 'a' + 10);
-                        else if (yytext[(i*2)+2] > '9') hexstring[i] |= (yytext[(i*2)+2] - 'A' + 10);
-                        else hexstring[i] |= (yytext[(i*2)+2] - '0');
+                        unsigned char first, second;
+                        unsigned int first_pos = (i*2);
+                        unsigned int second_pos = (i*2)+1;
+
+                        if (text[first_pos] > 'F') first = (text[first_pos] - 'a' + 10);
+                        else if (text[first_pos] > '9') first = (text[first_pos] - 'A' + 10);
+                        else first = (text[first_pos] - '0');
+
+                        
+                        if (text[second_pos] > 'F') second = (text[second_pos] - 'a' + 10);
+                        else if (text[second_pos] > '9') second = (text[second_pos] - 'A' + 10);
+                        else second = (text[second_pos] - '0');
+                        if (first > 15 || second > 15) 
+                        {
+                            printf("first: (%c -> %u), second: (%c -> %u)", text[first_pos], first, text[second_pos], second);
+                            exit(1);
+                        }
+                        hexstring[i] = (first << 4) + second;
                     }
                     yylval.string = hexstring;
                     return(SVF_HEXSTRING);

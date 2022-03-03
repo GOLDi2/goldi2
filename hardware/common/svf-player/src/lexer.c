@@ -858,16 +858,53 @@ case 3:
 YY_RULE_SETUP
 #line 19 "grammars/svf.l"
 {
-                    unsigned int size = (strlen(yytext) - 2)/2 + (strlen(yytext) % 2);
-                    char* hexstring = (char*) malloc(strlen(yytext) - 2);
+                    printf("YYTEXT: %s\n", yytext);
+
+                    unsigned int special_characters = 0;
+                    for (unsigned int i = 0; i < strlen(yytext); i++)
+                    {
+                        if (yytext[i] == ' ' || yytext[i] == '\t' || yytext[i] == '\n' || yytext[i] == '(' || yytext[i] == ')')
+                        {
+                            special_characters++;
+                        }
+                    }
+                    char* text = (char*) malloc(strlen(yytext) - special_characters + 1);
+                    int offset = 0;
+                    for (int i = 0; i < strlen(yytext) + 1; i++)
+                    {
+                        if (yytext[i] == ' ' || yytext[i] == '\t' || yytext[i] == '\n' || yytext[i] == '(' || yytext[i] == ')')
+                        {
+                            offset--;
+                            continue;
+                        }
+                        text[i+offset] = yytext[i];
+                    }
+
+                    printf("TEXT: %s\n", text);
+
+                    unsigned int size = (strlen(text))/2 + (strlen(text) % 2);
+                    char* hexstring = (char*) malloc(size);
+                    for (unsigned int i = 0; i < size; i++) hexstring[i] = 0;
                     for (unsigned int i = 0; i < size; i++)
                     {
-                        if (yytext[(i*2)+1] > 'F') hexstring[i] = (yytext[(i*2)+1] - 'a' + 10) << 4;
-                        else if (yytext[(i*2)+1] > '9') hexstring[i] = (yytext[(i*2)+1] - 'A' + 10) << 4;
-                        else hexstring[i] = (yytext[(i*2)+1] - '0') << 4;
-                        if (yytext[(i*2)+2] > 'F') hexstring[i] |= (yytext[(i*2)+2] - 'a' + 10);
-                        else if (yytext[(i*2)+2] > '9') hexstring[i] |= (yytext[(i*2)+2] - 'A' + 10);
-                        else hexstring[i] |= (yytext[(i*2)+2] - '0');
+                        unsigned char first, second;
+                        unsigned int first_pos = (i*2);
+                        unsigned int second_pos = (i*2)+1;
+
+                        if (text[first_pos] > 'F') first = (text[first_pos] - 'a' + 10);
+                        else if (text[first_pos] > '9') first = (text[first_pos] - 'A' + 10);
+                        else first = (text[first_pos] - '0');
+
+                        
+                        if (text[second_pos] > 'F') second = (text[second_pos] - 'a' + 10);
+                        else if (text[second_pos] > '9') second = (text[second_pos] - 'A' + 10);
+                        else second = (text[second_pos] - '0');
+                        if (first > 15 || second > 15) 
+                        {
+                            printf("first: (%c -> %u), second: (%c -> %u)", text[first_pos], first, text[second_pos], second);
+                            exit(1);
+                        }
+                        hexstring[i] = (first << 4) + second;
                     }
                     yylval.string = hexstring;
                     return(SVF_HEXSTRING);
@@ -875,7 +912,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 34 "grammars/svf.l"
+#line 71 "grammars/svf.l"
 {
                     unsigned int number = 0;
                     for (unsigned int i = 0; i < strlen(yytext); i++)
@@ -889,7 +926,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 44 "grammars/svf.l"
+#line 81 "grammars/svf.l"
 {  
                     char* errstr;
                     yylval.d = strtod(yytext, &errstr);
@@ -898,7 +935,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 50 "grammars/svf.l"
+#line 87 "grammars/svf.l"
 {
                     yylval.u = SVF_STATE_RESET;
                     return(SVF_STATE_RESET);
@@ -906,7 +943,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 54 "grammars/svf.l"
+#line 91 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IDLE;
                     return(SVF_STATE_IDLE);
@@ -914,7 +951,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 58 "grammars/svf.l"
+#line 95 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRSELECT;
                     return(SVF_STATE_DRSELECT);
@@ -922,7 +959,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 62 "grammars/svf.l"
+#line 99 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRCAPTURE;
                     return(SVF_STATE_DRCAPTURE);
@@ -930,7 +967,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 66 "grammars/svf.l"
+#line 103 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRSHIFT;
                     return(SVF_STATE_DRSHIFT);
@@ -938,7 +975,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 70 "grammars/svf.l"
+#line 107 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DREXIT1;
                     return(SVF_STATE_DREXIT1);
@@ -946,7 +983,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 74 "grammars/svf.l"
+#line 111 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRPAUSE;
                     return(SVF_STATE_DRPAUSE);
@@ -954,7 +991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 78 "grammars/svf.l"
+#line 115 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DREXIT2;
                     return(SVF_STATE_DREXIT2);
@@ -962,7 +999,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 82 "grammars/svf.l"
+#line 119 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRUPDATE;
                     return(SVF_STATE_DRUPDATE);
@@ -970,7 +1007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 86 "grammars/svf.l"
+#line 123 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRSELECT;
                     return(SVF_STATE_IRSELECT);
@@ -978,7 +1015,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 90 "grammars/svf.l"
+#line 127 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRCAPTURE;
                     return(SVF_STATE_IRCAPTURE);
@@ -986,7 +1023,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 94 "grammars/svf.l"
+#line 131 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRSHIFT;
                     return(SVF_STATE_IRSHIFT);
@@ -994,7 +1031,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 98 "grammars/svf.l"
+#line 135 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IREXIT1;
                     return(SVF_STATE_IREXIT1);
@@ -1002,7 +1039,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 102 "grammars/svf.l"
+#line 139 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRPAUSE;
                     return(SVF_STATE_IRPAUSE);
@@ -1010,7 +1047,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 106 "grammars/svf.l"
+#line 143 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IREXIT2;
                     return(SVF_STATE_IREXIT2);
@@ -1018,7 +1055,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 110 "grammars/svf.l"
+#line 147 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRUPDATE;
                     return(SVF_STATE_IRUPDATE);
@@ -1026,7 +1063,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 115 "grammars/svf.l"
+#line 152 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_ENDDR;
                     return(SVF_INSTRUCTION_ENDDR);
@@ -1034,7 +1071,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 119 "grammars/svf.l"
+#line 156 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_ENDIR;
                     return(SVF_INSTRUCTION_ENDIR);
@@ -1042,7 +1079,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 123 "grammars/svf.l"
+#line 160 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_FREQUENCY;
                     return(SVF_INSTRUCTION_FREQUENCY);
@@ -1050,7 +1087,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 127 "grammars/svf.l"
+#line 164 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_HDR;
                     return(SVF_INSTRUCTION_HDR);
@@ -1058,7 +1095,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 131 "grammars/svf.l"
+#line 168 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_HIR;
                     return(SVF_INSTRUCTION_HIR);
@@ -1066,7 +1103,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 135 "grammars/svf.l"
+#line 172 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_PIO;
                     return(SVF_INSTRUCTION_PIO);
@@ -1074,7 +1111,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 139 "grammars/svf.l"
+#line 176 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_PIOMAP;
                     return(SVF_INSTRUCTION_PIOMAP);
@@ -1082,7 +1119,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 143 "grammars/svf.l"
+#line 180 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_RUNTEST;
                     return(SVF_INSTRUCTION_RUNTEST);
@@ -1090,7 +1127,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 147 "grammars/svf.l"
+#line 184 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_SDR;
                     return(SVF_INSTRUCTION_SDR);
@@ -1098,7 +1135,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 151 "grammars/svf.l"
+#line 188 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_SIR;
                     return(SVF_INSTRUCTION_SIR);
@@ -1106,7 +1143,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 155 "grammars/svf.l"
+#line 192 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_STATE;
                     return(SVF_INSTRUCTION_STATE);
@@ -1114,7 +1151,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 159 "grammars/svf.l"
+#line 196 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TDR;
                     return(SVF_INSTRUCTION_TDR);
@@ -1122,7 +1159,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 163 "grammars/svf.l"
+#line 200 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TIR;
                     return(SVF_INSTRUCTION_TIR);
@@ -1130,7 +1167,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 167 "grammars/svf.l"
+#line 204 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TRST;
                     return(SVF_INSTRUCTION_TRST);
@@ -1138,32 +1175,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 172 "grammars/svf.l"
+#line 209 "grammars/svf.l"
 return(SVF_TDI);
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 173 "grammars/svf.l"
+#line 210 "grammars/svf.l"
 return(SVF_TDO);
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 174 "grammars/svf.l"
+#line 211 "grammars/svf.l"
 return(SVF_MASK);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 175 "grammars/svf.l"
+#line 212 "grammars/svf.l"
 return(SVF_SMASK);
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 177 "grammars/svf.l"
+#line 214 "grammars/svf.l"
 return(SVF_HZ);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 179 "grammars/svf.l"
+#line 216 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_ON;
                     return(SVF_TRST_MODE_ON);
@@ -1171,7 +1208,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 183 "grammars/svf.l"
+#line 220 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_OFF;
                     return(SVF_TRST_MODE_OFF);
@@ -1179,7 +1216,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 187 "grammars/svf.l"
+#line 224 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_Z;
                     return(SVF_TRST_MODE_Z);
@@ -1187,7 +1224,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 191 "grammars/svf.l"
+#line 228 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_ABSENT;
                     return(SVF_TRST_MODE_ABSENT);
@@ -1195,7 +1232,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 196 "grammars/svf.l"
+#line 233 "grammars/svf.l"
 {    
                     yylval.u = SVF_RUN_CLK_TCK;
                     return(SVF_RUN_CLK_TCK);
@@ -1203,7 +1240,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 200 "grammars/svf.l"
+#line 237 "grammars/svf.l"
 {    
                     yylval.u = SVF_RUN_CLK_SCK;
                     return(SVF_RUN_CLK_SCK);
@@ -1211,36 +1248,36 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 204 "grammars/svf.l"
+#line 241 "grammars/svf.l"
 return(SVF_SEC);
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 205 "grammars/svf.l"
+#line 242 "grammars/svf.l"
 return(SVF_MAXIMUM);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 206 "grammars/svf.l"
+#line 243 "grammars/svf.l"
 return(SVF_ENDSTATE);
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 208 "grammars/svf.l"
+#line 245 "grammars/svf.l"
 /* eat up whitespace */
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 210 "grammars/svf.l"
+#line 247 "grammars/svf.l"
 return(SVF_INSTRUCTION_END);
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 212 "grammars/svf.l"
+#line 249 "grammars/svf.l"
 ECHO;
 	YY_BREAK
-#line 1244 "src/lexer.c"
+#line 1281 "src/lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2208,5 +2245,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 212 "grammars/svf.l"
+#line 249 "grammars/svf.l"
 

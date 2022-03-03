@@ -19,8 +19,8 @@ static struct timespec SLEEP_TIME = {0,0};
 void print_hexstring(char* hexstring, unsigned int length) {
     for (int i = 0; i < length; i++)
     {
-        char first = (hexstring[i] & 0xF0) >> 4;
-        char second = hexstring[i] & 0x0F;
+        unsigned char first = (hexstring[i] & 0xF0) >> 4;
+        unsigned char second = hexstring[i] & 0x0F;
         if (first >= 10) printf("%c", first + 'A' - 10);
         else printf("%c", first + '0');
         if (second >= 10) printf("%c", second + 'A' - 10);
