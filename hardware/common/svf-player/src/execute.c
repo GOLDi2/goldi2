@@ -177,8 +177,6 @@ static int clk(unsigned int tms, unsigned int tdi)
 {
     writeGPIO(TMS, tms);
     writeGPIO(TDI, tdi);
-    if (readGPIO(TMS) != tms) printf("TMS set incorrectly!\n");
-    if (readGPIO(TDI) != tdi) printf("TDI set incorrectly!\n");
 
     writeGPIO(TCK, 0);
 
@@ -316,10 +314,6 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
-        print_hexstring(data, size);
-        printf("\n");
-        print_hexstring(instr->tdo, size);
-        printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
@@ -442,18 +436,18 @@ int execute_instructions()
                 }
                 for (unsigned int i = 0; i < instruction->run_count; i++)
                 {
-                    // if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
+                    if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
 
-                    // if (max_time_nsec &&
-                    //     ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - 
-                    //     (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec)) break;
+                    if (max_time_nsec &&
+                        ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - 
+                        (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec)) break;
 
                     clk(0,0);
                 }
                 if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 while ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - (start_time.tv_sec * 1000000000 + start_time.tv_nsec) < min_time_nsec)
                 {
-                    // clk(0,0);
+                    clk(0,0);
                     if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 }
                 break;
