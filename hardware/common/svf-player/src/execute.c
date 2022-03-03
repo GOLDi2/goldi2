@@ -21,9 +21,9 @@ void print_hexstring(char* hexstring, unsigned int length) {
     {
         char first = (hexstring[i] & 0xF0) >> 4;
         char second = hexstring[i] & 0x0F;
-        if (first > 10) printf("%c", first + 'A' - 10);
+        if (first >= 10) printf("%c", first + 'A' - 10);
         else printf("%c", first + '0');
-        if (second > 10) printf("%c", second + 'A' - 10);
+        if (second >= 10) printf("%c", second + 'A' - 10);
         else printf("%c", second + '0');
     }
 }
