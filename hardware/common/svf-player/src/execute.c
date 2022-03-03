@@ -176,6 +176,8 @@ static int clk(unsigned int tms, unsigned int tdi)
 {
     writeGPIO(TMS, tms);
     writeGPIO(TDI, tdi);
+    if (readGPIO(TMS) != tms) printf("TMS set incorrectly!\n");
+    if (readGPIO(TDI) != tdi) printf("TDI set incorrectly!\n");
 
     writeGPIO(TCK, 0);
 
