@@ -82,11 +82,8 @@ static int set_shift_data(SVF_Shift_Data* shift_data, SVF_Shift_Data* instr, int
         if (instr->smask) shift_data->smask = instr->smask;
 
         if (length_changed && !instr->tdo) shift_data->tdo = NULL;
-
         if (length_changed && !instr->mask) shift_data->mask = NULL;
-
         if (length_changed && !instr->smask) shift_data->smask = NULL;
-        
         if (length_changed && !instr->tdi) 
         {
             printf("Length changed but no value for tdi provided!\n");
@@ -438,18 +435,19 @@ int execute_instructions()
                 }
                 for (unsigned int i = 0; i < instruction->run_count; i++)
                 {
-                    if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
+                    // if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
 
-                    if (max_time_nsec &&
-                        ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - 
-                        (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec)) break;
+                    // if (max_time_nsec &&
+                    //     ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - 
+                    //     (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec)) break;
 
                     clk(0,0);
                 }
+                if (clock_gettime(CLOCK_REALTIME, &start_time)) return 1;
                 if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 while ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - (start_time.tv_sec * 1000000000 + start_time.tv_nsec) < min_time_nsec)
                 {
-                    clk(0,0);
+                    //clk(0,0);
                     if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 }
                 break;
