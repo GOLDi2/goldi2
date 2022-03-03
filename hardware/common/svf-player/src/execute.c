@@ -369,6 +369,8 @@ static int shift_instruction(SVF_Shift_Data* instr)
 
 int execute_instructions()
 {
+    struct timespec start, end;
+    if (clock_gettime(CLOCK_REALTIME, &start)) return 1;
     if (!instruction_list) return 0;
 
     if (initGPIO()) 
@@ -514,6 +516,12 @@ int execute_instructions()
     }
 
     delete_list(instruction_list);
+
+    if (clock_gettime(CLOCK_REALTIME, &end)) return 1;
+
+    long seconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec))/1000000000;
+    long nanoseconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec)) % 1000000000;
+    printf("Programming took %ld.%ld seconds\n", seconds, nanoseconds);
 
     return 0;
 }
