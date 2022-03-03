@@ -8,6 +8,6 @@ run_command('flex', '--outfile=src/lexer.c', '--header-file=src/lexer.h', '--nou
 
 exe = executable('svf_player', 'src/lexer.c', 'src/parser.c', 'src/execute.c', 'src/util.c', 'src/svf_player.c',
   c_args : ['-lbcm2835'],
-  install : true0)
+  install : true)
 
 test('basic', exe, args: ['../testfile'])
