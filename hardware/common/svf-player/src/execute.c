@@ -80,6 +80,8 @@ static int set_shift_data(SVF_Shift_Data* shift_data, SVF_Shift_Data* instr, int
         if (instr->mask) shift_data->mask = instr->mask;
         if (instr->smask) shift_data->smask = instr->smask;
 
+        if (length_changed && !instr->tdo) shift_data->tdo = NULL;
+
         if (length_changed && !instr->mask) shift_data->mask = NULL;
 
         if (length_changed && !instr->smask) shift_data->smask = NULL;
