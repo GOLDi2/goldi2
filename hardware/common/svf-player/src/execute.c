@@ -443,7 +443,11 @@ int execute_instructions()
                 for (unsigned int i = 0; i < instruction->run_count; i++)
                 {
                     if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
-                    if ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec) break;
+
+                    if (max_time_nsec &&
+                        ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - 
+                        (start_time.tv_sec * 1000000000 + start_time.tv_nsec) > max_time_nsec)) break;
+
                     clk(0,0);
                 }
                 if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
