@@ -16,6 +16,18 @@ static SVF_Shift_Data TIR = {0, NULL, NULL, NULL, NULL};
 static int CURRENT_STATE = SVF_STATE_RESET;
 static struct timespec SLEEP_TIME = {0,0};
 
+void print_hexstring(char* hexstring, unsigned int length) {
+    for (int i = 0; i < length; i++)
+    {
+        char first = (hexstring[i] & 0xF0) >> 4;
+        char second = hexstring[i] & 0x0F;
+        if (first > 10) printf("%c", first + 'A' - 10);
+        else printf("%c", first + '0');
+        if (second > 10) printf("%c", second + 'A' - 10);
+        else printf("%c", second + '0');
+    }
+}
+
 SVF_Instruction* create_empty_instruction()
 {
     SVF_Instruction* instruction = (SVF_Instruction*) malloc (sizeof(SVF_Instruction));
@@ -280,6 +292,7 @@ static int move_to_stable_state(int state)
 
 static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 {
+    int size = (instr->length/8) + ((instr->length % 8) > 0);
     int j = (instr->length/8) + ((instr->length % 8) > 0);
     while (j > 0)
     {
@@ -296,6 +309,10 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
+        print_hexstring(data, size);
+        printf("\n");
+        print_hexstring(instr->tdo, size);
+        printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
