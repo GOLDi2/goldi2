@@ -862,12 +862,12 @@ YY_RULE_SETUP
                     char* hexstring = (char*) malloc(strlen(yytext) - 2);
                     for (unsigned int i = 0; i < size; i++)
                     {
-                        if (yytext[i+1] > 'F') hexstring[i] = (yytext[i+1] - 'a' + 10) << 4;
-                        else if (yytext[i+1] > '9') hexstring[i] = (yytext[i+1] - 'A' + 10) << 4;
-                        else hexstring[i] = (yytext[i+1] - '0') << 4;
-                        if (yytext[i+2] > 'F') hexstring[i] |= (yytext[i+2] - 'a' + 10);
-                        else if (yytext[i+2] > '9') hexstring[i] |= (yytext[i+2] - 'A' + 10);
-                        else hexstring[i] |= (yytext[i+2] - '0');
+                        if (yytext[(i*2)+1] > 'F') hexstring[i] = (yytext[(i*2)+1] - 'a' + 10) << 4;
+                        else if (yytext[(i*2)+1] > '9') hexstring[i] = (yytext[(i*2)+1] - 'A' + 10) << 4;
+                        else hexstring[i] = (yytext[(i*2)+1] - '0') << 4;
+                        if (yytext[(i*2)+2] > 'F') hexstring[i] |= (yytext[(i*2)+2] - 'a' + 10);
+                        else if (yytext[(i*2)+2] > '9') hexstring[i] |= (yytext[(i*2)+2] - 'A' + 10);
+                        else hexstring[i] |= (yytext[(i*2)+2] - '0');
                     }
                     yylval.string = hexstring;
                     return(SVF_HEXSTRING);

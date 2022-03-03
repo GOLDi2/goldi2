@@ -2,7 +2,7 @@
 #include <errno.h>
 #include "execute.h"
 #include "parser.h"
-#include "bcmGPIO.c"
+#include "dummyGPIO.c"
 
 static List* instruction_list = NULL;
 static int ENDDR = SVF_STATE_IDLE;
@@ -280,9 +280,10 @@ static int move_to_stable_state(int state)
 
 static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 {
-    int j = (instr->length/2) + ((instr->length % 8) > 0) - 1;
-    for (int i = instr->length; i >= 8; i-=8)
+    int j = (instr->length/8) + ((instr->length % 8) > 0);
+    while (j > 0)
     {
+        j--;
         data[j] |= clk(0, (instr->tdi[j] & 0x01));
         data[j] |= clk(0, (instr->tdi[j] & 0x02) >> 1) << 1;
         data[j] |= clk(0, (instr->tdi[j] & 0x04) >> 2) << 2;
@@ -290,35 +291,21 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
         data[j] |= clk(0, (instr->tdi[j] & 0x10) >> 4) << 4;
         data[j] |= clk(0, (instr->tdi[j] & 0x20) >> 5) << 5;
         data[j] |= clk(0, (instr->tdi[j] & 0x40) >> 6) << 6;
-        data[j] |= clk((exit && (i == 0)), (instr->tdi[j] & 0x80) >> 7) << 7;
-        j--;
-    }
-    if (instr->length % 8)
-    {
-        char compare_tdi = 0x01;
-        char shift_tdi = 0;
-        char shift_data = 0;
-        for (int i = instr->length % 8; i >= 0; i--)
-        {
-            data[j] |= clk((exit && (i == 0)), (instr->tdi[i] & compare_tdi) >> shift_tdi) << shift_data;
-            compare_tdi <<= 2;
-            shift_tdi++;
-            shift_data++;
-        }
+        data[j] |= clk((exit && (j == 0)), (instr->tdi[j] & 0x80) >> 7) << 7;
     }
 
     if (instr->tdo)
     {
         if (instr->mask)
         {
-            for (unsigned int i = 0; i < (instr->length/2) + ((instr->length % 8) > 0); i++)
+            for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
                 if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) return 1;
             }
         }
         else
         {
-            for (unsigned int i = 0; i < (instr->length/2) + ((instr->length % 8) > 0); i++)
+            for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
                 if (data[i] != instr->tdo[i]) return 1;
             }
@@ -330,7 +317,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 static int shift(SVF_Shift_Data* instr, SVF_Shift_Data* header, SVF_Shift_Data* trailer)
 {
     int res = 0;
-    int length = (header->length/2) + (instr->length/2) + (trailer->length/2);
+    int length = (header->length/8) + (instr->length/8) + (trailer->length/8);
     length += ((header->length % 8) > 0) + ((instr->length % 8) > 0) + ((trailer->length % 8) > 0);
     char data[length];
     if (header->length > 0) res |= _shift(header, data, 0);
@@ -346,6 +333,7 @@ static int shift_data(SVF_Shift_Data* instr)
     if (move_to_stable_state(SVF_STATE_DRSHIFT)) return 1;
     int res = shift(instr, &HDR, &TDR);
     if (res) printf("Something went wrong while shifting data!\n");
+    clk(0,0);
     if (move_to_stable_state(ENDDR)) return 1;
     return res;
 }
@@ -355,6 +343,7 @@ static int shift_instruction(SVF_Shift_Data* instr)
     if (move_to_stable_state(SVF_STATE_IRSHIFT)) return 1;
     int res = shift(instr, &HIR, &TIR);
     if (res) printf("Something went wrong while shifting an instruction!\n");
+    clk(0,0);
     if (move_to_stable_state(ENDIR)) return 1;
     return res;
 }
