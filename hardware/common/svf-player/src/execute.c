@@ -264,7 +264,7 @@ static int move_to_stable_state(int state)
         case SVF_STATE_DRPAUSE:
             if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
             if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
-            if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_DRPAUSE) { break; }
             if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
             if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(0,0); break; }
             if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
@@ -273,7 +273,7 @@ static int move_to_stable_state(int state)
             if (state == SVF_STATE_RESET) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(1,0); break; }
             if (state == SVF_STATE_IDLE) { clk(1,0); clk(1,0); clk(0,0); break; }
             if (state == SVF_STATE_DRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
-            if (state == SVF_STATE_IRPAUSE) { clk(1,0); clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(1,0); clk(0,0); break; }
+            if (state == SVF_STATE_IRPAUSE) { break; }
             if (state == SVF_STATE_DRSHIFT) { clk(1,0); clk(1,0); clk(1,0); clk(0,0); clk(0,0); break; }
             if (state == SVF_STATE_IRSHIFT) { clk(1,0); clk(0,0); break; }
             break;
