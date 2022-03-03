@@ -453,7 +453,7 @@ int execute_instructions()
                 if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 while ((current_time.tv_sec * 1000000000 + current_time.tv_nsec) - (start_time.tv_sec * 1000000000 + start_time.tv_nsec) < min_time_nsec)
                 {
-                    clk(0,0);
+                    // clk(0,0);
                     if (clock_gettime(CLOCK_REALTIME, &current_time)) return 1;
                 }
                 break;
