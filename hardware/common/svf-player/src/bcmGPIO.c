@@ -30,6 +30,7 @@ void writeGPIO(int pin, unsigned data)
 
 unsigned int readGPIO(int pin)
 {
+    printf("Reading Value %u from pin %d\n", bcm2835_gpio_lev(pin), pin);
     return bcm2835_gpio_lev(pin);
 }
 
