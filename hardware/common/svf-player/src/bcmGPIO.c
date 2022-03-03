@@ -25,6 +25,7 @@ int initGPIO()
 
 void writeGPIO(int pin, unsigned data)
 {
+    printf("Writing Value %u to pin %d\n", data, pin);
     bcm2835_gpio_write(pin, data);
 }
 
