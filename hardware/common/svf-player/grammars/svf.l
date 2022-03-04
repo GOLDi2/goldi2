@@ -76,6 +76,14 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                 }
 {REAL}          {  
                     char* errstr;
+                    for (int i = 0; i < strlen(yytext); i++)
+                    {
+                        if (yytext[i] == ',') 
+                        {
+                            yytext[i] = '.';
+                            break;
+                        }
+                    }
                     yylval.d = strtod(yytext, &errstr);
                     return(SVF_REAL_NUMBER);
                 }
