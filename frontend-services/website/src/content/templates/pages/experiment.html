@@ -7,12 +7,10 @@ Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
     text = {
         headline: 'Experiment',
         description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
-        
         login_prompt: 'You need an activated user account for this action.',
-        account_setup_prompt: 'You don't have a user account yet?',
-
+        account_setup_prompt: 'You don\'t have a user account yet?',
         button_login: 'Login',
-        button_register: 'Create user account',
+        button_register: 'Create user account'
     }
  %}
 
@@ -21,12 +19,10 @@ Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
      text = {
          headline: 'Experiment',
          description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
-         
          login_prompt: 'Für diese Aktion benötigen Sie ein aktiviertes Benutzerkonto.',
          account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
- 
          button_login: 'Login',
-         button_register: 'Benutzerkonto einrichten',
+         button_register: 'Benutzerkonto einrichten'
      }
   %}
  {% endif %}
@@ -34,22 +30,22 @@ Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
 {% extends "layout.html" %}
 {% block main %}
 
-<div class="max-w-6xl w-full mx-auto py-16 font-body">
-    <div class="mx-auto flex flex-wrap-reverse justify-center gap-10">
-        <div class="max-w-md px-10 space-y-10">
+<div class="max-w-6xl mx-auto w-full py-16 font-body">
+    <div class="mx-auto flex flex-wrap-reverse justify-center gap-5">
+        <div class="max-w-md px-10 space-y-5">
             <div class="text-4xl font-bold text-secondary-dark">{{text.headline}}</div>
             <div>{{text.description}}</div>
             <div>{{text.login_prompt}}</div>
-            <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
+            <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-l hover:bg-secondary-primary-hover duration-300">
                 {{text.button_login}}
             </button>
-            <div>{{account_setup_prompt}}</div>
-            <button class="bg-secondary-light-middle rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-light-middle-hover duration-300">
+            <div>{{text.account_setup_prompt}}</div>
+            <button class="bg-secondary-light-middle rounded-3xl px-8 py-1 w-fit text-white text-l hover:bg-secondary-light-middle-hover duration-300">
                 {{text.button_register}}
             </button>
         </div>
-        <div class="max-w-md px-10">
-            <img class="w-full" src="/img/experiment1.png" alt="Logo">
+        <div class="max-w-lg">
+            <img class="mt-10" src="/img/experiment1.jpg" alt="Logo">
         </div>
     </div>
 </div>
