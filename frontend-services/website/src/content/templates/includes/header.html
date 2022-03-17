@@ -1,35 +1,75 @@
 <!-- Header -->
 {% set
     navbar = {
-        primary: [
-            {name: 'Documentation', href: '/documentation/control_units/pld.html'},
-            {name: 'Experiment', href: '/experiment.html'},
-            {name: 'Tools', href: '/faq.html'}
-        ],
         secondary: [
             {name: 'Login', href: '/'},
             {name: 'Register', href: '/about'}
-        ]
+        ],
+
+        doc: 'Documentation',
+        controller: 'Steuereinheiten',
+        con_1: 'Manuelle Steuerung',
+        con_2: 'Digitales Demo-Board',
+        con_3: 'PSOC',
+        con_4: 'PLD',
+        con_5: 'Automatengraph',
+        phys_systems: 'Physische Systeme',
+        phys_1: '3-Achs-Portal',
+        phys_2: 'Aufzug A (3 Etagen)',
+        phys_3: 'Aufzug B (4 Etagen)',
+        phys_4: 'Aufzug C (4 Etagen)',
+        phys_5: 'Bearbeitungseinheit',
+        phys_6: 'Hochregallager',
+        phys_7: 'Füllstandregelung',
+        doc_exp: 'Experiment',
+        doc_exp_instr: 'Instruction',
+        doc_tools: 'Tools',
+        too_1: 'BEAST',
+        too_2: 'GIFT',
+        too_3: 'SANE (Beta JS-Application)',
+        too_4: 'SANE (JAVA-Applet Download)',
+        too_5: 'WIDE (Standalone)',
+        exp: 'Experiment',
+        tools: 'Tools'
     }
  %}
 
 {% if language=='de' %}
 {% set
     navbar = {
-        primary: [
-            {name: 'Dokumentation', href: '/documentation.html'},
-            {name: 'Experiment', href: '/experiment.html'},
-            {name: 'Werkzeuge', href: '/faq.html'}
-        ],
         secondary: [
             {name: 'Login', href: '/'},
             {name: 'Registrieren', href: '/about'}
-        ]
+        ],
+        
+        doc: 'Dokumentation',
+        controller: 'Steuereinheiten',
+        con_1: 'Manuelle Steuerung',
+        con_2: 'Digitales Demo-Board',
+        con_3: 'PSOC',
+        con_4: 'PLD',
+        con_5: 'Automatengraph',
+        phys_systems: 'Physische Systeme',
+        phys_1: '3-Achs-Portal',
+        phys_2: 'Aufzug A (3 Etagen)',
+        phys_3: 'Aufzug B (4 Etagen)',
+        phys_4: 'Aufzug C (4 Etagen)',
+        phys_5: 'Bearbeitungseinheit',
+        phys_6: 'Hochregallager',
+        phys_7: 'Füllstandregelung',
+        doc_exp: 'Experiment',
+        doc_exp_instr: 'Anleitung',
+        doc_tools: 'Tools',
+        too_1: 'BEAST',
+        too_2: 'GIFT',
+        too_3: 'SANE (Beta JS-Application)',
+        too_4: 'SANE (JAVA-Applet Download)',
+        too_5: 'WIDE (Standalone)',
+        exp: 'Experiment',
+        tools: 'Werkzeuge'
     }
  %}
 {% endif %}
-
-<!-- Das ist ein Test -->
 
 <nav class="bg-secondary-darkblue w-full fixed z-50 p-2 font-body">
     <div class= "max-w-6xl mx-auto px-4">
@@ -40,17 +80,75 @@
                 <span class="font-bold text-2xl text-primary">GOLDi LABS</span>
             </a>
             <!--Navbar items -->
-            <div class="hidden md:flex items-center space-x-3 ">
-                <div class="hidden md:flex items-center space-x-10">
-                    {% for item in navbar.primary %}
-                    <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
-                    {% endfor %}
+            <div class="hidden md:flex items-center space-x-3">
+                <div class="hidden md:flex items-center space-x-10 pr-10">
+
+                    <div class="navbar">
+                        <div class="dropdown">
+                        <button class="dropbtn hover:bg-secondary-dark rounded transition duration-200">Dokumentation<i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content"> 
+                            <div class="row">
+                            <div class="column">
+                                <h5>{{navbar.controller}}</h5>
+                                <a href="#">{{navbar.con_1}}</a>
+                                <a href="#">{{navbar.con_2}}</a>
+                                <a href="#">{{navbar.con_3}}</a>
+                                <a href="#">{{navbar.con_4}}</a>
+                                <a href="#">{{navbar.con_5}}</a>
+                                <a href="#">{{navbar.con_6}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.phys_systems}}</h5>
+                                <a href="#">{{navbar.phys_1}}</a>
+                                <a href="#">{{navbar.phys_2}}</a>
+                                <a href="#">{{navbar.phys_3}}</a>
+                                <a href="#">{{navbar.phys_4}}</a>
+                                <a href="#">{{navbar.phys_5}}</a>
+                                <a href="#">{{navbar.phys_6}}</a>
+                                <a href="#">{{navbar.phys_7}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.doc_exp}}</h5>
+                                <a href="#">{{navbar.doc_exp_instr}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.tools}}</h5>
+                                <a href="#">{{navbar.too_1}}</a>
+                                <a href="#">{{navbar.too_2}}</a>
+                                <a href="#">{{navbar.too_3}}</a>
+                                <a href="#">{{navbar.too_4}}</a>
+                                <a href="#">{{navbar.too_5}}</a>
+                            </div>
+                            </div>
+                        </div>
+                        </div> 
+                    </div>
+
+                    <a href="/{{language}}/experiment.html" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Experiment</a>
+                    <a href="/{{language}}/tools.html" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Werkzeuge</a>
+                    
                 </div>
+
+                <!--Login & Register-->
                 <span class="bg-gray-400 w-px h-6 mr-2"></span>
                 {% for item in navbar.secondary %}
                 <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
                 {% endfor %}
+                
+                <!--Language-->
+                <div class="normal-dropdown">
+                    <button class="normal-dropbtn my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200 ">
+                        <img class="h-7" src="/img/language_icon.svg" alt="language">
+                    </button>
+                    <div class="normal-dropdown-content">
+                      <a href="#" language='de'>DE</a>
+                      <a href="#" language='en'>EN</a>
+                </div>            
+
             </div>
+
+        -->
             <!-- Hamburger Menu button -->
             <div class="md:hidden flex items-center">
                 <button class="outline-none mobile-menu-button">

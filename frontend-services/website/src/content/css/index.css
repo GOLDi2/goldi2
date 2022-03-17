@@ -35,9 +35,127 @@
   }
 }
 
-/* FAQ */
+/*------------Header------------*/
+
+/*--Normaler Dropdown--*/
+.normal-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.normal-dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 80px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding-top: 5px;
+  border-radius: 0px 0px 10px 10px;
+  background-color: #06152a;
+}
+
+.normal-dropdown-content a {
+  float: none;
+  color: white;
+  margin: 7px 11px;
+  padding: 5px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.normal-dropdown-content a:hover {
+  background-color: #1c355d;
+  border-radius: 8px;
+  transition-duration: 200ms;
+}
+
+.normal-dropdown:hover .normal-dropdown-content {
+  display: block;
+  background-color: #06152a;
+}
+
+/*--MEGA MENU--*/
+body {
+  margin: 0;
+}
+
+h5 {
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid #f2ab55;
+  padding-bottom: 5px;
+}
+
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  color: white;
+  padding: 5px;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #06152a;
+  width: 50%;
+  align-content: flex-end;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.column {
+  float: left;
+  width: 25%;
+  padding: 20px;
+  height: 350px;
+  color: white;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.column a {
+  float: none;
+  color: white;
+  margin: 7px 11px;
+  padding: 5px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  font-size: small;
+}
+
+.column a:hover {
+  background-color: #1c355d;
+  border-radius: 8px;
+  transition-duration: 200ms;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/*------------FAQ------------*/
 .faq > section {
-  @apply bg-secondary-light p-8 rounded-3xl out-shadow-section;
+  @apply bg-secondary-light p-5 rounded-3xl out-shadow-section;
 }
 
 .faq > section:hover, section:active {
@@ -48,7 +166,7 @@
 .collapsible {
   color: black;
   cursor: pointer;
-  padding: 10px;
+  padding-left: 10px;
   width: 100%;
   border: none;
   text-align: left;
