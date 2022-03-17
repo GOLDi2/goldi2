@@ -3,14 +3,14 @@
         heading: 'FAQ',
         subheading: 'MOST FREQUENT QUESTIONS AND ANSWERS',
 
-        question_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-
-        question_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-
-        question_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+        item: [
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'},
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'},
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}
+            ]
     }
  %}
 
@@ -20,14 +20,14 @@
         heading: 'FAQ',
         subheading: 'MOST FREQUENT QUESTIONS AND ANSWERS',
 
-        question_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-
-        question_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_2: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-    
-        question_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-        answer_3: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
+        item: [
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'},
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'},
+            {question: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}
+            ]
     }
  %}
 {% endif %}
@@ -46,32 +46,18 @@
 </div>
 
 <!-- Questions -->
-<div class="p-10 font-body">
+<div class="p-3 font-body">
     <div class="faq max-w-6xl w-2/3 mx-auto">
 
-        <section class="mb-10">
-        <button type="button" class="collapsible">{{text.question_1}}</button>
-            <div class="content">
-                <div class="h-line"></div>
-            <p class="pt-5">{{text.answer_1}}</p>
-        </div>
-        </section>
-
+        {% for item in text.item %}
         <section class="my-10">
-            <button type="button" class="collapsible">{{text.question_2}}</button>
+          <button type="button" class="collapsible">{{item.question}}</button>
                 <div class="content">
                     <div class="h-line"></div>
-                <p class="pt-5">{{text.answer_2}}</p>
-            </div>
+                    <p class="pt-5">{{item.answer}}</p>
+              </div>
         </section>
-
-        <section class="my-10">
-            <button type="button" class="collapsible">{{text.question_3}}</button>
-                <div class="content">
-                    <div class="h-line"></div>
-                <p class="pt-5">{{text.answer_3}}</p>
-            </div>
-        </section>
+        {% endfor %}
 
     </div>
 </div>
