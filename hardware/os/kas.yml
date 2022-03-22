@@ -24,15 +24,15 @@ repos:
     path: meta-goldi-bsp
 
   poky:
-    url: https://git.yoctoproject.org/git/poky
+    url: https://git.yoctoproject.org/poky
     refspec: d8d88ec51b175872a25153f09e18b6e3af166b46
     layers:
       meta:
       meta-poky:
 
   meta-raspberrypi:
-    url: https://git.yoctoproject.org/git/meta-raspberrypi
-    refspec: 77190af02d48adc2b28216775e6318e9eeda571c
+    url: https://git.yoctoproject.org/meta-raspberrypi
+    refspec: 934064a01903b2ba9a82be93b3f0efdb4543a0e8
 
   meta-gstreamer:
     url: https://github.com/OSSystems/meta-gstreamer1.0
