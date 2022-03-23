@@ -34,7 +34,7 @@
 {% set
     text = {
         start: 'Starten',
-        description: 'Das ist ein kleiner Text, wo in 2 Sätzen erklärt wird, worum es hier geht. Der Text wird noch ausgearbeitet.',
+        short_description: 'Das ist ein kleiner Text, wo in 2 Sätzen erklärt wird, worum es hier geht. Der Text wird noch ausgearbeitet.',
 
         description_headline: 'Was ist GOLDi LABS?',
         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
@@ -43,17 +43,17 @@
             {
                 headline: 'Für Studierende',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '/img/Student.png'
+                image: '/img/Student.svg'
             },
             {
                 headline: 'Für Lehrende',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '/img/Teacher.png'
+                image: '/img/Teacher.svg'
             },
             {
                 headline: 'Für Interessierte',
                 description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-                image: '/img/Laptop.png'
+                image: '/img/Laptop.svg'
             }
         ],
 
@@ -68,6 +68,26 @@
 
 {% extends "layout.html" %}
 {% block main %}
+
+<!-- Startbild neu -->
+<div class="w-full h-screen bg-[url('/img/landing_2.png')] bg-cover">
+    <div class="flex flex-col space-y-5 w-fit h-fit text-left mx-auto font-body p-10">
+        <!-- Der Text müsste noch vertikal zentriert werden. -->
+        <span class="text-gray-100 text-5xl 2xl:text-6xl text-center">GOLDi LABS</span>
+        <div class="h-line"></div>
+        <span class="text-secondary text-4xl"> Real labs at your home</span>
+        <div class="w-80 mr-auto text-gray-100 mx-0">
+            {{text.short_description}}
+        </div>
+        <div>
+            <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
+                {{text.start}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Startbild alt
 <div class="w-full h-screen absolute bg-secondary-dark hidden md:block">
     <div class="absolute top-0 left-[40%] right-0 bottom-0 bg-[url('/img/landing.jpg')] bg-cover bg-left"></div>
     <div class="absolute top-0 left-0 right-[60%] bottom-0 flex items-center min-w-fit">
@@ -104,7 +124,7 @@
     </div>
     <div class="bg-secondary-dark bg-[url('/img/landing_s.jpg')] w-full flex-grow bg-cover bg-top"></div>
 </div>
-<div class="h-screen"></div>
+<div class="h-screen"></div> -->
 
 <!-- Was ist GOLDi LABS? -->
 <div class="max-w-6xl w-full mx-auto py-16 font-body">
