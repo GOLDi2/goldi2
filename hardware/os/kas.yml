@@ -25,22 +25,22 @@ repos:
 
   poky:
     url: https://git.yoctoproject.org/git/poky
-    refspec: d8d88ec51b175872a25153f09e18b6e3af166b46
+    refspec: 630d754ea3d7206976b1e0f4489e054cdbc08fe8
     layers:
       meta:
       meta-poky:
 
   meta-raspberrypi:
     url: https://git.yoctoproject.org/git/meta-raspberrypi
-    refspec: 77190af02d48adc2b28216775e6318e9eeda571c
+    refspec: 378d4b6e7ba64b6a9a701457cc3780fa896ba5dc
 
-  meta-gstreamer:
-    url: https://github.com/OSSystems/meta-gstreamer1.0
-    refspec: b489b1ba084544d9c4c08f7c3b3d1c37ffa53c51
+  #meta-gstreamer:
+  #  url: https://github.com/OSSystems/meta-gstreamer1.0
+  #  refspec: b489b1ba084544d9c4c08f7c3b3d1c37ffa53c51
 
   meta-openembedded:
     url: http://git.openembedded.org/meta-openembedded
-    refspec: 346681e7bf9c78008a845fc89031be4fd4ceb3a1
+    refspec: 061b7fc74f887454251307ef119b808a90654d3f
     layers:
       meta-oe:
       meta-python:
@@ -48,7 +48,7 @@ repos:
 
   meta-rauc:
     url: https://github.com/rauc/meta-rauc.git
-    refspec: 100e8852fe9001215f649122d70a62a3fb47a50d
+    refspec: 3faf4cc4fcf558e99dad5aa8532fef2ecd566653
 
   #meta-rauc-community:
   #  url: https://github.com/leon-anavi/meta-rauc-community.git

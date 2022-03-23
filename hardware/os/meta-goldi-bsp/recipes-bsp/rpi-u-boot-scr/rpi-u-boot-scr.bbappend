@@ -1,2 +1,2 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-SRC_URI_append = " file://boot.cmd.in"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+SRC_URI:append = " file://boot.cmd.in"

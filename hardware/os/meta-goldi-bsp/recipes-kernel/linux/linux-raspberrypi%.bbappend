@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_append = " file://rauc.cfg"
-CMDLINE_remove = "root=/dev/mmcblk0p2"
+SRC_URI:append = " file://rauc.cfg"
+CMDLINE:remove = "root=/dev/mmcblk0p2"

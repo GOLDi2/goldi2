@@ -1,4 +1,4 @@
-do_install_append () {
+do_install:append () {
     cat >> ${D}${sysconfdir}/fstab <<EOF
 
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0 
