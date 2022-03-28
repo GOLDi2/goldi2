@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block main %}
+
+{% if stdout %}
+<pre>{{ stdout }}</pre>
+{% endif %}
+
+{% if stderr %}
+<pre style="color: red;">{{ stderr }}</pre>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" id="file" name="file">
+    <input type="submit">
+</form>
+
+{% endblock %}
