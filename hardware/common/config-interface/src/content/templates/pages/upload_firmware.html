@@ -1,3 +1,8 @@
+{% set
+    navbar = [
+        {name: 'Firmware Upload', href: '/upload_firmware.html', active: true}
+    ]
+ %}
 {% extends "layout.html" %}
 {% block main %}
 
@@ -9,9 +14,50 @@
 <pre style="color: red;">{{ stderr }}</pre>
 {% endif %}
 
-<form method="post" enctype="multipart/form-data">
-    <input type="file" id="file" name="file">
-    <input type="submit">
+<form id="upload_form" enctype="multipart/form-data" method="post">
+    <input type="file" name="file" id="file" onchange="uploadFile()"><br>
+    <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+    <h3 id="status"></h3>
+    <p id="loaded_n_total"></p>
 </form>
+
+<script>
+function _(el) {
+  return document.getElementById(el);
+}
+
+function uploadFile() {
+  var file = _("file").files[0];
+  var formdata = new FormData();
+  formdata.append("file", file);
+  var ajax = new XMLHttpRequest();
+  ajax.upload.addEventListener("progress", progressHandler);
+  ajax.addEventListener("load", completeHandler);
+  ajax.addEventListener("error", errorHandler);
+  ajax.addEventListener("abort", abortHandler);
+  ajax.open("POST", document.URL, true);
+  ajax.send(formdata);
+}
+
+function progressHandler(event) {
+  _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+  var percent = (event.loaded / event.total) * 100;
+  _("progressBar").value = Math.round(percent);
+  _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+}
+
+function completeHandler(event) {
+  _("status").innerHTML = "<pre>"+event.target.responseText+"</pre>";
+  _("progressBar").value = 0; //wil clear progress bar after successful upload
+}
+
+function errorHandler(event) {
+  _("status").innerHTML = "Upload Failed";
+}
+
+function abortHandler(event) {
+  _("status").innerHTML = "Upload Aborted";
+}
+</script>
 
 {% endblock %}
