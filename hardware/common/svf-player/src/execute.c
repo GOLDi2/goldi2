@@ -404,11 +404,11 @@ int execute_instructions()
         switch (instruction->type)
         {
             case SVF_INSTRUCTION_ENDDR:
-                printf("Executing ENDDR ");
+                printf("Executing ENDDR\n");
                 ENDDR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_ENDIR:
-                printf("Executing ENDIR ");
+                printf("Executing ENDIR\n");
                 ENDIR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_FREQUENCY:

@@ -393,14 +393,14 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    4,    1,    1,    1,    1,    1,    1,    5,
-        6,    1,    7,    1,    8,    9,   10,   11,   12,   13,
-       11,   11,   11,   11,   11,   11,   11,    1,   14,    1,
-        1,    1,    1,    1,   15,   16,   17,   18,   19,   20,
-        1,   21,   22,    1,   23,   24,   25,   26,   27,   28,
-       29,   30,   31,   32,   33,    1,    1,   34,   35,   36,
-        1,    1,    1,    1,    1,    1,   37,   37,   37,   37,
+        6,    1,    7,    8,    9,   10,   11,   12,   13,   14,
+       12,   12,   12,   12,   12,   12,   12,    1,   15,    1,
+        1,    1,    1,    1,   16,   17,   18,   19,   20,   21,
+        1,   22,   23,    1,   24,   25,   26,   27,   28,   29,
+       30,   31,   32,   33,   34,    1,    1,   35,   36,   37,
+        1,    1,    1,    1,    1,    1,   38,   38,   38,   38,
 
-       38,   37,    1,    1,    1,    1,    1,    1,    1,    1,
+       39,   38,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -419,37 +419,37 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[39] =
+static const YY_CHAR yy_meta[40] =
     {   0,
         1,    2,    2,    1,    1,    1,    1,    1,    1,    1,
-        2,    2,    2,    1,    2,    2,    2,    2,    2,    2,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    2,    2
+        1,    2,    2,    2,    1,    2,    2,    2,    2,    2,
+        2,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    2,    2
     } ;
 
 static const flex_int16_t yy_base[197] =
     {   0,
-        0,    0,  231,  232,   37,  227,    0,  219,   32,  232,
-      212,  197,  200,  195,   24,   29,  209,   28,  201,   30,
-       54,   35,  232,   53,  219,  232,  215,  217,   55,    0,
-       54,  188,   61,  200,  198,  186,  185,  232,  190,   65,
-       43,  193,  232,  185,  180,  184,  186,  178,  190,  176,
-      190,  189,  180,   61,  172,  170,  232,  197,  232,   88,
-       91,  180,  183,  163,  181,   66,  167,   87,  165,  232,
-      232,  174,  177,  157,  175,   76,  161,  165,  165,  232,
-      161,  166,  152,  232,  232,  232,  232,  152,  150,  232,
-      232,  232,  232,  232,  149,   99,  154,  151,  156,  144,
+        0,    0,  233,  234,   38,  229,    0,  220,   34,  234,
+      213,  198,  201,  196,   26,   24,  210,   29,  202,   31,
+       56,   39,  234,   50,  221,  234,  217,  219,   47,    0,
+       57,  189,   49,  201,  199,  187,  186,  234,  191,   66,
+       36,  194,  234,  186,  181,  185,  187,  179,  191,  177,
+      191,  190,  181,   49,  173,  171,  234,  199,  234,   79,
+       89,  181,  184,  164,  182,   65,  168,   85,  166,  234,
+      234,  175,  178,  158,  176,   68,  162,  166,  166,  234,
+      162,  167,  153,  234,  234,  234,  234,  153,  151,  234,
+      234,  234,  234,  234,  150,   93,  155,  152,  157,  145,
 
-      152,  153,  156,  143,  142,  139,  137,  232,  141,  146,
-      134,  142,  143,  146,  232,  138,  147,  129,  141,  136,
-      139,  232,  125,  124,  123,  123,  134,  132,  136,  232,
-      232,  135,  130,  116,  115,  115,  126,  124,  128,  109,
-      113,  232,  109,  232,  232,  232,  106,  101,  119,  120,
-      104,  103,  102,  107,   99,  103,  112,  108,   92,   91,
-       97,  232,   89,   90,  232,  232,  232,   87,  232,   98,
-       89,   89,   60,  232,  232,  232,   49,  232,   56,  232,
-      232,   50,  232,  232,  232,   29,   39,  232,  232,  232,
-      232,  232,  232,  126,   48,  128
+      153,  154,  157,  144,  143,  140,  138,  234,  142,  147,
+      135,  143,  144,  147,  234,  139,  148,  130,  142,  137,
+      140,  234,  126,  125,  124,  124,  135,  133,  137,  234,
+      234,  136,  131,  117,  116,  116,  127,  125,  129,  110,
+      114,  234,  110,  234,  234,  234,  107,   83,  120,  121,
+      105,  104,  103,  108,  100,   96,  113,  114,   98,   97,
+      103,  234,   95,   96,  234,  234,  234,   93,  234,  105,
+      104,  105,   85,  234,  234,  234,   82,  234,   94,  234,
+      234,   93,  234,  234,  234,   76,   91,  234,  234,  234,
+      234,  234,  234,  118,   92,  120
 
     } ;
 
@@ -479,70 +479,72 @@ static const flex_int16_t yy_def[197] =
 
     } ;
 
-static const flex_int16_t yy_nxt[271] =
+static const flex_int16_t yy_nxt[274] =
     {   0,
-        4,    5,    5,    6,    7,    4,    4,    4,    4,    8,
-        9,    9,    9,   10,   11,    4,    4,   12,   13,   14,
-       15,   16,    4,    4,   17,    4,   18,   19,    4,   20,
-       21,   22,    4,    4,    4,   23,    4,    4,   24,   24,
-       29,   36,   30,   30,   30,   37,   39,   42,   45,   27,
-       31,   53,   54,   43,   24,   24,   55,  192,   40,   38,
-       61,   61,   46,  191,   56,   60,   60,   60,  190,   31,
-       47,   48,   49,   78,  189,   50,   79,   63,   51,   64,
-      188,   73,   91,   74,  101,   52,  102,   92,   65,  187,
-       93,   66,   75,   67,  112,   76,  113,   77,   60,   60,
+        4,    5,    5,    6,    7,    4,    4,    4,    4,    4,
+        8,    9,    9,    9,   10,   11,    4,    4,   12,   13,
+       14,   15,   16,    4,    4,   17,    4,   18,   19,    4,
+       20,   21,   22,    4,    4,    4,   23,    4,    4,   24,
+       24,   29,   39,   29,   36,   30,   30,   30,   37,   42,
+       45,   24,   24,   31,   40,   43,   53,   54,   60,   60,
+       60,   55,   38,   61,   46,   61,   63,   78,   64,   56,
+       79,   91,   31,   47,   48,   49,   92,   65,   50,   93,
+       66,   51,   67,   73,  101,   74,  102,  112,   52,  113,
+       60,   60,   60,   27,   75,  165,  166,   76,   31,   77,
 
-       60,   96,   96,   96,  104,  186,   31,  185,  105,   96,
-       96,   96,  165,  166,  174,  175,  184,  106,  183,  182,
-      181,  180,  179,  178,  177,   31,   25,   25,   58,   58,
-      176,  173,  172,  171,  170,  169,  168,  167,  164,  163,
-      162,  161,  160,  159,  158,  157,  156,  155,  154,  153,
-      152,  151,  150,  149,  148,  147,  146,  145,  144,  143,
-      142,  141,  140,  139,  138,  137,  136,  135,  134,  133,
-      132,  131,  130,  129,  128,  127,  126,  125,  124,  123,
-      122,  121,  120,  119,  118,  117,  116,  115,  114,  111,
-      110,  109,  108,  107,  103,  100,   99,   98,   97,   59,
+       96,   96,   96,  104,   96,   96,   96,  105,  174,  175,
+      192,  191,  190,  189,  188,  187,  106,   31,   25,   25,
+       58,   58,  186,  185,  184,  183,  182,  181,  180,  179,
+      178,  177,  176,  173,  172,  171,  170,  169,  168,  167,
+      164,  163,  162,  161,  160,  159,  158,  157,  156,  155,
+      154,  153,  152,  151,  150,  149,  148,  147,  146,  145,
+      144,  143,  142,  141,  140,  139,  138,  137,  136,  135,
+      134,  133,  132,  131,  130,  129,  128,  127,  126,  125,
+      124,  123,  122,  121,  120,  119,  118,  117,  116,  115,
+      114,  111,  110,  109,  108,  107,  103,  100,   99,   98,
 
-       95,   94,   90,   89,   88,   87,   86,   85,   84,   83,
-       82,   81,   80,   72,   71,   70,   69,   68,   62,   59,
-       57,   26,   44,   41,   35,   34,   33,   32,   28,   26,
-      193,    3,  193,  193,  193,  193,  193,  193,  193,  193,
+       97,   59,   95,   94,   90,   89,   88,   87,   86,   85,
+       84,   83,   82,   81,   80,   72,   71,   70,   69,   68,
+       62,   59,   57,   26,   44,   41,   35,   34,   33,   32,
+       28,   26,  193,    3,  193,  193,  193,  193,  193,  193,
       193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
       193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
-      193,  193,  193,  193,  193,  193,  193,  193,  193,  193
+      193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
+      193,  193,  193
     } ;
 
-static const flex_int16_t yy_chk[271] =
+static const flex_int16_t yy_chk[274] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    5,    5,
-        9,   15,    9,    9,    9,   15,   16,   18,   20,  195,
-        9,   22,   22,   18,   24,   24,   22,  187,   16,   15,
-       31,   31,   20,  186,   22,   29,   29,   29,  182,    9,
-       21,   21,   21,   41,  179,   21,   41,   33,   21,   33,
-      177,   40,   54,   40,   66,   21,   66,   54,   33,  173,
-       54,   33,   40,   33,   76,   40,   76,   40,   60,   60,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    5,
+        5,    9,   16,    9,   15,    9,    9,    9,   15,   18,
+       20,   24,   24,    9,   16,   18,   22,   22,   29,   29,
+       29,   22,   15,   31,   20,   31,   33,   41,   33,   22,
+       41,   54,    9,   21,   21,   21,   54,   33,   21,   54,
+       33,   21,   33,   40,   66,   40,   66,   76,   21,   76,
+       60,   60,   60,  195,   40,  148,  148,   40,   60,   40,
 
-       60,   61,   61,   61,   68,  172,   60,  171,   68,   96,
-       96,   96,  148,  148,  156,  156,  170,   68,  168,  164,
-      163,  161,  160,  159,  158,   60,  194,  194,  196,  196,
-      157,  155,  154,  153,  152,  151,  150,  149,  147,  143,
-      141,  140,  139,  138,  137,  136,  135,  134,  133,  132,
-      129,  128,  127,  126,  125,  124,  123,  121,  120,  119,
-      118,  117,  116,  114,  113,  112,  111,  110,  109,  107,
-      106,  105,  104,  103,  102,  101,  100,   99,   98,   97,
-       95,   89,   88,   83,   82,   81,   79,   78,   77,   75,
-       74,   73,   72,   69,   67,   65,   64,   63,   62,   58,
+       61,   61,   61,   68,   96,   96,   96,   68,  156,  156,
+      187,  186,  182,  179,  177,  173,   68,   60,  194,  194,
+      196,  196,  172,  171,  170,  168,  164,  163,  161,  160,
+      159,  158,  157,  155,  154,  153,  152,  151,  150,  149,
+      147,  143,  141,  140,  139,  138,  137,  136,  135,  134,
+      133,  132,  129,  128,  127,  126,  125,  124,  123,  121,
+      120,  119,  118,  117,  116,  114,  113,  112,  111,  110,
+      109,  107,  106,  105,  104,  103,  102,  101,  100,   99,
+       98,   97,   95,   89,   88,   83,   82,   81,   79,   78,
+       77,   75,   74,   73,   72,   69,   67,   65,   64,   63,
 
-       56,   55,   53,   52,   51,   50,   49,   48,   47,   46,
-       45,   44,   42,   39,   37,   36,   35,   34,   32,   28,
-       27,   25,   19,   17,   14,   13,   12,   11,    8,    6,
-        3,  193,  193,  193,  193,  193,  193,  193,  193,  193,
+       62,   58,   56,   55,   53,   52,   51,   50,   49,   48,
+       47,   46,   45,   44,   42,   39,   37,   36,   35,   34,
+       32,   28,   27,   25,   19,   17,   14,   13,   12,   11,
+        8,    6,    3,  193,  193,  193,  193,  193,  193,  193,
       193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
       193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
-      193,  193,  193,  193,  193,  193,  193,  193,  193,  193
+      193,  193,  193,  193,  193,  193,  193,  193,  193,  193,
+      193,  193,  193
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -565,8 +567,8 @@ char *yytext;
 /* need this for the call to atof() below */
 #include <limits.h>
 #include "parser.h"
-#line 569 "src/lexer.c"
-#line 570 "src/lexer.c"
+#line 571 "src/lexer.c"
+#line 572 "src/lexer.c"
 
 #define INITIAL 0
 
@@ -784,7 +786,7 @@ YY_DECL
 #line 14 "grammars/svf.l"
 
 
-#line 788 "src/lexer.c"
+#line 790 "src/lexer.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -817,7 +819,7 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 232 );
+		while ( yy_base[yy_current_state] != 234 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -858,8 +860,6 @@ case 3:
 YY_RULE_SETUP
 #line 19 "grammars/svf.l"
 {
-                    printf("YYTEXT: %s\n", yytext);
-
                     unsigned int special_characters = 0;
                     for (unsigned int i = 0; i < strlen(yytext); i++)
                     {
@@ -879,8 +879,6 @@ YY_RULE_SETUP
                         }
                         text[i+offset] = yytext[i];
                     }
-
-                    printf("TEXT: %s\n", text);
 
                     unsigned int size = (strlen(text))/2 + (strlen(text) % 2);
                     char* hexstring = (char*) malloc(size);
@@ -912,7 +910,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 71 "grammars/svf.l"
+#line 67 "grammars/svf.l"
 {
                     unsigned int number = 0;
                     for (unsigned int i = 0; i < strlen(yytext); i++)
@@ -926,16 +924,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 81 "grammars/svf.l"
+#line 77 "grammars/svf.l"
 {  
                     char* errstr;
+                    for (int i = 0; i < strlen(yytext); i++)
+                    {
+                        if (yytext[i] == ',') 
+                        {
+                            yytext[i] = '.';
+                            break;
+                        }
+                    }
                     yylval.d = strtod(yytext, &errstr);
                     return(SVF_REAL_NUMBER);
                 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 87 "grammars/svf.l"
+#line 91 "grammars/svf.l"
 {
                     yylval.u = SVF_STATE_RESET;
                     return(SVF_STATE_RESET);
@@ -943,7 +949,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 91 "grammars/svf.l"
+#line 95 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IDLE;
                     return(SVF_STATE_IDLE);
@@ -951,7 +957,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 95 "grammars/svf.l"
+#line 99 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRSELECT;
                     return(SVF_STATE_DRSELECT);
@@ -959,7 +965,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 99 "grammars/svf.l"
+#line 103 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRCAPTURE;
                     return(SVF_STATE_DRCAPTURE);
@@ -967,7 +973,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 103 "grammars/svf.l"
+#line 107 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRSHIFT;
                     return(SVF_STATE_DRSHIFT);
@@ -975,7 +981,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 107 "grammars/svf.l"
+#line 111 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DREXIT1;
                     return(SVF_STATE_DREXIT1);
@@ -983,7 +989,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 111 "grammars/svf.l"
+#line 115 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRPAUSE;
                     return(SVF_STATE_DRPAUSE);
@@ -991,7 +997,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 115 "grammars/svf.l"
+#line 119 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DREXIT2;
                     return(SVF_STATE_DREXIT2);
@@ -999,7 +1005,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 119 "grammars/svf.l"
+#line 123 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_DRUPDATE;
                     return(SVF_STATE_DRUPDATE);
@@ -1007,7 +1013,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 123 "grammars/svf.l"
+#line 127 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRSELECT;
                     return(SVF_STATE_IRSELECT);
@@ -1015,7 +1021,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 127 "grammars/svf.l"
+#line 131 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRCAPTURE;
                     return(SVF_STATE_IRCAPTURE);
@@ -1023,7 +1029,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 131 "grammars/svf.l"
+#line 135 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRSHIFT;
                     return(SVF_STATE_IRSHIFT);
@@ -1031,7 +1037,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 135 "grammars/svf.l"
+#line 139 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IREXIT1;
                     return(SVF_STATE_IREXIT1);
@@ -1039,7 +1045,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 139 "grammars/svf.l"
+#line 143 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRPAUSE;
                     return(SVF_STATE_IRPAUSE);
@@ -1047,7 +1053,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 143 "grammars/svf.l"
+#line 147 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IREXIT2;
                     return(SVF_STATE_IREXIT2);
@@ -1055,7 +1061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 147 "grammars/svf.l"
+#line 151 "grammars/svf.l"
 {    
                     yylval.u = SVF_STATE_IRUPDATE;
                     return(SVF_STATE_IRUPDATE);
@@ -1063,7 +1069,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 152 "grammars/svf.l"
+#line 156 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_ENDDR;
                     return(SVF_INSTRUCTION_ENDDR);
@@ -1071,7 +1077,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 156 "grammars/svf.l"
+#line 160 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_ENDIR;
                     return(SVF_INSTRUCTION_ENDIR);
@@ -1079,7 +1085,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 160 "grammars/svf.l"
+#line 164 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_FREQUENCY;
                     return(SVF_INSTRUCTION_FREQUENCY);
@@ -1087,7 +1093,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 164 "grammars/svf.l"
+#line 168 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_HDR;
                     return(SVF_INSTRUCTION_HDR);
@@ -1095,7 +1101,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 168 "grammars/svf.l"
+#line 172 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_HIR;
                     return(SVF_INSTRUCTION_HIR);
@@ -1103,7 +1109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 172 "grammars/svf.l"
+#line 176 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_PIO;
                     return(SVF_INSTRUCTION_PIO);
@@ -1111,7 +1117,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 176 "grammars/svf.l"
+#line 180 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_PIOMAP;
                     return(SVF_INSTRUCTION_PIOMAP);
@@ -1119,7 +1125,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 180 "grammars/svf.l"
+#line 184 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_RUNTEST;
                     return(SVF_INSTRUCTION_RUNTEST);
@@ -1127,7 +1133,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 184 "grammars/svf.l"
+#line 188 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_SDR;
                     return(SVF_INSTRUCTION_SDR);
@@ -1135,7 +1141,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 188 "grammars/svf.l"
+#line 192 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_SIR;
                     return(SVF_INSTRUCTION_SIR);
@@ -1143,7 +1149,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 192 "grammars/svf.l"
+#line 196 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_STATE;
                     return(SVF_INSTRUCTION_STATE);
@@ -1151,7 +1157,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 196 "grammars/svf.l"
+#line 200 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TDR;
                     return(SVF_INSTRUCTION_TDR);
@@ -1159,7 +1165,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 200 "grammars/svf.l"
+#line 204 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TIR;
                     return(SVF_INSTRUCTION_TIR);
@@ -1167,7 +1173,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 204 "grammars/svf.l"
+#line 208 "grammars/svf.l"
 {    
                     yylval.u = SVF_INSTRUCTION_TRST;
                     return(SVF_INSTRUCTION_TRST);
@@ -1175,32 +1181,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 209 "grammars/svf.l"
+#line 213 "grammars/svf.l"
 return(SVF_TDI);
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 210 "grammars/svf.l"
+#line 214 "grammars/svf.l"
 return(SVF_TDO);
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 211 "grammars/svf.l"
+#line 215 "grammars/svf.l"
 return(SVF_MASK);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 212 "grammars/svf.l"
+#line 216 "grammars/svf.l"
 return(SVF_SMASK);
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 214 "grammars/svf.l"
+#line 218 "grammars/svf.l"
 return(SVF_HZ);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 216 "grammars/svf.l"
+#line 220 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_ON;
                     return(SVF_TRST_MODE_ON);
@@ -1208,7 +1214,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 220 "grammars/svf.l"
+#line 224 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_OFF;
                     return(SVF_TRST_MODE_OFF);
@@ -1216,7 +1222,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 224 "grammars/svf.l"
+#line 228 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_Z;
                     return(SVF_TRST_MODE_Z);
@@ -1224,7 +1230,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 228 "grammars/svf.l"
+#line 232 "grammars/svf.l"
 {    
                     yylval.u = SVF_TRST_MODE_ABSENT;
                     return(SVF_TRST_MODE_ABSENT);
@@ -1232,7 +1238,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 233 "grammars/svf.l"
+#line 237 "grammars/svf.l"
 {    
                     yylval.u = SVF_RUN_CLK_TCK;
                     return(SVF_RUN_CLK_TCK);
@@ -1240,7 +1246,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 237 "grammars/svf.l"
+#line 241 "grammars/svf.l"
 {    
                     yylval.u = SVF_RUN_CLK_SCK;
                     return(SVF_RUN_CLK_SCK);
@@ -1248,36 +1254,36 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 241 "grammars/svf.l"
+#line 245 "grammars/svf.l"
 return(SVF_SEC);
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 242 "grammars/svf.l"
+#line 246 "grammars/svf.l"
 return(SVF_MAXIMUM);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 243 "grammars/svf.l"
+#line 247 "grammars/svf.l"
 return(SVF_ENDSTATE);
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 245 "grammars/svf.l"
+#line 249 "grammars/svf.l"
 /* eat up whitespace */
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 247 "grammars/svf.l"
+#line 251 "grammars/svf.l"
 return(SVF_INSTRUCTION_END);
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 249 "grammars/svf.l"
+#line 253 "grammars/svf.l"
 ECHO;
 	YY_BREAK
-#line 1281 "src/lexer.c"
+#line 1287 "src/lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2245,5 +2251,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 249 "grammars/svf.l"
+#line 253 "grammars/svf.l"
 
