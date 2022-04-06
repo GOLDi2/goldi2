@@ -317,7 +317,6 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->length % 8 > 0)
     {
-        printf("Instruction length not divisible by 8\n");
         j--;
         int shift = 0;
         int pos = 1;
@@ -349,6 +348,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
+        print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
