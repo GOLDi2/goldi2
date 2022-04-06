@@ -7,8 +7,8 @@
 // #define TDI 20
 #define TCK 11
 #define TMS 8
-#define TDO 9
-#define TDI 10
+#define TDO 10
+#define TDI 9
 
 int initGPIO()
 {
