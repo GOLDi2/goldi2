@@ -313,8 +313,26 @@ static int move_to_stable_state(int state)
 
 static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 {
-    int size = (instr->length/8) + ((instr->length % 8) > 0);
     int j = (instr->length/8) + ((instr->length % 8) > 0);
+
+    if (instr->length % 8 > 0)
+    {
+        j--;
+        int shift = 0;
+        int pos = 1;
+        for (int i = 0; i < 8 - instr->length; i++)
+        {
+            shift++;
+            pos *= 2;
+        }
+        for (int i = 0; i < instr->length; i++)
+        {
+            data[j] |= clk((exit && (i == instr->length-1) && (j == 0)), (instr->tdi[j] & pos) >> shift) << shift;
+            shift++;
+            pos *= 2;
+        }
+    }
+
     while (j > 0)
     {
         j--;
