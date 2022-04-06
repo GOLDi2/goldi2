@@ -1,10 +1,14 @@
 #include <bcm2835.h>
 #include <stdio.h>
 
-#define TCK 21
-#define TMS 18
-#define TDO 19
-#define TDI 20
+// #define TCK 21
+// #define TMS 18
+// #define TDO 19
+// #define TDI 20
+#define TCK 11
+#define TMS 8
+#define TDO 9
+#define TDI 10
 
 int initGPIO()
 {
