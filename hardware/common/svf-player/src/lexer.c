@@ -881,7 +881,7 @@ YY_RULE_SETUP
                     }
 
                     unsigned int size = (strlen(text))/2 + (strlen(text) % 2);
-                    unsigned int even = strlen(text) % 2;
+                    unsigned int even = !(strlen(text) % 2);
                     char* hexstring = (char*) malloc(size);
                     for (unsigned int i = 0; i < size; i++) hexstring[i] = 0;
                     for (unsigned int i = 0; i < size; i++)
