@@ -336,6 +336,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     while (j > 0)
     {
+        printf("cycles left: %d\n", j);
         j--;
         data[j] |= clk(0, (instr->tdi[j] & 0x01));
         data[j] |= clk(0, (instr->tdi[j] & 0x02) >> 1) << 1;
