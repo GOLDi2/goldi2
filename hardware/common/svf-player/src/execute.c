@@ -327,6 +327,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
         }
         for (int i = 0; i < instr->length; i++)
         {
+            printf("data: %d, pos: %02x, shift: %d \n");
             data[j] |= clk((exit && (i == instr->length-1) && (j == 0)), (instr->tdi[j] & pos) >> shift) << shift;
             shift++;
             pos *= 2;
@@ -349,6 +350,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
     if (instr->tdo)
     {
         print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+        printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
