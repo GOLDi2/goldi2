@@ -1,0 +1,17 @@
+{
+  "name": "goldi-board-test",
+  "version": "0.0.1",
+  "description": "The test program for the GOLDi interface-boards",
+  "main": "index.js",
+  "author": "Pierre Helbing",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.6.2",
+    "@types/node": "^17.0.21"
+  },
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "tsc && yarn copy-files",
+    "copy-files": "cp ./src/testcases/programming_test_fpga/programming_file.svf ./dist/testcases/programming_test_fpga"
+  }
+}
