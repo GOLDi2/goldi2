@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:${PKI_PATH}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:${CODE_SIGNING_CERT}:"
 SRC_URI:append := "  \
 	file://system.conf \
 	file://ca.cert.pem \

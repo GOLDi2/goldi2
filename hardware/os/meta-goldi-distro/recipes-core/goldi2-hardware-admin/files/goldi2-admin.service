@@ -1,0 +1,13 @@
+[Unit]
+Description=GOLDi2 Admin Interface
+After=network.target
+
+[Service]
+Environment=GOLDI_HARDWARE_ADMIN_PORT=80
+Environment=GOLDI_HARDWARE_ADMIN_DEFAULT_LANGUAGE=en
+Environment=NODE_ENV=production
+Restart=on-failure
+ExecStart=/usr/bin/node /usr/lib/node/@goldi2/hardware-admin/dist/index.js
+
+[Install]
+WantedBy=multi-user.target

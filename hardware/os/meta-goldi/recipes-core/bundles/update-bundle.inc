@@ -6,5 +6,5 @@ RAUC_BUNDLE_BUILD = "${COMMITNR}"
 
 RAUC_SLOT_rootfs[fstype] = "ext4"
 
-RAUC_KEY_FILE = "${PKI_PATH}/ca.key.pem"
-RAUC_CERT_FILE = "${PKI_PATH}/ca.cert.pem"
+RAUC_KEY_FILE = "${CODE_SIGNING_KEY}"
+RAUC_CERT_FILE = "${CODE_SIGNING_CERT}"
