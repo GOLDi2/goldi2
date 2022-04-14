@@ -1,0 +1,17 @@
+{% set
+    navbar = [
+        {name: 'Firmware Upload', href: '/upload_firmware.html', active: true}
+    ]
+ %}
+{% extends "layout.html" %}
+{% block main %}
+
+<pre>{{ upload_firmware_out }}</pre>
+
+{% if reload %}
+<script>
+  window.location.reload(true)
+</script>
+{% endif %}
+
+{% endblock %}

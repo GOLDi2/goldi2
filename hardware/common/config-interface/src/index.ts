@@ -1,11 +1,14 @@
 import express from "express";
 import nunjucks from "nunjucks";
 import multer from "multer";
-import { spawnSync } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import { config } from "./config";
 import path from 'path';
 import { renderPageInit } from "./utils";
 import { AddressInfo } from "net";
+import { EventEmitter } from 'events';
+import ini from 'ini';
+import fs from 'fs';
 
 const app = express();
 
@@ -24,11 +27,54 @@ const renderPage = renderPageInit(content_path, config.DEFAULT_LANGUAGE);
 
 let router = express.Router();
 
+let upload_firmware_emitter: EventEmitter | boolean = false;
+let upload_firmware_out = ""
 router.post('/upload_firmware', firmware_upload.single('file'), async (req, res, next) => {
-    console.log(req)
-    let { stderr, stdout } = spawnSync(`rauc install ${(req as any).file.path}`, { shell: true });
-    res.send(stdout.toString()+stderr.toString());
+    const command = `rauc install ${(req as any).file.path}`
+    upload_firmware_out = command + '\n'
+    upload_firmware_emitter = new EventEmitter()
+    const rauc = spawn(command, { shell: true });
+    rauc.stdout.on("data", (data) => { upload_firmware_out += data; (upload_firmware_emitter as EventEmitter).emit("changed") })
+    rauc.stderr.on("data", (data) => { upload_firmware_out += data; (upload_firmware_emitter as EventEmitter).emit("changed") })
+    await renderPage(req.path, (req as any).language, res, { upload_firmware_out });
+    await new Promise(resolve => rauc.on('close', resolve));
+    (upload_firmware_emitter as EventEmitter).emit("changed")
+    upload_firmware_emitter = false
 });
+router.get('/upload_firmware_show', async (req, res, next) => {
+    let reload = false
+    if (upload_firmware_emitter) {
+        reload = true
+        await new Promise(resolve => (upload_firmware_emitter as EventEmitter).once("changed", resolve));
+    }
+    await renderPage(req.path, (req as any).language, res, { upload_firmware_out, reload });
+});
+
+router.all('/network', firmware_upload.none(), async (req, res, next) => {
+    let network_settings = ini.parse(fs.readFileSync(config.NETWORK_CONFIG_FILE, 'utf-8').replace(/Address=/g, "Address[]=").replace(/DNS=/g, "DNS[]="))
+    if (req.body) {
+        network_settings = {
+            ...network_settings,
+            Network: {
+                ...network_settings.Network,
+                DHCP: req.body.dhcp ? 'yes' : 'no',
+                Address: req.body.address.split(";"),
+                Gateway: req.body.gateway,
+                DNS: req.body.dns.split(";"),
+            },
+        }
+    }
+    fs.writeFileSync(config.NETWORK_CONFIG_FILE, ini.stringify(network_settings).replace(/\[\]/g, ""))
+    await renderPage(req.path, (req as any).language, res, {
+        dhcp: network_settings.Network.DHCP=='yes',
+        address: network_settings.Network.Address.join(";"),
+        gateway: network_settings.Network.Gateway,
+        dns: network_settings.Network.DNS.join(";")
+    });
+
+    spawnSync('systemctl restart systemd-networkd.service', { shell: true });
+});
+
 
 router.use('/', async (req, res) => { await renderPage(req.path, (req as any).language, res); });
 

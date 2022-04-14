@@ -6,19 +6,11 @@
 {% extends "layout.html" %}
 {% block main %}
 
-{% if stdout %}
-<pre>{{ stdout }}</pre>
-{% endif %}
-
-{% if stderr %}
-<pre style="color: red;">{{ stderr }}</pre>
-{% endif %}
-
 <form id="upload_form" enctype="multipart/form-data" method="post">
-    <input type="file" name="file" id="file" onchange="uploadFile()"><br>
-    <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
-    <h3 id="status"></h3>
-    <p id="loaded_n_total"></p>
+  <input type="file" name="file" id="file" onchange="uploadFile()"><br>
+  <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+  <h3 id="status"></h3>
+  <p id="loaded_n_total"></p>
 </form>
 
 <script>
@@ -47,7 +39,8 @@ function progressHandler(event) {
 }
 
 function completeHandler(event) {
-  _("status").innerHTML = "<pre>"+event.target.responseText+"</pre>";
+  //_("status").innerHTML = "<pre>"+event.target.responseText+"</pre>";
+  window.location.href = window.location.href+"_show";
   _("progressBar").value = 0; //wil clear progress bar after successful upload
 }
 
