@@ -1,5 +1,10 @@
 <!doctype html>
-
+{% set
+    navbar = [
+        {name: 'Firmware Upload', href: '/upload_firmware'},
+        {name: 'Network Settings', href: '/network'}
+    ]
+ %}
 <html lang="en">
 
 <head>
@@ -39,7 +44,7 @@
         <nav class="bg-white w-60 shadow-lg z-50 h-fit">
             <ul>
             {% for item in navbar %}
-                <li><a href="/{{language}}{{item.href}}" class="block w-60 p-2 hover:bg-secondary-light-middle {{ 'bg-secondary-light-middle' if item.active }}">{{ item.name }}</a></li>
+                <li><a href="/{{language}}{{item.href}}" class="block w-60 p-2 hover:bg-secondary-light-middle {{ 'bg-secondary-light-middle' if item.name == page_title }}">{{ item.name }}</a></li>
             {% endfor %}
             </ul>
         </nav>

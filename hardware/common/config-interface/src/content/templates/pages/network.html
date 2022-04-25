@@ -1,15 +1,10 @@
-{% set
-    navbar = [
-        {name: 'Firmware Upload', href: '/upload_firmware'},
-        {name: 'Network Settings', href: '/network'}
-    ]
- %}
+{% set page_title = 'Network Settings' %}
 {% extends "layout.html" %}
 {% block main %}
 
 <form method="post" enctype="multipart/form-data">
     <label class="w-72 inline-block" for="dhcp">DHCP:</label><input class="mt-1 border-2" type="checkbox" id="dhcp" name="dhcp" {{ 'checked' if dhcp }}><br>
-    <label class="w-72 inline-block" for="address">Address:</label><input class="mt-1 border-2" type="text" id="address" name="address" value="{{address}}"><br>
+    <label class="w-72 inline-block" for="address">Address (use /xx syntax):</label><input class="mt-1 border-2" type="text" id="address" name="address" value="{{address}}"><br>
     <label class="w-72 inline-block" for="gateway">Gateway:</label><input class="mt-1 border-2" type="text" id="gateway" name="gateway" value="{{gateway}}"><br>
     <label class="w-72 inline-block" for="dns">DNS (use ; to seperate entries):</label><input class="mt-1 border-2" type="text" id="dns" name="dns" value="{{dns}}"><br>
     <button class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
