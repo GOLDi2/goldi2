@@ -45,7 +45,7 @@ router.get('/upload_firmware_show', async (req, res, next) => {
     let reload = false
     if (upload_firmware_emitter) {
         reload = true
-        await new Promise(resolve => (upload_firmware_emitter as EventEmitter).once("changed", resolve));
+        await Promise.race([new Promise<void>(resolve=>setTimeout(() => resolve(), 1000)), new Promise<void>(resolve => (upload_firmware_emitter as EventEmitter).once("changed", resolve))]);
     }
     await renderPage(req.path, (req as any).language, res, { upload_firmware_out, reload });
 });
@@ -62,17 +62,20 @@ router.all('/network', firmware_upload.none(), async (req, res, next) => {
                 Gateway: req.body.gateway,
                 DNS: req.body.dns.split(";"),
             },
+            Address: {
+                Address: "169.254.79.79/16"
+            }
         }
+        fs.writeFileSync(config.NETWORK_CONFIG_FILE, ini.stringify(network_settings).replace(/\[\]/g, "").replace(/^.*=\n/gm, ""))
+        spawnSync('systemctl restart systemd-networkd.service', { shell: true });
     }
-    fs.writeFileSync(config.NETWORK_CONFIG_FILE, ini.stringify(network_settings).replace(/\[\]/g, ""))
     await renderPage(req.path, (req as any).language, res, {
         dhcp: network_settings.Network.DHCP=='yes',
-        address: network_settings.Network.Address.join(";"),
+        address: network_settings.Network.Address?network_settings.Network.Address.join(";"):"",
         gateway: network_settings.Network.Gateway,
-        dns: network_settings.Network.DNS.join(";")
+        dns: network_settings.Network.DNS?network_settings.Network.DNS.join(";"):""
     });
 
-    spawnSync('systemctl restart systemd-networkd.service', { shell: true });
 });
 
 
