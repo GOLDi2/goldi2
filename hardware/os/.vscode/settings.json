@@ -1,9 +1,19 @@
 {
     "files.watcherExclude":{
-        "build/**": true
+        "build/cache/**": true,
+        "build/conf/**": true,
+        "build/downloads/**": true,
+        "build/sstate-cache/**": true,
+        "build/tmp/**": true,
+        "build/workspace/**": false,
     },
     "files.exclude": {
         "**/node_modules": true,
-        "build": true,
+        "build/cache": true,
+        "build/conf": true,
+        "build/downloads": true,
+        "build/sstate-cache": true,
+        "build/tmp": true,
+        "build/workspace": false,
     }
 }
