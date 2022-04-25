@@ -22,6 +22,8 @@ SRCREV = "ef94d6edce8ec2b3a853477e806f7dc8548f71d6"
 S = "${WORKDIR}/git/${BPN}"
 PV = "6.4"
 
+EXTRA_OECONF_append = " --enable-linuxgpio"
+
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI_append := "  \
     file://avrdude.conf \
