@@ -1,0 +1,8 @@
+[Match]
+Name=eth0
+
+[Network]
+DHCP=yes
+
+[Address]
+Address=169.254.79.79/16
