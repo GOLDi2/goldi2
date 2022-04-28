@@ -13,13 +13,18 @@ if you want to connect to the board via VS Code Remote-SSH follow these steps:
 
 first expand the /data drive:
 ```
-
+fdisk /dev/mmcblk0
+> p
+> d
+> n
+> 4
+> 4464640
+> [enter]
+> p
+> w
 ```
 
-then you will need to link /home/root/.vscode-server to the data drive
-```
-ssh root@io-board.local -T "ln -s /data/.vscode-server /home/root/.vscode-server"
-```
+reboot to grow the fs
 
 copy your project to the target (inside the projectdirectory )
 ```
