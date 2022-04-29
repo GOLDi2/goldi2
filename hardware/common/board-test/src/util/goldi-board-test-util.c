@@ -573,6 +573,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "jtag"))
     {
         if (!bcm2835_init()) return 1;
+        int last_tck = -1;
         const int TCK = 11;
         const int TMS = 8;
         const int TDO = 10;
@@ -584,7 +585,12 @@ int main(int argc, char** argv)
 
         while (1) 
         {
-            printf("%u %u %u %u\n", bcm2835_gpio_lev(TCK), bcm2835_gpio_lev(TMS), bcm2835_gpio_lev(TDI), bcm2835_gpio_lev(TDO));
+            int curr_tck = bcm2835_gpio_lev(TCK);
+            if (last_tck != curr_tck)
+            {
+                last_tck = curr_tck;
+                printf("%u %u %u %u\n", curr_tck, bcm2835_gpio_lev(TMS), bcm2835_gpio_lev(TDI), bcm2835_gpio_lev(TDO));
+            }
             usleep(100);
         }
     }
