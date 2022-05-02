@@ -349,8 +349,8 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
-        //print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-        //printf("\n");
+        print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+        printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
