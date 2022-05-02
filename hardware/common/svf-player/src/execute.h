@@ -3,6 +3,8 @@
 
 #include "util.h"
 
+extern int verbose;
+
 typedef struct 
 {
     unsigned int length;

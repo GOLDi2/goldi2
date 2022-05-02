@@ -425,15 +425,15 @@ int execute_instructions()
         switch (instruction->type)
         {
             case SVF_INSTRUCTION_ENDDR:
-                printf("Executing ENDDR\n");
+                if (verbose) printf("Executing ENDDR\n");
                 ENDDR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_ENDIR:
-                printf("Executing ENDIR\n");
+                if (verbose) printf("Executing ENDIR\n");
                 ENDIR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_FREQUENCY:
-                printf("Executing FREQUENCY\n");
+                if (verbose) printf("Executing FREQUENCY\n");
                 if (instruction->cycles) 
                 {
                     SLEEP_TIME.tv_nsec = (long) (1000000000 / instruction->cycles);
@@ -447,26 +447,26 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_HDR:
-                printf("Executing HDR ");
+                if (verbose) printf("Executing HDR ");
                 if (set_shift_data(&HDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&HDR);
+                if (verbose) print_shift_data(&HDR);
                 break;
             case SVF_INSTRUCTION_HIR:
-                printf("Executing HIR ");
+                if (verbose) printf("Executing HIR ");
                 if (set_shift_data(&HIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&HIR);
+                if (verbose) print_shift_data(&HIR);
                 break;
             case SVF_INSTRUCTION_PIO:
-                printf("PIO is currently not implemented!\n");
+                if (verbose) printf("PIO is currently not implemented!\n");
                 return 1;
                 break;
             case SVF_INSTRUCTION_PIOMAP:
-                printf("PIOMAP is currently not implemented!\n");
+                if (verbose) printf("PIOMAP is currently not implemented!\n");
                 return 1;
                 break;
             case SVF_INSTRUCTION_RUNTEST:
             {
-                printf("Executing RUNTEST\n");
+                if (verbose) printf("Executing RUNTEST\n");
                 struct timespec start_time;
                 struct timespec current_time;
                 long max_time_nsec = (long) (instruction->max_time * 1000000000);
@@ -495,19 +495,19 @@ int execute_instructions()
                 break;
             }
             case SVF_INSTRUCTION_SDR:
-                printf("Executing SDR ");
+                if (verbose) printf("Executing SDR ");
                 if (set_shift_data(&SDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&SDR);
+                if (verbose) print_shift_data(&SDR);
                 if (shift_data(&SDR)) return 1;
                 break;
             case SVF_INSTRUCTION_SIR:
-                printf("Executing SIR ");
+                if (verbose) printf("Executing SIR ");
                 if (set_shift_data(&SIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&SIR);
+                if (verbose) print_shift_data(&SIR);
                 if (shift_instruction(&SIR)) return 1;
                 break;
             case SVF_INSTRUCTION_STATE:
-                printf("Executing STATE\n");
+                if (verbose) printf("Executing STATE\n");
                 if (instruction->path_states == NULL) 
                 {
                     if (move_to_stable_state(instruction->stable_state)) return 1;
@@ -528,14 +528,14 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_TDR:
-                printf("Executing TDR ");
+                if (verbose) printf("Executing TDR ");
                 if (set_shift_data(&TDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&TDR);
+                if (verbose) print_shift_data(&TDR);
                 break;
             case SVF_INSTRUCTION_TIR:
-                printf("Executing TIR ");
+                if (verbose) printf("Executing TIR ");
                 if (set_shift_data(&TIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&TIR);
+                if (verbose) print_shift_data(&TIR);
                 break;
             case SVF_INSTRUCTION_TRST:
                 printf("TRST is currently not implemented!\n");

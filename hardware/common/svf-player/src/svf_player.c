@@ -2,12 +2,19 @@
 #include "parser.h"
 #include "execute.h"
 
+int verbose = 0;
+
 int main(int argc, char** argv)
 {
+
     if (argc > 1)
         yyin = fopen(argv[1], "r");
     else
         yyin = stdin;
+
+    if (argc == 3 && argv[2] == "-v") {
+        verbose = 1;
+    }
     
     int ret_parse = yyparse();
     if (yyin != stdin) fclose(yyin);
