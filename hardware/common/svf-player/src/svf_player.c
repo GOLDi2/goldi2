@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     else
         yyin = stdin;
 
-    if (argc == 3 && argv[2] == "-v") {
+    if (argc == 3 && !strncmp(argv[2],"-v",2)) {
         verbose = 1;
     }
     
