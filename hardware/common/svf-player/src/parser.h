@@ -46,7 +46,7 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "grammars/svf.y"
 
-#define YYMAXDEPTH 100000
+#define YYMAXDEPTH 200000
 #include "util.h"
 #include "execute.h"
 

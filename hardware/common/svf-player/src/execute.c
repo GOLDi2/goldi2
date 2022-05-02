@@ -2,7 +2,7 @@
 #include <errno.h>
 #include "execute.h"
 #include "parser.h"
-#include "bcmGPIO.c"
+#include "dummyGPIO.c"
 
 static List* instruction_list = NULL;
 static int ENDDR = SVF_STATE_IDLE;
@@ -327,7 +327,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
         }
         for (int i = 0; i < instr->length; i++)
         {
-            printf("tms: %d, tdi: %d, pos: %02x, shift: %d\n", (exit && (i == instr->length-1) && (j == 0)), ((instr->tdi[j] & pos) >> shift), pos, shift);
+            //printf("tms: %d, tdi: %d, pos: %02x, shift: %d\n", (exit && (i == instr->length-1) && (j == 0)), ((instr->tdi[j] & pos) >> shift), pos, shift);
             data[j] |= clk((exit && (i == instr->length-1) && (j == 0)), (instr->tdi[j] & pos) >> shift) << shift;
             shift++;
             pos *= 2;
@@ -349,8 +349,8 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
-        print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-        printf("\n");
+        //print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+        //printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
