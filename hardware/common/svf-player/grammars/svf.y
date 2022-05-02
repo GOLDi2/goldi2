@@ -1,4 +1,5 @@
 %code requires {
+#define YYMAXDEPTH 200000
 #include "util.h"
 #include "execute.h"
 }

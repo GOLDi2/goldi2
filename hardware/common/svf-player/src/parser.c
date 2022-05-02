@@ -66,7 +66,7 @@
 
 
 /* First part of user prologue.  */
-#line 6 "grammars/svf.y"
+#line 7 "grammars/svf.y"
 
 #include <stdio.h>
 #include "lexer.h"
@@ -253,10 +253,11 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "grammars/svf.y"
 
+#define YYMAXDEPTH 100000
 #include "util.h"
 #include "execute.h"
 
-#line 260 "src/parser.c"
+#line 261 "src/parser.c"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -367,7 +368,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 151 "grammars/svf.y"
+#line 152 "grammars/svf.y"
 
     double d;
     List* list;
@@ -375,7 +376,7 @@ union YYSTYPE
     unsigned int u;
     SVF_Shift_Data shift_data;
 
-#line 379 "src/parser.c"
+#line 380 "src/parser.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -755,15 +756,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   226,   226,   226,   228,   232,   236,   240,   244,   248,
-     252,   256,   260,   264,   268,   272,   276,   280,   284,   288,
-     292,   296,   300,   304,   308,   312,   316,   320,   324,   328,
-     332,   336,   340,   345,   349,   353,   357,   361,   365,   369,
-     374,   374,   374,   374,   375,   375,   375,   375,   375,   376,
-     376,   376,   376,   376,   377,   377,   377,   377,   377,   378,
-     380,   382,   386,   390,   394,   399,   404,   409,   414,   419,
-     424,   429,   434,   439,   445,   451,   458,   463,   463,   464,
-     468,   473,   478,   478,   478,   478
+       0,   227,   227,   227,   229,   233,   237,   241,   245,   249,
+     253,   257,   261,   265,   269,   273,   277,   281,   285,   289,
+     293,   297,   301,   305,   309,   313,   317,   321,   325,   329,
+     333,   337,   341,   346,   350,   354,   358,   362,   366,   370,
+     375,   375,   375,   375,   376,   376,   376,   376,   376,   377,
+     377,   377,   377,   377,   378,   378,   378,   378,   378,   379,
+     381,   383,   387,   391,   395,   400,   405,   410,   415,   420,
+     425,   430,   435,   440,   446,   452,   459,   464,   464,   465,
+     469,   474,   479,   479,   479,   479
 };
 #endif
 
@@ -1660,461 +1661,461 @@ yyreduce:
   switch (yyn)
     {
   case 4:
-#line 229 "grammars/svf.y"
+#line 230 "grammars/svf.y"
             {
                 parse_enddr((yyvsp[-1].u));
             }
-#line 1668 "src/parser.c"
+#line 1669 "src/parser.c"
     break;
 
   case 5:
-#line 233 "grammars/svf.y"
+#line 234 "grammars/svf.y"
             {
                 parse_endir((yyvsp[-1].u));
             }
-#line 1676 "src/parser.c"
+#line 1677 "src/parser.c"
     break;
 
   case 6:
-#line 237 "grammars/svf.y"
+#line 238 "grammars/svf.y"
             {
                 parse_frequency(0);
             }
-#line 1684 "src/parser.c"
+#line 1685 "src/parser.c"
     break;
 
   case 7:
-#line 241 "grammars/svf.y"
+#line 242 "grammars/svf.y"
             {
                 parse_frequency((yyvsp[-1].d));
             }
-#line 1692 "src/parser.c"
+#line 1693 "src/parser.c"
     break;
 
   case 8:
-#line 245 "grammars/svf.y"
+#line 246 "grammars/svf.y"
             {
                 parse_hdr((yyvsp[-1].shift_data));
             }
-#line 1700 "src/parser.c"
+#line 1701 "src/parser.c"
     break;
 
   case 9:
-#line 249 "grammars/svf.y"
+#line 250 "grammars/svf.y"
             {
                 parse_hir((yyvsp[-1].shift_data));
             }
-#line 1708 "src/parser.c"
+#line 1709 "src/parser.c"
     break;
 
   case 10:
-#line 253 "grammars/svf.y"
+#line 254 "grammars/svf.y"
             {
                 parse_pio();
             }
-#line 1716 "src/parser.c"
+#line 1717 "src/parser.c"
     break;
 
   case 11:
-#line 257 "grammars/svf.y"
+#line 258 "grammars/svf.y"
             {
                 parse_piomap();
             }
-#line 1724 "src/parser.c"
+#line 1725 "src/parser.c"
     break;
 
   case 12:
-#line 261 "grammars/svf.y"
+#line 262 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
             }
-#line 1732 "src/parser.c"
+#line 1733 "src/parser.c"
     break;
 
   case 13:
-#line 265 "grammars/svf.y"
+#line 266 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
             }
-#line 1740 "src/parser.c"
+#line 1741 "src/parser.c"
     break;
 
   case 14:
-#line 269 "grammars/svf.y"
+#line 270 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
-#line 1748 "src/parser.c"
+#line 1749 "src/parser.c"
     break;
 
   case 15:
-#line 273 "grammars/svf.y"
+#line 274 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
             }
-#line 1756 "src/parser.c"
+#line 1757 "src/parser.c"
     break;
 
   case 16:
-#line 277 "grammars/svf.y"
+#line 278 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
-#line 1764 "src/parser.c"
+#line 1765 "src/parser.c"
     break;
 
   case 17:
-#line 281 "grammars/svf.y"
+#line 282 "grammars/svf.y"
             {
                 parse_runtest(0,(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
-#line 1772 "src/parser.c"
+#line 1773 "src/parser.c"
     break;
 
   case 18:
-#line 285 "grammars/svf.y"
+#line 286 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
             }
-#line 1780 "src/parser.c"
+#line 1781 "src/parser.c"
     break;
 
   case 19:
-#line 289 "grammars/svf.y"
+#line 290 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
             }
-#line 1788 "src/parser.c"
+#line 1789 "src/parser.c"
     break;
 
   case 20:
-#line 293 "grammars/svf.y"
+#line 294 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
-#line 1796 "src/parser.c"
+#line 1797 "src/parser.c"
     break;
 
   case 21:
-#line 297 "grammars/svf.y"
+#line 298 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
             }
-#line 1804 "src/parser.c"
+#line 1805 "src/parser.c"
     break;
 
   case 22:
-#line 301 "grammars/svf.y"
+#line 302 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
-#line 1812 "src/parser.c"
+#line 1813 "src/parser.c"
     break;
 
   case 23:
-#line 305 "grammars/svf.y"
+#line 306 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-6].u),(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
-#line 1820 "src/parser.c"
+#line 1821 "src/parser.c"
     break;
 
   case 24:
-#line 309 "grammars/svf.y"
+#line 310 "grammars/svf.y"
             {
                 parse_runtest(0,0,0,(yyvsp[-1].d),0,0);
             }
-#line 1828 "src/parser.c"
+#line 1829 "src/parser.c"
     break;
 
   case 25:
-#line 313 "grammars/svf.y"
+#line 314 "grammars/svf.y"
             {
                 parse_runtest(0,0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
-#line 1836 "src/parser.c"
+#line 1837 "src/parser.c"
     break;
 
   case 26:
-#line 317 "grammars/svf.y"
+#line 318 "grammars/svf.y"
             {
                 parse_runtest(0,0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
-#line 1844 "src/parser.c"
+#line 1845 "src/parser.c"
     break;
 
   case 27:
-#line 321 "grammars/svf.y"
+#line 322 "grammars/svf.y"
             {
                 parse_runtest(0,0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
-#line 1852 "src/parser.c"
+#line 1853 "src/parser.c"
     break;
 
   case 28:
-#line 325 "grammars/svf.y"
+#line 326 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-2].u),0,0,(yyvsp[-1].d),0,0);
             }
-#line 1860 "src/parser.c"
+#line 1861 "src/parser.c"
     break;
 
   case 29:
-#line 329 "grammars/svf.y"
+#line 330 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
-#line 1868 "src/parser.c"
+#line 1869 "src/parser.c"
     break;
 
   case 30:
-#line 333 "grammars/svf.y"
+#line 334 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
-#line 1876 "src/parser.c"
+#line 1877 "src/parser.c"
     break;
 
   case 31:
-#line 337 "grammars/svf.y"
+#line 338 "grammars/svf.y"
             {
                 parse_runtest((yyvsp[-4].u),0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
-#line 1884 "src/parser.c"
+#line 1885 "src/parser.c"
     break;
 
   case 32:
-#line 341 "grammars/svf.y"
+#line 342 "grammars/svf.y"
             {
                 SVF_Shift_Data shift_data = {(yyvsp[-1].u), NULL, NULL, NULL, NULL};
                 parse_sdr(shift_data);
             }
-#line 1893 "src/parser.c"
+#line 1894 "src/parser.c"
     break;
 
   case 33:
-#line 346 "grammars/svf.y"
+#line 347 "grammars/svf.y"
             {
                 parse_sdr((yyvsp[-1].shift_data));
             }
-#line 1901 "src/parser.c"
+#line 1902 "src/parser.c"
     break;
 
   case 34:
-#line 350 "grammars/svf.y"
+#line 351 "grammars/svf.y"
             {
                 parse_sir((yyvsp[-1].shift_data));
             }
-#line 1909 "src/parser.c"
+#line 1910 "src/parser.c"
     break;
 
   case 35:
-#line 354 "grammars/svf.y"
+#line 355 "grammars/svf.y"
             {
                 parse_state(NULL, (yyvsp[-1].u));
             }
-#line 1917 "src/parser.c"
+#line 1918 "src/parser.c"
     break;
 
   case 36:
-#line 358 "grammars/svf.y"
+#line 359 "grammars/svf.y"
             {
                 parse_state((yyvsp[-1].list), (yyvsp[0].u));
             }
-#line 1925 "src/parser.c"
+#line 1926 "src/parser.c"
     break;
 
   case 37:
-#line 362 "grammars/svf.y"
+#line 363 "grammars/svf.y"
             {
                 parse_tdr((yyvsp[-1].shift_data));
             }
-#line 1933 "src/parser.c"
+#line 1934 "src/parser.c"
     break;
 
   case 38:
-#line 366 "grammars/svf.y"
+#line 367 "grammars/svf.y"
             {
                 parse_tir((yyvsp[-1].shift_data));
             }
-#line 1941 "src/parser.c"
+#line 1942 "src/parser.c"
     break;
 
   case 39:
-#line 370 "grammars/svf.y"
+#line 371 "grammars/svf.y"
             {
                 parse_trst((yyvsp[-1].u));
             }
-#line 1949 "src/parser.c"
+#line 1950 "src/parser.c"
     break;
 
   case 61:
-#line 383 "grammars/svf.y"
+#line 384 "grammars/svf.y"
         {
             (yyval.string) = (yyvsp[0].string);
         }
-#line 1957 "src/parser.c"
+#line 1958 "src/parser.c"
     break;
 
   case 62:
-#line 387 "grammars/svf.y"
+#line 388 "grammars/svf.y"
         {
             (yyval.string) = (yyvsp[0].string);
         }
-#line 1965 "src/parser.c"
+#line 1966 "src/parser.c"
     break;
 
   case 63:
-#line 391 "grammars/svf.y"
+#line 392 "grammars/svf.y"
         {
             (yyval.string) = (yyvsp[0].string);
         }
-#line 1973 "src/parser.c"
+#line 1974 "src/parser.c"
     break;
 
   case 64:
-#line 395 "grammars/svf.y"
+#line 396 "grammars/svf.y"
         {
             (yyval.string) = (yyvsp[0].string);
         }
-#line 1981 "src/parser.c"
+#line 1982 "src/parser.c"
     break;
 
   case 65:
-#line 400 "grammars/svf.y"
+#line 401 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[0].u), NULL, NULL, NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 1990 "src/parser.c"
+#line 1991 "src/parser.c"
     break;
 
   case 66:
-#line 405 "grammars/svf.y"
+#line 406 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-1].u), (yyvsp[0].string), NULL, NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 1999 "src/parser.c"
+#line 2000 "src/parser.c"
     break;
 
   case 67:
-#line 410 "grammars/svf.y"
+#line 411 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), (yyvsp[0].string), NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2008 "src/parser.c"
+#line 2009 "src/parser.c"
     break;
 
   case 68:
-#line 415 "grammars/svf.y"
+#line 416 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), NULL, (yyvsp[0].string), NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2017 "src/parser.c"
+#line 2018 "src/parser.c"
     break;
 
   case 69:
-#line 420 "grammars/svf.y"
+#line 421 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), NULL, NULL, (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2026 "src/parser.c"
+#line 2027 "src/parser.c"
     break;
 
   case 70:
-#line 425 "grammars/svf.y"
+#line 426 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), (yyvsp[-1].string), (yyvsp[0].string), NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2035 "src/parser.c"
+#line 2036 "src/parser.c"
     break;
 
   case 71:
-#line 430 "grammars/svf.y"
+#line 431 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), (yyvsp[-1].string), NULL, (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2044 "src/parser.c"
+#line 2045 "src/parser.c"
     break;
 
   case 72:
-#line 435 "grammars/svf.y"
+#line 436 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), NULL, (yyvsp[-1].string), (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2053 "src/parser.c"
+#line 2054 "src/parser.c"
     break;
 
   case 73:
-#line 440 "grammars/svf.y"
+#line 441 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-4].u), (yyvsp[-3].string), (yyvsp[-2].string), (yyvsp[-1].string), (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2062 "src/parser.c"
+#line 2063 "src/parser.c"
     break;
 
   case 74:
-#line 446 "grammars/svf.y"
+#line 447 "grammars/svf.y"
             {
                 (yyval.list) = create_list();
                 unsigned long val = (yyvsp[0].u);
                 list_append((yyval.list), (void*) val);
             }
-#line 2072 "src/parser.c"
+#line 2073 "src/parser.c"
     break;
 
   case 75:
-#line 452 "grammars/svf.y"
+#line 453 "grammars/svf.y"
             {
                 unsigned long val = (yyvsp[-1].u);
                 list_append((yyvsp[0].list), (void*) val);
                 (yyval.list) = (yyvsp[0].list);
             }
-#line 2082 "src/parser.c"
+#line 2083 "src/parser.c"
     break;
 
   case 76:
-#line 459 "grammars/svf.y"
+#line 460 "grammars/svf.y"
         {
             (yyval.d) = (yyvsp[-1].d);
         }
-#line 2090 "src/parser.c"
+#line 2091 "src/parser.c"
     break;
 
   case 79:
-#line 465 "grammars/svf.y"
+#line 466 "grammars/svf.y"
         {
             (yyval.d) = (yyvsp[-1].d);
         }
-#line 2098 "src/parser.c"
+#line 2099 "src/parser.c"
     break;
 
   case 80:
-#line 469 "grammars/svf.y"
+#line 470 "grammars/svf.y"
         {
             (yyval.d) = (yyvsp[-1].d);
         }
-#line 2106 "src/parser.c"
+#line 2107 "src/parser.c"
     break;
 
   case 81:
-#line 474 "grammars/svf.y"
+#line 475 "grammars/svf.y"
             {
                 (yyval.u) = (yyvsp[0].u);
             }
-#line 2114 "src/parser.c"
+#line 2115 "src/parser.c"
     break;
 
 
-#line 2118 "src/parser.c"
+#line 2119 "src/parser.c"
 
       default: break;
     }
@@ -2346,7 +2347,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 479 "grammars/svf.y"
+#line 480 "grammars/svf.y"
 
 
 int yywrap()

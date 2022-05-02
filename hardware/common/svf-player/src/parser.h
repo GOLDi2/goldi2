@@ -46,10 +46,11 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "grammars/svf.y"
 
+#define YYMAXDEPTH 100000
 #include "util.h"
 #include "execute.h"
 
-#line 53 "src/parser.h"
+#line 54 "src/parser.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -160,7 +161,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 151 "grammars/svf.y"
+#line 152 "grammars/svf.y"
 
     double d;
     List* list;
@@ -168,7 +169,7 @@ union YYSTYPE
     unsigned int u;
     SVF_Shift_Data shift_data;
 
-#line 172 "src/parser.h"
+#line 173 "src/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

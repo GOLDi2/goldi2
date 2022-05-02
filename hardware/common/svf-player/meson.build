@@ -5,7 +5,6 @@ project('svf-player', 'c',
 bcm = declare_dependency(
     link_args : ['-lbcm2835'])
 
-#run_command('yacc', '-d', '--debug', '--verbose', 'svf.y', check: true)
 run_command('yacc', '--defines=src/parser.h', '--output=src/parser.c', 'grammars/svf.y', check: true)
 run_command('flex', '--outfile=src/lexer.c', '--header-file=src/lexer.h', '--nounput', 'grammars/svf.l', check: true)
 
