@@ -349,20 +349,38 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
 
     if (instr->tdo)
     {
-        print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-        printf("\n");
         if (instr->mask)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
-                if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) return 1;
+                if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) 
+                {
+                    print_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    print_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    print_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    return 1;
+                }
             }
         }
         else
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
-                if (data[i] != instr->tdo[i]) return 1;
+                if (data[i] != instr->tdo[i])
+                {
+                    print_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    print_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    printf("\n");
+                    return 1;
+                }
             }
         }
     }
