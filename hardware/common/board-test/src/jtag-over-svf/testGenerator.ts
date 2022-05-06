@@ -194,12 +194,8 @@ function generate_gpio_test_mc(value: "0" | "1") {
 
 // generate_reset_fpga()
 
-// generate_gpio_test_rpi("0")
-// generate_gpio_test_rpi("1")
+generate_gpio_test_rpi("0")
+generate_gpio_test_rpi("1")
 
 generate_gpio_test_mc("0")
-// generate_gpio_test_mc("1")
-
-import * as faults from "./svf_output.json"
-
-check_values((faults as any)["faults"], bsdl_fpga, "Faults.json");
+generate_gpio_test_mc("1")
