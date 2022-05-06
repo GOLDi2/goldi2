@@ -11,7 +11,7 @@
 #define GPIO0 16 // CPOL
 #define GPIO1 12 // CPHA
 
-void close()
+void close_util()
 {
     bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_fsel(GPIO1, BCM2835_GPIO_FSEL_INPT);
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     if (!strcmp(argv[1], "spi"))
     {
         if (!bcm2835_init()) return 1;
-        atexit(close);
+        atexit(close_util);
         if (!bcm2835_spi_begin()) return 1;
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "i2c"))
     {
         if (!bcm2835_init()) return 1;
-        atexit(close);
+        atexit(close_util);
         if (!bcm2835_i2c_begin()) return 1;
 
         // TODO: write and read eeprom
@@ -210,7 +210,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "clk")) 
     {
         if (!bcm2835_init()) return 1;
-        atexit(close);
+        atexit(close_util);
         if (!bcm2835_spi_begin()) return 1;
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
@@ -319,7 +319,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "gpio"))
     {
         if (!bcm2835_init()) return 1;
-        atexit(close);
+        atexit(close_util);
         if (argc != 5) return 1;
 
         int pin = strtol(argv[3], NULL, 10);
@@ -343,7 +343,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "led"))
     {
         if (!bcm2835_init()) return 1;
-        atexit(close);
+        atexit(close_util);
         char answer;
         pthread_t thread;
         blink_args args;
