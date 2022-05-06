@@ -1,5 +1,5 @@
 import { bsdlData, boundaryCell } from "./bsdl"
-import { map_RPi_FPGA } from "./pinMappings"
+import { map_MC_FPGA, map_RPi_FPGA } from "./pinMappings"
 import { binToHex, reverseString, saveStringArray, replaceAt, hexToBin } from "./util"
 
 export interface jtagPins {
@@ -26,50 +26,54 @@ export function add_fpga_header(output_instructions: Array<string>, bsdl: bsdlDa
     output_instructions.push(`SDR ${bsdl.idcode.length * 4} TDI (00000000) TDO(${bsdl.idcode}) MASK(FFFFFFFF);\n`)
 }
 
-export function generate_gpio_test_rpi(bsdl_fpga: bsdlData, map: Map<string,string>, value: "0" | "1") {
-    if (value != "0" && value != "1") process.exit(1);
+export function generate_value_check_fpga_mc(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, mc_port: string, value: "0" | "1") {
+    if (value != "0" && value != "1") process.exit(1)
+    const fpga_port = map_MC_FPGA.get(mc_port)
+    const nvalue = value == "0" ? "1" : "0"
 
-    const nvalue = value == "1" ? "0" : "1";
-
-    for (const rpi_pin of map_RPi_FPGA.keys()) {
-        let output_instructions: Array<string> = []
-        add_fpga_header(output_instructions, bsdl_fpga)
-
-        const fpga_pin = map.get(rpi_pin)
-        if (!fpga_pin) process.exit(1);
-
-        // Preload
-        output_instructions.push("! Preload")
-        output_instructions.push(`SIR ${bsdl_fpga.instructionLength} TDI(${bsdl_fpga.instructions.sample});`)
-        let str = []
-        for (const bc of bsdl_fpga.boundaryCells) {
-            if (bc.port != "*") {
-                if (bc.port == fpga_pin) {
-                    str[bc.cellNumber] = value
-                } else {
-                    str[bc.cellNumber] = nvalue
-                }
-                if (bc.controllCell && bc.disableValue && bc.disableResult) {
-                    const control_cell = parseInt(bc.controllCell)
-                    const disable_value = parseInt(bc.disableValue)
-                    str[control_cell] = disable_value == 1 ? 0 : 1
-                }
-            } else {
-                if (bc.function == "INTERNAL") {
-                    if (bc.safeBit == "X") str[bc.cellNumber] = "1"
-                    else str[bc.cellNumber] = bc.safeBit
-                }
-            }
-        }
-        let bin = str.reverse().join("")
-        output_instructions.push(`SDR ${bsdl_fpga.boundaryCellsLength} TDI (${binToHex(bin)});\n`)
-
-        // Extest
-        output_instructions.push("! Extest")
-        output_instructions.push(`SIR ${bsdl_fpga.instructionLength} TDI(${bsdl_fpga.instructions.extest});\n`)
-
-        saveStringArray(output_instructions, `generated_tests/test_gpio_${rpi_pin}_v${value}.svf`)
+    let vector = ""
+    for (let i = 0; i < bsdl.boundaryCellsLength; i++) {
+        vector += "0"
     }
+    for (const cell of bsdl.boundaryCells) {
+        if (cell.port != "*" && cell.function != "OBSERVE_ONLY") {
+            vector = replaceAt(vector, parseInt(cell.controllCell!), cell.disableValue!)
+        } else if (cell.function == "INTERNAL") {
+            vector = replaceAt(vector, cell.cellNumber, cell.safeBit == "X" ? "0" : cell.safeBit)
+        }
+    }
+
+    vector = replaceAt(vector, parseInt(jtag.tck.controllCell!), jtag.tck.enableValue!)
+    vector = replaceAt(vector, parseInt(jtag.tms.controllCell!), jtag.tms.enableValue!)
+    vector = replaceAt(vector, parseInt(jtag.tdi.controllCell!), jtag.tdi.enableValue!)
+    vector = replaceAt(vector, parseInt(jtag.tdo.controllCell!), jtag.tdo.disableValue!)
+    vector = replaceAt(vector, jtag.tck.cellNumber, "0")
+    vector = replaceAt(vector, jtag.tms.cellNumber, "0")
+    vector = replaceAt(vector, jtag.tdi.cellNumber, "0")
+    vector = replaceAt(vector, jtag.tdo.cellNumber, "0")
+
+    let tdo = ""
+    let mask = ""
+    for (let i = 0; i < bsdl.boundaryCellsLength; i++) {
+        tdo += "0"
+        mask += "0"
+    }
+    for (const port of map_MC_FPGA.keys()) {
+        const boundaryCell = bsdl.boundaryCells.find(bc => bc.port == map_MC_FPGA.get(port))
+        if ([jtag.tck, jtag.tdi, jtag.tdo, jtag.tms].includes(boundaryCell!) || port == "RESET") continue
+        if (port == mc_port) {
+            tdo = replaceAt(tdo, boundaryCell?.cellNumber!, value)
+            mask = replaceAt(mask, boundaryCell?.cellNumber!, "1")
+        } else {
+            tdo = replaceAt(tdo, boundaryCell?.cellNumber!, nvalue)
+            mask = replaceAt(mask, boundaryCell?.cellNumber!, "1")
+        }
+    }
+
+    output_instructions.push("! Checking Value")
+    output_instructions.push(`SDR ${bsdl.boundaryCellsLength} TDI (${binToHex(reverseString(vector))})
+        TDO (${binToHex(reverseString(tdo))})
+        MASK (${binToHex(reverseString(mask))});\n`)
 }
 
 export function generate_clock(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, vtms: "0" | "1", vtdi: "0" | "1", vtdo?: "0" | "1") {
@@ -79,9 +83,9 @@ export function generate_clock(jtag: jtagPins, bsdl: bsdlData, output_instructio
     }
     for (const cell of bsdl.boundaryCells) {
         if (cell.port != "*" && cell.function != "OBSERVE_ONLY") {
-            vector = replaceAt(vector, parseInt(cell.controllCell!), cell.enableValue!)
+            vector = replaceAt(vector, parseInt(cell.controllCell!), cell.disableValue!)
         } else if (cell.function == "INTERNAL") {
-            vector = replaceAt(vector, cell.cellNumber, cell.safeBit == "X" ? "1" : cell.safeBit)
+            vector = replaceAt(vector, cell.cellNumber, cell.safeBit == "X" ? "0" : cell.safeBit)
         }
     }
 
@@ -367,9 +371,9 @@ export function generate_move(jtag: jtagPins, bsdl: bsdlData, output_instruction
     }
 }
 
-export function generate_sir(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, instruction: string) {
-    const instruction_bin = hexToBin(instruction)
-    console.log(instruction + " -> " + instruction_bin)
+export function generate_sir(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, instruction: string, instruction_bin_length: number) {
+    const instruction_bin = hexToBin(instruction, instruction_bin_length)
+    //console.log(instruction + " -> " + instruction_bin)
     output_instructions.push(`! Generated SIR ${instruction}`)
     generate_move(jtag, bsdl, output_instructions, "IDLE", "IRSHIFT")
     for (let i = instruction_bin.length - 1; i >= 0; i--) {
@@ -385,26 +389,40 @@ export function generate_sir(jtag: jtagPins, bsdl: bsdlData, output_instructions
     generate_move(jtag, bsdl, output_instructions, "IRPAUSE", "IDLE")
 }
 
-export function generate_sdr(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, data: string, tdo: string) {
-    const data_bin = hexToBin(data)
-    console.log(data + " -> " + data_bin)
-    const tdo_bin = hexToBin(tdo)
-    if (data_bin.length != tdo_bin.length) console.error("data and tdo have different length")
-    output_instructions.push(`! Generated SDR ${data} TDO ${tdo}`)
-    generate_move(jtag, bsdl, output_instructions, "IDLE", "DRSHIFT")
-    for (let i = data_bin.length - 1; i >= 0; i--) {
-        if (data_bin[i] == "0" && tdo_bin[i] == "0") {
-            generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "0", "0")
-        } else if (data_bin[i] == "0" && tdo_bin[i] == "1") {
-            generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "0", "1")
-        } else if (data_bin[i] == "1" && tdo_bin[i] == "0") {
-            generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "1", "0")
-        } else if (data_bin[i] == "1" && tdo_bin[i] == "1") {
-            generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "1", "1")
-        } else {
-            console.error("data or tdo not valid")
+export function generate_sdr(jtag: jtagPins, bsdl: bsdlData, output_instructions: Array<string>, data: string, data_bin_length: number, tdo?: string, mask?: string) {
+    const data_bin = hexToBin(data, data_bin_length)
+    //console.log(data + " -> " + data_bin)
+    
+    if (tdo) {
+        const tdo_bin = hexToBin(tdo, data_bin_length)
+        if (data_bin.length != tdo_bin.length) console.error("data and tdo have different length")
+        output_instructions.push(`! Generated SDR ${data} TDO ${tdo}`)
+        generate_move(jtag, bsdl, output_instructions, "IDLE", "DRSHIFT")
+        for (let i = data_bin.length - 1; i >= 0; i--) {
+            if (data_bin[i] == "0" && tdo_bin[i] == "0") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "0", "0")
+            } else if (data_bin[i] == "0" && tdo_bin[i] == "1") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "0", "1")
+            } else if (data_bin[i] == "1" && tdo_bin[i] == "0") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "1", "0")
+            } else if (data_bin[i] == "1" && tdo_bin[i] == "1") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "1", "1")
+            } else {
+                console.error("data or tdo not valid")
+            }
+        }
+    } else {
+        output_instructions.push(`! Generated SDR ${data}`)
+        generate_move(jtag, bsdl, output_instructions, "IDLE", "DRSHIFT")
+        for (let i = data_bin.length - 1; i >= 0; i--) {
+            if (data_bin[i] == "0") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "0")
+            } else if (data_bin[i] == "1") {
+                generate_clock(jtag, bsdl, output_instructions, i == 0 ? "1" : "0", "1")
+            }
         }
     }
+
     generate_clock(jtag, bsdl, output_instructions, "0", "0")
     generate_move(jtag, bsdl, output_instructions, "DRPAUSE", "IDLE")
 }

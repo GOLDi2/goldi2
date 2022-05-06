@@ -129,7 +129,7 @@ attribute INSTRUCTION_PRIVATE of ATmega2560 : entity is
 " PRIVATE3 " ;              
                  
 attribute IDCODE_REGISTER of ATmega2560 : entity is             
- "0100" &               
+ "0101" &               
  "1001100000000001" &               
  "00000011111" &               
  "1" ;               

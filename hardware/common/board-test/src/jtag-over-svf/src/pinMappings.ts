@@ -187,7 +187,7 @@ const mapping_fpga_mc_raw = [
         mc: "PG(3)"
     },
     {
-        fpga: "PR29B",
+        fpga: "PB29B",
         mc: "PG(2)"
     },
     {
@@ -381,5 +381,5 @@ for (const mapping of mapping_fpga_mc_raw) {
 
 export const map_MC_FPGA = new Map<string, string>()
 for (const mapping of mapping_fpga_mc_raw) {
-    map_FPGA_MC.set(mapping.mc, mapping.fpga)
+    map_MC_FPGA.set(mapping.mc, mapping.fpga)
 }

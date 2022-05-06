@@ -1,7 +1,7 @@
 import { testCase as ethernet_test } from "./ethernet_test"
 import { testCase as false_test } from "./false_test"
 import { testCase as fpga_clock_test } from "./fpga_clock_test"
-import { testCase as gpio_test } from "./gpio_test"
+import { testCase as gpio_test } from "./rpi_gpio_test"
 import { testCase as i2c_test } from "./i2c_test"
 import { testCase as led_test } from "./led_test"
 import { testCase as programming_test_fpga } from "./programming_test_fpga"

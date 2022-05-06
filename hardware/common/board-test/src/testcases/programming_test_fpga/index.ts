@@ -6,8 +6,7 @@ const testCaseData: TestCaseData = {
     description: "Tests if the FPGA can be programmed.",
     test: (tc: TestCase) => {
         return new Promise<void>(resolve => {
-            console.log(__dirname)
-            const proc = spawnSync("svf-player " + __dirname + "/programming_file.svf", {timeout: 10000, shell: true})
+            const proc = spawnSync(`svf-player ${__dirname}/programming_file.svf`, {timeout: 10000, shell: true})
             if (proc.status == 0) 
                 tc.outcome = "Success"
             else 

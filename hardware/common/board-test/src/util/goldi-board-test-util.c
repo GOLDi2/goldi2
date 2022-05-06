@@ -303,8 +303,26 @@ int main(int argc, char** argv)
     }
     else if (!strcmp(argv[1], "gpio"))
     {
-        printf("Test for all GPIOs is currently not implemented!\n");
-        return 1;
+        if (!bcm2835_init()) return 1;
+        if (argc != 5) return 1;
+
+        int pin = strtol(argv[3], NULL, 10);
+        int value = strtol(argv[4], NULL, 10);
+
+        if (value < 0 || value > 1) return 1;
+
+        if (!strcmp(argv[2], "read"))
+        {
+            bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+            if (bcm2835_gpio_lev(pin) != value) return 1;
+        }
+        else if (!strcmp(argv[2], "write"))
+        {
+            bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
+            bcm2835_gpio_write(pin, value);
+        }
+
+        return 0;
     }
     else if (!strcmp(argv[1], "led"))
     {
@@ -569,30 +587,6 @@ int main(int argc, char** argv)
         while (answer != '\n') scanf("%c", &answer);
 
         return 0;
-    }
-    else if (!strcmp(argv[1], "jtag"))
-    {
-        if (!bcm2835_init()) return 1;
-        int last_tck = -1;
-        const int TCK = 11;
-        const int TMS = 8;
-        const int TDO = 10;
-        const int TDI = 9;
-        bcm2835_gpio_fsel(8, BCM2835_GPIO_FSEL_INPT);
-        bcm2835_gpio_fsel(9, BCM2835_GPIO_FSEL_INPT);
-        bcm2835_gpio_fsel(10, BCM2835_GPIO_FSEL_INPT);
-        bcm2835_gpio_fsel(11, BCM2835_GPIO_FSEL_INPT);
-
-        while (1) 
-        {
-            int curr_tck = bcm2835_gpio_lev(TCK);
-            if (last_tck != curr_tck)
-            {
-                last_tck = curr_tck;
-                printf("%u %u %u %u\n", curr_tck, bcm2835_gpio_lev(TMS), bcm2835_gpio_lev(TDI), bcm2835_gpio_lev(TDO));
-            }
-            usleep(100);
-        }
     }
 
     return 1;

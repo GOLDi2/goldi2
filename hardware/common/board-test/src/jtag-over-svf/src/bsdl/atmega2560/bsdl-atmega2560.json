@@ -1109,7 +1109,7 @@
         ]
     },
     "optional_register_description": {
-        "idcode_register": "01001001100000000001000000111111"
+        "idcode_register": "01011001100000000001000000111111"
     },
     "register_access_description": [
         {
