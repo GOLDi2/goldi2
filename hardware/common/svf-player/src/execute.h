@@ -4,6 +4,7 @@
 #include "util.h"
 
 extern int verbose;
+extern int interrupt;
 
 typedef struct 
 {

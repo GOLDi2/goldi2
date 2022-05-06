@@ -351,21 +351,6 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
     {
         if (instr->mask)
         {
-            if (verbose) 
-            {
-                printf("TDI:  ");
-                print_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
-                printf("\n");
-                printf("TDO:  ");
-                print_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
-                printf("\n");
-                printf("MASK: ");
-                print_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
-                printf("\n");
-                printf("DATA: ");
-                print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-                printf("\n");
-            }
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
                 if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) 
@@ -378,7 +363,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     printf("\n");
                     print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
                     printf("\n");
-                    return 1;
+                    return 1 && interrupt;
                 }
             }
         }
@@ -394,7 +379,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     printf("\n");
                     print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
                     printf("\n");
-                    return 1;
+                    return 1 && interrupt;
                 }
             }
         }
@@ -598,7 +583,7 @@ int execute_instructions()
 
     long seconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec))/1000000000;
     long nanoseconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec)) % 1000000000;
-    printf("Programming took %ld.%ld seconds\n", seconds, nanoseconds);
+    printf("Execution took %ld.%ld seconds\n", seconds, nanoseconds);
 
     return 0;
 }

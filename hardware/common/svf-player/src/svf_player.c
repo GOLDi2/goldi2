@@ -3,6 +3,7 @@
 #include "execute.h"
 
 int verbose = 0;
+int interrupt = 1;
 
 int main(int argc, char** argv)
 {
@@ -12,8 +13,16 @@ int main(int argc, char** argv)
     else
         yyin = stdin;
 
-    if (argc == 3 && !strncmp(argv[2],"-v",2)) {
-        verbose = 1;
+    for (int i = 1; i < argc; i++) 
+    {
+        if (!strncmp(argv[i],"-v",2)) 
+        {
+            verbose = 1;
+        } 
+        else if (!strncmp(argv[i],"-ni",3)) 
+        {
+            interrupt = 0;
+        }
     }
     
     int ret_parse = yyparse();
