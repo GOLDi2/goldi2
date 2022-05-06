@@ -110,7 +110,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
 
     add_fpga_header(output_instructions, bsdl_fpga)
 
-    // enter extest mode fppga
+    // enter extest mode fpga
     output_instructions.push("! Preload/Sample")
     output_instructions.push(`SIR ${bsdl_fpga.instructionLength} TDI(${bsdl_fpga.instructions.sample});`)
     let str: Array<"0"|"1"> = []
@@ -188,6 +188,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     // move fpga out of extest
     output_instructions.push("! Reset FPGA")
     output_instructions.push("STATE RESET;")
+    output_instructions.push("STATE IDLE;")
 
     saveStringArray(output_instructions, `dist/generated_tests/test_fpga_mc_${value}.svf`)
 }

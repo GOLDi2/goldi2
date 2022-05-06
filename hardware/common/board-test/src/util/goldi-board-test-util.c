@@ -15,7 +15,7 @@ void close_util()
 {
     bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_fsel(GPIO1, BCM2835_GPIO_FSEL_INPT);
-    bcm2835_gpio_fsel(27, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(17, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_fsel(26, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_fsel(13, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_fsel(5, BCM2835_GPIO_FSEL_INPT);
@@ -39,6 +39,8 @@ int main(int argc, char** argv)
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_fsel(GPIO1, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_fsel(17, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(17, 1);
 
         char command = 0x01;
         char* data = calloc(6, sizeof(char));
@@ -85,6 +87,7 @@ int main(int argc, char** argv)
 
         free(data);
         bcm2835_spi_end();
+        bcm2835_gpio_write(17, 0);
 
         return 0;
     }
