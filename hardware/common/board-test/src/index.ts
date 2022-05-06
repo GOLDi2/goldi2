@@ -22,6 +22,8 @@ if (process.argv.length == 3 && process.argv[2] == "--not-interactive") {
     exit(1)
 }
 
+export const generatedTestsDir = __dirname + "/generated_tests";
+
 async function main() {
     console.log("Starting Board Test!\n")
 

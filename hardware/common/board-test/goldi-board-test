@@ -1,1 +1,1 @@
-node /usr/lib/node/goldi-board-test/dist/index.js
+node /usr/lib/node_modules/@goldi2/goldi-board-test/dist/index.js

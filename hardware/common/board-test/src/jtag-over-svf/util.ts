@@ -58,7 +58,7 @@ export function saveStringArray(strarr: Array<string>, fname: string) {
         return curr
     })
     
-    if (!fs.existsSync("generated_tests")) fs.mkdirSync("generated_tests")
+    if (!fs.existsSync("dist/generated_tests")) fs.mkdirSync("dist/generated_tests")
     fs.writeFileSync(fname, output_string)
 }
 

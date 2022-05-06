@@ -7,7 +7,7 @@ const testCaseData: TestCaseData = {
     description: "Tests if the Microcontroller can be programmed.",
     test: (tc: TestCase) => {
         return new Promise<void>(resolve => {
-            const proc = spawnSync(`avrdude -p m2560 -c rpi`, {timeout: 10000, shell: true})
+            const proc = spawnSync(`avrdude -p m2560 -c rpi -e`, {timeout: 10000, shell: true})
             if (proc.status == 0) 
                 tc.outcome = "Success"
             else 

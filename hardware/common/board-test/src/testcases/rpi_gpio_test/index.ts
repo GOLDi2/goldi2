@@ -1,7 +1,7 @@
 import { TestCase, TestCaseData } from "../testcase"
 import { spawnSync } from "child_process"
+import { generatedTestsDir } from "../.."
 
-// TODO: toggle on Raspberry Pi side and read from FPGA?
 const testCaseData: TestCaseData = {
     name: "Raspberry Pi GPIO Test",
     description: "Tests if the GPIOs of the Raspberry Pi are working properly.",
@@ -17,7 +17,7 @@ const testCaseData: TestCaseData = {
             ]
 
             for (const test of tests) {
-                const proc_svf = spawnSync(`svf-player ${__dirname}/test_rpi_gpio_write_${test.pin}_${test.value}.svf`, {timeout: 10000, shell: true})
+                const proc_svf = spawnSync(`svf-player ${generatedTestsDir}/test_rpi_gpio_write_${test.pin}_${test.value}.svf`, {timeout: 10000, shell: true})
                 if (proc_svf.status != 0) {
                     tc.outcome = "Fail"
                     resolve()
@@ -29,7 +29,7 @@ const testCaseData: TestCaseData = {
                 }
             }
 
-            const proc_svf = spawnSync(`svf-player ${__dirname}/test_reset_fpga.svf`, {timeout: 10000, shell: true})
+            const proc_svf = spawnSync(`svf-player ${generatedTestsDir}/test_reset_fpga.svf`, {timeout: 10000, shell: true})
             if (proc_svf.status != 0) {
                 tc.outcome = "Fail"
                 resolve()
@@ -41,7 +41,7 @@ const testCaseData: TestCaseData = {
                     tc.outcome = "Fail"
                     resolve()
                 }
-                const proc_svf = spawnSync(`svf-player ${__dirname}/test_rpi_gpio_read_${test.pin}_${test.value}.svf`, {timeout: 10000, shell: true})
+                const proc_svf = spawnSync(`svf-player ${generatedTestsDir}/test_rpi_gpio_read_${test.pin}_${test.value}.svf`, {timeout: 10000, shell: true})
                 if (proc_svf.status != 0) {
                     tc.outcome = "Fail"
                     resolve()

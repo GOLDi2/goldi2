@@ -11,6 +11,18 @@
 #define GPIO0 16 // CPOL
 #define GPIO1 12 // CPHA
 
+void close()
+{
+    bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(GPIO1, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(27, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(26, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(13, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(5, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_fsel(6, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_close();
+}
+
 int main(int argc, char** argv)
 {
     if (argc != 2)
@@ -22,6 +34,7 @@ int main(int argc, char** argv)
     if (!strcmp(argv[1], "spi"))
     {
         if (!bcm2835_init()) return 1;
+        atexit(close);
         if (!bcm2835_spi_begin()) return 1;
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
@@ -78,6 +91,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "i2c"))
     {
         if (!bcm2835_init()) return 1;
+        atexit(close);
         if (!bcm2835_i2c_begin()) return 1;
 
         // TODO: write and read eeprom
@@ -196,6 +210,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "clk")) 
     {
         if (!bcm2835_init()) return 1;
+        atexit(close);
         if (!bcm2835_spi_begin()) return 1;
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
@@ -304,6 +319,7 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "gpio"))
     {
         if (!bcm2835_init()) return 1;
+        atexit(close);
         if (argc != 5) return 1;
 
         int pin = strtol(argv[3], NULL, 10);
@@ -327,12 +343,13 @@ int main(int argc, char** argv)
     else if (!strcmp(argv[1], "led"))
     {
         if (!bcm2835_init()) return 1;
+        atexit(close);
         char answer;
         pthread_t thread;
         blink_args args;
         int stop = 0;
 
-        // LEDActive (left)
+        // LEDActive (right)
         bcm2835_gpio_fsel(13, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_fsel(26, BCM2835_GPIO_FSEL_OUTP);
 
@@ -340,7 +357,7 @@ int main(int argc, char** argv)
         bcm2835_gpio_fsel(5, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_fsel(6, BCM2835_GPIO_FSEL_OUTP);
 
-        // LEDPower (right) TODO: replace with SPI command
+        // LEDPower (left) 
         bcm2835_gpio_fsel(12, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_fsel(16, BCM2835_GPIO_FSEL_OUTP);
 
@@ -350,7 +367,7 @@ int main(int argc, char** argv)
         args.mode = 0;
         args.stop = &stop;
         int ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the left LED blink green? (y/n): ");
+        printf("Is the right LED blinking green? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -372,7 +389,7 @@ int main(int argc, char** argv)
         args.mode = 1;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the left LED blink red? (y/n): ");
+        printf("Is the right LED blinking red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -394,7 +411,7 @@ int main(int argc, char** argv)
         args.mode = 2;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the left LED blink green and red? (y/n): ");
+        printf("Is the right LED blinking green and red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -419,7 +436,7 @@ int main(int argc, char** argv)
         args.mode = 0;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the center LED blink green? (y/n): ");
+        printf("Is the center LED blinking green? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -441,7 +458,7 @@ int main(int argc, char** argv)
         args.mode = 1;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the center LED blink red? (y/n): ");
+        printf("Is the center LED blinking red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -463,7 +480,7 @@ int main(int argc, char** argv)
         args.mode = 2;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the center LED blink green and red? (y/n): ");
+        printf("Is the center LED blinking green and red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -488,7 +505,7 @@ int main(int argc, char** argv)
         args.mode = 0;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the right LED blink green? (y/n): ");
+        printf("Is the left LED blinking green? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -510,7 +527,7 @@ int main(int argc, char** argv)
         args.mode = 1;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the right LED blink red? (y/n): ");
+        printf("Is the left LED blinking red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -532,7 +549,7 @@ int main(int argc, char** argv)
         args.mode = 2;
         stop = 0;
         ret = pthread_create(&thread, NULL, blink, &args);
-        printf("Does the right LED blink green and red? (y/n): ");
+        printf("Is the left LED blinking green and red? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);
@@ -569,7 +586,7 @@ int main(int argc, char** argv)
 
         while (answer != '\n') scanf("%c", &answer);
 
-        printf("Does the green ethernet LED blink? (y/n): ");
+        printf("Is the green ethernet LED blinking? (y/n): ");
         while (answer != 'n' && answer != 'y')
         {
             scanf("%c", &answer);

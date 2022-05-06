@@ -5,8 +5,8 @@ import { map_MC_FPGA, map_RPi_FPGA } from "./pinMappings"
 import { add_fpga_header, jtagPins, generate_clock, generate_move, generate_sir, generate_sdr, generate_value_check_fpga_mc } from "./svfGenerator"
 import { binToHex, check_values, saveStringArray } from "./util"
 
-const bsdl_fpga = parseBsdl(bsdl_fpga_raw as bsdlRaw)
-const bsdl_mc = parseBsdl(bsdl_mc_raw as bsdlRaw)
+export const bsdl_fpga = parseBsdl(bsdl_fpga_raw as bsdlRaw)
+export const bsdl_mc = parseBsdl(bsdl_mc_raw as bsdlRaw)
 
 const jtag: jtagPins = {
     tck: bsdl_fpga.boundaryCells.find(cell => cell.port == "PL24B")!,
@@ -20,7 +20,7 @@ function generate_reset_fpga() {
     add_fpga_header(output_instructions, bsdl_fpga)
     output_instructions.push("STATE RESET")
     output_instructions.push("STATE IDLE")
-    saveStringArray(output_instructions, `generated_tests/test_reset_fpga.svf`)
+    saveStringArray(output_instructions, `dist/generated_tests/test_reset_fpga.svf`)
 }
 
 function generate_gpio_test_rpi(value: "0" | "1") {
@@ -64,7 +64,7 @@ function generate_gpio_test_rpi(value: "0" | "1") {
         output_instructions.push("! Extest")
         output_instructions.push(`SIR ${bsdl_fpga.instructionLength} TDI(${bsdl_fpga.instructions.extest});\n`)
 
-        saveStringArray(output_instructions, `generated_tests/test_gpio_write_${rpi_pin}_${value}.svf`)
+        saveStringArray(output_instructions, `dist/generated_tests/test_gpio_write_${rpi_pin}_${value}.svf`)
     }
 
     // read pins
@@ -101,7 +101,7 @@ function generate_gpio_test_rpi(value: "0" | "1") {
         if (bsdl_fpga.boundaryCellsLength % 4 > 0) tdi += "0"
         output_instructions.push(`SDR ${bsdl_fpga.boundaryCellsLength} TDI (${tdi}) \nTDO  (${tdo}) \nMASK (${mask});\n`)
 
-        saveStringArray(output_instructions, `generated_tests/test_gpio_read_${rpi_pin}_${value}.svf`)
+        saveStringArray(output_instructions, `dist/generated_tests/test_gpio_read_${rpi_pin}_${value}.svf`)
     }
 }
 
@@ -144,7 +144,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     let sdr_data = ""
     for (let i = 0; i < bsdl_mc.idcode.length; i++) sdr_data += "0"
     generate_sdr(jtag, bsdl_fpga, output_instructions, sdr_data, bsdl_mc.idcode.length, bsdl_mc.idcode)
-    // saveStringArray(output_instructions, `generated_tests/test_idcode_mc.svf`)
+    saveStringArray(output_instructions, `dist/generated_tests/test_idcode_mc.svf`)
 
     // enter extest mode microcontroller
     output_instructions.push("! Enter Extest Microcontroller")
@@ -189,7 +189,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     output_instructions.push("! Reset FPGA")
     output_instructions.push("STATE RESET;")
 
-    saveStringArray(output_instructions, `generated_tests/test_fpga_mc_${value}.svf`)
+    saveStringArray(output_instructions, `dist/generated_tests/test_fpga_mc_${value}.svf`)
 }
 
 // generate_reset_fpga()
