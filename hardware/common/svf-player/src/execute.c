@@ -16,7 +16,7 @@ static SVF_Shift_Data TIR = {0, NULL, NULL, NULL, NULL};
 static int CURRENT_STATE = SVF_STATE_RESET;
 static struct timespec SLEEP_TIME = {0,0};
 
-void print_hexstring(char* hexstring, unsigned int length) {
+char* print_hexstring(char* hexstring, unsigned int length) {
     for (int i = 0; i < length; i++)
     {
         unsigned char first = (hexstring[i] & 0xF0) >> 4;
@@ -26,6 +26,33 @@ void print_hexstring(char* hexstring, unsigned int length) {
         if (second >= 10) printf("%c", second + 'A' - 10);
         else printf("%c", second + '0');
     }
+}
+
+char* to_printable_hexstring(char* hexstring, unsigned int length) {
+    char* str = (char*) malloc(length*2+1);
+    if (!str) return NULL;
+
+    if (hexstring == NULL)
+    {
+        for (int i = 0; i < length*2; i++) 
+        {
+            str[i] = '0';
+        }
+        str[length*2] = '\0';
+        return str;
+    }
+
+    for (int i = 0; i < length; i++)
+    {
+        unsigned char first = (hexstring[i] & 0xF0) >> 4;
+        unsigned char second = hexstring[i] & 0x0F;
+        if (first >= 10) str[i*2] = first + 'A' - 10;
+        else str[i*2] = first + '0';
+        if (second >= 10) str[i*2+1] = second + 'A' - 10;
+        else str[i*2+1] = second + '0';
+    }
+    str[length*2] = '\0';
+    return str;
 }
 
 void print_shift_data(SVF_Shift_Data* shift_data) {
@@ -355,14 +382,16 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
             {
                 if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) 
                 {
-                    print_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
-                    print_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
-                    print_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
-                    print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
+                    cJSON* faultJSON = cJSON_CreateObject();
+                    char* tdi_string = to_printable_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
+                    cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
+                    cJSON_AddStringToObject(faultJSON, "mask", mask_string);
+                    cJSON_AddStringToObject(faultJSON, "data", data_string);
+                    cJSON_AddItemToArray(faultsJSON, faultJSON);
                     return 1 && interrupt;
                 }
             }
@@ -373,12 +402,16 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
             {
                 if (data[i] != instr->tdo[i])
                 {
-                    print_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
-                    print_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
-                    print_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
-                    printf("\n");
+                    cJSON* faultJSON = cJSON_CreateObject();
+                    char* tdi_string = to_printable_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
+                    cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
+                    cJSON_AddStringToObject(faultJSON, "mask", mask_string);
+                    cJSON_AddStringToObject(faultJSON, "data", data_string);
+                    cJSON_AddItemToArray(faultsJSON, faultJSON);
                     return 1 && interrupt;
                 }
             }

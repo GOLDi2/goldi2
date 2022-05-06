@@ -2,9 +2,11 @@
 #define EXECUTE_H
 
 #include "util.h"
+#include "cJSON.h"
 
 extern int verbose;
 extern int interrupt;
+extern cJSON* faultsJSON;
 
 typedef struct 
 {
