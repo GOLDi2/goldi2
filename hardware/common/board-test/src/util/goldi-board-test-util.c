@@ -218,6 +218,8 @@ int main(int argc, char** argv)
 
         bcm2835_gpio_fsel(GPIO0, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_fsel(GPIO1, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_fsel(17, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(17, 1);
 
         char command = 0x02;
         char* data = calloc(4, sizeof(char));
@@ -247,6 +249,7 @@ int main(int argc, char** argv)
         if (clock_frequency != 48) return 1;
 
         bcm2835_spi_end();
+        bcm2835_gpio_write(17, 0);
 
         return 0;
     }
