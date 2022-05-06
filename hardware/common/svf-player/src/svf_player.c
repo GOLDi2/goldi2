@@ -5,6 +5,7 @@
 
 int verbose = 0;
 int interrupt = 1;
+int execution_failed = 0;
 cJSON* faultsJSON;
 
 int main(int argc, char** argv)
@@ -42,5 +43,5 @@ int main(int argc, char** argv)
     fputs(output, fp);
     fclose(fp);
 
-    return ret;
+    return ret && !execution_failed;
 }

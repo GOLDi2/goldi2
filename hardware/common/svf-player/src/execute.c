@@ -392,6 +392,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     cJSON_AddStringToObject(faultJSON, "mask", mask_string);
                     cJSON_AddStringToObject(faultJSON, "data", data_string);
                     cJSON_AddItemToArray(faultsJSON, faultJSON);
+                    execution_failed = 1;
                     return 1 && interrupt;
                 }
             }
@@ -412,6 +413,7 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     cJSON_AddStringToObject(faultJSON, "mask", mask_string);
                     cJSON_AddStringToObject(faultJSON, "data", data_string);
                     cJSON_AddItemToArray(faultsJSON, faultJSON);
+                    execution_failed = 1;
                     return 1 && interrupt;
                 }
             }

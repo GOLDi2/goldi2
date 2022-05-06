@@ -7,6 +7,7 @@
 extern int verbose;
 extern int interrupt;
 extern cJSON* faultsJSON;
+extern int execution_failed;
 
 typedef struct 
 {
