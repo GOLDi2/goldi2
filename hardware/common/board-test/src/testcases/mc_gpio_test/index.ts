@@ -3,7 +3,7 @@ import { spawnSync } from "child_process"
 import { generatedTestsDir } from "../.."
 import { check_values } from "../../jtag-over-svf/util"
 import * as fs from "fs"
-import { bsdl_fpga } from "../../jtag-over-svf/testGenerator"
+import { bsdl_fpga } from "../../jtag-over-svf/globals"
 
 const testCaseData: TestCaseData = {
     name: "Microcontroller GPIO Test",

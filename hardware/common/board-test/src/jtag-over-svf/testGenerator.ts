@@ -1,12 +1,7 @@
-import { bsdlRaw, parseBsdl } from "./bsdl"
-import * as bsdl_fpga_raw from "./bsdl/machxo2/bsdl-machxo2.json" 
-import * as bsdl_mc_raw from "./bsdl/atmega2560/bsdl-atmega2560.json"
 import { map_MC_FPGA, map_RPi_FPGA } from "./pinMappings"
 import { add_fpga_header, jtagPins, generate_clock, generate_move, generate_sir, generate_sdr, generate_value_check_fpga_mc } from "./svfGenerator"
-import { binToHex, check_values, saveStringArray } from "./util"
-
-export const bsdl_fpga = parseBsdl(bsdl_fpga_raw as bsdlRaw)
-export const bsdl_mc = parseBsdl(bsdl_mc_raw as bsdlRaw)
+import { binToHex, saveStringArray } from "./util"
+import { bsdl_fpga, bsdl_mc } from "./globals"
 
 const jtag: jtagPins = {
     tck: bsdl_fpga.boundaryCells.find(cell => cell.port == "PL24B")!,
@@ -193,7 +188,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     saveStringArray(output_instructions, `dist/generated_tests/test_fpga_mc_${value}.svf`)
 }
 
-// generate_reset_fpga()
+generate_reset_fpga()
 
 generate_gpio_test_rpi("0")
 generate_gpio_test_rpi("1")
