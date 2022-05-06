@@ -43,5 +43,5 @@ int main(int argc, char** argv)
     fputs(output, fp);
     fclose(fp);
 
-    return ret && !execution_failed;
+    return ret || execution_failed;
 }
