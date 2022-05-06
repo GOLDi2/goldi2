@@ -179,6 +179,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     // reset jtag microcontroller
     output_instructions.push("! Reset Microcontroller")
     for (let i = 0; i < 5; i++) generate_clock(jtag, bsdl_fpga, output_instructions, "1", "0")
+    generate_clock(jtag, bsdl_fpga, output_instructions, "0", "0")
 
     // move fpga out of extest
     output_instructions.push("! Reset FPGA")
