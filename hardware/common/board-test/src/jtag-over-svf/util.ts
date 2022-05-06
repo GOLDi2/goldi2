@@ -63,11 +63,9 @@ export function saveStringArray(strarr: Array<string>, fname: string) {
 }
 
 export function check_values(faults: Array<{tdi: string, tdo: string, mask: string, data: string}>, bsdl_fpga: bsdlData, filename: string) {
-    for (const mapping of map_MC_FPGA) console.log(mapping);
     let nr = 0;
     let outputStrings = [];
     for (const fault of faults) {
-        outputStrings.push(`Mapping ${nr}: ${Array.from(map_MC_FPGA.entries())[nr]}`)
         outputStrings.push(`Fault ${++nr}:`)
         const tdo = hexToBin(fault.tdo, bsdl_fpga.boundaryCellsLength);
         const mask = hexToBin(fault.mask, bsdl_fpga.boundaryCellsLength);
