@@ -15,14 +15,14 @@ const testCaseData: TestCaseData = {
                 tc.outcome = "Fail"
                 const str = fs.readFileSync("/tmp/svf_output.json", {encoding: "utf-8"})
                 const faults = JSON.parse(str)["faults"]
-                check_values(faults, bsdl_fpga, "faults_mc_gpio_0")
+                check_values(faults, bsdl_fpga, "faults_mc_gpio_0.json")
             }
             const proc_1 = spawnSync(`svf-player ${generatedTestsDir}/test_fpga_mc_1.svf -ni`, {timeout: 120000, shell: true})
             if (proc_1.status != 0) {
                 tc.outcome = "Fail"
                 const str = fs.readFileSync("/tmp/svf_output.json", {encoding: "utf-8"})
                 const faults = JSON.parse(str)["faults"]
-                check_values(faults, bsdl_fpga, "faults_mc_gpio_1")
+                check_values(faults, bsdl_fpga, "faults_mc_gpio_1.json")
             }
             if (tc.outcome != "Fail") tc.outcome = "Success"
             resolve()
