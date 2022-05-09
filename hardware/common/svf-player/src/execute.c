@@ -78,6 +78,7 @@ SVF_Instruction* create_empty_instruction()
 {
     SVF_Instruction* instruction = (SVF_Instruction*) malloc (sizeof(SVF_Instruction));
     instruction->type = -1;
+    instruction->label = NULL;
     instruction->shift_data.length = -1;
     instruction->shift_data.tdi = NULL;
     instruction->shift_data.tdo = NULL;
@@ -96,9 +97,10 @@ SVF_Instruction* create_empty_instruction()
     return instruction;
 }
 
-void add_instruction(SVF_Instruction* instruction)
+void add_instruction(SVF_Instruction* instruction, char* instruction_label)
 {
     if (!instruction_list) instruction_list = create_list();
+    if (instruction_label) instruction->label = instruction_label;
     list_append(instruction_list, instruction);
 }
 
@@ -338,7 +340,7 @@ static int move_to_stable_state(int state)
     return 0;
 }
 
-static int _shift(SVF_Shift_Data* instr, char* data, int exit)
+static int _shift(SVF_Shift_Data* instr, char* data, int exit, char* instruction_label)
 {
     int j = (instr->length/8) + ((instr->length % 8) > 0);
 
@@ -387,6 +389,8 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
                     char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
                     char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    if (instruction_label) cJSON_AddStringToObject(faultJSON, "label", instruction_label);
+                    else cJSON_AddStringToObject(faultJSON, "label", "unlabeled");
                     cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
                     cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
                     cJSON_AddStringToObject(faultJSON, "mask", mask_string);
@@ -408,6 +412,8 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
                     char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
                     char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
                     char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    if (instruction_label) cJSON_AddStringToObject(faultJSON, "label", instruction_label);
+                    else cJSON_AddStringToObject(faultJSON, "label", "unlabeled");
                     cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
                     cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
                     cJSON_AddStringToObject(faultJSON, "mask", mask_string);
@@ -422,35 +428,35 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
     return 0;
 }
 
-static int shift(SVF_Shift_Data* instr, SVF_Shift_Data* header, SVF_Shift_Data* trailer)
+static int shift(SVF_Shift_Data* instr, SVF_Shift_Data* header, SVF_Shift_Data* trailer, char* instruction_label)
 {
     int res = 0;
     int length = (header->length/8) + (instr->length/8) + (trailer->length/8);
     length += ((header->length % 8) > 0) + ((instr->length % 8) > 0) + ((trailer->length % 8) > 0);
     char data[length];
     for (int i = 0; i < length; i++) data[i] = 0;
-    if (header->length > 0) res |= _shift(header, data, 0);
+    if (header->length > 0) res |= _shift(header, data, 0, instruction_label);
     if (res) return res;
-    if (instr->length > 0) res |= _shift(instr, data + header->length, trailer->length == 0);
+    if (instr->length > 0) res |= _shift(instr, data + header->length, trailer->length == 0, instruction_label);
     if (res) return res;
-    if (trailer->length > 0) res |= _shift(trailer, data + header->length + instr->length, 1);
+    if (trailer->length > 0) res |= _shift(trailer, data + header->length + instr->length, 1, instruction_label);
     return res;
 }
 
-static int shift_data(SVF_Shift_Data* instr)
+static int shift_data(SVF_Shift_Data* instr, char* instruction_label)
 {
     if (move_to_stable_state(SVF_STATE_DRSHIFT)) return 1;
-    int res = shift(instr, &HDR, &TDR);
+    int res = shift(instr, &HDR, &TDR, instruction_label);
     if (res) printf("Something went wrong while shifting data!\n");
     clk(0,0);
     if (move_to_stable_state(ENDDR)) return 1;
     return res;
 }
 
-static int shift_instruction(SVF_Shift_Data* instr)
+static int shift_instruction(SVF_Shift_Data* instr, char* instruction_label)
 {
     if (move_to_stable_state(SVF_STATE_IRSHIFT)) return 1;
-    int res = shift(instr, &HIR, &TIR);
+    int res = shift(instr, &HIR, &TIR, instruction_label);
     if (res) printf("Something went wrong while shifting an instruction!\n");
     clk(0,0);
     if (move_to_stable_state(ENDIR)) return 1;
@@ -551,13 +557,13 @@ int execute_instructions()
                 if (verbose) printf("Executing SDR ");
                 if (set_shift_data(&SDR, &instruction->shift_data, instruction->type)) return 1;
                 if (verbose) print_shift_data(&SDR);
-                if (shift_data(&SDR)) return 1;
+                if (shift_data(&SDR, instruction->label)) return 1;
                 break;
             case SVF_INSTRUCTION_SIR:
                 if (verbose) printf("Executing SIR ");
                 if (set_shift_data(&SIR, &instruction->shift_data, instruction->type)) return 1;
                 if (verbose) print_shift_data(&SIR);
-                if (shift_instruction(&SIR)) return 1;
+                if (shift_instruction(&SIR, instruction->label)) return 1;
                 break;
             case SVF_INSTRUCTION_STATE:
                 if (verbose) printf("Executing STATE\n");

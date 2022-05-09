@@ -6,15 +6,28 @@
 #include "parser.h"
 %}
 
-STRING          .*
+STRING          [0-9A-Za-z\ \<\>\-\(\)\,\:\=]*
 REAL            [0-9]+(("."|",")[0-9]+)?(("E"|"e")("+"|"-")[0-9]+)?
 UNSIGNED        [0-9]+
 HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 
 %%
 
-"!"{STRING}\n   
-"//"{STRING}\n  
+"! [instruction-label] "{STRING}\n     {
+                                            char* string = (char*) malloc(strlen(yytext)-22+1);
+                                            strcpy(string, yytext+22);
+                                            yylval.string = string;
+                                            return (SVF_INSTRUCTION_LABEL);
+                                        }
+"// [instruction-label] "{STRING}\n     {
+                                            char* string = (char*) malloc(strlen(yytext)-23+1);
+                                            strcpy(string, yytext+23);
+                                            yylval.string = string;
+                                            return (SVF_INSTRUCTION_LABEL);
+                                        }
+
+"!".*\n
+"//".*\n
 
 {HEXSTRING}     {
                     unsigned int special_characters = 0;

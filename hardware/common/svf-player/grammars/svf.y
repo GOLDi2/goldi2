@@ -12,6 +12,8 @@
 extern FILE* yyin;
 //int yydebug=1;
 
+char* current_instruction_label = NULL;
+
 int yyerror(char* s)
 {
     fprintf(stderr, "%s\n",s);
@@ -23,7 +25,8 @@ static int parse_enddr(int stable_state)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_ENDDR;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -32,7 +35,8 @@ static int parse_endir(int stable_state)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_ENDIR;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -41,7 +45,8 @@ static int parse_frequency(double cycles)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_FREQUENCY;
     instruction->cycles = cycles;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -50,7 +55,8 @@ static int parse_hdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_HDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -59,7 +65,8 @@ static int parse_hir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_HIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -85,7 +92,8 @@ static int parse_runtest(int run_state, unsigned int run_count, int run_clk, dou
     instruction->min_time = min_time;
     instruction->max_time = max_time;
     instruction->end_state = end_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -94,7 +102,8 @@ static int parse_sdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_SDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -103,7 +112,8 @@ static int parse_sir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_SIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -113,7 +123,8 @@ static int parse_state(List* path_states, int stable_state)
     instruction->type = SVF_INSTRUCTION_STATE;
     instruction->path_states = path_states;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -122,7 +133,8 @@ static int parse_tdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -131,7 +143,8 @@ static int parse_tir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -140,7 +153,8 @@ static int parse_trst(int trst_mode)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TRST;
     instruction->trst_mode = trst_mode;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -178,6 +192,7 @@ static int parse_trst(int trst_mode)
             SVF_INSTRUCTION_TDR
             SVF_INSTRUCTION_TIR
             SVF_INSTRUCTION_TRST
+            SVF_INSTRUCTION_LABEL
 
 /* states */
 %token  <u> SVF_STATE_RESET
@@ -226,7 +241,11 @@ static int parse_trst(int trst_mode)
 
 program:    command | command program;
 
-command:    SVF_INSTRUCTION_ENDDR stable_state end 
+command:    SVF_INSTRUCTION_LABEL 
+            {
+                current_instruction_label = $<string>1;
+            } |
+            SVF_INSTRUCTION_ENDDR stable_state end 
             {
                 parse_enddr($<u>2);
             } |

@@ -75,6 +75,8 @@
 extern FILE* yyin;
 //int yydebug=1;
 
+char* current_instruction_label = NULL;
+
 int yyerror(char* s)
 {
     fprintf(stderr, "%s\n",s);
@@ -86,7 +88,8 @@ static int parse_enddr(int stable_state)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_ENDDR;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -95,7 +98,8 @@ static int parse_endir(int stable_state)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_ENDIR;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -104,7 +108,8 @@ static int parse_frequency(double cycles)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_FREQUENCY;
     instruction->cycles = cycles;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -113,7 +118,8 @@ static int parse_hdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_HDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -122,7 +128,8 @@ static int parse_hir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_HIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -148,7 +155,8 @@ static int parse_runtest(int run_state, unsigned int run_count, int run_clk, dou
     instruction->min_time = min_time;
     instruction->max_time = max_time;
     instruction->end_state = end_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -157,7 +165,8 @@ static int parse_sdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_SDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -166,7 +175,8 @@ static int parse_sir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_SIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -176,7 +186,8 @@ static int parse_state(List* path_states, int stable_state)
     instruction->type = SVF_INSTRUCTION_STATE;
     instruction->path_states = path_states;
     instruction->stable_state = stable_state;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -185,7 +196,8 @@ static int parse_tdr(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TDR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -194,7 +206,8 @@ static int parse_tir(SVF_Shift_Data shift_data)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TIR;
     instruction->shift_data = shift_data;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
@@ -203,12 +216,13 @@ static int parse_trst(int trst_mode)
     SVF_Instruction* instruction = create_empty_instruction();
     instruction->type = SVF_INSTRUCTION_TRST;
     instruction->trst_mode = trst_mode;
-    add_instruction(instruction);
+    add_instruction(instruction, current_instruction_label);
+    current_instruction_label = NULL;
     return 0;
 }
 
 
-#line 212 "src/parser.c"
+#line 226 "src/parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -257,7 +271,7 @@ extern int yydebug;
 #include "util.h"
 #include "execute.h"
 
-#line 261 "src/parser.c"
+#line 275 "src/parser.c"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -278,40 +292,41 @@ extern int yydebug;
     SVF_INSTRUCTION_TDR = 269,
     SVF_INSTRUCTION_TIR = 270,
     SVF_INSTRUCTION_TRST = 271,
-    SVF_STATE_RESET = 272,
-    SVF_STATE_IDLE = 273,
-    SVF_STATE_DRSELECT = 274,
-    SVF_STATE_DRCAPTURE = 275,
-    SVF_STATE_DRSHIFT = 276,
-    SVF_STATE_DREXIT1 = 277,
-    SVF_STATE_DRPAUSE = 278,
-    SVF_STATE_DREXIT2 = 279,
-    SVF_STATE_DRUPDATE = 280,
-    SVF_STATE_IRSELECT = 281,
-    SVF_STATE_IRCAPTURE = 282,
-    SVF_STATE_IRSHIFT = 283,
-    SVF_STATE_IREXIT1 = 284,
-    SVF_STATE_IRPAUSE = 285,
-    SVF_STATE_IREXIT2 = 286,
-    SVF_STATE_IRUPDATE = 287,
-    SVF_REAL_NUMBER = 288,
-    SVF_UNSIGNED_INT = 289,
-    SVF_HEXSTRING = 290,
-    SVF_RUN_CLK_TCK = 291,
-    SVF_RUN_CLK_SCK = 292,
-    SVF_TRST_MODE_ON = 293,
-    SVF_TRST_MODE_OFF = 294,
-    SVF_TRST_MODE_Z = 295,
-    SVF_TRST_MODE_ABSENT = 296,
-    SVF_HZ = 297,
-    SVF_MAXIMUM = 298,
-    SVF_SEC = 299,
-    SVF_ENDSTATE = 300,
-    SVF_TDI = 301,
-    SVF_TDO = 302,
-    SVF_MASK = 303,
-    SVF_SMASK = 304,
-    SVF_INSTRUCTION_END = 305
+    SVF_INSTRUCTION_LABEL = 272,
+    SVF_STATE_RESET = 273,
+    SVF_STATE_IDLE = 274,
+    SVF_STATE_DRSELECT = 275,
+    SVF_STATE_DRCAPTURE = 276,
+    SVF_STATE_DRSHIFT = 277,
+    SVF_STATE_DREXIT1 = 278,
+    SVF_STATE_DRPAUSE = 279,
+    SVF_STATE_DREXIT2 = 280,
+    SVF_STATE_DRUPDATE = 281,
+    SVF_STATE_IRSELECT = 282,
+    SVF_STATE_IRCAPTURE = 283,
+    SVF_STATE_IRSHIFT = 284,
+    SVF_STATE_IREXIT1 = 285,
+    SVF_STATE_IRPAUSE = 286,
+    SVF_STATE_IREXIT2 = 287,
+    SVF_STATE_IRUPDATE = 288,
+    SVF_REAL_NUMBER = 289,
+    SVF_UNSIGNED_INT = 290,
+    SVF_HEXSTRING = 291,
+    SVF_RUN_CLK_TCK = 292,
+    SVF_RUN_CLK_SCK = 293,
+    SVF_TRST_MODE_ON = 294,
+    SVF_TRST_MODE_OFF = 295,
+    SVF_TRST_MODE_Z = 296,
+    SVF_TRST_MODE_ABSENT = 297,
+    SVF_HZ = 298,
+    SVF_MAXIMUM = 299,
+    SVF_SEC = 300,
+    SVF_ENDSTATE = 301,
+    SVF_TDI = 302,
+    SVF_TDO = 303,
+    SVF_MASK = 304,
+    SVF_SMASK = 305,
+    SVF_INSTRUCTION_END = 306
   };
 #endif
 /* Tokens.  */
@@ -329,46 +344,47 @@ extern int yydebug;
 #define SVF_INSTRUCTION_TDR 269
 #define SVF_INSTRUCTION_TIR 270
 #define SVF_INSTRUCTION_TRST 271
-#define SVF_STATE_RESET 272
-#define SVF_STATE_IDLE 273
-#define SVF_STATE_DRSELECT 274
-#define SVF_STATE_DRCAPTURE 275
-#define SVF_STATE_DRSHIFT 276
-#define SVF_STATE_DREXIT1 277
-#define SVF_STATE_DRPAUSE 278
-#define SVF_STATE_DREXIT2 279
-#define SVF_STATE_DRUPDATE 280
-#define SVF_STATE_IRSELECT 281
-#define SVF_STATE_IRCAPTURE 282
-#define SVF_STATE_IRSHIFT 283
-#define SVF_STATE_IREXIT1 284
-#define SVF_STATE_IRPAUSE 285
-#define SVF_STATE_IREXIT2 286
-#define SVF_STATE_IRUPDATE 287
-#define SVF_REAL_NUMBER 288
-#define SVF_UNSIGNED_INT 289
-#define SVF_HEXSTRING 290
-#define SVF_RUN_CLK_TCK 291
-#define SVF_RUN_CLK_SCK 292
-#define SVF_TRST_MODE_ON 293
-#define SVF_TRST_MODE_OFF 294
-#define SVF_TRST_MODE_Z 295
-#define SVF_TRST_MODE_ABSENT 296
-#define SVF_HZ 297
-#define SVF_MAXIMUM 298
-#define SVF_SEC 299
-#define SVF_ENDSTATE 300
-#define SVF_TDI 301
-#define SVF_TDO 302
-#define SVF_MASK 303
-#define SVF_SMASK 304
-#define SVF_INSTRUCTION_END 305
+#define SVF_INSTRUCTION_LABEL 272
+#define SVF_STATE_RESET 273
+#define SVF_STATE_IDLE 274
+#define SVF_STATE_DRSELECT 275
+#define SVF_STATE_DRCAPTURE 276
+#define SVF_STATE_DRSHIFT 277
+#define SVF_STATE_DREXIT1 278
+#define SVF_STATE_DRPAUSE 279
+#define SVF_STATE_DREXIT2 280
+#define SVF_STATE_DRUPDATE 281
+#define SVF_STATE_IRSELECT 282
+#define SVF_STATE_IRCAPTURE 283
+#define SVF_STATE_IRSHIFT 284
+#define SVF_STATE_IREXIT1 285
+#define SVF_STATE_IRPAUSE 286
+#define SVF_STATE_IREXIT2 287
+#define SVF_STATE_IRUPDATE 288
+#define SVF_REAL_NUMBER 289
+#define SVF_UNSIGNED_INT 290
+#define SVF_HEXSTRING 291
+#define SVF_RUN_CLK_TCK 292
+#define SVF_RUN_CLK_SCK 293
+#define SVF_TRST_MODE_ON 294
+#define SVF_TRST_MODE_OFF 295
+#define SVF_TRST_MODE_Z 296
+#define SVF_TRST_MODE_ABSENT 297
+#define SVF_HZ 298
+#define SVF_MAXIMUM 299
+#define SVF_SEC 300
+#define SVF_ENDSTATE 301
+#define SVF_TDI 302
+#define SVF_TDO 303
+#define SVF_MASK 304
+#define SVF_SMASK 305
+#define SVF_INSTRUCTION_END 306
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 152 "grammars/svf.y"
+#line 166 "grammars/svf.y"
 
     double d;
     List* list;
@@ -376,7 +392,7 @@ union YYSTYPE
     unsigned int u;
     SVF_Shift_Data shift_data;
 
-#line 380 "src/parser.c"
+#line 396 "src/parser.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -693,21 +709,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  63
+#define YYFINAL  64
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   151
+#define YYLAST   152
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  51
+#define YYNTOKENS  52
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  85
+#define YYNRULES  86
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  145
+#define YYNSTATES  146
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   305
+#define YYMAXUTOK   306
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -749,22 +765,22 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50
+      45,    46,    47,    48,    49,    50,    51
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   227,   227,   227,   229,   233,   237,   241,   245,   249,
-     253,   257,   261,   265,   269,   273,   277,   281,   285,   289,
-     293,   297,   301,   305,   309,   313,   317,   321,   325,   329,
-     333,   337,   341,   346,   350,   354,   358,   362,   366,   370,
-     375,   375,   375,   375,   376,   376,   376,   376,   376,   377,
-     377,   377,   377,   377,   378,   378,   378,   378,   378,   379,
-     381,   383,   387,   391,   395,   400,   405,   410,   415,   420,
-     425,   430,   435,   440,   446,   452,   459,   464,   464,   465,
-     469,   474,   479,   479,   479,   479
+       0,   242,   242,   242,   244,   248,   252,   256,   260,   264,
+     268,   272,   276,   280,   284,   288,   292,   296,   300,   304,
+     308,   312,   316,   320,   324,   328,   332,   336,   340,   344,
+     348,   352,   356,   360,   365,   369,   373,   377,   381,   385,
+     389,   394,   394,   394,   394,   395,   395,   395,   395,   395,
+     396,   396,   396,   396,   396,   397,   397,   397,   397,   397,
+     398,   400,   402,   406,   410,   414,   419,   424,   429,   434,
+     439,   444,   449,   454,   459,   465,   471,   478,   483,   483,
+     484,   488,   493,   498,   498,   498,   498
 };
 #endif
 
@@ -779,16 +795,16 @@ static const char *const yytname[] =
   "SVF_INSTRUCTION_PIOMAP", "SVF_INSTRUCTION_RUNTEST",
   "SVF_INSTRUCTION_SDR", "SVF_INSTRUCTION_SIR", "SVF_INSTRUCTION_STATE",
   "SVF_INSTRUCTION_TDR", "SVF_INSTRUCTION_TIR", "SVF_INSTRUCTION_TRST",
-  "SVF_STATE_RESET", "SVF_STATE_IDLE", "SVF_STATE_DRSELECT",
-  "SVF_STATE_DRCAPTURE", "SVF_STATE_DRSHIFT", "SVF_STATE_DREXIT1",
-  "SVF_STATE_DRPAUSE", "SVF_STATE_DREXIT2", "SVF_STATE_DRUPDATE",
-  "SVF_STATE_IRSELECT", "SVF_STATE_IRCAPTURE", "SVF_STATE_IRSHIFT",
-  "SVF_STATE_IREXIT1", "SVF_STATE_IRPAUSE", "SVF_STATE_IREXIT2",
-  "SVF_STATE_IRUPDATE", "SVF_REAL_NUMBER", "SVF_UNSIGNED_INT",
-  "SVF_HEXSTRING", "SVF_RUN_CLK_TCK", "SVF_RUN_CLK_SCK",
-  "SVF_TRST_MODE_ON", "SVF_TRST_MODE_OFF", "SVF_TRST_MODE_Z",
-  "SVF_TRST_MODE_ABSENT", "SVF_HZ", "SVF_MAXIMUM", "SVF_SEC",
-  "SVF_ENDSTATE", "SVF_TDI", "SVF_TDO", "SVF_MASK", "SVF_SMASK",
+  "SVF_INSTRUCTION_LABEL", "SVF_STATE_RESET", "SVF_STATE_IDLE",
+  "SVF_STATE_DRSELECT", "SVF_STATE_DRCAPTURE", "SVF_STATE_DRSHIFT",
+  "SVF_STATE_DREXIT1", "SVF_STATE_DRPAUSE", "SVF_STATE_DREXIT2",
+  "SVF_STATE_DRUPDATE", "SVF_STATE_IRSELECT", "SVF_STATE_IRCAPTURE",
+  "SVF_STATE_IRSHIFT", "SVF_STATE_IREXIT1", "SVF_STATE_IRPAUSE",
+  "SVF_STATE_IREXIT2", "SVF_STATE_IRUPDATE", "SVF_REAL_NUMBER",
+  "SVF_UNSIGNED_INT", "SVF_HEXSTRING", "SVF_RUN_CLK_TCK",
+  "SVF_RUN_CLK_SCK", "SVF_TRST_MODE_ON", "SVF_TRST_MODE_OFF",
+  "SVF_TRST_MODE_Z", "SVF_TRST_MODE_ABSENT", "SVF_HZ", "SVF_MAXIMUM",
+  "SVF_SEC", "SVF_ENDSTATE", "SVF_TDI", "SVF_TDO", "SVF_MASK", "SVF_SMASK",
   "SVF_INSTRUCTION_END", "$accept", "program", "command", "stable_state",
   "state", "end", "tdi", "tdo", "mask", "smask", "common", "statelist",
   "cycles", "run_clk", "min", "max", "end_state", "trst_mode", YY_NULLPTR
@@ -805,16 +821,16 @@ static const yytype_int16 yytoknum[] =
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
-     305
+     305,   306
 };
 # endif
 
-#define YYPACT_NINF (-78)
+#define YYPACT_NINF (-80)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-44)
+#define YYTABLE_NINF (-45)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -823,21 +839,21 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     135,    30,    30,   -17,   -24,   -24,   -78,   -78,    75,   -15,
-     -24,   105,   -24,   -24,    56,    25,   135,   -78,   -78,   -78,
-     -78,   -19,   -19,     0,   -78,   -78,   -19,    -9,   -19,   -19,
-       7,    -8,    10,    -5,    19,   -19,   -19,     6,     8,   -78,
-     -78,   -78,   -78,    14,   -78,   -78,   -78,   -78,   -78,   -78,
-      20,   -78,   -78,   -19,   105,   -19,   -19,   -19,   -78,   -78,
-     -78,   -78,   -19,   -78,   -78,   -78,   -78,   -78,   -78,    24,
-      70,   -78,   -78,   -78,   -78,   -78,   -27,    -8,    -5,    40,
-      30,   -78,   -41,   -19,   -78,   -78,   -78,   -78,   -78,   -78,
-     -78,   -78,   -78,   -78,   -78,    42,    45,    52,    18,    39,
-     -78,   -78,    -5,   -19,   -27,   -78,   -41,   -19,    47,   -78,
-     -78,   -19,   -78,   -78,   -78,   -78,    39,   -78,   -78,   -78,
-     -41,   -19,   -78,   -78,    -5,   -19,   -78,   -19,   -78,   -78,
-     -78,   -78,   -78,   -19,   -78,   -78,   -41,   -19,   -78,   -78,
-     -78,   -78,   -19,   -78,   -78
+     135,    29,    29,   -23,   -13,   -13,   -80,   -80,    74,   -10,
+     -13,   104,   -13,   -13,    25,   -80,    17,   135,   -80,   -80,
+     -80,   -80,   -20,   -20,    -3,   -80,   -80,   -20,    -2,   -20,
+     -20,     6,     5,    24,    -7,   -18,   -20,   -20,    22,    26,
+     -80,   -80,   -80,   -80,    36,   -80,   -80,   -80,   -80,   -80,
+     -80,    37,   -80,   -80,   -20,   104,   -20,   -20,   -20,   -80,
+     -80,   -80,   -80,   -20,   -80,   -80,   -80,   -80,   -80,   -80,
+      44,    46,   -80,   -80,   -80,   -80,   -80,   -28,     5,    -7,
+      57,    29,   -80,   -42,   -20,   -80,   -80,   -80,   -80,   -80,
+     -80,   -80,   -80,   -80,   -80,   -80,    61,    65,    71,    20,
+      52,   -80,   -80,    -7,   -20,   -28,   -80,   -42,   -20,    11,
+     -80,   -80,   -20,   -80,   -80,   -80,   -80,    52,   -80,   -80,
+     -80,   -42,   -20,   -80,   -80,    -7,   -20,   -80,   -20,   -80,
+     -80,   -80,   -80,   -80,   -20,   -80,   -80,   -42,   -20,   -80,
+     -80,   -80,   -80,   -20,   -80,   -80
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -845,35 +861,35 @@ static const yytype_int16 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     0,     0,     0,     0,     0,    10,    11,     0,     0,
-       0,     0,     0,     0,     0,     0,     2,    40,    41,    42,
-      43,     0,     0,     0,    60,     6,     0,    65,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    44,    45,    46,
+       0,     0,     0,     0,     0,     0,    11,    12,     0,     0,
+       0,     0,     0,     0,     0,     4,     0,     2,    41,    42,
+      43,    44,     0,     0,     0,    61,     7,     0,    66,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    45,    46,
       47,    48,    49,    50,    51,    52,    53,    54,    55,    56,
-      57,    58,    59,     0,     0,     0,     0,     0,    82,    83,
-      84,    85,     0,     1,     3,     4,     5,    76,     7,     0,
-      66,     8,     9,    79,    77,    78,     0,     0,     0,     0,
-       0,    24,     0,     0,    32,    33,    34,    35,    74,    75,
-      36,    37,    38,    39,    61,     0,     0,     0,    67,    68,
-      69,    12,     0,     0,     0,    28,     0,     0,     0,    81,
-      25,     0,    26,    62,    63,    64,    70,    71,    72,    13,
-       0,     0,    15,    18,     0,     0,    29,     0,    30,    80,
-      27,    73,    14,     0,    16,    19,     0,     0,    21,    31,
-      17,    20,     0,    22,    23
+      57,    58,    59,    60,     0,     0,     0,     0,     0,    83,
+      84,    85,    86,     0,     1,     3,     5,     6,    77,     8,
+       0,    67,     9,    10,    80,    78,    79,     0,     0,     0,
+       0,     0,    25,     0,     0,    33,    34,    35,    36,    75,
+      76,    37,    38,    39,    40,    62,     0,     0,     0,    68,
+      69,    70,    13,     0,     0,     0,    29,     0,     0,     0,
+      82,    26,     0,    27,    63,    64,    65,    71,    72,    73,
+      14,     0,     0,    16,    19,     0,     0,    30,     0,    31,
+      81,    28,    74,    15,     0,    17,    20,     0,     0,    22,
+      32,    18,    21,     0,    23,    24
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -78,    85,   -78,     9,   -78,   -21,   -78,   -78,     4,   -77,
-      66,    53,   -78,    33,   -30,   -75,   -52,   -78
+     -80,    93,   -80,     8,   -80,   -22,   -80,   -80,    12,   -79,
+      66,    58,   -80,    39,   -31,   -76,   -53,   -80
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,    15,    16,    21,    54,    25,    70,    98,    99,   100,
-      28,    55,    26,    76,    33,    82,    83,    62
+      -1,    16,    17,    22,    55,    26,    71,    99,   100,   101,
+      29,    56,    27,    77,    34,    83,    84,    63
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -881,42 +897,42 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      65,    66,    78,   106,    80,    68,    30,    71,    72,    24,
-      27,    22,    81,    84,    85,    86,    23,    32,    80,    34,
-      53,   117,   118,    24,   103,    63,   107,   120,    74,    75,
-     111,    24,    87,    24,    90,    91,    92,    69,    79,   131,
-      80,    93,    67,    30,    77,    24,   102,    17,    18,   136,
-     121,    73,   125,    19,   127,   101,   -40,   105,   -41,    94,
-      20,   110,   112,    88,   -42,    69,    96,    97,   133,    24,
-     -43,    29,   137,   108,   124,    35,    36,   113,    56,    57,
-     114,   119,   122,   123,   142,   126,   128,   115,    97,   109,
-     130,   129,    17,    18,    58,    59,    60,    61,    19,   132,
-     134,    64,   116,   135,   138,    20,   139,    89,    30,    31,
-     104,     0,   140,     0,     0,   141,   143,    95,    96,    97,
-       0,   144,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52,     1,     2,
+      66,    67,    79,   107,    81,    69,    31,    72,    73,    25,
+      23,    24,    82,    85,    86,    87,    33,    64,    81,    54,
+     118,   119,    28,    25,   104,    35,   108,   121,    25,    70,
+     112,    25,    88,    25,    91,    92,    93,    80,   132,    81,
+      68,    94,    75,    76,    25,    70,   103,    18,    19,   137,
+     122,    74,   126,    20,   128,   102,   130,   106,    31,    78,
+      21,   111,   113,    89,    59,    60,    61,    62,   134,    97,
+      98,    30,   138,   -41,   125,    36,    37,   -42,    57,    58,
+      95,   120,   123,   124,   143,   127,   129,   -43,   -44,   110,
+     131,   109,    18,    19,    96,    97,    98,   114,    20,   133,
+     135,   115,    98,   136,   139,    21,   140,   116,    31,    32,
+      65,   117,   141,    90,     0,   142,   144,   105,     0,     0,
+       0,   145,    38,    39,    40,    41,    42,    43,    44,    45,
+      46,    47,    48,    49,    50,    51,    52,    53,     1,     2,
        3,     4,     5,     6,     7,     8,     9,    10,    11,    12,
-      13,    14
+      13,    14,    15
 };
 
 static const yytype_int16 yycheck[] =
 {
-      21,    22,    32,    78,    45,    26,    33,    28,    29,    50,
-      34,     2,    33,    34,    35,    36,    33,     8,    45,    34,
-      11,    98,    99,    50,    76,     0,    78,   102,    36,    37,
-      82,    50,    53,    50,    55,    56,    57,    46,    43,   116,
-      45,    62,    42,    33,    34,    50,    76,    17,    18,   124,
-     102,    44,   104,    23,   106,    76,    50,    78,    50,    35,
-      30,    82,    83,    54,    50,    46,    48,    49,   120,    50,
-      50,     5,   124,    33,   104,     9,    10,    35,    12,    13,
-      35,   102,   103,   104,   136,   106,   107,    35,    49,    80,
-     111,    44,    17,    18,    38,    39,    40,    41,    23,   120,
-     121,    16,    98,   124,   125,    30,   127,    54,    33,    34,
-      77,    -1,   133,    -1,    -1,   136,   137,    47,    48,    49,
-      -1,   142,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,     3,     4,
+      22,    23,    33,    79,    46,    27,    34,    29,    30,    51,
+       2,    34,    34,    35,    36,    37,     8,     0,    46,    11,
+      99,   100,    35,    51,    77,    35,    79,   103,    51,    47,
+      83,    51,    54,    51,    56,    57,    58,    44,   117,    46,
+      43,    63,    37,    38,    51,    47,    77,    18,    19,   125,
+     103,    45,   105,    24,   107,    77,    45,    79,    34,    35,
+      31,    83,    84,    55,    39,    40,    41,    42,   121,    49,
+      50,     5,   125,    51,   105,     9,    10,    51,    12,    13,
+      36,   103,   104,   105,   137,   107,   108,    51,    51,    81,
+     112,    34,    18,    19,    48,    49,    50,    36,    24,   121,
+     122,    36,    50,   125,   126,    31,   128,    36,    34,    35,
+      17,    99,   134,    55,    -1,   137,   138,    78,    -1,    -1,
+      -1,   143,    18,    19,    20,    21,    22,    23,    24,    25,
+      26,    27,    28,    29,    30,    31,    32,    33,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16
+      15,    16,    17
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -924,48 +940,48 @@ static const yytype_int16 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     3,     4,     5,     6,     7,     8,     9,    10,    11,
-      12,    13,    14,    15,    16,    52,    53,    17,    18,    23,
-      30,    54,    54,    33,    50,    56,    63,    34,    61,    61,
-      33,    34,    54,    65,    34,    61,    61,    17,    18,    19,
+      12,    13,    14,    15,    16,    17,    53,    54,    18,    19,
+      24,    31,    55,    55,    34,    51,    57,    64,    35,    62,
+      62,    34,    35,    55,    66,    35,    62,    62,    18,    19,
       20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
-      30,    31,    32,    54,    55,    62,    61,    61,    38,    39,
-      40,    41,    68,     0,    52,    56,    56,    42,    56,    46,
-      57,    56,    56,    44,    36,    37,    64,    34,    65,    43,
-      45,    56,    66,    67,    56,    56,    56,    56,    54,    62,
-      56,    56,    56,    56,    35,    47,    48,    49,    58,    59,
-      60,    56,    65,    67,    64,    56,    66,    67,    33,    54,
-      56,    67,    56,    35,    35,    35,    59,    60,    60,    56,
-      66,    67,    56,    56,    65,    67,    56,    67,    56,    44,
-      56,    60,    56,    67,    56,    56,    66,    67,    56,    56,
-      56,    56,    67,    56,    56
+      30,    31,    32,    33,    55,    56,    63,    62,    62,    39,
+      40,    41,    42,    69,     0,    53,    57,    57,    43,    57,
+      47,    58,    57,    57,    45,    37,    38,    65,    35,    66,
+      44,    46,    57,    67,    68,    57,    57,    57,    57,    55,
+      63,    57,    57,    57,    57,    36,    48,    49,    50,    59,
+      60,    61,    57,    66,    68,    65,    57,    67,    68,    34,
+      55,    57,    68,    57,    36,    36,    36,    60,    61,    61,
+      57,    67,    68,    57,    57,    66,    68,    57,    68,    57,
+      45,    57,    61,    57,    68,    57,    57,    67,    68,    57,
+      57,    57,    57,    68,    57,    57
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    51,    52,    52,    53,    53,    53,    53,    53,    53,
-      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
-      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
-      53,    53,    53,    53,    53,    53,    53,    53,    53,    53,
-      54,    54,    54,    54,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
-      56,    57,    58,    59,    60,    61,    61,    61,    61,    61,
-      61,    61,    61,    61,    62,    62,    63,    64,    64,    65,
-      66,    67,    68,    68,    68,    68
+       0,    52,    53,    53,    54,    54,    54,    54,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    54,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    54,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    54,    54,    54,
+      54,    55,    55,    55,    55,    56,    56,    56,    56,    56,
+      56,    56,    56,    56,    56,    56,    56,    56,    56,    56,
+      56,    57,    58,    59,    60,    61,    62,    62,    62,    62,
+      62,    62,    62,    62,    62,    63,    63,    64,    65,    65,
+      66,    67,    68,    69,    69,    69,    69
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     3,     3,     2,     3,     3,     3,
-       1,     1,     4,     5,     6,     5,     6,     7,     5,     6,
-       7,     6,     7,     8,     3,     4,     4,     5,     4,     5,
-       5,     6,     3,     3,     3,     3,     3,     3,     3,     3,
+       0,     2,     1,     2,     1,     3,     3,     2,     3,     3,
+       3,     1,     1,     4,     5,     6,     5,     6,     7,     5,
+       6,     7,     6,     7,     8,     3,     4,     4,     5,     4,
+       5,     5,     6,     3,     3,     3,     3,     3,     3,     3,
+       3,     1,     1,     1,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     2,     2,     2,     2,     1,     2,     3,     3,     3,
-       4,     4,     4,     5,     1,     2,     2,     1,     1,     2,
-       3,     2,     1,     1,     1,     1
+       1,     1,     2,     2,     2,     2,     1,     2,     3,     3,
+       3,     4,     4,     4,     5,     1,     2,     2,     1,     1,
+       2,     3,     2,     1,     1,     1,     1
 };
 
 
@@ -1661,461 +1677,469 @@ yyreduce:
   switch (yyn)
     {
   case 4:
-#line 230 "grammars/svf.y"
+#line 245 "grammars/svf.y"
             {
-                parse_enddr((yyvsp[-1].u));
-            }
-#line 1669 "src/parser.c"
-    break;
-
-  case 5:
-#line 234 "grammars/svf.y"
-            {
-                parse_endir((yyvsp[-1].u));
-            }
-#line 1677 "src/parser.c"
-    break;
-
-  case 6:
-#line 238 "grammars/svf.y"
-            {
-                parse_frequency(0);
+                current_instruction_label = (yyvsp[0].string);
             }
 #line 1685 "src/parser.c"
     break;
 
-  case 7:
-#line 242 "grammars/svf.y"
+  case 5:
+#line 249 "grammars/svf.y"
             {
-                parse_frequency((yyvsp[-1].d));
+                parse_enddr((yyvsp[-1].u));
             }
 #line 1693 "src/parser.c"
     break;
 
-  case 8:
-#line 246 "grammars/svf.y"
+  case 6:
+#line 253 "grammars/svf.y"
             {
-                parse_hdr((yyvsp[-1].shift_data));
+                parse_endir((yyvsp[-1].u));
             }
 #line 1701 "src/parser.c"
     break;
 
-  case 9:
-#line 250 "grammars/svf.y"
+  case 7:
+#line 257 "grammars/svf.y"
             {
-                parse_hir((yyvsp[-1].shift_data));
+                parse_frequency(0);
             }
 #line 1709 "src/parser.c"
     break;
 
-  case 10:
-#line 254 "grammars/svf.y"
+  case 8:
+#line 261 "grammars/svf.y"
             {
-                parse_pio();
+                parse_frequency((yyvsp[-1].d));
             }
 #line 1717 "src/parser.c"
     break;
 
-  case 11:
-#line 258 "grammars/svf.y"
+  case 9:
+#line 265 "grammars/svf.y"
             {
-                parse_piomap();
+                parse_hdr((yyvsp[-1].shift_data));
             }
 #line 1725 "src/parser.c"
     break;
 
-  case 12:
-#line 262 "grammars/svf.y"
+  case 10:
+#line 269 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
+                parse_hir((yyvsp[-1].shift_data));
             }
 #line 1733 "src/parser.c"
     break;
 
-  case 13:
-#line 266 "grammars/svf.y"
+  case 11:
+#line 273 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
+                parse_pio();
             }
 #line 1741 "src/parser.c"
     break;
 
-  case 14:
-#line 270 "grammars/svf.y"
+  case 12:
+#line 277 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
+                parse_piomap();
             }
 #line 1749 "src/parser.c"
     break;
 
-  case 15:
-#line 274 "grammars/svf.y"
+  case 13:
+#line 281 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
+                parse_runtest(0,(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
             }
 #line 1757 "src/parser.c"
     break;
 
-  case 16:
-#line 278 "grammars/svf.y"
+  case 14:
+#line 285 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
+                parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
             }
 #line 1765 "src/parser.c"
     break;
 
-  case 17:
-#line 282 "grammars/svf.y"
+  case 15:
+#line 289 "grammars/svf.y"
             {
-                parse_runtest(0,(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
+                parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
 #line 1773 "src/parser.c"
     break;
 
-  case 18:
-#line 286 "grammars/svf.y"
+  case 16:
+#line 293 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
+                parse_runtest(0,(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
             }
 #line 1781 "src/parser.c"
     break;
 
-  case 19:
-#line 290 "grammars/svf.y"
+  case 17:
+#line 297 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
+                parse_runtest(0,(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
 #line 1789 "src/parser.c"
     break;
 
-  case 20:
-#line 294 "grammars/svf.y"
+  case 18:
+#line 301 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
+                parse_runtest(0,(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
 #line 1797 "src/parser.c"
     break;
 
-  case 21:
-#line 298 "grammars/svf.y"
+  case 19:
+#line 305 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
+                parse_runtest((yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].u),0,0,0);
             }
 #line 1805 "src/parser.c"
     break;
 
-  case 22:
-#line 302 "grammars/svf.y"
+  case 20:
+#line 309 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
+                parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),(yyvsp[-1].d),0,0);
             }
 #line 1813 "src/parser.c"
     break;
 
-  case 23:
-#line 306 "grammars/svf.y"
+  case 21:
+#line 313 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-6].u),(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
+                parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
 #line 1821 "src/parser.c"
     break;
 
-  case 24:
-#line 310 "grammars/svf.y"
+  case 22:
+#line 317 "grammars/svf.y"
             {
-                parse_runtest(0,0,0,(yyvsp[-1].d),0,0);
+                parse_runtest((yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].u),0,0,(yyvsp[-1].u));
             }
 #line 1829 "src/parser.c"
     break;
 
-  case 25:
-#line 314 "grammars/svf.y"
+  case 23:
+#line 321 "grammars/svf.y"
             {
-                parse_runtest(0,0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
+                parse_runtest((yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].u),(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
 #line 1837 "src/parser.c"
     break;
 
-  case 26:
-#line 318 "grammars/svf.y"
+  case 24:
+#line 325 "grammars/svf.y"
             {
-                parse_runtest(0,0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
+                parse_runtest((yyvsp[-6].u),(yyvsp[-5].u),(yyvsp[-4].u),(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
 #line 1845 "src/parser.c"
     break;
 
-  case 27:
-#line 322 "grammars/svf.y"
+  case 25:
+#line 329 "grammars/svf.y"
             {
-                parse_runtest(0,0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
+                parse_runtest(0,0,0,(yyvsp[-1].d),0,0);
             }
 #line 1853 "src/parser.c"
     break;
 
-  case 28:
-#line 326 "grammars/svf.y"
+  case 26:
+#line 333 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-2].u),0,0,(yyvsp[-1].d),0,0);
+                parse_runtest(0,0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
             }
 #line 1861 "src/parser.c"
     break;
 
-  case 29:
-#line 330 "grammars/svf.y"
+  case 27:
+#line 337 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
+                parse_runtest(0,0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
             }
 #line 1869 "src/parser.c"
     break;
 
-  case 30:
-#line 334 "grammars/svf.y"
+  case 28:
+#line 341 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
+                parse_runtest(0,0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
             }
 #line 1877 "src/parser.c"
     break;
 
-  case 31:
-#line 338 "grammars/svf.y"
+  case 29:
+#line 345 "grammars/svf.y"
             {
-                parse_runtest((yyvsp[-4].u),0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
+                parse_runtest((yyvsp[-2].u),0,0,(yyvsp[-1].d),0,0);
             }
 #line 1885 "src/parser.c"
     break;
 
+  case 30:
+#line 349 "grammars/svf.y"
+            {
+                parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),(yyvsp[-1].d),0);
+            }
+#line 1893 "src/parser.c"
+    break;
+
+  case 31:
+#line 353 "grammars/svf.y"
+            {
+                parse_runtest((yyvsp[-3].u),0,0,(yyvsp[-2].d),0,(yyvsp[-1].u));
+            }
+#line 1901 "src/parser.c"
+    break;
+
   case 32:
-#line 342 "grammars/svf.y"
+#line 357 "grammars/svf.y"
+            {
+                parse_runtest((yyvsp[-4].u),0,0,(yyvsp[-3].d),(yyvsp[-2].d),(yyvsp[-1].u));
+            }
+#line 1909 "src/parser.c"
+    break;
+
+  case 33:
+#line 361 "grammars/svf.y"
             {
                 SVF_Shift_Data shift_data = {(yyvsp[-1].u), NULL, NULL, NULL, NULL};
                 parse_sdr(shift_data);
             }
-#line 1894 "src/parser.c"
-    break;
-
-  case 33:
-#line 347 "grammars/svf.y"
-            {
-                parse_sdr((yyvsp[-1].shift_data));
-            }
-#line 1902 "src/parser.c"
-    break;
-
-  case 34:
-#line 351 "grammars/svf.y"
-            {
-                parse_sir((yyvsp[-1].shift_data));
-            }
-#line 1910 "src/parser.c"
-    break;
-
-  case 35:
-#line 355 "grammars/svf.y"
-            {
-                parse_state(NULL, (yyvsp[-1].u));
-            }
 #line 1918 "src/parser.c"
     break;
 
-  case 36:
-#line 359 "grammars/svf.y"
+  case 34:
+#line 366 "grammars/svf.y"
             {
-                parse_state((yyvsp[-1].list), (yyvsp[0].u));
+                parse_sdr((yyvsp[-1].shift_data));
             }
 #line 1926 "src/parser.c"
     break;
 
-  case 37:
-#line 363 "grammars/svf.y"
+  case 35:
+#line 370 "grammars/svf.y"
             {
-                parse_tdr((yyvsp[-1].shift_data));
+                parse_sir((yyvsp[-1].shift_data));
             }
 #line 1934 "src/parser.c"
     break;
 
-  case 38:
-#line 367 "grammars/svf.y"
+  case 36:
+#line 374 "grammars/svf.y"
             {
-                parse_tir((yyvsp[-1].shift_data));
+                parse_state(NULL, (yyvsp[-1].u));
             }
 #line 1942 "src/parser.c"
     break;
 
-  case 39:
-#line 371 "grammars/svf.y"
+  case 37:
+#line 378 "grammars/svf.y"
             {
-                parse_trst((yyvsp[-1].u));
+                parse_state((yyvsp[-1].list), (yyvsp[0].u));
             }
 #line 1950 "src/parser.c"
     break;
 
-  case 61:
-#line 384 "grammars/svf.y"
-        {
-            (yyval.string) = (yyvsp[0].string);
-        }
+  case 38:
+#line 382 "grammars/svf.y"
+            {
+                parse_tdr((yyvsp[-1].shift_data));
+            }
 #line 1958 "src/parser.c"
     break;
 
-  case 62:
-#line 388 "grammars/svf.y"
-        {
-            (yyval.string) = (yyvsp[0].string);
-        }
+  case 39:
+#line 386 "grammars/svf.y"
+            {
+                parse_tir((yyvsp[-1].shift_data));
+            }
 #line 1966 "src/parser.c"
     break;
 
-  case 63:
-#line 392 "grammars/svf.y"
-        {
-            (yyval.string) = (yyvsp[0].string);
-        }
+  case 40:
+#line 390 "grammars/svf.y"
+            {
+                parse_trst((yyvsp[-1].u));
+            }
 #line 1974 "src/parser.c"
     break;
 
-  case 64:
-#line 396 "grammars/svf.y"
+  case 62:
+#line 403 "grammars/svf.y"
         {
             (yyval.string) = (yyvsp[0].string);
         }
 #line 1982 "src/parser.c"
     break;
 
+  case 63:
+#line 407 "grammars/svf.y"
+        {
+            (yyval.string) = (yyvsp[0].string);
+        }
+#line 1990 "src/parser.c"
+    break;
+
+  case 64:
+#line 411 "grammars/svf.y"
+        {
+            (yyval.string) = (yyvsp[0].string);
+        }
+#line 1998 "src/parser.c"
+    break;
+
   case 65:
-#line 401 "grammars/svf.y"
+#line 415 "grammars/svf.y"
+        {
+            (yyval.string) = (yyvsp[0].string);
+        }
+#line 2006 "src/parser.c"
+    break;
+
+  case 66:
+#line 420 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[0].u), NULL, NULL, NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 1991 "src/parser.c"
+#line 2015 "src/parser.c"
     break;
 
-  case 66:
-#line 406 "grammars/svf.y"
+  case 67:
+#line 425 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-1].u), (yyvsp[0].string), NULL, NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2000 "src/parser.c"
+#line 2024 "src/parser.c"
     break;
 
-  case 67:
-#line 411 "grammars/svf.y"
+  case 68:
+#line 430 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), (yyvsp[0].string), NULL, NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2009 "src/parser.c"
+#line 2033 "src/parser.c"
     break;
 
-  case 68:
-#line 416 "grammars/svf.y"
+  case 69:
+#line 435 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), NULL, (yyvsp[0].string), NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2018 "src/parser.c"
+#line 2042 "src/parser.c"
     break;
 
-  case 69:
-#line 421 "grammars/svf.y"
+  case 70:
+#line 440 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-2].u), (yyvsp[-1].string), NULL, NULL, (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2027 "src/parser.c"
+#line 2051 "src/parser.c"
     break;
 
-  case 70:
-#line 426 "grammars/svf.y"
+  case 71:
+#line 445 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), (yyvsp[-1].string), (yyvsp[0].string), NULL};
             (yyval.shift_data) = shift_data;
         }
-#line 2036 "src/parser.c"
+#line 2060 "src/parser.c"
     break;
 
-  case 71:
-#line 431 "grammars/svf.y"
+  case 72:
+#line 450 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), (yyvsp[-1].string), NULL, (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2045 "src/parser.c"
+#line 2069 "src/parser.c"
     break;
 
-  case 72:
-#line 436 "grammars/svf.y"
+  case 73:
+#line 455 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-3].u), (yyvsp[-2].string), NULL, (yyvsp[-1].string), (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2054 "src/parser.c"
+#line 2078 "src/parser.c"
     break;
 
-  case 73:
-#line 441 "grammars/svf.y"
+  case 74:
+#line 460 "grammars/svf.y"
         {
             SVF_Shift_Data shift_data = {(yyvsp[-4].u), (yyvsp[-3].string), (yyvsp[-2].string), (yyvsp[-1].string), (yyvsp[0].string)};
             (yyval.shift_data) = shift_data;
         }
-#line 2063 "src/parser.c"
+#line 2087 "src/parser.c"
     break;
 
-  case 74:
-#line 447 "grammars/svf.y"
+  case 75:
+#line 466 "grammars/svf.y"
             {
                 (yyval.list) = create_list();
                 unsigned long val = (yyvsp[0].u);
                 list_append((yyval.list), (void*) val);
             }
-#line 2073 "src/parser.c"
+#line 2097 "src/parser.c"
     break;
 
-  case 75:
-#line 453 "grammars/svf.y"
+  case 76:
+#line 472 "grammars/svf.y"
             {
                 unsigned long val = (yyvsp[-1].u);
                 list_append((yyvsp[0].list), (void*) val);
                 (yyval.list) = (yyvsp[0].list);
             }
-#line 2083 "src/parser.c"
-    break;
-
-  case 76:
-#line 460 "grammars/svf.y"
-        {
-            (yyval.d) = (yyvsp[-1].d);
-        }
-#line 2091 "src/parser.c"
-    break;
-
-  case 79:
-#line 466 "grammars/svf.y"
-        {
-            (yyval.d) = (yyvsp[-1].d);
-        }
-#line 2099 "src/parser.c"
-    break;
-
-  case 80:
-#line 470 "grammars/svf.y"
-        {
-            (yyval.d) = (yyvsp[-1].d);
-        }
 #line 2107 "src/parser.c"
     break;
 
-  case 81:
-#line 475 "grammars/svf.y"
-            {
-                (yyval.u) = (yyvsp[0].u);
-            }
+  case 77:
+#line 479 "grammars/svf.y"
+        {
+            (yyval.d) = (yyvsp[-1].d);
+        }
 #line 2115 "src/parser.c"
     break;
 
+  case 80:
+#line 485 "grammars/svf.y"
+        {
+            (yyval.d) = (yyvsp[-1].d);
+        }
+#line 2123 "src/parser.c"
+    break;
 
-#line 2119 "src/parser.c"
+  case 81:
+#line 489 "grammars/svf.y"
+        {
+            (yyval.d) = (yyvsp[-1].d);
+        }
+#line 2131 "src/parser.c"
+    break;
+
+  case 82:
+#line 494 "grammars/svf.y"
+            {
+                (yyval.u) = (yyvsp[0].u);
+            }
+#line 2139 "src/parser.c"
+    break;
+
+
+#line 2143 "src/parser.c"
 
       default: break;
     }
@@ -2347,7 +2371,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 480 "grammars/svf.y"
+#line 499 "grammars/svf.y"
 
 
 int yywrap()
