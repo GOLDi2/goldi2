@@ -71,7 +71,7 @@ export function generate_value_check_fpga_mc(jtag: jtagPins, bsdl: bsdlData, out
     }
 
     output_instructions.push("! Checking Value")
-    output_instructions.push(`! [instruction-label] Testing ${mc_port} <-> ${map_MC_FPGA.get(mc_port)} expected value ${value}`)
+    output_instructions.push(`! [instruction-label] Running-${value}-Test: ${mc_port} <-> ${map_MC_FPGA.get(mc_port)}`)
     output_instructions.push(`SDR ${bsdl.boundaryCellsLength} TDI (${binToHex(reverseString(vector))})
         TDO (${binToHex(reverseString(tdo))})
         MASK (${binToHex(reverseString(mask))});\n`)

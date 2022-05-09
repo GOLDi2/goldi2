@@ -62,21 +62,30 @@ export function saveStringArray(strarr: Array<string>, fname: string) {
     fs.writeFileSync(fname, output_string)
 }
 
-export function check_values(faults: Array<{tdi: string, tdo: string, mask: string, data: string}>, bsdl_fpga: bsdlData, filename: string) {
-    let fault_nr = 0;
-    let output: Array<{fault_nr: number, port_mc: string, port_fpga: string, expected: string, received: string}> = [];
+export function check_values(faults: Array<{label: string, tdi: string, tdo: string, mask: string, data: string}>, bsdl_fpga: bsdlData, filename: string) {
+    let id = 1;
+    let _faults: Array<{port_mc: string, port_fpga: string, expected: string, received: string}> = []
+    let output: Array<{id: number, label: string, faults: Array<{port_mc: string, port_fpga: string, expected: string, received: string}>}> = [];
     for (const fault of faults) {
         const tdo = hexToBin(fault.tdo, bsdl_fpga.boundaryCellsLength)
         const mask = hexToBin(fault.mask, bsdl_fpga.boundaryCellsLength)
         const data = hexToBin(fault.data, bsdl_fpga.boundaryCellsLength)
         for (const port of map_MC_FPGA.keys()) {
             const bc = bsdl_fpga.boundaryCells.find(bc => bc.port == map_MC_FPGA.get(port));
-            if (bc && mask[mask.length - bc.cellNumber - 1] == "1" &&
-                tdo[tdo.length - bc.cellNumber - 1] != data[data.length - bc.cellNumber - 1]) {
-                    output.push({fault_nr: fault_nr, port_mc: port, port_fpga: map_MC_FPGA.get(port)!, expected: tdo[tdo.length - bc.cellNumber - 1], received: data[data.length - bc.cellNumber - 1]})
+            if (bc && mask[mask.length - bc.cellNumber - 1] == "1" && tdo[tdo.length - bc.cellNumber - 1] != data[data.length - bc.cellNumber - 1]) {
+                _faults.push({
+                    port_mc: port, 
+                    port_fpga: map_MC_FPGA.get(port)!, 
+                    expected: tdo[tdo.length - bc.cellNumber - 1], 
+                    received: data[data.length - bc.cellNumber - 1]
+                })
             }
         }
-        fault_nr++
+        output.push({
+            id: id++,
+            label: fault.label, 
+            faults: _faults
+        })
     }
     if (output.length > 0) fs.writeFileSync(filename, JSON.stringify(output, null, 4))
 }
