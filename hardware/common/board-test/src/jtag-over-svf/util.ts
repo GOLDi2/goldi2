@@ -64,9 +64,9 @@ export function saveStringArray(strarr: Array<string>, fname: string) {
 
 export function check_values(faults: Array<{label: string, tdi: string, tdo: string, mask: string, data: string}>, bsdl_fpga: bsdlData, filename: string) {
     let id = 1;
-    let _faults: Array<{port_mc: string, port_fpga: string, expected: string, received: string}> = []
     let output: Array<{id: number, label: string, faults: Array<{port_mc: string, port_fpga: string, expected: string, received: string}>}> = [];
     for (const fault of faults) {
+        let _faults: Array<{port_mc: string, port_fpga: string, expected: string, received: string}> = []
         const tdo = hexToBin(fault.tdo, bsdl_fpga.boundaryCellsLength)
         const mask = hexToBin(fault.mask, bsdl_fpga.boundaryCellsLength)
         const data = hexToBin(fault.data, bsdl_fpga.boundaryCellsLength)

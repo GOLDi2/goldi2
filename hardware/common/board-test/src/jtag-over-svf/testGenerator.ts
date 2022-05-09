@@ -150,6 +150,7 @@ function generate_gpio_test_mc(value: "0" | "1") {
     const nvalue = value == "1" ? "0" : "1";
 
     for (const mc_port of map_MC_FPGA.keys()) {
+        if (mc_port == "RESET") continue
         output_instructions.push("! Testing Ports " + mc_port + " <-> " + map_MC_FPGA.get(mc_port) + ", value = " + value)
         let str = []
         for (const bc of bsdl_mc.boundaryCells) {
