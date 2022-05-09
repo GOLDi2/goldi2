@@ -15,13 +15,19 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 
 "! [instruction-label] "{STRING}\n     {
                                             char* string = (char*) malloc(strlen(yytext)-22+1);
-                                            strcpy(string, yytext+22);
+                                            for (int i = 0; i < strlen(yytext)-22; i++) 
+                                            {
+                                                if (yytext[i+22]!='\n') string[i] = yytext[i+22];
+                                            }
                                             yylval.string = string;
                                             return (SVF_INSTRUCTION_LABEL);
                                         }
 "// [instruction-label] "{STRING}\n     {
                                             char* string = (char*) malloc(strlen(yytext)-23+1);
-                                            strcpy(string, yytext+23);
+                                            for (int i = 0; i < strlen(yytext)-23; i++) 
+                                            {
+                                                if (yytext[i+23]!='\n') string[i] = yytext[i+23];
+                                            }
                                             yylval.string = string;
                                             return (SVF_INSTRUCTION_LABEL);
                                         }
