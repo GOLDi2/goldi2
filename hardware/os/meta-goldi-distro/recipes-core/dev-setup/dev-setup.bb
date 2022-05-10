@@ -3,7 +3,7 @@ SUMMARY = ""
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM=""
 
-DEPENDS = "base-files"
+RDEPENDS:${PN} = "base-files"
 
 do_install:append() {
     install -d ${D}/home/root

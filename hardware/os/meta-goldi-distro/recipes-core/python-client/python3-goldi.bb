@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = ""
 PV = "1.0+git${SRCPV}"
 
 SRC_URI = "git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/python_client.git;protocol=ssh;branch=master"
-SRCREV = "402cccd0e4efd5f28e2942ccf895ef9e53ec1118"
+SRCREV = "4288f3a9531759a87ca52082cf390f9739b36b3b"
 
 S = "${WORKDIR}/git"
 

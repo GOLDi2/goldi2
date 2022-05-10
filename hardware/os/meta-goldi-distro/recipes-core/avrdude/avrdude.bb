@@ -22,11 +22,11 @@ SRCREV = "ef94d6edce8ec2b3a853477e806f7dc8548f71d6"
 S = "${WORKDIR}/git/${BPN}"
 PV = "6.4"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-SRC_URI_append := "  \
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+SRC_URI:append := "  \
     file://avrdude.conf \
 "
 
-do_install_append () {
+do_install:append () {
     cat ${THISDIR}/files/avrdude.conf >> ${D}${sysconfdir}/avrdude.conf
 }

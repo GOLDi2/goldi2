@@ -3,6 +3,7 @@ SUMMARY = "GOLDi development image"
 inherit core-image
 require goldi-image.bb
 
+IMAGE_FEATURES:remove = "read-only-rootfs"
 IMAGE_FEATURES += "ssh-server-dropbear tools-debug debug-tweaks package-management"
 
 

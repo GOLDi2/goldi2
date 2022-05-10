@@ -2,8 +2,10 @@ SUMMARY = "GOLDi production image"
 
 LICENSE = "MIT"
 
-IMAGE_FEATURES = "ssh-server-dropbear tools-debug debug-tweaks"
+IMAGE_FEATURES = " read-only-rootfs"
 
-IMAGE_INSTALL:append = " gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad"
+IMAGE_INSTALL:append = ""
 
-inherit core-image
+EXTRA_USERS_PARAMS = "usermod -p ${ROOT_PASSWORD} root;"
+
+inherit core-image extrausers
