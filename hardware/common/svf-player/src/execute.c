@@ -16,7 +16,7 @@ static SVF_Shift_Data TIR = {0, NULL, NULL, NULL, NULL};
 static int CURRENT_STATE = SVF_STATE_RESET;
 static struct timespec SLEEP_TIME = {0,0};
 
-void print_hexstring(char* hexstring, unsigned int length) {
+char* print_hexstring(char* hexstring, unsigned int length) {
     for (int i = 0; i < length; i++)
     {
         unsigned char first = (hexstring[i] & 0xF0) >> 4;
@@ -26,6 +26,33 @@ void print_hexstring(char* hexstring, unsigned int length) {
         if (second >= 10) printf("%c", second + 'A' - 10);
         else printf("%c", second + '0');
     }
+}
+
+char* to_printable_hexstring(char* hexstring, unsigned int length) {
+    char* str = (char*) malloc(length*2+1);
+    if (!str) return NULL;
+
+    if (hexstring == NULL)
+    {
+        for (int i = 0; i < length*2; i++) 
+        {
+            str[i] = '0';
+        }
+        str[length*2] = '\0';
+        return str;
+    }
+
+    for (int i = 0; i < length; i++)
+    {
+        unsigned char first = (hexstring[i] & 0xF0) >> 4;
+        unsigned char second = hexstring[i] & 0x0F;
+        if (first >= 10) str[i*2] = first + 'A' - 10;
+        else str[i*2] = first + '0';
+        if (second >= 10) str[i*2+1] = second + 'A' - 10;
+        else str[i*2+1] = second + '0';
+    }
+    str[length*2] = '\0';
+    return str;
 }
 
 void print_shift_data(SVF_Shift_Data* shift_data) {
@@ -51,6 +78,7 @@ SVF_Instruction* create_empty_instruction()
 {
     SVF_Instruction* instruction = (SVF_Instruction*) malloc (sizeof(SVF_Instruction));
     instruction->type = -1;
+    instruction->label = NULL;
     instruction->shift_data.length = -1;
     instruction->shift_data.tdi = NULL;
     instruction->shift_data.tdo = NULL;
@@ -69,9 +97,10 @@ SVF_Instruction* create_empty_instruction()
     return instruction;
 }
 
-void add_instruction(SVF_Instruction* instruction)
+void add_instruction(SVF_Instruction* instruction, char* instruction_label)
 {
     if (!instruction_list) instruction_list = create_list();
+    if (instruction_label) instruction->label = instruction_label;
     list_append(instruction_list, instruction);
 }
 
@@ -311,10 +340,29 @@ static int move_to_stable_state(int state)
     return 0;
 }
 
-static int _shift(SVF_Shift_Data* instr, char* data, int exit)
+static int _shift(SVF_Shift_Data* instr, char* data, int exit, char* instruction_label)
 {
-    int size = (instr->length/8) + ((instr->length % 8) > 0);
     int j = (instr->length/8) + ((instr->length % 8) > 0);
+
+    if (instr->length % 8 > 0)
+    {
+        j--;
+        int shift = 0;
+        int pos = 1;
+        for (int i = 0; i < 8 - instr->length; i++)
+        {
+            shift++;
+            pos *= 2;
+        }
+        for (int i = 0; i < instr->length; i++)
+        {
+            //printf("tms: %d, tdi: %d, pos: %02x, shift: %d\n", (exit && (i == instr->length-1) && (j == 0)), ((instr->tdi[j] & pos) >> shift), pos, shift);
+            data[j] |= clk((exit && (i == instr->length-1) && (j == 0)), (instr->tdi[j] & pos) >> shift) << shift;
+            shift++;
+            pos *= 2;
+        }
+    }
+
     while (j > 0)
     {
         j--;
@@ -334,49 +382,81 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit)
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
-                if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) return 1;
+                if ((data[i] & instr->mask[i]) != (instr->tdo[i] & instr->mask[i])) 
+                {
+                    cJSON* faultJSON = cJSON_CreateObject();
+                    char* tdi_string = to_printable_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    if (instruction_label) cJSON_AddStringToObject(faultJSON, "label", instruction_label);
+                    else cJSON_AddStringToObject(faultJSON, "label", "unlabeled");
+                    cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
+                    cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
+                    cJSON_AddStringToObject(faultJSON, "mask", mask_string);
+                    cJSON_AddStringToObject(faultJSON, "data", data_string);
+                    cJSON_AddItemToArray(faultsJSON, faultJSON);
+                    execution_failed = 1;
+                    return 1 && interrupt;
+                }
             }
         }
         else
         {
             for (unsigned int i = 0; i < (instr->length/8) + ((instr->length % 8) > 0); i++)
             {
-                if (data[i] != instr->tdo[i]) return 1;
+                if (data[i] != instr->tdo[i])
+                {
+                    cJSON* faultJSON = cJSON_CreateObject();
+                    char* tdi_string = to_printable_hexstring(instr->tdi, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* tdo_string = to_printable_hexstring(instr->tdo, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* mask_string = to_printable_hexstring(instr->mask, (instr->length/8) + ((instr->length % 8) > 0));
+                    char* data_string = to_printable_hexstring(data, (instr->length/8) + ((instr->length % 8) > 0));
+                    if (instruction_label) cJSON_AddStringToObject(faultJSON, "label", instruction_label);
+                    else cJSON_AddStringToObject(faultJSON, "label", "unlabeled");
+                    cJSON_AddStringToObject(faultJSON, "tdi", tdi_string);
+                    cJSON_AddStringToObject(faultJSON, "tdo", tdo_string);
+                    cJSON_AddStringToObject(faultJSON, "mask", mask_string);
+                    cJSON_AddStringToObject(faultJSON, "data", data_string);
+                    cJSON_AddItemToArray(faultsJSON, faultJSON);
+                    execution_failed = 1;
+                    return 1 && interrupt;
+                }
             }
         }
     }
     return 0;
 }
 
-static int shift(SVF_Shift_Data* instr, SVF_Shift_Data* header, SVF_Shift_Data* trailer)
+static int shift(SVF_Shift_Data* instr, SVF_Shift_Data* header, SVF_Shift_Data* trailer, char* instruction_label)
 {
     int res = 0;
     int length = (header->length/8) + (instr->length/8) + (trailer->length/8);
     length += ((header->length % 8) > 0) + ((instr->length % 8) > 0) + ((trailer->length % 8) > 0);
     char data[length];
     for (int i = 0; i < length; i++) data[i] = 0;
-    if (header->length > 0) res |= _shift(header, data, 0);
+    if (header->length > 0) res |= _shift(header, data, 0, instruction_label);
     if (res) return res;
-    if (instr->length > 0) res |= _shift(instr, data + header->length, trailer->length == 0);
+    if (instr->length > 0) res |= _shift(instr, data + header->length, trailer->length == 0, instruction_label);
     if (res) return res;
-    if (trailer->length > 0) res |= _shift(trailer, data + header->length + instr->length, 1);
+    if (trailer->length > 0) res |= _shift(trailer, data + header->length + instr->length, 1, instruction_label);
     return res;
 }
 
-static int shift_data(SVF_Shift_Data* instr)
+static int shift_data(SVF_Shift_Data* instr, char* instruction_label)
 {
     if (move_to_stable_state(SVF_STATE_DRSHIFT)) return 1;
-    int res = shift(instr, &HDR, &TDR);
+    int res = shift(instr, &HDR, &TDR, instruction_label);
     if (res) printf("Something went wrong while shifting data!\n");
     clk(0,0);
     if (move_to_stable_state(ENDDR)) return 1;
     return res;
 }
 
-static int shift_instruction(SVF_Shift_Data* instr)
+static int shift_instruction(SVF_Shift_Data* instr, char* instruction_label)
 {
     if (move_to_stable_state(SVF_STATE_IRSHIFT)) return 1;
-    int res = shift(instr, &HIR, &TIR);
+    int res = shift(instr, &HIR, &TIR, instruction_label);
     if (res) printf("Something went wrong while shifting an instruction!\n");
     clk(0,0);
     if (move_to_stable_state(ENDIR)) return 1;
@@ -404,15 +484,15 @@ int execute_instructions()
         switch (instruction->type)
         {
             case SVF_INSTRUCTION_ENDDR:
-                printf("Executing ENDDR\n");
+                if (verbose) printf("Executing ENDDR\n");
                 ENDDR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_ENDIR:
-                printf("Executing ENDIR\n");
+                if (verbose) printf("Executing ENDIR\n");
                 ENDIR = instruction->stable_state;
                 break;
             case SVF_INSTRUCTION_FREQUENCY:
-                printf("Executing FREQUENCY\n");
+                if (verbose) printf("Executing FREQUENCY\n");
                 if (instruction->cycles) 
                 {
                     SLEEP_TIME.tv_nsec = (long) (1000000000 / instruction->cycles);
@@ -426,26 +506,26 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_HDR:
-                printf("Executing HDR ");
+                if (verbose) printf("Executing HDR ");
                 if (set_shift_data(&HDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&HDR);
+                if (verbose) print_shift_data(&HDR);
                 break;
             case SVF_INSTRUCTION_HIR:
-                printf("Executing HIR ");
+                if (verbose) printf("Executing HIR ");
                 if (set_shift_data(&HIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&HIR);
+                if (verbose) print_shift_data(&HIR);
                 break;
             case SVF_INSTRUCTION_PIO:
-                printf("PIO is currently not implemented!\n");
+                if (verbose) printf("PIO is currently not implemented!\n");
                 return 1;
                 break;
             case SVF_INSTRUCTION_PIOMAP:
-                printf("PIOMAP is currently not implemented!\n");
+                if (verbose) printf("PIOMAP is currently not implemented!\n");
                 return 1;
                 break;
             case SVF_INSTRUCTION_RUNTEST:
             {
-                printf("Executing RUNTEST\n");
+                if (verbose) printf("Executing RUNTEST\n");
                 struct timespec start_time;
                 struct timespec current_time;
                 long max_time_nsec = (long) (instruction->max_time * 1000000000);
@@ -474,19 +554,19 @@ int execute_instructions()
                 break;
             }
             case SVF_INSTRUCTION_SDR:
-                printf("Executing SDR ");
+                if (verbose) printf("Executing SDR ");
                 if (set_shift_data(&SDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&SDR);
-                if (shift_data(&SDR)) return 1;
+                if (verbose) print_shift_data(&SDR);
+                if (shift_data(&SDR, instruction->label)) return 1;
                 break;
             case SVF_INSTRUCTION_SIR:
-                printf("Executing SIR ");
+                if (verbose) printf("Executing SIR ");
                 if (set_shift_data(&SIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&SIR);
-                if (shift_instruction(&SIR)) return 1;
+                if (verbose) print_shift_data(&SIR);
+                if (shift_instruction(&SIR, instruction->label)) return 1;
                 break;
             case SVF_INSTRUCTION_STATE:
-                printf("Executing STATE\n");
+                if (verbose) printf("Executing STATE\n");
                 if (instruction->path_states == NULL) 
                 {
                     if (move_to_stable_state(instruction->stable_state)) return 1;
@@ -507,14 +587,14 @@ int execute_instructions()
                 }
                 break;
             case SVF_INSTRUCTION_TDR:
-                printf("Executing TDR ");
+                if (verbose) printf("Executing TDR ");
                 if (set_shift_data(&TDR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&TDR);
+                if (verbose) print_shift_data(&TDR);
                 break;
             case SVF_INSTRUCTION_TIR:
-                printf("Executing TIR ");
+                if (verbose) printf("Executing TIR ");
                 if (set_shift_data(&TIR, &instruction->shift_data, instruction->type)) return 1;
-                print_shift_data(&TIR);
+                if (verbose) print_shift_data(&TIR);
                 break;
             case SVF_INSTRUCTION_TRST:
                 printf("TRST is currently not implemented!\n");
@@ -544,7 +624,7 @@ int execute_instructions()
 
     long seconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec))/1000000000;
     long nanoseconds = ((end.tv_sec * 1000000000 + end.tv_nsec) - (start.tv_sec * 1000000000 + start.tv_nsec)) % 1000000000;
-    printf("Programming took %ld.%ld seconds\n", seconds, nanoseconds);
+    printf("Execution took %ld.%ld seconds\n", seconds, nanoseconds);
 
     return 0;
 }

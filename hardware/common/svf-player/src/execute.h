@@ -2,6 +2,12 @@
 #define EXECUTE_H
 
 #include "util.h"
+#include "cJSON.h"
+
+extern int verbose;
+extern int interrupt;
+extern cJSON* faultsJSON;
+extern int execution_failed;
 
 typedef struct 
 {
@@ -15,6 +21,7 @@ typedef struct
 typedef struct 
 {
     int type;
+    char* label;
     SVF_Shift_Data shift_data;
     int stable_state;
     List* path_states;
@@ -29,7 +36,7 @@ typedef struct
 } SVF_Instruction;
 
 SVF_Instruction* create_empty_instruction();
-void add_instruction(SVF_Instruction* instruction);
+void add_instruction(SVF_Instruction* instruction, char* instruction_label);
 int execute_instructions();
 
 #endif
