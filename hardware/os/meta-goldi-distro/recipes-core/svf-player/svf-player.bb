@@ -1,5 +1,5 @@
 SUMMARY = "Provides a SVF-Player"
-HOMEPAGE = "https://gitlab.tu-ilmenau.de/pihe5617/svf-player"
+HOMEPAGE = "https://gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/svf-player"
 SRCREV = "${AUTOREV}"
 SRC_URI = "git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/svf-player.git;protocol=ssh"
 LICENSE = "LGPLv2.1"
