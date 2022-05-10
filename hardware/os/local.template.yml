@@ -12,3 +12,4 @@ local_conf_header:
 env:
   CODE_SIGNING_KEY: /home/jona3814/workspace/goldi/pki/dev-signing.key.pem
   CODE_SIGNING_CERT: /home/jona3814/workspace/goldi/pki/dev-signing.crt.pem
+  ROOT_PASSWORD: 1DlSwvm5vnMrM

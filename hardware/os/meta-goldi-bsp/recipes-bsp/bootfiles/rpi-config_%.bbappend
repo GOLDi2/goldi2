@@ -1,3 +1,3 @@
-do_deploy_append() {
+do_deploy:append() {
 	echo "dtoverlay=disable-bt" >> ${DEPLOYDIR}/bootfiles/config.txt
 }
