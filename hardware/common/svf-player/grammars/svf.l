@@ -6,15 +6,34 @@
 #include "parser.h"
 %}
 
-STRING          .*
+STRING          [0-9A-Za-z\ \<\>\-\(\)\,\:\=]*
 REAL            [0-9]+(("."|",")[0-9]+)?(("E"|"e")("+"|"-")[0-9]+)?
 UNSIGNED        [0-9]+
 HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 
 %%
 
-"!"{STRING}\n   
-"//"{STRING}\n  
+"! [instruction-label] "{STRING}\n     {
+                                            char* string = (char*) malloc(strlen(yytext)-22+1);
+                                            for (int i = 0; i < strlen(yytext)-22; i++) 
+                                            {
+                                                if (yytext[i+22]!='\n') string[i] = yytext[i+22];
+                                            }
+                                            yylval.string = string;
+                                            return (SVF_INSTRUCTION_LABEL);
+                                        }
+"// [instruction-label] "{STRING}\n     {
+                                            char* string = (char*) malloc(strlen(yytext)-23+1);
+                                            for (int i = 0; i < strlen(yytext)-23; i++) 
+                                            {
+                                                if (yytext[i+23]!='\n') string[i] = yytext[i+23];
+                                            }
+                                            yylval.string = string;
+                                            return (SVF_INSTRUCTION_LABEL);
+                                        }
+
+"!".*\n
+"//".*\n
 
 {HEXSTRING}     {
                     unsigned int special_characters = 0;
@@ -38,11 +57,12 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                     }
 
                     unsigned int size = (strlen(text))/2 + (strlen(text) % 2);
+                    unsigned int even = !(strlen(text) % 2);
                     char* hexstring = (char*) malloc(size);
                     for (unsigned int i = 0; i < size; i++) hexstring[i] = 0;
                     for (unsigned int i = 0; i < size; i++)
                     {
-                        unsigned char first, second;
+                        unsigned char first, second = 0;
                         unsigned int first_pos = (i*2);
                         unsigned int second_pos = (i*2)+1;
 
@@ -50,16 +70,22 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                         else if (text[first_pos] > '9') first = (text[first_pos] - 'A' + 10);
                         else first = (text[first_pos] - '0');
 
-                        
-                        if (text[second_pos] > 'F') second = (text[second_pos] - 'a' + 10);
-                        else if (text[second_pos] > '9') second = (text[second_pos] - 'A' + 10);
-                        else second = (text[second_pos] - '0');
-                        if (first > 15 || second > 15) 
+                        if (even || i != size - 1)
                         {
-                            printf("first: (%c -> %u), second: (%c -> %u)", text[first_pos], first, text[second_pos], second);
-                            exit(1);
+                            if (text[second_pos] > 'F') second = (text[second_pos] - 'a' + 10);
+                            else if (text[second_pos] > '9') second = (text[second_pos] - 'A' + 10);
+                            else second = (text[second_pos] - '0');
+                            if (first > 15 || second > 15) 
+                            {
+                                printf("first: (%c -> %u), second: (%c -> %u)", text[first_pos], first, text[second_pos], second);
+                                exit(1);
+                            }
+                            hexstring[i] = (first << 4) + second;
                         }
-                        hexstring[i] = (first << 4) + second;
+                        else
+                        {
+                            hexstring[i] = first << 4;
+                        }
                     }
                     yylval.string = hexstring;
                     return(SVF_HEXSTRING);

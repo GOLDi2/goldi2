@@ -6,6 +6,12 @@
 #define TDO 19
 #define TDI 20
 
+// MC TEST PINS
+// #define TCK 11
+// #define TMS 8
+// #define TDO 10
+// #define TDI 9
+
 int initGPIO()
 {
     // If you call this, it will not actually access the GPIO
