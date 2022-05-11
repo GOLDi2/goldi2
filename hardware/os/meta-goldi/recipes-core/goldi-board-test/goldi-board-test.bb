@@ -30,7 +30,7 @@ DEPENDS = "nodejs-native bcm2835"
 
 inherit meson
 
-do_compile_append() {
+do_compile:append() {
     cd ${S}
     rm -rf dist
     rm -rf node_modules
@@ -38,7 +38,7 @@ do_compile_append() {
     npm run build
 }
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${libdir}/node_modules/@goldi2/goldi-board-test/
     cp ${S}/package.json ${D}${libdir}/node_modules/@goldi2/goldi-board-test/
     cp -r ${S}/dist/ ${D}${libdir}/node_modules/@goldi2/goldi-board-test/dist/
