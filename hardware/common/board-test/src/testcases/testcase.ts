@@ -20,6 +20,7 @@ export class TestCase {
     outcome: TestCaseOutcome
     dependencies: Array<TestCase>
     requiresInteraction: boolean
+    enabled: boolean
 
     constructor(data: TestCaseData) {
         this.name = data.name
@@ -29,6 +30,7 @@ export class TestCase {
         this.outcome = "Undefined"
         this.dependencies = data.dependencies
         this.requiresInteraction = data.requiresInteraction
+        this.enabled = true
     }
 
     getResult(): TestCaseResult {
