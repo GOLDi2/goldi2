@@ -1,5 +1,5 @@
 {
-  "name": "goldi-board-test",
+  "name": "@goldi2/goldi-board-test",
   "version": "0.0.1",
   "description": "The test program for the GOLDi interface-boards",
   "main": "index.js",
