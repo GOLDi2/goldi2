@@ -14,5 +14,10 @@
     "build": "tsc && npm run copy-files && npm run generate-tests",
     "generate-tests": "tsc && node ./dist/jtag-over-svf/testGenerator.js",
     "copy-files": "cp ./src/testcases/programming_test_fpga/programming_file.svf ./dist/testcases/programming_test_fpga"
-  }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.svf"
+  ]
 }
