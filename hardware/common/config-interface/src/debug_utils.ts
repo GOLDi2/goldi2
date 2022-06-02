@@ -25,7 +25,7 @@ export function start_browserSync(port: number){
         online: false,
         open: false,
         port: config.PORT,
-        proxy: 'localhost:' + port,
+        proxy: 'https://localhost:' + port,
         ui: false,
     });
 }

@@ -9,8 +9,42 @@ import { AddressInfo } from "net";
 import { EventEmitter } from 'events';
 import ini from 'ini';
 import fs from 'fs';
+import https from "https";
+import { pamAuthenticatePromise } from 'node-linux-pam';
+import {execSync} from 'child_process';
+
+function pam_auth(realm: string) {
+    async function _pam_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
+        function send_auth() {
+            res.header('WWW-Authenticate', 'Basic realm="' + realm + '"');
+            res.status(401).send('Authentication required');
+        }
+
+        if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0) {
+            var decodedAuth = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
+
+            const options = {
+                username: decodedAuth[0],
+                password: decodedAuth[1],
+            };
+
+            pamAuthenticatePromise(options).then(() => {
+                next();
+            }).catch((err) => {
+                send_auth();
+                console.log("Failed Authentication Attemp: ", err)
+            })
+            return;
+        }
+        send_auth();
+    }
+    return _pam_auth;
+}
+
 
 const app = express();
+
+app.use(pam_auth("Admin Area"))
 
 const firmware_upload = multer({ dest: '/tmp/' });
 
@@ -45,7 +79,7 @@ router.get('/upload_firmware_show', async (req, res, next) => {
     let reload = false
     if (upload_firmware_emitter) {
         reload = true
-        await Promise.race([new Promise<void>(resolve=>setTimeout(() => resolve(), 1000)), new Promise<void>(resolve => (upload_firmware_emitter as EventEmitter).once("changed", resolve))]);
+        await Promise.race([new Promise<void>(resolve => setTimeout(() => resolve(), 1000)), new Promise<void>(resolve => (upload_firmware_emitter as EventEmitter).once("changed", resolve))]);
     }
     await renderPage(req.path, (req as any).language, res, { upload_firmware_out, reload });
 });
@@ -70,10 +104,10 @@ router.all('/network', firmware_upload.none(), async (req, res, next) => {
         spawnSync('systemctl restart systemd-networkd.service', { shell: true });
     }
     await renderPage(req.path, (req as any).language, res, {
-        dhcp: network_settings.Network.DHCP=='yes',
-        address: network_settings.Network.Address?network_settings.Network.Address.join(";"):"",
+        dhcp: network_settings.Network.DHCP == 'yes',
+        address: network_settings.Network.Address ? network_settings.Network.Address.join(";") : "",
         gateway: network_settings.Network.Gateway,
-        dns: network_settings.Network.DNS?network_settings.Network.DNS.join(";"):""
+        dns: network_settings.Network.DNS ? network_settings.Network.DNS.join(";") : ""
     });
 
 });
@@ -104,11 +138,26 @@ app.get('/', function (req, res) {
     res.redirect(307, '/' + selected_language + req.originalUrl);
 });
 
+function createSSLCertificate(path: string){
+    if(!fs.existsSync(path+'key.pem')){
+        execSync('openssl genrsa -out key.pem 2048')
+    }
+    if(!fs.existsSync(path+'cert.pem')){
+        execSync('openssl req -x509 -sha256 -days 3650 -nodes \
+                  -key '+path+'key.pem -out '+path+'cert.pem -subj "/CN=example.com" \
+                  -addext "subjectAltName=DNS:example.com,DNS:www.example.net,IP:10.0.0.1"')
+    }
+    return {
+        key: fs.readFileSync("key.pem"),
+        cert: fs.readFileSync("cert.pem"),
+    }
+}
+
 if (config.NODE_ENV === 'development') {
     // When developing, we start a browserSync server after listen
     const { start_browserSync } = require("./debug_utils");
-    const server = app.listen(() => start_browserSync((server.address() as AddressInfo).port));
+    const server = https.createServer(createSSLCertificate(''),app).listen(() => start_browserSync((server.address() as AddressInfo).port));
 } else {
     // Just listen on the configured port
-    app.listen(config.PORT);
+    https.createServer(createSSLCertificate('/data/certificates'),app).listen(config.PORT);
 }
