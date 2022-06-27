@@ -19,8 +19,8 @@ inherit autotools
 
 PACKAGES += "${PN}-tests"
 
-RDEPENDS_${PN}-dev = ""
+RDEPENDS:${PN}-dev = ""
 
-FILES_${PN} = ""
-FILES_${PN}-tests = "${libdir}/${BPN}"
-FILES_${PN}-dbg += "${libdir}/${BPN}/.debug"
+FILES:${PN} = ""
+FILES:${PN}-tests = "${libdir}/${BPN}"
+FILES:${PN}-dbg += "${libdir}/${BPN}/.debug"

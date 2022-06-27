@@ -21,12 +21,13 @@ SUMMARY = "The test program for the GOLDi interface-boards"
 PV = "0.0.1+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 SRC_URI = "git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/goldi-board-test.git;protocol=ssh;branch=master"
-LICENSE = "MIT"
+LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f2c6e854b04f73c7caa9a9ea48b57f1e"
 SRC_URI[sha256sum] = "354ec4faf8359290f187fff0c513702747a3e2a3823a259978239e05f4e780cd"
 S = "${WORKDIR}/git"
 
 DEPENDS = "nodejs-native bcm2835"
+RDEPENDS:${PN} = "nodejs" 
 
 inherit meson
 
@@ -45,10 +46,8 @@ do_install:append() {
     cp -r ${S}/node_modules/ ${D}${libdir}/node_modules/@goldi2/goldi-board-test/node_modules/
 }
 
-FILES_${PN} = "\
+FILES:${PN} = "\
     ${libdir}/node_modules/ \
     ${bindir}/goldi-board-test \
     ${bindir}/goldi-board-test-util \
     "
-
-LICENSE_${PN} = "Unknown MIT"

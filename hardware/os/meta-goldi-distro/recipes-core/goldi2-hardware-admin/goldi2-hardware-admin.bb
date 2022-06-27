@@ -1,7 +1,7 @@
 SUMMARY = ""
 LICENSE = "MIT & ISC & Unknown"
 
-LIC_FILES_CHKSUM = "file://package.json;md5=47c6ca06ee34cc38292c76d278b23766"
+LIC_FILES_CHKSUM = "file://package.json;md5=00631feb558571571782259ce9a607a9"
 
 DEPENDS = "nodejs-native"
 
@@ -9,7 +9,7 @@ SRC_URI = " \
     git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/admin.git;protocol=ssh;branch=master \
     file://goldi2-admin.service \
 "
-SRCREV = "667abe06b0e2b55ab9c77ffd5124f63f75a65bb1"
+SRCREV = "fe24620b6ea16fbc6dd5b80057da2822efff0802"
 PV = "1.0.3+git${SRCPV}"
 
 S = "${WORKDIR}/git"
