@@ -10,8 +10,8 @@ import { EventEmitter } from 'events';
 import ini from 'ini';
 import fs from 'fs';
 import https from "https";
-import { pamAuthenticatePromise } from 'node-linux-pam';
 import {execSync} from 'child_process';
+import passwd from 'passwd-linux';
 
 function pam_auth(realm: string) {
     async function _pam_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -28,7 +28,19 @@ function pam_auth(realm: string) {
                 password: decodedAuth[1],
             };
 
-            pamAuthenticatePromise(options).then(() => {
+            new Promise((resolve, reject)=>{
+                passwd.checkPassword(options.username, options.password, (err: any, response: any) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        if (response) {
+                            resolve(undefined);
+                        } else {
+                            reject('Password is not correct');
+                        }
+                    }
+                })
+            }).then(() => {
                 next();
             }).catch((err) => {
                 send_auth();
