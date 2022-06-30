@@ -171,5 +171,5 @@ if (config.NODE_ENV === 'development') {
     const server = https.createServer(createSSLCertificate(''),app).listen(() => start_browserSync((server.address() as AddressInfo).port));
 } else {
     // Just listen on the configured port
-    https.createServer(createSSLCertificate('/data/certificates'),app).listen(config.PORT);
+    https.createServer(createSSLCertificate('/data/certificates/'),app).listen(config.PORT);
 }
