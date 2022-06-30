@@ -152,7 +152,7 @@ app.get('/', function (req, res) {
 
 function createSSLCertificate(path: string){
     if(!fs.existsSync(path+'key.pem')){
-        execSync('openssl genrsa -out key.pem 2048')
+        execSync('openssl genrsa -out '+path+'key.pem 2048')
     }
     if(!fs.existsSync(path+'cert.pem')){
         execSync('openssl req -x509 -sha256 -days 3650 -nodes \
@@ -160,8 +160,8 @@ function createSSLCertificate(path: string){
                   -addext "subjectAltName=DNS:example.com,DNS:www.example.net,IP:10.0.0.1"')
     }
     return {
-        key: fs.readFileSync("key.pem"),
-        cert: fs.readFileSync("cert.pem"),
+        key: fs.readFileSync(path+"key.pem"),
+        cert: fs.readFileSync(path+"cert.pem"),
     }
 }
 
