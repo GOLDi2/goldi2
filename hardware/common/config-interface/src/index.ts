@@ -151,13 +151,14 @@ app.get('/', function (req, res) {
 });
 
 function createSSLCertificate(path: string){
+    fs.mkdirSync(path, {recursive: true});
     if(!fs.existsSync(path+'key.pem')){
         execSync('openssl genrsa -out '+path+'key.pem 2048')
     }
     if(!fs.existsSync(path+'cert.pem')){
         execSync('openssl req -x509 -sha256 -days 3650 -nodes \
-                  -key '+path+'key.pem -out '+path+'cert.pem -subj "/CN=example.com" \
-                  -addext "subjectAltName=DNS:example.com,DNS:www.example.net,IP:10.0.0.1"')
+                  -key '+path+'key.pem -out '+path+'cert.pem -subj "/CN=goldi.local" \
+                  -addext "subjectAltName=DNS:goldi.local,IP:169.254.79.79"')
     }
     return {
         key: fs.readFileSync(path+"key.pem"),
@@ -168,7 +169,7 @@ function createSSLCertificate(path: string){
 if (config.NODE_ENV === 'development') {
     // When developing, we start a browserSync server after listen
     const { start_browserSync } = require("./debug_utils");
-    const server = https.createServer(createSSLCertificate(''),app).listen(() => start_browserSync((server.address() as AddressInfo).port));
+    const server = https.createServer(createSSLCertificate('./'),app).listen(() => start_browserSync((server.address() as AddressInfo).port));
 } else {
     // Just listen on the configured port
     https.createServer(createSSLCertificate('/data/certificates/'),app).listen(config.PORT);
