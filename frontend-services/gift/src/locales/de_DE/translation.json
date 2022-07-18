@@ -1,0 +1,157 @@
+{
+    "about": {
+        "text": "Das graphische interaktive FSM Tool (GiFT) ist eine Webanwendung zur Darstellung und Umrechnung digitaler Automaten,in verschiedenen Darstellungsformen, welche aus einem Softwareprojekt an der TU Ilmenau hervorging. ,Hier namentlich zu erwähnen:",
+        "title": "GiFT - Graphisches interaktives FSM Tool"
+    },
+    "buttons": {
+        "addstate": "Zustand hinzufügen",
+        "removeall": "Entferne alles",
+        "removeallconfirmation": "Sind Sie sich sicher, dass Sie ALLE Zustände und Transitionen entfernen möchten?",
+        "repositionall": "Neu anordnen"
+    },
+    "del_para": {
+        "text": "Bist du sicher, dass du diesen Parallelen Automaten löschen möchtest?",
+        "title": "Vorsicht!"
+    },
+    "download": {
+        "download": "Download",
+        "name": "Dateiname",
+        "text": "Der Download ist bereit!"
+    },
+    "global": {
+        "activate": "Aktivieren",
+        "cancel": "Abbrechen",
+        "close": "Schließen",
+        "continue": "Fortfahren",
+        "create": "Erstellen",
+        "deactivate": "Deaktivieren",
+        "gui": "Graphische Oberfläche",
+        "save_changes": "Änderungen speichern",
+        "yEquation": "y-Gleichungen",
+        "zEquation": "z-Gleichungen"
+    },
+    "infoedit": {
+        "attribute": "Attribut",
+        "fromstate": "von Zustand",
+        "info": "Klicken Sie auf einen Zustand oder eine Transition",
+        "input": "Zustandsüberführungsfunktion",
+        "output": "Ausgabefunktion",
+        "remove": "Entfernen",
+        "removenodeconfirmation": "Sind Sie sich sicher, dass Sie diesen Zustand entfernen möchten?",
+        "removetransitionconfirmation": "Sind Sie sich sicher, dass Sie diese Transition entfernen möchten?",
+        "state": "Zustand",
+        "stateName": "Zustandsbezeichnung",
+        "tostate": "zu Zustand",
+        "transition": "Transition",
+        "transitions": "Transitionen",
+        "unstick": "Ablösen",
+        "value": "Wert"
+    },
+    "lang": {
+        "english": "Englisch",
+        "german": "Deutsch"
+    },
+    "navbar": {
+        "add_para_machine": "Parallelen Automat hinzufügen",
+        "brandy": "Graph. interaktives FSM Tool",
+        "files_EcpExport": " ECP Export",
+        "files_ExportMachine": " Export machine",
+        "files_File": "Datei",
+        "files_ImportMachine": " Import machine",
+        "files_New": " Neu",
+        "files_Settings": " Einstellungen",
+        "help_About": " About",
+        "help_HelpTopics": " Help Topics",
+        "help_Legend": " Legende",
+        "help_Main": "Hilfe",
+        "h_punkt": "h•(z,x) anzeigen",
+        "h_stern": "h*(x) eingeben",
+        "inputMode_Graph_trans": "Automatengraph\/Transitionsmatrix",
+        "inputMode_Machine_equations": "Automatentabelle\/Z-Gleichungen",
+        "inputMode_Main": "Eingabemodus",
+        "newMachine_Main": "Neuer Automat",
+        "newMachine_State_bits": "Zustandsbits",
+        "para_machine": "Paralleler Automat",
+        "para_machines": "Parallele Automaten"
+    },
+    "progressbar": {
+        "prev_wait": "Bisherige Wartezeit",
+        "rem_wait": "Geschätzte Restwartezeit",
+        "wait": "Bitte warten..."
+    },
+    "qmc": {
+        "ccnf": "KKNF",
+        "cdnf": "KDNF",
+        "minimized": "minimiert",
+        "minimized_h": "minimiert mit h*(x)",
+        "unminimized": "unminimiert"
+    },
+    "sections": {
+        "informationeditor": "Informationen und Editor",
+        "settings": "Einstellungen",
+        "statediagram": "Zustandsdiagramm",
+        "title": "Automatengraph"
+    },
+    "settings": {
+        "and": "UND",
+        "ascVars": "Aufwärts",
+        "createlink": "Erstelle download link",
+        "desVars": "Abwärts",
+        "export": "Export",
+        "filtVars": "Variablen filtern",
+        "import": "Import",
+        "inputVars": "Eingangsvariablen",
+        "lang": "Sprache:",
+        "language": "Sprache",
+        "log_op": "Logische Operatoren",
+        "not": "NICHT",
+        "or": "ODER",
+        "outputVars": "Ausgangsvariablen",
+        "sortVars": "Variablen sortieren",
+        "usage": "Benutzung",
+        "userDefinedVars": "Variablennamen",
+        "variable_settings": "Variableneinstellungen"
+    },
+    "swap_inputmode": {
+        "text": "Der Wechsel des Eingabemodus führt zu einem Verwerfen des Automaten. <br><br>,Die widerspruchsfreien und vollständigen Darstellungen aus der Ausgabeseite werden auf die Eingabeseite überführt.",
+        "title": "Vorsicht!"
+    },
+    "tabs": {
+        "flipflop": "FlipFlop",
+        "machineTable": "Automatentabelle",
+        "simulation": "Simulation",
+        "stateDiagram": "Automatengraph",
+        "transitionMatrix": "Transitionsmatrix"
+    },
+    "upload": {
+        "select": "Auswählen...",
+        "upload": "Hochladen"
+    },
+    "usage": {
+        "aborta": "Breche Bearbeitung ab",
+        "aborti": "Escabe während der Bearbeitung",
+        "action": "Aktion",
+        "addloopa": "Füge Eigenschleife hinzu",
+        "addloopi": "Ziehe von einem Zustand zu sich selbst (Bewegung >3px))",
+        "addstatea": "Füge Zustand hinzu",
+        "addstatei": "Doppelklick auf Leinwand",
+        "addtransitiona": "Füge Transition hinzu",
+        "addtransitioni": "Ziehe von einem Zustand zu einem anderen",
+        "colora": "Weise eine Farbe zu, z.B. um zu gruppieren",
+        "colori": "Klick auf die Farbeingabe in der oberen rechten Ecke",
+        "delete": "Entfernt den ausgewählten Zustand bzw. die ausgewählte Transition",
+        "draga": "Bewege Zustand und fixiere ihn",
+        "dragi": "Halte \"Strg\" während des Ziehens eines Zustands",
+        "editcontenta": "Bearbeite Inhalt",
+        "editcontenti": "Doppelklick auf eine Zeile",
+        "ineditor": "Im Editor",
+        "input": "Eingabe",
+        "oncanvas": "Auf der Leinwand",
+        "reposition": "Positioniert Zustände neu",
+        "selecta": "Wählt den Zustand\/die Transition aus und zeigt weitere Informationen sowie den Editor",
+        "selecti": "Klick auf einen Zustand\/eine Transition (oder ihre Überführungsfunktion)",
+        "submita": "Speichere Änderungen",
+        "submiti": "Eingabetaste während der Bearbeitung",
+        "title": "Benutzung"
+    }
+}

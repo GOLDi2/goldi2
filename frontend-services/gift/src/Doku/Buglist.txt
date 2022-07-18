@@ -1,0 +1,12 @@
+-Änderungen der Bennenung erfolgt nicht automatisch im Automatengraph
+->Behalten alte Namen und müssen manuell geändert werden
+->Geben Fehler im Datentyp aus
+
+
+-includes/Datentyp/DataType.js:1194 
+Uncaught Error: The expression is not valid! 
+Please check it for errors or add new names or operators
+ to the table! Unknown subexpression:  "xs"
+
+-Uncaught TypeError: Failed to execute 'replaceChild' on 'Node': 
+parameter 2 is not of type 'Node'.

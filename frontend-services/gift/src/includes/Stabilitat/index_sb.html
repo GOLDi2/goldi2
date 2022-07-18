@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="../checkfunctions.js"></script>
+    <script src="stability.js"></script>
+    <script src="../../Stephen/QMC/Logic.js"></script>
+    <title></title>
+</head>
+<body>
+<script>
+    var transitionTest = [["0","/x0",0,"x0"],["x1","/x1+/x0",0,"x0"],[0,0,0,0],[0,"/x1+x0",0,"/x1"]];
+    var result = checkStability.createOutputForMachineTable(transitionTest);
+
+    for (var i=0; i<result.length; i++)
+    {
+        document.write(result[i]+"<br>");
+
+    }
+
+
+</script>
+
+</body>
+</html>
