@@ -11,7 +11,7 @@ var fsm;
 
 	function startView() {
 		try {
-			$.i18n.init({fallbackLng: 'en_US', preload: ['en_US','de_DE'] } , function () {
+			$.i18n.init({fallbackLng: 'en-US', preload: ['en-US','de-DE'] } , function () {
 				$(document).i18n();
 			});
 

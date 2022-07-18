@@ -325,8 +325,8 @@
         selectorAttr: 'data-i18n',
         debug: false,
         
-        //resGetPath: 'locales/__lng__/__ns__.json',
-        resGetPath: '../index.php?Function=GIFTGetLocales&Locale=__lng__',
+        resGetPath: 'locales/__lng__/__ns__.json',
+        //resGetPath: '../index.php?Function=GIFTGetLocales&Locale=__lng__',
         resPostPath: 'locales/add/__lng__/__ns__',
     
         getAsync: true,

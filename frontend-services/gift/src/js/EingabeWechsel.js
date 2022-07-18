@@ -101,12 +101,12 @@ function L_GUI_pick(a) {
 function change_Language(a) {
     switch (a) {
         case '1':
-            i18n.setLng('de_DE', function() { $('[data-i18n]').i18n(); });
-            localStorage.locale = 'de_DE';
+            i18n.setLng('de-DE', function() { $('[data-i18n]').i18n(); });
+            localStorage.locale = 'de-DE';
             break;
         case '0':
-            i18n.setLng('en_US', function() { $('[data-i18n]').i18n(); });
-            localStorage.locale = 'en_US';
+            i18n.setLng('en-US', function() { $('[data-i18n]').i18n(); });
+            localStorage.locale = 'en-US';
             break;
     }
     $('.transitiondesc').hide();
@@ -114,10 +114,10 @@ function change_Language(a) {
 }
 
 function renderSelectpicker() {
-    if (i18n.detectLanguage() == 'en_US') {
+    if (i18n.detectLanguage() == 'en-US') {
         $('#L_GUI_Lang').val('0');
         $('#L_GUI_Lang2').val('0');
-    } else if (i18n.detectLanguage() == 'de_DE') {
+    } else if (i18n.detectLanguage() == 'de-DE') {
         $('#L_GUI_Lang').val('1');
         $('#L_GUI_Lang2').val('1');
     } else {
