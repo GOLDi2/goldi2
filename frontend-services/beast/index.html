@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <title>BEAST</title>
     <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="Images/favicon.ico">
+
     <script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 
     <link rel="stylesheet" href="css/jquery-ui.css">
@@ -12,6 +13,7 @@
     <script src="js/plugins/jquery-ui.js"></script>
 
 
+    <link rel="stylesheet" href="css/Supernice.min.css">
     <link rel="stylesheet" href="css/ui.fancytree.css">
     <link rel="stylesheet" href="css/contextMenu.css">
     <script src="js/plugins/jquery.contextMenu.js"></script>
@@ -21,8 +23,8 @@
     <script src="js/plugins/jquery.fancytree.edit.js"></script>
     <script src="js/plugins/jquery.fancytree.glyph.js"></script>
 
-    <script src='js/spectrum.js'></script>
-    <link rel='stylesheet' href='css/spectrum.css'/>
+    <script src="js/spectrum.js"></script>
+    <link rel="stylesheet" href="css/spectrum.css"/>
 
 
     <script type="text/javascript" src="js/SVGGraphics.js"></script>
@@ -40,22 +42,40 @@
     <script type="text/javascript" src="js/controller/editorController.js"></script>
     <script type="text/javascript" src="js/controller/workspaceController.js"></script>
     <script type="text/javascript" src="js/model/model.js"></script>
+    <script type="text/javascript" src="js/equation_converters/CreateSequenceController.js"></script>
     <script type="text/javascript" src="js/controller/menubarController.js"></script>
     <script type="text/javascript" src="js/fancytree/treeController.js"></script>
     <script type="text/javascript" src="js/controller/BeastController.js"></script>
 
+    <script type="text/javascript" src="js/equation_converters/converter.js"></script>
+    <script type="text/javascript" src="js/equation_converters/converter_back.js"></script>
+    <script type="text/javascript" src="js/equation_converters/fsm_beast.js"></script>
+    <script type="text/javascript" src="js/equation_converters/sane-expression-parser.js"></script>
+
     <script type="text/javascript" src="js/simcir/simcir-builtins.js"></script>
     <link rel="stylesheet" type="text/css" href="css/simcir-basicset.css"/>
+    <script type="text/javascript" src="js/simcir/GridBuilder.js"></script>
     <script type="text/javascript" src="js/simcir/simcir-basicset.js"></script>
     <script type="text/javascript" src="js/simcir/simcir-dso.js"></script>
     <script type="text/javascript" src="js/simcir/simcir-transmitter.js"></script>
 
-
     <link rel="stylesheet" href="css/BEAST-UI.css">
 
-    <link href="css/bootstrap-toggle.css" rel="stylesheet">
+    <link href="css/bootstrap-toggle.min.css" rel="stylesheet">
     <script type="text/javascript" src="js/plugins/bootstrap-toggle.min.js"></script>
 
+    <script>
+        /**
+         * creates a new BeastController
+         */
+        $(document)
+            .ready(function()
+                {
+                    let RunningBeastController = new BeastController();
+                    RunningBeastController.initVersion();
+                }
+            );
+    </script>
 </head>
 <body>
 
@@ -111,6 +131,10 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a id="createComponent" href="#"><span class="glyphicon glyphicon-plus"></span>
                                     &nbsp&nbspNew Component</a></li>
+                                <li><a id="createComponentFromEquation" href="#"><span class="glyphicon glyphicon-plus"></span>
+                                    &nbsp&nbspNew Component From Equation</a></li>
+                                <li><a id="createComponentFromSequence" href="#"><span class="glyphicon glyphicon-plus"></span>
+                                    &nbsp&nbspNew Component From Sequence</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -209,34 +233,42 @@
     </div>
 </div>
 
+<style>
+    #editor-top-row input {
+        height: 44px;
+    }
+    #editor-top-row button {
+        height: 44px;
+    }
+</style>
+
 <!-- TAB CONTENT -->
 <div class="tab-pane active flex-grow-equal col-flex-container template" role="tabpanel">
     <!--editortoolbar-->
-    <div id="editor-top-row" class="row-flex-container">
-
+    <div id="editor-top-row" class="row-flex-container" style="height:46px">
 
         <!--//TODO Not sure if btn-toolbar should be deleted -->
         <!--//TODO yes it is for now, also learn how to write proper comments in HTML, so they do not show up in the page -->
         <div class="" role="toolbar">
 
-                <div class="input-group input-group-lg zoom-group">
+            <div class="input-group input-group-lg zoom-group">
 
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default btn-zoomin" data-toggle="tooltip" data-placement="top"
                                 title="Zoom In"><span class="glyphicon glyphicon-zoom-in"></span></button>
                     </span>
-                    <input type="text" class="form-control" value="100%" class="form-control input-lg" disabled />
+                <input type="text" class="form-control" value="100%" class="form-control input-lg" disabled />
 
-                    <span class="input-group-btn">
+                <span class="input-group-btn">
                         <button type="button" class="btn btn-default btn-zoomout" data-toggle="tooltip" data-placement="top"
-                            title="Zoom Out"><span class="glyphicon glyphicon-zoom-out"></span></button>
+                                title="Zoom Out"><span class="glyphicon glyphicon-zoom-out"></span></button>
                     </span>
-                </div>
+            </div>
 
-                <div class="btn-group btn-group-lg" role="group">
+            <div class="btn-group btn-group-lg toolbar-buttons" role="group" style="margin-left:4px; margin-right:4px">
 
                 <button type="button" class="btn btn-default btn-rotateleft" data-toggle="tooltip" data-placement="top"
-                        title="Rotate Left"><span class="glyphicon glyphicon-repeat gly-flip-horizontal"></span>
+                        title="Rotate Left"><span class="glyphicon glyphicon-repeat flip-glyphicon"></span>
                 </button>
                 <button type="button" class="btn btn-default btn-rotateright" data-toggle="tooltip" data-placement="top"
                         title="Rotate Right"><span class="glyphicon glyphicon-repeat"></span></button>
@@ -250,18 +282,21 @@
         </div>
         <div id="toggleb-bar" class="flex-grow-equal" role="toolbar">
             <!--<label class="checkbox-inline">-->
-                <input type="checkbox" class="cb-pan" data-on="Mouse move" data-off="Mouse select" data-onstyle="primary"
-                       data-offstyle="info" data-height="46">
+            <input type="checkbox" class="cb-pan" data-on="Mouse move" data-off="Mouse select" data-onstyle="primary"
+                   data-offstyle="info" data-height="44">
             <!--</label>-->
 
             <!--<label class="checkbox-inline">-->
-                <input type="checkbox" class="cb-connsim" data-on="Animated connections on" data-off="Animated connections off" data-onstyle="success" data-offstyle="danger"
-                       data-width="200" data-height="46">
+            <input type="checkbox" class="cb-connsim" data-on="Animated connections on" data-off="Animated connections off" data-onstyle="success" data-offstyle="danger"
+                   data-width="200" data-height="44" checked>
             <!--</label>-->
 
             <!--<label class="checkbox-inline">-->
-                <input type="checkbox" class="cb-tooltip" data-on="Tooltips on" data-off="Tooltips off" data-onstyle="success" data-offstyle="danger"
-                       data-height="46">
+            <input type="checkbox" class="cb-tooltip" data-on="Tooltips on" data-off="Tooltips off" data-onstyle="success" data-offstyle="danger"
+                   data-height="44">
+
+            <button id="grabEquations" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top"
+                    title="Grab equations">Grab equations</button>
             <!--</label>-->
         </div>
 
@@ -270,6 +305,7 @@
     <div class="workspace flex-grow-equal"></div>
 
 </div>
+
 
 <!-- TABBar-Element -->
 <li class="tabbarelement template">

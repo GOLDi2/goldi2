@@ -206,7 +206,7 @@ class BeastController
         {
             this.basicComponentsLib            = new Library(BeastController.BASIC_LIB_ID, 'Basic Components');
             this.basicComponentsLib.components = BeastController.basicComponents;
-            this.persistenceController.loadStaticLibrary('BEAST/assets/beast-basic-compound.bdcl', (result) => {
+            this.persistenceController.loadStaticLibrary('assets/beast-basic-compound.bdcl', (result) => {
                 this.basicComplexComponentsLib = result;
                 this.checkForDepositLibrary();
                 Callback();

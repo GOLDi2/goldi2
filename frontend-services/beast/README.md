@@ -50,3 +50,18 @@ Alexander Zenkner
 Niels Andrä
 
 Based on the implementation of simcir.js by Kazuhiko Arase
+
+
+## Build the docker image ##
+
+```
+docker build . -t goldi2/beast
+```
+
+## Publish the docker image ##
+
+```
+docker login -u goldi2
+docker build . -t goldi2/beast:latest
+docker push goldi2/beast:latest
+```
