@@ -18,19 +18,13 @@ log4js.configure({
   appenders: {
     console: { type: 'stdout' },
     gcc_file: {
-      type: 'file',
-      filename: path.resolve('../Nodeserver/logs', 'gcc_js.log') ,
-      maxLogSize: 10000
+      type: 'stdout',
     },
     compile_file: {
-      type: 'file',
-      filename: path.resolve('../Nodeserver/logs', 'compile_js.log') ,
-      maxLogSize: 10000
+      type: 'stdout',
     },
     general: {
-      type: 'file',
-      filename: path.resolve('../Nodeserver/logs', 'nodejs.log') ,
-      maxLogSize: 10000
+      type: 'stdout',
     }
   },
   categories: {
