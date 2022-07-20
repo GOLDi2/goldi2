@@ -19,7 +19,7 @@ function getBoards() {
         } else {
             supportedBoards = JSON.parse(stdout)["boards"];
             supportedBoards.forEach((board) => {
-                getBoardOptions(board.FQBN);
+                getBoardOptions(board.fqbn);
             });
         }
     });
@@ -30,7 +30,7 @@ function getBoards() {
  * @param fqbn - the fully qualified board name
  */
 function getBoardOptions(fqbn) {
-    exec("arduino-cli board details " + fqbn + " --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
+    exec("arduino-cli board details -b " + fqbn + " --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
         if (error) {
             throw (stderr);
         } else {
@@ -41,7 +41,7 @@ function getBoardOptions(fqbn) {
                         delete value.selected;
                     });
                 });
-                supportedBoards.find((board) => board.FQBN === fqbn).config_options = config_options;
+                supportedBoards.find((board) => board.fqbn === fqbn).config_options = config_options;
             }
         }
     });

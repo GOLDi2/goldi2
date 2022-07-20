@@ -47,7 +47,7 @@ module.exports = {
 
       if (req.body.makefile === "arduino") {
           let board = req.body.board;
-          fqbn = board.FQBN;
+          fqbn = board.fqbn;
           if (board.options !== undefined && board.options.length > 0) {
               fqbn = fqbn.concat(':');
               board.options.forEach((option) => {

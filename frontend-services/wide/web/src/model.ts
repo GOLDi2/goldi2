@@ -41,12 +41,12 @@ export interface IProject {
  * the interface for a general arduino board
  * @typedef IBoard
  * @property name               - the name of the board
- * @property FQBN               - the Fully-Qualified-Board-Name of the board
+ * @property fqbn               - the Fully-Qualified-Board-Name of the board
  * @property config_options     - the configuration-options of the board with all their possible values
  */
 export interface IBoard {
     name: string;
-    FQBN: string;
+    fqbn: string;
     config_options: Array<{option: string, option_label: string, values: Array<{value: string, value_label: string}>}>;
 }
 
@@ -54,12 +54,12 @@ export interface IBoard {
  * the interface for a specific arduino board
  * @typedef IBoardConfiguration
  * @property name       - the name of the board
- * @property FQBN       - the Fully-Qualified-Board-Name of the board
+ * @property fqbn       - the Fully-Qualified-Board-Name of the board
  * @property options    - the configuration-options of the board with their chosen value
  */
 export interface IBoardConfiguration {
     name: string;
-    FQBN: string;
+    fqbn: string;
     options: Array<{option: string, option_label: string, value: string, value_label: string}>;
 }
 

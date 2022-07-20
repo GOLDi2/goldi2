@@ -215,13 +215,14 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
     function setDefaultGOLDiBoard() {
         if (wide.model.supportedBoards.length > 0 && !!wide.PSPUType) {
             let board = wide.model.supportedBoards.find((board) => board.name == "GOLDi Experiment");
+            console.log(board)
             let configOption = board.config_options[0];
             let configOptionValue = configOption.values.find((value) => value.value == wide.PSPUType);
             wide.model = {
                 ...wide.model,
                 selected_board: {
                     name: board.name,
-                    FQBN: board.FQBN,
+                    fqbn: board.fqbn,
                     options: [{
                         option: configOption.option,
                         option_label: configOption.option_label,
@@ -774,6 +775,7 @@ document.addEventListener('wide-ready', (event: CustomEvent) => {
                 file.name = mainSketchName + "/" + file.name.slice(file.name.indexOf("/")+1, file.name.length);
                 return file;
             });
+            console.log(wide.model);
             if (wide.model.selected_board.name == "GOLDi Experiment") {
                 compilefiles[0].content = '#include "PhysicalSystems/' + wide.model.selected_board.options.find((option) => option.option == "pspu").value_label + '.h" + \n' + compilefiles[0].content;
             }

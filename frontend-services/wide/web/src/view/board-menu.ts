@@ -262,7 +262,7 @@ class BoardMenu extends LitElement {
      * Change the selected board of the current project
      */
     updateSelectedBoard(){
-        let currentBoard:IBoardConfiguration = {name: this.selectedBoard.name, FQBN: this.selectedBoard.FQBN, options: this.selectedBoardConfigOptions};
+        let currentBoard:IBoardConfiguration = {name: this.selectedBoard.name, fqbn: this.selectedBoard.fqbn, options: this.selectedBoardConfigOptions};
         let event = new CustomEvent('wide-choose-board', { detail: { board: currentBoard }, bubbles: true });
         this.dispatchEvent(event);
     }

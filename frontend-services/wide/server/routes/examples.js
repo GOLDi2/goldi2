@@ -24,10 +24,14 @@ router.post('/', function (req, res) {
         pspus = pspus.filter((pspu) => pspu !== ".DS_Store");
         pspus.forEach((pspu) => {
             languages.forEach((language) => {
-                let files = fs.readdirSync(examplepath + pspu + '/' + language + '/');
-                response = response.concat(files.map((file) => {
-                    return ({name: file, PSPUType: pspu, language: language});
-                }));
+                try{
+                    let files = fs.readdirSync(examplepath + pspu + '/' + language + '/');
+                    response = response.concat(files.map((file) => {
+                        return ({name: file, PSPUType: pspu, language: language});
+                    }));
+                }catch{
+                    //do nothing
+                }
             });
         });
     } else {

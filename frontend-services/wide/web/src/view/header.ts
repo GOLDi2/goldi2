@@ -111,7 +111,7 @@ class Header extends LitElement {
         if (enabled && !!this.model && !!this.model.supportedBoards && !!this.model.selected_board && !!this.model.selectedproject) {
             return html`<wide-board-menu    
                             .boardOptions="${this.model.supportedBoards}" 
-                            .selectedBoard="${this.model.supportedBoards.find((board) => board.FQBN == this.model.selected_board.FQBN)}" 
+                            .selectedBoard="${this.model.supportedBoards.find((board) => board.fqbn == this.model.selected_board.fqbn)}" 
                             .selectedBoardConfigOptions="${this.model.selected_board.options}" 
                             .visible="${this.model.selectedproject.language.name=="Arduino"}">
                         </wide-board-menu>`
