@@ -2,12 +2,15 @@
 {% extends "layout.html" %}
 {% block main %}
 
-<pre>{{ upload_firmware_out }}</pre>
+<pre id="console"></pre>
 
-{% if reload %}
 <script>
-  window.location.reload(true)
+  const evtSource = new EventSource(window.location.href+"/stream");
+  const con = document.getElementById("console");
+  evtSource.onmessage = function(event) {
+    console.log(event.data);
+    con.textContent += JSON.parse(event.data);
+  }
 </script>
-{% endif %}
 
 {% endblock %}

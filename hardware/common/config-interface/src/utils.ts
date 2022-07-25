@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 
 import { Response } from "express";
+import { execSync } from 'child_process';
 
 export function template_resolution(base_path: string, sub_path: string, default_language: string) {
     return async (filename:string, language?: string)=>{
@@ -39,5 +40,21 @@ export function renderPageInit(content_path: string, default_language: string){
             const page_template = await page_resolution("404", language);
             res.render(page_template, { ...vars, language });
         }
+    }
+}
+
+export function createSSLCertificate(path: string) {
+    fs.mkdirSync(path, { recursive: true });
+    if (!fs.existsSync(path + 'key.pem')) {
+        execSync('openssl genrsa -out ' + path + 'key.pem 2048')
+    }
+    if (!fs.existsSync(path + 'cert.pem')) {
+        execSync('openssl req -x509 -sha256 -days 3650 -nodes \
+                  -key '+ path + 'key.pem -out ' + path + 'cert.pem -subj "/CN=goldi.local" \
+                  -addext "subjectAltName=DNS:goldi.local,IP:169.254.79.79"')
+    }
+    return {
+        key: fs.readFileSync(path + "key.pem"),
+        cert: fs.readFileSync(path + "cert.pem"),
     }
 }
