@@ -45,17 +45,19 @@
   const con = document.getElementById("console");
   evtSource.onmessage = function(event) {
     const str=JSON.parse(event.data);
-    const message=JSON.parse(str);
-    if(message.initialize != undefined){
-        inputDiv.innerHTML="";
-        outputDiv.innerHTML="";
-        message.initialize.input.forEach(createInput);
-        message.initialize.output.forEach(createOutput);
-    }
-    if(message.set){
-        Object.keys(message.set).forEach(id=>{
-            document.getElementById(id).checked=message.set[id];
-        });
+    for(const line of str.split("\n")){
+        const message=JSON.parse(line);
+        if(message.initialize != undefined){
+            inputDiv.innerHTML="";
+            outputDiv.innerHTML="";
+            message.initialize.input.forEach(createInput);
+            message.initialize.output.forEach(createOutput);
+        }
+        if(message.set){
+            Object.keys(message.set).forEach(id=>{
+                document.getElementById(id).checked=message.set[id];
+            });
+        }
     }
   }
 </script>
