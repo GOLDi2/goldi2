@@ -6,6 +6,11 @@ IMAGE_FEATURES = " read-only-rootfs"
 
 IMAGE_INSTALL:append = ""
 
-EXTRA_USERS_PARAMS = "usermod -p ${ROOT_PASSWORD} root;"
+inherit core-image
 
-inherit core-image extrausers
+
+ROOTFS_POSTPROCESS_COMMAND += "copy_shadow_to_data;"
+
+copy_shadow_to_data(){
+    cp ${IMAGE_ROOTFS}/etc/shadow ${IMAGE_ROOTFS}/data-factory/shadow
+}
