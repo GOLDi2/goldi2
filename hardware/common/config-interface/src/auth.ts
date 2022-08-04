@@ -42,6 +42,7 @@ export function pam_auth(realm: string) {
                 })
             }).then(() => {
                 if (!use_cached) next();
+                cache=req.headers.authorization;
             }).catch((err) => {
                 cache=undefined;
                 send_auth();
