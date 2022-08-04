@@ -1,4 +1,4 @@
 part --fstype=vfat --align 4096 --fixed-size 128 --label boot --source bootimg-partition --active
-part --fstype=ext4 --align 4096 --fixed-size 1024 --label A --source rootfs
-part --fstype=ext4 --align 4096 --fixed-size 1024 --label B
+part --fstype=ext4 --align 4096 --fixed-size 4096 --label A --source rootfs
+part --fstype=ext4 --align 4096 --fixed-size 4096 --label B
 part --fstype=ext4 --align 4096 --size 256 --label data --fsoptions "x-systemd.growfs"
