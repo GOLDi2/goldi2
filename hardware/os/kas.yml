@@ -45,6 +45,7 @@ repos:
       meta-oe:
       meta-python:
       meta-multimedia:
+      meta-networking:
 
   meta-rauc:
     url: https://github.com/rauc/meta-rauc.git

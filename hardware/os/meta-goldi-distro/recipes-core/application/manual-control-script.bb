@@ -7,7 +7,7 @@ SRC_URI = " \
     https://gitlab.tu-ilmenau.de/api/v4/projects/3776/packages/generic/3_axis_v1/0.0.1/dist.tar.gz;user=token;pswd=${GITLAB_TOKEN} \
 "
 
-SRC_URI[sha256sum] = "cdfd8fa0922c448892ab71a8eb575f8f326e5fe3a7d3adf832679c8b4c7dc6bd"
+SRC_URI[sha256sum] = "0f79ffeb492e52e7a2e9157b4c27071d568f3293740a9c7a0e3adf9203d08c52"
 
 RDEPENDS:${PN} = "python3 python3-spidev"
 
