@@ -1,0 +1,20 @@
+#!/bin/sh
+config=$(cat /boot/vpn-config)
+key=${config%%,*}
+ip=${config##*,}
+ip4=10.79.$(($((${ip}/256))%256)).$((${ip}%256)) 
+ip6=fd47:4f4c:4469:867f::$(printf "%x" "$ip")
+
+mkdir -p /data-local/overlay/network-config
+cat > /data-local/overlay/network-config/wg-goldi.conf << EOF
+[Interface]
+Address = $ip4/32
+PrivateKey = $key
+
+[Peer]
+PublicKey = eqnxeRGTDB9XNukWUyweEQb75AOoEai56ubpOP8qxQ8=
+AllowedIPs = 10.79.0.1/16
+Endpoint = vpn.goldi-labs.de:5555
+PersistentKeepalive = 21
+
+EOF

@@ -1,0 +1,14 @@
+[Unit]
+Description=Resets the vpn config
+DefaultDependencies=no
+ConditionPathExists=!/data-local/network-config/wg-goldi.conf
+ConditionPathExists=/boot/vpn-config
+After=data.mount
+Before=wg-quick@wg-goldi.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/reset-vpn-config
+
+[Install]
+WantedBy=multi-user.target
