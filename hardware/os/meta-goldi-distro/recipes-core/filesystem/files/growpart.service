@@ -1,0 +1,11 @@
+[Unit]
+Description=Grow Partition on /dev/mmcblk0p4
+DefaultDependencies=no
+Before=systemd-growfs@data\x2dlocal.service 
+
+[Service]
+Type=oneshot
+ExecStart=parted -s /dev/mmcblk0 resizepart 4 100% Yes
+
+[Install]
+WantedBy=multi-user.target
