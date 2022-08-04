@@ -5,6 +5,7 @@ import passwd from 'passwd-linux';
 
 export function pam_auth(realm: string) {
     let cache: undefined | string = undefined;
+    let cache_time: undefined | number = undefined;
     async function _pam_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
         if (config.NODE_ENV === 'development') {
             return next();
@@ -20,6 +21,9 @@ export function pam_auth(realm: string) {
             if (req.headers.authorization === cache) {
                 use_cached = true;
                 next();
+                if (cache_time && Date.now() - cache_time < 10000) {
+                    return;
+                }
             }
             var decodedAuth = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
 
@@ -43,8 +47,10 @@ export function pam_auth(realm: string) {
             }).then(() => {
                 if (!use_cached) next();
                 cache=req.headers.authorization;
+                cache_time=Date.now();
             }).catch((err) => {
                 cache=undefined;
+                cache_time=undefined;
                 send_auth();
                 console.log("Failed Authentication Attemp: ", err)
             })
