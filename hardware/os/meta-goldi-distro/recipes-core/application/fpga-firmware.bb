@@ -8,7 +8,7 @@ SRC_URI = " \
     file://load-fpga-firmware.service \
 "
 
-SRC_URI[sha256sum] = "cdfd8fa0922c448892ab71a8eb575f8f326e5fe3a7d3adf832679c8b4c7dc6bd"
+SRC_URI[sha256sum] = "0f79ffeb492e52e7a2e9157b4c27071d568f3293740a9c7a0e3adf9203d08c52"
 
 do_install() {
     install -d ${D}/lib/firmware/lattice/
