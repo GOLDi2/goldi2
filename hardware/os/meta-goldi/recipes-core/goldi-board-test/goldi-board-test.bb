@@ -20,7 +20,7 @@ SUMMARY = "The test program for the GOLDi interface-boards"
 # Modify these as desired
 PV = "0.0.1+git${SRCPV}"
 SRCREV = "${AUTOREV}"
-SRC_URI = "git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/goldi-board-test.git;protocol=ssh;branch=master"
+SRC_URI = "git://token:${GITLAB_TOKEN}@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/goldi-board-test.git;protocol=https;branch=master"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f2c6e854b04f73c7caa9a9ea48b57f1e"
 SRC_URI[sha256sum] = "354ec4faf8359290f187fff0c513702747a3e2a3823a259978239e05f4e780cd"

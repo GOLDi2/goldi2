@@ -7,7 +7,7 @@ DEPENDS = "nodejs-native"
 RDEPENDS:${PN} = "nodejs"
 
 SRC_URI = " \
-    git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/admin.git;protocol=ssh;branch=master \
+    git://token:${GITLAB_TOKEN}@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/admin.git;protocol=https;branch=master \
     file://goldi2-admin.service \
 "
 SRCREV = "c02eee26e9eb50e36c3be158ddc34382a45dc20b"

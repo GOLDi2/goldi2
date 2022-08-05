@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM=""
 
 SRC_URI = " \
-    git://git@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/applications.git;protocol=ssh;branch=master \
+    git://token:${GITLAB_TOKEN}@gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/applications.git;protocol=https;branch=master \
     file://load-fpga-firmware.service \
 "
 SRCREV = "647e328dcadeb0e25530dc621a984c5cdaddcef3"
