@@ -1,0 +1,6 @@
+image: ghcr.io/siemens/kas/kas
+
+io-board:
+  stage: build
+  script:
+    - kas build kas.yml
