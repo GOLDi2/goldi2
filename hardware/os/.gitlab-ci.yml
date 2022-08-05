@@ -3,4 +3,5 @@ image: ghcr.io/siemens/kas/kas
 io-board:
   stage: build
   script:
+    - cat "$LOCAL_YML" > "local.yml"
     - kas build kas.yml
