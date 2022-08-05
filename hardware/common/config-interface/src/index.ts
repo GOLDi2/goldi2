@@ -36,7 +36,7 @@ let router = express.Router();
 
 const firmwareFuns = createProcessInterface(router, "/upload_firmware_show")
 router.post('/upload_firmware', firmware_upload.single('file'), async (req, res, next) => {
-    const command = `rauc install ${(req as any).file.path}`
+    const command = `rauc install ${(req as any).file.path} && reboot`;
     firmwareFuns.setProcess(spawn(command, { shell: true }))
     await renderPage(req.path, (req as any).language, res);
 });
