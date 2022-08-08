@@ -6,5 +6,5 @@ variables:
 io-board:
   stage: build
   script:
-    - cat "$LOCAL_YML" > "local.yml"
+    - cat "$LOCAL_YML" | envsubst > "local.yml"
     - kas build kas.yml
