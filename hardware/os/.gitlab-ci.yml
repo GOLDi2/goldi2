@@ -1,5 +1,8 @@
 image: ghcr.io/siemens/kas/kas
 
+variables:
+  GIT_CLEAN_FLAGS: -ffdx -e build/
+
 io-board:
   stage: build
   script:

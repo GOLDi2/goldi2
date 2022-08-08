@@ -1,0 +1,20 @@
+#!/bin/sh
+source /etc/os-release 
+MAC=$(cat /sys/class/net/eth0/address)
+ID=${MAC//:}
+
+url=https://api.goldi-labs.de/updates/$ID?current_version=$VERSION_ID
+
+response=$(curl -H 'Cache-Control: no-cache' -s -i -k --max-time 2 --write-out '%{http_code} %{redirect_url}' "$url")
+read -r http_code redirect_url < <(tail -n1 <<<"$response")
+
+if [ "$http_code" -eq "303" ]; then
+    rauc install "$redirect_url"
+    if [[ $? -ne 0 ]]; then
+        echo "Update installation failed"
+        exit 1
+    fi
+    reboot
+else
+    echo "No update available"
+fi

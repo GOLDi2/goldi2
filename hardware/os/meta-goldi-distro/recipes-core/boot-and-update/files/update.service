@@ -1,0 +1,11 @@
+[Unit]
+Description=Updates the system
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=60s
+ExecStart=/usr/bin/update
+
+[Install]
+WantedBy=multi-user.target

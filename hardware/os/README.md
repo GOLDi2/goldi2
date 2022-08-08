@@ -9,23 +9,6 @@ sudo bmaptool copy ./build/tmp/deploy/images/io-board/goldi-dev-image-io-board.w
 
 # VS Code SSH Remote Development
 
-if you want to connect to the board via VS Code Remote-SSH follow these steps:
-
-first expand the /data drive:
-```
-fdisk /dev/mmcblk0
-> p
-> d
-> n
-> 4
-> 4464640
-> [enter]
-> p
-> w
-```
-
-reboot to grow the fs
-
 copy your project to the target (inside the projectdirectory )
 ```
 rsync -rlptzv --progress --delete --exclude=.git --exclude=node_modules . "root@io-board.local:/data/workspace/"
@@ -37,3 +20,27 @@ copy your project back to your pc (inside the project directory)
 ```
 rsync -rlptzv --progress --delete --exclude=.git --exclude=node_modules "root@io-board.local:/data/workspace/" .
 ```
+
+# PKI
+
+To generate a signing key follow these steps:
+
+1. install easy-rsa
+
+    ```sh
+    wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz -O - | tar -xz
+    ```
+
+2. init easy-rsa
+
+    ```sh
+    ./EasyRSA-3.0.8/easyrsa init-pki
+    ```
+
+3. generate certificate request
+
+    ```sh
+    ./EasyRSA-3.0.8/easyrsa gen-req dev-signing nopass
+    ```
+
+4. let the certificate request be signed

@@ -20,7 +20,7 @@ do_install() {
 }
 
 FILES:${PN} = " \
-    ${systemd_system_unitdir}/mkoverlaydir.service \
+    ${systemd_system_unitdir}/growpart.service \
 "
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
