@@ -6,6 +6,7 @@ variables:
 io-board:
   stage: build
   script:
+    - mkdir -p ~/.ssh/
     - cp "$CI_SSH_KEY" ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - sudo apt-get update && sudo apt-get install gettext-base
