@@ -8,7 +8,7 @@ SRC_URI = " \
     file://update \
 "
 
-RDEPENDS:${PN}="parted"
+RDEPENDS:${PN}="parted curl"
 
 inherit systemd
 
