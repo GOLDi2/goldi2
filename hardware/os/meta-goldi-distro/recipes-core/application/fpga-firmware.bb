@@ -10,9 +10,11 @@ SRC_URI = " \
 
 SRC_URI[sha256sum] = "${APPLICATION_ARCHIVE_CHECKSUM}"
 
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
 do_install() {
     install -d ${D}/lib/firmware/lattice/
-    cp ${WORKDIR}/bitstream.svf ${D}/lib/firmware/lattice/firmware.svf
+    cp ${WORKDIR}/fpga/dist/bitstream.svf ${D}/lib/firmware/lattice/firmware.svf
 
     install -d ${D}/${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/load-fpga-firmware.service ${D}/${systemd_system_unitdir}
