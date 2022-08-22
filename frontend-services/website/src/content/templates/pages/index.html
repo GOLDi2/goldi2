@@ -70,29 +70,10 @@
 {% block main %}
 
 <!-- Startbild neu -->
-<div class="w-full h-screen bg-[url('/img/landing_2.png')] bg-cover">
-    <div class="flex flex-col space-y-5 w-fit h-fit text-left mx-auto font-body p-10">
-        <!-- Der Text müsste noch vertikal zentriert werden. -->
-        <span class="text-gray-100 text-5xl 2xl:text-6xl text-center">GOLDi LABS</span>
-        <div class="h-line"></div>
-        <span class="text-secondary text-4xl"> Real labs at your home</span>
-        <div class="w-80 mr-auto text-gray-100 mx-0">
-            {{text.short_description}}
-        </div>
-        <div>
-            <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
-                {{text.start}}
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Startbild alt
-<div class="w-full h-screen absolute bg-secondary-dark hidden md:block">
-    <div class="absolute top-0 left-[40%] right-0 bottom-0 bg-[url('/img/landing.jpg')] bg-cover bg-left"></div>
-    <div class="absolute top-0 left-0 right-[60%] bottom-0 flex items-center min-w-fit">
+<div class="w-full h-screen mb-[-3.5rem] pb-14">
+    <div class="h-full bg-[url('/img/landing_2.png')] bg-cover flex items-center">
         <div class="flex flex-col space-y-5 w-fit h-fit text-left mx-auto font-body p-10">
-            <span class="text-gray-100 text-6xl 2xl:text-7xl">GOLDi LABS</span>
+            <span class="text-gray-100 text-5xl 2xl:text-6xl text-center">GOLDi LABS</span>
             <div class="h-line"></div>
             <span class="text-secondary text-4xl"> Real labs at your home</span>
             <div class="w-80 mr-auto text-gray-100 mx-0">
@@ -106,25 +87,6 @@
         </div>
     </div>
 </div>
-<div class="w-full h-screen absolute pt-10 flex flex-col bg-secondary-dark md:hidden">
-    <div class="flex mt-12 w-full md:max-w-6xl md:mx-auto">
-        <div class="flex flex-col space-y-5 w-fit h-fit text-center mx-auto font-body">
-            <span class="text-gray-100 text-6xl">GOLDi LABS</span>
-            <div class="h-line"></div>
-            <span class="text-secondary text-4xl"> Real labs at your home</span>
-            <div class="w-80 mr-auto text-gray-100 mx-auto md:mx-0">
-                {{text.short_description}}
-            </div>
-            <div>
-                <button class="bg-primary rounded-3xl px-8 py-1 w-fit text-white text-2xl hover:bg-secondary-primary-hover duration-300">
-                    {{text.start}}
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="bg-secondary-dark bg-[url('/img/landing_s.jpg')] w-full flex-grow bg-cover bg-top"></div>
-</div>
-<div class="h-screen"></div> -->
 
 <!-- Was ist GOLDi LABS? -->
 <div class="max-w-6xl w-full mx-auto py-16 font-body">
