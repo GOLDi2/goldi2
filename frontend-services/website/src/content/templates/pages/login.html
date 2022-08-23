@@ -1,0 +1,53 @@
+
+{% set title = 'Login'%}
+{% set
+    text = {
+        username: 'username',
+        password: 'password',
+        button_login: 'Login',
+        account_setup_prompt: 'You don\'t have a user account yet?',
+        button_register: 'Create user account'
+    }
+ %}
+
+{% if language=='de' %}  
+{% set
+    text = {
+        username: 'Benutzername',
+        password: 'Passwort',
+        button_login: 'Login',
+        account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
+        button_register: 'Benutzerkonto einrichten'
+    }
+%}
+{% endif %}
+
+{% extends "simple.html" %}
+{% block content %}
+
+<section class="w-96 m-auto">
+    <form method="POST" class="flex items-start flex-col w-full gap-4">
+        <div class="w-full">
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
+        </div>
+
+        <div class="w-full">
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
+        </div>
+
+        <div>
+        <button class="primary-button" type="submit">{{text.button_login}}</button>
+        </div>
+        <div>
+            <label> <input type="checkbox" checked="checked" name="remember"> Remember me </label>
+        </div>
+    </form>
+    <div class="mt-4">{{text.account_setup_prompt}}</div>
+    <button class="secondary-button">
+        {{text.button_register}}
+    </button>
+</section>
+
+{% endblock %}

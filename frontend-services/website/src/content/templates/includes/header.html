@@ -3,7 +3,7 @@
 {% set
     navbar = {
         secondary: [
-            {name: 'Login', href: '/'},
+            {name: 'Login', href: '/login.html'},
             {name: 'Register', href: '/about'}
         ],
 
@@ -41,8 +41,8 @@
 {% set
     navbar = {
         secondary: [
-            {name: 'Login', href: '/'},
-            {name: 'Registrieren', href: '/about'}
+            {name: 'Login', href: '/login.html'},
+            {name: 'Registrieren', href: '/register.html'}
         ],
         
         doc: 'Dokumentation',
@@ -136,11 +136,17 @@
                     
                 </div>
 
-                <!--Login & Register-->
-                <span class="bg-gray-400 w-px h-6 mr-2"></span>
-                {% for item in navbar.secondary %}
-                <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
-                {% endfor %}
+                {% if isLoggedIn %}
+                    <div class="text-white">
+                        <a href="logout.html?redirect={{page}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ user.username }}</a>
+                    </div>
+                {% else %}
+                    <!--Login & Register-->
+                    <span class="bg-gray-400 w-px h-6 mr-2"></span>
+                    {% for item in navbar.secondary %}
+                        <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+                    {% endfor %}
+                {% endif %}
                 
                 <!--Language-->
                 <div class="normal-dropdown">
@@ -148,8 +154,8 @@
                         <img class="h-7" src="/img/language_icon.svg" alt="language">
                     </button>
                     <div class="normal-dropdown-content">
-                      <a href="#" language='de'>DE</a>
-                      <a href="#" language='en'>EN</a>
+                      <a href="/de/{{page}}" language='de'>DE</a>
+                      <a href="/en/{{page}}" language='en'>EN</a>
                 </div>            
 
             </div>
