@@ -1,0 +1,35 @@
+{
+  "name": "ecp",
+  "version": "1.0.0",
+  "description": "Experiment Control Panel",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --mode development --watch",
+    "serve": "webpack serve"
+  },
+  "author": "Johannes Nau",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^2.7.1",
+    "source-map-loader": "^4.0.0",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
+  },
+  "dependencies": {
+    "@cross-lab-project/api-client": "^0.0.15",
+    "@cross-lab-project/soa-client": "^0.0.9",
+    "@cross-lab-project/soa-service-electrical": "^0.0.1",
+    "@cross-lab-project/soa-service-webcam": "^0.0.1",
+    "cross-fetch": "^3.1.5",
+    "events": "^3.3.0",
+    "immer": "^9.0.15",
+    "lit": "^2.3.1",
+    "url": "^0.11.0"
+  }
+}
