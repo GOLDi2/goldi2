@@ -1,27 +1,41 @@
-import { APIClient } from "@cross-lab-project/api-client";
-import { DeviceHandler } from "@cross-lab-project/soa-client";
-import {ElectricalConnection} from "./electricalConnection"
-import { Webcam } from "./webcam";
+import { APIClient } from './client';
+import { DeviceOverview } from "@cross-lab-project/api-client/dist/generated/device/types";
+import { LitElement, html, adoptStyles, unsafeCSS } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 
-const device_id='60895feb-00cb-4f60-bb96-2ee5a8edab14'
-const client = new APIClient('https://api.goldi-labs.de');
-const deviceHandler = new DeviceHandler()
+import './esp-device-panel'
+import './esp-config-pane'
 
+import style from './styles.css'
 
-async function main() {
-    await client.postLogin({username: 'REDACTED', password: 'REDACTED', method: 'tui'})
-    const {body: token}=(await client.getDevicesByDeviceIdToken({device_id}))
+const stylesheet = unsafeCSS(style)
 
-    const ecs = new ElectricalConnection()
-    ecs.register(deviceHandler)
-    document.body.appendChild(ecs)
+@customElement('esp-app')
+export class App extends LitElement {
+    @state()
+    devices: DeviceOverview[] = [];
 
-    const webcam = new Webcam()
-    webcam.register(deviceHandler)
-    document.body.appendChild(webcam)
-    
-    deviceHandler.connect({ endpoint: "wss://api.goldi-labs.de/devices/ws", id: "https://api.goldi-labs.de/devices/"+device_id, token })
+    async connectedCallback() {
+        super.connectedCallback();
+        adoptStyles(this.shadowRoot, [stylesheet]);
+        const client = new APIClient();
+        const devices_response = await client.getDevices();
+        if (devices_response.status == 200) {
+            this.devices = devices_response.body
+        } else {
+            alert("Error: " + devices_response.status)
+        }
+    }
+
+    render() {
+        return html`
+        <div class="flex h-80">
+            <div class="border-black border-2 overflow-y-scroll w-80 h-full">
+                <esp-device-panel .device=${this.devices}/>
+            </div>
+            <div class="border-black border-2 grow">
+                <esp-config-pane></esp-config-pane>
+            </div>
+        </div>`;
+    }
 }
-
-
-main()
