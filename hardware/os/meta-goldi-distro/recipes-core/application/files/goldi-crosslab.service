@@ -1,0 +1,10 @@
+[Unit]
+Description=GOLDi2 Crosslab Client
+After=network.target
+
+[Service]
+Restart=on-failure
+ExecStart=crosslab_client
+
+[Install]
+WantedBy=multi-user.target

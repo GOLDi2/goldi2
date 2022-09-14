@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=907b5e856b2e6bcd8a3cc8d338a6166f"
 PV = "1.3.2+git${SRCPV}"
 
 SRC_URI = "git://github.com/GOLDi2/aiortc.git;protocol=https;branch=main"
-SRCREV = "acc534b9158934aa11d9317073f309b386e379d8"
+SRCREV = "6a84510edf538e19e2102140a34f6a35454c647e"
 
 S = "${WORKDIR}/git"
 

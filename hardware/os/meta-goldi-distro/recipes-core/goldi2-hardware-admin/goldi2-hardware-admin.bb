@@ -10,7 +10,7 @@ SRC_URI = " \
     git://gitlab.tu-ilmenau.de/FakIA/fachgebiet-iks/goldi/goldi2/hardware/admin.git;protocol=https;branch=master;user=token:${GITLAB_TOKEN} \
     file://goldi2-admin.service \
 "
-SRCREV = "f9388f27390a998ae6b240814020719dc9a0bf4a"
+SRCREV = "038576ddea57401cb2f3890a030fc88c09b467d8"
 PV = "1.0.3+git${SRCPV}"
 
 S = "${WORKDIR}/git"

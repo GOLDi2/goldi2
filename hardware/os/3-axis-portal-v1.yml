@@ -48,8 +48,8 @@ repos:
       meta-networking:
 
   meta-rauc:
-    url: https://github.com/rauc/meta-rauc.git
-    refspec: 3faf4cc4fcf558e99dad5aa8532fef2ecd566653
+    url: https://github.com/GOLDi2/meta-rauc.git
+    refspec: c9126ee5fcbbb0a631d1f7b815153beeebe50158
 
   #meta-rauc-community:
   #  url: https://github.com/leon-anavi/meta-rauc-community.git

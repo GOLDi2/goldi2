@@ -3,4 +3,4 @@ SUMMARY = "GOLDi packagegroup"
 
 inherit packagegroup
 
-RDEPENDS:${PN} = "fpga-firmware python3-driver manual-control-script"
+RDEPENDS:${PN} = "fpga-firmware python3-driver manual-control-script crosslab"
