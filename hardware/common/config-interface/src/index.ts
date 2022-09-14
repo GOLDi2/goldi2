@@ -119,7 +119,7 @@ router.all("/crosslab", firmware_upload.none(), async (req, res, next) => {
       config.CROSSLAB_CONFIG_FILE,
       JSON.stringify(crosslab_settings)
     );
-    spawnSync("systemctl restart goldi2-crosslab.service", { shell: true });
+    spawnSync("systemctl restart goldi-crosslab.service", { shell: true });
   }
   await renderPage(req.path, (req as any).language, res, {
     id: crosslab_settings.deviceId,
