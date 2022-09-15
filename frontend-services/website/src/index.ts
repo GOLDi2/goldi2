@@ -104,7 +104,8 @@ app.use('/', asyncHandler(async (req: Request, res, next) => {
             req.user = identityResponse.body
         }*/
         req.user = {
-            username: "Username TO BE CHANGED"
+            username: "Username TO BE CHANGED",
+            token: req.cookies.token
         }
     }
     next()
