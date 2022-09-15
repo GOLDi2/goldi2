@@ -12,6 +12,7 @@
   "author": "Johannes Nau",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.8",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
@@ -31,12 +32,13 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
-    "@cross-lab-project/api-client": "^0.0.15",
+    "@cross-lab-project/api-client": "^0.0.23",
     "cross-fetch": "^3.1.5",
     "events": "^3.3.0",
     "immer": "^9.0.15",
     "interactjs": "^1.10.17",
     "lit": "^2.3.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "uuid": "^9.0.0"
   }
 }

@@ -17,6 +17,7 @@ export class DevicePanel extends LitElement {
     device: DeviceOverview[];
 
     render() {
+        return html``;
         return html`
         <div>
             <h2>Devices</h2>

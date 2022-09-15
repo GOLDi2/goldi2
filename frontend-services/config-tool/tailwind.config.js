@@ -4,10 +4,9 @@ module.exports = {
   content: ['./src/**/*.ts'],
   theme: {
     colors: {
-      black: '#242728',
+      black: colors.black,
       white: colors.white,
-      gray: colors.gray,
-      primary: '#f2ab55',
+      /*primary: '#f2ab55',
       secondary: {
         DEFAULT: '#7ea1c4',
         'light': '#e8eef3',
@@ -21,6 +20,15 @@ module.exports = {
         'light-middle-hover':'#3B65A5',
 
         'footer-black': '#191616',
+      },*/
+      primary:{
+        DEFAULT: '#3f5e9e',
+        '900': '#1c355d',
+        '100': '#c0dbf1',
+        '50': '#f2f5fc'
+      },
+      secondary: {
+        DEFAULT: '#f2ab55',
       },
     },
     fontFamily: {
