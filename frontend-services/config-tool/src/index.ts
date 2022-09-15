@@ -34,9 +34,12 @@ export class App extends LitElement {
     const experiment={...this.configPane.experimentConfiguration}
     experiment.status="running"
     experiment.devices=experiment.roles.map(role=>({device: role.template_device as string, role: role.name}))
-    const ecp = window.open(`http://localhost:8081`, '_blank', 'popup');
+    const ecp = window.open(`/ecp/`, '_blank', 'popup');
     ecp.addEventListener('message', (e) => {
       if(e.data==="ecp-loaded"){
+        ecp.postMessage({token: localStorage.getItem('token')}, "*")
+      }
+      if(e.data==="ecp-authorized"){
         this.client.createExperiment('https://api.goldi-labs.de', experiment)
       }
     });
