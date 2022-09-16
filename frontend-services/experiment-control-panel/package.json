@@ -22,14 +22,20 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
-    "@cross-lab-project/api-client": "^0.0.15",
-    "@cross-lab-project/soa-client": "^0.0.9",
-    "@cross-lab-project/soa-service-electrical": "^0.0.1",
-    "@cross-lab-project/soa-service-webcam": "^0.0.1",
+    "@cross-lab-project/api-client": "^0.0.23",
+    "@cross-lab-project/soa-client": "^0.0.10",
+    "@cross-lab-project/soa-service-electrical": "^0.0.2",
+    "@cross-lab-project/soa-service-webcam": "^0.0.2",
+    "autoprefixer": "^10.4.11",
     "cross-fetch": "^3.1.5",
+    "css-loader": "^6.7.1",
     "events": "^3.3.0",
     "immer": "^9.0.15",
     "lit": "^2.3.1",
+    "postcss": "^8.4.16",
+    "postcss-jsx": "^0.36.4",
+    "postcss-loader": "^7.0.1",
+    "tailwindcss": "^3.1.8",
     "url": "^0.11.0"
   }
 }
