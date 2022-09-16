@@ -28,3 +28,10 @@ yarn run start:dev
 ```
 ### How to keep NPM and Yarn lock files in sync
 Make sure that the package-lock.json is the single point of truth. Whenever the lock files needs to change, delete yarn.lock, change the package-lock.json and run `yarn import` to recreate the yarn.lock
+
+## Publish the docker image ##
+
+```
+npm run build
+docker push goldi2/web-frontend:latest
+```

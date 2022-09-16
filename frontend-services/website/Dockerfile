@@ -1,7 +1,7 @@
 # Build Image
 FROM node:latest AS build
 WORKDIR /app
-COPY package.json package-lock.json /app/
+COPY package.json package-lock.json .npmrc /app/
 #RUN --mount=type=secret,mode=0644,id=npmrc,target=/usr/src/app/.npmrc npm ci --only=production
 RUN npm ci --only=production
  
