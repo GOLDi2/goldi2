@@ -120,7 +120,7 @@ module.exports = {
                           };*/
                           var formData = {
                               UserFile: {
-                                  value:  fs.createReadStream(tmpPath+'/main.hex'),
+                                  value:  fs.createReadStream((sketchPath??tmpPath)+'/main.hex'),
                                   options: {
                                       //'content-type': 'application/octet-stream',
                                       filename: 'MicrocontrollerProgrammingFile.hex'
@@ -190,7 +190,7 @@ module.exports = {
                             if ((req.body.experimentId != undefined) &&(req.body.uploadServer != undefined)){
                                 resSent = true;
 
-                                fs.renameSync(path.join(sketchPath, mainSketch + ".goldi.avr.experiment.hex"), path.join(tmpPath, "main.hex"));
+                                fs.renameSync(path.join(tmpPath, 'ArduinoCLIBuild', mainSketch + ".ino.hex"), path.join(tmpPath, "main.hex"));
 
                                 var formData = {
                                     UserFile: {
