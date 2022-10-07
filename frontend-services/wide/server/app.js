@@ -29,8 +29,8 @@ log4js.configure({
   },
   categories: {
     default: { appenders: ['console'], level: 'info' },
-    compile: { appenders: ['compile_file', 'general'], level: 'info' },
-    gcc: { appenders: ['gcc_file', 'general', 'console'], level: 'info' }
+    compile: { appenders: ['console'], level: 'info' },
+    gcc: { appenders: ['console'], level: 'info' }
   }
 });
 

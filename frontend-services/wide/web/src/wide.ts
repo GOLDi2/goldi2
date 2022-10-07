@@ -54,7 +54,7 @@ function init(){
 
     iFrame=document.createElement('iframe');
     let paramstring = window.location.search.substring(1);
-    iFrame.src = './WIDE/index.html?' + paramstring;
+    iFrame.src = './index.html?' + paramstring;
     iFrame.style.width='100%';
     iFrame.style.height='100%';
     iFrame.style.border='0';

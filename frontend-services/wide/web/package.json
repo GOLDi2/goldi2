@@ -8,7 +8,7 @@
     },
     "scripts": {
         "copy-monaco": "copyfiles -u 3 -V 'editor-release/min/vs/**/*.*' dist/WIDE/monaco",
-        "copy-dev-index": "copyfiles -u 1 src/index-dev.html dist/",
+        "copy-dev-index": "copyfiles -u 1 src/index-dev.html dist/WIDE",
         "copy-index": "copyfiles -u 1 src/index.html dist/WIDE/",
         "copy-examples": "copyfiles -u 1 examples/**/*.* dist/WIDE/examples/",
         "copy-img": "copyfiles -u 1 img/* dist/WIDE/img/",

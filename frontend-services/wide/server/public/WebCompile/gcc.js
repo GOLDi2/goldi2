@@ -32,7 +32,6 @@ module.exports = {
       let nsPath = path.resolve(process.cwd()); //NodeServer Path
       let avrPath = path.resolve(nsPath, 'makefiles/avr-gcc');
       let tmpPath = path.resolve(nsPath, tmpName);
-      let tmpMkfilePath = path.resolve(nsPath, tmpName + '/Makefile');
       let makeExePath = path.resolve(nsPath, 'toolchains/make');
       let toolchainsPath = path.resolve(nsPath, 'toolchains/');
 
@@ -44,6 +43,7 @@ module.exports = {
           mainSketch = req.body.files[0].name.slice(0, req.body.files[0].name.indexOf("/"));
           sketchPath = path.resolve(tmpPath, mainSketch);
       }
+      let tmpMkfilePath = path.resolve(sketchPath??tmpPath, 'Makefile');
 
       if (req.body.makefile === "arduino") {
           let board = req.body.board;
@@ -73,10 +73,7 @@ module.exports = {
             }
       exec(makeExePath + ' all',
           {
-              cwd: tmpPath,
-              env: {
-                  "TOOLCHAINS": toolchainsPath
-              }
+              cwd: sketchPath??tmpPath+'/',
           },
           function (error, stdout, stderr) { // wichtig, an dateien immer .c anhängen, weil sonst nivht funktioniert
               gccLogger.info('make.exe stdout: ' + stdout);
@@ -172,9 +169,9 @@ module.exports = {
         } else {
             let bonus_flags = "";
             if (fqbn.includes("goldi:avr:experiment")) {
-                bonus_flags = bonus_flags.concat("--build-properties runtime.tools.avr-gcc.path=" + '"' + path.join(toolchainsPath, "avr-gcc/"));
+                bonus_flags = bonus_flags.concat('--build-property runtime.tools.avr-gcc.path="/usr/"');
             }
-            exec('arduino-cli compile -v -b ' + fqbn + ' ' + sketchPath  + ' --build-path "' + path.join(tmpPath, "ArduinoCLIBuild") + '" ' + bonus_flags, {cwd: arduinocliPath},
+            exec('./arduino-cli compile -v -b ' + fqbn + ' ' + sketchPath  + ' --build-path "' + path.join(tmpPath, "ArduinoCLIBuild") + '" ' + bonus_flags, {cwd: arduinocliPath},
                 function (error, stdout, stderr) { // wichtig, an dateien immer .ino anhängen, weil sonst nicht funktioniert
                     gccLogger.info('make.exe stdout: ' + stdout);
                     runningProcesses.addProcess(req.body.sessionId);

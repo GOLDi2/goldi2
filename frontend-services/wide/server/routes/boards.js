@@ -13,7 +13,7 @@ let arduinoPath = path.join(__dirname, '../makefiles/arduino-cli/');
  * gets a list of all installed boards and saves them in supportedBoards as a JSON object
  */
 function getBoards() {
-    exec("arduino-cli board listall --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
+    exec("./arduino-cli board listall --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
         if (error) {
             throw (stderr);
         } else {
@@ -30,7 +30,7 @@ function getBoards() {
  * @param fqbn - the fully qualified board name
  */
 function getBoardOptions(fqbn) {
-    exec("arduino-cli board details -b " + fqbn + " --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
+    exec("./arduino-cli board details -b " + fqbn + " --format json", {cwd: arduinoPath} , function (error, stdout, stderr) {
         if (error) {
             throw (stderr);
         } else {
@@ -51,7 +51,7 @@ function getBoardOptions(fqbn) {
  * updates the index of the arduino-cli
  */
 function updateIndex() {
-    exec("arduino-cli core update-index", {cwd: arduinoPath} , function (error, stdout, stderr) {
+    exec("./arduino-cli core update-index", {cwd: arduinoPath} , function (error, stdout, stderr) {
         if (error) {
             throw (stderr);
         } else {

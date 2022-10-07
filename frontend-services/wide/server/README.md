@@ -1,5 +1,11 @@
 # WIDE SERVER
 
+To run:
+
+```
+docker run -e BACKEND_PATH=http://localhost:8080 -p 8080:8080 goldi2/wide-server
+```
+
 ## Build the docker image ##
 
 ```

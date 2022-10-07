@@ -1,5 +1,5 @@
 # basic settings
-MCU=ATmega644A
+MCU=atmega644a
 F_CPU = 12000000UL
 TARGET = main
 
