@@ -14,7 +14,7 @@ import { testCase as mc_gpio_test } from "./mc_gpio_test"
 
 export const testCases = [
     ethernet_test,
-    false_test,
+    //false_test,
     fpga_clock_test,
     rpi_gpio_test,
     i2c_test,
@@ -22,7 +22,7 @@ export const testCases = [
     programming_test_fpga,
     programming_test_microcontroller,
     spi_test,
-    true_test,
+    //true_test,
     uart_test,
     usb_slave_test,
     mc_gpio_test
