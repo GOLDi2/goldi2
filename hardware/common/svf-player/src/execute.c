@@ -1,7 +1,7 @@
 #include <time.h>
 #include <errno.h>
 #include "execute.h"
-#include "parser.h"
+#include "generated/parser.h"
 #include "bcmGPIO.c"
 
 static List* instruction_list = NULL;
@@ -16,8 +16,8 @@ static SVF_Shift_Data TIR = {0, NULL, NULL, NULL, NULL};
 static int CURRENT_STATE = SVF_STATE_RESET;
 static struct timespec SLEEP_TIME = {0,0};
 
-char* print_hexstring(char* hexstring, unsigned int length) {
-    for (int i = 0; i < length; i++)
+void print_hexstring(char* hexstring, unsigned int length) {
+    for (unsigned int i = 0; i < length; i++)
     {
         unsigned char first = (hexstring[i] & 0xF0) >> 4;
         unsigned char second = hexstring[i] & 0x0F;
@@ -34,7 +34,7 @@ char* to_printable_hexstring(char* hexstring, unsigned int length) {
 
     if (hexstring == NULL)
     {
-        for (int i = 0; i < length*2; i++) 
+        for (unsigned int i = 0; i < length*2; i++) 
         {
             str[i] = '0';
         }
@@ -42,7 +42,7 @@ char* to_printable_hexstring(char* hexstring, unsigned int length) {
         return str;
     }
 
-    for (int i = 0; i < length; i++)
+    for (unsigned int i = 0; i < length; i++)
     {
         unsigned char first = (hexstring[i] & 0xF0) >> 4;
         unsigned char second = hexstring[i] & 0x0F;
@@ -349,12 +349,12 @@ static int _shift(SVF_Shift_Data* instr, char* data, int exit, char* instruction
         j--;
         int shift = 0;
         int pos = 1;
-        for (int i = 0; i < 8 - instr->length; i++)
+        for (unsigned int i = 0; i < 8 - instr->length; i++)
         {
             shift++;
             pos *= 2;
         }
-        for (int i = 0; i < instr->length; i++)
+        for (unsigned int i = 0; i < instr->length; i++)
         {
             //printf("tms: %d, tdi: %d, pos: %02x, shift: %d\n", (exit && (i == instr->length-1) && (j == 0)), ((instr->tdi[j] & pos) >> shift), pos, shift);
             data[j] |= clk((exit && (i == instr->length-1) && (j == 0)), (instr->tdi[j] & pos) >> shift) << shift;
@@ -528,7 +528,7 @@ int execute_instructions()
                 if (verbose) printf("Executing RUNTEST\n");
                 struct timespec start_time;
                 struct timespec current_time;
-                long max_time_nsec = (long) (instruction->max_time * 1000000000);
+                // long max_time_nsec = (long) (instruction->max_time * 1000000000);
                 long min_time_nsec = (long) (instruction->min_time * 1000000000);
                 if (clock_gettime(CLOCK_REALTIME, &start_time)) return 1;
                 if (instruction->run_state && instruction->run_state != CURRENT_STATE) {

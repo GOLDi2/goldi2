@@ -2,7 +2,7 @@
 #define EXECUTE_H
 
 #include "util.h"
-#include "cJSON.h"
+#include "json/cJSON.h"
 
 extern int verbose;
 extern int interrupt;

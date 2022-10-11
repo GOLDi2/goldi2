@@ -1,7 +1,7 @@
-#include "lexer.h"
-#include "parser.h"
+#include "generated/lexer.h"
+#include "generated/parser.h"
 #include "execute.h"
-#include "cJSON.h"
+#include "json/cJSON.h"
 
 int verbose = 0;
 int interrupt = 1;

@@ -5,11 +5,12 @@ project('svf-player', 'c',
 bcm = declare_dependency(
     link_args : ['-lbcm2835'])
 
-run_command('yacc', '--defines=src/parser.h', '--output=src/parser.c', 'grammars/svf.y', check: true)
-run_command('flex', '--outfile=src/lexer.c', '--header-file=src/lexer.h', '--nounput', 'grammars/svf.l', check: true)
+run_command('mkdir', 'src/generated', check: false)
+run_command('yacc', '--defines=src/generated/parser.h', '--output=src/generated/parser.c', 'grammars/svf.y', check: true)
+run_command('flex', '--outfile=src/generated/lexer.c', '--header-file=src/generated/lexer.h', '--nounput', 'grammars/svf.l', check: true)
 
-exe = executable('svf-player', 'src/lexer.c', 'src/parser.c', 'src/execute.c', 'src/util.c', 'src/svf_player.c', 'src/cJSON.c',
+exe = executable('svf-player', 'src/generated/lexer.c', 'src/generated/parser.c', 'src/execute.c', 'src/util.c', 'src/svf_player.c', 'src/json/cJSON.c',
   dependencies : [bcm],
   install : true)
 
-test('basic', exe, args: ['../testfile'])
+test('basic', exe, args: ['../test/test.svf'])
