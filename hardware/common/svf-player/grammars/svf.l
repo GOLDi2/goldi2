@@ -15,7 +15,7 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 
 "! [instruction-label] "{STRING}\n     {
                                             char* string = (char*) malloc(strlen(yytext)-22+1);
-                                            for (int i = 0; i < strlen(yytext)-22; i++) 
+                                            for (unsigned int i = 0; i < strlen(yytext)-22; i++) 
                                             {
                                                 if (yytext[i+22]!='\n') string[i] = yytext[i+22];
                                             }
@@ -24,7 +24,7 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                                         }
 "// [instruction-label] "{STRING}\n     {
                                             char* string = (char*) malloc(strlen(yytext)-23+1);
-                                            for (int i = 0; i < strlen(yytext)-23; i++) 
+                                            for (unsigned int i = 0; i < strlen(yytext)-23; i++) 
                                             {
                                                 if (yytext[i+23]!='\n') string[i] = yytext[i+23];
                                             }
@@ -46,7 +46,7 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                     }
                     char* text = (char*) malloc(strlen(yytext) - special_characters + 1);
                     int offset = 0;
-                    for (int i = 0; i < strlen(yytext) + 1; i++)
+                    for (unsigned int i = 0; i < strlen(yytext) + 1; i++)
                     {
                         if (yytext[i] == ' ' || yytext[i] == '\t' || yytext[i] == '\n' || yytext[i] == '(' || yytext[i] == ')')
                         {
@@ -102,7 +102,7 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
                 }
 {REAL}          {  
                     char* errstr;
-                    for (int i = 0; i < strlen(yytext); i++)
+                    for (unsigned int i = 0; i < strlen(yytext); i++)
                     {
                         if (yytext[i] == ',') 
                         {
@@ -272,7 +272,7 @@ HEXSTRING       "("[0-9A-Fa-f\ \t\n]+")"
 "MAXIMUM"       return(SVF_MAXIMUM);
 "ENDSTATE"      return(SVF_ENDSTATE);
 
-[ \t\n]+            /* eat up whitespace */
+[ \t\n\r]+            /* eat up whitespace */
 
 ";"             return(SVF_INSTRUCTION_END);
 

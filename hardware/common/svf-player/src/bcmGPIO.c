@@ -14,10 +14,6 @@
 
 int initGPIO()
 {
-    // If you call this, it will not actually access the GPIO
-    // Use for testing
-    // bcm2835_set_debug(1);
-
     if (!bcm2835_init())
       return 1;
 
