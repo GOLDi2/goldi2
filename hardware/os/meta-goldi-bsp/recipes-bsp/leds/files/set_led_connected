@@ -1,0 +1,5 @@
+#!/bin/sh
+/bin/echo none > /sys/class/leds/red\:cloud/trigger
+/bin/echo none > /sys/class/leds/green\:cloud/trigger
+/bin/echo 0 > /sys/class/leds/red\:cloud/brightness
+/bin/echo 255 > /sys/class/leds/green\:cloud/brightness

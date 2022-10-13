@@ -12,7 +12,7 @@ SRC_URI[sha256sum] = "${APPLICATION_ARCHIVE_CHECKSUM}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-RDEPENDS:${PN} = "python3 python3-spidev python3-asyncio python3-goldi python3-driver fpga-firmware"
+RDEPENDS:${PN} = "python3 python3-spidev python3-asyncio python3-goldi python3-driver fpga-firmware led-control-scripts"
 
 do_install() {
     install -d ${D}/usr/bin/
