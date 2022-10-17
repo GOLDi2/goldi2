@@ -74,7 +74,7 @@ export class PlugableViewport extends LitElement {
   static styles = css`
     #plugable-viewport-container {
       overflow: hidden;
-      position: absolute;
+      position: relative;
       width: 100%;
       height: 100%;
     }
@@ -250,9 +250,8 @@ export class PlugableViewport extends LitElement {
     const coordinates: ConnectionCoordinates[] = [];
     for (const connection of this.connections) {
       const plugables = connection.keys.map(key => this.plugables[key]).filter(e => e !== undefined);
-      coordinates.push(getConnectionCoordinates(plugables));
+      coordinates.push({...getConnectionCoordinates(plugables), details: (connection as any).details});
     }
-    //coordinates.forEach(c=> console.log(...c.connectionPoints))
     if (this.dragging && this.dragging.element) {
       coordinates.push(getConnectionCoordinates([this.dragging.element, this.dragging.second_element || this.dragging.coordinate]));
     }

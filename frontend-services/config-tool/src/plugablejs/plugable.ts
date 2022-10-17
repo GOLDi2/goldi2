@@ -28,6 +28,7 @@ interface Point {
 export interface ConnectionCoordinates {
   center: Point;
   connectionPoints: Point[];
+  details?: any;
 }
 
 export function getConnectionLines(coordinates: ConnectionCoordinates) {
@@ -67,6 +68,16 @@ export class PlugableReflectEvent extends CustomEvent<Plugable> {
     super('plugable-reflect', {
       detail: plugable,
       bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export class PlugablePlugReflectEvent extends CustomEvent<Plugable> {
+  constructor() {
+    super('plugable-plug-reflect', {
+      bubbles: true,
+      composed: true,
     });
   }
 }
@@ -76,6 +87,7 @@ export class PlugableDragEvent extends CustomEvent<{enabled: false} | {element: 
     super('plugable-drag', {
       detail: detail,
       bubbles: true,
+      composed: true,
     });
   }
 }
@@ -85,6 +97,7 @@ export class PlugablePlugEvent extends CustomEvent<{element: Plugable}> {
     super('plugable-plug', {
       detail: detail,
       bubbles: false,
+      composed: true,
     });
   }
 }
@@ -120,6 +133,7 @@ export class PlugableConnectionPoint extends LitElement {
   firstUpdated() {
     this.viewport = closestViewport(this);
     this.style.zIndex = '100';
+    this.dispatchEvent(new PlugablePlugReflectEvent())
   }
 }
 
@@ -132,11 +146,11 @@ export class PlugableElement extends LitElement implements Plugable {
   key: string;
 
   public get connectionPoints(): PlugableConnectionPoint[] {
-    return Array.from(
+    return [...Array.from(
       (this.renderRoot.firstElementChild as HTMLSlotElement)
         .assignedElements({flatten: true})
         .flatMap(e => Array.from(e.querySelectorAll('plugable-connection-point') as NodeListOf<PlugableConnectionPoint>)),
-    );
+    ), ...(Array.from(this.querySelectorAll('plugable-connection-point')) as PlugableConnectionPoint[])];
   }
 
   @property()
@@ -150,7 +164,6 @@ export class PlugableElement extends LitElement implements Plugable {
 
   requestUpdate(name?: PropertyKey, oldValue?: unknown) {
     if (name === '_slot') {
-      console.log('slot changed');
     }
     if (name === 'isPlugableTarget') {
       if (this.connectionPoints && this.connectionPoints.length > 0) {
@@ -224,7 +237,6 @@ export class PlugableElement extends LitElement implements Plugable {
         return dragable_compatible && dropzone_compatible;
       },
       ondropactivate: () => {
-        console.log('ondropactivate');
         this.isPlugableTarget = true;
       },
       ondropdeactivate: () => {
@@ -241,6 +253,9 @@ export class PlugableElement extends LitElement implements Plugable {
       },
     });
 
+    this.addEventListener('plugable-plug-reflect', ()=>{
+      this.dispatchEvent(new PlugableReflectEvent(this));
+    })
     this.dispatchEvent(new PlugableReflectEvent(this));
   }
 }
