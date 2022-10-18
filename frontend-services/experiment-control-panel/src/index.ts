@@ -3,6 +3,7 @@ import { DeviceHandler } from "@cross-lab-project/soa-client";
 import { adoptStyles, html, LitElement, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ElectricalConnection } from "./electricalConnection";
+import { FileUpload } from './file';
 import { Webcam } from "./webcam";
 
 const device_id = "60895feb-00cb-4f60-bb96-2ee5a8edab14";
@@ -14,14 +15,14 @@ const stylesheet = unsafeCSS(style);
 @customElement("ecp-app")
 export class App extends LitElement {
   @state()
-  private sensors: ElectricalConnection;
+  private electrical: ElectricalConnection;
   @state()
-  private actuators: ElectricalConnection;
+  private file: FileUpload;
   @state()
   private webcam: Webcam;
 
   @state()
-  private isLoading: boolean = true;
+  private isLoading: boolean = false;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -42,11 +43,11 @@ export class App extends LitElement {
       "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     );
 
-    this.sensors = new ElectricalConnection("sensors");
-    this.sensors.register(deviceHandler);
+    this.electrical = new ElectricalConnection("electrical");
+    this.electrical.register(deviceHandler);
 
-    this.actuators = new ElectricalConnection("actuators");
-    this.actuators.register(deviceHandler);
+    this.file = new FileUpload("file");
+    this.file.register(deviceHandler);
 
     this.webcam = new Webcam();
     this.webcam.register(deviceHandler);
@@ -69,8 +70,8 @@ export class App extends LitElement {
         <div class="grow flex w-full items-center">
           <div class="flex-1">${this.webcam}</div>
           <div class="flex-1 flex flex-col">
-            <div class="p-4">${this.sensors}</div>
-            <div class="p-4">${this.actuators}</div>
+            <div class="p-4">${this.file}</div>
+            <div class="p-4">${this.electrical}</div>
           </div>
         </div>
         <div class="bg-primary-100 w-full h-12"></div>

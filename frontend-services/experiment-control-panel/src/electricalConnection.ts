@@ -40,6 +40,7 @@ export class ElectricalConnection extends LitElement {
     sensor_service.addInterface(sensor_interface);
 
     sensor_service.on("newInterface", (event) => {
+      console.log(event);
       if (event.connectionInterface.interfaceType == "gpio") {
         const gpioInterface = event.connectionInterface as GPIOInterface;
         this._interfaces[gpioInterface.configuration.signals.gpio] =
