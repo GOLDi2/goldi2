@@ -30,3 +30,17 @@ io-board:
     - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 build/tmp/deploy/ipk/ admin@x56.theoinf.tu-ilmenau.de:/data/www/package/ipk-dev
     - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 -L build/tmp/deploy/images/3-axis-portal-v1/goldi-*3-axis-portal-v1.*raucb admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/update
     - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 -L build/tmp/deploy/images/3-axis-portal-v1/goldi-*3-axis-portal-v1.wic* admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/image
+
+microcontroller:
+  stage: build
+  script:
+    - mkdir -p ~/.ssh/
+    - cp "$CI_SSH_KEY" ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - sudo apt-get update && sudo apt-get install gettext-base
+    - cat "$LOCAL_YML" | envsubst > "local.yml"
+    - kas build microcontroller.yml
+    - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 build/sstate-cache/ admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/share/sstate
+    - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 build/tmp/deploy/ipk/ admin@x56.theoinf.tu-ilmenau.de:/data/www/package/ipk-dev
+    - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 -L build/tmp/deploy/images/microcontroller/goldi-*microcontroller.*raucb admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/update
+    - rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --progress --chmod=755 -L build/tmp/deploy/images/microcontroller/goldi-*microcontroller.wic* admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/image
