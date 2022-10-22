@@ -1,6 +1,6 @@
 {
   "name": "esp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Experiment Selection Panel",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",

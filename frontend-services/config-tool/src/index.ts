@@ -12,7 +12,7 @@ const stylesheet = unsafeCSS(style);
 
 import './plugablejs/viewport';
 import { ConfigPane } from './esp-config-pane';
-import { mc, three_axes_portal_mc } from './predefined';
+import { mc, three_axes_portal, three_axes_portal_io, three_axes_portal_mc } from './predefined';
 import { Experiment } from '@cross-lab-project/api-client/dist/generated/experiment/types';
 
 const API_URL = 'https://api.goldi-labs.de';
@@ -47,6 +47,7 @@ export class App extends LitElement {
         this.client.createExperiment(API_URL, experiment)
       }
     });
+    //this.client.createExperiment(API_URL, experiment)
   }
 
   @state()
@@ -77,8 +78,10 @@ export class App extends LitElement {
                 ${device.name}
               </div>`,
             )}
-            <button class="m-2 p-4 mt-16 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal_mc}}>3 Achs Portal + Microcontroller</button>
-            <button class="m-2 p-4 mt-16 bg-primary-900 text-white" @click=${()=>{this.exp=mc}}>Microcontroller</button>
+            <button class="m-2 p-4 mt-16 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal}}>3 Achs Portal</button>
+            <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal_mc}}>3 Achs Portal + Microcontroller</button>
+            <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal_io}}>3 Achs Portal + IO Board</button>
+            <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=mc}}>Microcontroller</button>
           </div>
           <div class="grow relative flex-auto">
             <div class="w-full h-full overflow-hidden">
