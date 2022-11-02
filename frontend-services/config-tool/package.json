@@ -1,0 +1,44 @@
+{
+  "name": "esp",
+  "version": "0.0.2",
+  "description": "Experiment Selection Panel",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --mode development --watch",
+    "serve": "webpack serve"
+  },
+  "author": "Johannes Nau",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/uuid": "^8.3.4",
+    "autoprefixer": "^10.4.8",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss": "^8.4.16",
+    "postcss-jsx": "^0.36.4",
+    "postcss-lit": "^0.4.3",
+    "postcss-loader": "^7.0.1",
+    "postcss-syntax": "^0.36.2",
+    "prettier": "^2.7.1",
+    "source-map-loader": "^4.0.0",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.1.8",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
+  },
+  "dependencies": {
+    "@cross-lab-project/api-client": "^0.0.23",
+    "cross-fetch": "^3.1.5",
+    "events": "^3.3.0",
+    "immer": "^9.0.15",
+    "interactjs": "^1.10.17",
+    "lit": "^2.3.1",
+    "url": "^0.11.0",
+    "uuid": "^9.0.0"
+  }
+}
