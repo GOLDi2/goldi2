@@ -1,0 +1,175 @@
+Info: *******************************************************************
+Info: Running Quartus Prime Shell
+    Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+    Info: Copyright (C) 2018  Intel Corporation. All rights reserved.
+    Info: Your use of Intel Corporation's design tools, logic functions 
+    Info: and other software and tools, and its AMPP partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Intel Program License 
+    Info: Subscription Agreement, the Intel Quartus Prime License Agreement,
+    Info: the Intel FPGA IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Intel and sold by Intel or its authorized distributors.  Please
+    Info: refer to the applicable agreement for further details.
+    Info: Processing started: Sat Jun 22 15:40:19 2019
+Info: Command: quartus_sh --flow compile "D:/IdeaProject/SWPWIDE/src/nodeserver/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out"
+Info: Quartus(args): compile {D:/IdeaProject/SWPWIDE/src/nodeserver/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out}
+Info: Project Name = D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out
+Info: Revision Name = out
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+    Info: Processing started: Sat Jun 22 15:40:23 2019
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off out -c out
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
+Info (12021): Found 4 design units, including 2 entities, in source file out.vhd
+    Info (12022): Found design unit 1: Output-rtl File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 27
+    Info (12022): Found design unit 2: Output_top_module-rtl File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 173
+    Info (12023): Found entity 1: Output File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 6
+    Info (12023): Found entity 2: Output_top_module File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 153
+Info (12127): Elaborating entity "Output_top_module" for the top level hierarchy
+Info (12128): Elaborating entity "Output" for hierarchy "Output:Output_inst" File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 219
+Warning (10036): Verilog HDL or VHDL warning at out.vhd(30): object "FREQGEN_var" assigned a value but never read File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 30
+Warning (10036): Verilog HDL or VHDL warning at out.vhd(31): object "BUTTON0_var" assigned a value but never read File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 31
+Warning (10036): Verilog HDL or VHDL warning at out.vhd(32): object "BUTTON1_var" assigned a value but never read File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 32
+Warning (21074): Design contains 4 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "FREQGEN" File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 157
+    Warning (15610): No output dependent on input pin "BUTTON0" File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 158
+    Warning (15610): No output dependent on input pin "BUTTON1" File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 159
+    Warning (15610): No output dependent on input pin "BUTTON4" File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 162
+Info (21057): Implemented 39 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 7 input pins
+    Info (21059): Implemented 7 output pins
+    Info (21061): Implemented 25 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 9 warnings
+    Info: Peak virtual memory: 4804 megabytes
+    Info: Processing ended: Sat Jun 22 15:41:17 2019
+    Info: Elapsed time: 00:00:54
+    Info: Total CPU time (on all processors): 00:00:51
+Info: *******************************************************************
+Info: Running Quartus Prime Fitter
+    Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+    Info: Processing started: Sat Jun 22 15:41:18 2019
+Info: Command: quartus_fit --read_settings_files=off --write_settings_files=off out -c out
+Info: qfit2_default_script.tcl version: #1
+Info: Project  = out
+Info: Revision = out
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
+Info (119006): Selected device 5M1270ZT144C5 for design "out"
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (171003): Fitter is performing an Auto Fit compilation, which may decrease Fitter effort to reduce compilation time
+Warning (292013): Feature LogicLock is only available with a valid subscription license. You can purchase a software subscription to gain full access to this feature.
+Info (176444): Device migration not selected. If you intend to use device migration later, you may need to change the pin assignments as they may be incompatible with other devices
+    Info (176445): Device 5M240ZT144C5 is compatible
+    Info (176445): Device 5M240ZT144I5 is compatible
+    Info (176445): Device 5M570ZT144C5 is compatible
+    Info (176445): Device 5M570ZT144I5 is compatible
+    Info (176445): Device 5M1270ZT144I5 is compatible
+Critical Warning (332012): Synopsys Design Constraints File file not found: 'out.sdc'. A Synopsys Design Constraints File is required by the Timing Analyzer to get proper timing constraints. Without it, the Compiler will not properly optimize the design.
+Info (332144): No user constrained base clocks found in the design
+Info (332128): Timing requirements not specified -- optimizing circuit to achieve the following default global requirements
+    Info (332127): Assuming a default timing requirement
+Info (332111): Found 1 clocks
+    Info (332111):   Period   Clock Name
+    Info (332111): ======== ============
+    Info (332111):    1.000      BUTTON3
+Info (186079): Completed User Assigned Global Signals Promotion Operation
+Info (186215): Automatically promoted signal "BUTTON3" to use Global clock File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 160
+Info (186228): Pin "BUTTON3" drives global clock, but is not placed in a dedicated clock pin position File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 160
+Info (186215): Automatically promoted signal "SWITCH3" to use Global clock File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 161
+Info (186228): Pin "SWITCH3" drives global clock, but is not placed in a dedicated clock pin position File: D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/out.vhd Line: 161
+Info (186079): Completed Auto Global Promotion Operation
+Info (176234): Starting register packing
+Info (186468): Started processing fast register assignments
+Info (186469): Finished processing fast register assignments
+Info (176235): Finished register packing
+Info (171121): Fitter preparation operations ending: elapsed time is 00:00:01
+Info (14896): Fitter has disabled Advanced Physical Optimization because it is not supported for the current family.
+Info (170189): Fitter placement preparation operations beginning
+Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:00
+Info (170191): Fitter placement operations beginning
+Info (170137): Fitter placement was successful
+Info (170192): Fitter placement operations ending: elapsed time is 00:00:00
+Info (170193): Fitter routing operations beginning
+Info (170195): Router estimated average interconnect usage is 0% of the available device resources
+    Info (170196): Router estimated peak interconnect usage is 0% of the available device resources in the region that extends from location X9_Y0 to location X17_Y11
+Info (170199): The Fitter performed an Auto Fit compilation.  Optimizations were skipped to reduce compilation time.
+    Info (170201): Optimizations that may affect the design's routability were skipped
+Info (170194): Fitter routing operations ending: elapsed time is 00:00:00
+Info (11888): Total time spent on timing analysis during the Fitter is 0.12 seconds.
+Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:00
+Warning (169174): The Reserve All Unused Pins setting has not been specified, and will default to 'As output driving ground'.
+Info (144001): Generated suppressed messages file D:/IdeaProject/SWPWIDE/Src/NodeServer/tmp_08b87b28-08e3-485b-95a5-4e8b5b182d77/FDFDF.elws - 22_06_2019-15-40-19/output_files/out.fit.smsg
+Info: Quartus Prime Fitter was successful. 0 errors, 4 warnings
+    Info: Peak virtual memory: 5118 megabytes
+    Info: Processing ended: Sat Jun 22 15:41:23 2019
+    Info: Elapsed time: 00:00:05
+    Info: Total CPU time (on all processors): 00:00:05
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+    Info: Processing started: Sat Jun 22 15:41:24 2019
+Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off out -c out
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 4673 megabytes
+    Info: Processing ended: Sat Jun 22 15:41:26 2019
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:01
+Info (293026): Skipped module Power Analyzer due to the assignment FLOW_ENABLE_POWER_ANALYZER
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition
+    Info: Processing started: Sat Jun 22 15:41:27 2019
+Info: Command: quartus_sta out -c out
+Info: qsta_default_script.tcl version: #1
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (334003): Started post-fitting delay annotation
+Info (334004): Delay annotation completed successfully
+Critical Warning (332012): Synopsys Design Constraints File file not found: 'out.sdc'. A Synopsys Design Constraints File is required by the Timing Analyzer to get proper timing constraints. Without it, the Compiler will not properly optimize the design.
+Info (332142): No user constrained base clocks found in the design. Calling "derive_clocks -period 1.0"
+Info (332105): Deriving Clocks
+    Info (332105): create_clock -period 1.000 -name BUTTON3 BUTTON3
+Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info: Can't run Report Timing Closure Recommendations. The current device family is not supported.
+Critical Warning (332148): Timing requirements not met
+Info (332146): Worst-case setup slack is -3.425
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    -3.425             -46.493 BUTTON3 
+Info (332146): Worst-case hold slack is 1.380
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     1.380               0.000 BUTTON3 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is -2.289
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    -2.289              -2.289 BUTTON3 
+Info (332001): The selected device family is not supported by the report_metastability command.
+Info (332102): Design is not fully constrained for setup requirements
+Info (332102): Design is not fully constrained for hold requirements
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 3 warnings
+    Info: Peak virtual memory: 4682 megabytes
+    Info: Processing ended: Sat Jun 22 15:41:31 2019
+    Info: Elapsed time: 00:00:04
+    Info: Total CPU time (on all processors): 00:00:04
+Info (293000): Quartus Prime Full Compilation was successful. 0 errors, 17 warnings
+Info (23030): Evaluation of Tcl script d:/intelfpga_lite/18.1/quartus/common/tcl/internal/qsh_flow.tcl was successful
+Info: Quartus Prime Shell was successful. 0 errors, 17 warnings
+    Info: Peak virtual memory: 4663 megabytes
+    Info: Processing ended: Sat Jun 22 15:41:31 2019
+    Info: Elapsed time: 00:01:12
+    Info: Total CPU time (on all processors): 00:00:04

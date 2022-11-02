@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+    <head>
+        <link rel="icon" type="image/png" href="img/icon.png">
+
+        <script src="https://unpkg.com/@webcomponents/custom-elements"></script>
+
+        <link rel="stylesheet" type="text/css" href="app.css">
+        <link rel="stylesheet" type="text/css" href="monaco/editor/editor.main.css">
+
+        <script>
+            var require = {
+                paths: {
+                    'vs': 'monaco'
+                }
+            };
+        </script>
+        <script src="monaco/loader.js"></script>
+        <script src="monaco/editor/editor.main.nls.js"></script>
+        <script src="monaco/editor/editor.main.js"></script>
+
+        <script src="jszip.js"></script>
+        <script src="FileSaver.js"></script>
+        <script src="JSZipUtils.js"></script>
+
+        <script src="app.js"></script>
+    </head>
+
+    <body>
+        <noscript>Error: JavaScript is disabled</noscript>
+        <wide-app></wide-app>
+    </body>
+
+</html>

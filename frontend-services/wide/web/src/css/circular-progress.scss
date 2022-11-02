@@ -1,0 +1,39 @@
+@import "@material/animation/functions";
+
+@keyframes rotate {
+    100% {
+    transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124;
+    }
+}
+
+.mdc-circular-progress {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    animation: rotate 2s linear infinite;
+
+    &__path {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+        animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+        stroke-linecap: round;
+        stroke: white;
+    }
+}

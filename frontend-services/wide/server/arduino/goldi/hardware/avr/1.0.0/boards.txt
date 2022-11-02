@@ -1,0 +1,71 @@
+menu.pspu=Experiment
+
+experiment.name=GOLDi Experiment
+
+experiment.build.mcu=atmega644a
+experiment.build.f_cpu=12000000UL
+experiment.build.core=goldi
+experiment.build.variant=goldi
+experiment.build.board=AVR_GOLDI
+
+## GOLDi Experiment 3AxisPortal
+## ------------------------------
+experiment.menu.pspu.3AxisPortal=3AxisPortal
+
+experiment.menu.pspu.3AxisPortal.build.extra_flags=-DPSPU_3AxisPortal
+
+
+## GOLDi Experiment Elevator3Floors
+## ------------------------------
+experiment.menu.pspu.Elevator3Floors=Elevator3Floors
+
+experiment.menu.pspu.Elevator3Floors.build.extra_flags=-DPSPU_Elevator3Floors
+
+
+## GOLDi Experiment Elevator4Floors
+## ------------------------------
+experiment.menu.pspu.Elevator4Floors=Elevator4Floors
+
+experiment.menu.pspu.Elevator4Floors.build.extra_flags=-DPSPU_Elevator4Floors
+
+
+## GOLDi Experiment Elevator4FloorsClassic
+## ------------------------------
+experiment.menu.pspu.Elevator4FloorsClassic=Elevator4FloorsClassic
+
+experiment.menu.pspu.Elevator4FloorsClassic.build.extra_flags=-DPSPU_Elevator4FloorsClassic
+
+
+## GOLDi Experiment ProductionCell
+## ------------------------------
+experiment.menu.pspu.ProductionCell=ProductionCell
+
+experiment.menu.pspu.ProductionCell.build.extra_flags=-DPSPU_ProductionCell
+
+
+## GOLDi Experiment Pump
+## ------------------------------
+experiment.menu.pspu.Pump=Pump
+
+experiment.menu.pspu.Pump.build.extra_flags=-DPSPU_Pump
+
+
+## GOLDi Experiment Maze
+## ------------------------------
+experiment.menu.pspu.Maze=Maze
+
+experiment.menu.pspu.Maze.build.extra_flags=-DPSPU_Maze
+
+
+## GOLDi Experiment Warehouse
+## ------------------------------
+experiment.menu.pspu.Warehouse=Warehouse
+
+experiment.menu.pspu.Warehouse.build.extra_flags=-DPSPU_Warehouse
+
+
+## GOLDi Experiment DigitalDemoBoardPSPU
+## ------------------------------
+experiment.menu.pspu.DigitalDemoBoardPSPU=DigitalDemoBoardPSPU
+
+experiment.menu.pspu.DigitalDemoBoardPSPU.build.extra_flags=-DPSPU_DigitalDemoBoardPSPU
