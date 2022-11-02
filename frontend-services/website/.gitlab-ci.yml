@@ -1,0 +1,21 @@
+image: $CI_REGISTRY/$ci_group/buildimage:latest
+
+build-test-docker-job:
+  stage: build
+  script:
+    - npm install
+    - npm run build:node
+    - npm test
+    - npm run build:docker
+
+    - docker login -u $docker_hub_user -p $docker_hub_token
+    - docker tag goldi2/web-frontend:latest goldi2/web-frontend:staging
+    - docker rmi goldi2/web-frontend:latest
+    - docker push goldi2/web-frontend:staging
+
+bridge:
+  stage: deploy
+  variables:
+    ANSIBLE_HOSTS: development
+    ANSIBLE_TAG: web-frontend-deploy
+  trigger: FakIA/fachgebiet-iks/goldi/goldi2/deployment-scripts

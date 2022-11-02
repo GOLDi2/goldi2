@@ -1,0 +1,90 @@
+{% set
+    text = {
+        heading: 'ABOUT US',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+   
+        panel:[
+            {
+                name: 'Dr.-Ing. Prof. h. c. Karsten Henke',
+                description: 'Lorem Ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Johannes Nau',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Max Mustermann',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Max Mustermann',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            }
+        ]
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    text = {
+        heading: 'ÜBER UNS',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+    
+        panel:[
+            {
+                name: 'Dr.-Ing. Prof. h. c. Karsten Henke',
+                description: 'Lorem Ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Johannes Nau',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Max Mustermann',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            },
+            {
+                name: 'Max Mustermann',
+                description: 'Lorem ipsum dolor sit amet',
+                image: '/img/Teacher.svg'
+            }
+        ]
+    }
+ %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+
+<!-- About Us Überschrift und kurze Vorstellung -->
+<div class="max-w-6xl w-full mx-auto pt-16 font-body mb-10">
+    <div class="mx-auto flex justify-center">
+        <div class="max-w-xl px-10 space-y-5 text-center">
+            <div class="text-7xl font-bold text-secondary-dark">{{text.heading}}</div>
+            <div>{{text.description}}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Vorstellung des Teams -->
+<div class="w-full bg-secondary mt-14 px-10">
+    <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
+        {% for item in text.panel %}
+        <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
+            <img class="h-20 mx-auto" src="{{item.image}}"/>
+            <div class="text-2xl pb-2 font-bold mx-auto">{{item.name}}</div>
+            <div>{{item.description}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

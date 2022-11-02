@@ -1,0 +1,192 @@
+<!-- Header -->
+
+{% set
+    navbar = {
+        secondary: [
+            {name: 'Login', href: '/login.html'},
+            {name: 'Register', href: '/about'}
+        ],
+
+        doc: 'Documentation',
+        controller: 'Steuereinheiten',
+        con_1: 'Manuelle Steuerung',
+        con_2: 'Digitales Demo-Board',
+        con_3: 'PSOC',
+        con_4: 'PLD',
+        con_5: 'Automatengraph',
+        phys_systems: 'Physische Systeme',
+        phys_1: '3-Achs-Portal',
+        phys_2: 'Aufzug A (3 Etagen)',
+        phys_3: 'Aufzug B (4 Etagen)',
+        phys_4: 'Aufzug C (4 Etagen)',
+        phys_5: 'Bearbeitungseinheit',
+        phys_6: 'Hochregallager',
+        phys_7: 'Füllstandregelung',
+        doc_exp: 'Experiment',
+        doc_exp_instr: 'Instruction',
+        doc_exp_srtnw: 'Start now',
+        doc_exp_reser: 'Reservation',
+        doc_tools: 'Tools',
+        too_1: 'BEAST',
+        too_2: 'GIFT',
+        too_3: 'SANE (Beta JS-Application)',
+        too_4: 'SANE (JAVA-Applet Download)',
+        too_5: 'WIDE (Standalone)',
+        exp: 'Experiment',
+        tools: 'Tools'
+    }
+ %}
+
+{% if language=='de' %}
+{% set
+    navbar = {
+        secondary: [
+            {name: 'Login', href: '/login.html'},
+            {name: 'Registrieren', href: '/register.html'}
+        ],
+        
+        doc: 'Dokumentation',
+        controller: 'Steuereinheiten',
+        con_1: 'Manuelle Steuerung',
+        con_2: 'Digitales Demo-Board',
+        con_3: 'PSOC',
+        con_4: 'PLD',
+        con_5: 'Automatengraph',
+        phys_systems: 'Physische Systeme',
+        phys_1: '3-Achs-Portal',
+        phys_2: 'Aufzug A (3 Etagen)',
+        phys_3: 'Aufzug B (4 Etagen)',
+        phys_4: 'Aufzug C (4 Etagen)',
+        phys_5: 'Bearbeitungseinheit',
+        phys_6: 'Hochregallager',
+        phys_7: 'Füllstandregelung',
+        doc_exp: 'Experiment',
+        doc_exp_instr: 'Anleitung',
+        doc_exp_srtnw: 'Start now',
+        doc_exp_reser: 'Reservation',
+        doc_tools: 'Tools',
+        too_1: 'BEAST',
+        too_2: 'GIFT',
+        too_3: 'SANE (Beta JS-Application)',
+        too_4: 'SANE (JAVA-Applet Download)',
+        too_5: 'WIDE (Standalone)',
+        exp: 'Experiment',
+        tools: 'Werkzeuge'
+    }
+ %}
+{% endif %}
+
+<nav class="bg-secondary-darkblue w-full fixed z-50 p-2 font-body">
+    <div class= "max-w-6xl mx-auto px-4">
+        <div class="flex justify-between h-10">
+            <!-- Logo -->
+            <a href='/{{language}}/index.html' class="flex items-center">
+                <img class="h-8 w-8 mr-3 select-none pointer-events-none" src="/img/GOLDi_Logo.png" alt="Logo">
+                <span class="font-bold text-2xl text-primary">GOLDi LABS</span>
+            </a>
+            <!--Navbar items -->
+            <div class="hidden md:flex items-center space-x-3">
+                <div class="hidden md:flex items-center space-x-10 pr-10">
+
+                    <div class="navbar">
+                        <div class="dropdown">
+                        <button class="dropbtn hover:bg-secondary-dark rounded transition duration-200">Dokumentation<i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content"> 
+                            <div class="row">
+                            <div class="column">
+                                <h5>{{navbar.controller}}</h5>
+                                <a href="#">{{navbar.con_1}}</a>
+                                <a href="#">{{navbar.con_2}}</a>
+                                <a href="#">{{navbar.con_3}}</a>
+                                <a href="#">{{navbar.con_4}}</a>
+                                <a href="#">{{navbar.con_5}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.phys_systems}}</h5>
+                                <a href="#">{{navbar.phys_1}}</a>
+                                <a href="#">{{navbar.phys_2}}</a>
+                                <a href="#">{{navbar.phys_3}}</a>
+                                <a href="#">{{navbar.phys_4}}</a>
+                                <a href="#">{{navbar.phys_5}}</a>
+                                <a href="#">{{navbar.phys_6}}</a>
+                                <a href="#">{{navbar.phys_7}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.doc_exp}}</h5>
+                                <a href="#">{{navbar.doc_exp_instr}}</a>
+                                <a href="#">{{navbar.doc_exp_srtnw}}</a>
+                                <a href="#">{{navbar.doc_exp_reser}}</a>
+                            </div>
+                            <div class="column">
+                                <h5>{{navbar.tools}}</h5>
+                                <a href="#">{{navbar.too_1}}</a>
+                                <a href="#">{{navbar.too_2}}</a>
+                                <a href="#">{{navbar.too_3}}</a>
+                                <a href="#">{{navbar.too_4}}</a>
+                                <a href="#">{{navbar.too_5}}</a>
+                            </div>
+                            </div>
+                        </div>
+                        </div> 
+                    </div>
+
+                    <a href="/{{language}}/experiment.html" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Experiment</a>
+                    <a href="/{{language}}/tools.html" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Werkzeuge</a>
+                    
+                </div>
+
+                {% if isLoggedIn %}
+                    <div class="text-white">
+                        <a href="logout.html?redirect={{page}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ user.username }}</a>
+                    </div>
+                {% else %}
+                    <!--Login & Register-->
+                    <span class="bg-gray-400 w-px h-6 mr-2"></span>
+                    {% for item in navbar.secondary %}
+                        <a href="/{{language}}{{item.href}}" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+                    {% endfor %}
+                {% endif %}
+                
+                <!--Language-->
+                <div class="normal-dropdown">
+                    <button class="normal-dropbtn my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200 ">
+                        <img class="h-7" src="/img/language_icon.svg" alt="language">
+                    </button>
+                    <div class="normal-dropdown-content">
+                      <a href="/de/{{page}}" language='de'>DE</a>
+                      <a href="/en/{{page}}" language='en'>EN</a>
+                </div>            
+
+            </div>
+
+        -->
+            <!-- Hamburger Menu button -->
+            <div class="md:hidden flex items-center">
+                <button class="outline-none mobile-menu-button">
+                    <svg class=" w-6 h-6 text-gray-500 hover:text-green-500 " x-show="!showMenu" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="hidden mobile-menu md:hidden">
+        <ul class="">
+            {% for item in navbar.primary %}
+            <a href="" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    </script>
+</nav>
+<div class="mt-14"></div>
