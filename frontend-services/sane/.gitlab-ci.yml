@@ -1,0 +1,36 @@
+stages:
+  - build
+  - test
+  - deploy
+  
+
+build_job:
+  stage: build
+  script:
+    - npm install
+    - npm run build:pro
+  artifacts:
+    when: on_success
+    paths:
+      - build/
+    
+
+test_job:
+  stage: test
+  script:
+    - npm run test
+
+deploy-production_job:
+  stage: deploy
+  script:
+    - ssh goldi-experimental "rm -rf /var/local/www/GOLDiWebsite/SANE/*" 
+    - scp -r build/es6-unbundled/* goldi-experimental:/var/local/www/GOLDiWebsite/SANE/
+  only:
+    - master
+
+deploy-experimental_job:
+  stage: deploy
+  script:
+    - echo "Do something with SFTP or ...."
+  only:
+    - developement

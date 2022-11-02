@@ -1,0 +1,32 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/sane-app.js",
+  "autoBasePath": false,
+  "fragments": [
+
+  ],
+  "sources": [
+    "src/*.js",
+    "src/*.json",
+    "images/**/*",
+    ".htaccess"
+
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**"
+  ],
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  },
+  "moduleResolution": "node",
+  "npm": true,
+  "builds": [
+    {
+      "preset": "es6-unbundled",
+      "basePath": "/SANE/"
+    }
+  ]
+}

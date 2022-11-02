@@ -1,0 +1,11 @@
+# Build Artifcats
+build/
+src/*.js
+!src/sane-expression-parser.js
+
+# Documentation
+docs/
+
+# Packages sources
+node_modules/
+

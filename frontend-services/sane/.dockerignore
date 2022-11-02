@@ -1,0 +1,5 @@
+build/
+src/*.js
+!src/sane-expression-parser.js
+docs/
+node_modules/
