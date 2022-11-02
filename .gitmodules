@@ -1,0 +1,3 @@
+[submodule "crosslab"]
+	path = crosslab
+	url = https://github.com/Cross-Lab-Project/crosslab
