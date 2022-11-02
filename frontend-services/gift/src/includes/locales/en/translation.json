@@ -1,0 +1,67 @@
+{
+	"sections": {
+		"title": "Finite State Machine – State Diagram",
+		"statediagram": "State Diagram",
+		"settings": "Settings",
+		"informationeditor": "Information and Editor"
+	},
+	"buttons": {
+		"addstate": "Add state",
+		"repositionall": "Reposition all",
+		"removeall": "Remove all",
+		"removeallconfirmation": "Are you sure you want to remove ALL states and transitions?"
+	},
+	"infoedit": {
+		"info": "Click on a state or transition",
+		"state": "State",
+		"transition": "Transition",
+		"attribute": "Attribute",
+		"value": "Value",
+		"output": "Output",
+		"fromstate": "from State",
+		"tostate": "to State",
+		"input": "Input",
+		"longtransition": "Short notation",
+		"unstick": "Un-stick",
+		"remove": "Remove",
+		"removenodeconfirmation": "Are you sure you want to remove this state?",
+		"removetransitionconfirmation": "Are you sure you want to remove this transition?"
+	},
+	"settings": {
+		"or": "Disjunction/OR",
+		"and": "Konjunction/AND",
+		"not": "Negation/NOT",
+		"language": "Language",
+		"export": "Export",
+		"import": "Import",
+		"createlink": "Create download link",
+		"usage": "Usage"
+	},
+	"usage": {
+		"title": "Usage",
+		"oncanvas": "On the canvas",
+		"ineditor": "In the editor",
+		"input": "Input",
+		"action": "Action",
+		"addstatei": "Doubleclick on canvas",
+		"addstatea": "Add state",
+		"addtransitioni": "Drag from one state to another",
+		"addtransitiona": "Add transition",
+		"addloopi": "Drag from one state to the same (movement >3px)",
+		"addloopa": "Add loop transition",
+		"dragi": "Hold 'Ctrl' while dragging a state",
+		"draga": "Move state",
+		"selecti": "Click on state/transition (or its condition)",
+		"selecta": "Selects state/transition and shows further information and the editor",
+		"delete": "Deletes selected state/transition",
+		"reposition": "Reposition and un-fix states",
+		"editcontenti": "Doubleclick on a row",
+		"editcontenta": "Edit content",
+		"submiti": "Enter during edit",
+		"submita": "Submit changes",
+		"aborti": "Escape during edit",
+		"aborta": "Abort changes",
+		"colori": "Click on color input in the upper right corner",
+		"colora": "Assign a color, i.e. for grouping purposes"
+	}
+}

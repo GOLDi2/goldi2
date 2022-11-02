@@ -1,0 +1,190 @@
+12.9 5h
+
+-Ordner erstellen
+-Alles ausdrucken, markieren und sortieren
+-konzept für progressbar
+-check auf überflüssige Funktionen
+-mobile Version TTable
+-viele Bugfixes
+
+13.9 5h
+-Speichern Dialog
+-Möglichkeiten über Flash
+-Probleme Server/Client
+-Entfernen der Transitionsbedingungen bei Z-Gleichungen, falls diese "(1)" sind
+-Hinzufügen der Box bei Transitionseingaben (Automatengraph)
+-Infoedits im Editor / Automantengraph
+
+14.9 2h
+-bugfixes zu "-Infoedits im Editor / Automantengraph"
+-model-view-controller struktur verdeutlichen
+-> bilden eines anfänglichen Verständnisses
+
+20.9 2-3h
+-Struktur der "getZEquation" im Datentyp erarbeiten
+-Zusammenspiel zwischen Datentyp und zyequations.js
+-Hinzufügen zweier Parameter um "Filter" und "Sortieren" 
+zu aktivieren/deaktiven
+	-> Überflüssige 0 und 1 entfernden 
+-Nächstes mal Funktion implementieren um alphanumerisch mit Priorität
+zu sortieren
+-Entdeken zweier Bugs bezüglich der Umbenennung der Variablen
+-Erste Ansätze sowie sinnvolle Erweiterungen im Datatyp.js/zyequations.js
+
+21.9 2-3h
+-Bugfixes und Strukturänderungen zur Eingabe im Automatengraphen
+-> im datentyp
+-Implemetierung der Filter-Funktion im Datentyp für die Z-Gleichungen
+-Sort-Funktion vorbereitet
+-Erweiterung Datentyp
+
+24.09 2h
+-divide and conquer algorithmus zum Sortieren
+-> Umgang mit negativen '/' muss noch gemacht werden
+-> Prioritäten im Sortieralgo noch zu erledigen
+
+26.09.2015 5h
+-Sort- und Filter-Funktion fast vollständig implementiert und optimiert
+-Alphanumerische Sortierfunktion mit abwärts Alpha und aufwärts 
+numerischer Sortierung zum allgemeinen Gebrauch im Datentyp
+-Aufwandsoptimierung der Funktionen
+-Erweitern der Filter-Funktion
+-Bugfixes
+-Verstädnis aufbauen für zy_equations
+-Verbindung zum Equationnormalizer
+-Einfügen der Sort-Funktion in KDNF
+
+26.09.2015 2h
+-Strukturveränderungen in der Simulation
+-User defined Variables verschwinden nicht mehr
+
+
+
+27./28.09.2015 4h
+->Einarbeitung in das File-Upload-Tool
+->Überarbeiten des File-Dialoges
+->Funktion auf umliegendes Model erweitern (cancel)
+
+28.09.2015 9h
+-Fix innerhalb von 'New-State'
+-> Nun wird nicht mehr nur ein y bei neuen Zuständen vorhanden sein, 
+sondern die eingestellte Anzahl 
+
+-Designoptimierungen
+-Überarbeitung des Hilfe Menüs (Bedienung) sowie einiger Übersetzungen
+-Neue Dialog-Bibliothek auf alle Modal-Fenster anwenden
+-Designänderungen am Editor im Automatengraphen
+-Bufixes im Datentyp
+
+03.10.2015 1h
+-QMC/worker
+
+04.10.2015 10h
+-Vorbereiten Touch-Funktion für mobile Version
+-Bugfix-Datei-Upload
+--Progressbar überarbeitet 
+->Zeignt nun größtenteils immer den tatsächlichen Fortschritt an
+-Texte durch Prozentanzeige getauscht
+--Bugfixes
+-Zeitanzeige startet nach Abbruch jetzt wieder bei 0 und Progressbar startet leer
+-Präzisere Prozentangaben
+-Testumgebung für mobile Version (Handy)
+-Bugfixes an der Progressbar, sowie noch genauere prozentuale Anzeige des Fortschrittes + 
+Schätzung der Restdauer
+-Anpassung der Aktualisierungen an Bootstrap-Progressbar-Animation
+-Seltenere Aktualisierung der Progressbar-Animation -> Perfomanceverbesserung
+-Entfernen von nun überflüssig gewordenen Funktionen
+-mobile Version test
+-Design-Anpassungen im Automatengraphen
+
+05.10.2015 11h
+-Designanpassungen Simulation für mobil
+-Anzeigefehler sSimulation behoben
+-Bugfixes im responsiv Design
+-Designanpassungen Progressbar
+-Design Bugfixes Automatentabelle/Transitionsmatrix
+-Anzeigeproblem für sehr hohe Auflösungen lösen
+-Optimierung und Vereinheitlichung des Design der Tabs
+-ÜBERSETZUNG
+
+06.10.2015 7/8h
+-Designtest für Goldi
+-Einrichtung Emulator zum testen der mobilen Version
+-Vervollständigung der Übersetzung
+-marginale Änderung
+-Schriftfarbe
+-Zustandsbezeichnungen hinzugefügt
+-Zustandsbezeichnungen -> Bedingungen gesetzt
+
+07.10.2015 8,5h
+-Schnelleres laden der Übersetzungen
+-Überstzungen nun auch für Bootstrap- und Jquery-Elemente
+-SVG-Element nutzt nun mehr Platz aus
+-Tests für viele Auflösungen
+-Grundlegende Veränderungen um den Winkel der Transitionen zu ändern 
+-> Implementierung eines Tests
+
+08.10.2015 1h
+-Hotfixes des mobilen Designs / der Überstzung
+
+11.10.2015 1h
+-Hotfixes Filter-Funktion
+-> NEXT: Sortier-Fkt.
+
+12.10.2015 2h
+-Besprechung der geleisteten Arbeiten am Gift
+
+
+13.10.2015 1/2h
+-Treffen mit Tobias F. bezüglich i18n (multilingual)
+
+16.10.2015 2,5h
+-Beheben eines Fehlers , welcher zu einem Fehler im Datentyp sorgte. 
+Daraus resultierte, dass nurnoch der Tab "Automatengraph" funktionierte
+-Fix Filter-Funktion
+-Anfang Umbau Sort-Funktion
+-Filter-Update bzgl. Eingabevariablen in Klammern , z.b. (x1) -> x1
+
+17.10.2015 1h
+-Filter-Fkt. Fix
+
+19.10.2015 1,5h
+-Vorstellen der Arbeit beim Fachgebiet
+
+20.10.2015 1h
+-Einarbeitung und Besprechung i18n
+
+27.10.2015 6h
+-Einarbeitung der Sort-fkt. in die Struktur des Datentyps (mit Stephen)
+-Analysieren der restlichen 2 Bugs für bevorstehenden fix
+-Sort-Fkt. wieder aktiviert
+
+02.11.2015 2h
+-Einarbeitung und Abstimmungen mit david
+
+05.11.2015 1h
+-GOLDI-Treffen
+
+11.11.2015 2h
+-Anpassungen an die Hauptseite (Ändern der Sprache über das Flagge-Symbol)
+-automatische Aktualisierung bei veränderter Sprache im anderen Tab
+
+12.11.2015 2h
+-GOLDI-Treffen
+-Anschließende Besprechung mit Rene
+
+17.11.2015 0,5h
+-Fehlerkorrektur beim include der lokalen bootstrap-dialog
+
+19.11.2015 2h
+-GOLDI-Treffen
+-Besprechung mit David
+
+21.11.2015 6h
+-Dropdown für paralelle Automaten so wie zugehörige Funktion zum Tab-wechsel
+ etc vorbereitet
+
+22.11.2015 2h
+-Cookie Notification in DE und EN
+-Auto-Scroll zum Editor-Fenster bei kleinen Bilschirmen
+-Anpassung des mobilen Design an neue Breite der Navbar

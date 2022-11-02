@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../checkfunctions.js"></script>
+    <script src="consistency.js"></script>
+    <script src="../QMC/Logic.js"></script>
+    <script src="../Datentyp/DataType.js"></script>
+
+</head>
+<body>
+<script>
+    var transitionTest = [[0,"/x0",0,"x0"],["x1","/x1+/x0",0,"x0"],[0,0,0,0],[0,"/x1+x0",0,"/x1"]];
+
+    var result = checkConsistency.createOutputForStateGraph(transitionTest);
+
+   for (var i=0; i<result.length; i++)
+    {
+        for (var j=0; j<result[i].length; j++)
+        {
+            document.write(result[i][j]);
+        }
+        document.write("<br>");
+    }
+
+
+
+</script>
+
+</body>
+</html>

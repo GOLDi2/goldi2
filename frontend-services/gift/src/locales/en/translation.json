@@ -1,0 +1,161 @@
+{
+  "global": {
+	"close":"Close",
+	"cancel":"Cancel",
+	"save_changes":"Save changes",
+	"create":"Create",
+	"yEquation": "y-Equations",
+	"zEquation": "z-Equations",
+	"continue":"Continue",
+	"gui":"Graphical user interface",
+	"deactivate":"Deactivate",
+	"activate":"Activate"
+  },
+  "about": {
+	"title":"GiFT - Graphical interactive FSM Tool",
+	"text": [
+	  "The graphical interactive FSM Tool (GiFT) is a web application to calculate and display digital machines",
+	  "in several representations, which was created as a software project at the technical University Ilmenau.",
+	  "Here are particular mention:"
+	]
+  },
+  "lang": {
+	"german":"German",
+	"english":"English"
+  },
+  "swap_inputmode": {
+	"title":"Attention!",
+	"text": [
+	  "The change of the input mode will cause a reset of the machine. <br><br>",
+	  "The non-contradictory and complete representations of the output side are transferred to the input side."
+	]
+  },
+  "qmc": {
+	"minimized":"minimized",
+	"unminimized":"unminimized",
+	"minimized_h":"minimized with h*(x)",
+	"cdnf":"CDNF",
+	"ccnf":"CCNF"
+  },
+  "progressbar": {
+	"wait":"Please wait...",
+	"prev_wait":"Previous waiting time",
+	"rem_wait":"Remaining waiting time"
+  },
+  "upload": {
+	"select":"Select...",
+	"upload":"Upload"
+  },
+	"sections": {
+		"title": "Finite State Machine – State Diagram",
+		"statediagram": "State Diagram",
+		"settings": "Settings",
+		"informationeditor": "Information and Editor"
+	},
+  	"navbar": {
+	  	"brandy":"Graph. interactive FSM Tool",
+		  "inputMode": {
+			"main":"Inputmode",
+			"graph_trans":"State Diagram/Transition matrix",
+			"machine_equations":"Machine table/z-Equations"
+	 	 },
+	  	"newMachine": {
+		  	"main":"New machine",
+			"state_bits":"State bits"
+		  },
+		"files": {
+	  		"file": "File",
+	  		"new":" New",
+		  	"importMachine":" Import machine",
+	  		"exportMachine":" Export machine",
+	  		"ecpExport":" ECP Export",
+	  		"settings":" Settings"
+		},
+	  	"h_stern":"Enter h*(x)",
+	  	"h_punkt":"Show h•(z,x)",
+	  	"help":{
+			"main":"Help",
+		  	"helpTopics":" Help Topics",
+		  	"legend":" Legend",
+		  	"about":" About"
+	 	 }
+ 	 },
+  	"tabs": {
+	"stateDiagram": "State Diagram",
+	"transitionMatrix": "Transition matrix",
+	"machineTable": "Machine table",
+	"simulation": "Simulation",
+	"flipflop": "FlipFlop"
+ 	 },
+	"buttons": {
+		"addstate": "Add state",
+		"repositionall": "Reposition all",
+		"removeall": "Remove all",
+		"removeallconfirmation": "Are you sure you want to remove ALL states and transitions?"
+	},
+	"infoedit": {
+		"info": "Click on a state or transition",
+		"state": "State",
+	  	"stateName": "State designation",
+		"transition": "Transition",
+	  	"transitions": "Transitions",
+		"attribute": "Attribute",
+		"value": "Value",
+		"output": "Output",
+		"fromstate": "from State",
+		"tostate": "to State",
+		"input": "Input",
+		"longtransition": "Short notation",
+		"unstick": "Un-stick",
+		"remove": "Remove",
+		"removenodeconfirmation": "Are you sure you want to remove this state?",
+		"removetransitionconfirmation": "Are you sure you want to remove this transition?"
+	},
+	"settings": {
+		"or": "OR",
+		"and": "AND",
+		"not": "NOT",
+		"language": "Language",
+		"export": "Export",
+		"import": "Import",
+		"createlink": "Create download link",
+		"usage": "Usage",
+	  	"log_op":"Logical operators",
+	  	"lang":"Language:",
+	  	"userDefinedVars":"User defined variables",
+	  	"inputVars":"Input Variables",
+	  	"outputVars":"Output Variables",
+	  	"variable_settings":"Variable settings",
+	  	"sortVars":"Sort Variables",
+	  	"filtVars":"Filter Variables",
+	  	"ascVars":"Ascending",
+	  	"desVars":"Descending"
+	},
+	"usage": {
+		"title": "Usage",
+		"oncanvas": "On the canvas",
+		"ineditor": "In the editor",
+		"input": "Input",
+		"action": "Action",
+		"addstatei": "Doubleclick on canvas",
+		"addstatea": "Add state",
+		"addtransitioni": "Drag from one state to another",
+		"addtransitiona": "Add transition",
+		"addloopi": "Drag from one state to the same (movement >3px)",
+		"addloopa": "Add loop transition",
+		"dragi": "Hold 'Ctrl' while dragging a state",
+		"draga": "Move state",
+		"selecti": "Click on state/transition (or its condition)",
+		"selecta": "Selects state/transition and shows further information and the editor",
+		"delete": "Deletes selected state/transition",
+		"reposition": "Reposition and un-fix states",
+		"editcontenti": "Doubleclick on a row",
+		"editcontenta": "Edit content",
+		"submiti": "Enter during edit",
+		"submita": "Submit changes",
+		"aborti": "Escape during edit",
+		"aborta": "Abort changes",
+		"colori": "Click on color input in the upper right corner",
+		"colora": "Assign a color, i.e. for grouping purposes"
+	}
+}

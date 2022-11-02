@@ -1,0 +1,10 @@
+var test = new TTable(2,2,1,["+", "*", "/"]);
+test.setTransition("x1", 0, 0);
+test.setTransition("x0", 0, 1);
+test.setTransition("/x1", 1, 1);
+test.setTransition("x1+x0", 1, 2);
+test.setTransition("/x0", 2, 1);
+test.setOutputEquation(0, "y0 = 0");
+test.setOutputEquation(1, "y0 = 1");
+test.setOutputEquation(2, "y0 = x1");
+test.setOutputEquation(3, "y0 = 0");

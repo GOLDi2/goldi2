@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Transitionsmatrix</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="functions.js"></script>
+    <script src="../../../../../Stephen/Datentyp/DataType.js"></script>
+    <script src="../../../../../Lennart/Adapter/controller.js>"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+
+
+<div class="container">
+
+    <h2>Transitionsmatrix</h2>
+    <button class="btn btn-default" onclick="Testmodule.testGenerateEditable()">testGenerateEditable</button>
+    <button class="btn btn-default" onclick="Testmodule.testGenerateStatic()">testGenerateStatic</button>
+
+    <div id="Eingabe_Automaten_Transitionsmatrix"></div>
+    <div id="Ausgabe_Automaten_Transitionsmatrix"></div>
+
+
+</div>
+
+<script>
+    var Testmodule = (function () {
+        var TTableInstance = new TTable(0, 1, 3, ["+", "*", "/"]);
+
+        var testGenerateEditable = function () {
+            TransitionTable.generateTransitionTable(true, TTableInstance, "Eingabe_Automaten_Transitionsmatrix", "TransitionTableInput");
+        };
+
+        var testGenerateStatic = function () {
+            TransitionTable.generateTransitionTable(false, TTableInstance, "Ausgabe_Automaten_Transitionsmatrix", "TransitionTableOutput");
+        };
+
+        return {
+            testGenerateEditable: testGenerateEditable,
+            testGenerateStatic: testGenerateStatic
+
+    };
+    })();
+
+
+
+</script>
+</body>
+</html>

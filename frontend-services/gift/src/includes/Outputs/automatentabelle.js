@@ -1,0 +1,1 @@
+document.write("Ausgabe_Automaten_Automatentabelle");

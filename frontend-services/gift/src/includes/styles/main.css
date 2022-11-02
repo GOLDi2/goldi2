@@ -1,0 +1,147 @@
+.browsehappy {
+	margin: 0.2em 0;
+	background: #ccc;
+	color: #000;
+	padding: 0.2em 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 95%;
+}
+
+/* Custom page header */
+.header {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+/* Custom page footer */
+.footer {
+	position: absolute;
+	bottom: 0;
+	padding-top: 17px;
+	padding-bottom: 0px;
+	color: #777;
+	border-top: 1px solid #e5e5e5;
+}
+
+.fill {
+	height: 95%;
+	min-height: 85%;
+}
+
+.flex-container {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+	align-content: center;
+	height: 100%;
+}
+
+.outside-center {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.inside-center {
+	text-align: center;
+}
+
+#statediagram {
+	background: #fafafa;
+}
+
+svg text {
+	font-family: serif;
+	font-size: 15px;
+	text-anchor: middle;
+	fill: #000;
+	stroke: none;
+}
+
+.stateLabel, .outputLabel, .linkLabelText {
+	font-family: tahoma, arial, sans-serif;
+	font-size: 15px;
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none;          /* Likely future */
+}
+
+.node {
+	fill: #fff;
+	stroke: #000;
+	stroke-width: 1.5px;
+}
+
+.node:hover {
+	stroke: #abc;
+}
+
+.linkPath, .dragPath {
+	fill: none;
+	stroke: #000;
+	stroke-width: 2px;
+}
+
+.hidden {
+	stroke-width: 0;
+}
+
+.node.selected {
+	stroke-width: 2.5px;
+}
+
+.linkPath.selected {
+	stroke-width: 3.5px;
+}
+
+.hovered {
+	stroke: #9ab;
+	color: #9ab;
+}
+
+#editor {
+	user-select: none;
+	min-width: 280px;
+}
+
+.editable {
+	cursor: pointer;
+}
+
+.content {
+	min-width: 50%;
+	max-width: 90%;
+}
+
+.settings {
+	padding-top: 0.7em;
+	padding-right: 1em;
+	padding-left: 1em;
+	padding-bottom: 0.3em;
+}
+
+.fbout {
+	background-color: inherit;
+	transition: background-color 500ms linear;
+}
+
+.fbsuccess {
+	background-color: #DFF0D8;
+	transition: background-color 200ms linear;
+}
+
+.fbwarning {
+	background-color: #FCF8E3;
+	transition: background-color 200ms linear;
+}
+
+.fberror {
+	background-color: #F2DEDE;
+	transition: background-color 200ms linear;
+}

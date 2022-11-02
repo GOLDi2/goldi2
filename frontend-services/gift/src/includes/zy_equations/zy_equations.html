@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Zustands- und Ausgabegleichungen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="zy_equations.js"></script>
+    <script src="DataType.js"></script>
+    <!-- <link rel="stylesheet" href="../../Bastian/Entwurf/entwurf%20v2/css/style.css"> -->
+</head>
+<body>
+
+
+<div class="container">
+
+    <h1>Zustands-und Ausgabegleichungen</h1>
+    <button class="btn btn-default" onclick="Testmodule.testGenerateEditable()">testGenerateEditable</button>
+    <button class="btn btn-default" onclick="Testmodule.testGenerateStatic()">testGenerateStatic</button>
+
+    <div id="Eingabe">
+        <div id="Eingabe_Variablen"></div>
+        <div id="Eingabe_Automaten_z-Gleichungen"></div>
+        <div id="Eingabe_Automaten_y-Gleichungen"></div>
+    </div>
+    <div id="Ausgabe">
+        <div id="Ausgabe_Automaten_z-Gleichungen"></div>
+        <div id="Ausgabe_Automaten_y-Gleichungen"></div>
+    </div>
+
+
+
+
+</div>
+
+<script>
+    var Testmodule = (function () {
+        var TTableInstance = new TTable(2, 2, 2, ["+", "*", "/"]);
+        TTableInstance.Outputnames.push("y0:kran");
+        TTableInstance.Inputnames.push("x0:peter");
+
+
+        var testGenerateEditable = function () {
+            equations.generateTable(true, TTableInstance, "Eingabe_Variablen", "EquationVariables")
+            equations.generateTableZ(true, TTableInstance, "Eingabe_Automaten_z-Gleichungen", "EquationZTableInput");
+            equations.generateTableY(true, TTableInstance, "Eingabe_Automaten_y-Gleichungen", "EquationYTableInput");
+
+        };
+
+        var testGenerateStatic = function () {
+            equations.generateTableZ(false, TTableInstance, "Ausgabe_Automaten_z-Gleichungen", "EquationZTableOutput");
+            equations.generateTableY(false, TTableInstance, "Ausgabe_Automaten_y-Gleichungen", "EquationYTableOutput");
+
+        };
+
+
+        return {
+            testGenerateEditable: testGenerateEditable,
+            testGenerateStatic: testGenerateStatic
+
+        };
+    })();
+
+
+
+</script>
+</body>
+</html>

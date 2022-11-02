@@ -1,0 +1,46 @@
+﻿- Speicherort definieren X
+- Dateinamen festlegen X
+
+Eingabe:
+========
+
+- y-Gleichungen - unminimiert: bei /z1&/z0&(1) das (1) weglassen R
+
+- z-Gleichungen: minimiert/nicht minimiert: z-Variablen vorn und sortiert R
+
+
+Simulation:
+===========
+- userdefined Variablennamen anzeigen R
+
+
+Automatengraph
+==============
+- Eingabefelder (Transitionen) einrahmen, damit besser erkennbar R
+
+- nach Import (z.B. Spindel_Mealy) -> neuer Zustand -> nur noch yl als Ausgabe (kein yl, yr) R
+->Fehler leigt allgemein am 'neuen Zustand' 
+
+- kann man evtl. die Kanten von Hand bewegen X
+
+
+Automat laden
+=============
+- nach dem Laden hat sich offensichtlich die Zustandskodierung geändert (3-Achs Mealy)
+- dadurch läuft die Simulation nicht mehr ???
+-> Konnte den Fehler nicht reproduzieren
+
+
+Wünsche
+=======
+- Schematic
+- ECP
+- C
+- VHDL
+
+
+
+
+-mobile Version
+-Progressbar
+-Umstellung vom Localstorage weg (Weg zur Plattformunabhängigkeit)

@@ -1,0 +1,67 @@
+{
+	"sections": {
+		"title": "Automatengraph",
+		"statediagram": "Zustandsdiagramm",
+		"settings": "Einstellungen",
+		"informationeditor": "Informationen und Editor"
+	},
+	"buttons": {
+		"addstate": "Zustand hinzufügen",
+		"repositionall": "Neu anordnen",
+		"removeall": "Entferne alles",
+		"removeallconfirmation": "Sind Sie sich sicher, dass Sie ALLE Zustände und Transitionen entfernen möchten?"
+	},
+	"infoedit": {
+		"info": "Klicken Sie auf einen Zustand oder eine Transition",
+		"state": "Zustand",
+		"transition": "Transition",
+		"attribute": "Attribut",
+		"value": "Wert",
+		"output": "Ausgabefunktion",
+		"fromstate": "von Zustand",
+		"tostate": "zu Zustand",
+		"input": "Zustandsüberführungsfunktion",
+		"longtransition": "Kurznotation",
+		"unstick": "Ablösen",
+		"remove": "Entfernen",
+		"removenodeconfirmation": "Sind Sie sich sicher, dass Sie diesen Zustand entfernen möchten?",
+		"removetransitionconfirmation": "Sind Sie sich sicher, dass Sie diese Transition entfernen möchten?"
+	},
+	"settings": {
+		"or": "Disjunktion/ODER",
+		"and": "Konjunktion/UND",
+		"not": "Negation/NICHT",
+		"language": "Sprache",
+		"export": "Export",
+		"import": "Import",
+		"createlink": "Erstelle download link",
+		"usage": "Benutzung"
+	},
+	"usage": {
+		"title": "Benutzung",
+		"oncanvas": "Auf der Leinwand",
+		"ineditor": "Im Editor",
+		"input": "Eingabe",
+		"action": "Aktion",
+		"addstatei": "Doppelklick auf Leinwand",
+		"addstatea": "Füge Zustand hinzu",
+		"addtransitioni": "Ziehen von einem Zustand zu einem anderen",
+		"addtransitiona": "Füge Transition hinzu",
+		"addloopi": "Ziehen von einem Zustand zu sich selbst (Bewegung >3px))",
+		"addloopa": "Füge Eigenschleife hinzu",
+		"dragi": "Halte 'Strg' während des Ziehens eines Zustands",
+		"draga": "Bewege Zustand und fixiere ihn",
+		"selecti": "Klick auf einen Zustand/eine Transition (oder ihre Überführungsfunktion)",
+		"selecta": "Wählt den Zustand/die Transition aus und zeigt weitere Informationen sowie den Editor",
+		"delete": "Entfernt den ausgewählten Zustand bzw. die ausgewählte Transition",
+		"reposition": "Positioniert Zustände neu",
+		"editcontenti": "Doppelklick auf eine Zeile",
+		"editcontenta": "Bearbeite Inhalt",
+		"submiti": "Eingabetaste während der Bearbeitung",
+		"submita": "Speichere Änderungen",
+		"aborti": "Escabe während der Bearbeitung",
+		"aborta": "Breche Bearbeitung ab",
+		"colori": "Klick auf die Farbeingabe in der oberen rechten Ecke",
+		"colora": "Weise eine Farbe zu, z.B. um zu gruppieren"
+	}
+}

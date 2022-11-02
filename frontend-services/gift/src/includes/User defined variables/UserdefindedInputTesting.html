@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Variables</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="../../../../../Bastian/Entwurf/entwurf%20v2/includes/Datentyp/DataType.js"></script>
+    <script src="userdefinedvariables.js"></script>
+
+</head>
+<body>
+
+
+<div class="container">
+
+    <h2>User defined Variables</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th class="col-sm-4">
+                    <div class="form-group has-feedback" id="UserDefinedOperators_UND_DivGroup">
+                        <label class="control-label" for="UserDefinedOperators_UND">Logisches UND:</label>
+                        <input type="text" class="form-control" id="UserDefinedOperators_UND" aria-describedby="UserDefinedOperators_UND_Span"
+                               placeholder="*" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                        <span id="UserDefinedOperators_UND_Glyphicon" aria-hidden="true"></span>
+                        <span id="UserDefinedOperators_UND_Span" class="sr-only">(Erfolg)</span>
+                    </div>
+                </th>
+                <th class="col-sm-4">
+                    <div class="form-group has-feedback" id="UserDefinedOperators_ODER_DivGroup">
+                        <label class="control-label" for="UserDefinedOperators_ODER">Logisches ODER:</label>
+                        <input type="text" class="form-control" id="UserDefinedOperators_ODER" aria-describedby="UserDefinedOperators_ODER_Span"
+                               placeholder="+" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                        <span id="UserDefinedOperators_ODER_Glyphicon" aria-hidden="true"></span>
+                        <span id="UserDefinedOperators_ODER_Span" class="sr-only">(Erfolg)</span>
+                    </div>
+                </th>
+                <th class="col-sm-4">
+                    <div class="form-group has-feedback" id="UserDefinedOperators_NICHT_DivGroup">
+                        <label class="control-label" for="UserDefinedOperators_NICHT">Logische Negation:</label>
+                        <input type="text" class="form-control" id="UserDefinedOperators_NICHT" aria-describedby="UserDefinedOperators_NICHT_Span"
+                               placeholder="/" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                        <span id="UserDefinedOperators_NICHT_Glyphicon" aria-hidden="true"></span>
+                        <span id="UserDefinedOperators_NICHT_Span" class="sr-only">(Erfolg)</span>
+                    </div>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

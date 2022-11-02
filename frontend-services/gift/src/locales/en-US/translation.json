@@ -1,0 +1,157 @@
+{
+    "about": {
+        "text": "The graphical interactive FSM Tool (GiFT) is a web application to calculate and display digital machines,in several representations, which was created as a software project at the technical University Ilmenau.,Here are particular mention:",
+        "title": "GiFT - Graphical interactive FSM Tool"
+    },
+    "buttons": {
+        "addstate": "Add state",
+        "removeall": "Remove all",
+        "removeallconfirmation": "Are you sure you want to remove ALL states and transitions?",
+        "repositionall": "Reposition all"
+    },
+    "del_para": {
+        "text": "Are you sure delete the paralell machine?",
+        "title": "Attention!"
+    },
+    "download": {
+        "download": "Download",
+        "name": "Filename",
+        "text": "The Download is ready!"
+    },
+    "global": {
+        "activate": "Activate",
+        "cancel": "Cancel",
+        "close": "Close",
+        "continue": "Continue",
+        "create": "Create",
+        "deactivate": "Deactivate",
+        "gui": "Graphical user interface",
+        "save_changes": "Save changes",
+        "yEquation": "y-Equations",
+        "zEquation": "z-Equations"
+    },
+    "infoedit": {
+        "attribute": "Attribute",
+        "fromstate": "from State",
+        "info": "Click on a state or transition",
+        "input": "Input",
+        "output": "Output",
+        "remove": "Remove",
+        "removenodeconfirmation": "Are you sure you want to remove this state?",
+        "removetransitionconfirmation": "Are you sure you want to remove this transition?",
+        "state": "State",
+        "stateName": "State designation",
+        "tostate": "to State",
+        "transition": "Transition",
+        "transitions": "Transitions",
+        "unstick": "Un-stick",
+        "value": "Value"
+    },
+    "lang": {
+        "english": "English",
+        "german": "German"
+    },
+    "navbar": {
+        "add_para_machine": "Add new parallel machine",
+        "brandy": "Graph. interactive FSM Tool",
+        "files_EcpExport": " ECP Export",
+        "files_ExportMachine": " Automat exportieren",
+        "files_File": "File",
+        "files_ImportMachine": " Automat importieren",
+        "files_New": " New",
+        "files_Settings": " Settings",
+        "help_About": " About",
+        "help_HelpTopics": " Help Topics",
+        "help_Legend": " Legend",
+        "help_Main": "Help",
+        "h_punkt": "Show h•(z,x)",
+        "h_stern": "Enter h*(x)",
+        "inputMode_Graph_trans": "State Diagram\/Transition matrix",
+        "inputMode_Machine_equations": "Machine table\/z-Equations",
+        "inputMode_Main": "Inputmode",
+        "newMachine_Main": "New machine",
+        "newMachine_State_bits": "State bits",
+        "para_machine": "Parallel machine",
+        "para_machines": "Parallel machines"
+    },
+    "progressbar": {
+        "prev_wait": "Previous waiting time",
+        "rem_wait": "Remaining waiting time",
+        "wait": "Please wait..."
+    },
+    "qmc": {
+        "ccnf": "CCNF",
+        "cdnf": "CDNF",
+        "minimized": "minimized",
+        "minimized_h": "minimized with h*(x)",
+        "unminimized": "unminimized"
+    },
+    "sections": {
+        "informationeditor": "Information and Editor",
+        "settings": "Settings",
+        "statediagram": "State Diagram",
+        "title": "Finite State Machine – State Diagram"
+    },
+    "settings": {
+        "and": "AND",
+        "ascVars": "Ascending",
+        "createlink": "Create download link",
+        "desVars": "Descending",
+        "export": "Export",
+        "filtVars": "Filter Variables",
+        "import": "Import",
+        "inputVars": "Input Variables",
+        "lang": "Language:",
+        "language": "Language",
+        "log_op": "Logical operators",
+        "not": "NOT",
+        "or": "OR",
+        "outputVars": "Output Variables",
+        "sortVars": "Sort Variables",
+        "usage": "Usage",
+        "userDefinedVars": "User defined variables",
+        "variable_settings": "Variable settings"
+    },
+    "swap_inputmode": {
+        "text": "The change of the input mode will cause a reset of the machine. <br><br>,The non-contradictory and complete representations of the output side are transferred to the input side.",
+        "title": "Attention!"
+    },
+    "tabs": {
+        "flipflop": "FlipFlop",
+        "machineTable": "Machine table",
+        "simulation": "Simulation",
+        "stateDiagram": "State Diagram",
+        "transitionMatrix": "Transition matrix"
+    },
+    "upload": {
+        "select": "Select...",
+        "upload": "Upload"
+    },
+    "usage": {
+        "aborta": "Abort changes",
+        "aborti": "Escape during edit",
+        "action": "Action",
+        "addloopa": "Add loop transition",
+        "addloopi": "Drag from one state to the same (movement >3px)",
+        "addstatea": "Add state",
+        "addstatei": "Doubleclick on canvas",
+        "addtransitiona": "Add transition",
+        "addtransitioni": "Drag from one state to another",
+        "colora": "Assign a color, i.e. for grouping purposes",
+        "colori": "Click on color input in the upper right corner",
+        "delete": "Deletes selected state\/transition",
+        "draga": "Move state",
+        "dragi": "Hold \"Ctrl\" while dragging a state",
+        "editcontenta": "Edit content",
+        "editcontenti": "Doubleclick on a row",
+        "ineditor": "In the editor",
+        "input": "Input",
+        "oncanvas": "On the canvas",
+        "reposition": "Reposition and un-fix states",
+        "selecta": "Selects state\/transition and shows further information and the editor",
+        "selecti": "Click on state\/transition (or its condition)",
+        "submita": "Submit changes",
+        "submiti": "Enter during edit",
+        "title": "Usage"
+    }
+}

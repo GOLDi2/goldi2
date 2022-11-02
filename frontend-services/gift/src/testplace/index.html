@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>D3 Touch 1</title>
+    <meta charset="utf-8" />
+</head>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<style>
+    body, html {
+        width:100%;
+        height:100%;
+    }
+    #vizcontainer {
+        width:100%;
+        height:100%;
+    }
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+    #buttons {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+    }
+</style>
+<body onload="touchDemo1()">
+
+<div id="vizcontainer">
+    <svg></svg>
+    <div id="buttons">
+    </div>
+</div>
+<footer>
+    <script>
+        function touchDemo1() {
+            d3.select("#buttons").html("")
+                    .style("pointer-events", "none")
+                    .append("div").attr("id", "touchStatus")
+                    .append("p")
+                    .html("Touch Status:")
+                    .append("ol")
+                    .append("li")
+                    .html("Touch the screen with a touch interface to get the current touch positions using d3.touches");
+
+            d3.select("svg").on("touchstart", touchStatus);
+            d3.select("svg").on("touchmove", touchStatus);
+
+            function touchStatus() {
+                d3.event.preventDefault();
+                d3.event.stopPropagation();
+                d = d3.touches(this);
+                d3.select("#touchStatus")
+                        .select("ol")
+                        .selectAll("li")
+                        .data(d)
+                        .enter()
+                        .append("li");
+
+                d3.select("#touchStatus")
+                        .select("ol")
+                        .selectAll("li")
+                        .data(d)
+                        .exit()
+                        .remove();
+
+                d3.select("#touchStatus")
+                        .select("ol")
+                        .selectAll("li")
+                        .html(function(d) {return d});
+
+            }
+
+        }
+    </script>
+</footer>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Automatentabelle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+    <script src="../Datentyp/DataType.js"></script>
+    <script src="../controller.js>"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Automatentabelle</h2>
+    <button class="btn btn-default" onclick="Testmodule.testGenerate()">test</button>
+    <button class="btn btn-default" onclick="Testmodule.testGetterNextStateArray()">testGetterNextStateArray</button>
+    <button class="btn btn-default" onclick="Testmodule.testSetterNextStateArray()">testSetterNextStateArray</button>
+    <button class="btn btn-default" onclick="Testmodule.testGetterOutputAssignments()">testGetterOutputAssignmentsOfy0</button>
+    <button class="btn btn-default" onclick="Testmodule.testSetterOutputAssignments()">testSetterOutputAssignmentsOfy0</button>
+    <p> </p>
+    <p> </p>
+
+    <div id="L_E_Automatentabelle"></div>
+
+
+
+</div>
+<script>
+    var Testmodule = (function () {
+        var TTableInstance = new TTable(1, 1, 3, ["+", "*", "/"]);
+
+        var testGenerate = function () {
+            MachineTable.generateMachineTable(true,TTableInstance,"L_E_Automatentabelle","Simon");
+        };
+
+        var testGetterNextStateArray = function () {
+            alert(MachineTable.getArrayNextStates(TTableInstance,"Simon"));
+        };
+
+        var testSetterNextStateArray = function () {
+            var nextStateArray = [  ["10","10","01","u"],
+                                    ["10","00","w","00"],
+                                    ["10","11","01","00"],
+                                    ["10","01","11","11"]];
+            MachineTable.setArrayNextStates(nextStateArray,TTableInstance,"Simon");
+        };
+
+        var testGetterOutputAssignments = function () {
+            alert(MachineTable.getOutputAssignment(0,TTableInstance,"Simon"));
+        };
+
+        var testSetterOutputAssignments = function () {
+            var outputAssignments = [  ["1","1","1","*"],
+                                    ["1","1","1","1"],
+                                    ["1","1","1","1"],
+                                    ["1","1","1","1"]];
+            MachineTable.setOutputAssignment(outputAssignments,0,TTableInstance,"Simon");
+        };
+
+        return {
+            testGenerate: testGenerate,
+            testGetterNextStateArray: testGetterNextStateArray,
+            testSetterNextStateArray: testSetterNextStateArray,
+            testGetterOutputAssignments: testGetterOutputAssignments,
+            testSetterOutputAssignments: testSetterOutputAssignments
+        };
+    })();
+</script>
+</body>
+</html>

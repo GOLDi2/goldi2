@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GiFT - Graphisches interaktives FSM Tool</title>
+
+    <link rel="stylesheet" href="includes/styles/main.css">
+    <link href="jquery/jquery-ui.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-submenu.css" rel="stylesheet">
+    <link href="css/fileinput.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" href="css/font-Awesome.css">
+    <link rel="stylesheet" href="css/bootstrap-select.css">
+
+    <script src="jquery/jquery.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
+    <script src="js/fileinput.js"></script>
+    <script src="js/fileinput_locale_de.js"></script>
+    <script type="text/javascript" src="js/cookieconsent.min.js"></script>
+
+    <script src="js/GUI_para_machines.js"></script>
+    <script src="js/designFunctions.js"></script>
+    <script src="includes/Adapter/DTToAT/DTToAT.js"></script>
+    <script src="includes/Adapter/ATToDT/ATToDT.js"></script>
+    <script src="includes/Adapter/DTToEq/DTToEq.js"></script>
+    <script src="includes/Adapter/EqToDT/EqToDT.js"></script>
+    <script src="includes/Datentyp/DataType.js"></script>
+    <script src="includes/Datentyp/GiftState.js"></script>
+    <script src="includes/QMC/qmc.js"></script>
+    <script src="includes/QMC/EquationNormalizer.js"></script>
+    <script src="includes/QMC/Logic.js"></script>
+    <script src="includes/Automatentabelle/script.js"></script>
+    <script src="includes/Transitionsmatrix/functions.js"></script>
+    <script src="includes/Vollstandigkeit/completeness.js"></script>
+    <script src="includes/Widerspruchsfreiheit/consistency.js"></script>
+    <script src="includes/Stabilitat/stability.js"></script>
+    <script src="includes/checkfunctions.js"></script>
+    <script src="includes/zy_equations/zy_equations.js"></script>
+    <script src="includes/DFlipFlop.js"></script>
+    <script src="includes/wavedrom-master/skins/default.js"></script>
+    <script src="includes/wavedrom-master/wavedrom.max.js"></script>
+    <script src="includes/wavedrom-master/wavedrom_addon.js"></script>
+    <script src="includes/h-Punkt/h-Punkt.js"></script>
+    <script src="includes/util.js"></script>
+    <script src="includes/Flipflop/JK-Ausgabegleichung.js"></script>
+    <script src="includes/thread.min.js"></script>
+    <script src="includes/worker.js"></script>
+
+    <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+    <script type="text/javascript">
+        if (localStorage.locale=='de-DE') {
+            window.cookieconsent_options = {"message":"Dieses Tool verwendet Cookies um Ihnen die besten Erfahrungen damit zu ermöglichen.","dismiss":"OK !","learnMore":"Mehr Informationen","link":null,"theme":"dark-bottom"};
+        } else if (localStorage.locale=='en-US') {
+            window.cookieconsent_options = {"message":"This Tool uses cookies to ensure you get the best experience of it.","dismiss":"Got it!","learnMore":"More info","link":null,"theme":"dark-bottom"};
+        } else {
+            window.cookieconsent_options = {"message":"This Tool uses cookies to ensure you get the best experience of it.","dismiss":"Got it!","learnMore":"More info","link":null,"theme":"dark-bottom"};
+        }
+    </script>
+    <!-- End Cookie Consent plugin -->
+
+</head>
+<body onload="loadWebsite()">
+
+<!--modal Neu -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_About_new" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center><span data-i18n="navbar.newMachine_Main"></span></center></h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="col-sm-4 container-fluid">
+                        <center><span data-i18n="navbar.newMachine_State_bits"></span></center>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number"  data-type="minus" data-field="quant[1]">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <input style="text-align: center;" type="text" name="quant[1]" class="form-control input-number" id="L_count_Z" value="1" min="1" max="4" onkeypress='validate(event,/[0-4]/)'>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 container-fluid">
+                        <center><span data-i18n="settings.inputVars"></span></center>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number"  data-type="minus" data-field="quant[2]">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <input style="text-align: center;" type="text" name="quant[2]" class="form-control input-number" id="L_count_X" value="1" min="1" max="6" onkeypress='validate(event,/[0-4]/)'>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[2]">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 container-fluid">
+                        <center><span data-i18n="settings.outputVars"></span></center>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-number"  data-type="minus" data-field="quant[3]">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </span>
+                            <input style="text-align: center;" type="text" name="quant[3]" class="form-control input-number" id="L_count_Y" value="1" min="1" max="6" onkeypress='validate(event,/[0-4]/)'>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[3]">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br>
+                <hr>
+                <h4 class="modal-title"><center><span data-i18n="navbar.inputMode_Main"></span></center></h4><hr>
+                <div class="form-group">
+                    <center>
+                        <select class="selectpicker" data-style="btn-inverse" id="L_new_mode">
+                            <option value="0" data-i18n="navbar.inputMode_Graph_trans" selected></option>
+                            <option value="1" data-i18n="navbar.inputMode_Machine_equations"></option>
+                        </select>
+                    </center>
+                </div>
+                <hr>
+                <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix" role="tab" id="LabelOne_new" style="height:55px;">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion2" href="#User_defined_input_new" aria-expanded="false" aria-controls="User_defined_input_new">
+                                    <span data-i18n="settings.inputVars"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="User_defined_input_new" class="panel-collapse collapse" role="tabpanel" aria-labelledby="LabelOne_new">
+                            <div class="panel-body" id="User_defined_Inputvariables_new"></div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix" role="tab" id="LabelTwo_new" style="height:55px;">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion2" href="#User_defined_output_new" aria-expanded="false" aria-controls="User_defined_output_new">
+                                    <span data-i18n="settings.outputVars"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="User_defined_output_new" class="panel-collapse collapse" role="tabpanel" aria-labelledby="LabelTwo_new">
+                            <div class="panel-body" id="User_defined_Outputvariables_new"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+                <button onclick="Controller.generateNewMachine()" type="button" class="btn btn-primary" data-dismiss="modal" id="New_Create_Button" data-i18n="global.create"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--modal load machine -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_load_machine_model" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center><span data-i18n="navbar.files_ImportMachine"></span></center></h4>
+            </div>
+            <div class="modal-body">
+                <input id="L_load_machine_file_upload" type="file" class="file-loading" accept=".gift" data-show-preview="false">
+                <script>
+                    $("#L_load_machine_file_upload").fileinput({
+                        allowedFileExtensions: ["gift"],
+                        previewClass: "bg-warning"
+                    });
+                    function handleFileSelect(id) {
+                        var f = document.getElementById(id).files[0];
+
+                        var reader = new FileReader();
+
+                        // Closure to capture the file information.
+                        reader.onload = (function(theFile) {
+                            return function(e) {
+                                load_machine_from_upload(e.target.result);
+                            };
+                        })(f);
+
+                        // Read in the image file as a data URL.
+                        reader.readAsText(f);
+                    }
+                </script>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id='fileinput_cancel_button' class="btn btn-default" data-dismiss="modal" data-i18n="global.cancel"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--modal Einstellungen -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_settings_modal" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title"><center><span data-i18n="navbar.files_Settings"></span></center></h3>
+            </div>
+            <div class="modal-body">
+                <h4 id="L_settings_logic" data-i18n="settings.log_op"></h4><br>
+                <table>
+                    <tbody>
+                    <tr>
+                        <th class="col-sm-4">
+                            <div class="form-group has-feedback" id="UserDefinedOperators_UND_DivGroup">
+                                <label class="control-label" for="UserDefinedOperators_UND" data-i18n="settings.and"></label>
+                                <input type="text" class="form-control" id="UserDefinedOperators_UND" aria-describedby="UserDefinedOperators_UND_Span"
+                                       placeholder="*" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                                <span id="UserDefinedOperators_UND_Glyphicon" aria-hidden="true"></span>
+                                <span id="UserDefinedOperators_UND_Span" class="sr-only">(Erfolg)</span>
+                            </div>
+                        </th>
+                        <th class="col-sm-4">
+                            <div class="form-group has-feedback" id="UserDefinedOperators_ODER_DivGroup">
+                                <label class="control-label" for="UserDefinedOperators_ODER" data-i18n="settings.or"></label>
+                                <input type="text" class="form-control" id="UserDefinedOperators_ODER" aria-describedby="UserDefinedOperators_ODER_Span"
+                                       placeholder="+" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                                <span id="UserDefinedOperators_ODER_Glyphicon" aria-hidden="true"></span>
+                                <span id="UserDefinedOperators_ODER_Span" class="sr-only">(Erfolg)</span>
+                            </div>
+                        </th>
+                        <th class="col-sm-4">
+                            <div class="form-group has-feedback" id="UserDefinedOperators_NICHT_DivGroup">
+                                <label class="control-label" for="UserDefinedOperators_NICHT" data-i18n="settings.not"></label>
+                                <input type="text" class="form-control" id="UserDefinedOperators_NICHT" aria-describedby="UserDefinedOperators_NICHT_Span"
+                                       placeholder="/" style="text-align: center" maxlength="1" oninput="UserDefinedOperators.changeMachineOperators(this.id)">
+                                <span id="UserDefinedOperators_NICHT_Glyphicon" aria-hidden="true"></span>
+                                <span id="UserDefinedOperators_NICHT_Span" class="sr-only">(Erfolg)</span>
+                            </div>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <!--<span data-i18n="settings.lang"></span>
+                <div class="form-group select-notmobile">
+                    <center>
+                        <select id="L_GUI_Lang" class="selectpicker" data-style="btn-inverse" onchange="change_Language(event.target);">
+                            <option  value="0" data-i18n="lang.english"></option>
+                            <option  value="1" data-i18n="lang.german"></option>
+                        </select>
+                    </center>
+                </div>
+                <div class="form-group select-mobile" style="display: none;">
+                    <center>
+                        <select id="L_GUI_Lang2" class="" data-style="btn-inverse" style="width: 100%;" onchange="change_Language(event.target);">
+                            <option  value="0" data-i18n="lang.english"></option>
+                            <option  value="1" data-i18n="lang.german"></option>
+                        </select>
+                    </center>
+                </div>
+                <hr>-->
+                <h4 id="L_settings_varsettings" data-i18n="settings.variable_settings"></h4>
+                <table>
+                    <tr>
+                        <td class="col-sm-3"><span id="L_settings_alphanumericsort_desc" data-i18n="settings.sortVars"></span></td>
+                        <td class="col-sm-9">
+                            <form>
+                                <label class="radio-inline"><input type="radio" onchange="AlphaNumericsort_asc=false;" name="optradio" checked><span data-i18n="settings.desVars"></span></label>
+                                <label class="radio-inline"><input type="radio" onchange="AlphaNumericsort_asc=true;" name="optradio"><span data-i18n="settings.ascVars"></span></label>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-3"><span id="L_settings_filter_Variables" data-i18n="settings.filtVars"></span></td>
+                        <td class="col-sm-9">
+                            <form>
+                                <label class="radio-inline"><input type="radio" onchange="alphanumericsort_desc=true;L_Variables_sort=true;" name="optradio" checked><span data-i18n="settings.desVars"></span></label>
+                                <label class="radio-inline"><input type="radio" onchange="alphanumericsort_desc=false;L_Variables_sort=true;" name="optradio"><span data-i18n="settings.ascVars"></span></label>
+                                <label class="radio-inline"><input type="radio" onchange="L_Variables_sort=false;" name="optradio"><span data-i18n="global.deactivate"></span></label>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <h4 id="L_settings_varnames" data-i18n="settings.userDefinedVars"></h4><br>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix" role="tab" id="LabelOne" style="height:55px;">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#User_defined_input" aria-expanded="false" aria-controls="User_defined_input">
+                                    <span data-i18n="settings.inputVars"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="User_defined_input" class="panel-collapse collapse" role="tabpanel" aria-labelledby="LabelOne">
+                            <div class="panel-body" id="User_defined_Inputvariables"></div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix" role="tab" id="LabelTwo" style="height:55px;">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#User_defined_output" aria-expanded="false" aria-controls="User_defined_output">
+                                    <span data-i18n="settings.outputVars"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="User_defined_output" class="panel-collapse collapse" role="tabpanel" aria-labelledby="LabelTwo">
+                            <div class="panel-body" id="User_defined_Outputvariables"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="Controller.refresh()" type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--modal FlipFlop -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_F_F_modal" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog FFmodal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center data-i18n="global.flipflopequations"></center></h4>
+            </div>
+            <div class="modal-body">
+                <div id="L_F_F_Gleichungen_D_FlipFlop" align="center" width="100%"></div>
+                <div id="L_F_F_Gleichungen_JK_FlipFlop" align="center" width="100%"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--modal h-punkt -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_h_punkt" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><center><span data-i18n="navbar.h_punkt"></span></center></h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon">h•(z,x)</span>
+                    <textarea rows="1" id="L_h_punkt_Output" class="form-control" placeholder="" disabled wrap="off" style="overflow-x: scroll;overflow-y:hidden;vertical-align: middle;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!--modal h* -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_h_stern" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center><span data-i18n="navbar.h_stern"></span></center></h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon">h*(x)</span>
+                    <textarea rows="1" id="L_h_stern_input" class="form-control" placeholder="" wrap="off" style="overflow-x: scroll;overflow-y:hidden;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+                <button onclick="Controller.getHReduce()" type="button" class="btn btn-primary" data-i18n="global.save_changes"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--modal Hilfe -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_Help_modal" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title"><center><span data-i18n="navbar.help_HelpTopics"></span></center></h3>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="helpCanvas">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#helpCanvas2" aria-expanded="false" aria-controls="helpCanvas2">
+                                    <span data-i18n="usage.oncanvas"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="helpCanvas2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="helpCanvas">
+                            <div class="panel-body">
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th data-i18n="usage.input"></th>
+                                            <th data-i18n="usage.action"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td data-i18n="usage.addstatei"></td>
+                                            <td data-i18n="usage.addstatea"></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="usage.addtransitioni"></td>
+                                            <td data-i18n="usage.addtransitiona"></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="usage.addloopi"></td>
+                                            <td data-i18n="usage.addloopa"></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="usage.dragi"></td>
+                                            <td data-i18n="usage.draga"></td>
+                                        </tr>
+                                        <tr>
+                                            <td data-i18n="usage.selecti"></td>
+                                            <td data-i18n="usage.selecta"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>'Entf'</td>
+                                            <td data-i18n="usage.delete"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>'r'</td>
+                                            <td data-i18n="usage.reposition"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="helpEditor">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#helpEditor2" aria-expanded="false" aria-controls"collapseZwei">
+                                <span data-i18n="usage.ineditor"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="helpEditor2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="helpEditor">
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th data-i18n="usage.input"></th>
+                                        <th data-i18n="usage.action"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td data-i18n="usage.editcontenti"></td>
+                                        <td data-i18n="usage.editcontenta"></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.submiti"></td>
+                                        <td data-i18n="usage.submita"></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.aborti"></td>
+                                        <td data-i18n="usage.aborta"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="überschriftEins">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEins" aria-expanded="false" aria-controls"collapseEins">
+                                <span data-i18n="global.gui"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseEins" class="panel-collapse collapse" role="tabpanel" aria-labelledby="überschriftEins">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <center>
+                                        <select class="selectpicker" data-style="btn-inverse" id="L_Help_Topics_GUI" onchange="L_GUI_pick(event.target)">
+                                            <option>Eingabeleiste</option>
+                                            <option>Eingabemodus</option>
+                                            <option>Ausgabeleiste</option>
+                                            <option>Menueleiste</option>
+                                        </select>
+                                    </center>
+                                </div>
+                                <div id="L_Help_Topics_Eingabeleiste" class="L_Help_Topics_GUI_Select">
+                                    <h4>Eingabeleiste</h4><br>
+                                    Im Tool kann über eine Eingabeleiste eine der vier verschiedenen Darstellungsformen ausgewählt werden. Dabei stehen …  Tabs zur Auswahl der einzelnen Darstellungsformen – von links nach rechts: Automatengraph, Transtionsmatrix, Automatentabelle, Z-Gleichungen, Simulation (genauere Erläuterungen siehe Seite …  - Eingabemodi) – am unteren Bildschirmrand zur Verfügung.
+                                </div>
+
+                                <div id="L_Help_Topics_Eingabemodus" style="display:none;" class="L_Help_Topics_GUI_Select">
+                                    <h4>Eingabemodus</h4><br>
+                                    Zur Eingabe von Daten stehen zwei Eingabemodi zur Auswahl – Automatengraph/Transitionsmatrix und Automatentabelle/Z-Gleichungen. Der aktuell gewählte Eingabemodus kann über den Menüpunkt Eingabe der Menüleiste (siehe  Seite …  - Menüleiste) oder durch Anklicken der Eingabemodus-Anzeige gewechselt werden.
+                                </div>
+
+                                <div id="L_Help_Topics_Ausgabeleiste" style="display:none;" class="L_Help_Topics_GUI_Select">
+                                    <h4>Ausgabeleiste</h4><br>
+                                    Über die Ausgabeleiste können die berechneten Ausgaben ausgewählt und angezeigt werden. Die Auswahl der anzuzeigenden Darstellungsform – von links nach rechts: Automatengraph, Transitionsmatrix, Automatentabelle, Z-Gleichungen, FlipFlop (genauere Erläuterungen siehe S. …  - Ausgabemodi) – erfolgt über die …  Tableiste am unteren Bildschirmrand.
+                                </div>
+
+                                <div id="L_Help_Topics_Menuleiste" style="display:none;" class="L_Help_Topics_GUI_Select">
+                                    <h4>Datei</h4><hr>
+                                    Unter dem Drop-Down-Menüpunkt Datei findet der Nutzer die Menüpunkte:<br>
+                                    •	Neu – neuen Automaten eingeben<br>
+                                    •	Refresh – Tool neu laden<br>
+                                    •	Automat laden – Einen zu einem früheren Zeitpunkt gespeicherten Automaten laden<br>
+                                    •	Automaten exportieren – Den aktuell eingegeben Automaten exportieren und speichern<br>
+                                    •	Einstellungen – Einstellungen zu logischen Operatoren, Variablennamen und Don’t care
+                                    h*(x) vornehmen<br><br>
+
+                                    <h4>Neu</h4><hr> Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben die aktuell eingegeben Daten zurückzusetzen und neue Daten einzugeben.
+                                    Refresh: Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben das Tool neu zu laden ohne dass die zuvor eingegebenen Daten gelöscht werden.
+                                    Automat laden: Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben einen Automaten, den er zu einem früheren Zeitpunkt exportiert und auf seinem Endgerät gespeichert hat, zu laden, um diesen dann im Tool weiter zu bearbeiten.
+                                    Automat exportieren: Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben den gerade geöffneten Automaten zu exportieren und auf seinem Endgerät zu speichern.
+                                    Einstellungen: Unter dem Menüpunkt Einstellungen wird dem Nutzer die Möglichkeit gegeben die Zeichen für die logischen Operatoren nach seinen Wünschen zu ändern, die Variablennamen abzuändern und das Einbeziehen von h*(x) zu erlauben.
+                                    <br><br>
+                                    <h4>Bearbeiten</h4><hr>
+                                    Unter den Drop-Down-Menüpunkt Bearbeiten findet der Nutzer die Menüpunkte:<br>
+                                    •	Minimieren – Minimieren der Gleichungen mit Hilfe QuineMcCluskey<br>
+                                    •	Test Vollständigkeit/Widerspruchsfreiheit   – Test des Eingegebenen Automaten auf Vollständigkeit und Widerspruchsfreiheit<br><br>
+                                    Minimieren: Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben die eingegebenen Z-Gleichungen zu kürzen. Dies erfolgt mit Hilfe des QuineMcCluskey- Verfahren.
+                                    Test Vollständigkeit/Widerspruchsfreiheit: Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben den/die eingegebene(n) Automaten auf Vollständigkeit und Widerspruchsfreiheit zu testen. Das Ergebnis wird in der Automatentabelle und im Automatengraph markiert.
+                                    <br><br>
+                                    <h4>h•(x,z) anzeigen</h4><hr>
+                                    Über diesen Menüleistenpunkt wird dem Nutzer die Möglichkeit gegeben sich die verbotenen Situationen, die in Form von h.(x,z) angezeigt werden und aus dem Test auf Vollständigkeit und Widerspruchsfreiheit folgen, anzeigen zu lassen.
+                                    <br><br><br>
+
+                                    <h4>h*(x) eingeben</h4><hr> Über diesen Menüpunkt wird dem Nutzer die Möglichkeit gegeben den h*(x)-Ausdruck einzugeben.
+                                    <br><br>
+                                    <h4>Hilfe</h4><hr>
+                                    Unter dem Drop-Down-Menüpunkt Hilfe findet der Nutzer die Menüpunkte:<br>
+                                    •	Help Topics<br>
+                                    •	About<br>
+                                    <br>
+                                    Help Topics: Über diesen Menüpunkt sind die Tastenkürzel-Belegungen und das Benutzerhandbuch zu finden.
+                                    <br><br>
+                                    About: Unter diesem Menüpunkt ist eine kurze Beschreibung des Tools hinterlegt.
+                                    <h4>Parallele Automaten</h4><hr>
+                                    Zu Beginn existiert nur ein Automat. Über das Menü „Parallele Automaten“ sind weitere Automaten erstellbar und auswählbar. Der momentan gewählte Automat wird in dem Menüpunkt dargestellt. Die bestehenden Automaten können individuell benannt werden. Über den Menüpunkt „y-Gleichungen“ können die kombinierten Ausgabegleichungen angezeigt werden. <br>
+                                    <br>
+                                    Für die Nutzung von Variablen aus Automaten, die nicht aus dem momentanen Automaten stammen ist folgenden Notation zu beachten:<br>
+                                    "a0z0+a1z2"<br>
+                                    Hierbei zieht sich a0 Auf Automat 0 und a1 auf Automat 1.<br>
+                                    <br>
+                                    Bei von Nutzung von mehr als einem Automaten, entfällt die Darstellung der Automatentabelle sowie die Berechnung der KDNF/KKNF-Gleichungen. Die Simulation ist für jeden Teilautomaten möglich. Dabei werden die Zustandsvariablen aller anderen Teilautomaten als Eingänge dargestellt.<br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    th,td{
+                        text-align:center;
+                    }
+                </style>
+            </div>
+	    <a href="/GIFT/Doku/Benutzerhandbuch.pdf" download style="margin-left: 20px;">Benutzerhanbuch</a>
+	    <div class="modal-footer">
+		    <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+	    </div>
+	</div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--modal About -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_About_modal" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center>About</center></h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <h4><span data-i18n="about.title"></span></h4>
+                    <p><span data-i18n="about.text"></span></p>
+                    <li>Stephen Ahmad</li>
+                    <li>Fabian Dörnfeld</li>
+                    <li>Bastian Hellweg</li>
+                    <li>Simon Lanfermann</li>
+                    <li>Lennart Planz</li>
+                    <li>Nicole Ponischil</li>
+                    <li>Lisa-Marie Schilling</li>
+                    <li>Sönke Thies</li>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal bootstrap-dialog type-primary fade" id="L_Download_File" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="L_Download_File_title"><center><span data-i18n="navbar.files_ExportMachine"></span></center></h4>
+            </div>
+            <div class="modal-body" id="L_Download_File_text">
+                <div class="input-group">
+                    <span class="input-group-addon" data-i18n="download.name">Filename</span>
+                    <input type="text" id="Download_File_Input" class="form-control" placeholder="FSM-exported-machine" onkeyup="RenameDownloadFile(this,event);" onkeypress="validate(event,/[0-9a-zA-Z_]/);SubmitRenameWithEnter(event);">
+                    <span class="input-group-addon">.gift</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="exportlink" data-i18n="download.download">Download</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<!--modal Legende -->
+<div class="modal bootstrap-dialog type-primary fade" id="L_Legende" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><center>Legende</center></h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <table class="table table-bordered LegendeTable" >
+                        <tr>
+                            <th>Abbildung</th>
+                            <th>Bedeutung</th>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/eingabe.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Eingabeseite</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/ausgabe.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Ausgabeseite</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/schwarz.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Zustand ist vollständig</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/blau.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Zustand ist unvollständig</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/hellgrun.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Folgezustand in der Simulation</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/dunkelgrun.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Momentaner Zustand in der Simulation</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/Orange.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Instabiler Zustand</td>
+                        </tr>
+                        <tr>
+                            <td class="LegendeTable_Pic"><img src="img/Legende/rot.png" style="width:100%;height:100%;" /></td>
+                            <td style="display:table-cell;vertical-align:middle;">Kante löst Widerspruch aus</td>
+                        </tr>
+                    </table>
+                </center>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.close"></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--Für Blauen Header folgende Klasse hinzufügen: bootstrap-dialog type-primary -->
+<div class="modal" id="L_progressbar_modal" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><center><span data-i18n="progressbar.wait"></span></center></h4>
+            </div>
+            <div class="modal-body" id="L_progressbar_content">
+
+            </div>
+            <div class="modal-footer">
+                <div style="padding-left:15px;">
+                    <table style="margin: auto; width: 100%">
+                        <tr>
+                            <td><span data-i18n="progressbar.prev_wait"></span>: </td>
+                            <td><span id="Prev_Time_Waiting">00:01</span></td>
+                            <!--<td><button type="button" class="btn btn-default" data-dismiss="modal" style="width: 101px;">Ausblenden</button></td>-->
+                        </tr>
+                        <tr>
+                            <td><span data-i18n="progressbar.rem_wait"></span>: </td>
+                            <td><span id="Rest_Time_Waiting">00:00</span></td>
+                            <td align="right"><button onclick='Worker.terminate()' type="button" class="btn btn-danger" data-dismiss="modal" style="width: 101px;" data-i18n="global.cancel"></button></td>
+                        </tr>
+                        <!--  <tr>
+                              <td align="right"><button onclick='Worker.terminate()' type="button" class="btn btn-default" data-dismiss="modal" >Ausblenden</button></td>
+                              <td align="right"><button onclick='Worker.terminate()' type="button" class="btn btn-default" data-dismiss="modal" >Abbrechen</button></td>
+                          </tr>-->
+                    </table>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal bootstrap-dialog type-primary fade" id="L_Brandy_inputmode_change" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="L_Brandy_inputmode_change_title"><center><span data-i18n="swap_inputmode.title"></span></center></h4>
+            </div>
+            <div class="modal-body" id="L_Brandy_inputmode_change_text">
+                <span data-i18n="[html]swap_inputmode.text;"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.cancel"></button>
+                <button onclick="Controller.swapInputMode()" type="button" class="btn btn-danger" data-dismiss="modal"><span data-i18n="global.continue"></span></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal bootstrap-dialog type-primary fade" id="L_Delete_Para" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="L_Delete_Para_title"><center><span data-i18n="del_para.title"></span></center></h4>
+            </div>
+            <div class="modal-body" id="L_Delete_Para_text">
+                <span data-i18n="[html]del_para.text;"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="global.cancel"></button>
+                <button onclick="GUI_paraMachines.del_para_machine();" type="button" class="btn btn-danger" data-dismiss="modal"><span data-i18n="global.continue"></span></button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal bootstrap-dialog type-primary fade" id="L_Para_yEquation" tabindex="-1" role="dialog" aria-labelledby="meinModalLabel" aria-hidden="true" style="color: #000000">
+    <div class="modal-dialog FFmodal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="L_Para_yEquation_title" data-i18n="global.yEquation"><center>Ein Titel </center></h4>
+            </div>
+            <div class="modal-body" id="L_Para_yEquation_text">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Navbar2 -->
+<nav class="navbar navbar-inverse navbar-fixed-top" id="obereNavbar">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top_fixed_navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand L_brand_navbar" href="#" data-toggle="modal" data-target="#L_About_modal"><img style="width:30px; position:relative; top:-5px" src="img/GOLDi_Logo.png"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="top_fixed_navbar">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span data-i18n="navbar.files_File"></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a onclick="Controller.generateNewMachine()" href="#"> <span class="glyphicon glyphicon-file" aria-hidden="true"></span><span data-i18n="navbar.files_New"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" data-toggle="modal" data-target="#L_load_machine_model" id="F1_load_machine"> <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span><span data-i18n="navbar.files_ImportMachine"></span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#L_Download_File" onclick="machine_export()" id="exportlink2"> <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span data-i18n="navbar.files_ExportMachine"></span></a></li>
+                        <li><a href="#"onclick="ecp_export.start()" id="exportecplink"> <span class="glyphicon glyphicon-export" aria-hidden="true"></span><span data-i18n="navbar.files_EcpExport"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a onclick="L_reset_settings();renderSelectpicker();" href="#" data-toggle="modal" data-target="#L_settings_modal" id="F1_Settings"> <span class="glyphicon glyphicon-cog" aria-hidden="true"></span><span data-i18n="navbar.files_Settings"></span></a></li>
+                        <li><a onclick="Controller.resetGift()" href="#"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"> </span> Reset</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" onclick="Controller.setHReduce()" data-toggle="modal" data-target="#L_h_stern" data-i18n="navbar.h_stern"></a></li>
+                <li><a href="#" onclick="Controller.activateHDot()" data-toggle="modal" data-target="#L_h_punkt" data-i18n="navbar.h_punkt"></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" data-i18n="navbar.help_Main"><span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" onclick="renderSelectpicker();" data-toggle="modal" data-target="#L_Help_modal" id="F1_Help"> <span class="glyphicon glyphicon-flag" aria-hidden="true"></span><span data-i18n="navbar.help_HelpTopics"></span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#L_Legende" id="F1_Legende"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><span data-i18n="navbar.help_Legend"></span></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#L_About_modal" id="F1_About"> <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span><span data-i18n="navbar.help_About"></span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown mega-dropdown" id="Para_dropdown">
+                    <a href="#" role="button" aria-expanded="false"><span data-i18n="navbar.para_machines"></span> <span id="GUI_para_number_span"></span></a>
+                    <ul class="dropdown-menu" role="menu" id="L_parallel_machines_dropdown_navbar">
+                        <li><a onclick="GUI_paraMachines.add_para_machine();"><span data-i18n="navbar.add_para_machine"></span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span data-i18n="settings.language"></span> <span class="glyphicon glyphicon-flag"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a onclick="change_Language('0');"><span data-i18n="lang.english"></span></a></li>
+                        <li><a onclick="change_Language('1');"><span data-i18n="lang.german"></span></a></li>
+                    </ul>
+                </li>
+                <li id="resolution" class="navbar-text" style="display:none;"></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <div class="navbar-header">
+                    <li><a  data-toggle="modal" data-target="#L_Brandy_inputmode_change" class="navbar-text" href="#" ><span data-i18n="navbar.inputMode_Main"></span>: <span id="L_Modus_Text" style="font-weight: bold;" data-i18n="navbar.inputMode_Graph_trans"></span></a></li>
+                </div>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<nav class="navbar navbar-inverse nopadding"></nav> <!-- Placeholder top !!the other navbar is fixed!! -->
+
+
+
+<!-- Tab-Inhalte (Main Content)-->
+<div role="tabpanel" style="height: calc(100% - 42px);" class="tablet_padding2">
+    <div class="tab-content" style="height: calc(100% - 42px);" class="tablet_padding3">
+        <div role="tabpanel" class="tab-pane active" id="L_E_Automatengraph" style="color:#000;height:100%">
+
+
+            <div class="" style="height: 100%;margin-left:-15px;">
+                <div class="col-sm-9 svgmobile flex-container" style="height: 100%;float: left;width: calc(100% - 3px);">
+                    <svg id="statediagram" style="height: 100%;padding: 0px 0px 10px 10px;"></svg>
+                </div>
+
+                <div class="container-fluid" style="padding-bottom: 60px;margin-bottom: 60px;float: left;">
+                    <h3><span data-i18n="sections.settings" style="color:#FFFFFF">Settings</span></h3>
+                    <p>
+                        <button id="add-state" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                            <span data-i18n="buttons.addstate">Add state</span>
+                        </button>
+                    </p>
+                    <p>
+                        <button id="reposition" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-random"></span>
+                            <span data-i18n="buttons.repositionall">Reposition all</span>
+                        </button>
+                    </p>
+                    <p>
+                        <button id="drop-storage" type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            <span data-i18n="buttons.removeall">Remove all</span>
+                        </button>
+                    </p>
+
+                    <!--<h3 data-i18n="sections.informationeditor" style="color:#FFFFFF">Information and Editor</h3>-->
+                    <div id="editor">
+                        <p class="text-info2" data-i18n="infoedit.info" style="color:#FFFFFF">Klicken Sie auf einen Zustand oder eine Transition</p>
+                    </div>
+                </div>
+
+
+                <div class="modal bootstrap-dialog type-primary fade" id="usage" tabindex="-1" role="dialog" aria-labelledby="usage" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 data-i18n="usage.title">Usage</h2>
+                            </div>
+                            <div class="modal-body">
+                                <h3 data-i18n="usage.oncanvas">On the Canvas</h3>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th data-i18n="usage.input">Input</th>
+                                        <th data-i18n="usage.action">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td data-i18n="usage.addstatei">Doubleclick on canvas</td>
+                                        <td data-i18n="usage.addstatea">Add state</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.addtransitioni">Drag from one state to another</td>
+                                        <td data-i18n="usage.addtransitiona">Add transition</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.addloopi">Drag from one state to the same (movement >3px)</td>
+                                        <td data-i18n="usage.addloopa">Add loop transition</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.dragi">Hold 'Ctrl' while dragging a state</td>
+                                        <td data-i18n="usage.draga">Move state</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.selecti">Click on state/transition (or its condition)</td>
+                                        <td data-i18n="usage.selecta">Selects state/transition and shows further information and the editor</td>
+                                    </tr>
+                                    <tr>
+                                        <td>'Entf'</td>
+                                        <td data-i18n="usage.delete">Deletes selected state/transition</td>
+                                    </tr>
+                                    <tr>
+                                        <td>'r'</td>
+                                        <td data-i18n="usage.reposition">Reposition and un-fix nodes</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3 data-i18n="usage.ineditor">In the Editor</h3>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th data-i18n="usage.input">Input</th>
+                                        <th data-i18n="usage.action">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td data-i18n="usage.editcontenti">click on a row</td>
+                                        <td data-i18n="usage.editcontenta">Edit content</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.submiti">Enter during edit</td>
+                                        <td data-i18n="usage.submita">Submit changes</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="usage.aborti">Escape during edit</td>
+                                        <td data-i18n="usage.aborta">Abort changes</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- L_E_Automatengraph<br>
+ <input type="text" style="color:#000;"><br><br>
+ <input type="text" style="color:#000;">
+ <div class="container">
+     <h2>Ladevorgang</h2>
+     <p>Aktueller Fortschritt:</p>
+     <div class="progress">
+         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%" id="L_progressbar1">
+             20%
+         </div>
+     </div>
+ </div>
+
+
+
+
+ <button type="button" id ="L_Test_Popover" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="right">
+     Popover rechts
+ </button>
+ <script>
+     var L_test_content = 'ich bin test-content';
+     $("#L_Test_Popover").attr("data-content", L_test_content);
+ </script>!-->
+
+
+
+
+
+        </div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_E_Transitionsmatrix" style="padding-bottom: 30px;padding-top: 30px;" >
+            <br>
+        </div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_E_Automatentabelle" style="padding-bottom: 30px;padding-top: 30px;" >
+
+        </div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_E_ZGleichungen" style="padding-bottom: 30px;padding-top: 30px;">
+            <div id="L_E_EingabeVariablen"></div>
+            <div id="L_E_EingabeZGleichungen"></div>
+            <div id="L_E_EingabeYGleichungen"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_A_Automatengraph" style="padding-bottom: 30px;padding-top: 30px;"></div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_A_Transitionsmatrix" style="padding-bottom: 30px;padding-top: 30px;"></div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_A_Automatentabelle" style="padding-bottom: 30px;padding-top: 30px;"></div>
+        <div role="tabpanel" class="tab-pane tablet_padding" id="L_A_ZGleichungen" style="padding-bottom: 30px;padding-top: 30px;">
+            <div id="L_A_ZZGleichungen"></div>
+            <div id="L_A_YGleichungen"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="L_Simulation" style="padding-bottom: 30px;padding-top: 30px;"></div>
+    </div>
+</div>
+
+
+
+
+
+<!-- FOOTER. Navbar with tabs-->
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom" tabindex="-2">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bot_fixed_navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Tabs-Navs -->
+        <div class="collapse navbar-collapse" id="bot_fixed_navbar" style="text-align: center;">
+            <ul class="nav nav-pills navbar-inverse" role="tablist" id="nav-pills_id">
+                <li onclick="L_TabDisable();L_refresh_values(1,Controller.getTab())" role="presentation" class="L_Tabs_Input active" id="TAB_on_E_Automatengraph"><a href="#L_E_Automatengraph" role="tab" data-toggle="tab" id="L_E_TAB_Automatengraph" data-i18n="tabs.stateDiagram"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(2,Controller.getTab())" role="presentation" class="L_Tabs_Input" id="TAB_on_E_Transitionsmatrix"><a href="#L_E_Transitionsmatrix" role="tab" data-toggle="tab" id="TAB_on_E_Transitionsmatrix2" data-i18n="tabs.transitionMatrix"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(3,Controller.getTab())" role="presentation" class="L_Tabs_Input" id="TAB_on_E_Automatentabelle"><a href="#L_E_Automatentabelle" role="tab" data-toggle="tab" id="L_E_TAB_Automatentabelle" data-i18n="tabs.machineTable"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(4,Controller.getTab())" role="presentation" class="L_Tabs_Input" id="TAB_on_E_ZGleichungen"><a href="#L_E_ZGleichungen" role="tab" data-toggle="tab" id="TAB_on_E_ZGleichungen2" data-i18n="global.zEquation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(9,Controller.getTab())" role="presentation" class="L_Tabs_Simulation tablet_in" style="display: none;" id="TAB_on_Simulation"><a href="#L_Simulation" role="tab" data-toggle="tab" id="TAB_on_Simulation2" data-i18n="tabs.simulation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(5,Controller.getTab())" role="presentation" class="L_Tabs_Output tablet_out" id="TAB_on_A_Automatengraph"><a href="#L_E_Automatengraph" role="tab" data-toggle="tab" id="TAB_on_A_Automatengraph2" data-i18n="tabs.stateDiagram"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(6,Controller.getTab())" role="presentation" class="L_Tabs_Output tablet_out" id="TAB_on_A_Transtionsmatrix"><a href="#L_A_Transitionsmatrix" role="tab" data-toggle="tab" id="TAB_on_A_Transtionsmatrix2" data-i18n="tabs.transitionMatrix"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(7,Controller.getTab())" role="presentation" class="L_Tabs_Output tablet_out" id="TAB_on_A_Automatentabelle"><a href="#L_A_Automatentabelle" role="tab" data-toggle="tab" id="TAB_on_A_Automatentabelle2" data-i18n="tabs.machineTable"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(8,Controller.getTab())" role="presentation" class="L_Tabs_Output tablet_out" id="TAB_on_A_ZGleichungen"><a href="#L_A_ZGleichungen" role="tab" data-toggle="tab" id="TAB_on_A_ZGleichungen2" data-i18n="global.zEquation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(9,Controller.getTab())" role="presentation" class="L_Tabs_Simulation tablet_out" id="TAB_on_Simulation"><a href="#L_Simulation" role="tab" data-toggle="tab" id="TAB_on_Simulation2" data-i18n="tabs.simulation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(10,Controller.getTab())" role="presentation" class="L_Tabs_Simulation tablet_out" id="TAB_on_FF"><a href="#" data-toggle="modal" data-target="#L_F_F_modal" id="TAB_on_FF2" data-i18n="tabs.flipflop"></a></li></ul>
+            <ul class="nav nav-pills navbar-inverse tablet_in" role="tablist" style="display: none;" id="nav-pills_id2">
+                <li onclick="L_TabDisable();L_refresh_values(5,Controller.getTab())" role="presentation" class="L_Tabs_Output" id="TAB_on_A_Automatengraph"><a href="#L_E_Automatengraph" role="tab" data-toggle="tab" id="TAB_on_A_Automatengraph2" data-i18n="tabs.stateDiagram"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(6,Controller.getTab())" role="presentation" class="L_Tabs_Output" id="TAB_on_A_Transtionsmatrix"><a href="#L_A_Transitionsmatrix" role="tab" data-toggle="tab" id="TAB_on_A_Transtionsmatrix2" data-i18n="tabs.transitionMatrix"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(7,Controller.getTab())" role="presentation" class="L_Tabs_Output" id="TAB_on_A_Automatentabelle4"><a href="#L_A_Automatentabelle" role="tab" data-toggle="tab" id="TAB_on_A_Automatentabelle4" data-i18n="tabs.machineTable"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(8,Controller.getTab())" role="presentation" class="L_Tabs_Output" id="TAB_on_A_ZGleichungen"><a href="#L_A_ZGleichungen" role="tab" data-toggle="tab" id="TAB_on_A_ZGleichungen2" data-i18n="global.zEquation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(9,Controller.getTab())" role="presentation" class="L_Tabs_Simulation tablet_out" id="TAB_on_Simulation"><a href="#L_Simulation" role="tab" data-toggle="tab" id="TAB_on_Simulation2" data-i18n="tabs.simulation"></a></li>
+                <li onclick="L_TabDisable();L_refresh_values(10,Controller.getTab())" role="presentation" class="L_Tabs_Simulation" id="TAB_on_FF"><a href="#" data-toggle="modal" data-target="#L_F_F_modal" id="TAB_on_FF2" data-i18n="tabs.flipflop"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!--
+Include scripts
+-->
+
+<script id="editor-blank-template" type="text/x-handlebars-template">
+    <p class="text-info2">{{t "infoedit.info"}}</p>
+</script>
+
+<script id="statedescr-template" type="text/x-handlebars-template">
+    <div class="panel panel-default statedesc">
+        <div class="blue-header">
+            <h4 class="panel-title"><center>{{t "infoedit.state"}}</center></h4>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>{{t "infoedit.attribute"}}</th>
+                    <th>{{t "infoedit.value"}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="stateName" class="editable">
+                    <td>{{t "infoedit.stateName"}}</td>
+                    <td class="content">
+                        <div class="output">
+                            <!-- ${ {{name}} }$ -->
+                        </div>
+                        <input value="{{name}}" class="form-control form-inline noselect" maxlength="8" style="text-align: center;" size="10"></input>
+                    </td>
+                </tr>
+                <tr id="statevalue" class="editable">
+                    <td>{{t "infoedit.state"}}</td>
+                    <td class="content">
+                        <div class="output">$Z_{ {{value}} }$</div>
+                        <input type="number" min="0" max="32" class="form-control form-inline hidden"></input>
+                    </td>
+                </tr>
+                {{#each output}}
+                <tr id="stateoutput{{@index}}" class="editable">
+                    {{#if @first }}
+                    <td>{{t "infoedit.output"}}</td>
+                    {{else}}
+                    <td></td>
+                    {{/if}}
+                    <td class="content">
+                        <div class="output">
+                            ${{printYName @index}}= {{toTeX this}}$
+                            {{#if (editable)}}
+                            {{#if @last }}
+                            <button id="remove-output" class="btn btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></button>
+                            {{/if}}
+                            {{/if}}
+                        </div>
+                        <input placeholder="{{boolExprPlaceholder}}" class="form-control form-inline hidden"></input>
+                    </td>
+                </tr>
+                {{/each}}
+                {{#if (editable)}}
+                {{#if (notMaximum)}}
+                <tr id="add-state-output" class="editable">
+                    <td></td>
+                    <td>
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <input placeholder="{{boolExprPlaceholder}}" class="form-control form-inline hidden" size="10"></input>
+                    </td>
+                </tr>
+                </tbody>
+                {{/if}}
+                {{/if}}
+            </table>
+        </div>
+
+        <div class="panel-footer">
+            {{#if (editable)}}
+            <button id="reposition-selected" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-random"></span>
+                {{t "infoedit.unstick"}}
+            </button>
+            <button id="remove-selected-state" type="button" class="btn btn-danger">
+                <span class="glyphicon glyphicon-trash"></span>
+                {{t "infoedit.remove"}}
+            </button>
+            {{/if}}
+        </div>
+    </div>
+</script>
+
+<script id="transitiondescr-template" type="text/x-handlebars-template">
+    <div class="panel panel-default transitiondesc">
+        <div class="blue-header">
+            <h4 class="panel-title"><center>{{t "infoedit.transition"}}</center></h4>
+        </div>
+        <div class="panel-body" id="panel_body_editor">
+            <table class="table" id="table_panel_body_editor">
+                <thead>
+                <tr>
+                    <th>{{t "infoedit.attribute"}}</th>
+                    <th>{{t "infoedit.value"}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="transitionsource" class="editable">
+                    <td>{{t "infoedit.fromstate"}}</td>
+                    <td class="content">
+                        <div class="output">$Z_{ {{source.value}} }$</div>
+                        <input type="number" min="0" max="32" class="form-control form-inline hidden"></input>
+                    </td>
+                </tr>
+                <tr id="transitiontarget" class="editable">
+                    <td>{{t "infoedit.tostate"}}</td>
+                    <td class="content">
+                        <div class="output">$Z_{ {{target.value}} }$</div>
+                        <input type="number" min="0" max="32" class="form-control form-inline hidden"></input>
+                    </td>
+                </tr>
+                <tr id="transitioninput" class="editable">
+                    <td>{{t "infoedit.input"}}</td>
+                    <td class="content" >
+                        <div class="output"></div>
+                        <input value="{{ input}}" class="form-control form-inline" style="text-align: center;" size="10"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="cboxlongtransition">
+                            {{t "infoedit.longtransition"}}
+                        </label>
+                    </td>
+                    <td>
+                        <input type="checkbox" value="" id="cboxlongtransition"
+                               {{#if shortened}}
+                               checked
+                               {{/if}}>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            {{#if (editable)}}
+            <button id="remove-selected-transition" type="button" class="btn btn-danger">
+                <span class="glyphicon glyphicon-trash"></span>
+                {{t "infoedit.remove"}}
+            </button>
+            {{/if}}
+        </div>
+    </div>
+</script>
+<!-- end templates -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    showProcessingMessages: false,
+    jax: ['input/TeX', 'output/CommonHTML'],
+    extensions: ['tex2jax.js'],
+    messageStyle: 'simple',
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$', '$$'] ],
+      processEscapes: true
+    },
+    MathMenu: {
+      showLocale: false,
+      showMathPlayer: false
+    },
+    AssistiveMML: {disabled: true}
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"> </script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="includes/bower_components/handlebars/handlebars.js"></script>
+<script src="includes/bower_components/i18next/i18next.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js(.) scripts/plugins.js -->
+<!-- endbuild -->
+
+<!-- build:js({app,.tmp}) scripts/main.js -->
+<script src="includes/scripts/util.js"></script>
+<script src="includes/scripts/parser.js"></script>
+<script src="includes/scripts/store.js"></script>
+<script src="includes/scripts/model.js"></script>
+<script src="includes/scripts/controller.js"></script>
+<script src="includes/scripts/statediagram.js"></script>
+<script src="includes/scripts/view.js"></script>
+<script src="includes/scripts/main.js"></script>
+<script src="includes/GraphConverter.js"></script>
+<script src="includes/controller.js"></script>
+<script src="includes/User%20defined%20variables/userdefinedvariables.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+<script src="js/bootstrap-dialog.min.js"></script>
+
+<script src="js/underscore.js"></script>
+<script src="js/shortcut2.js"></script>
+<script src="contextmenu/jquery.ui.position.js"></script>
+<script src="contextmenu/jquery.context2Menu.js"></script>
+<script src="js/EingabeWechsel.js"></script>
+<script src="js/BackupObject.js"></script>
+<script src="js/Backup.js"></script>
+<script src="js/CustomUpload.js"></script>
+<script src="js/CostomDownload.js"></script>
+<script src="js/ecpExport.js"></script>
+<script src="js/AusgabeDisplay.js"></script>
+<script src="responsive/gridstack.js"></script>
+<script type="text/javascript" src="js/ownShortcuts.js"></script>
+<script src="js/bootstrap-confirmation.js"></script>
+<script src="js/NumberSpinner.js"></script>
+<script src="js/bootstrap-select.js"></script>
+<script type="text/javascript">
+    //Default settings
+    createProgressbar("progressbar1",0);
+    var Tab_Alt = 1;
+    var L_Input_mode = 0;
+    loadWebsite()
+    change(L_Input_mode);
+    var L_dont_care = 1;
+    var L_logic_and='+';
+    var L_logic_or='*';
+    var L_logic_not='/';
+    var alphanumericsort_desc = true;
+    var L_Variables_sort = true;
+    var L_Variables_filt = true;
+    var LocalStorage_Language = localStorage.locale;
+    L_reset_settings();
+    CompareLocalStorage();
+    setInterval(CompareLocalStorage, 5000);
+    /*var localStorage["LLdontcare"];
+     var localStorage["LLlogicor"];
+     var localStorage["LLlogicnot"];
+     var localStorage["LLvarnamesinput"];
+     var localStorage["LLvarnamesoutput"];
+     var localStorage["LLvarnamesstates"];*/
+
+    if (localStorage.gift["something_saved"]==1) {
+        loadlocalstorage();
+    }
+    /*window.onload = function() {
+
+     }*/
+
+    //Anpassungen zum schließen und öffnen des Dropdown-Menüs
+    //Anpassungen zum schließen und öffnen des Dropdown-Menüs
+    $('li.dropdown.mega-dropdown').on('click', function (event) {
+        $(this).parent().toggleClass("open");
+    });
+    $('body').on('click', function (e) {
+        if (!($('li.dropdown.mega-dropdown').is(e.target) || e.target.className=='glyphicon glyphicon-pencil')
+                && $('li.dropdown.mega-dropdown').has(e.target).length === 0
+                && $('.open').has(e.target).length === 0
+        ) {
+            $('li.dropdown.mega-dropdown').removeClass('open');
+        }
+    });
+    /*$('body').on('click', function (e) {
+     if(giftInput.getHighestMachineNumber() > 0) {
+     if ($('#TAB_on_E_Automatentabelle').is(e.target) || $('#L_E_TAB_Automatentabelle').is(e.target) || $('#TAB_on_A_Automatentabelle2').is(e.target) || $('TAB_on_A_Automatentabelle').is(e.target)) {
+     e.stopPropagation();
+     return false;
+     }
+     }
+     });*/
+
+
+</script>
+
+
+<script type="text/javascript">
+
+
+    function validate(evt,regex) {
+        var theEvent = evt || window.event;
+        var key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode( key );
+        if( !regex.test(key) ) {
+            theEvent.returnValue = false;
+            if(theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+
+    function maxLengthCheck(object)
+    {
+        if (object.value.length > object.maxLength)
+            object.value = object.value.slice(0, object.maxLength)
+    }
+
+
+    function stopRKey(evt) {
+        var evt = (evt) ? evt : ((event) ? event : null);
+        var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if ((evt.keyCode == 13) && (node.type=="text"))  {return false;}
+    }
+
+    document.onkeypress = stopRKey;
+</script>
+</body>
+</html>

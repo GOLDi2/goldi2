@@ -1,0 +1,75 @@
+/**
+ * Created by Lennart on 27.04.2015.
+ */
+//OnClick Funktion
+var names = [];
+var dataString = [];
+var dataArray = [];
+
+var counter;
+
+WaveDrom.init = function(xNames,yNames,zNames){        //arguments: x-vector-names, y-vector-names, z-vector-names
+    names = ["x0", "x1", "x2", "y1"];
+    for (i = 0 ; i < names.length ; i++){
+        dataArray[i] = [",",",",",",",",",",",",",",",",",",","];
+        dataString[i] = dataArray[i].join("");
+    }
+    var praefix = "{ signal : [ \n ";
+    var line = [];
+    var suffix = " ]}";
+    var data ;
+    data = praefix ;
+    for (i = 0 ; i < names.length ; i++){
+        line[i] = '{ name: "' + names[i] +'", wave: "' + dataString[i] + '" }, \n ';
+        data = data + line[i] ;
+    }
+    data = data + suffix;
+    document.getElementById('InputJSON_0').innerHTML = data;
+    WaveDrom.EditorRefresh();
+}
+WaveDrom.click = function(i,j,index) {
+    if((i % 2) === 0){
+        i = i/2;
+    }
+    else {
+        i = (i - 1) / 2;
+    }
+    for(k = 1 ; k < dataArray[j].length ; k++){
+        if(dataArray[j][k] === '.'){
+            dataArray[j][k] = dataArray[j][k-1];
+        }
+    }
+    if (dataArray[j][i] === "h") {
+        dataArray[j][i] = "l";
+    }
+    else {
+        dataArray[j][i] = "h";
+    }
+    for(k = dataArray[j].length-1; k >= 1; k-- ){
+        if (dataArray[j][k] === ','){
+
+        }
+        else if (dataArray[j][k] === dataArray[j][k-1]){
+            dataArray[j][k] = '.';
+        }
+    }
+    dataString[j] = dataArray[j].join("");
+    var praefix = "{ signal : [ \n ";
+    var line = [];
+    var suffix = " ]}";
+    var data ;
+    data = praefix ;
+    for (i = 0 ; i < names.length ; i++){
+        line[i] = '{ name: "' + names[i] +'", wave: "' + dataString[i] + '" }, \n ';
+        data = data + line[i] ;
+    }
+    data = data + suffix;
+    document.getElementById('InputJSON_0').innerHTML = data;
+    WaveDrom.EditorRefresh();
+}
+WaveDrom.getValues = function(){
+
+}
+WaveDrom.setValues = function(x,y,z){
+
+}
