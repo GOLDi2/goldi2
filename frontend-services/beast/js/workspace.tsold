@@ -1,0 +1,33 @@
+/**
+ * Created by maximilian on 12.05.17.
+ */
+
+type Circuit = any;
+type SubCircuit = Circuit;
+
+type dragMode = "pan" | "select";
+type rotationAngle = -90 | 90;
+
+interface WorkspaceInterface {
+    
+    removeSelection();
+    rotateSelection(angle: rotationAngle);
+    getSelectedSubcircuit(): SubCircuit;
+    pasteSubcircuit(circuit: SubCircuit);
+    setDragMode(mode: dragMode);
+    setRelativeZoom(factor: number);
+    resetZoom();
+    editSelectionParameters();
+    
+    getCircuit(): Circuit
+}
+
+interface WorkspaceControllerInterface{
+    getLibraryComponent(identifier: string, workspace: WorkspaceInterface): Circuit;
+    circuitModified(workspace: WorkspaceInterface); //TODO: connections or components changed?
+    openCompoundComponent(identifier: string, workspace: WorkspaceInterface);
+}
+
+interface WorkspaceConstructor{
+    new (container: JQuery, controller: WorkspaceControllerInterface, circuit: Circuit): WorkspaceInterface;
+}

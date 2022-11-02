@@ -1,0 +1,56 @@
+{
+  "name": "beast",
+  "version": "1.0.0",
+  "description": "BEAST - Block Diagram Editing and Simulating Tool",
+  "main": "index.html",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/webpack --config webpack.config.js",
+    "build": "rimraf dist && tsc || node build.js"
+  },
+  "keywords": [
+    "circiut",
+    "simulation",
+    "digital"
+  ],
+  "author": "TU-Ilmenau",
+  "contributors": [
+    {
+      "name": "Maximilian Engelhardt"
+    },
+    {
+      "name": "Jonas Knüpper"
+    },
+    {
+      "name": "Markus Seeber"
+    },
+    {
+      "name": "Dario Götze"
+    },
+    {
+      "name": "Dorian Müller"
+    },
+    {
+      "name": "Paul Lindner"
+    },
+    {
+      "name": "Alexander Zenkner"
+    },
+    {
+      "name": "Niels Andrä"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "copy": "^0.3.2",
+    "minify": "^8.0.3",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^2.2.2",
+    "typedoc": "^0.7.1",
+    "typescript": "^2.4.1",
+    "webpack": "^3.0.0"
+  }
+}

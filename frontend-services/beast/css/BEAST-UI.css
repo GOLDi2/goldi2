@@ -1,0 +1,281 @@
+/**
+ * Created by dorianmueller on 12.05.2017.
+ */
+
+html, body {
+    height: 100%
+}
+
+#treewrapper {
+    width: 24em;
+}
+
+#bodywrapper {
+    height: 100%;
+    font-size: 14px;
+}
+
+.padding {
+    padding: 0;
+}
+
+.sharp-corner {
+    border-radius: 0 !important;
+}
+
+.col-flex-container {
+    display: flex !important;
+    flex-direction: column;
+}
+
+.row-flex-container {
+    display: flex !important;
+    flex-direction: row;
+}
+
+.flex-grow-equal {
+    flex-grow: 1;
+}
+
+.flex-grow-99 {
+    flex-grow: 99;
+}
+
+/*** non-responsive ***/
+#row2 {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+#evilGoldi {
+    height: 100%;
+}
+
+ul.fancytree-container {
+    height: 10em;
+}
+
+#tree > ul {
+    border: none;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+#buttons {
+    padding: 1em;
+}
+
+#row1 {
+    margin-bottom: 0;
+}
+
+#right-nav-help {
+    margin-right: 0;
+}
+
+/*** tabStyle ***/
+#tabBar {
+}
+
+#tabBar > li {
+    position: relative;
+}
+
+#tabBar > li > a {
+    display: inline-block;
+    /*padding: 15px;*/
+}
+
+#tabBar > li > span {
+    display: inline-block;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: red;
+}
+
+#editor {
+    border-left: 2px;
+    border-color: #555;
+}
+
+/*** workaround for graphical toggle button glitch ***/
+/*.checkbox-inline > div > div > label {*/
+    /*line-height: 32px;*/
+/*}*/
+
+/*** Label Pseodo-Device ***/
+.beast-label-text {
+    stroke-width: 0px;
+}
+
+.beast-label {
+    fill: rgba(230, 230, 230, 0.4);
+}
+
+/*** workspace parameter dialog ***/
+
+.beast-parameter-invalid {
+    color: red;
+}
+
+/*** workspace parameter tooltip ***/
+
+.beast-parameter-tooltip {
+    background-color: rgba(230, 230, 230, 1);
+    text-align: center;
+    border: 1px solid gray;
+    margin: 0.5em;
+    border-radius: 5px;
+}
+
+.beast-parameter-tooltip td.name {
+    text-align: right;
+}
+
+.beast-parameter-tooltip td.value {
+    text-align: left;
+    padding-left: 0.5em;
+    white-space: nowrap;
+}
+
+.beast-parameter-colorpreview {
+    width: 0.8em;
+    height: 0.8em;
+    display: inline-block;
+    margin-left: 0.3em;
+}
+
+.beast-overlay {
+    background: #e9e9e9;
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+}
+
+.beast-horizontal-fill {
+    width: 100%;
+}
+
+/*** workspace line simulation ***/
+.beast-connection-hot {
+    stroke: #ff0000;
+}
+
+.beast-connection-cold {
+    stroke: #000000;
+}
+
+/*** Set on ports with external manipulation ***/
+.simcir-port-manipulated {
+    fill: #00ff00;
+}
+
+.simcir-port-manipulated-hot .simcir-port {
+    stroke: #ff0000;
+}
+
+.simcir-port-manipulated-hot .simcir-port-hole {
+    fill: #ff0000;
+}
+
+.template {
+    display: none !important;
+}
+
+.simcir-device-text {
+    fill: black;
+    stroke-width: 0;
+}
+
+.zoom-group {
+    width: 15em;
+    float: left;
+}
+
+.zoom-group > input {
+    text-align: center;
+    cursor:pointer !important;
+    user-select: none;
+}
+
+.flip-glyphicon {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+#bodywrapper .btn{
+    font-size:14px;
+}
+
+.ui-dialog { /* Push Jquery Diologs to front */
+    z-index: 100000 !important;
+}
+
+.toolbar-buttons button {
+    height: 46px;
+}
+
+#sequence-params {
+    /*position: absolute;*/
+    /*margin-top: 46px;*/
+    background: white;
+}
+
+#SequenceReadyBtn {
+    margin-right: 15px;
+}
+
+#ComponentNameInput {
+    display: inline-block;
+    width: 83%;
+    float: left;
+    margin-right: 15px
+}
+
+#sequence-params {
+    height: 600px;
+}
+
+.sequence-wrapper {
+    display: grid;
+    height: 100%;
+}
+
+.equations-wrapper {
+    align-self: start;
+    margin-bottom: 15px;
+}
+
+#SubmitSequenceWrapper {
+    margin-bottom: 15px;
+}
+
+.controlButtons {
+    margin-top: 15px;
+}
+
+.equationsGroup {
+    height: 450px;
+    overflow: auto;
+    margin: 30px 0px 0px;
+}
+
+#states {
+    display: none;
+}
+
+
+

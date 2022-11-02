@@ -1,0 +1,850 @@
+{
+    "circuit": {
+        "ID": "project",
+        "name": "SpindelMealy",
+        "devices": [
+            {
+                "label": "SENSOR_X1",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev0",
+                "x": 50,
+                "y": 80
+            },
+            {
+                "label": "SENSOR_X2",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev1",
+                "x": 50,
+                "y": 140
+            },
+            {
+                "label": "SENSOR_X3",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev2",
+                "x": 50,
+                "y": 200
+            },
+            {
+                "label": "SENSOR_X4",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev3",
+                "x": 50,
+                "y": 260
+            },
+            {
+                "label": "SENSOR_X5",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev4",
+                "x": 50,
+                "y": 320
+            },
+            {
+                "label": "SENSOR_X6",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev5",
+                "x": 50,
+                "y": 380
+            },
+            {
+                "label": "SENSOR_X7",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev6",
+                "x": 50,
+                "y": 440
+            },
+            {
+                "label": "SENSOR_X8",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev7",
+                "x": 50,
+                "y": 500
+            },
+            {
+                "label": "SENSOR_X9",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev8",
+                "x": 50,
+                "y": 560
+            },
+            {
+                "label": "ACTUATOR_Y1",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev9",
+                "x": 900,
+                "y": 80
+            },
+            {
+                "label": "ACTUATOR_Y2",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev10",
+                "x": 900,
+                "y": 140
+            },
+            {
+                "label": "ACTUATOR_Y3",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev11",
+                "x": 900,
+                "y": 200
+            },
+            {
+                "label": "ACTUATOR_Y4",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev12",
+                "x": 900,
+                "y": 260
+            },
+            {
+                "label": "ACTUATOR_Y5",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev13",
+                "x": 900,
+                "y": 320
+            },
+            {
+                "label": "ACTUATOR_Y6",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev14",
+                "x": 900,
+                "y": 380
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev15",
+                "x": 384,
+                "y": 176
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev16",
+                "x": 264,
+                "y": 40,
+                "rotation": 180
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev17",
+                "x": 384,
+                "y": 96
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NOT"
+                },
+                "id": "dev18",
+                "x": 288,
+                "y": 216
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev19",
+                "x": 760,
+                "y": 128
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev20",
+                "x": 344,
+                "y": 568
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev21",
+                "x": 160,
+                "y": 216,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev22",
+                "x": 184,
+                "y": 88
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev23",
+                "x": 208,
+                "y": 104,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev24",
+                "x": 560,
+                "y": 488
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev25",
+                "x": 160,
+                "y": 480,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev26",
+                "x": 208,
+                "y": 496,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev27",
+                "x": 160,
+                "y": 40,
+                "rotation": 90
+            },
+            {
+                "label": "SENSOR_X0",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "In"
+                },
+                "id": "dev28",
+                "x": 48,
+                "y": 24
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev29",
+                "x": 800,
+                "y": 136
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev30",
+                "x": 808,
+                "y": 112,
+                "rotation": 270
+            },
+            {
+                "label": "ACTUATOR_Y0",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Out"
+                },
+                "id": "dev31",
+                "x": 904,
+                "y": 24
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev32",
+                "x": 256,
+                "y": 168,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev33",
+                "x": 336,
+                "y": 224
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev34",
+                "x": 344,
+                "y": 216,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev35",
+                "x": 424,
+                "y": 184
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OR"
+                },
+                "id": "dev36",
+                "x": 472,
+                "y": 104
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev37",
+                "x": 432,
+                "y": 144,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev38",
+                "x": 512,
+                "y": 112
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev39",
+                "x": 368,
+                "y": 88,
+                "rotation": 90
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "AND"
+                },
+                "id": "dev40",
+                "x": 768,
+                "y": 24
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic-compound",
+                    "componentID": "D-FF"
+                },
+                "id": "dev41",
+                "x": 568,
+                "y": 112
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev42",
+                "x": 536,
+                "y": 152,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev43",
+                "x": 640,
+                "y": 48,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev44",
+                "x": 632,
+                "y": 112
+            },
+            {
+                "label": "Oscilator",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "OSC"
+                },
+                "id": "dev45",
+                "x": 528,
+                "y": 208,
+                "freq": "10",
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "DSO"
+                },
+                "id": "dev46",
+                "x": 864,
+                "y": 448,
+                "state": {
+                    "playing": true,
+                    "rangeIndex": 0
+                }
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev47",
+                "x": 840,
+                "y": 448,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev48",
+                "x": 816,
+                "y": 472
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev49",
+                "x": 696,
+                "y": 168,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev50",
+                "x": 696,
+                "y": 64,
+                "rotation": 270
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev51",
+                "x": 696,
+                "y": 576,
+                "rotation": 270
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "NOT"
+                },
+                "id": "dev52",
+                "x": 288,
+                "y": 64
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev53",
+                "x": 256,
+                "y": 64,
+                "rotation": 90
+            },
+            {
+                "label": " ",
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "id": "dev54",
+                "x": 344,
+                "y": 72
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "y_l",
+                "id": "dev55",
+                "x": 1008,
+                "y": 80
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "y_r",
+                "id": "dev56",
+                "x": 1008,
+                "y": 24
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "x_r",
+                "id": "dev57",
+                "x": -40,
+                "y": 24
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "x_s",
+                "id": "dev58",
+                "x": -32,
+                "y": 560
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Label"
+                },
+                "color": "#000000",
+                "fontSize": 18,
+                "text": "x_l",
+                "id": "dev59",
+                "x": -40,
+                "y": 80
+            },
+            {
+                "type": {
+                    "libraryID": "beast-basic",
+                    "componentID": "Joint"
+                },
+                "label": " ",
+                "id": "dev60",
+                "x": 816,
+                "y": 32
+            }
+        ],
+        "connectors": [
+            {
+                "from": "dev9.in0",
+                "to": "dev30.out0"
+            },
+            {
+                "from": "dev15.in0",
+                "to": "dev32.out0"
+            },
+            {
+                "from": "dev15.in1",
+                "to": "dev34.out0"
+            },
+            {
+                "from": "dev16.in0",
+                "to": "dev43.out0"
+            },
+            {
+                "from": "dev17.in0",
+                "to": "dev39.out0"
+            },
+            {
+                "from": "dev17.in1",
+                "to": "dev23.out0"
+            },
+            {
+                "from": "dev18.in0",
+                "to": "dev21.out0"
+            },
+            {
+                "from": "dev19.in0",
+                "to": "dev41.out1"
+            },
+            {
+                "from": "dev19.in1",
+                "to": "dev49.out0"
+            },
+            {
+                "from": "dev20.in0",
+                "to": "dev8.out0"
+            },
+            {
+                "from": "dev21.in0",
+                "to": "dev27.out0"
+            },
+            {
+                "from": "dev22.in0",
+                "to": "dev0.out0"
+            },
+            {
+                "from": "dev23.in0",
+                "to": "dev22.out0"
+            },
+            {
+                "from": "dev24.in0",
+                "to": "dev25.out0"
+            },
+            {
+                "from": "dev25.in0",
+                "to": "dev21.out0"
+            },
+            {
+                "from": "dev26.in0",
+                "to": "dev23.out0"
+            },
+            {
+                "from": "dev27.in0",
+                "to": "dev28.out0"
+            },
+            {
+                "from": "dev29.in0",
+                "to": "dev19.out0"
+            },
+            {
+                "from": "dev30.in0",
+                "to": "dev29.out0"
+            },
+            {
+                "from": "dev31.in0",
+                "to": "dev60.out0"
+            },
+            {
+                "from": "dev32.in0",
+                "to": "dev53.out0"
+            },
+            {
+                "from": "dev33.in0",
+                "to": "dev18.out0"
+            },
+            {
+                "from": "dev34.in0",
+                "to": "dev33.out0"
+            },
+            {
+                "from": "dev35.in0",
+                "to": "dev15.out0"
+            },
+            {
+                "from": "dev36.in0",
+                "to": "dev17.out0"
+            },
+            {
+                "from": "dev36.in1",
+                "to": "dev37.out0"
+            },
+            {
+                "from": "dev37.in0",
+                "to": "dev35.out0"
+            },
+            {
+                "from": "dev38.in0",
+                "to": "dev36.out0"
+            },
+            {
+                "from": "dev39.in0",
+                "to": "dev54.out0"
+            },
+            {
+                "from": "dev40.in0",
+                "to": "dev43.out0"
+            },
+            {
+                "from": "dev40.in1",
+                "to": "dev50.out0"
+            },
+            {
+                "from": "dev41.in0",
+                "to": "dev38.out0"
+            },
+            {
+                "from": "dev41.in1",
+                "to": "dev42.out0"
+            },
+            {
+                "from": "dev42.in0",
+                "to": "dev45.out0"
+            },
+            {
+                "from": "dev43.in0",
+                "to": "dev44.out0"
+            },
+            {
+                "from": "dev44.in0",
+                "to": "dev41.out0"
+            },
+            {
+                "from": "dev46.in0",
+                "to": "dev47.out0"
+            },
+            {
+                "from": "dev46.in1",
+                "to": "dev48.out0"
+            },
+            {
+                "from": "dev46.in2",
+                "to": "dev24.out0"
+            },
+            {
+                "from": "dev46.in3",
+                "to": "dev26.out0"
+            },
+            {
+                "from": "dev47.in0",
+                "to": "dev60.out0"
+            },
+            {
+                "from": "dev48.in0",
+                "to": "dev29.out0"
+            },
+            {
+                "from": "dev49.in0",
+                "to": "dev51.out0"
+            },
+            {
+                "from": "dev50.in0",
+                "to": "dev49.out0"
+            },
+            {
+                "from": "dev51.in0",
+                "to": "dev20.out0"
+            },
+            {
+                "from": "dev52.in0",
+                "to": "dev53.out0"
+            },
+            {
+                "from": "dev53.in0",
+                "to": "dev16.out0"
+            },
+            {
+                "from": "dev54.in0",
+                "to": "dev52.out0"
+            },
+            {
+                "from": "dev60.in0",
+                "to": "dev40.out0"
+            }
+        ]
+    },
+    "version": "1.0.0",
+    "libraries": [
+        {
+            "ID": "beast-deposit",
+            "name": "Deposit",
+            "version": "1.0.0",
+            "components": []
+        }
+    ]
+}
