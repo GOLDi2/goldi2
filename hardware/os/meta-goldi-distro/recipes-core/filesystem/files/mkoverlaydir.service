@@ -1,0 +1,13 @@
+[Unit]
+Description=Make Overlay Dirs
+DefaultDependencies=no
+RequiresMountsFor=/data-local
+Before=data.mount
+
+[Service]
+Type=oneshot
+ExecStart=mkdir -p /data-local/overlay
+ExecStart=mkdir -p /data-local/overlay-work
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+#!/bin/sh
+/bin/echo none > /sys/class/leds/red\:active/trigger
+/bin/echo timer > /sys/class/leds/green\:active/trigger
+/bin/echo 100 > /sys/class/leds/green\:active/delay_on
+/bin/echo 100 > /sys/class/leds/green\:active/delay_off
+/bin/echo 0 > /sys/class/leds/red\:active/brightness
+/bin/echo 255 > /sys/class/leds/green\:active/brightness

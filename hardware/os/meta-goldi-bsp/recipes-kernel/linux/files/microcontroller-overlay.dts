@@ -1,0 +1,92 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    /* Disable HDMI0 and HDMI1 */
+
+    fragment@0 {
+        target = <&hdmi0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+    fragment@1 {
+        target = <&hdmi0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+    /* LEDs */
+
+    fragment@2 {
+		target = <&leds>;
+		__overlay__ {
+			compatible = "gpio-leds";
+			red_active {
+				label = "red:active";
+				linux,default-trigger = "default-on";
+				gpios = <&gpio 26 0>;
+			};
+
+            green_active {
+				label = "green:active";
+				linux,default-trigger = "default-on";
+				gpios = <&gpio 13 0>;
+			};
+
+            red_cloud {
+				label = "red:cloud";
+				linux,default-trigger = "default-on";
+				gpios = <&gpio 6 0>;
+			};
+
+            green_cloud {
+				label = "green:cloud";
+				linux,default-trigger = "default-on";
+				gpios = <&gpio 5 0>;
+			};
+		};
+	};
+
+	/* RTC */
+
+	fragment@3 {
+		target = <&i2c_arm>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+			ds3231: ds3231@68 {
+				compatible = "maxim,ds3231";
+				reg = <0x68>;
+				status = "okay";
+			};
+		};
+	};
+
+	/* SPI 0 */
+	fragment@4 {
+		target = <&spi0_cs_pins>;
+		__overlay__ {
+			brcm,pins = <8>;
+		};
+	};
+
+	fragment@5 {
+		target = <&spi0>;
+		__overlay__ {
+			cs-gpios = <&gpio 8 1>;
+		};
+	};
+
+	fragment@6 {
+		target = <&spidev1>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+};

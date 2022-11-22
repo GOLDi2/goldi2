@@ -1,0 +1,14 @@
+header:
+  version: 8
+local_conf_header:
+  standard: |
+    SSTATE_DIR ?= "/local/mounted/shared-sstate-cache"
+    DL_DIR ?= "/local/mounted/downloads-cache"
+    SSTATE_MIRRORS ?= "\
+      file://.* http://sstate.yoctoproject.org/dev/PATH;downloadfilename=PATH \n \
+      file://.* http://sstate.yoctoproject.org/3.1.6/PATH;downloadfilename=PATH \n \
+      file://.* http://sstate.yoctoproject.org/3.1/PATH;downloadfilename=PATH \n \
+      "
+env:
+  CODE_SIGNING_KEY: /home/jona3814/workspace/goldi/pki/dev-signing.key.pem
+  CODE_SIGNING_CERT: /home/jona3814/workspace/goldi/pki/dev-signing.crt.pem
