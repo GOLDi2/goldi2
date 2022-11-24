@@ -3,18 +3,18 @@ SUMMARY = ""
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM=""
 
-SRC_URI = " \
-    ${APPLICATION_ARCHIVE};user=token;pswd=${GITLAB_TOKEN} \
-    file://load-fpga-firmware.service \
-"
+FILESEXTRAPATHS:prepend := "${THISDIR}/../../../../fpga/dist:"
 
-SRC_URI[sha256sum] = "${APPLICATION_ARCHIVE_CHECKSUM}"
+SRC_URI = " \
+    file://load-fpga-firmware.service \
+    file://bitstream.svf \
+"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 do_install() {
     install -d ${D}/lib/firmware/lattice/
-    cp ${WORKDIR}/fpga/dist/bitstream.svf ${D}/lib/firmware/lattice/firmware.svf
+    cp ${WORKDIR}/bitstream.svf ${D}/lib/firmware/lattice/firmware.svf
 
     install -d ${D}/${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/load-fpga-firmware.service ${D}/${systemd_system_unitdir}
