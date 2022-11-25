@@ -2,6 +2,8 @@
     "files.exclude": {
         "crosslab/": true,
         //begin generated
+        "crosslab/clients/api/.vscode": true,
+        "crosslab/clients/.vscode": true,
         "hardware/boards/io-board/firmware/build": true,
         "hardware/boards/io-board/firmware/meta-goldi-bsp": true,
         "hardware/boards/io-board/firmware/meta-goldi-distro": true,
