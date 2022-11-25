@@ -8,6 +8,9 @@
         "meta-raspberrypi": true,
         "meta-rauc": true,
         "poky": true,
+        //begin generated
+        
+        //end generated
     },
     "files.watcherExclude": {
         "build": true,

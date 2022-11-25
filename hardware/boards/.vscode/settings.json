@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        //begin generated
+        "io-board/firmware/build": true,
+        "io-board/firmware/meta-goldi-bsp": true,
+        "io-board/firmware/meta-goldi-distro": true,
+        "io-board/firmware/meta-goldi": true,
+        "io-board/firmware/meta-openembedded": true,
+        "io-board/firmware/meta-raspberrypi": true,
+        "io-board/firmware/meta-rauc": true,
+        "io-board/firmware/poky": true,
+        "io-board/fpga/build": true,
+        "io-board/.vscode": true,
+        "template/fpga/build": true,
+        "template/.vscode": true,
+        //end generated
+    },
+    "files.watcherExclude": {
+    }
+}

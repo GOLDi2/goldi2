@@ -1,0 +1,28 @@
+{
+    "files.exclude": {
+        //begin generated
+        "boards/io-board/firmware/build": true,
+        "boards/io-board/firmware/meta-goldi-bsp": true,
+        "boards/io-board/firmware/meta-goldi-distro": true,
+        "boards/io-board/firmware/meta-goldi": true,
+        "boards/io-board/firmware/meta-openembedded": true,
+        "boards/io-board/firmware/meta-raspberrypi": true,
+        "boards/io-board/firmware/meta-rauc": true,
+        "boards/io-board/firmware/poky": true,
+        "boards/io-board/fpga/build": true,
+        "boards/io-board/.vscode": true,
+        "boards/template/fpga/build": true,
+        "boards/template/.vscode": true,
+        "boards/.vscode": true,
+        "os/build/cache": true,
+        "os/build/conf": true,
+        "os/build/downloads": true,
+        "os/build/sstate-cache": true,
+        "os/build/tmp": true,
+        "os/build/workspace": false,
+        "os/**/node_modules": true,
+        //end generated
+    },
+    "files.watcherExclude": {
+    }
+}

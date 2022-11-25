@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        //begin generated
+        "firmware/build": true,
+        "firmware/meta-goldi-bsp": true,
+        "firmware/meta-goldi-distro": true,
+        "firmware/meta-goldi": true,
+        "firmware/meta-openembedded": true,
+        "firmware/meta-raspberrypi": true,
+        "firmware/meta-rauc": true,
+        "firmware/poky": true,
+        "fpga/build": true,
+        //end generated
+    },
+    "files.watcherExclude": {
+    }
+}

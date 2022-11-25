@@ -1,6 +1,9 @@
 {
     "files.exclude": {
         "build": true,
+        //begin generated
+        
+        //end generated
     },
     "files.watcherExclude": {
         "build": true,
