@@ -67,19 +67,19 @@ app.use(expressWinston.logger({
 }));
 
 async function handle_login(req: Request, res: Response, next: NextFunction) {
-    const response = await req.apiClient.postLogin({ username: req.body.username, password: req.body.password, method: "tui" });
-    if (response.status == 201) {
+    try{
+        await req.apiClient.login(req.body.username, req.body.password, "tui");
         res.cookie('token', req.apiClient.accessToken, { secure: true, httpOnly: true, sameSite: 'strict' })
         req.user = {
-            username: "Username TO BE CHANGED"
+            username: await (await req.apiClient.getIdentity()).username
         }
-
         if (req.query.redirect ){
             res.redirect(303, req.query.redirect as string);
         }else{
             next();
         }
-    } else {
+    }catch(e){
+        logger.warn(e)
         res.clearCookie('token')
         next()
     }
