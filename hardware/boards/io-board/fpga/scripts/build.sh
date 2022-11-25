@@ -1,5 +1,8 @@
 #!/bin/bash
 
+./scripts/generate_project.sh
+rm -rf build
+
 result=$(docker run --mac-address=3E-13-AE-04-D8-9C \
             -v $(pwd):/home/diamond/project/1/2/3/ \
             -v $(pwd)/../../../common/fpga/:/home/diamond/project/common/fpga/ \

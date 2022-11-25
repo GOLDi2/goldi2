@@ -5,10 +5,6 @@ use ieee.numeric_std.all;
 library machxo2;
 use machxo2.all;
 
-
-library common;
-use common.decoder_types.all;
-
 entity top_level is
     port(
         LEDPowerR   : out   std_logic;
@@ -24,73 +20,15 @@ end entity top_level;
 architecture RTL of top_level is
     signal rst : std_logic;
     signal clk : std_logic;
-
-    signal SPI0_MOSI_sync : std_logic;
-    signal SPI0_SCLK_sync : std_logic;
-    signal SPI0_CE0_sync  : std_logic;
-
-    signal spi0_frame_received : std_logic;
-    signal spi0_din            : std_logic_vector(7 downto 0);
-    signal spi0_dout           : std_logic_vector(7 downto 0);
-
-    signal bus0_do       : std_logic_vector(7 downto 0);
-    signal bus0_di       : std_logic_vector(7 downto 0);
-    signal bus0_we       : std_logic;
-    signal bus0_addr     : std_logic_vector(8 downto 0);
-    signal bus0_do_fanin : data_array(0 to 1);
-
-    signal io_internal       : std_logic_vector(63 downto 0);
-    signal io_internal_drive : std_logic_vector(63 downto 0);
+    signal bus_miso : work.GBus.umaster_in;
+    signal bus_mosi : work.GBus.umaster_out;
+    signal gpio_ports_out : work.crossbar.uport_out_vector(63 downto 0);
+    signal gpio_ports_in : work.crossbar.uport_in_vector(63 downto 0);
+    signal ports_in : work.crossbar.uport_in_vector(63 downto 0);
+    signal ports_out : work.crossbar.uport_out_vector(63 downto 0);
 begin
-    tristate2 : for i in 0 to 63 generate
-        IO(i) <= 'Z' when io_internal_drive(i) = '0' else io_internal(i);
-    end generate;
-
     LEDPowerR <= '1';
-
-    rst_syncronizer : entity common.syncronzier
-        generic map(
-            stages => 2
-        )
-        port map(
-            clk  => clk,
-            rst  => not FPGA_nReset,
-            bit  => not FPGA_nReset,
-            sync => rst
-        );
-
-    SPI0_MOSI_syncronizer : entity common.syncronzier
-        generic map(
-            stages => 2
-        )
-        port map(
-            clk  => clk,
-            rst  => rst,
-            bit  => SPI0_MOSI,
-            sync => SPI0_MOSI_sync
-        );
-
-    SPI0_SCLK_syncronzier : entity common.syncronzier
-        generic map(
-            stages => 2
-        )
-        port map(
-            clk  => clk,
-            rst  => rst,
-            bit  => SPI0_SCLK,
-            sync => SPI0_SCLK_sync
-        );
-
-    SPI0_nCE0_syncronizer : entity common.syncronzier
-        generic map(
-            stages => 2
-        )
-        port map(
-            clk  => clk,
-            rst  => rst,
-            bit  => not SPI0_nCE0,
-            sync => SPI0_CE0_sync
-        );
+    rst <= FPGA_nReset;
 
     --clk <= ClockFPGA;
     OSCInst0 : component machxo2.components.OSCH
@@ -103,57 +41,54 @@ begin
             SEDSTDBY => open
         );
 
-    spi0 : entity common.spi_slave
+    spi0 : entity work.spi_gbus_bridge_synchronized
         port map(
-            clk            => clk,
-            rst            => rst or not ('0' or SPI0_CE0_sync),
-            mosi           => SPI0_MOSI_sync,
-            miso           => SPI0_MISO,
-            sck            => SPI0_SCLK_sync,
-            frame_received => spi0_frame_received,
-            din            => spi0_din,
-            dout           => spi0_dout
-        );
-
-    spi0_transaction : entity common.spi_multi_transaction
-        port map(
-            clk            => clk,
-            rst            => rst,
-            cs             => '0' & SPI0_CE0_sync,
-            frame_received => spi0_frame_received,
-            din            => spi0_dout,
-            dout           => spi0_din,
-            bus_do         => bus0_do,
-            bus_di         => bus0_di,
-            bus_we         => bus0_we,
-            bus_addr       => bus0_addr
-        );
-
-    bus0_fanin : entity common.bus_fan_in
+            clk     => clk,
+            rst     => rst,
+            mosi    => SPI0_MOSI,
+            miso    => SPI0_MISO,
+            sck     => SPI0_SCLK,
+            cs      => not SPI0_nCE0,
+            bus_in  => bus_miso,
+            bus_out => bus_mosi
+        ) ;
+        
+    gpio_module_array_inst : entity work.gpio_module_array
         generic map(
-            addresses     => ((1, 22), (24, 24)),
-            address_width => 9
-        )
+            address    => 0,
+            module_cnt => 16
+        ) 
         port map(
-            address      => bus0_addr,
-            bus_do       => bus0_do,
-            bus_do_fanin => bus0_do_fanin
-        );
+            clk      => clk,
+            rst      => rst,
+            bus_in   => bus_mosi,
+            bus_out  => bus_miso,
+            port_out => gpio_ports_out,
+            port_in  => gpio_ports_in
+        ) ;
+    
 
-    io_controller0 : entity common.io_controller
+    crossbar_switch_inst : entity work.crossbar_switch
         generic map(
-            address => 1,
-            ports   => 8
-        )
+            left_side_port_cnt  => 64,
+            right_side_port_cnt => 64
+        ) 
         port map(
-            clk                => clk,
-            rst                => rst,
-            bus_do             => bus0_do_fanin(0),
-            bus_di             => bus0_di,
-            bus_we             => bus0_we,
-            bus_addr           => bus0_addr,
-            inp(63 downto 0)   => IO(63 downto 0),
-            outp(63 downto 0)  => io_internal,
-            drive(63 downto 0) => io_internal_drive
+            config          => work.crossbar_config.config,
+            left_ports_out  => gpio_ports_out,
+            right_ports_out  => ports_out,
+            left_ports_in   => gpio_ports_in,
+            right_ports_in => ports_in
         );
+        
+    machxo2_pad_array_inst : entity work.machxo2_pad_array
+        generic map(
+            pad_cnt => 64
+        ) 
+        port map(
+            port_out => ports_out,
+            port_in  => ports_in,
+            output   => IO
+        ) ;
+    
 end architecture RTL;
