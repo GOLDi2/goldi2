@@ -1,0 +1,65 @@
+{% set page_title = 'Manual Control' %}
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="flex">
+    <div id="input" class="w-80"></div>
+    <div id="output" class="w-80"></div>
+</div>
+
+<script>
+    const inputDiv = document.getElementById("input")
+    const outputDiv = document.getElementById("output")
+
+    function createInput(id) {
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.id=id;
+        input.addEventListener("change", (event)=>{
+            fetch(window.location.href+"/input?input="+encodeURI(JSON.stringify({"set":{[id]: event.target.checked}})+"\n"))
+        });
+        var label = document.createElement("label");
+        label.htmlFor = id;
+        label.textContent=id;
+        label.className="ml-2"
+        inputDiv.append(input);
+        inputDiv.append(label);
+        inputDiv.append(document.createElement("br"));
+    }
+
+    function createOutput(id) {
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.id=id;
+        input.disabled=true;
+        var label = document.createElement("label");
+        label.htmlFor = id;
+        label.textContent=id;
+        label.className="ml-2"
+        outputDiv.append(input);
+        outputDiv.append(label);
+        outputDiv.append(document.createElement("br"));
+    }
+
+  const evtSource = new EventSource(window.location.href+"/stream");
+  const con = document.getElementById("console");
+  evtSource.onmessage = function(event) {
+    const str=JSON.parse(event.data);
+    for(const line of str.split("\n")){
+        const message=JSON.parse(line);
+        if(message.initialize != undefined){
+            inputDiv.innerHTML="";
+            outputDiv.innerHTML="";
+            message.initialize.input.forEach(createInput);
+            message.initialize.output.forEach(createOutput);
+        }
+        if(message.set){
+            Object.keys(message.set).forEach(id=>{
+                document.getElementById(id).checked=message.set[id];
+            });
+        }
+    }
+  }
+</script>
+
+{% endblock %}

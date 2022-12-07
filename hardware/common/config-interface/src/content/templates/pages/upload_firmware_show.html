@@ -1,0 +1,16 @@
+{% set page_title = 'Firmware Upload' %}
+{% extends "layout.html" %}
+{% block main %}
+
+<pre id="console"></pre>
+
+<script>
+  const evtSource = new EventSource(window.location.href+"/stream");
+  const con = document.getElementById("console");
+  evtSource.onmessage = function(event) {
+    console.log(event.data);
+    con.textContent += JSON.parse(event.data);
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+<!doctype html>
+{% set
+    navbar = [
+        {name: 'Crosslab Settings', href: '/crosslab'},
+        {name: 'Manual Control', href: '/manual_control'},
+        {name: 'Firmware Upload', href: '/upload_firmware'},
+        {name: 'Network Settings', href: '/network'}
+    ]
+ %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+
+    <title>A Basic HTML5 Template</title>
+    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <meta name="author" content="SitePoint">
+
+    <meta property="og:title" content="A Basic HTML5 Template">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+    <meta property="og:description" content="A simple HTML5 Template for new projects.">
+    <meta property="og:image" content="image.png">
+
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="/css/index.css">
+
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-200">
+
+    <nav class="bg-primary w-full fixed z-40 p-2 flex justify-between h-16 shadow-lg">
+            <!-- Logo -->
+            <a href='#' class="flex items-center">
+                <img class="h-14 w-20 mr-3 select-none pointer-events-none" src="/img/goldi2.svg" alt="Logo">
+                <span class="font-bold text-2xl text-black">Configuration Interface</span>
+            </a>
+    </nav>    
+
+    <div class="mt-16 flex flex-row">
+        <!--Navbar items -->
+        <nav class="bg-white w-60 shadow-lg z-50 h-fit">
+            <ul>
+            {% for item in navbar %}
+                <li><a href="/{{language}}{{item.href}}" class="block w-60 p-2 hover:bg-secondary-light-middle {{ 'bg-secondary-light-middle' if item.name == page_title }}">{{ item.name }}</a></li>
+            {% endfor %}
+            </ul>
+        </nav>
+        <div class="ml-5 p-5 bg-white flex-grow h-fit">
+            {% block main %}{% endblock %}
+        </div>
+    </div>
+
+</body>
+
+</html>
