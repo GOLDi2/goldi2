@@ -1,0 +1,4 @@
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 --delete build/sstate-cache/ admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/share/sstate
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 --delete build/tmp/deploy/ipk/ admin@x56.theoinf.tu-ilmenau.de:/data/www/package/ipk-dev
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 -L build/tmp/deploy/images/io-board/goldi-*io-board.*raucb admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/update
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 -L build/tmp/deploy/images/io-board/goldi-*io-board.wic* admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/image

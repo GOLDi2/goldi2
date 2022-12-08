@@ -7,6 +7,6 @@ RAUC_BUNDLE_FORMAT = "verity"
 
 RAUC_SLOT_rootfs[fstype] = "ext4"
 
-RAUC_KEY_FILE = "${CODE_SIGNING_KEY}"
-RAUC_CERT_FILE = "${CODE_SIGNING_CERT}"
+RAUC_KEY_FILE = "${THISDIR}/../../../signing.key.pem"
+RAUC_CERT_FILE = "${THISDIR}/../../../signing.crt.pem"
 

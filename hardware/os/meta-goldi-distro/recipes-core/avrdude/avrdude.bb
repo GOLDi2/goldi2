@@ -17,9 +17,9 @@ DEPENDS = " \
     hidapi \
 "
 
-SRC_URI = "git://github.com/schnitzeltony/avrdude.git;protocol=https;branch=master"
-SRCREV = "ef94d6edce8ec2b3a853477e806f7dc8548f71d6"
-S = "${WORKDIR}/git/${BPN}"
+SRC_URI = "git://github.com/avrdudes/avrdude.git;protocol=https;branch=main"
+SRCREV = "7015ebe0d6b6087ed5dfaa20992bd055a4b009cc"
+S = "${WORKDIR}/git"
 PV = "6.4"
 
 EXTRA_OECONF:append = " --enable-linuxgpio"
