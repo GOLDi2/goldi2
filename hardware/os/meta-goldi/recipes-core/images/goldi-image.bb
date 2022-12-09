@@ -4,7 +4,7 @@ LICENSE = "MIT"
 
 IMAGE_FEATURES = " read-only-rootfs"
 
-IMAGE_INSTALL:append = ""
+IMAGE_INSTALL:append = " fpga-firmware"
 
 inherit core-image
 
