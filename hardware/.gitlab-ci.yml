@@ -1,0 +1,4 @@
+image: ghcr.io/siemens/kas/kas
+
+hardware/os-build:
+  script: cd hardware/os && ./scripts/build.sh -c -w --run_on_host && ./scripts/sync_sstate.sh
