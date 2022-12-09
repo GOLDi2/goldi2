@@ -1,4 +1,11 @@
 image: ghcr.io/siemens/kas/kas
 
 hardware/os-build:
-  script: cd hardware/os && ./scripts/build.sh -c -w --run_on_host && ./scripts/sync_sstate.sh
+  timeout: 48h
+  script:
+    - cd hardware/os
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - cat "$LOCAL_YML" > "local.yml"
+    - cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
+    - ./scripts/build.sh -c -w --run_on_host
+    - ./scripts/sync_sstate.sh
