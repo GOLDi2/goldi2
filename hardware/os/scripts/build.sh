@@ -5,7 +5,7 @@ function docker_or_host_exec(){
   GIT_ROOT=$(git rev-parse --show-toplevel)
   RELATIVE_PATH=$(realpath --relative-to=$GIT_ROOT $(pwd))
   if [ "$HOST" = true ] ; then
-    exec $1
+    bash -c "$1"
   else
     # Allow docker to create subfolders (build)
     chmod 777 .
@@ -52,8 +52,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ "$CLEAN" = true ] ; then
+  set +e
   rm -rf ./dist
   docker_or_host_exec "rm -rf ./build"
+  set -e
 fi
 
 if [ "$WORLD" = true ] ; then
