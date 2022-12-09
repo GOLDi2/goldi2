@@ -4,11 +4,11 @@ function docker_or_host_exec(){
   GIT_ROOT=$(git rev-parse --show-toplevel)
   RELATIVE_PATH=$(realpath --relative-to=$GIT_ROOT $(pwd))
   if [ "$HOST" = true ] ; then
-    $@
+    exec $1
   else
     # Allow docker to create subfolders (build)
     chmod 777 .
-    docker run -it -v $GIT_ROOT:/git ghcr.io/siemens/kas/kas bash -c "cd /git/$RELATIVE_PATH && $@"
+    docker run -it -v $GIT_ROOT:/git ghcr.io/siemens/kas/kas bash -c "cd /git/$RELATIVE_PATH && $1"
   fi
 }
 
