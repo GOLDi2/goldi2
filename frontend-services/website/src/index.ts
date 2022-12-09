@@ -76,7 +76,7 @@ async function handle_login(req: Request, res: Response, next: NextFunction) {
         if (req.query.redirect ){
             res.redirect(303, req.query.redirect as string);
         }else{
-            next();
+            res.redirect(303, 'index.html' as string);
         }
     }catch(e){
         logger.warn(e)
@@ -98,14 +98,15 @@ app.use('/', asyncHandler(async (req: Request, res, next) => {
     req.apiClient = new APIClient(config.API_URL)
     req.user = undefined
     if (req.cookies.token) {
-        req.apiClient.accessToken = req.cookies.token
-        /*const identityResponse = await req.apiClient.getIdentity()
-        if (identityResponse.status == 200) {
-            req.user = identityResponse.body
-        }*/
-        req.user = {
-            username: "Username TO BE CHANGED",
-            token: req.cookies.token
+        try{
+            req.apiClient.accessToken = req.cookies.token
+            req.user = {
+                ...await req.apiClient.getIdentity(),
+                token: req.cookies.token
+            }
+        } catch(e){
+            logger.info(e)
+            res.clearCookie('token')
         }
     }
     next()
