@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function docker_or_host_exec(){
   GIT_ROOT=$(git rev-parse --show-toplevel)
