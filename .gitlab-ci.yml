@@ -1,10 +1,13 @@
 image: ghcr.io/siemens/kas/kas
 
-hardware/os-build:
+hardware/os-rebuild-world:
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
   timeout: 48h
   script:
     - cd hardware/os
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - cp "$LOCAL_YML" local.yml && "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
+    - cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
     - ./scripts/build.sh -c -w --run_on_host
-    - ./scripts/sync_sstate.sh
+    - ./scripts/sync_sstate.sh -c
