@@ -5,7 +5,7 @@ import path from 'path';
 import { AddressInfo } from "net";
 import { renderPageInit } from "./utils";
 import { APIClient } from "@cross-lab-project/api-client"
-import { User } from "@cross-lab-project/api-client/dist/generated/auth/types";
+import { AuthenticationServiceTypes } from "@cross-lab-project/api-client";
 import expressWinston from 'express-winston';
 import winston from 'winston';
 import cookieParser from 'cookie-parser'
@@ -14,7 +14,7 @@ import asyncHandler from 'express-async-handler';
 declare module 'express-serve-static-core' {
     interface Request {
         apiClient: APIClient
-        user?: User
+        user?: AuthenticationServiceTypes.User
     }
 }
 
@@ -68,7 +68,7 @@ app.use(expressWinston.logger({
 
 async function handle_login(req: Request, res: Response, next: NextFunction) {
     try{
-        await req.apiClient.login(req.body.username, req.body.password, "tui");
+        await req.apiClient.login(req.body.username, req.body.password, { method: "tui" });
         res.cookie('token', req.apiClient.accessToken, { secure: true, httpOnly: true, sameSite: 'strict' })
         req.user = {
             username: await (await req.apiClient.getIdentity()).username

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 
 import { Response } from "express";
-import { User } from "@cross-lab-project/api-client/dist/generated/auth/types";
+import { AuthenticationServiceTypes } from "@cross-lab-project/api-client";
 
 export function template_resolution(base_path: string, sub_path: string, default_language: string) {
     return async (filename: string, language?: string) => {
@@ -33,7 +33,7 @@ export async function find_language_suffixed_files(filename: string, language: s
 export function renderPageInit(content_path: string, default_language: string) {
     const page_resolution = template_resolution(content_path + '/templates', 'pages', default_language);
 
-    return async function renderPage(page: string, language: string, res: Response, user?: User) {
+    return async function renderPage(page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User) {
         const isLoggedIn = user !== undefined
         const _page=page.slice(1)
         try {
