@@ -59,9 +59,9 @@ if [ "$CLEAN" = true ] ; then
 fi
 
 if [ "$WORLD" = true ] ; then
-  docker_or_host_exec "kas shell $VARIANT.yml -c \"bitbake -k -c build world\""
+  docker_or_host_exec "kas shell $VARIANT.yml -c \"bitbake -k -q -c build world\""
 else
-  docker_or_host_exec "kas shell $VARIANT.yml -c \"bitbake -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle\""
+  docker_or_host_exec "kas shell $VARIANT.yml -c \"bitbake -q -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle\""
 fi
 
 mkdir -p ./dist
