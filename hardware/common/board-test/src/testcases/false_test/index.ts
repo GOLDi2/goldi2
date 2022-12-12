@@ -1,16 +1,12 @@
-import { TestCase, TestCaseData } from "../testcase"
+import { TestCase, TestCaseData } from '../testcase'
 
-export const testCaseData: TestCaseData = {
-    name: "False Test",
-    description: "This simple test always fails.",
-    test: (tc: TestCase) => {
-        return new Promise<void>(resolve => {
-            tc.outcome = "Fail"
-            resolve()
-        })
+const testCaseData: TestCaseData = {
+    name: 'False Test',
+    description: 'This simple test always fails.',
+    test: async (testCase: TestCase) => {
+        testCase.outcome = 'Fail'
     },
-    dependencies: [],
-    requiresInteraction: false
+    requiresInteraction: false,
 }
 
-export const testCase: TestCase = new TestCase(testCaseData);
+export const testCase: TestCase = new TestCase(testCaseData)

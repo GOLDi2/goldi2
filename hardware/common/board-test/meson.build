@@ -9,7 +9,7 @@ pthread = declare_dependency(
     link_args : ['-lpthread'])
     
 executable('goldi-board-test-util',
-           'src/util/goldi-board-test-util.c',
+           'src/goldi-board-test-util/goldi-board-test-util.c',
            dependencies : [bcm,pthread],
            install : true)
 

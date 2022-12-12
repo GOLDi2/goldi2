@@ -1,21 +1,13 @@
-import { TestCase, TestCaseData } from "../testcase"
-import { spawnSync } from "child_process"
+import { TestCase, TestCaseData } from '../testcase'
+import { programFPGA } from '../../utils/utilityFunctions'
 
 const testCaseData: TestCaseData = {
-    name: "Programming Test FPGA",
-    description: "Tests if the FPGA can be programmed.",
-    test: (tc: TestCase) => {
-        return new Promise<void>(resolve => {
-            const proc = spawnSync(`svf-player ${__dirname}/programming_file.svf`, {timeout: 10000, shell: true})
-            if (proc.status == 0) 
-                tc.outcome = "Success"
-            else 
-                tc.outcome = "Fail"
-            resolve()
-        })
+    name: 'Programming Test FPGA',
+    description: 'Tests if the FPGA can be programmed.',
+    test: async (testCase: TestCase) => {
+        testCase.outcome = programFPGA() ? 'Success' : 'Fail'
     },
-    dependencies: [],
-    requiresInteraction: false
+    requiresInteraction: false,
 }
 
 export const testCase: TestCase = new TestCase(testCaseData)

@@ -1,30 +1,28 @@
-import { TestCase, TestCaseData } from "../testcase"
-import { spawnSync } from "child_process"
-import { testCase as prog_fpga } from "../programming_test_fpga"
+import { TestCase, TestCaseData } from '../testcase'
+import { spawnSync } from 'child_process'
+import { programFPGA } from '../../utils/utilityFunctions'
+import * as _process from 'node:process'
 
 const testCaseData: TestCaseData = {
-    name: "LED Test",
-    description: "Tests if the LEDs are working properly.",
-    test: (tc: TestCase) => {
-        return new Promise<void>(resolve => {
-            const proc = spawnSync("goldi-board-test-util led", 
-                {
-                    timeout: 120000, 
-                    shell: true,
-                    cwd: process.cwd(),
-                    env: process.env,
-                    stdio: [process.stdin, process.stdout, process.stderr],
-                    encoding: 'utf-8'
-                })
-            if (proc.status == 0) 
-                tc.outcome = "Success"
-            else 
-                tc.outcome = "Fail"
-            resolve()
+    name: 'LED Test',
+    description: 'Tests if the LEDs are working properly.',
+    test: async (testCase: TestCase) => {
+        if (!programFPGA()) {
+            testCase.outcome = 'Fail'
+            return
+        }
+        const process = spawnSync('goldi-board-test-util led', {
+            timeout: 120000,
+            shell: true,
+            cwd: _process.cwd(),
+            env: _process.env,
+            stdio: [_process.stdin, _process.stdout, _process.stderr],
+            encoding: 'utf-8',
         })
+        if (process.status == 0) testCase.outcome = 'Success'
+        else testCase.outcome = 'Fail'
     },
-    dependencies: [prog_fpga],
-    requiresInteraction: true
+    requiresInteraction: true,
 }
 
 export const testCase: TestCase = new TestCase(testCaseData)

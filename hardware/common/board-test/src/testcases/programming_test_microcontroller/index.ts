@@ -1,22 +1,23 @@
-import { TestCase, TestCaseData } from "../testcase"
-import { testCase as prog_fpga } from "../programming_test_fpga"
-import { spawnSync } from "child_process"
+import { TestCase, TestCaseData } from '../testcase'
+import { spawnSync } from 'child_process'
+import { programFPGA } from '../../utils/utilityFunctions'
 
 const testCaseData: TestCaseData = {
-    name: "Programming Test Microcontroller",
-    description: "Tests if the Microcontroller can be programmed.",
-    test: (tc: TestCase) => {
-        return new Promise<void>(resolve => {
-            const proc = spawnSync(`avrdude -p m2560 -c rpi -e`, {timeout: 10000, shell: true})
-            if (proc.status == 0) 
-                tc.outcome = "Success"
-            else 
-                tc.outcome = "Fail"
-            resolve()
+    name: 'Programming Test Microcontroller',
+    description: 'Tests if the Microcontroller can be programmed.',
+    test: async (testCase: TestCase) => {
+        if (!programFPGA()) {
+            testCase.outcome = 'Fail'
+            return
+        }
+        const process = spawnSync(`avrdude -p m2560 -c rpi -e`, {
+            timeout: 10000,
+            shell: true,
         })
+        if (process.status == 0) testCase.outcome = 'Success'
+        else testCase.outcome = 'Fail'
     },
-    dependencies: [prog_fpga],
-    requiresInteraction: false
+    requiresInteraction: false,
 }
 
 export const testCase: TestCase = new TestCase(testCaseData)

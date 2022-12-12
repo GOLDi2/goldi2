@@ -5,234 +5,138 @@
     },
     "logical_port_description": [
         {
-            "identifier_list": [
-                "RESET"
-            ],
+            "identifier_list": ["RESET"],
             "pin_type": "in",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "VCC"
-            ],
+            "identifier_list": ["VCC"],
             "pin_type": "linkage",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "3"
-                ]
+                "bit_vector": ["0", "to", "3"]
             }
         },
         {
-            "identifier_list": [
-                "GND"
-            ],
+            "identifier_list": ["GND"],
             "pin_type": "linkage",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "4"
-                ]
+                "bit_vector": ["0", "to", "4"]
             }
         },
         {
-            "identifier_list": [
-                "XTAL1"
-            ],
+            "identifier_list": ["XTAL1"],
             "pin_type": "linkage",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "XTAL2"
-            ],
+            "identifier_list": ["XTAL2"],
             "pin_type": "linkage",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "PA"
-            ],
+            "identifier_list": ["PA"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PB"
-            ],
+            "identifier_list": ["PB"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PC"
-            ],
+            "identifier_list": ["PC"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PD"
-            ],
+            "identifier_list": ["PD"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PE"
-            ],
+            "identifier_list": ["PE"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PF"
-            ],
+            "identifier_list": ["PF"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "3"
-                ]
+                "bit_vector": ["0", "to", "3"]
             }
         },
         {
-            "identifier_list": [
-                "TCK"
-            ],
+            "identifier_list": ["TCK"],
             "pin_type": "in",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "TMS"
-            ],
+            "identifier_list": ["TMS"],
             "pin_type": "in",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "TDO"
-            ],
+            "identifier_list": ["TDO"],
             "pin_type": "out",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "TDI"
-            ],
+            "identifier_list": ["TDI"],
             "pin_type": "in",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "PG"
-            ],
+            "identifier_list": ["PG"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "5"
-                ]
+                "bit_vector": ["0", "to", "5"]
             }
         },
         {
-            "identifier_list": [
-                "PH"
-            ],
+            "identifier_list": ["PH"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PJ"
-            ],
+            "identifier_list": ["PJ"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PK"
-            ],
+            "identifier_list": ["PK"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "PL"
-            ],
+            "identifier_list": ["PL"],
             "pin_type": "inout",
             "port_dimension": {
-                "bit_vector": [
-                    "0",
-                    "to",
-                    "7"
-                ]
+                "bit_vector": ["0", "to", "7"]
             }
         },
         {
-            "identifier_list": [
-                "AREF"
-            ],
+            "identifier_list": ["AREF"],
             "pin_type": "linkage",
             "port_dimension": "bit"
         },
         {
-            "identifier_list": [
-                "AVCC"
-            ],
+            "identifier_list": ["AVCC"],
             "pin_type": "linkage",
             "port_dimension": "bit"
         }
@@ -245,389 +149,113 @@
             "pin_map": [
                 {
                     "port_name": "RESET",
-                    "pin_list": [
-                        "30"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        1,
-                        11,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["30"],
+                    "parseinfo": [null, "port", 1, 11, 0, 0]
                 },
                 {
                     "port_name": "VCC",
-                    "pin_list": [
-                        "10",
-                        "31",
-                        "61",
-                        "80"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        14,
-                        35,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["10", "31", "61", "80"],
+                    "parseinfo": [null, "port", 14, 35, 0, 0]
                 },
                 {
                     "port_name": "GND",
-                    "pin_list": [
-                        "11",
-                        "32",
-                        "62",
-                        "81",
-                        "99"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        38,
-                        62,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["11", "32", "62", "81", "99"],
+                    "parseinfo": [null, "port", 38, 62, 0, 0]
                 },
                 {
                     "port_name": "XTAL1",
-                    "pin_list": [
-                        "34"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        65,
-                        75,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["34"],
+                    "parseinfo": [null, "port", 65, 75, 0, 0]
                 },
                 {
                     "port_name": "XTAL2",
-                    "pin_list": [
-                        "33"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        78,
-                        88,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["33"],
+                    "parseinfo": [null, "port", 78, 88, 0, 0]
                 },
                 {
                     "port_name": "PA",
-                    "pin_list": [
-                        "78",
-                        "77",
-                        "76",
-                        "75",
-                        "74",
-                        "73",
-                        "72",
-                        "71"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        91,
-                        124,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["78", "77", "76", "75", "74", "73", "72", "71"],
+                    "parseinfo": [null, "port", 91, 124, 0, 0]
                 },
                 {
                     "port_name": "PB",
-                    "pin_list": [
-                        "19",
-                        "20",
-                        "21",
-                        "22",
-                        "23",
-                        "24",
-                        "25",
-                        "26"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        127,
-                        160,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["19", "20", "21", "22", "23", "24", "25", "26"],
+                    "parseinfo": [null, "port", 127, 160, 0, 0]
                 },
                 {
                     "port_name": "PC",
-                    "pin_list": [
-                        "53",
-                        "54",
-                        "55",
-                        "56",
-                        "57",
-                        "58",
-                        "59",
-                        "60"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        163,
-                        196,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["53", "54", "55", "56", "57", "58", "59", "60"],
+                    "parseinfo": [null, "port", 163, 196, 0, 0]
                 },
                 {
                     "port_name": "PD",
-                    "pin_list": [
-                        "43",
-                        "44",
-                        "45",
-                        "46",
-                        "47",
-                        "48",
-                        "49",
-                        "50"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        199,
-                        232,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["43", "44", "45", "46", "47", "48", "49", "50"],
+                    "parseinfo": [null, "port", 199, 232, 0, 0]
                 },
                 {
                     "port_name": "PE",
-                    "pin_list": [
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        235,
-                        260,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["2", "3", "4", "5", "6", "7", "8", "9"],
+                    "parseinfo": [null, "port", 235, 260, 0, 0]
                 },
                 {
                     "port_name": "PF",
-                    "pin_list": [
-                        "97",
-                        "96",
-                        "95",
-                        "94"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        263,
-                        284,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["97", "96", "95", "94"],
+                    "parseinfo": [null, "port", 263, 284, 0, 0]
                 },
                 {
                     "port_name": "TCK",
-                    "pin_list": [
-                        "93"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        287,
-                        297,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["93"],
+                    "parseinfo": [null, "port", 287, 297, 0, 0]
                 },
                 {
                     "port_name": "TMS",
-                    "pin_list": [
-                        "92"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        300,
-                        310,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["92"],
+                    "parseinfo": [null, "port", 300, 310, 0, 0]
                 },
                 {
                     "port_name": "TDO",
-                    "pin_list": [
-                        "91"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        313,
-                        323,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["91"],
+                    "parseinfo": [null, "port", 313, 323, 0, 0]
                 },
                 {
                     "port_name": "TDI",
-                    "pin_list": [
-                        "90"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        326,
-                        336,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["90"],
+                    "parseinfo": [null, "port", 326, 336, 0, 0]
                 },
                 {
                     "port_name": "PG",
-                    "pin_list": [
-                        "51",
-                        "52",
-                        "70",
-                        "28",
-                        "29",
-                        "1"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        339,
-                        365,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["51", "52", "70", "28", "29", "1"],
+                    "parseinfo": [null, "port", 339, 365, 0, 0]
                 },
                 {
                     "port_name": "PH",
-                    "pin_list": [
-                        "12",
-                        "13",
-                        "14",
-                        "15",
-                        "16",
-                        "17",
-                        "18",
-                        "27"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        368,
-                        401,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["12", "13", "14", "15", "16", "17", "18", "27"],
+                    "parseinfo": [null, "port", 368, 401, 0, 0]
                 },
                 {
                     "port_name": "PJ",
-                    "pin_list": [
-                        "63",
-                        "64",
-                        "65",
-                        "66",
-                        "67",
-                        "68",
-                        "69",
-                        "79"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        404,
-                        437,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["63", "64", "65", "66", "67", "68", "69", "79"],
+                    "parseinfo": [null, "port", 404, 437, 0, 0]
                 },
                 {
                     "port_name": "PK",
-                    "pin_list": [
-                        "89",
-                        "88",
-                        "87",
-                        "86",
-                        "85",
-                        "84",
-                        "83",
-                        "82"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        440,
-                        473,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["89", "88", "87", "86", "85", "84", "83", "82"],
+                    "parseinfo": [null, "port", 440, 473, 0, 0]
                 },
                 {
                     "port_name": "PL",
-                    "pin_list": [
-                        "35",
-                        "36",
-                        "37",
-                        "38",
-                        "39",
-                        "40",
-                        "41",
-                        "42"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        476,
-                        509,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["35", "36", "37", "38", "39", "40", "41", "42"],
+                    "parseinfo": [null, "port", 476, 509, 0, 0]
                 },
                 {
                     "port_name": "AREF",
-                    "pin_list": [
-                        "98"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        512,
-                        522,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["98"],
+                    "parseinfo": [null, "port", 512, 522, 0, 0]
                 },
                 {
                     "port_name": "AVCC",
-                    "pin_list": [
-                        "100"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        525,
-                        536,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["100"],
+                    "parseinfo": [null, "port", 525, 536, 0, 0]
                 }
             ]
         },
@@ -636,389 +264,113 @@
             "pin_map": [
                 {
                     "port_name": "RESET",
-                    "pin_list": [
-                        "30"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        1,
-                        11,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["30"],
+                    "parseinfo": [null, "port", 1, 11, 0, 0]
                 },
                 {
                     "port_name": "VCC",
-                    "pin_list": [
-                        "10",
-                        "31",
-                        "61",
-                        "80"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        14,
-                        35,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["10", "31", "61", "80"],
+                    "parseinfo": [null, "port", 14, 35, 0, 0]
                 },
                 {
                     "port_name": "GND",
-                    "pin_list": [
-                        "11",
-                        "32",
-                        "62",
-                        "81",
-                        "99"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        38,
-                        62,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["11", "32", "62", "81", "99"],
+                    "parseinfo": [null, "port", 38, 62, 0, 0]
                 },
                 {
                     "port_name": "XTAL1",
-                    "pin_list": [
-                        "34"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        65,
-                        75,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["34"],
+                    "parseinfo": [null, "port", 65, 75, 0, 0]
                 },
                 {
                     "port_name": "XTAL2",
-                    "pin_list": [
-                        "33"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        78,
-                        88,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["33"],
+                    "parseinfo": [null, "port", 78, 88, 0, 0]
                 },
                 {
                     "port_name": "PA",
-                    "pin_list": [
-                        "78",
-                        "77",
-                        "76",
-                        "75",
-                        "74",
-                        "73",
-                        "72",
-                        "71"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        91,
-                        124,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["78", "77", "76", "75", "74", "73", "72", "71"],
+                    "parseinfo": [null, "port", 91, 124, 0, 0]
                 },
                 {
                     "port_name": "PB",
-                    "pin_list": [
-                        "19",
-                        "20",
-                        "21",
-                        "22",
-                        "23",
-                        "24",
-                        "25",
-                        "26"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        127,
-                        160,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["19", "20", "21", "22", "23", "24", "25", "26"],
+                    "parseinfo": [null, "port", 127, 160, 0, 0]
                 },
                 {
                     "port_name": "PC",
-                    "pin_list": [
-                        "53",
-                        "54",
-                        "55",
-                        "56",
-                        "57",
-                        "58",
-                        "59",
-                        "60"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        163,
-                        196,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["53", "54", "55", "56", "57", "58", "59", "60"],
+                    "parseinfo": [null, "port", 163, 196, 0, 0]
                 },
                 {
                     "port_name": "PD",
-                    "pin_list": [
-                        "43",
-                        "44",
-                        "45",
-                        "46",
-                        "47",
-                        "48",
-                        "49",
-                        "50"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        199,
-                        232,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["43", "44", "45", "46", "47", "48", "49", "50"],
+                    "parseinfo": [null, "port", 199, 232, 0, 0]
                 },
                 {
                     "port_name": "PE",
-                    "pin_list": [
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        235,
-                        260,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["2", "3", "4", "5", "6", "7", "8", "9"],
+                    "parseinfo": [null, "port", 235, 260, 0, 0]
                 },
                 {
                     "port_name": "PF",
-                    "pin_list": [
-                        "97",
-                        "96",
-                        "95",
-                        "94"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        263,
-                        284,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["97", "96", "95", "94"],
+                    "parseinfo": [null, "port", 263, 284, 0, 0]
                 },
                 {
                     "port_name": "TCK",
-                    "pin_list": [
-                        "93"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        287,
-                        297,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["93"],
+                    "parseinfo": [null, "port", 287, 297, 0, 0]
                 },
                 {
                     "port_name": "TMS",
-                    "pin_list": [
-                        "92"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        300,
-                        310,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["92"],
+                    "parseinfo": [null, "port", 300, 310, 0, 0]
                 },
                 {
                     "port_name": "TDO",
-                    "pin_list": [
-                        "91"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        313,
-                        323,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["91"],
+                    "parseinfo": [null, "port", 313, 323, 0, 0]
                 },
                 {
                     "port_name": "TDI",
-                    "pin_list": [
-                        "90"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        326,
-                        336,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["90"],
+                    "parseinfo": [null, "port", 326, 336, 0, 0]
                 },
                 {
                     "port_name": "PG",
-                    "pin_list": [
-                        "51",
-                        "52",
-                        "70",
-                        "28",
-                        "29",
-                        "1"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        339,
-                        365,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["51", "52", "70", "28", "29", "1"],
+                    "parseinfo": [null, "port", 339, 365, 0, 0]
                 },
                 {
                     "port_name": "PH",
-                    "pin_list": [
-                        "12",
-                        "13",
-                        "14",
-                        "15",
-                        "16",
-                        "17",
-                        "18",
-                        "27"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        368,
-                        401,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["12", "13", "14", "15", "16", "17", "18", "27"],
+                    "parseinfo": [null, "port", 368, 401, 0, 0]
                 },
                 {
                     "port_name": "PJ",
-                    "pin_list": [
-                        "63",
-                        "64",
-                        "65",
-                        "66",
-                        "67",
-                        "68",
-                        "69",
-                        "79"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        404,
-                        437,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["63", "64", "65", "66", "67", "68", "69", "79"],
+                    "parseinfo": [null, "port", 404, 437, 0, 0]
                 },
                 {
                     "port_name": "PK",
-                    "pin_list": [
-                        "89",
-                        "88",
-                        "87",
-                        "86",
-                        "85",
-                        "84",
-                        "83",
-                        "82"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        440,
-                        473,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["89", "88", "87", "86", "85", "84", "83", "82"],
+                    "parseinfo": [null, "port", 440, 473, 0, 0]
                 },
                 {
                     "port_name": "PL",
-                    "pin_list": [
-                        "35",
-                        "36",
-                        "37",
-                        "38",
-                        "39",
-                        "40",
-                        "41",
-                        "42"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        476,
-                        509,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["35", "36", "37", "38", "39", "40", "41", "42"],
+                    "parseinfo": [null, "port", 476, 509, 0, 0]
                 },
                 {
                     "port_name": "AREF",
-                    "pin_list": [
-                        "98"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        512,
-                        522,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["98"],
+                    "parseinfo": [null, "port", 512, 522, 0, 0]
                 },
                 {
                     "port_name": "AVCC",
-                    "pin_list": [
-                        "100"
-                    ],
-                    "parseinfo": [
-                        null,
-                        "port",
-                        525,
-                        536,
-                        0,
-                        0
-                    ]
+                    "pin_list": ["100"],
+                    "parseinfo": [null, "port", 525, 536, 0, 0]
                 }
             ]
         }
@@ -1045,68 +397,43 @@
         "instruction_opcodes": [
             {
                 "instruction_name": "EXTEST",
-                "opcode_list": [
-                    "0000"
-                ]
+                "opcode_list": ["0000"]
             },
             {
                 "instruction_name": "IDCODE",
-                "opcode_list": [
-                    "0001"
-                ]
+                "opcode_list": ["0001"]
             },
             {
                 "instruction_name": "SAMPLE",
-                "opcode_list": [
-                    "0010"
-                ]
+                "opcode_list": ["0010"]
             },
             {
                 "instruction_name": "PRIVATE0",
-                "opcode_list": [
-                    "1000"
-                ]
+                "opcode_list": ["1000"]
             },
             {
                 "instruction_name": "PRIVATE1",
-                "opcode_list": [
-                    "1001"
-                ]
+                "opcode_list": ["1001"]
             },
             {
                 "instruction_name": "PRIVATE2",
-                "opcode_list": [
-                    "1010"
-                ]
+                "opcode_list": ["1010"]
             },
             {
                 "instruction_name": "PRIVATE3",
-                "opcode_list": [
-                    "1011"
-                ]
+                "opcode_list": ["1011"]
             },
             {
                 "instruction_name": "AVR_RESET",
-                "opcode_list": [
-                    "1100"
-                ]
+                "opcode_list": ["1100"]
             },
             {
                 "instruction_name": "BYPASS",
-                "opcode_list": [
-                    "1111"
-                ]
+                "opcode_list": ["1111"]
             }
         ],
-        "instruction_capture": [
-            "0001"
-        ],
-        "instruction_private": [
-            "PRIVATE0",
-            "PRIVATE1",
-            "PRIVATE2",
-            "PRIVATE3"
-        ]
+        "instruction_capture": ["0001"],
+        "instruction_private": ["PRIVATE0", "PRIVATE1", "PRIVATE2", "PRIVATE3"]
     },
     "optional_register_description": {
         "idcode_register": "01011001100000000001000000111111"
@@ -1133,12 +460,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1166,12 +488,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1199,12 +516,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1232,12 +544,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1265,12 +572,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1298,12 +600,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1331,12 +628,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1364,12 +656,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1397,12 +684,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PE",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PE", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1430,12 +712,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1463,12 +740,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1496,12 +768,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1529,12 +796,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1562,12 +824,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1595,12 +852,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1628,12 +880,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1661,12 +908,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1694,12 +936,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1727,12 +964,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1760,12 +992,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1793,12 +1020,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1826,12 +1048,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1859,12 +1076,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1892,12 +1104,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PB",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PB", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1925,12 +1132,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PH",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PH", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1958,12 +1160,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -1991,12 +1188,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2036,12 +1228,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2069,12 +1256,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2102,12 +1284,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2135,12 +1312,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2168,12 +1340,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2201,12 +1368,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2234,12 +1396,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2267,12 +1424,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PL",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PL", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2300,12 +1452,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2333,12 +1480,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2366,12 +1508,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2399,12 +1536,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2432,12 +1564,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2465,12 +1592,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2498,12 +1620,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2531,12 +1648,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PD",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PD", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2564,12 +1676,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2597,12 +1704,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2630,12 +1732,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2663,12 +1760,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2696,12 +1788,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2729,12 +1816,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2762,12 +1844,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2795,12 +1872,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2828,12 +1900,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2861,12 +1928,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PC",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PC", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2894,12 +1956,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2927,12 +1984,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2960,12 +2012,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -2993,12 +2040,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3026,12 +2068,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3059,12 +2096,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3092,12 +2124,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3125,12 +2152,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PG",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PG", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3158,12 +2180,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3191,12 +2208,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3224,12 +2236,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3257,12 +2264,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3290,12 +2292,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3323,12 +2320,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3356,12 +2348,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3389,12 +2376,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PA",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PA", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3422,12 +2404,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PJ",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PJ", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3455,12 +2432,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "7",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "7", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3488,12 +2460,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "6",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "6", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3521,12 +2488,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "5",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "5", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3554,12 +2516,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "4",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "4", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3587,12 +2544,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3620,12 +2572,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3653,12 +2600,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3686,12 +2628,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PK",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PK", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3719,12 +2656,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PF",
-                                "(",
-                                "3",
-                                ")"
-                            ],
+                            "port_id": ["PF", "(", "3", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3752,12 +2684,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PF",
-                                "(",
-                                "2",
-                                ")"
-                            ],
+                            "port_id": ["PF", "(", "2", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3785,12 +2712,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PF",
-                                "(",
-                                "1",
-                                ")"
-                            ],
+                            "port_id": ["PF", "(", "1", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
@@ -3818,12 +2740,7 @@
                     "cell_info": {
                         "cell_spec": {
                             "cell_name": "BC_7",
-                            "port_id": [
-                                "PF",
-                                "(",
-                                "0",
-                                ")"
-                            ],
+                            "port_id": ["PF", "(", "0", ")"],
                             "function": "BIDIR",
                             "safe_bit": "X"
                         },
