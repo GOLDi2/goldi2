@@ -1,0 +1,16 @@
+{
+    "files.exclude": {
+        //begin generated
+        "crosslab-typescript-addon/node_modules": true,
+        "openapi-codegeneration/node_modules": true,
+        "tsdoc-theme/node_modules": true,
+        //end generated
+    },
+    "files.watcherExclude": {
+        //begin generated
+        "crosslab-typescript-addon/node_modules": true,
+        "openapi-codegeneration/node_modules": true,
+        "tsdoc-theme/node_modules": true,
+        //end generated
+    }
+}

@@ -14,15 +14,23 @@
         "boards/template/fpga/build": true,
         "boards/template/.vscode": true,
         "boards/.vscode": true,
-        "os/build/cache": true,
-        "os/build/conf": true,
-        "os/build/downloads": true,
-        "os/build/sstate-cache": true,
-        "os/build/tmp": true,
-        "os/build/workspace": false,
-        "os/**/node_modules": true,
+        "common/spi-driver/.*_cache": true,
+        "common/spi-driver/src/**/__pycache__": true,
+        "common/spi-driver/src/spi_driver.egg-info": true,
+        "common/spi-driver/tests/**/__pycache__": true,
+        "common/spi-driver/venv": true,
+        "common/svf-player/.vscode": true,
+        "common/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
+        //begin generated
+        "os/build/cache/**": true,
+        "os/build/conf/**": true,
+        "os/build/downloads/**": true,
+        "os/build/sstate-cache/**": true,
+        "os/build/tmp/**": true,
+        "os/build/workspace/**": false,
+        //end generated
     }
 }

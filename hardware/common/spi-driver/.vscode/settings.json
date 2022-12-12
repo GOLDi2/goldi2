@@ -24,11 +24,8 @@
         //end generated
     },
     "files.watcherExclude": {
-        ".*_cache": true,
-        ".tox": true,
-        "venv": true,
-        "src/spi_driver.egg-info": true,
-        "src/**/__pycache__": true,
-        "tests/**/__pycache__": true,
+        //begin generated
+        
+        //end generated
     }
 }

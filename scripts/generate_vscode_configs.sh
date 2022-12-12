@@ -1,6 +1,7 @@
 #!/bin/bash
 
-config_paths=$(git ls-files --recurse-submodules | grep .vscode/settings.json)
+#config_paths=$(git ls-files --recurse-submodules | grep .vscode/settings.json)
+config_paths=$(find -L . -path '*.vscode/settings.json' -o \( -name 'build' -o -name 'node_modules' -o -path './crosslab' \) -prune -false)
 NL=$'\n'
 
 for config_path in $config_paths; do
@@ -31,7 +32,7 @@ for config_path in $config_paths; do
         if [ $subdir = $config_path ]; then continue; fi
         subdir_toplevel=$(dirname $(dirname $subdir))
         content=$(cat $subdir)
-        content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*\/\/end generated)', '', \"\"\"$content\"\"\"))")
+        content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
         rel_path=${subdir_toplevel/"$toplevel/"/""}
         files_exclude=$files_exclude$NL$(python -c "import re;"\
 "m=re.search(r'\"files\.exclude\"[\s\S]*?{([\s\S]*?)}', \"\"\"$content\"\"\");"\
@@ -44,10 +45,10 @@ for config_path in $config_paths; do
         fi
     done
     files_exclude=$(echo "$files_exclude" | sort | uniq -u | sed 's/^/        /')
-    files_watcherExclude=$(echo "$files_watcherExclude" | sort | uniq -u | sed 's/^/ /')
+    files_watcherExclude=$(echo "$files_watcherExclude" | sort | uniq -u | sed 's/^/        /')
     content=$(cat $config_path)
     # remove generated code
-    content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*\/\/end generated)', '', \"\"\"$content\"\"\"))")
+    content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
 
     if [[ ! $content =~ "\"files.exclude\"" ]]; then
         content=$(python -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.exclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
@@ -55,8 +56,10 @@ for config_path in $config_paths; do
     if [[ ! $content =~ "\"files.watcherExclude\"" ]]; then
         content=$(python -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.watcherExclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
     fi
+    # if config_path is clients
 
     content=$(python -c "import re;print(re.sub(r'(\"files\.exclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_exclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
+    content=$(python -c "import re;print(re.sub(r'(\"files\.watcherExclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_watcherExclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
     content=$(python -c "import re;print(re.sub(r'{,', '{', \"\"\"$content\"\"\",0,re.MULTILINE))")
     echo "$content" > $config_path
 done
