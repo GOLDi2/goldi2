@@ -83,10 +83,13 @@ while read line; do
         if [ -n "$dependencies" ]; then
             echo "  needs:" >> .gitlab-ci.yml
             for dependency in $dependencies; do
+                #replace : with -
+                dependency=$(echo "$dependency" | sed 's/:/-/g')
                 echo "    - $dependency" >> .gitlab-ci.yml
             done
             echo "  dependencies:" >> .gitlab-ci.yml
             for dependency in $dependencies; do
+                dependency=$(echo "$dependency" | sed 's/:/-/g')
                 echo "    - $dependency" >> .gitlab-ci.yml
             done
         else

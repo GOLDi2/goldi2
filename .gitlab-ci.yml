@@ -61,9 +61,9 @@ helper/crosslab-typescript-addon-build:
   variables:
     PROJECT_DIR: helper/crosslab-typescript-addon
   needs:
-    - helper/openapi-codegeneration:build
+    - helper/openapi-codegeneration-build
   dependencies:
-    - helper/openapi-codegeneration:build
+    - helper/openapi-codegeneration-build
   rules:
     - changes:
       - helper/crosslab-typescript-addon/**
@@ -140,19 +140,19 @@ backend-services/openapi-build-spec:
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/auth:build-spec
-    - backend-services/booking:build-spec
-    - backend-services/device:build-spec
-    - backend-services/experiment:build-spec
-    - backend-services/federation:build-spec
-    - backend-services/update:build-spec
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
   dependencies:
-    - backend-services/auth:build-spec
-    - backend-services/booking:build-spec
-    - backend-services/device:build-spec
-    - backend-services/experiment:build-spec
-    - backend-services/federation:build-spec
-    - backend-services/update:build-spec
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
   rules:
     - changes:
       - backend-services/auth/**
@@ -168,9 +168,9 @@ backend-services/openapi-lint:
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/openapi:build-spec
+    - backend-services/openapi-build-spec
   dependencies:
-    - backend-services/openapi:build-spec
+    - backend-services/openapi-build-spec
   rules:
     - changes:
       - backend-services/auth/**
@@ -190,25 +190,25 @@ clients/api/js-build:
   variables:
     PROJECT_DIR: clients/api/js
   needs:
-    - backend-services/auth:build-spec
-    - backend-services/booking:build-spec
-    - backend-services/device:build-spec
-    - backend-services/experiment:build-spec
-    - backend-services/federation:build-spec
-    - backend-services/update:build-spec
-    - helper/crosslab-typescript-addon:build
-    - helper/tsdoc-theme:build
-    - helper/openapi-codegeneration:build
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+    - helper/crosslab-typescript-addon-build
+    - helper/tsdoc-theme-build
+    - helper/openapi-codegeneration-build
   dependencies:
-    - backend-services/auth:build-spec
-    - backend-services/booking:build-spec
-    - backend-services/device:build-spec
-    - backend-services/experiment:build-spec
-    - backend-services/federation:build-spec
-    - backend-services/update:build-spec
-    - helper/crosslab-typescript-addon:build
-    - helper/tsdoc-theme:build
-    - helper/openapi-codegeneration:build
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+    - helper/crosslab-typescript-addon-build
+    - helper/tsdoc-theme-build
+    - helper/openapi-codegeneration-build
   rules:
     - changes:
       - backend-services/auth/**
@@ -228,11 +228,11 @@ clients/api/python-build:
   variables:
     PROJECT_DIR: clients/api/python
   needs:
-    - backend-services/openapi:build-spec
-    - helper/openapi-codegeneration:build
+    - backend-services/openapi-build-spec
+    - helper/openapi-codegeneration-build
   dependencies:
-    - backend-services/openapi:build-spec
-    - helper/openapi-codegeneration:build
+    - backend-services/openapi-build-spec
+    - helper/openapi-codegeneration-build
   rules:
     - changes:
       - backend-services/auth/**
