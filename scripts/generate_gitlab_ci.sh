@@ -87,24 +87,24 @@ while read line; do
                 dependency=$(echo "$dependency" | sed 's/:/-/g')
                 echo "    - job: $dependency" >> .gitlab-ci.yml
                 echo "      optional: true" >> .gitlab-ci.yml
-                echo "      artifacts: false" >> .gitlab-ci.yml
+                echo "      artifacts: true" >> .gitlab-ci.yml
             done
-            echo "  dependencies: []" >> .gitlab-ci.yml
-            echo "  before_script:" >> .gitlab-ci.yml
-            echo "    - apt update && apt install -y unzip" >> .gitlab-ci.yml
-            for dependency in $dependencies; do
-                dependency=$(echo "$dependency" | sed 's/:/-/g')
-                echo '    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job='"$dependency"'&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip' >> .gitlab-ci.yml
-            done
+            #echo "  dependencies: []" >> .gitlab-ci.yml
+            #echo "  before_script:" >> .gitlab-ci.yml
+            #echo "    - apt update && apt install -y unzip" >> .gitlab-ci.yml
+            #for dependency in $dependencies; do
+            #    dependency=$(echo "$dependency" | sed 's/:/-/g')
+            #    echo '    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job='"$dependency"'&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip' >> .gitlab-ci.yml
+            #done
         else
             echo "  needs: []" >> .gitlab-ci.yml
             echo "  dependencies: []" >> .gitlab-ci.yml
         fi
-        echo "  rules:" >> .gitlab-ci.yml
-        echo "    - changes:" >> .gitlab-ci.yml
-        for path in ${path_changes["$path:$job_name"]}; do
-            echo "      - ${path}" >> .gitlab-ci.yml
-        done
+        #echo "  rules:" >> .gitlab-ci.yml
+        #echo "    - changes:" >> .gitlab-ci.yml
+        #for path in ${path_changes["$path:$job_name"]}; do
+        #    echo "      - ${path}" >> .gitlab-ci.yml
+        #done
 
         echo "" >> .gitlab-ci.yml
         continue
