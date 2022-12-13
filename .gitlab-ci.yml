@@ -44,7 +44,7 @@ helper/tsdoc-theme-build:
   dependencies: []
   rules:
     - changes:
-      - helper/tsdoc-theme/**
+      - helper/tsdoc-theme/**/*
 
 helper/openapi-codegeneration-build:
   extends: .build-node
@@ -54,7 +54,7 @@ helper/openapi-codegeneration-build:
   dependencies: []
   rules:
     - changes:
-      - helper/openapi-codegeneration/**
+      - helper/openapi-codegeneration/**/*
 
 helper/crosslab-typescript-addon-build:
   extends: .build-node
@@ -66,8 +66,8 @@ helper/crosslab-typescript-addon-build:
     - helper/openapi-codegeneration-build
   rules:
     - changes:
-      - helper/crosslab-typescript-addon/**
-      - helper/openapi-codegeneration/**
+      - helper/crosslab-typescript-addon/**/*
+      - helper/openapi-codegeneration/**/*
 
 
 ################################################################################
@@ -82,7 +82,7 @@ backend-services/auth-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/auth/**
+      - backend-services/auth/**/*
 
 backend-services/booking-build-spec:
   extends: .build-spec-node
@@ -92,7 +92,7 @@ backend-services/booking-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/booking/**
+      - backend-services/booking/**/*
 
 backend-services/device-build-spec:
   extends: .build-spec-node
@@ -102,7 +102,7 @@ backend-services/device-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/device/**
+      - backend-services/device/**/*
 
 backend-services/experiment-build-spec:
   extends: .build-spec-node
@@ -112,7 +112,7 @@ backend-services/experiment-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/experiment/**
+      - backend-services/experiment/**/*
 
 backend-services/federation-build-spec:
   extends: .build-spec-node
@@ -122,7 +122,7 @@ backend-services/federation-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/federation/**
+      - backend-services/federation/**/*
 
 backend-services/update-build-spec:
   extends: .build-spec-node
@@ -132,7 +132,7 @@ backend-services/update-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/update/**
+      - backend-services/update/**/*
 
 
 backend-services/openapi-build-spec:
@@ -155,13 +155,13 @@ backend-services/openapi-build-spec:
     - backend-services/update-build-spec
   rules:
     - changes:
-      - backend-services/auth/**
-      - backend-services/booking/**
-      - backend-services/device/**
-      - backend-services/experiment/**
-      - backend-services/federation/**
-      - backend-services/openapi/**
-      - backend-services/update/**
+      - backend-services/auth/**/*
+      - backend-services/booking/**/*
+      - backend-services/device/**/*
+      - backend-services/experiment/**/*
+      - backend-services/federation/**/*
+      - backend-services/openapi/**/*
+      - backend-services/update/**/*
 
 backend-services/openapi-lint:
   extends: .lint-node
@@ -173,13 +173,13 @@ backend-services/openapi-lint:
     - backend-services/openapi-build-spec
   rules:
     - changes:
-      - backend-services/auth/**
-      - backend-services/booking/**
-      - backend-services/device/**
-      - backend-services/experiment/**
-      - backend-services/federation/**
-      - backend-services/openapi/**
-      - backend-services/update/**
+      - backend-services/auth/**/*
+      - backend-services/booking/**/*
+      - backend-services/device/**/*
+      - backend-services/experiment/**/*
+      - backend-services/federation/**/*
+      - backend-services/openapi/**/*
+      - backend-services/update/**/*
 
 
 ################################################################################
@@ -211,16 +211,16 @@ clients/api/js-build:
     - helper/openapi-codegeneration-build
   rules:
     - changes:
-      - backend-services/auth/**
-      - backend-services/booking/**
-      - backend-services/device/**
-      - backend-services/experiment/**
-      - backend-services/federation/**
-      - backend-services/update/**
-      - clients/api/js/**
-      - helper/crosslab-typescript-addon/**
-      - helper/openapi-codegeneration/**
-      - helper/tsdoc-theme/**
+      - backend-services/auth/**/*
+      - backend-services/booking/**/*
+      - backend-services/device/**/*
+      - backend-services/experiment/**/*
+      - backend-services/federation/**/*
+      - backend-services/update/**/*
+      - clients/api/js/**/*
+      - helper/crosslab-typescript-addon/**/*
+      - helper/openapi-codegeneration/**/*
+      - helper/tsdoc-theme/**/*
 
 
 clients/api/python-build:
@@ -235,15 +235,15 @@ clients/api/python-build:
     - helper/openapi-codegeneration-build
   rules:
     - changes:
-      - backend-services/auth/**
-      - backend-services/booking/**
-      - backend-services/device/**
-      - backend-services/experiment/**
-      - backend-services/federation/**
-      - backend-services/openapi/**
-      - backend-services/update/**
-      - clients/api/python/**
-      - helper/openapi-codegeneration/**
+      - backend-services/auth/**/*
+      - backend-services/booking/**/*
+      - backend-services/device/**/*
+      - backend-services/experiment/**/*
+      - backend-services/federation/**/*
+      - backend-services/openapi/**/*
+      - backend-services/update/**/*
+      - clients/api/python/**/*
+      - helper/openapi-codegeneration/**/*
 
 ################################################################################
 # Hardware #####################################################################

@@ -32,7 +32,7 @@ do
             fi
 
             
-            path_changes["$path:$job_name"]="$path/**"
+            path_changes["$path:$job_name"]="$path/**/*"
             for dependency in $dependencies; do
                 path_changes["$path:$job_name"]="${path_changes[$path:$job_name]} ${path_changes[$dependency]}"
             done
