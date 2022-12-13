@@ -44,7 +44,8 @@ helper/tsdoc-theme-build:
   dependencies: []
   rules:
     - changes:
-      - helper/tsdoc-theme/**/*
+      - crosslab/helper/tsdoc-theme/*
+      - crosslab/helper/tsdoc-theme/**/*
 
 helper/openapi-codegeneration-build:
   extends: .build-node
@@ -54,7 +55,8 @@ helper/openapi-codegeneration-build:
   dependencies: []
   rules:
     - changes:
-      - helper/openapi-codegeneration/**/*
+      - crosslab/helper/openapi-codegeneration/*
+      - crosslab/helper/openapi-codegeneration/**/*
 
 helper/crosslab-typescript-addon-build:
   extends: .build-node
@@ -63,12 +65,17 @@ helper/crosslab-typescript-addon-build:
   needs:
     - job: helper/openapi-codegeneration-build
       optional: true
-  dependencies:
-    - helper/openapi-codegeneration-build
+      artifacts: false
+  dependencies: []
+  before_script:
+    - apt update && apt install -y unzip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
   rules:
     - changes:
-      - helper/crosslab-typescript-addon/**/*
-      - helper/openapi-codegeneration/**/*
+      - crosslab/helper/crosslab-typescript-addon/*
+      - crosslab/helper/crosslab-typescript-addon/**/*
+      - crosslab/helper/openapi-codegeneration/*
+      - crosslab/helper/openapi-codegeneration/**/*
 
 
 ################################################################################
@@ -83,7 +90,8 @@ backend-services/auth-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/auth/**/*
+      - crosslab/services/auth/*
+      - crosslab/services/auth/**/*
 
 backend-services/booking-build-spec:
   extends: .build-spec-node
@@ -93,7 +101,8 @@ backend-services/booking-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/booking/**/*
+      - crosslab/services/booking/*
+      - crosslab/services/booking/**/*
 
 backend-services/device-build-spec:
   extends: .build-spec-node
@@ -103,7 +112,8 @@ backend-services/device-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/device/**/*
+      - crosslab/services/device/*
+      - crosslab/services/device/**/*
 
 backend-services/experiment-build-spec:
   extends: .build-spec-node
@@ -113,7 +123,8 @@ backend-services/experiment-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/experiment/**/*
+      - crosslab/services/experiment/*
+      - crosslab/services/experiment/**/*
 
 backend-services/federation-build-spec:
   extends: .build-spec-node
@@ -123,7 +134,8 @@ backend-services/federation-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/federation/**/*
+      - crosslab/services/federation/*
+      - crosslab/services/federation/**/*
 
 backend-services/update-build-spec:
   extends: .build-spec-node
@@ -133,7 +145,8 @@ backend-services/update-build-spec:
   dependencies: []
   rules:
     - changes:
-      - backend-services/update/**/*
+      - crosslab/services/update/*
+      - crosslab/services/update/**/*
 
 
 backend-services/openapi-build-spec:
@@ -143,32 +156,47 @@ backend-services/openapi-build-spec:
   needs:
     - job: backend-services/auth-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/booking-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/device-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/experiment-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/federation-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/update-build-spec
       optional: true
-  dependencies:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
+      artifacts: false
+  dependencies: []
+  before_script:
+    - apt update && apt install -y unzip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/auth-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/booking-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/device-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/experiment-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/federation-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/update-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
   rules:
     - changes:
-      - backend-services/auth/**/*
-      - backend-services/booking/**/*
-      - backend-services/device/**/*
-      - backend-services/experiment/**/*
-      - backend-services/federation/**/*
-      - backend-services/openapi/**/*
-      - backend-services/update/**/*
+      - crosslab/services/auth/*
+      - crosslab/services/auth/**/*
+      - crosslab/services/booking/*
+      - crosslab/services/booking/**/*
+      - crosslab/services/device/*
+      - crosslab/services/device/**/*
+      - crosslab/services/experiment/*
+      - crosslab/services/experiment/**/*
+      - crosslab/services/federation/*
+      - crosslab/services/federation/**/*
+      - crosslab/services/openapi/*
+      - crosslab/services/openapi/**/*
+      - crosslab/services/update/*
+      - crosslab/services/update/**/*
 
 backend-services/openapi-lint:
   extends: .lint-node
@@ -177,17 +205,27 @@ backend-services/openapi-lint:
   needs:
     - job: backend-services/openapi-build-spec
       optional: true
-  dependencies:
-    - backend-services/openapi-build-spec
+      artifacts: false
+  dependencies: []
+  before_script:
+    - apt update && apt install -y unzip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/openapi-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
   rules:
     - changes:
-      - backend-services/auth/**/*
-      - backend-services/booking/**/*
-      - backend-services/device/**/*
-      - backend-services/experiment/**/*
-      - backend-services/federation/**/*
-      - backend-services/openapi/**/*
-      - backend-services/update/**/*
+      - crosslab/services/auth/*
+      - crosslab/services/auth/**/*
+      - crosslab/services/booking/*
+      - crosslab/services/booking/**/*
+      - crosslab/services/device/*
+      - crosslab/services/device/**/*
+      - crosslab/services/experiment/*
+      - crosslab/services/experiment/**/*
+      - crosslab/services/federation/*
+      - crosslab/services/federation/**/*
+      - crosslab/services/openapi/*
+      - crosslab/services/openapi/**/*
+      - crosslab/services/update/*
+      - crosslab/services/update/**/*
 
 
 ################################################################################
@@ -200,44 +238,65 @@ clients/api/js-build:
   needs:
     - job: backend-services/auth-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/booking-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/device-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/experiment-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/federation-build-spec
       optional: true
+      artifacts: false
     - job: backend-services/update-build-spec
       optional: true
+      artifacts: false
     - job: helper/crosslab-typescript-addon-build
       optional: true
+      artifacts: false
     - job: helper/tsdoc-theme-build
       optional: true
+      artifacts: false
     - job: helper/openapi-codegeneration-build
       optional: true
-  dependencies:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
-    - helper/crosslab-typescript-addon-build
-    - helper/tsdoc-theme-build
-    - helper/openapi-codegeneration-build
+      artifacts: false
+  dependencies: []
+  before_script:
+    - apt update && apt install -y unzip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/auth-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/booking-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/device-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/experiment-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/federation-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/update-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/crosslab-typescript-addon-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/tsdoc-theme-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
   rules:
     - changes:
-      - backend-services/auth/**/*
-      - backend-services/booking/**/*
-      - backend-services/device/**/*
-      - backend-services/experiment/**/*
-      - backend-services/federation/**/*
-      - backend-services/update/**/*
-      - clients/api/js/**/*
-      - helper/crosslab-typescript-addon/**/*
-      - helper/openapi-codegeneration/**/*
-      - helper/tsdoc-theme/**/*
+      - crosslab/clients/api/js/*
+      - crosslab/clients/api/js/**/*
+      - crosslab/helper/crosslab-typescript-addon/*
+      - crosslab/helper/crosslab-typescript-addon/**/*
+      - crosslab/helper/openapi-codegeneration/*
+      - crosslab/helper/openapi-codegeneration/**/*
+      - crosslab/helper/tsdoc-theme/*
+      - crosslab/helper/tsdoc-theme/**/*
+      - crosslab/services/auth/*
+      - crosslab/services/auth/**/*
+      - crosslab/services/booking/*
+      - crosslab/services/booking/**/*
+      - crosslab/services/device/*
+      - crosslab/services/device/**/*
+      - crosslab/services/experiment/*
+      - crosslab/services/experiment/**/*
+      - crosslab/services/federation/*
+      - crosslab/services/federation/**/*
+      - crosslab/services/update/*
+      - crosslab/services/update/**/*
 
 
 clients/api/python-build:
@@ -251,6 +310,7 @@ clients/api/python-build:
     - job: helper/openapi-codegeneration-build
       optional: true
       artifacts: false
+<<<<<<< HEAD
   before_script:
     - apt update && apt install -y unzip
     - 'echo curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN"'
@@ -267,6 +327,33 @@ clients/api/python-build:
       - backend-services/update/**/*
       - clients/api/python/**/*
       - helper/openapi-codegeneration/**/*
+=======
+  dependencies: []
+  before_script:
+    - apt update && apt install -y unzip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=backend-services/openapi-build-spec&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+    - curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip
+  rules:
+    - changes:
+      - crosslab/clients/api/python/*
+      - crosslab/clients/api/python/**/*
+      - crosslab/helper/openapi-codegeneration/*
+      - crosslab/helper/openapi-codegeneration/**/*
+      - crosslab/services/auth/*
+      - crosslab/services/auth/**/*
+      - crosslab/services/booking/*
+      - crosslab/services/booking/**/*
+      - crosslab/services/device/*
+      - crosslab/services/device/**/*
+      - crosslab/services/experiment/*
+      - crosslab/services/experiment/**/*
+      - crosslab/services/federation/*
+      - crosslab/services/federation/**/*
+      - crosslab/services/openapi/*
+      - crosslab/services/openapi/**/*
+      - crosslab/services/update/*
+      - crosslab/services/update/**/*
+>>>>>>> bbc1360 (update pipeline with realpaths)
 
 ################################################################################
 # Hardware #####################################################################
