@@ -83,6 +83,13 @@ backend-services/booking-build-spec:
   needs: []
   dependencies: []
 
+backend-services/device-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/device
+  needs: []
+  dependencies: []
+
 backend-services/experiment-build-spec:
   extends: .build-spec-node
   variables:
