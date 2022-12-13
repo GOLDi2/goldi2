@@ -1,47 +1,179 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - build
+  - lint
+  - test
   
-helper/tsdoc-theme-build:
+.build-node:
   image: node:latest
   stage: build
-  needs: []
-  dependencies: []
   script:
-    - cd helper/tsdoc-theme
-    - ./scripts/build.sh
+    - cd "$PROJECT_DIR"
+    - ./scripts/build.sh $BUILD_PARAMETERS
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
     paths:
-      - helper/tsdoc-theme/dist
+      - $PROJECT_DIR/dist
+
+.build-spec-node:
+  extends: .build-node
+  variables:
+    BUILD_PARAMETERS: -s
+
+.build-python:
+  extends: .build-node
+  image: nikolaik/python-nodejs
+    
+.lint-node:
+  image: node:latest
+  stage: lint
+  script:
+    - cd "$PROJECT_DIR"
+    - ./scripts/lint.sh
+
+################################################################################
+# Helper #######################################################################
+################################################################################
+helper/tsdoc-theme-build:
+  extends: .build-node
+  variables:
+    PROJECT_DIR: helper/tsdoc-theme
+  needs: []
+  dependencies: []
 
 helper/openapi-codegeneration-build:
-  image: node:latest
-  stage: build
+  extends: .build-node
+  variables:
+    PROJECT_DIR: helper/openapi-codegeneration
   needs: []
   dependencies: []
-  script:
-    - cd helper/openapi-codegeneration
-    - ./scripts/build.sh
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-  artifacts:
-    paths:
-      - helper/openapi-codegeneration/dist
 
 helper/crosslab-typescript-addon-build:
-  image: node:latest
-  stage: build
+  extends: .build-node
+  variables:
+    PROJECT_DIR: helper/crosslab-typescript-addon
   needs:
     - helper/openapi-codegeneration-build
   dependencies:
     - helper/openapi-codegeneration-build
-  script:
-    - cd helper/crosslab-typescript-addon
-    - ./scripts/build.sh
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-  artifacts:
-    paths:
-      - helper/crosslab-typescript-addon/dist
 
+################################################################################
+# Backend ######################################################################
+################################################################################
+backend-services/auth-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/auth
+  needs: []
+  dependencies: []
+
+backend-services/auth-build:
+  extends: .build-node
+  variables:
+    PROJECT_DIR: backend-services/auth
+  needs: []
+  dependencies: []
+
+backend-services/booking-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/booking
+  needs: []
+  dependencies: []
+
+backend-services/experiment-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/experiment
+  needs: []
+  dependencies: []
+
+backend-services/federation-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/federation
+  needs: []
+  dependencies: []
+
+backend-services/update-build-spec:
+  extends: .build-spec-node
+  variables:
+    PROJECT_DIR: backend-services/update
+  needs: []
+  dependencies: []
+
+backend-services/openapi-build:
+  extends: .build-node
+  variables:
+    PROJECT_DIR: backend-services/openapi
+  needs:
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+  dependencies:
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+
+backend-services/openapi-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/openapi
+  needs:
+    - backend-services/openapi-build
+  dependencies:
+    - backend-services/openapi-build
+
+################################################################################
+# Clients ######################################################################
+################################################################################
+clients/api/js-build:
+  extends: .build-node
+  variables:
+    PROJECT_DIR: clients/api/js
+  needs:
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+    - helper/crosslab-typescript-addon-build
+    - helper/tsdoc-theme-build
+    - helper/openapi-codegeneration-build
+  dependencies:
+    - backend-services/auth-build-spec
+    - backend-services/booking-build-spec
+    - backend-services/device-build-spec
+    - backend-services/experiment-build-spec
+    - backend-services/federation-build-spec
+    - backend-services/update-build-spec
+    - helper/crosslab-typescript-addon-build
+    - helper/tsdoc-theme-build
+    - helper/openapi-codegeneration-build
+
+clients/api/python-build:
+  extends: .build-python
+  variables:
+    PROJECT_DIR: clients/api/python
+  needs:
+    - helper/openapi-codegeneration-build
+    - backend-services/openapi-build
+  dependencies:
+    - helper/openapi-codegeneration-build
+    - backend-services/openapi-build
+
+################################################################################
+# Hardware #####################################################################
+################################################################################
 hardware/os-rebuild-world:
   image: ghcr.io/siemens/kas/kas
   stage: build
