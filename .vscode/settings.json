@@ -3,7 +3,6 @@
         "crosslab/": true,
         //begin generated
         "backend-services/.vscode": true,
-        "clients/api/js/.vscode": true,
         "clients/api/python/**/*.egg-info": true,
         "clients/api/python/node_modules": true,
         "clients/api/python/**/__pycache__": true,
