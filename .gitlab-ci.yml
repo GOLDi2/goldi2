@@ -4,28 +4,43 @@ variables:
 helper/tsdoc-theme-build:
   image: node:latest
   stage: build
+  needs: []
+  dependencies: []
   script:
     - cd helper/tsdoc-theme
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - helper/tsdoc-theme/dist
 
 helper/openapi-codegeneration-build:
   image: node:latest
   stage: build
+  needs: []
+  dependencies: []
   script:
     - cd helper/openapi-codegeneration
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - helper/openapi-codegeneration/dist
 
 helper/crosslab-typescript-addon-build:
   image: node:latest
   stage: build
   needs:
     - helper/openapi-codegeneration-build
+  dependencies:
+    - helper/openapi-codegeneration-build
   script:
     - cd helper/crosslab-typescript-addon
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - helper/crosslab-typescript-addon/dist
 
 hardware/os-rebuild-world:
   image: ghcr.io/siemens/kas/kas
