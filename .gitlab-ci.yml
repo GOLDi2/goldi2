@@ -1,37 +1,37 @@
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive
+GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
-  - build
-  - lint
-  - test
-  
+- build
+- lint
+- test
+
 .build-node:
-  image: node:latest
-  stage: build
-  script:
-    - cd "$PROJECT_DIR"
-    - ./scripts/build.sh $BUILD_PARAMETERS
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-  artifacts:
-    paths:
-      - $PROJECT_DIR/dist
+image: node:latest
+stage: build
+script:
+- cd "$PROJECT_DIR"
+- ./scripts/build.sh $BUILD_PARAMETERS
+- cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+artifacts:
+paths:
+- $PROJECT_DIR/dist
 
 .build-spec-node:
-  extends: .build-node
-  variables:
-    BUILD_PARAMETERS: -s
+extends: .build-node
+variables:
+BUILD_PARAMETERS: -s
 
 .build-python:
-  extends: .build-node
-  image: nikolaik/python-nodejs
-    
+extends: .build-node
+image: nikolaik/python-nodejs
+
 .lint-node:
-  image: node:latest
-  stage: lint
-  script:
-    - cd "$PROJECT_DIR"
-    - ./scripts/lint.sh
+image: node:latest
+stage: lint
+script:
+- cd "$PROJECT_DIR"
+- ./scripts/lint.sh
 
 ################################################################################
 # Helper #######################################################################
@@ -42,6 +42,9 @@ helper/tsdoc-theme-build:
     PROJECT_DIR: helper/tsdoc-theme
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - helper/tsdoc-theme/**
 
 helper/openapi-codegeneration-build:
   extends: .build-node
@@ -49,32 +52,37 @@ helper/openapi-codegeneration-build:
     PROJECT_DIR: helper/openapi-codegeneration
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - helper/openapi-codegeneration/**
 
 helper/crosslab-typescript-addon-build:
   extends: .build-node
   variables:
     PROJECT_DIR: helper/crosslab-typescript-addon
   needs:
-    - helper/openapi-codegeneration-build
+    - helper/openapi-codegeneration:build
   dependencies:
-    - helper/openapi-codegeneration-build
+    - helper/openapi-codegeneration:build
+  rules:
+    - changes:
+      - helper/crosslab-typescript-addon/**
+      - helper/openapi-codegeneration/**
+
 
 ################################################################################
 # Backend ######################################################################
 ################################################################################
+
 backend-services/auth-build-spec:
   extends: .build-spec-node
   variables:
     PROJECT_DIR: backend-services/auth
   needs: []
   dependencies: []
-
-backend-services/auth-build:
-  extends: .build-node
-  variables:
-    PROJECT_DIR: backend-services/auth
-  needs: []
-  dependencies: []
+  rules:
+    - changes:
+      - backend-services/auth/**
 
 backend-services/booking-build-spec:
   extends: .build-spec-node
@@ -82,6 +90,9 @@ backend-services/booking-build-spec:
     PROJECT_DIR: backend-services/booking
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - backend-services/booking/**
 
 backend-services/device-build-spec:
   extends: .build-spec-node
@@ -89,6 +100,9 @@ backend-services/device-build-spec:
     PROJECT_DIR: backend-services/device
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - backend-services/device/**
 
 backend-services/experiment-build-spec:
   extends: .build-spec-node
@@ -96,6 +110,9 @@ backend-services/experiment-build-spec:
     PROJECT_DIR: backend-services/experiment
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - backend-services/experiment/**
 
 backend-services/federation-build-spec:
   extends: .build-spec-node
@@ -103,6 +120,9 @@ backend-services/federation-build-spec:
     PROJECT_DIR: backend-services/federation
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - backend-services/federation/**
 
 backend-services/update-build-spec:
   extends: .build-spec-node
@@ -110,34 +130,57 @@ backend-services/update-build-spec:
     PROJECT_DIR: backend-services/update
   needs: []
   dependencies: []
+  rules:
+    - changes:
+      - backend-services/update/**
 
-backend-services/openapi-build:
-  extends: .build-node
+
+backend-services/openapi-build-spec:
+  extends: .build-spec-node
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
+    - backend-services/auth:build-spec
+    - backend-services/booking:build-spec
+    - backend-services/device:build-spec
+    - backend-services/experiment:build-spec
+    - backend-services/federation:build-spec
+    - backend-services/update:build-spec
   dependencies:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
+    - backend-services/auth:build-spec
+    - backend-services/booking:build-spec
+    - backend-services/device:build-spec
+    - backend-services/experiment:build-spec
+    - backend-services/federation:build-spec
+    - backend-services/update:build-spec
+  rules:
+    - changes:
+      - backend-services/auth/**
+      - backend-services/booking/**
+      - backend-services/device/**
+      - backend-services/experiment/**
+      - backend-services/federation/**
+      - backend-services/openapi/**
+      - backend-services/update/**
 
 backend-services/openapi-lint:
   extends: .lint-node
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/openapi-build
+    - backend-services/openapi:build-spec
   dependencies:
-    - backend-services/openapi-build
+    - backend-services/openapi:build-spec
+  rules:
+    - changes:
+      - backend-services/auth/**
+      - backend-services/booking/**
+      - backend-services/device/**
+      - backend-services/experiment/**
+      - backend-services/federation/**
+      - backend-services/openapi/**
+      - backend-services/update/**
+
 
 ################################################################################
 # Clients ######################################################################
@@ -147,50 +190,74 @@ clients/api/js-build:
   variables:
     PROJECT_DIR: clients/api/js
   needs:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
-    - helper/crosslab-typescript-addon-build
-    - helper/tsdoc-theme-build
-    - helper/openapi-codegeneration-build
+    - backend-services/auth:build-spec
+    - backend-services/booking:build-spec
+    - backend-services/device:build-spec
+    - backend-services/experiment:build-spec
+    - backend-services/federation:build-spec
+    - backend-services/update:build-spec
+    - helper/crosslab-typescript-addon:build
+    - helper/tsdoc-theme:build
+    - helper/openapi-codegeneration:build
   dependencies:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
-    - helper/crosslab-typescript-addon-build
-    - helper/tsdoc-theme-build
-    - helper/openapi-codegeneration-build
+    - backend-services/auth:build-spec
+    - backend-services/booking:build-spec
+    - backend-services/device:build-spec
+    - backend-services/experiment:build-spec
+    - backend-services/federation:build-spec
+    - backend-services/update:build-spec
+    - helper/crosslab-typescript-addon:build
+    - helper/tsdoc-theme:build
+    - helper/openapi-codegeneration:build
+  rules:
+    - changes:
+      - backend-services/auth/**
+      - backend-services/booking/**
+      - backend-services/device/**
+      - backend-services/experiment/**
+      - backend-services/federation/**
+      - backend-services/update/**
+      - clients/api/js/**
+      - helper/crosslab-typescript-addon/**
+      - helper/openapi-codegeneration/**
+      - helper/tsdoc-theme/**
+
 
 clients/api/python-build:
   extends: .build-python
   variables:
     PROJECT_DIR: clients/api/python
   needs:
-    - helper/openapi-codegeneration-build
-    - backend-services/openapi-build
+    - backend-services/openapi:build-spec
+    - helper/openapi-codegeneration:build
   dependencies:
-    - helper/openapi-codegeneration-build
-    - backend-services/openapi-build
+    - backend-services/openapi:build-spec
+    - helper/openapi-codegeneration:build
+  rules:
+    - changes:
+      - backend-services/auth/**
+      - backend-services/booking/**
+      - backend-services/device/**
+      - backend-services/experiment/**
+      - backend-services/federation/**
+      - backend-services/openapi/**
+      - backend-services/update/**
+      - clients/api/python/**
+      - helper/openapi-codegeneration/**
 
 ################################################################################
 # Hardware #####################################################################
 ################################################################################
 hardware/os-rebuild-world:
-  image: ghcr.io/siemens/kas/kas
-  stage: build
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  timeout: 48h
-  script:
-    - cd hardware/os
-    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
-    - ./scripts/build.sh -c -w --run_on_host
-    - ./scripts/sync_sstate.sh -c
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+image: ghcr.io/siemens/kas/kas
+stage: build
+rules:
+- if: $CI_PIPELINE_SOURCE == "schedule"
+timeout: 48h
+script:
+- cd hardware/os
+- mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+- cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
+- ./scripts/build.sh -c -w --run_on_host
+- ./scripts/sync_sstate.sh -c
+- cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
