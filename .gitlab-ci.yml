@@ -252,7 +252,8 @@ clients/api/python-build:
       optional: true
       artifacts: false
   before_script:
-    - 'curl --location --output artifacts.zip --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build" && unzip artifacts.zip && rm artifacts.zip'
+    - 'echo curl --location --output artifacts.zip --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build" && unzip artifacts.zip && rm artifacts.zip'
+    - 'curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build"'
   rules:
     - changes:
       - .gitlab-ci.yml
