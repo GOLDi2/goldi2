@@ -7,7 +7,7 @@ helper/tsdoc-theme-build:
   script:
     - cd helper/tsdoc-theme
     - ./scripts/build.sh
-    - cd "$CI_BUILDS_DIR" && ./scripts/check_no_changes.sh
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
 
 helper/openapi-codegeneration-build:
   image: node:latest
@@ -15,7 +15,7 @@ helper/openapi-codegeneration-build:
   script:
     - cd helper/openapi-codegeneration
     - ./scripts/build.sh
-    - cd "$CI_BUILDS_DIR" && ./scripts/check_no_changes.sh
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
 
 helper/crosslab-typescript-addon-build:
   image: node:latest
@@ -25,7 +25,7 @@ helper/crosslab-typescript-addon-build:
   script:
     - cd helper/crosslab-typescript-addon
     - ./scripts/build.sh
-    - cd "$CI_BUILDS_DIR" && ./scripts/check_no_changes.sh
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
 
 hardware/os-rebuild-world:
   image: ghcr.io/siemens/kas/kas
@@ -39,4 +39,4 @@ hardware/os-rebuild-world:
     - cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
     - ./scripts/build.sh -c -w --run_on_host
     - ./scripts/sync_sstate.sh -c
-    - cd "$CI_BUILDS_DIR" && ./scripts/check_no_changes.sh
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
