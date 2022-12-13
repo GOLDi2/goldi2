@@ -234,7 +234,7 @@ clients/api/python-build:
     - backend-services/openapi-build-spec
     - helper/openapi-codegeneration-build
   only:
-    - changes:
+    changes:
       - .gitlab-ci.yml
       - backend-services/auth/**/*
       - backend-services/booking/**/*
