@@ -310,24 +310,6 @@ clients/api/python-build:
     - job: helper/openapi-codegeneration-build
       optional: true
       artifacts: false
-<<<<<<< HEAD
-  before_script:
-    - apt update && apt install -y unzip
-    - 'echo curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN"'
-    - 'curl --location --output artifacts.zip "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/main/download?job=helper/openapi-codegeneration-build&job_token=$CI_JOB_TOKEN" && unzip artifacts.zip && rm artifacts.zip'
-  rules:
-    - changes:
-      - .gitlab-ci.yml
-      - backend-services/auth/**/*
-      - backend-services/booking/**/*
-      - backend-services/device/**/*
-      - backend-services/experiment/**/*
-      - backend-services/federation/**/*
-      - backend-services/openapi/**/*
-      - backend-services/update/**/*
-      - clients/api/python/**/*
-      - helper/openapi-codegeneration/**/*
-=======
   dependencies: []
   before_script:
     - apt update && apt install -y unzip
@@ -353,7 +335,6 @@ clients/api/python-build:
       - crosslab/services/openapi/**/*
       - crosslab/services/update/*
       - crosslab/services/update/**/*
->>>>>>> bbc1360 (update pipeline with realpaths)
 
 ################################################################################
 # Hardware #####################################################################
