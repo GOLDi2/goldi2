@@ -36,7 +36,7 @@ do
             for dependency in $dependencies; do
                 path_changes["$path:$job_name"]="${path_changes[$path:$job_name]} ${path_changes[$dependency]}"
             done
-            path_changes["$path:$job_name"]=$(echo "${path_changes[$path:$job_name]}" | tr ' ' '\n'| sort | uniq)
+            path_changes["$path:$job_name"]=$(echo "${path_changes[$path:$job_name]}" | tr ' ' '\n'| sort | uniq | tr '\n' ' ')
 
             if [ "${path_changes[$path:$job_name]}" != "${path_changes_old[$path:$job_name]}" ]; then
                 path_changes_old["$path:$job_name"]="${path_changes[$path:$job_name]}"
@@ -52,8 +52,9 @@ do
 done
 
 rm .gitlab-ci.yml || true
-
+IFS=
 while read line; do
+    IFS=' '
     # if line begins with >
     if [[ $line == \>* ]]; then
         #remove >
@@ -102,4 +103,5 @@ while read line; do
         continue
     fi
     echo "$line" >> .gitlab-ci.yml
+    IFS=
 done <<< "$(cat .jobs.yml)"

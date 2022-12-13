@@ -1,37 +1,37 @@
 variables:
-GIT_SUBMODULE_STRATEGY: recursive
+  GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
-- build
-- lint
-- test
-
+  - build
+  - lint
+  - test
+  
 .build-node:
-image: node:latest
-stage: build
-script:
-- cd "$PROJECT_DIR"
-- ./scripts/build.sh $BUILD_PARAMETERS
-- cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-artifacts:
-paths:
-- $PROJECT_DIR/dist
+  image: node:latest
+  stage: build
+  script:
+    - cd "$PROJECT_DIR"
+    - ./scripts/build.sh $BUILD_PARAMETERS
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - $PROJECT_DIR/dist
 
 .build-spec-node:
-extends: .build-node
-variables:
-BUILD_PARAMETERS: -s
+  extends: .build-node
+  variables:
+    BUILD_PARAMETERS: -s
 
 .build-python:
-extends: .build-node
-image: nikolaik/python-nodejs
-
+  extends: .build-node
+  image: nikolaik/python-nodejs
+    
 .lint-node:
-image: node:latest
-stage: lint
-script:
-- cd "$PROJECT_DIR"
-- ./scripts/lint.sh
+  image: node:latest
+  stage: lint
+  script:
+    - cd "$PROJECT_DIR"
+    - ./scripts/lint.sh
 
 ################################################################################
 # Helper #######################################################################
@@ -249,15 +249,15 @@ clients/api/python-build:
 # Hardware #####################################################################
 ################################################################################
 hardware/os-rebuild-world:
-image: ghcr.io/siemens/kas/kas
-stage: build
-rules:
-- if: $CI_PIPELINE_SOURCE == "schedule"
-timeout: 48h
-script:
-- cd hardware/os
-- mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-- cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
-- ./scripts/build.sh -c -w --run_on_host
-- ./scripts/sync_sstate.sh -c
-- cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  image: ghcr.io/siemens/kas/kas
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  timeout: 48h
+  script:
+    - cd hardware/os
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
+    - ./scripts/build.sh -c -w --run_on_host
+    - ./scripts/sync_sstate.sh -c
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
