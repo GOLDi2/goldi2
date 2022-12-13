@@ -61,7 +61,8 @@ helper/crosslab-typescript-addon-build:
   variables:
     PROJECT_DIR: helper/crosslab-typescript-addon
   needs:
-    - helper/openapi-codegeneration-build
+    - job: helper/openapi-codegeneration-build
+      optional: true
   dependencies:
     - helper/openapi-codegeneration-build
   rules:
@@ -140,12 +141,18 @@ backend-services/openapi-build-spec:
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
+    - job: backend-services/auth-build-spec
+      optional: true
+    - job: backend-services/booking-build-spec
+      optional: true
+    - job: backend-services/device-build-spec
+      optional: true
+    - job: backend-services/experiment-build-spec
+      optional: true
+    - job: backend-services/federation-build-spec
+      optional: true
+    - job: backend-services/update-build-spec
+      optional: true
   dependencies:
     - backend-services/auth-build-spec
     - backend-services/booking-build-spec
@@ -168,7 +175,8 @@ backend-services/openapi-lint:
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
-    - backend-services/openapi-build-spec
+    - job: backend-services/openapi-build-spec
+      optional: true
   dependencies:
     - backend-services/openapi-build-spec
   rules:
@@ -190,15 +198,24 @@ clients/api/js-build:
   variables:
     PROJECT_DIR: clients/api/js
   needs:
-    - backend-services/auth-build-spec
-    - backend-services/booking-build-spec
-    - backend-services/device-build-spec
-    - backend-services/experiment-build-spec
-    - backend-services/federation-build-spec
-    - backend-services/update-build-spec
-    - helper/crosslab-typescript-addon-build
-    - helper/tsdoc-theme-build
-    - helper/openapi-codegeneration-build
+    - job: backend-services/auth-build-spec
+      optional: true
+    - job: backend-services/booking-build-spec
+      optional: true
+    - job: backend-services/device-build-spec
+      optional: true
+    - job: backend-services/experiment-build-spec
+      optional: true
+    - job: backend-services/federation-build-spec
+      optional: true
+    - job: backend-services/update-build-spec
+      optional: true
+    - job: helper/crosslab-typescript-addon-build
+      optional: true
+    - job: helper/tsdoc-theme-build
+      optional: true
+    - job: helper/openapi-codegeneration-build
+      optional: true
   dependencies:
     - backend-services/auth-build-spec
     - backend-services/booking-build-spec
@@ -228,8 +245,10 @@ clients/api/python-build:
   variables:
     PROJECT_DIR: clients/api/python
   needs:
-    - backend-services/openapi-build-spec
-    - helper/openapi-codegeneration-build
+    - job: backend-services/openapi-build-spec
+      optional: true
+    - job: helper/openapi-codegeneration-build
+      optional: true
   dependencies:
     - backend-services/openapi-build-spec
     - helper/openapi-codegeneration-build
