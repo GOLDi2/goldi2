@@ -2,14 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "Node.js & TypeScript",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:16-bullseye",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"GitHub.copilot"
-			]
-		}
-	}
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:16-bullseye"
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
