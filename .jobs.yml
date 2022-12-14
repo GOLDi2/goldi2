@@ -33,6 +33,10 @@ stages:
     - cd "$PROJECT_DIR"
     - ./scripts/lint.sh
 
+.lint-python:
+  extends: .build-node
+  image: nikolaik/python-nodejs
+
 ################################################################################
 # Helper #######################################################################
 ################################################################################
@@ -64,7 +68,7 @@ stages:
 
 
 > backend-services/openapi build-spec(node) < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec
-> backend-services/openapi lint(node) < backend-services/openapi:build-spec
+> backend-services/openapi lint(node) < backend-services/openapi:build-spec backend-services/auth:lint backend-services/booking:lint backend-services/device:lint backend-services/experiment:lint backend-services/federation:lint backend-services/update:lint
 
 ################################################################################
 # Clients ######################################################################
@@ -72,6 +76,7 @@ stages:
 > clients/api/js build(node) < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec helper/crosslab-typescript-addon:build helper/tsdoc-theme:build helper/openapi-codegeneration:build
 
 > clients/api/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build
+> clients/api/python lint(python) < clients/api/python:build
 ################################################################################
 # Hardware #####################################################################
 ################################################################################

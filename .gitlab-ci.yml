@@ -33,6 +33,10 @@ stages:
     - cd "$PROJECT_DIR"
     - ./scripts/lint.sh
 
+.lint-python:
+  extends: .build-node
+  image: nikolaik/python-nodejs
+
 ################################################################################
 # Helper #######################################################################
 ################################################################################
@@ -199,6 +203,24 @@ backend-services/openapi-lint:
     - job: backend-services/openapi-build-spec
       optional: true
       artifacts: true
+    - job: backend-services/auth-lint
+      optional: true
+      artifacts: true
+    - job: backend-services/booking-lint
+      optional: true
+      artifacts: true
+    - job: backend-services/device-lint
+      optional: true
+      artifacts: true
+    - job: backend-services/experiment-lint
+      optional: true
+      artifacts: true
+    - job: backend-services/federation-lint
+      optional: true
+      artifacts: true
+    - job: backend-services/update-lint
+      optional: true
+      artifacts: true
 
 
 ################################################################################
@@ -247,6 +269,15 @@ clients/api/python-build:
       optional: true
       artifacts: true
     - job: helper/openapi-codegeneration-build
+      optional: true
+      artifacts: true
+
+clients/api/python-lint:
+  extends: .lint-python
+  variables:
+    PROJECT_DIR: clients/api/python
+  needs:
+    - job: clients/api/python-build
       optional: true
       artifacts: true
 
