@@ -45,11 +45,23 @@ stages:
 ################################################################################
 
 > backend-services/auth build-spec(node)
+> backend-services/auth lint(node) < backend-services/auth:build-spec
+
 > backend-services/booking build-spec(node)
+> backend-services/booking lint(node) < backend-services/booking:build-spec
+
 > backend-services/device build-spec(node)
+> backend-services/device lint(node) < backend-services/device:build-spec
+
 > backend-services/experiment build-spec(node)
+> backend-services/experiment lint(node) < backend-services/experiment:build-spec
+
 > backend-services/federation build-spec(node)
+> backend-services/federation lint(node) < backend-services/federation:build-spec
+
 > backend-services/update build-spec(node)
+> backend-services/update lint(node) < backend-services/update:build-spec
+
 
 > backend-services/openapi build-spec(node) < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec
 > backend-services/openapi lint(node) < backend-services/openapi:build-spec

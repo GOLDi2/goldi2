@@ -71,12 +71,32 @@ backend-services/auth-build-spec:
   needs: []
   dependencies: []
 
+backend-services/auth-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/auth
+  needs:
+    - job: backend-services/auth-build-spec
+      optional: true
+      artifacts: true
+
+
 backend-services/booking-build-spec:
   extends: .build-spec-node
   variables:
     PROJECT_DIR: backend-services/booking
   needs: []
   dependencies: []
+
+backend-services/booking-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/booking
+  needs:
+    - job: backend-services/booking-build-spec
+      optional: true
+      artifacts: true
+
 
 backend-services/device-build-spec:
   extends: .build-spec-node
@@ -85,12 +105,32 @@ backend-services/device-build-spec:
   needs: []
   dependencies: []
 
+backend-services/device-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/device
+  needs:
+    - job: backend-services/device-build-spec
+      optional: true
+      artifacts: true
+
+
 backend-services/experiment-build-spec:
   extends: .build-spec-node
   variables:
     PROJECT_DIR: backend-services/experiment
   needs: []
   dependencies: []
+
+backend-services/experiment-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/experiment
+  needs:
+    - job: backend-services/experiment-build-spec
+      optional: true
+      artifacts: true
+
 
 backend-services/federation-build-spec:
   extends: .build-spec-node
@@ -99,12 +139,32 @@ backend-services/federation-build-spec:
   needs: []
   dependencies: []
 
+backend-services/federation-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/federation
+  needs:
+    - job: backend-services/federation-build-spec
+      optional: true
+      artifacts: true
+
+
 backend-services/update-build-spec:
   extends: .build-spec-node
   variables:
     PROJECT_DIR: backend-services/update
   needs: []
   dependencies: []
+
+backend-services/update-lint:
+  extends: .lint-node
+  variables:
+    PROJECT_DIR: backend-services/update
+  needs:
+    - job: backend-services/update-build-spec
+      optional: true
+      artifacts: true
+
 
 
 backend-services/openapi-build-spec:
