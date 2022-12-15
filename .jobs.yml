@@ -38,7 +38,7 @@ stages:
     - cd "$PROJECT_DIR"
     - ./scripts/test.sh
 
-.lint-python:
+.test-python:
   extends: .test-node
 
 ################################################################################
