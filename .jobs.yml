@@ -1,13 +1,14 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
+image: crosslab/development-container
+
 stages:
   - build
   - lint
   - test
   
 .build-node:
-  image: node:latest
   stage: build
   script:
     - cd "$PROJECT_DIR"
@@ -24,18 +25,21 @@ stages:
 
 .build-python:
   extends: .build-node
-  image: nikolaik/python-nodejs
     
 .lint-node:
-  image: node:latest
   stage: lint
   script:
     - cd "$PROJECT_DIR"
     - ./scripts/lint.sh
 
+.test-node:
+  stage: test
+  script:
+    - cd "$PROJECT_DIR"
+    - ./scripts/test.sh
+
 .lint-python:
-  extends: .lint-node
-  image: nikolaik/python-nodejs
+  extends: .test-node
 
 ################################################################################
 # Helper #######################################################################
@@ -77,6 +81,7 @@ stages:
 
 > clients/api/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build
 > clients/api/python lint(python) < clients/api/python:build
+> clients/api/python test(python) < clients/api/python:build
 ################################################################################
 # Hardware #####################################################################
 ################################################################################
