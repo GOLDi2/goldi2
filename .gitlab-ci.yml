@@ -34,7 +34,7 @@ stages:
     - ./scripts/lint.sh
 
 .lint-python:
-  extends: .build-node
+  extends: .lint-node
   image: nikolaik/python-nodejs
 
 ################################################################################

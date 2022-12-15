@@ -41,6 +41,7 @@
     },
     "files.watcherExclude": {
         //begin generated
+        "clients/api/js/node_modules": true,
         "clients/api/python/**/*.egg-info": true,
         "clients/api/python/node_modules": true,
         "clients/api/python/**/__pycache__": true,
