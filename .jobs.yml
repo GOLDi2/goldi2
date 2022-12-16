@@ -11,6 +11,7 @@ stages:
 .build-node:
   stage: build
   script:
+    - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
     - ./scripts/build.sh $BUILD_PARAMETERS
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
@@ -29,6 +30,7 @@ stages:
 .lint-node:
   stage: lint
   script:
+    - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
     - ./scripts/lint.sh
 
@@ -38,6 +40,7 @@ stages:
 .test-node:
   stage: test
   script:
+    - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
     - ./scripts/test.sh
 
