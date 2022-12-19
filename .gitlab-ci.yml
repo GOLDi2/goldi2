@@ -2,14 +2,8 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 image: crosslab/development-container
-
-stages:
-  - build
-  - lint
-  - test
   
 .build-node:
-  stage: build
   script:
     - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
@@ -28,7 +22,6 @@ stages:
   extends: .build-node
     
 .lint-node:
-  stage: lint
   script:
     - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
@@ -38,7 +31,6 @@ stages:
   extends: .lint-node
 
 .test-node:
-  stage: test
   script:
     - source "$HOME/.profile"
     - cd "$PROJECT_DIR"
