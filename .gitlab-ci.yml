@@ -299,6 +299,40 @@ clients/api/python-test:
       optional: true
       artifacts: true
 
+
+clients/soa/python-build:
+  extends: .build-python
+  variables:
+    PROJECT_DIR: clients/soa/python
+  needs:
+    - job: backend-services/openapi-build-spec
+      optional: true
+      artifacts: true
+    - job: helper/openapi-codegeneration-build
+      optional: true
+      artifacts: true
+    - job: clients/api/python-test
+      optional: true
+      artifacts: true
+
+clients/soa/python-lint:
+  extends: .lint-python
+  variables:
+    PROJECT_DIR: clients/soa/python
+  needs:
+    - job: clients/soa/python-build
+      optional: true
+      artifacts: true
+
+clients/soa/python-test:
+  extends: .test-python
+  variables:
+    PROJECT_DIR: clients/soa/python
+  needs:
+    - job: clients/soa/python-build
+      optional: true
+      artifacts: true
+
 ################################################################################
 # Hardware #####################################################################
 ################################################################################

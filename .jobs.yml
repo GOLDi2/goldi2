@@ -87,6 +87,10 @@ stages:
 > clients/api/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build
 > clients/api/python lint(python) < clients/api/python:build
 > clients/api/python test(python) < clients/api/python:build
+
+> clients/soa/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build clients/api/python:test
+> clients/soa/python lint(python) < clients/soa/python:build
+> clients/soa/python test(python) < clients/soa/python:build
 ################################################################################
 # Hardware #####################################################################
 ################################################################################
