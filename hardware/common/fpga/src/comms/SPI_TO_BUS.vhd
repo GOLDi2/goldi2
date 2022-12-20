@@ -9,32 +9,49 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_BUS_STANDARD.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
 --					-> SP_CONVERTER.vhd
 --					-> BUS_CONVERTER.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
+-- 
+-- Revision V0.01.01 - Elimination of generics for a unified package
+-- Additional Comments: Elimination of module generics to introduce
+--						the GOLDI_COMM_STANDARD package which sets a
+--						unified standard for all communication modules
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom communication library
-use work.GOLDI_BUS_STANDARD.all;
+use work.GOLDI_COMM_STANDARD.all;
 
 
 
 
---! @brief
+--! @brief SPI standard to internal BUS standard
 --! @details
+--! Module acts as a slave SPI interface and transforms
+--! manages the communication between the FPGA system and
+--! the microcontroller
 --!
+--! ###Data format:
+--!	
+--! 
+--! |Byte  			|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
+--! |:--------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+--! |Byte 1	[in]	|we	  | ADDRESS[6:0]|||||||
+--! |Byte 2	[inout]	| DATA[7:0] ||||||||
+--! |Byte + [inout]	| DATA[7:0] -> ADDRESS+1||||||||
+--!
+--! **Latency:2**
 entity SPI_TO_BUS is
-	generic(
-		BUS_ADDRESS_WIDTH	:	natural := 7;
-		BUS_DATA_WIDTH		:	natural := 8
-	);
 	port(
 		--General
 		clk			: in	std_logic;
@@ -75,18 +92,14 @@ architecture RTL of SPI_TO_BUS is
 	end component;
 	
 	component BUS_CONVERTER
-		generic(
-			CONFIG_WORD_WIDTH	:	natural;
-			DATA_WORD_WIDTH		:	natural
-		);
 		port(
 			clk				: in	std_logic;
 			rst				: in	std_logic;
 			ce				: in	std_logic;
 			word_valid		: in	std_logic;
-			config_word		: in	std_logic_vector(CONFIG_WORD_WIDTH-1 downto 0);
-			data_word_in	: in	std_logic_vector(DATA_WORD_WIDTH-1 downto 0);
-			data_word_out	: out	std_logic_vector(DATA_WORD_WIDTH-1 downto 0);
+			config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+			data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+			data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 			sys_bus_i		: out	bus_in;
 			sys_bus_o		: in	bus_out
 		);
@@ -95,8 +108,8 @@ architecture RTL of SPI_TO_BUS is
 	
 	--Signals
 	signal config_word		:	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
-	signal data_word_in		:	std_logic_vector(BUS_DATA_WIDTH-1 downto 0);
-	signal data_word_out	:	std_logic_vector(BUS_DATA_WIDTH-1 downto 0);
+	signal data_word_in		:	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+	signal data_word_out	:	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 	--Mux and Demux
 	signal converter_select :	std_logic;
 	signal ce_demux			:	std_logic_vector(1 downto 0);
@@ -127,10 +140,6 @@ begin
 	
 	
 	BUS_MANAGER : BUS_CONVERTER
-	generic map(
-		CONFIG_WORD_WIDTH	=> BUS_ADDRESS_WIDTH+1,
-		DATA_WORD_WIDTH		=> BUS_DATA_WIDTH
-	)
 	port map(
 		clk				=> clk,
 		rst				=> rst,
@@ -162,7 +171,7 @@ begin
 	
 	DATA_WORD_CONVERTER : SP_CONVERTER
 	generic map(
-		WORD_LENGTH		=> BUS_DATA_WIDTH
+		WORD_LENGTH		=> SYSTEM_DATA_WIDTH
 	)
 	port map(
 		clk				=> clk,

@@ -14,6 +14,9 @@
 -- Revisions:
 -- Revision V2.01.00 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Include standard library
 library IEEE;
@@ -22,22 +25,29 @@ use IEEE.numeric_std.all;
 
 
 
-package GOLDI_BUS_STANDARD is
+package GOLDI_COMM_STANDARD is
 
 	--System constants
-	constant BUS_ADDRESS_WIDTH	:	natural := 7;
-	constant BUS_DATA_WIDTH		:	natural := 8;
+	constant BUS_ADDRESS_WIDTH	:	natural range 7 to 63 := 7;
+	constant SYSTEM_DATA_WIDTH	:	natural range 8 to 64 := 8;
 
-	--Data structures
+
+    --Internal data structures
+    subtype address_word is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
+    subtype data_word is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+    type data_word_vector is array (natural range <>) of data_word;
+
+
+
+	--BUS Data structures
 	type bus_in is record
 		we	:	std_logic;
-		adr	:	std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
-		dat	:	std_logic_vector(BUS_DATA_WIDTH-1 downto 0);
+		adr	:	address_word;
+		dat	:	data_word;
 	end record;
 	
 	type bus_out is record
-		dat :	std_logic_vector(BUS_DATA_WIDTH-1 downto 0);
-		err	:	std_logic;
+		dat :	data_word;
 	end record;
 	
 

@@ -9,29 +9,43 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_BUS_STANDARD.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
+-- 
+-- Revision V0.01.01 - Elimination of generics for a unified package
+-- Additional Comments: Elimination of module generics to introduce
+--						the GOLDI_COMM_STANDARD package which sets a
+--						unified standard for all communication modules
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom communication library
-use work.GOLDI_BUS_STANDARD.all;
+use work.GOLDI_COMM_STANDARD.all;
 
 
 
---! @brief
+--! @brief BUS Master interface
 --! @details
+--! Module routes the incomming parallel data and performs the 
+--! communication operations with the slave modules in the system.
+--! 
+--! ###Data format:
 --!
+--! |      		|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
+--! |:----------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+--! |config_word|we	  | ADDRESS[6:0]|||||||
+--! |data_word	| DATA[7:0] ||||||||
+--!
+--! **Latency:1**
 entity BUS_CONVERTER is
-	generic(
-		CONFIG_WORD_WIDTH	:	natural := 8;
-		DATA_WORD_WIDTH		:	natural := 8
-	);
 	port(
 		--General
 		clk				: in	std_logic;
@@ -39,13 +53,14 @@ entity BUS_CONVERTER is
 		ce				: in	std_logic;
 		--Parallel data
 		word_valid		: in	std_logic;
-		config_word		: in	std_logic_vector(CONFIG_WORD_WIDTH-1 downto 0);
-		data_word_in	: in	std_logic_vector(DATA_WORD_WIDTH-1 downto 0);
-		data_word_out	: out	std_logic_vector(DATA_WORD_WIDTH-1 downto 0);
+		config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+		data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+		data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 		--BUS
 		sys_bus_i		: out	bus_in;
 		sys_bus_o		: in	bus_out
-	);end entity BUS_CONVERTER;
+	);
+end entity BUS_CONVERTER;
 
 
 
@@ -55,9 +70,9 @@ architecture RTL of BUS_CONVERTER is
 	
 	--Signals
 	--Buffers
-	signal address_buff			:	std_logic_vector(CONFIG_WORD_WIDTH-2 downto 0);
 	signal write_enb_buff		:	std_logic;
-	signal data_word_buff		:	std_logic_vector(DATA_WORD_WIDTH-1 downto 0);
+	signal address_buff			:	address_word;
+	signal data_word_buff		:	data_word;
 	--Flags
 	signal bus_write_valid		:	std_logic;
 	signal multi_transaction	:	std_logic;
@@ -103,8 +118,8 @@ begin
 					multi_transaction <= '0';
 					
 					if(word_valid = '1') then
-						write_enb_buff	<= config_word(CONFIG_WORD_WIDTH-1);
-						address_buff 	<= config_word(CONFIG_WORD_WIDTH-2 downto 0);
+						write_enb_buff	<= config_word(BUS_ADDRESS_WIDTH);
+						address_buff 	<= config_word(BUS_ADDRESS_WIDTH-1 downto 0);
 						PS <= DATA;
 					else
 						PS <= CONFIG;
@@ -122,7 +137,7 @@ begin
 						data_word_buff	  <= data_word_in;
 						
 					elsif(multi_transaction = '1') then
-						address_buff <= std_logic_vector(unsigned(address_buff) + to_unsigned(1,CONFIG_WORD_WIDTH-2));
+						address_buff <= std_logic_vector(unsigned(address_buff) + to_unsigned(1,BUS_ADDRESS_WIDTH));
 						multi_transaction <= '0';
 						bus_write_valid   <= '0';
 					

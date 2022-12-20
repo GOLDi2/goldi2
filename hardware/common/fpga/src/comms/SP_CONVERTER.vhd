@@ -14,6 +14,9 @@
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -27,6 +30,8 @@ use IEEE.numeric_std.all;
 --! Bidirectional serial and parallel data converter for use in SPI 
 --! communication. Module transforms SPI incomming signals into parallel
 --! data and the outgoing parallel data into miso serial data.
+--!
+--! **Latency:1**
 entity SP_CONVERTER is
 	generic(
 		WORD_LENGTH		:	natural := 8
@@ -64,7 +69,7 @@ begin
 			if((rst = '1') or (ce /= '1')) then
 				--Reset internal
 				bit_counter <= 0;
-				sclk_old    <= '0';
+				sclk_old    <= '1';
 				--Reset serial interface
 				miso <= '0';
 				--Reset parallel
