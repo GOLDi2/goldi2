@@ -42,48 +42,48 @@ default:
 ################################################################################
 # Helper #######################################################################
 ################################################################################
-> helper/tsdoc-theme build(node)
-> helper/openapi-codegeneration build(node)
-> helper/crosslab-typescript-addon build(node) < helper/openapi-codegeneration:build
+> helper/tsdoc-theme build
+> helper/openapi-codegeneration build
+> helper/crosslab-typescript-addon build < helper/openapi-codegeneration:build
 
 ################################################################################
 # Backend ######################################################################
 ################################################################################
 
-> backend-services/auth build-spec(node)
-> backend-services/auth lint(node) < backend-services/auth:build-spec
+> backend-services/auth build-spec
+> backend-services/auth lint < backend-services/auth:build-spec
 
-> backend-services/booking build-spec(node)
-> backend-services/booking lint(node) < backend-services/booking:build-spec
+> backend-services/booking build-spec
+> backend-services/booking lint < backend-services/booking:build-spec
 
-> backend-services/device build-spec(node)
-> backend-services/device lint(node) < backend-services/device:build-spec
+> backend-services/device build-spec
+> backend-services/device lint < backend-services/device:build-spec
 
-> backend-services/experiment build-spec(node)
-> backend-services/experiment lint(node) < backend-services/experiment:build-spec
+> backend-services/experiment build-spec
+> backend-services/experiment lint < backend-services/experiment:build-spec
 
-> backend-services/federation build-spec(node)
-> backend-services/federation lint(node) < backend-services/federation:build-spec
+> backend-services/federation build-spec
+> backend-services/federation lint < backend-services/federation:build-spec
 
-> backend-services/update build-spec(node)
-> backend-services/update lint(node) < backend-services/update:build-spec
+> backend-services/update build-spec
+> backend-services/update lint < backend-services/update:build-spec
 
 
-> backend-services/openapi build-spec(node) < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec
-> backend-services/openapi lint(node) < backend-services/openapi:build-spec backend-services/auth:lint backend-services/booking:lint backend-services/device:lint backend-services/experiment:lint backend-services/federation:lint backend-services/update:lint
+> backend-services/openapi build-spec < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec
+> backend-services/openapi lint < backend-services/openapi:build-spec backend-services/auth:lint backend-services/booking:lint backend-services/device:lint backend-services/experiment:lint backend-services/federation:lint backend-services/update:lint
 
 ################################################################################
 # Clients ######################################################################
 ################################################################################
-> clients/api/js build(node) < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec helper/crosslab-typescript-addon:build helper/tsdoc-theme:build helper/openapi-codegeneration:build
+> clients/api/js build < backend-services/auth:build-spec backend-services/booking:build-spec backend-services/device:build-spec backend-services/experiment:build-spec backend-services/federation:build-spec backend-services/update:build-spec helper/crosslab-typescript-addon:build helper/tsdoc-theme:build helper/openapi-codegeneration:build
 
-> clients/api/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build
-> clients/api/python lint(python) < clients/api/python:build
-> clients/api/python test(python) < clients/api/python:build
+> clients/api/python build < backend-services/openapi:build-spec helper/openapi-codegeneration:build
+> clients/api/python lint < clients/api/python:build
+> clients/api/python test < clients/api/python:build
 
-> clients/soa/python build(python) < backend-services/openapi:build-spec helper/openapi-codegeneration:build clients/api/python:test
-> clients/soa/python lint(python) < clients/soa/python:build
-> clients/soa/python test(python) < clients/soa/python:build
+> clients/soa/python build < backend-services/openapi:build-spec helper/openapi-codegeneration:build clients/api/python:test
+> clients/soa/python lint < clients/soa/python:build
+> clients/soa/python test < clients/soa/python:build
 ################################################################################
 # Hardware #####################################################################
 ################################################################################

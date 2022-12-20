@@ -43,21 +43,21 @@ default:
 # Helper #######################################################################
 ################################################################################
 helper/tsdoc-theme-build:
-  extends: .build-node
+  extends: .build
   variables:
     PROJECT_DIR: helper/tsdoc-theme
   needs: []
   dependencies: []
 
 helper/openapi-codegeneration-build:
-  extends: .build-node
+  extends: .build
   variables:
     PROJECT_DIR: helper/openapi-codegeneration
   needs: []
   dependencies: []
 
 helper/crosslab-typescript-addon-build:
-  extends: .build-node
+  extends: .build
   variables:
     PROJECT_DIR: helper/crosslab-typescript-addon
   needs:
@@ -71,14 +71,14 @@ helper/crosslab-typescript-addon-build:
 ################################################################################
 
 backend-services/auth-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/auth
   needs: []
   dependencies: []
 
 backend-services/auth-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/auth
   needs:
@@ -88,14 +88,14 @@ backend-services/auth-lint:
 
 
 backend-services/booking-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/booking
   needs: []
   dependencies: []
 
 backend-services/booking-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/booking
   needs:
@@ -105,14 +105,14 @@ backend-services/booking-lint:
 
 
 backend-services/device-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/device
   needs: []
   dependencies: []
 
 backend-services/device-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/device
   needs:
@@ -122,14 +122,14 @@ backend-services/device-lint:
 
 
 backend-services/experiment-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/experiment
   needs: []
   dependencies: []
 
 backend-services/experiment-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/experiment
   needs:
@@ -139,14 +139,14 @@ backend-services/experiment-lint:
 
 
 backend-services/federation-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/federation
   needs: []
   dependencies: []
 
 backend-services/federation-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/federation
   needs:
@@ -156,14 +156,14 @@ backend-services/federation-lint:
 
 
 backend-services/update-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/update
   needs: []
   dependencies: []
 
 backend-services/update-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/update
   needs:
@@ -174,7 +174,7 @@ backend-services/update-lint:
 
 
 backend-services/openapi-build-spec:
-  extends: .build-spec-node
+  extends: .build-spec
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
@@ -198,7 +198,7 @@ backend-services/openapi-build-spec:
       artifacts: true
 
 backend-services/openapi-lint:
-  extends: .lint-node
+  extends: .lint
   variables:
     PROJECT_DIR: backend-services/openapi
   needs:
@@ -229,7 +229,7 @@ backend-services/openapi-lint:
 # Clients ######################################################################
 ################################################################################
 clients/api/js-build:
-  extends: .build-node
+  extends: .build
   variables:
     PROJECT_DIR: clients/api/js
   needs:
@@ -263,7 +263,7 @@ clients/api/js-build:
 
 
 clients/api/python-build:
-  extends: .build-python
+  extends: .build
   variables:
     PROJECT_DIR: clients/api/python
   needs:
@@ -275,7 +275,7 @@ clients/api/python-build:
       artifacts: true
 
 clients/api/python-lint:
-  extends: .lint-python
+  extends: .lint
   variables:
     PROJECT_DIR: clients/api/python
   needs:
@@ -284,7 +284,7 @@ clients/api/python-lint:
       artifacts: true
 
 clients/api/python-test:
-  extends: .test-python
+  extends: .test
   variables:
     PROJECT_DIR: clients/api/python
   needs:
@@ -294,7 +294,7 @@ clients/api/python-test:
 
 
 clients/soa/python-build:
-  extends: .build-python
+  extends: .build
   variables:
     PROJECT_DIR: clients/soa/python
   needs:
@@ -309,7 +309,7 @@ clients/soa/python-build:
       artifacts: true
 
 clients/soa/python-lint:
-  extends: .lint-python
+  extends: .lint
   variables:
     PROJECT_DIR: clients/soa/python
   needs:
@@ -318,7 +318,7 @@ clients/soa/python-lint:
       artifacts: true
 
 clients/soa/python-test:
-  extends: .test-python
+  extends: .test
   variables:
     PROJECT_DIR: clients/soa/python
   needs:
