@@ -2,38 +2,39 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 image: crosslab/development-container
-  
-.build-node:
-  script:
-    - source "$HOME/.profile"
+
+default:
+  before_script:
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
+  after_script:
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
+
+.build:
+  script:
+    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME}_success.svg"
+    - wget https://img.shields.io/badge/build-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME}_failed.svg"
     - ./scripts/build.sh $BUILD_PARAMETERS
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
     paths:
       - $PROJECT_DIR/dist
 
-.build-spec-node:
+.build-spec:
   extends: .build-node
   variables:
     BUILD_PARAMETERS: -s
-
-.build-python:
-  extends: .build-node
     
-.lint-node:
+.lint:
   script:
-    - source "$HOME/.profile"
-    - cd "$PROJECT_DIR"
+    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME}_success.svg"
+    - wget https://img.shields.io/badge/linting-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME}_failed.svg"
     - ./scripts/lint.sh
 
-.lint-python:
-  extends: .lint-node
-
-.test-node:
+.test:
   script:
-    - source "$HOME/.profile"
-    - cd "$PROJECT_DIR"
+    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME}_success.svg"
+    - wget https://img.shields.io/badge/tests-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME}_failed.svg"
     - ./scripts/test.sh
 
 .test-python:
