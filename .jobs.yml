@@ -21,7 +21,7 @@ default:
       - $PROJECT_DIR/dist
 
 .build-spec:
-  extends: .build-node
+  extends: .build
   variables:
     BUILD_PARAMETERS: -s
     
@@ -37,8 +37,6 @@ default:
     - wget https://img.shields.io/badge/tests-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME}_failed.svg"
     - ./scripts/test.sh
 
-.test-python:
-  extends: .test-node
 ################################################################################
 # Helper #######################################################################
 ################################################################################
