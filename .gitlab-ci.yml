@@ -14,16 +14,21 @@ default:
   script:
     - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
     - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
-    - ./scripts/build.sh $BUILD_PARAMETERS
+    - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
     paths:
       - $PROJECT_DIR/dist
 
 .build-spec:
-  extends: .build
-  variables:
-    BUILD_PARAMETERS: -s
+  script:
+    - wget https://img.shields.io/badge/spec%20build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
+    - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
+    - ./scripts/build.sh -s
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - $PROJECT_DIR/dist
     
 .lint:
   script:
