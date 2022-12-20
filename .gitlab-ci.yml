@@ -12,8 +12,8 @@ default:
 
 .build:
   script:
-    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_success.svg"
-    - wget https://img.shields.io/badge/build-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_failed.svg"
+    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
+    - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
     - ./scripts/build.sh $BUILD_PARAMETERS
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
@@ -27,14 +27,14 @@ default:
     
 .lint:
   script:
-    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_success.svg"
-    - wget https://img.shields.io/badge/linting-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_failed.svg"
+    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
+    - wget https://img.shields.io/badge/linting-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
     - ./scripts/lint.sh
 
 .test:
   script:
-    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_success.svg"
-    - wget https://img.shields.io/badge/tests-failed-critica?style=flat-square -O "badge_${CI_JOB_NAME_SLUG}_failed.svg"
+    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
+    - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
     - ./scripts/test.sh
 
 ################################################################################
