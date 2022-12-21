@@ -329,6 +329,40 @@ clients/soa/python-test:
       optional: true
       artifacts: true
 
+
+# SOA Service ##################################################################
+
+clients/soa_services/electricalConnection/python-build:
+  extends: .build
+  variables:
+    PROJECT_DIR: clients/soa_services/electricalConnection/python
+  needs:
+    - job: clients/api/python-test
+      optional: true
+      artifacts: true
+    - job: clients/soa/python-test
+      optional: true
+      artifacts: true
+
+clients/soa_services/electricalConnection/python-lint:
+  extends: .lint
+  variables:
+    PROJECT_DIR: clients/soa_services/electricalConnection/python
+  needs:
+    - job: clients/soa_clients/electricalConnection/python-build
+      optional: true
+      artifacts: true
+
+clients/soa_services/electricalConnection/python-test:
+  extends: .test
+  variables:
+    PROJECT_DIR: clients/soa_services/electricalConnection/python
+  needs:
+    - job: clients/soa_clients/electricalConnection/python-lint
+      optional: true
+      artifacts: true
+
+
 ################################################################################
 # Hardware #####################################################################
 ################################################################################

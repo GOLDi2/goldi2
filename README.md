@@ -14,7 +14,7 @@
 | update     | ![build-spec](https://x56.theoinf.tu-ilmenau.de/badges/badge_backend-services_update-build-spec.svg)     | ![build-spec](https://x56.theoinf.tu-ilmenau.de/badges/badge_backend-services_update-lint.svg)     |
 | openapi    | ![build-spec](https://x56.theoinf.tu-ilmenau.de/badges/badge_backend-services_openapi-build-spec.svg)    | ![build-spec](https://x56.theoinf.tu-ilmenau.de/badges/badge_backend-services_openapi-lint.svg)    |
 
-## Clients
+### Clients
 
 | Name             | build                                                                                 | lint                                                                                | test                                                                                |
 | ---------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
@@ -23,10 +23,16 @@
 | soa (javascript) | ![build](https://img.shields.io/badge/build-unavailable-inactive?style=flat-square)   | ![lint](https://img.shields.io/badge/lint-unavailable-inactive?style=flat-square)   | ![test](https://img.shields.io/badge/test-unavailable-inactive?style=flat-square)   |
 | soa (python)     | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_python-build.svg) | ![lint](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_python-lint.svg) | ![test](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_python-test.svg) |
 
-## Helper
+#### SOA Services
 
-| Name       | build|
-| ---------- | - |
+| Name                           | build                                                                                                              | lint                                                                                                             | test                                                                                                             |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Electrical Connection (python) | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-build.svg) | ![lint](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-lint.svg) | ![test](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-test.svg) |
+
+### Helper
+
+| Name                      | build                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------- |
 | crosslab-typescript-addon | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_helper_crosslab-typescript-addon-build.svg) |
-| openapi-codegeneration | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_helper_openapi-codegeneration-build.svg) |
-| tsdoc-theme | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_helper_tsdoc-theme-build.svg) |
+| openapi-codegeneration    | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_helper_openapi-codegeneration-build.svg)    |
+| tsdoc-theme               | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_helper_tsdoc-theme-build.svg)               |

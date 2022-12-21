@@ -87,6 +87,13 @@ default:
 > clients/soa/python build < backend-services/openapi:build-spec helper/openapi-codegeneration:build clients/api/python:test
 > clients/soa/python lint < clients/soa/python:build
 > clients/soa/python test < clients/soa/python:build
+
+# SOA Service ##################################################################
+
+> clients/soa_services/electricalConnection/python build < clients/api/python:test clients/soa/python:test
+> clients/soa_services/electricalConnection/python lint < clients/soa_clients/electricalConnection/python:build
+> clients/soa_services/electricalConnection/python test < clients/soa_clients/electricalConnection/python:lint
+
 ################################################################################
 # Hardware #####################################################################
 ################################################################################
