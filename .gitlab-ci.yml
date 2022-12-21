@@ -349,7 +349,7 @@ clients/soa_services/electricalConnection/python-lint:
   variables:
     PROJECT_DIR: clients/soa_services/electricalConnection/python
   needs:
-    - job: clients/soa_clients/electricalConnection/python-build
+    - job: clients/soa_services/electricalConnection/python-build
       optional: true
       artifacts: true
 
@@ -358,7 +358,7 @@ clients/soa_services/electricalConnection/python-test:
   variables:
     PROJECT_DIR: clients/soa_services/electricalConnection/python
   needs:
-    - job: clients/soa_clients/electricalConnection/python-lint
+    - job: clients/soa_services/electricalConnection/python-lint
       optional: true
       artifacts: true
 
