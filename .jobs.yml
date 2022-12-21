@@ -9,6 +9,12 @@ default:
     - cd "$PROJECT_DIR"
   after_script:
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
+  cache:
+    key:
+      files:
+        - $PROJECT_DIR/package-lock.json
+    paths:
+      - $PROJECT_DIR/node_modules
 
 .build:
   script:
