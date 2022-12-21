@@ -7,12 +7,11 @@ default:
   before_script:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
+    - echo "${PROJECT_DIR}/package-lock.json"
   after_script:
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
   cache:
-    key:
-      files:
-        - $PROJECT_DIR/package-lock.json
+    key: "$CI_COMMIT_REF_SLUG-$PROJECT_DIR"
     paths:
       - $PROJECT_DIR/node_modules
 
