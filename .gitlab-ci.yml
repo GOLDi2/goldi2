@@ -343,6 +343,9 @@ clients/soa_services/electricalConnection/python-build:
   variables:
     PROJECT_DIR: clients/soa_services/electricalConnection/python
   needs:
+    - job: helper/openapi-codegeneration-build
+      optional: true
+      artifacts: true
     - job: clients/api/python-test
       optional: true
       artifacts: true

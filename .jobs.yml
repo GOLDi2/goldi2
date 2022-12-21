@@ -96,7 +96,7 @@ default:
 
 # SOA Service ##################################################################
 
-> clients/soa_services/electricalConnection/python build < clients/api/python:test clients/soa/python:test
+> clients/soa_services/electricalConnection/python build < helper/openapi-codegeneration:build clients/api/python:test clients/soa/python:test
 > clients/soa_services/electricalConnection/python lint < clients/soa_services/electricalConnection/python:build
 > clients/soa_services/electricalConnection/python test < clients/soa_services/electricalConnection/python:lint
 
