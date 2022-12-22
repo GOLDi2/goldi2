@@ -27,7 +27,7 @@
 
 | Name                           | build                                                                                                              | lint                                                                                                             | test                                                                                                             |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Electrical Connection (python) | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-build.svg) | ![lint](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-lint.svg) | ![test](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_clients_electricalConnection_python-test.svg) |
+| Electrical Connection (python) | ![build](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_services_electricalConnection_python-build.svg) | ![lint](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_services_electricalConnection_python-lint.svg) | ![test](https://x56.theoinf.tu-ilmenau.de/badges/badge_clients_soa_services_electricalConnection_python-test.svg) |
 
 ### Helper
 
