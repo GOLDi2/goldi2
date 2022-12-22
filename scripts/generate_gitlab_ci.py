@@ -28,8 +28,9 @@ def checkPathChange(path: str):
     crosslabPath=subprocess.run(["realpath", "crosslab"], capture_output=True).stdout.decode("utf-8").strip()
 
     if realpath.startswith(crosslabPath):
-        print(["git", "ls-tree", last_commit, crosslabPath].join(" "))
-        print(["git", "ls-tree", this_commit, crosslabPath].join(" "))
+        print(" ".join(["git", "ls-tree", last_commit, crosslabPath]))
+        print(last_submodule_commit=subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True))
+        print(" ".join(["git", "ls-tree", this_commit, crosslabPath]))
         last_submodule_commit=subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
         this_submodule_commit=subprocess.run(["git", "ls-tree", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
         print(last_commit, this_commit, last_submodule_commit, this_submodule_commit)
