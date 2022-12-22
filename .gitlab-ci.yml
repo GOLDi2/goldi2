@@ -3,6 +3,11 @@ variables:
 
 image: crosslab/development-container
 
+stages:
+  - build
+  - lint
+  - test
+
 default:
   before_script:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
@@ -16,6 +21,7 @@ default:
       - $PROJECT_DIR/node_modules
 
 .build:
+  stage: build
   script:
     - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
     - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
@@ -26,6 +32,7 @@ default:
       - $PROJECT_DIR/dist
 
 .build-spec:
+  stage: build
   script:
     - wget https://img.shields.io/badge/spec%20build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
     - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
@@ -36,12 +43,14 @@ default:
       - $PROJECT_DIR/dist
     
 .lint:
+  stage: lint
   script:
     - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
     - wget https://img.shields.io/badge/linting-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
     - ./scripts/lint.sh
 
 .test:
+  stage: test
   script:
     - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
     - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
@@ -213,24 +222,6 @@ backend-services/openapi-lint:
     - job: backend-services/openapi-build-spec
       optional: true
       artifacts: true
-    - job: backend-services/auth-lint
-      optional: true
-      artifacts: true
-    - job: backend-services/booking-lint
-      optional: true
-      artifacts: true
-    - job: backend-services/device-lint
-      optional: true
-      artifacts: true
-    - job: backend-services/experiment-lint
-      optional: true
-      artifacts: true
-    - job: backend-services/federation-lint
-      optional: true
-      artifacts: true
-    - job: backend-services/update-lint
-      optional: true
-      artifacts: true
 
 
 ################################################################################
@@ -312,7 +303,7 @@ clients/soa/python-build:
     - job: helper/openapi-codegeneration-build
       optional: true
       artifacts: true
-    - job: clients/api/python-test
+    - job: clients/api/python-build
       optional: true
       artifacts: true
 
@@ -345,10 +336,10 @@ clients/soa_services/electricalConnection/python-build:
     - job: helper/openapi-codegeneration-build
       optional: true
       artifacts: true
-    - job: clients/api/python-test
+    - job: clients/api/python-build
       optional: true
       artifacts: true
-    - job: clients/soa/python-test
+    - job: clients/soa/python-build
       optional: true
       artifacts: true
 
