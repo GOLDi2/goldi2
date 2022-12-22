@@ -11,6 +11,15 @@ with open(".jobs.yml", "r") as f:
 # If the --static flag is passed, create a static .gitlab-ci.yml that builds all jobs
 DYNAMIC=False if "--static" in sys.argv else True
 
+last_commit=subprocess.run(["git", "rev-parse", "HEAD~1"], capture_output=True).stdout.decode("utf-8").strip()
+this_commit=subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True).stdout.decode("utf-8").strip()
+
+for arg in sys.argv:
+    if arg.startswith("--last-commit="):
+        last_commit=arg.split("=")[1]
+    elif arg.startswith("--this-commit="):
+        this_commit=arg.split("=")[1]
+
 jobs=[]
 
 def checkPathChange(path: str):
@@ -18,13 +27,9 @@ def checkPathChange(path: str):
     realpath=subprocess.run(["realpath", path], capture_output=True).stdout.decode("utf-8").strip()
     crosslabPath=subprocess.run(["realpath", "crosslab"], capture_output=True).stdout.decode("utf-8").strip()
 
-    last_commit=subprocess.run(["git", "rev-parse", "HEAD~1"], capture_output=True).stdout.decode("utf-8").strip()
-    this_commit=subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True).stdout.decode("utf-8").strip()
-
     if realpath.startswith(crosslabPath):
-
-        last_submodule_commit=subprocess.run(["git", "ls-tree", "--format='%(objectname)'", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip()
-        this_submodule_commit=subprocess.run(["git", "ls-tree", "--format='%(objectname)'", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip()
+        last_submodule_commit=subprocess.run(["git", "ls-tree", "--format=%(objectname)", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip()
+        this_submodule_commit=subprocess.run(["git", "ls-tree", "--format=%(objectname)", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip()
         print(last_commit, this_commit, last_submodule_commit, this_submodule_commit)
         result=subprocess.run(["git", "diff", "--quiet", last_submodule_commit, this_submodule_commit, "--", realpath], capture_output=True, cwd=crosslabPath).returncode != 0
         print("Checking submodule changes for "+path+" ("+last_submodule_commit+" to "+this_submodule_commit+") -> "+str(result) )
@@ -80,6 +85,7 @@ jobs=[[job[0], job[1], job[2] or hasChangedDependencies(job)] for job in jobs]
 with (open("generated.gitlab-ci.yml", "w")) as f:
     with(open("static.gitlab-ci.yml", "r")) as f2:
         f.write(f2.read())
+    f.write("\n")
     for job in jobs:
         f.write(formatJob(*job))
 

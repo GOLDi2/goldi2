@@ -72,3 +72,10 @@ hardware/os-rebuild-world:
     - ./scripts/build.sh -c -w --run_on_host
     - ./scripts/sync_sstate.sh -c
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+
+dummy-job:
+  before_script: []
+  after_script: []
+  cache: []
+  artifacts: {}
+  script: ['echo "Workaround for https://gitlab.com/gitlab-org/gitlab/-/issues/331816"']

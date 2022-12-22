@@ -9,7 +9,7 @@ stages:
 
 generate-pipeline:
   stage: generate
-  script: ./scripts/generate_gitlab_ci.py
+  script: ./scripts/generate_gitlab_ci.py --last-commit=${CI_COMMIT_BEFORE_SHA} --this-commit=${CI_COMMIT_SHA}
   artifacts:
     paths:
       - generated.gitlab-ci.yml
