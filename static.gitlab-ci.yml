@@ -1,0 +1,74 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+image: crosslab/development-container
+
+stages:
+  - build
+  - lint
+  - test
+
+default:
+  before_script:
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - cd "$PROJECT_DIR"
+    - echo "${PROJECT_DIR}/package-lock.json"
+  after_script:
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
+  cache:
+    key: "$CI_COMMIT_REF_SLUG-$PROJECT_DIR"
+    paths:
+      - $PROJECT_DIR/node_modules
+
+.build:
+  stage: build
+  script:
+    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
+    - ./scripts/build.sh
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - $PROJECT_DIR/dist
+
+.build-spec:
+  stage: build
+  script:
+    - wget https://img.shields.io/badge/spec%20build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
+    - ./scripts/build.sh -s
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
+  artifacts:
+    paths:
+      - $PROJECT_DIR/dist
+    
+.lint:
+  stage: lint
+  script:
+    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/linting-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
+    - ./scripts/lint.sh
+
+.test:
+  stage: test
+  script:
+    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
+    - ./scripts/test.sh
+
+################################################################################
+# Hardware #####################################################################
+################################################################################
+hardware/os-rebuild-world:
+  image: ghcr.io/siemens/kas/kas
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  timeout: 48h
+  script:
+    - cd hardware/os
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - cp "$LOCAL_YML_NO_CACHE" local.yml && cp "$DEV_CRT" signing.crt.pem && cp "$DEV_KEY" signing.key.pem
+    - ./scripts/build.sh -c -w --run_on_host
+    - ./scripts/sync_sstate.sh -c
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh

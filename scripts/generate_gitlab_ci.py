@@ -75,11 +75,10 @@ def formatJob(job, dependencies, changed):
 
 jobs=[[job[0], job[1], job[2] or hasChangedDependencies(job)] for job in jobs]
 
-with (open(".gitlab-ci.yml", "w")) as f:
-    for line in lines:
-        if line.startswith(">"):
-            f.write(formatJob(*jobs.pop(0)))
-        else:
-            f.write(line)
+with (open("generated.gitlab-ci.yml", "w")) as f:
+    with(open("static.gitlab-ci.yml", "r")) as f2:
+        f.write(f2.read())
+    for job in jobs:
+        f.write(formatJob(*job))
 
 #print(lines)
