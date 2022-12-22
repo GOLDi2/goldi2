@@ -23,8 +23,8 @@ default:
 .build:
   stage: build
   script:
-    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
-    - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
+    - wget https://img.shields.io/badge/build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
@@ -34,8 +34,8 @@ default:
 .build-spec:
   stage: build
   script:
-    - wget https://img.shields.io/badge/spec%20build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
-    - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
+    - wget https://img.shields.io/badge/spec%20build-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/build.sh -s
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
   artifacts:
@@ -45,15 +45,15 @@ default:
 .lint:
   stage: lint
   script:
-    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
-    - wget https://img.shields.io/badge/linting-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
+    - wget https://img.shields.io/badge/linting-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/linting-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/lint.sh
 
 .test:
   stage: test
   script:
-    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME////_}_success.svg"
-    - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME////_}_failed.svg"
+    - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
+    - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/test.sh
 
 ################################################################################
@@ -64,15 +64,11 @@ helper/tsdoc-theme-build:
   variables:
     PROJECT_DIR: helper/tsdoc-theme
   needs: []
-  dependencies: []
-
 helper/openapi-codegeneration-build:
   extends: .build
   variables:
     PROJECT_DIR: helper/openapi-codegeneration
   needs: []
-  dependencies: []
-
 helper/crosslab-typescript-addon-build:
   extends: .build
   variables:
@@ -92,8 +88,6 @@ backend-services/auth-build-spec:
   variables:
     PROJECT_DIR: backend-services/auth
   needs: []
-  dependencies: []
-
 backend-services/auth-lint:
   extends: .lint
   variables:
@@ -109,8 +103,6 @@ backend-services/booking-build-spec:
   variables:
     PROJECT_DIR: backend-services/booking
   needs: []
-  dependencies: []
-
 backend-services/booking-lint:
   extends: .lint
   variables:
@@ -126,8 +118,6 @@ backend-services/device-build-spec:
   variables:
     PROJECT_DIR: backend-services/device
   needs: []
-  dependencies: []
-
 backend-services/device-lint:
   extends: .lint
   variables:
@@ -143,8 +133,6 @@ backend-services/experiment-build-spec:
   variables:
     PROJECT_DIR: backend-services/experiment
   needs: []
-  dependencies: []
-
 backend-services/experiment-lint:
   extends: .lint
   variables:
@@ -160,8 +148,6 @@ backend-services/federation-build-spec:
   variables:
     PROJECT_DIR: backend-services/federation
   needs: []
-  dependencies: []
-
 backend-services/federation-lint:
   extends: .lint
   variables:
@@ -177,8 +163,6 @@ backend-services/update-build-spec:
   variables:
     PROJECT_DIR: backend-services/update
   needs: []
-  dependencies: []
-
 backend-services/update-lint:
   extends: .lint
   variables:
