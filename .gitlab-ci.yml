@@ -9,7 +9,7 @@ stages:
 
 generate-pipeline:
   stage: generate
-  script: ./scripts/generate_gitlab_ci
+  script: ./scripts/generate_gitlab_ci.py
   artifacts:
     paths:
       - generated.gitlab-ci.yml
