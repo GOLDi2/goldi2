@@ -24,19 +24,22 @@ jobs=[]
 
 def checkPathChange(path: str):
     """ Check if there are any file changes in the last git commit for the given path. """
-    realpath=subprocess.run(["realpath", path], capture_output=True).stdout.decode("utf-8").strip()
-    crosslabPath=subprocess.run(["realpath", "crosslab"], capture_output=True).stdout.decode("utf-8").strip()
+    try:
+        realpath=subprocess.run(["realpath", path], capture_output=True).stdout.decode("utf-8").strip()
+        crosslabPath=subprocess.run(["realpath", "crosslab"], capture_output=True).stdout.decode("utf-8").strip()
 
-    if realpath.startswith(crosslabPath):
-        last_submodule_commit=subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
-        this_submodule_commit=subprocess.run(["git", "ls-tree", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
-        result=subprocess.run(["git", "diff", "--quiet", last_submodule_commit, this_submodule_commit, "--", realpath], capture_output=True, cwd=crosslabPath).returncode != 0
-        print("Checking submodule changes for "+path+" ("+last_submodule_commit+" to "+this_submodule_commit+") -> "+str(result) )
-        return result
-    else:
-        result=subprocess.run(["git", "diff", "--quiet", last_commit, this_commit, "--", realpath], capture_output=True).returncode != 0
-        print("Checking changes for "+path+" ("+last_commit+" to "+this_commit+") -> "+str(result))
-        return result
+        if realpath.startswith(crosslabPath):
+            last_submodule_commit=subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
+            this_submodule_commit=subprocess.run(["git", "ls-tree", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
+            result=subprocess.run(["git", "diff", "--quiet", last_submodule_commit, this_submodule_commit, "--", realpath], capture_output=True, cwd=crosslabPath).returncode != 0
+            print("Checking submodule changes for "+path+" ("+last_submodule_commit+" to "+this_submodule_commit+") -> "+str(result) )
+            return result
+        else:
+            result=subprocess.run(["git", "diff", "--quiet", last_commit, this_commit, "--", realpath], capture_output=True).returncode != 0
+            print("Checking changes for "+path+" ("+last_commit+" to "+this_commit+") -> "+str(result))
+            return result
+    except:
+        return True
 
 for line in lines:
     if line.startswith(">"):
