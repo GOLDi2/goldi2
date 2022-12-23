@@ -1,2 +1,3 @@
 **/badge_*.svg
 generated.gitlab-ci.yml
+**/coverage.txt

@@ -61,6 +61,10 @@ default:
     - wget https://img.shields.io/badge/tests-passing-success?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_success.svg"
     - wget https://img.shields.io/badge/tests-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/test.sh
+    - >
+      if [ -f coverage.txt ]; then
+        wget https://img.shields.io/badge/coverage-$(cat coverage.txt)-informational?style=flat-square -O "badge_${PROJECT_DIR//\//_}-coverage.svg"
+      fi
 
 ################################################################################
 # Hardware #####################################################################
