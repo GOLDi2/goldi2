@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR=$(dirname "$0")
+
 JOB_STATUS="failed"
 if [ "$1" = "success" ]; then
     JOB_STATUS="success"
 fi
 
-badges=$(find -L . -path '*/badge_*.svg' -o \( -name 'build' -o -name 'node_modules' -o -path './crosslab' -o -path './badges' \) -prune -false)
+badges=$($SCRIPT_DIR/.find-files.sh '*/badge_*.svg')
 # remove tailing _success.svg, _failed.svg or .svg
 badges=$(echo "$badges" | sed -e 's/_success.svg$//' -e 's/_failed.svg$//' -e 's/.svg$//')
 

@@ -1,7 +1,9 @@
 #!/bin/bash
 
+SCRIPT_DIR=$(dirname "$0")
+
 #config_paths=$(git ls-files --recurse-submodules | grep .vscode/settings.json)
-config_paths=$(find -L . -path '*.vscode/settings.json' -o \( -name 'build' -o -name 'node_modules' -o -path './crosslab' \) -prune -false)
+config_paths=$($SCRIPT_DIR/.find-files.sh '*.vscode/settings.json')
 NL=$'\n'
 
 for config_path in $config_paths; do

@@ -12,8 +12,7 @@ default:
   before_script:
     - >
       for JOB in $DEPENDENCIES; do
-        (wget --header "JOB-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=$JOB" && unzip -o artifact.tmp) || echo "Skip Artifact Download for $JOB"
-        rm -f artifact.tmp
+        ./scripts/download_artifacts.sh -b $CI_COMMIT_BRANCH -j $JOB
       done
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
@@ -33,9 +32,7 @@ default:
     - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-  artifacts:
-    paths:
-      - $PROJECT_DIR/dist
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_artifacts.sh -b $CI_COMMIT_BRANCH -j $CI_JOB_NAME -f $PROJECT_DIR/dist
 
 .build-spec:
   stage: build
