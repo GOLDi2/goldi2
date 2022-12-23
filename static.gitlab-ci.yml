@@ -12,7 +12,7 @@ default:
   before_script:
     - >
       for JOB in $DEPENDENCIES; do
-        wget -s --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=&JOB"
+        wget --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=&JOB"
         unzip artifact.tmp;
         rm artifact.tmp
       done
