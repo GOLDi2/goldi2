@@ -10,9 +10,7 @@ stages:
 
 default:
   before_script:
-    - >
-      echo "Add safe.directory=$CI_PROJECT_DIR for https://gitlab.com/gitlab-org/gitlab/-/issues/368133"
-      git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - git config --global --add safe.directory '*'
     - >
       for JOB in $DEPENDENCIES; do
         ./scripts/download_artifacts.sh -b $CI_COMMIT_BRANCH -j $JOB
