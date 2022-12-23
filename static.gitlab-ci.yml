@@ -12,7 +12,9 @@ default:
   before_script:
     - >
       for JOB in $DEPENDENCIES; do
-        curl -s --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=&JOB" > unzip -;
+        wget -s --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=&JOB"
+        unzip artifact.tmp;
+        rm artifact.tmp
       done
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
