@@ -61,5 +61,5 @@ RPATH=${REPOSITORY/*:/}
 for file in $files; do
     echo "Uploading $file"
     ssh -o StrictHostKeyChecking=no $SERVER "sudo install -d -m 0755 $RPATH/$BRANCH/$JOB/$file"
-    rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --info=progress2 --chmod=755 $file/ $REPOSITORY/$BRANCH/$JOB/$file/
+    rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -a --info=progress2 $file/ $REPOSITORY/$BRANCH/$JOB/$file/
 done

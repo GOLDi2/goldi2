@@ -11,11 +11,11 @@ stages:
 default:
   before_script:
     - git config --global --add safe.directory '*'
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - >
       for JOB in $DEPENDENCIES; do
         ./scripts/download_artifacts.sh -b $CI_COMMIT_BRANCH -j $JOB
       done
-    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
   after_script:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
