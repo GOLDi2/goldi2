@@ -13,7 +13,7 @@ default:
     - >
       for JOB in $DEPENDENCIES; do
         wget --header "JOB-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=$JOB"
-        unzip artifact.tmp;
+        unzip -o artifact.tmp;
         rm artifact.tmp
       done
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
