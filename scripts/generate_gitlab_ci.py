@@ -28,12 +28,8 @@ def checkPathChange(path: str):
     crosslabPath=subprocess.run(["realpath", "crosslab"], capture_output=True).stdout.decode("utf-8").strip()
 
     if realpath.startswith(crosslabPath):
-        print(" ".join(["git", "ls-tree", last_commit, crosslabPath]))
-        print(subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True))
-        print(" ".join(["git", "ls-tree", this_commit, crosslabPath]))
         last_submodule_commit=subprocess.run(["git", "ls-tree", last_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
         this_submodule_commit=subprocess.run(["git", "ls-tree", this_commit, crosslabPath], capture_output=True).stdout.decode("utf-8").strip().replace("\t", " ").split(" ")[2]
-        print(last_commit, this_commit, last_submodule_commit, this_submodule_commit)
         result=subprocess.run(["git", "diff", "--quiet", last_submodule_commit, this_submodule_commit, "--", realpath], capture_output=True, cwd=crosslabPath).returncode != 0
         print("Checking submodule changes for "+path+" ("+last_submodule_commit+" to "+this_submodule_commit+") -> "+str(result) )
         return result
@@ -71,8 +67,8 @@ def formatJob(job, dependencies, changed):
             if DYNAMIC and len([jobs for jobs in jobs if jobs[0]==dependency and jobs[2]])==0:
                 continue
             dependencies_formatted+=f"""    - job: {dependency.replace(" ","-")}
-      optional: true
-      artifacts: true
+      optional: false
+      artifacts: false
 """
     if DYNAMIC and not changed:
         return ""
@@ -80,10 +76,12 @@ def formatJob(job, dependencies, changed):
   extends: .{job.split(" ")[1]}
   variables:
     PROJECT_DIR: {job.split(" ")[0]}
+    DEPENDENCIES: "{" ".join([d.replace(" ","-") for d in dependencies])}"
   needs:{dependencies_formatted}
 """
 
-jobs=[[job[0], job[1], job[2] or hasChangedDependencies(job)] for job in jobs]
+if DYNAMIC:
+    jobs=[[job[0], job[1], job[2] or hasChangedDependencies(job)] for job in jobs]
 
 with (open("generated.gitlab-ci.yml", "w")) as f:
     with(open("static.gitlab-ci.yml", "r")) as f2:
