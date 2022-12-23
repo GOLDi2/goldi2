@@ -12,14 +12,14 @@ default:
   before_script:
     - >
       for JOB in $DEPENDENCIES; do
-        wget --header "JOB-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=$JOB"
-        unzip -o artifact.tmp;
-        rm artifact.tmp
+        (wget --header "JOB-TOKEN: ${CI_JOB_TOKEN}" -O artifact.tmp "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/jobs/artifacts/$CI_COMMIT_BRANCH/download?job=$JOB" && unzip -o artifact.tmp) || echo "Skip Artifact Download for $JOB"
+        rm -f artifact.tmp
       done
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$PROJECT_DIR"
     - echo "${PROJECT_DIR}/package-lock.json"
   after_script:
+    - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
   cache:
     key: "$CI_COMMIT_REF_SLUG-$PROJECT_DIR"
