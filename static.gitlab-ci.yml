@@ -10,7 +10,7 @@ stages:
 
 default:
   before_script:
-    - git config --global --add safe.directory '*'
+    - sudo chown -R $USER:$USER .
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - >
       for JOB in $DEPENDENCIES; do
