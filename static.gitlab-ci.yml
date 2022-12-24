@@ -10,11 +10,7 @@ stages:
 
 default:
   before_script:
-    - ls -al .
-    - echo $USER
-    - whoami
     - sudo chown -R $(whoami) .
-    - ls -al .
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - >
       for JOB in $DEPENDENCIES; do
@@ -23,7 +19,7 @@ default:
     - cd "$PROJECT_DIR"
   after_script:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh $CI_JOB_STATUS
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh -s $CI_JOB_STATUS -b $CI_COMMIT_BRANCH
   cache:
     key: "$CI_COMMIT_REF_SLUG-$PROJECT_DIR"
     paths:

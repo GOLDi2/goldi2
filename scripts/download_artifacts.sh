@@ -48,4 +48,4 @@ if [ -z "$JOB" ]; then
     exit -1
 fi
 
-rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -aK --info=progress2 --chmod=755 $REPOSITORY/$BRANCH/$JOB/ .
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -aK --info=progress2 $REPOSITORY/$BRANCH/$JOB/ .
