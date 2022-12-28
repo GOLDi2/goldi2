@@ -3,6 +3,10 @@ variables:
 
 image: crosslab/development-container
 
+workflow:
+  rules:
+    - when: always
+
 stages:
   - build
   - lint
