@@ -12,7 +12,7 @@ generate-pipeline:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
       variables:
-        - $GENERATE_OPTIONS = "--static"
+        GENERATE_OPTIONS: "--static"
     - if: $CI_PIPELINE_SOURCE == "push"
   script:
       - git config --global --add safe.directory '*'
