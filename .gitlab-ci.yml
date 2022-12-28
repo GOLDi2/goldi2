@@ -3,6 +3,11 @@ variables:
 
 image: crosslab/development-container
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == "push"
+
 stages:
   - generate
   - run
@@ -23,9 +28,6 @@ generate-pipeline:
 
 run-pipeline:
   stage: run
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_PIPELINE_SOURCE == "push"
   trigger:
     include:
       - artifact: generated.gitlab-ci.yml

@@ -3,6 +3,11 @@ variables:
 
 image: crosslab/development-container
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == "push"
+
 stages:
   - build
   - lint
