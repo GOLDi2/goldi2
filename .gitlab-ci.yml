@@ -32,3 +32,4 @@ run-pipeline:
     include:
       - artifact: generated.gitlab-ci.yml
         job: generate-pipeline
+    strategy: depend
