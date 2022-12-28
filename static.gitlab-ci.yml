@@ -18,12 +18,12 @@ default:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - >
       for JOB in $DEPENDENCIES; do
-        ./scripts/download_artifacts.sh -b $CI_COMMIT_BRANCH -j $JOB
+        ./scripts/download_artifacts.sh -b ${CI_MERGE_REQUEST_REF_PATH}${CI_COMMIT_BRANCH} -j $JOB
       done
     - cd "$PROJECT_DIR"
   after_script:
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh -s $CI_JOB_STATUS -b $CI_COMMIT_BRANCH
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_badges.sh -s $CI_JOB_STATUS -b ${CI_MERGE_REQUEST_REF_PATH}${CI_COMMIT_BRANCH}
   cache:
     key: "$CI_COMMIT_REF_SLUG-$PROJECT_DIR"
     paths:
@@ -37,7 +37,7 @@ default:
     - wget https://img.shields.io/badge/build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/build.sh
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_artifacts.sh -b $CI_COMMIT_BRANCH -j $CI_JOB_NAME -f $PROJECT_DIR/dist
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_artifacts.sh -b ${CI_MERGE_REQUEST_REF_PATH}${CI_COMMIT_BRANCH} -j $CI_JOB_NAME -f $PROJECT_DIR/dist
 
 .build-spec:
   stage: build
@@ -46,7 +46,7 @@ default:
     - wget https://img.shields.io/badge/spec%20build-failed-critical?style=flat-square -O "badge_${CI_JOB_NAME//\//_}_failed.svg"
     - ./scripts/build.sh -s
     - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/check_no_changes.sh
-    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_artifacts.sh -b $CI_COMMIT_BRANCH -j $CI_JOB_NAME -f $PROJECT_DIR/dist
+    - cd "$CI_BUILDS_DIR" && cd "$CI_PROJECT_DIR" && ./scripts/upload_artifacts.sh -b ${CI_MERGE_REQUEST_REF_PATH}${CI_COMMIT_BRANCH} -j $CI_JOB_NAME -f $PROJECT_DIR/dist
     
 .lint:
   stage: lint
