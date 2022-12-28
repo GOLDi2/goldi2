@@ -9,6 +9,11 @@ stages:
 
 generate-pipeline:
   stage: generate
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      variables:
+        - $GENERATE_OPTIONS = "--static"
+    - if: $CI_PIPELINE_SOURCE == "push"
   script:
       - git config --global --add safe.directory '*'
       - ./scripts/generate_gitlab_ci.py --last-commit=${CI_COMMIT_BEFORE_SHA} --this-commit=${CI_COMMIT_SHA} $GENERATE_OPTIONS
