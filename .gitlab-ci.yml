@@ -7,6 +7,9 @@ workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "webide"
 
 stages:
   - generate
@@ -16,6 +19,12 @@ generate-pipeline:
   stage: generate
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      variables:
+        GENERATE_OPTIONS: "--static"
+    - if: $CI_PIPELINE_SOURCE == "web"
+      variables:
+        GENERATE_OPTIONS: "--static"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
       variables:
         GENERATE_OPTIONS: "--static"
     - if: $CI_PIPELINE_SOURCE == "push"
