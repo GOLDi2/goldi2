@@ -1,6 +1,0 @@
-{
-  "name": "Node.js & TypeScript",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:16-bullseye",
-  "workspaceMount": "source=/home/jona3814/workspace/goldi2,target=/workspace,type=bind,consistency=cached",
-  "workspaceFolder": "/workspace/frontend-services/website"
-}
