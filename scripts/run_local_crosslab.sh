@@ -11,8 +11,11 @@ export BASE_URL="http://localhost"
 
 CSI='\x1b['
 
-(cd backend-services/auth && PORT=3000 npm run start 2>&1 | sed 's/^/Auth:'"${CSI}19G"'| /') &
-#(cd backend-services/device && PORT=3001 npm run start 2>&1 | sed 's/^/Device:'"${CSI}19G"'| /') &
+(cd backend-services/auth && \
+   PORT=3000 \
+   ALLOWLIST=localhost:authservice,localhost:deviceservice,localhost:experimentservice,localhost:federationservice,localhost:updateservice \
+   npm run start 2>&1 | sed 's/^/Auth:'"${CSI}19G"'| /') &
+(cd backend-services/device && PORT=3001 npm run start 2>&1 | sed 's/^/Device:'"${CSI}19G"'| /') &
 (cd backend-services/experiment && PORT=3002 npm run start 2>&1 | sed 's/^/Experiment:'"${CSI}19G"'| /') &
 (cd backend-services/federation && PORT=3003 npm run start 2>&1 | sed 's/^/Federation:'"${CSI}19G"'| /') &
 

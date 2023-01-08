@@ -20,7 +20,7 @@ export class APIClient extends originalClient {
           await self._login();
           const ret = await original_function(...args);
           if (k === 'getDevice') {
-            if (ret.url === 'https://api.goldi-labs.de/devices/40f25599-b62c-4580-82dc-3889c641bf77') {
+            if (ret.name === 'Test') {
               ret.services = [
                 {serviceType: 'http://api.goldi-labs.de/serviceTypes/webcam', serviceId: 'webcam', serviceDirection: 'out'},
                 {
@@ -51,7 +51,7 @@ export class APIClient extends originalClient {
                 },
               ];
             }
-            if (ret.url === 'https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e') {
+            if (ret.name === 'ECP') {
               ret.services = [
                 {serviceType: 'http://api.goldi-labs.de/serviceTypes/webcam', serviceId: 'webcam', serviceDirection: 'in'},
                 {serviceType: 'http://api.goldi-labs.de/serviceTypes/file', serviceId: 'file', serviceDirection: 'out'},
@@ -71,7 +71,7 @@ export class APIClient extends originalClient {
               ];
             }
           }
-          if (ret.url === 'https://api.goldi-labs.de/devices/c1359733-ccbd-46e2-9e99-6d9b1e12fe7b') {
+          if (ret.name === 'Microcontroller') {
             ret.services = [
               {serviceType: 'http://api.goldi-labs.de/serviceTypes/file', serviceId: 'file', serviceDirection: 'in'},
               {
@@ -169,6 +169,24 @@ export class APIClient extends originalClient {
                         'PC5',
                         'PC6',
                         'PC7',
+                      ],
+                    },
+                  },
+                ],
+              },
+            ];
+          }
+          if (ret.name === 'IO-Board') {
+            ret.services = [
+              {
+                serviceType: 'http://api.goldi-labs.de/serviceTypes/electrical',
+                serviceId: 'pins',
+                serviceDirection: 'inout',
+                interfaces: [
+                  {
+                    interfaceType: 'gpio',
+                    availableSignals: {
+                      gpio: [
                       ],
                     },
                   },

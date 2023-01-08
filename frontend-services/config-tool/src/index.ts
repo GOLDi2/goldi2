@@ -1,5 +1,4 @@
 import {APIClient} from './client';
-import {DeviceOverview} from '@cross-lab-project/api-client/dist/generated/device/types';
 import {LitElement, html, adoptStyles, unsafeCSS, PropertyValueMap} from 'lit';
 import {customElement, query, state} from 'lit/decorators.js';
 
@@ -13,14 +12,12 @@ const stylesheet = unsafeCSS(style);
 import './plugablejs/viewport';
 import { ConfigPane } from './esp-config-pane';
 import { mc, three_axes_portal, three_axes_portal_io, three_axes_portal_mc } from './predefined';
-import { Experiment } from '@cross-lab-project/api-client/dist/generated/experiment/types';
-
-const API_URL = 'https://api.goldi-labs.de';
+import { DeviceServiceTypes, ExperimentServiceTypes } from '@cross-lab-project/api-client';
 
 @customElement('esp-app')
 export class App extends LitElement {
   @state()
-  devices: DeviceOverview[] = [];
+  devices: DeviceServiceTypes.DeviceOverview[] = [];
 
   private client = new APIClient();
 
@@ -28,7 +25,7 @@ export class App extends LitElement {
     super.connectedCallback();
     adoptStyles(this.shadowRoot, [stylesheet]);
     //this.devices = [{name: "test", id: "test"}];
-    this.devices = await (this.client as any).getDevices();
+    this.devices = await this.client.listDevices();
   }
 
   @query('esp-config-pane')
@@ -38,20 +35,22 @@ export class App extends LitElement {
     const experiment={...this.configPane.experimentConfiguration}
     experiment.status="running"
     experiment.devices=experiment.roles.map(role=>({device: role.template_device as string, role: role.name}))
+    console.log(experiment)
+    return
     const ecp = window.open(`/ecp/`, '_blank', 'popup');
     ecp.addEventListener('message', (e) => {
       if(e.data==="ecp-loaded"){
         ecp.postMessage({token: localStorage.getItem('token')}, "*")
       }
       if(e.data==="ecp-authorized"){
-        this.client.createExperiment(API_URL, experiment)
+        this.client.createExperiment(experiment)
       }
     });
     //this.client.createExperiment(API_URL, experiment)
   }
 
   @state()
-  exp: Experiment = undefined
+  exp: ExperimentServiceTypes.Experiment = undefined
 
   render() {
     return html`

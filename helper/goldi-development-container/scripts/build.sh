@@ -32,11 +32,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Download script libraries
-mkdir -p container-scripts
-wget https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/node-debian.sh -O container-scripts/node-debian.sh
-wget https://raw.githubusercontent.com/microsoft/vscode-dev-containers/main/script-library/common-debian.sh -O container-scripts/common-debian.sh
-
 # load the crosslab development container
 docker load < ../crosslab-development-container/dist/crosslab-devcontainer.tar
 
