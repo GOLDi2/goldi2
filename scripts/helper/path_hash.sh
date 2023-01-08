@@ -20,4 +20,18 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-fd -L -H -tf . $PATHS | sort | git hash-object --stdin-paths | git hash-object --stdin
+for path in $PATHS; do
+  #check if path is a file
+  if [ -f "$path" ]; then
+    files="$path"
+  else
+    files="$(fd -L -H -tf . $path)"
+  fi
+  if [ -z "$FILES" ]; then
+    FILES="$files"
+  else
+    FILES="$FILES"$'\n'"$files"
+  fi
+done
+
+sort <<< "$FILES"| git hash-object --stdin-paths | git hash-object --stdin

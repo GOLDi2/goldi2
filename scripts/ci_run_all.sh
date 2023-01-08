@@ -79,18 +79,41 @@ declare -A status
 declare -A files
 declare -A root
 declare -A script
+declare -A script_args
+declare -a job_names
 
-jobs=$(cat .jobs.yml | yq -r '. | to_entries | .[] | .key as $k | "\($k):\(.value[].script)"')
-for job in $jobs; do
-  dependencies[$job]=$(cat .jobs.yml | yq -r '."'${job%:*}'"[] | select(.script == "'${job#*:}'").dependencies[]?')
-  status[$job]="created"
-  files[$job]=${job%:*}
-  root[$job]=${job%:*}
-  script[$job]=${job#*:}
+echo -en "Parsing .jobs.yml..."
+
+raw_jobs=$(cat .jobs.yml | yq -r '. | to_entries | .[] | .key as $k | .value | map({path: $k}+.) | "\(.[])"')
+
+oldIFS="$IFS"
+IFS=$'\n'
+for raw_job in $raw_jobs; do
+  job_name=$(echo $raw_job | jq -r '.path + ":" + .script | split(" ")[0]')
+  job_names+=($job_name)
+  dependencies[$job_name]=$(echo $raw_job | jq -r '.dependencies[]?' | sed 's/^null$//g')
+  status[$job_name]="created"
+
+  path=$(echo $raw_job | jq -r '.path')
+  paths=$(echo $raw_job | jq -r '.paths[]?')
+  if [[ "$paths" != "" ]]; then
+    files[$job_name]=$(echo $paths | sed "s#\.\/#$path\/#g")
+  else
+    files[$job_name]=$(echo $raw_job | jq -r '"\(.path)"')
+  fi
+
+  root[$job_name]=$(echo $raw_job | jq -r '"\(.path)"')
+  script[$job_name]=$(echo $raw_job | jq -r '"\(.script | split(" ")[0])"')
+  script_args[$job_name]=$(echo $raw_job | jq -r '"\(.script | split(" ")[1:] | join(" "))"')
 done
+IFS=$oldIFS
+
+echo -e "${CSI}77GDone"
 
 while true; do
-  for job in $jobs; do
+  for job in "${job_names[@]}"; do
+
+    # skip if script name is not in SCRIPT
     if [ ! -z "$SCRIPT" ]; then
       is_in_script=false
       for s in $SCRIPT; do
@@ -104,35 +127,52 @@ while true; do
         continue
       fi
     fi
+
     if [ ${status[$job]} = "created" ]; then
       runable=true
-      force_rebuild=false
       for dependency in ${dependencies[$job]}; do
-        if [ $dependency = "null" ]; then
+        if [[ $dependency == "null" ]]; then
           continue
         fi
+
+        if [ -z ${status[$dependency]} ]; then
+          echo "Error: dependency $dependency of $job not found"
+          exit 1
+        fi
+
         if [ ${status[$dependency]} = "failed" -a ${status[$dependency]} = "ignored" ]; then
           status[$job]="ignored"
           runable=false
         elif [ ${status[$dependency]} = "created" ]; then
           runable=false
-        elif [ ${status[$dependency]} = "success" ]; then
-          force_rebuild=true
+        #elif [ ${status[$dependency]} = "success" ]; then
         fi
       done
       if [ $runable = true ]; then
         echo -en "${BLUE}❯ Running $job"
-        if [ $INCREMENTAL = true ] && [ $force_rebuild = false ]; then
-          if ! $SCRIPT_DIR/helper/check_for_changes_between_commits.sh -f ${files[$job]} -c $REFERENCE; then
-            status[$job]="skipped"
-            echo -e "${CSI}74G${GREEN}skipped${NC}"
+
+        job_input_paths="-p ${files[$job]}"
+        for dependency in ${dependencies[$job]}; do
+          if [ $dependency = "null" ]; then
             continue
           fi
+          job_input_paths="$job_input_paths -p ${root[$dependency]}/dist/${script[$dependency]}.hash"
+        done
+        job_input_hash=$($SCRIPT_DIR/helper/path_hash.sh $job_input_paths)
+
+        if [ "$(cat ${root[$job]}/dist/${script[$job]}.hash 2>/dev/null)" = "$job_input_hash" ]; then
+          status[$job]="skipped"
+          if [ "$(cat ${root[$job]}/dist/${script[$job]}.status 2>/dev/null)" = "success" ]; then
+            echo -e "${CSI}72G${GREEN}✓ skipped${NC}"
+          else
+            echo -e "${CSI}72G${RED}✗ skipped${NC}"
+          fi
+          continue 2
         fi
 
         mkdir -p ${root[$job]}"/dist"
         set +e
-        (cd ${root[$job]} && ./scripts/${script[$job]}.sh > "dist/"${script[$job]}".log" 2>&1); exit_code=$?
+        (cd ${root[$job]} && ./scripts/${script[$job]}.sh ${script_args[$job]} > "dist/"${script[$job]}".log" 2>&1); exit_code=$?
         set -e
         if [ $exit_code -eq 0 ]; then
           status[$job]="success"
@@ -141,6 +181,9 @@ while true; do
           status[$job]="failed"
           echo -e "${CSI}80G${RED}✗${NC}"
         fi
+
+        echo "${status[$job]}" > "${root[$job]}/dist/${script[$job]}.status"
+        echo "$job_input_hash" > "${root[$job]}/dist/${script[$job]}.hash"
         continue 2
       fi
     fi
