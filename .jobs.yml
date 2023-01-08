@@ -36,6 +36,8 @@ backend-services/common:
 
 backend-services/auth:
   - script: build-spec
+    paths:
+      - ./api
   - script: lint
     dependencies:
       - backend-services/auth:build-spec
@@ -45,6 +47,7 @@ backend-services/auth:
       - backend-services/common:build
       - helper/crosslab-typescript-addon:build
       - helper/openapi-codegeneration:build
+      - clients/api/js:build
 
 backend-services/booking:
   - script: build-spec
@@ -54,6 +57,8 @@ backend-services/booking:
 
 backend-services/device:
   - script: build-spec
+    paths:
+      - ./api
   - script: lint
     dependencies:
       - backend-services/device:build-spec
@@ -63,9 +68,12 @@ backend-services/device:
       - backend-services/common:build
       - helper/crosslab-typescript-addon:build
       - helper/openapi-codegeneration:build
+      - clients/api/js:build
 
 backend-services/experiment:
   - script: build-spec
+    paths:
+      - ./api
   - script: lint
     dependencies:
       - backend-services/experiment:build-spec
@@ -75,9 +83,12 @@ backend-services/experiment:
       - backend-services/common:build
       - helper/crosslab-typescript-addon:build
       - helper/openapi-codegeneration:build
+      - clients/api/js:build
 
 backend-services/federation:
   - script: build-spec
+    paths:
+      - ./api
   - script: lint
     dependencies:
       - backend-services/federation:build-spec
@@ -87,9 +98,12 @@ backend-services/federation:
       - backend-services/common:build
       - helper/crosslab-typescript-addon:build
       - helper/openapi-codegeneration:build
+      - clients/api/js:build
 
 backend-services/update:
   - script: build-spec
+    paths:
+      - ./api
   - script: lint
     dependencies:
       - backend-services/update:build-spec
@@ -99,6 +113,7 @@ backend-services/update:
       - backend-services/common:build
       - helper/crosslab-typescript-addon:build
       - helper/openapi-codegeneration:build
+      - clients/api/js:build
 
 
 backend-services/openapi:
