@@ -1,3 +1,6 @@
+#!/bin/bash
+SCRIPT_DIR=$(dirname "$0")
+
 if [[ `git status --porcelain` ]]; then
     echo "There are changes in the repository:"
     git status --porcelain

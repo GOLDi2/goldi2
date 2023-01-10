@@ -1,12 +1,50 @@
 #!/bin/bash
 set -e
 
-JOB_STATUS="failed"
-if [ "$1" = "success" ]; then
-    JOB_STATUS="success"
-fi
+SCRIPT_DIR=$(dirname "$0")
 
-badges=$(find -L . -path '*/badge_*.svg' -o \( -name 'build' -o -name 'node_modules' -o -path './crosslab' -o -path './badges' \) -prune -false)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+JOB_STATUS="failed"
+REPOSITORY=admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/badges
+badges=$($SCRIPT_DIR/.find-files.sh '*/badge_*.svg')
+CLEAN=false
+
+# Read the commands
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -s|--status)
+      if [ "$2" = "success" ]; then
+        JOB_STATUS="success"
+      fi
+      shift # past argument
+      shift # past value
+      ;;
+
+    -b|--branch)
+      BRANCH="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+    -f|--files)
+      badges="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+    -c|--clean)
+      CLEAN=true
+      shift # past argument
+      ;;
+
+    *) # unknown option
+      shift # past argument
+    ;;
+  esac
+done
+
 # remove tailing _success.svg, _failed.svg or .svg
 badges=$(echo "$badges" | sed -e 's/_success.svg$//' -e 's/_failed.svg$//' -e 's/.svg$//')
 
@@ -17,4 +55,4 @@ for badge in $badges; do
     cp "${badge}_${JOB_STATUS}.svg" "badges/${name}.svg" || cp "${badge}.svg" "badges/${name}.svg"
 done
 
-rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 -L badges/* admin@x56.theoinf.tu-ilmenau.de:/data/www/x56/badges/
+rsync -e "ssh -o StrictHostKeyChecking=no" --rsync-path 'sudo rsync' -avP --info=progress2 --chmod=755 -L badges/* $REPOSITORY/$BRANCH/

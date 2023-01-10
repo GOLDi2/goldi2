@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR=$(dirname "$0")
+
 # Default values
 CLEAN=false
 
@@ -19,7 +21,7 @@ while [[ $# -gt 0 ]]; do
     ;;
   esac
 done
-config_paths=$(find -L . -path '*/.devcontainer/devcontainer.json' -o \( -name 'build' -o -name 'node_modules' -o -path './crosslab' \) -prune -false)
+config_paths=$($SCRIPT_DIR/.find-files.sh '*/.devcontainer/devcontainer.json')
 
 _pwd=$PWD
 if [ "$CLEAN" = true ] ; then
