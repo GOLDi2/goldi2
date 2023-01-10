@@ -38,17 +38,17 @@ entity SP_CONVERTER is
 	);
 	port(
 		--General
-		clk				: in	std_logic;
-		rst				: in	std_logic;
+		clk				: in	std_logic;									--! System clock
+		rst				: in	std_logic;									--! Synchronous reset
 		--Serial interface
-		ce				: in	std_logic;
-		sclk			: in	std_logic;
-		mosi			: in	std_logic;
-		miso			: out	std_logic;
+		ce				: in	std_logic;									--! SPI - Chip enable signal
+		sclk			: in	std_logic;									--! SPI - Serial clock
+		mosi			: in	std_logic;									--! SPI - Master out, Slave in 
+		miso			: out	std_logic;									--! SPI - Mastter in, Slave out
 		--Parallel interface
-		word_valid		: out	std_logic;
-		dat_i			: in	std_logic_vector(WORD_LENGTH-1 downto 0);
-		dat_o			: out	std_logic_vector(WORD_LENGTH-1 downto 0)
+		word_valid		: out	std_logic;									--! Decoding of serial word valid
+		dat_i			: in	std_logic_vector(WORD_LENGTH-1 downto 0);	--! Parallel data to serial
+		dat_o			: out	std_logic_vector(WORD_LENGTH-1 downto 0)	--! Serial data to parallel
 	);
 end entity SP_CONVERTER;
 

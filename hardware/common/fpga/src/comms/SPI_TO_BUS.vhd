@@ -9,7 +9,8 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+-- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
+--					-> GOLDI_COMM_STANDARD.vhd
 --					-> SP_CONVERTER.vhd
 --					-> BUS_CONVERTER.vhd
 --
@@ -22,6 +23,10 @@
 --						the GOLDI_COMM_STANDARD package which sets a
 --						unified standard for all communication modules
 --
+-- Revision V0.01.03 - Modification to BUS convention
+-- Additional Comments: Addition of valid signal to data output and change to 
+--                      naming convention.
+--
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -
 -------------------------------------------------------------------------------
@@ -30,40 +35,43 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom communication library
+use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 
 
 
 
---! @brief SPI standard to internal BUS standard
+--! @brief SPI to internal BUS standard
 --! @details
---! Module acts as a slave SPI interface and transforms
---! manages the communication between the FPGA system and
---! the microcontroller
+--! Module acts as a SPI slave interface and a BUS master
+--! interface. The moduel manages the communication between 
+--! the FPGA system and the microcontroller based on the 
+--! configuration parameters set in the GOLDI_MODULE_CONFIG
+--! package (default: adr -> 7bit, dat -> 8 bit)
 --!
 --! ###Data format:
 --!	
 --! 
---! |Byte  			|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
---! |:--------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
---! |Byte 1	[in]	|we	  | ADDRESS[6:0]|||||||
---! |Byte 2	[inout]	| DATA[7:0] ||||||||
---! |Byte + [inout]	| DATA[7:0] -> ADDRESS+1||||||||
+--! |Byte  				|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
+--! |:------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+--! |Byte 1	[in]		|we	  | ADDRESS[6:0]|||||||
+--! |Byte 2	[in/out]	| DATA[7:0] ||||||||
+--! |Byte + [in/out]	| DATA[7:0] -> ADDRESS+1||||||||
 --!
 --! **Latency:2**
 entity SPI_TO_BUS is
 	port(
 		--General
-		clk			: in	std_logic;
-		rst			: in	std_logic;
+		clk				: in	std_logic;	--! System clock
+		rst				: in	std_logic;	--! Synchronous reset
 		--SPI interface
-		ce			: in	std_logic;
-		sclk		: in	std_logic;
-		mosi		: in	std_logic;
-		miso		: out	std_logic;
+		ce				: in	std_logic;	--! SPI - Chip enable
+		sclk			: in	std_logic;	--! SPI - Serial clock
+		mosi			: in	std_logic;	--! SPI - Master out; Slave in
+		miso			: out	std_logic;	--! SPI - Master in; Slave out
 		--BUS interface
-		sys_bus_i	: out	bus_in;
-		sys_bus_o	: in	bus_out
+		master_bus_o	: out	mbus_out;	--! BUS master interface output signals [we,adr,dat]
+		master_bus_i	: in	mbus_in		--! BUS master interface input signals [dat,val]
 	);
 end entity SPI_TO_BUS;
 
@@ -100,8 +108,8 @@ architecture RTL of SPI_TO_BUS is
 			config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
 			data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 			data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-			sys_bus_i		: out	bus_in;
-			sys_bus_o		: in	bus_out
+			master_bus_o	: out	mbus_out;
+			master_bus_i	: in	mbus_in
 		);
 	end component;
 	
@@ -127,13 +135,15 @@ begin
 	
 	
 	
-	CE_ROUTING : process(rst,ce,word_valid_mux)
+	CE_ROUTING : process(clk)
 	begin
-		if((rst = '1') or (ce /= '1')) then
-			converter_select <= '0';
-		elsif(word_valid_mux /= "00") then
-			converter_select <= '1';
-		else null;
+		if(rising_edge(clk)) then
+			if((rst = '1') or (ce /= '1')) then
+				converter_select <= '0';
+			elsif(word_valid_mux /= "00") then
+				converter_select <= '1';
+			else null;
+			end if;
 		end if;
 	end process;
 	
@@ -148,8 +158,8 @@ begin
 		config_word		=> config_word,
 		data_word_in	=> data_word_in,
 		data_word_out	=> data_word_out,
-		sys_bus_i		=> sys_bus_i,
-		sys_bus_o		=> sys_bus_o
+		master_bus_o	=> master_bus_o,
+		master_bus_i	=> master_bus_i
 	);
 	
 	

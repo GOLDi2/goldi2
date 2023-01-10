@@ -9,7 +9,8 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+-- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
+--					-> GOLDI_COMM_STANDARD.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
@@ -20,6 +21,10 @@
 --						the GOLDI_COMM_STANDARD package which sets a
 --						unified standard for all communication modules
 --
+-- Revision V0.01.03 - Modification to BUS convention
+-- Additional Comments: Addition of valid signal to data output and change to 
+--                      naming convention.
+--
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -
 -------------------------------------------------------------------------------
@@ -28,6 +33,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom communication library
+use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 
 
@@ -48,17 +54,17 @@ use work.GOLDI_COMM_STANDARD.all;
 entity BUS_CONVERTER is
 	port(
 		--General
-		clk				: in	std_logic;
-		rst				: in	std_logic;
-		ce				: in	std_logic;
+		clk				: in	std_logic;											--! System clock
+		rst				: in	std_logic;											--! Synchronous reset
+		ce				: in	std_logic;											--! Chip enable
 		--Parallel data
-		word_valid		: in	std_logic;
-		config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
-		data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-		data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+		word_valid		: in	std_logic;											--! Parallel data available 
+		config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);		--! Configuration word
+		data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);		--! Input data word
+		data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);		--! Output data word
 		--BUS
-		sys_bus_i		: out	bus_in;
-		sys_bus_o		: in	bus_out
+		master_bus_o	: out	mbus_out;											--! BUS master interface output signals [we,adr,dat]
+		master_bus_i	: in	mbus_in												--! BUS master interface input signals [dat,val]
 	);
 end entity BUS_CONVERTER;
 
@@ -84,11 +90,11 @@ architecture RTL of BUS_CONVERTER is
 begin
 
 	--Input routing
-	data_word_out <= sys_bus_o.dat;
+	data_word_out <= master_bus_i.dat;
 	--Output routing
-	sys_bus_i.we  <= write_enb_buff when(bus_write_valid = '1') else '0';
-	sys_bus_i.adr <= address_buff;
-	sys_bus_i.dat <= data_word_buff;
+	master_bus_o.we  <= write_enb_buff when(bus_write_valid = '1') else '0';
+	master_bus_o.adr <= address_buff;
+	master_bus_o.dat <= data_word_buff;
 	
 	
 	
