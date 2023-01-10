@@ -9,7 +9,9 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_DATA_TYPES.vhd
+-- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
+--					-> GOLDI_COMM_STANDARD.vhd
+--					-> GOLDI_IO_STANDARD.vhd
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
@@ -20,9 +22,10 @@
 -- Additional Comments: Change of code style to clean the design. Change
 --						to the Register tabel functionality.
 --
--- Revision V0.01.03 - Modification to BUS convention
+-- Revision V0.01.03 - Modification to BUS and IO standards
 -- Additional Comments: Addition of valid signal to data output and change to 
---                      naming convention.
+--                      naming convention. Change to register sizing and port
+--						data types.
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -  
@@ -40,12 +43,12 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Incremental encoder dsp module 
 --! @details
---! Incremental encoder processing unit for a 3 channel sensor.
+--! Incremental encoder processing unit for 3 or 2 channel sensor.
 --! The module reacts to the edges of the a channel providing an impulse
 --! counts per channel a edge using the b channel to determinate direction. 
 --! The counter value is stored in a signed 16 bit integer. The counter 
---! values are stored in internal registers and can be access through a 
---! custom parallel BUS stucture
+--! values are stored in internal registers (default 8 bits) and can be 
+--! access through a custom parallel BUS stucture
 --! 
 --! **Latency:3**
 --!
@@ -61,20 +64,20 @@ use work.GOLDI_IO_STANDARD.all;
 --! | +1		| VALUE [15:8] ||||||||
 entity INC_ENCODER is
 	generic(
-		ADDRESS		:	natural := 1;
-		INDEX_RST	:	boolean := false
+		ADDRESS		:	natural := 1;			--! Module base address
+		INDEX_RST	:	boolean := false		--! Reset mode [true -> 3 channels, false -> 2 channels]
 	);
 	port(
 		--General
-		clk			: in	std_logic;
-		rst			: in	std_logic;
+		clk			: in	std_logic;			--! System clock
+		rst			: in	std_logic;			--! Synchronous reset
 		--BUS slave interface
-		sys_bus_i	: in	sbus_in;
-		sys_bus_o	: out	sbus_out;
+		sys_bus_i	: in	sbus_in;			--! BUS input signals [we,adr,dat]
+		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,val]
 		--3 Channel encoder signals
-		channel_a	: in	io_i;
-		channel_b	: in	io_i;
-		channel_i	: in	io_i
+		channel_a	: in	io_i;				--! Channel_a input
+		channel_b	: in	io_i;				--! Channel_b input
+		channel_i	: in	io_i				--! Channel_i input
 	);
 end entity INC_ENCODER;
 
