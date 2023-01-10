@@ -57,6 +57,9 @@ package GOLDI_IO_STANDARD is
 		input	:	io_i;
 		output  :	io_o;
 	end record;
+	
+	constant gnd_io_i : io_i := (dat => '0');
+	constant gnd_io_o : io_o := (enb => '0', dat => '0');
 
 
 	--Array structures
@@ -105,8 +108,8 @@ package body GOLDI_IO_STANDARD is
 	function setInVector(sc : io_i_vector; tg : std_io_vector) return std_io_vector is
 		variable io_vector	:	std_io_vector(tg'range);
  	begin
-		assert(sc'range = tg'range) report "Unequal vector ranges" severity error;
-		for i in 0 to tg'range loop
+		assert(sc'length = tg'length) report "Unequal vector ranges" severity error;
+		for i in 0 to tg'length loop
 			io_vector(i).input  := sc(i);
 			io_vector(i).output := tg(i).output; 
 		end loop;
@@ -116,17 +119,17 @@ package body GOLDI_IO_STANDARD is
 
 
 	--!
-	function setInVector(sc : io_o_vector; tg : std_io_vector) return std_io_vector is
+	function setOutVector(sc : io_o_vector; tg : std_io_vector) return std_io_vector is
 		variable io_vector	:	std_io_vector(tg'range);
  	begin
-		assert(sc'range = tg'range) report "Unequal vector ranges" severity error;
-		for i in 0 to tg'range loop
+		assert(sc'length = tg'length) report "Unequal vector ranges" severity error;
+		for i in 0 to tg'length loop
 			io_vector(i).input  := tg(i).input;
 			io_vector(i).output := sc(i); 
 		end loop;
 
 		return io_vector;
-	end setInVector;
+	end setOutVector;
 
 	
 end package body GOLDI_IO_STANDARD;
