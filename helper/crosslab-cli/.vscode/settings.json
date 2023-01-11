@@ -1,12 +1,13 @@
 {
     "files.exclude": {
-        "build": true,
+        "node_modules": true,
         //begin generated
         
         //end generated
     },
     "files.watcherExclude": {
-        "build": true,
+        "app/**": true,
+        "node_modules": true,
         //begin generated
         
         //end generated

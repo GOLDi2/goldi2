@@ -1,9 +1,9 @@
 {
     "files.exclude": {
         //begin generated
-        "crosslab/.mypy_cache": true,
-        "crosslab/.tox": true,
-        "crosslab/venv": true,
+        "crosslab/**/*/.egg-info": true,
+        "crosslab/.mypy_cache/*": true,
+        "crosslab/.tox/*": true,
         "firmware/build": true,
         "firmware/meta-goldi-bsp": true,
         "firmware/meta-goldi-distro/recipes-core/.vscode": true,
@@ -19,9 +19,18 @@
     },
     "files.watcherExclude": {
         //begin generated
+        "crosslab/**/*/.egg-info": true,
         "crosslab/.mypy_cache": true,
         "crosslab/.tox": true,
-        "crosslab/venv": true,
+        "firmware/build": true,
+        "firmware/meta-goldi-bsp": true,
+        "firmware/meta-goldi-distro": true,
+        "firmware/meta-goldi": true,
+        "firmware/meta-openembedded": true,
+        "firmware/meta-raspberrypi": true,
+        "firmware/meta-rauc": true,
+        "firmware/poky": true,
+        "fpga/build": true,
         //end generated
     }
 }

@@ -1,4 +1,5 @@
 {
+    "python.defaultInterpreterPath": "venv/bin/python",
     "python.formatting.provider": "none",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
@@ -19,11 +20,15 @@
         "src/spi_driver.egg-info": true,
         "src/**/__pycache__": true,
         "tests/**/__pycache__": true,
+        ".mypy_cache/*": true,
+        ".tox/*": true,
         //begin generated
         
         //end generated
     },
     "files.watcherExclude": {
+        ".tox": true,
+        ".mypy_cache": true,
         //begin generated
         
         //end generated

@@ -1,14 +1,12 @@
 {
     "files.exclude": {
-        "build": true,
         //begin generated
-        
+        "recipes-core/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
-        "build": true,
         //begin generated
-        
+
         //end generated
     }
 }

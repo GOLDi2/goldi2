@@ -9,12 +9,13 @@
         "meta-rauc": true,
         "poky": true,
         //begin generated
-        
+        "meta-goldi-distro/recipes-core/.vscode": true,
+        "meta-goldi-distro/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-        
+
         //end generated
     }
 }
