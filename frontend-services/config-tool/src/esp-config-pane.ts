@@ -117,7 +117,7 @@ export class RoleBoxDummy extends LitElement implements Dragable {
 @customElement('role-box')
 export class RoleBox extends LitElement implements Dragable, Focusable {
   @property()
-  role: ExperimentServiceTypes.Role;
+  ServiceRole: ExperimentServiceTypes.Role;
 
   client: APIClient;
 
@@ -138,7 +138,7 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
 
   shouldUpdate(changedProperties: PropertyValueMap<this>) {
     if (changedProperties.has('role')) {
-      this.client.getDevice((this.role as any).template_device).then(device => {
+      this.client.getDevice((this.ServiceRole as any).template_device).then(device => {
         this.templateDevice = device;
       });
     }
@@ -155,11 +155,11 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
         ? ' outline'
         : ''} outline-2 outline-secondary"
       style="${positionStyle}">
-      <div class="font-bold p-5">${this.role.name.toUpperCase()}</div>
+      <div class="font-bold p-5">${this.ServiceRole.name.toUpperCase()}</div>
       <div class="flex flex-col gap-4">
         ${this.templateDevice
           ? (this.templateDevice.services as any).map(
-              (service: any) => html`<service-box .service=${service} .rolename=${this.role.name} />`,
+              (service: any) => html`<service-box .service=${service} .rolename=${this.ServiceRole.name} />`,
             )
           : html`Loading...`}
       </div>
@@ -167,7 +167,7 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
   }
 
   firstUpdated(): void {
-    const configPos = (this.role['x-esc-position'] as {x: number; y: number}) || {x: 0, y: 0};
+    const configPos = (this.ServiceRole['x-esc-position'] as {x: number; y: number}) || {x: 0, y: 0};
     this.position = new Coordinate(configPos.x, configPos.y);
     makeDragable(this);
     makeFocusable(this);
@@ -435,7 +435,7 @@ export class ConfigPane extends LitElement {
           @service-configuration-create=${this.createServiceConf}
           .renderConnection="${this.renderConnection}">
           ${this.experimentConfiguration.roles.map(
-            (role, idx) => html`<role-box .role="${role}" @role-updated="${(e: CustomEvent) => updateRole(idx, e.detail)}" />`,
+            (role, idx) => html`<role-box .ServiceRole="${role}" @role-updated="${(e: CustomEvent) => updateRole(idx, e.detail)}" />`,
           )}
         </plugable-viewport>
         <div class="bg-primary-100 w-80 h-full shadow-[inset_0rem_0.3rem_0.3rem_-0.3em_rgba(0,0,0,0.3)]">

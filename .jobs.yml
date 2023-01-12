@@ -129,6 +129,9 @@ backend-services/openapi:
     dependencies:
       - backend-services/openapi:build-spec
 
+backend-services/gateway:
+  - script: build
+
 
 ################################################################################
 # Clients ######################################################################

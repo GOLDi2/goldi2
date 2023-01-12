@@ -20,7 +20,7 @@ export class APIClient extends originalClient {
           await self._login();
           const ret = await original_function(...args);
           if (k === 'getDevice') {
-            if (ret.name === 'Test') {
+            if (ret.name === '3AxesPortal') {
               ret.services = [
                 {serviceType: 'http://api.goldi-labs.de/serviceTypes/webcam', serviceId: 'webcam', serviceDirection: 'out'},
                 {
