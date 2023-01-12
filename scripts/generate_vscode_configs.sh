@@ -34,12 +34,12 @@ for config_path in $config_paths; do
         if [ $subdir = $config_path ]; then continue; fi
         subdir_toplevel=$(dirname $(dirname $subdir))
         content=$(cat $subdir)
-        content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
+        content=$(python3 -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
         rel_path=${subdir_toplevel/"$toplevel/"/""}
-        files_exclude=$files_exclude$NL$(python -c "import re;"\
+        files_exclude=$files_exclude$NL$(python3 -c "import re;"\
 "m=re.search(r'\"files\.exclude\"[\s\S]*?{([\s\S]*?)}', \"\"\"$content\"\"\");"\
 "print('\n'.join([s.strip().replace('\"','\"$rel_path/',1) for s in m.group(1).split('\n')]) if m else '');")
-        files_watcherExclude=$files_watcherExclude$NL$(python -c "import re;"\
+        files_watcherExclude=$files_watcherExclude$NL$(python3 -c "import re;"\
 "m=re.search(r'\"files\.watcherExclude\"[\s\S]*?{([\s\S]*?)}', \"\"\"$content\"\"\");"\
 "print('\n'.join([s.strip().replace('\"','\"$rel_path/',1) for s in m.group(1).split('\n')]) if m else '');")
         if [ -f "$subdir_toplevel/.vscode/.hidden" ]; then
@@ -49,19 +49,20 @@ for config_path in $config_paths; do
     files_exclude=$(echo "$files_exclude" | sort | uniq -u | sed 's/^/        /')
     files_watcherExclude=$(echo "$files_watcherExclude" | sort | uniq -u | sed 's/^/        /')
     content=$(cat $config_path)
+    cp "$config_path" "$config_path.bak"
     # remove generated code
-    content=$(python -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
+    content=$(python3 -c "import re;print(re.sub(r'(\n.*\/\/begin generated[\s\S]*?\/\/end generated)', '', \"\"\"$content\"\"\"))")
 
     if [[ ! $content =~ "\"files.exclude\"" ]]; then
-        content=$(python -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.exclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
+        content=$(python3 -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.exclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
     fi
     if [[ ! $content =~ "\"files.watcherExclude\"" ]]; then
-        content=$(python -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.watcherExclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
+        content=$(python3 -c "import re;print(re.sub(r'(.*)(,?)(\\n})', '\\\\1,\\\\n    \"files.watcherExclude\": {\\n    }\\\\3', \"\"\"$content\"\"\",0,re.MULTILINE | re.DOTALL))")
     fi
     # if config_path is clients
 
-    content=$(python -c "import re;print(re.sub(r'(\"files\.exclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_exclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
-    content=$(python -c "import re;print(re.sub(r'(\"files\.watcherExclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_watcherExclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
-    content=$(python -c "import re;print(re.sub(r'{,', '{', \"\"\"$content\"\"\",0,re.MULTILINE))")
+    content=$(python3 -c "import re;print(re.sub(r'(\"files\.exclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_exclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
+    content=$(python3 -c "import re;print(re.sub(r'(\"files\.watcherExclude\": {[\s\S]*?)(,?)(\n.*})', \"\"\"\\\\1,\\\\n        //begin generated\\\\n$files_watcherExclude\\\\n        //end generated\\\\3\"\"\", \"\"\"$content\"\"\",0,re.MULTILINE))")
+    content=$(python3 -c "import re;print(re.sub(r'{,', '{', \"\"\"$content\"\"\",0,re.MULTILINE))")
     echo "$content" > $config_path
 done

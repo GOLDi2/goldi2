@@ -10,6 +10,7 @@ JOB=""
 files=$($SCRIPT_DIR/.find-files.sh '*/dist')
 CLEAN=false
 INCREMENTAL=false
+RUN_ALL=true
 
 # Read the commands
 while [[ $# -gt 0 ]]; do
@@ -160,14 +161,16 @@ while true; do
         done
         job_input_hash=$($SCRIPT_DIR/helper/path_hash.sh $job_input_paths)
 
-        if [ "$(cat ${root[$job]}/dist/${script[$job]}.hash 2>/dev/null)" = "$job_input_hash" ]; then
-          status[$job]="skipped"
-          if [ "$(cat ${root[$job]}/dist/${script[$job]}.status 2>/dev/null)" = "success" ]; then
-            echo -e "${CSI}72G${GREEN}✓ skipped${NC}"
-          else
-            echo -e "${CSI}72G${RED}✗ skipped${NC}"
+        if [ $RUN_ALL = false ]; then
+          if [ "$(cat ${root[$job]}/dist/${script[$job]}.hash 2>/dev/null)" = "$job_input_hash" ]; then
+            status[$job]="skipped"
+            if [ "$(cat ${root[$job]}/dist/${script[$job]}.status 2>/dev/null)" = "success" ]; then
+              echo -e "${CSI}72G${GREEN}✓ skipped${NC}"
+            else
+              echo -e "${CSI}72G${RED}✗ skipped${NC}"
+            fi
+            continue 2
           fi
-          continue 2
         fi
 
         mkdir -p ${root[$job]}"/dist"

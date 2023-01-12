@@ -1,3 +1,4 @@
+from typing import Optional
 from pyee.asyncio import AsyncIOEventEmitter
 
 from spi_driver.spi_registers import SpiRegisters
@@ -27,7 +28,7 @@ class GPIO(AsyncIOEventEmitter):
                     self._old_values[index] = bool(value & (1 << j))
                     self.emit("change", index, self._old_values[index])
 
-    def __setitem__(self, key: int, value: bool | None):
+    def __setitem__(self, key: int, value: Optional[bool]):
         if key < 0 or key >= self._gpio_cnt:
             raise IndexError("GPIO index out of range")
         address = self._address + key // 4

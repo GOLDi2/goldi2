@@ -1,9 +1,11 @@
 {
+    "python.defaultInterpreterPath": "venv/bin/python",
     "python.analysis.typeCheckingMode": "basic",
     "files.exclude": {
-        ".tox/*": true,
-        ".mypy_cache/*": true,
-        "**/*/.egg-info": true,
+        ".tox": true,
+        ".mypy_cache": true,
+        "venv": true,
+        "**/*.egg-info": true,
         //begin generated
         
         //end generated
@@ -11,7 +13,8 @@
     "files.watcherExclude": {
         ".tox": true,
         ".mypy_cache": true,
-        "**/*/.egg-info": true,
+        "venv": true,
+        "**/*.egg-info": true,
         //begin generated
         
         //end generated

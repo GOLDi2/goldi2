@@ -4,7 +4,7 @@ LICENSE = "MIT"
 
 IMAGE_FEATURES = " read-only-rootfs"
 
-IMAGE_INSTALL:append = " fpga-firmware"
+IMAGE_INSTALL:append = " fpga-firmware goldi-crosslab"
 
 inherit core-image
 

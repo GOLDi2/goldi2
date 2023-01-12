@@ -1,1 +1,4 @@
-dist/**/*
+*
+!container-scripts
+!licenses
+!./diamond/*.deb

@@ -1,7 +1,7 @@
 header:
   version: 8
   includes:
-   - hardware/os/local.yml
+   - ./local.yml
    
 machine: goldi1
 distro: goldi-distro
@@ -43,4 +43,4 @@ repos:
 
   meta-rauc:
     url: https://github.com/rauc/meta-rauc.git
-    refspec: 3faf4cc4fcf558e99dad5aa8532fef2ecd566653
+    refspec: 800feeca2f8ba17b4f0dcb4b71aae21a567d06aa

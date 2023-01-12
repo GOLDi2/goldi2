@@ -2,6 +2,8 @@
 .tox
 .coverage
 .coverage.xml
+dist
 __pycache__
 venv
 /**/*.egg-info
+coverage.xml

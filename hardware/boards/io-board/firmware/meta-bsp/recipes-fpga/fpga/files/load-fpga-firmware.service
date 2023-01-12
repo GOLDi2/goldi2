@@ -1,9 +1,0 @@
-[Unit]
-Description=Loads the FPGA firmware
-
-[Service]
-Type=oneshot
-ExecStart=svf-player /lib/firmware/lattice/firmware.svf -v
-
-[Install]
-WantedBy=multi-user.target
