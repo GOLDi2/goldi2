@@ -65,6 +65,9 @@ else
   cat "backend-services/federation/dist/docker-image.tar" | ssh "$HOST" "cat - | docker load"
   cat "backend-services/update/dist/docker-image.tar" | ssh "$HOST" "cat - | docker load"
 
+  cat "frontend-services/config-tool/dist/docker-image.tar" | ssh "$HOST" "cat - | docker load"
+  cat "frontend-services/experiment-control-panel/dist/docker-image.tar" | ssh "$HOST" "cat - | docker load"
+
   # Specify the exact version in the compose file
   COMPOSE=$(cat helper/deploy-files/docker-compose.instance.yml)
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: gateway-service/image: gateway-service:'$(git -C crosslab rev-parse --short HEAD)'/g')
@@ -73,6 +76,9 @@ else
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: experiment-service/image: experiment-service:'$(git -C crosslab rev-parse --short HEAD)'/g')
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: federation-service/image: federation-service:'$(git -C crosslab rev-parse --short HEAD)'/g')
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: update-service/image: update-service:'$(git -C crosslab rev-parse --short HEAD)'/g')
+
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: esp:'$(git rev-parse --short HEAD)'/g')
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp/image: ecp:'$(git rev-parse --short HEAD)'/g')
 
   echo "$COMPOSE" | ssh "$HOST" "source $DIR/prod.secrets; cat - | envsubst > $DIR/prod/docker-compose.yml"
   ssh "$HOST" "cd $DIR/prod; docker-compose up -d"
