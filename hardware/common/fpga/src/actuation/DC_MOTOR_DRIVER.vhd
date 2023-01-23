@@ -13,15 +13,28 @@
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
--- Revision V1.00.00 - File Created
+-- Revision V0.01.01 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V0.01.02 - Changes to register table and code style
+-- Additional Comments: Change of code style to clean the design. Change
+--						to the Register tabel functionality.
+--
+-- Revision V0.01.03 - Modification to BUS convention
+-- Additional Comments: Addition of valid signal to data output and change to 
+--                      naming convention.
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -  
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom library
-use work.GOLDI_DATA_TYPES.all;
+use work.GOLDI_MODULE_CONFIG.all;
+use work.GOLDI_COMM_STANDARD.all;
+use work.GOLDI_IO_STANDARD.all;
 
 
 
@@ -31,36 +44,35 @@ use work.GOLDI_DATA_TYPES.all;
 --! H-Bridge driver for a DC motor with configurable registers
 --! The module is capable to drive the DC motor in both directions and
 --! at diffrent speeds by changin the PWM value and direction bits.
---!
---! **Latency: 4**
 --! 
 --! The PWM signal frequency can be configured through the CLK_FACTOR
 --!
---!    *CLK_FACTOR = (f_clk/f_pwm*255)*
+--! *CLK_FACTOR = (f_clk/f_pwm*255)*
 --!
 --! #### Registers:
 --!
 --! | Address 	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
---! |+0			|Enable	|	    |       |   	|		|		|Out 2	| Out 1	|
+--! |+0			|		|	    |       |   	|		|		|Out 2	| Out 1	|
 --!	|+1			| PWM[7:0]||||||||
+--!
+--! **Latency: 4**
 entity DC_MOTOR_DRIVER is
 	generic(
-		ADDRESS			:	natural := 1;	--! Module base address
-		CLK_FACTOR		:	natural := 10	--! Factor sets PWM frequency
+		ADDRESS			:	natural := 1;	--! Module's base address
+		CLK_FACTOR		:	natural := 10	--! PWM frequency factor
 	);
 	port(
 		--General
 		clk			: in	std_logic;		--! System clock
 		rst			: in	std_logic;		--! Synchronous reset
 		--BUS slave interface
-		sys_bus_i	: in	bus_in;			--! BUS input signals [we,adr,dat]
-		sys_bus_o	: out	bus_out;		--! BUS output signals [dat,err]
+		sys_bus_i	: in	sbus_in;		--! BUS input signals [we,adr,dat]
+		sys_bus_o	: out	sbus_out;		--! BUS output signals [dat,val]
 		--L293DD
 		DC_enb		: out 	io_o;			--! L293DD Enable
 		DC_out_1	: out	io_o;			--! L293DD Output 1 
-		DC_out_2	: out 	io_o;			--! L293DD Output 2
-		DC_err		: out 	std_logic		--! Error. Both directions selected
+		DC_out_2	: out 	io_o			--! L293DD Output 2
 	);
 end entity DC_MOTOR_DRIVER;
 
@@ -72,31 +84,33 @@ architecture RTL of DC_MOTOR_DRIVER is
 
 	--Components
 	component REGISTER_TABLE
-		generic(
-			BASE_ADDRESS		:	natural;
-			REGISTER_NUMBER		:	natural;
-			BUS_ADDRESS_WIDTH	:	natural;
-			REG_CONFIGURATION	:	reg_type_array;
-			REG_DEFAULT_VALUES	:	word_8_bit_array
-		);
-		port(
-			clk				: in	std_logic;
-			rst				: in	std_logic;
-			sys_bus_i		: in	bus_in;
-			sys_bus_o		: out	bus_out;
-			reg_data_in		: in	word_8_bit_array(REGISTER_NUMBER-1 downto 0);
-			reg_data_out	: out	word_8_bit_array(REGISTER_NUMBER-1 downto 0);
-			reg_data_stb	: out	std_logic_vector(REGISTER_NUMBER-1 downto 0)
-		);
+	generic(
+		BASE_ADDRESS		:	natural;
+		NUMBER_REGISTERS	:	natural;
+		REG_DEFAULT_VALUES	:	data_word_vector
+	);
+	port(
+		clk				: in	std_logic;
+		rst				: in	std_logic;
+		sys_bus_i		: in	sbus_in;
+		sys_bus_o		: out	sbus_out;
+		reg_data_in		: in	data_word_vector(NUMBER_REGISTERS-1 downto 0);
+		reg_data_out	: out   data_word_vector(NUMBER_REGISTERS-1 downto 0);
+		reg_data_stb	: out	std_logic_vector(NUMBER_REGISTERS-1 downto 0)
+	);
 	end component;
 	
 	
 	--Intermediate signals
-	signal reg_data			:	word_8_bit_array(1 downto 0);
-		alias pwm			:	std_logic_vector(7 downto 0) is reg_data(1);
-		alias enable		:	std_logic is reg_data(0)(7);
-		alias enb_pos		:	std_logic is reg_data(0)(1);
+	--Constants
+	constant reg_default	:	data_word_vector(1 downto 0) 
+		:= (std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH)),
+			std_logic_vector(to_unsigned(0,SYSTEM_DATA_WIDTH)));
+	--Registers
+	signal reg_data			:	data_word_vector(1 downto 0);
 		alias enb_neg		:	std_logic is reg_data(0)(0);
+		alias enb_pos		:	std_logic is reg_data(0)(1);
+		alias pwm			:	std_logic_vector(7 downto 0) is reg_data(1)(7 downto 0);
 	signal reg_data_stb 	:	std_logic_vector(1 downto 0);
 	--PWM
 	signal pwm_count_flag	:	std_logic;
@@ -107,19 +121,13 @@ architecture RTL of DC_MOTOR_DRIVER is
 begin
 	--Output routing
 	DC_enb.enb 	 <= '1';
-	DC_enb.z_enb <= '0';
-	DC_enb.dat	 <= '1' when((pwm_out_valid = '1') and (enable = '1') and 
-							 ((enb_pos = '1') xor (enb_neg = '1'))) else '0';
-	
+	DC_enb.dat	 <= '1' when((pwm_out_valid = '1') and ((enb_pos = '1') xor (enb_neg = '1'))) else '0';
+
 	DC_out_1.enb 	<= '1';
-	DC_out_1.z_enb 	<= '0';
-	DC_out_1.dat	<= '1' 	when((enable = '1') and (enb_neg = '1')) else '0';
+	DC_out_1.dat	<= '1' 	when(enb_neg = '1') else '0';
 	
 	DC_out_2.enb	<= '1';
-	DC_out_2.z_enb  <= '0';
-	DC_out_2.dat	<= '1'	when((enable = '1') and (enb_pos = '1')) else '0';
-	
-	DC_err <= enb_pos and enb_neg;
+	DC_out_2.dat	<= '1'	when(enb_pos = '1') else '0';
 	
 	
 	
@@ -129,7 +137,7 @@ begin
 	PWM_SIGNAL_GENERATOR : process(clk)
 	begin
 		if(rising_edge(clk)) then
-			if((rst = '1') or (reg_data_stb /= "00") or (enable /= '1')) then
+			if((rst = '1') or (reg_data_stb /= "00")) then
 				pwm_counter <= 1;
 				pwm_out_valid <= '0';
 				
@@ -160,7 +168,7 @@ begin
 	begin
 		if(rising_edge(clk)) then
 			--Manage counter value
-			if((rst = '1') or (reg_data_stb /= "00") or (enable /= '1')) then
+			if((rst = '1') or (reg_data_stb /= "00")) then
 				counter := 0;
 				pwm_count_flag <= '0';
 				
@@ -185,17 +193,15 @@ begin
 	MEMORY : REGISTER_TABLE
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
-		REGISTER_NUMBER		=> 2,
-		BUS_ADDRESS_WIDTH	=> BUS_ADDRESS_WIDTH,
-		REG_CONFIGURATION	=> (W,W),
-		REG_DEFAULT_VALUES	=> (x"00",x"0F")
+		NUMBER_REGISTERS	=> 2,
+		REG_DEFAULT_VALUES	=> reg_default
 	)
 	port map(
 		clk				=> clk,
 		rst				=> rst,
 		sys_bus_i		=> sys_bus_i,
 		sys_bus_o		=> sys_bus_o,
-		reg_data_in		=> (others => (others => '0')),
+		reg_data_in		=> reg_data,
 		reg_data_out	=> reg_data,
 		reg_data_stb	=> reg_data_stb
 	);
