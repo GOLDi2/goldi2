@@ -1,0 +1,174 @@
+-------------------------------------------------------------------------------
+-- Company:			Technische Universität Ilmenau
+-- Engineer:		JP_CC <josepablo.chew@gmail.com>
+--
+-- Create Date:		01/12/2022
+-- Design Name:		Configuration parameters for 3_axis_portal_v1
+-- Module Name:		GOLDI_MODULE_CONFIG
+-- Project Name:	GOLDi_FPGA_CORE
+-- Target Devices:	LCMXO2-7000HC-4TG144C
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
+--
+-- Dependencies: 	none
+--
+-- Revisions:
+-- Revision V0.01.03 - File Created
+-- Additional Comments: First commitment
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
+-------------------------------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+
+
+
+package GOLDI_MODULE_CONFIG is
+    
+    --****SYSTEM CONSTANTS****
+    -----------------------------------------------------------------------------------------------
+    --System size
+    --Address width sets the protocol for SPI communication and the number of possible registers
+    --SPI communication protocol takes first bit of the configuration byte's for write enable
+    --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
+    constant BUS_ADDRESS_WIDTH	:	natural range 7 to 63 := 7;
+    
+    --Main parameter of the system. Sets the width of data words 
+    constant SYSTEM_DATA_WIDTH	:	natural range 8 to 64 := 8;
+    
+
+    --Model pins
+    --Number of physical FPGA pins that are available for IO functions
+    constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;
+    --Number of IO pins needed for the system modules
+    constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 42;
+    -----------------------------------------------------------------------------------------------
+ 
+    
+
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    --Module Base Addresses; Length based on a system_data_width = 8
+    constant CONFIG_REG_ADDRESS     :   natural := 1;       --Table length: 1
+    constant SENSOR_REG_ADDRESS     :   natural := 2;       --Table length: 2
+    constant ERROR_LIST_ADDRESS     :   natural := 4;       --Table length: 3
+    constant GPIO_DRIVER_ADDRESS    :   natural := 7;       --Table length: 2
+    constant X_MOTOR_ADDRESS        :   natural := 9;       --Table length: 2
+    constant Y_MOTOR_ADDRESS        :   natural := 11;      --Table length: 2
+    constant Z_MOTOR_ADDRESS        :   natural := 13;      --Table length: 2
+    constant EMAG_ADDRESS           :   natural := 15;      --Table length: 1
+    constant X_ENCODER_ADDRESS      :   natural := 16;      --Table length: 2
+    constant Y_ENCODER_ADDRESS      :   natural := 18;      --Table length: 2
+    constant PR_LED_ADDRESS         :   natural := 20;      --Table length: 1
+    constant PG_LED_ADDRESS         :   natural := 21;      --Table length: 1
+    constant ER_LED_ADDRESS         :   natural := 22;      --Table length: 1
+    constant EW_LED_ADDRESS         :   natural := 23;      --Table length: 1
+    constant EG_LED_ADDRESS         :   natural := 24;      --Table length: 1
+    
+	
+	--Default Value for Configuration Register
+	constant REG_CONFIG_DEFAULT		:	std_logic_vector(7 downto 0) :=  (others => '0');
+	-----------------------------------------------------------------------------------------------
+    
+
+
+    --****IO DATA MANAGEMENT****
+    -----------------------------------------------------------------------------------------------
+    --Crossbar data types
+	type phy_io_layout is array(0 to PHYSICAL_PIN_NUMBER-1) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
+    type vir_io_layout is array(0 to VIRTUAL_PIN_NUMBER-1) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+    
+    
+    --Enables and disabled the use of the io crossbar
+    constant block_layout           :   boolean := false;
+    
+    --Default configuration for the io crossbar in case of reset or blocked layout.
+    --Index: Right side of the Crossbar io_vector connected to the FPGA pins
+    --Data: Represents the index of the left side of the Crossbar io_vector connected
+    --      to the system modules
+    constant DEFAULT_IO_LAYOUT      :   phy_io_layout :=
+    (
+        0  => x"00",
+        1  => x"01",
+        2  => x"02",
+        3  => x"03",
+        4  => x"04",
+        5  => x"05",
+        6  => x"06",
+        7  => x"07",
+        8  => x"08",
+        9  => x"09",
+        10 => x"0A",
+        11 => x"0B",
+        12 => x"0C",
+        13 => x"0D",
+        14 => x"0E",
+        15 => x"0F",
+        16 => x"10",
+        17 => x"11",
+        18 => x"12",
+        19 => x"13",
+        20 => x"14",
+        21 => x"15",
+        22 => x"16",
+        23 => x"17",
+        24 => x"18",
+        25 => x"19",
+        26 => x"1A",
+        27 => x"1B",
+        28 => x"1C",
+        29 => x"1D",
+        30 => x"1E",
+        31 => x"1F",
+        32 => x"20",
+        others => x"29"     --x"29" grounded pin
+    );
+    -----------------------------------------------------------------------------------------------
+
+    
+
+	--****SENSOR DATA MANAGEMENT****
+	-----------------------------------------------------------------------------------------------
+	constant SENSORS_DEFAULT	:	std_logic_vector(8 downto 0) := (others => '0');
+	-----------------------------------------------------------------------------------------------
+	
+	
+	
+    --****INCREMENTAL ENCODERS****
+    ----------------------------------------------------------------------------------------------
+    --Activates the use of Channel_I for reference
+    constant X_ENCODER_RST_TYPE :   boolean := false;
+    constant Y_ENCODER_RST_TYPE :   boolean := false;
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****ACTUATORS****
+    -----------------------------------------------------------------------------------------------
+    --Frequency of PWM signal
+    constant X_MOTOR_FREQUENCY  :   natural := 377;
+    constant Y_MOTOR_FREQUENCY  :   natural := 377;
+    constant Z_MOTOR_FREQUENCY  :   natural := 377;
+    -----------------------------------------------------------------------------------------------
+    
+
+
+    --****LED****
+    -----------------------------------------------------------------------------------------------
+    --Module constants
+    constant PR_LED_FREQUENCY   :   natural := 1133000000;
+    constant PG_LED_FREQUENCY   :   natural := 1133000000;
+    constant ER_LED_FREQUENCY   :   natural := 1133000000;
+    constant EW_LED_FREQUENCY   :   natural := 1133000000;
+    constant EG_LED_FREQUENCY   :   natural := 1133000000;
+    constant PR_LED_INVERTED    :   boolean := false;
+    constant PG_LED_INVERTED    :   boolean := false; 
+    constant ER_LED_INVERTED    :   boolean := false;
+    constant EW_LED_INVERTED    :   boolean := false;
+    constant EG_LED_INVERTED    :   boolean := false;
+    -----------------------------------------------------------------------------------------------
+    
+
+end package;
