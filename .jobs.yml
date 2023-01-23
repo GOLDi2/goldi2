@@ -2,13 +2,13 @@
 # Build Development Container ##################################################
 ################################################################################
 
-helper/crosslab-development-container:
-  - script: build -t crosslab-development-container:latest
+#helper/crosslab-development-container:
+#  - script: build -t crosslab-development-container:latest
 
-helper/goldi-development-container:
-  - script: build
-    dependencies:
-      - helper/crosslab-development-container:build
+#helper/goldi-development-container:
+#  - script: build
+#    dependencies:
+#      - helper/crosslab-development-container:build
 
 
 ################################################################################

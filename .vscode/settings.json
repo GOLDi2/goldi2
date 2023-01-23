@@ -3,7 +3,7 @@
         "*": false
     },
     "files.exclude": {
-        "crosslab/": true,
+        "crosslab/": false,
         //begin generated
         "backend-services/auth/node_modules": true,
         "backend-services/auth/.packages": true,

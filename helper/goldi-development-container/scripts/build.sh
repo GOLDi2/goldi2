@@ -50,7 +50,7 @@ fi
 docker load < ../crosslab-development-container/dist/crosslab-devcontainer.tar
 
 # Build the container
-docker build -t goldi-devcontainer:build .
+docker build --no-cache -t goldi-devcontainer:build .
 if [ -n "$ADDITIONAL_TAGS" ]; then
   for tag in $ADDITIONAL_TAGS; do
     docker tag goldi-devcontainer:build  $tag

@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
 	"name": "Crosslab",
-	"image": "gitlab-registry.rz.tu-ilmenau.de/fakia/fachgebiet-iks/goldi/goldi2/goldi2/devcontainer:latest",
+	"image": "goldi-devcontainer:build",
 
 	"runArgs": [
 		// give all capabilities to a container, in other words, the container can then do almost everything that the host can do
