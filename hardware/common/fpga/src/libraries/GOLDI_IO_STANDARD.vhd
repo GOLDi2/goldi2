@@ -68,17 +68,47 @@ package GOLDI_IO_STANDARD is
 	type std_io_vector is array (natural range <>) of std_io;
 
 
+
 	--Functions
+	function getIOInData(io : io_i_vector) return std_logic_vector;
+	function getIOOutData(io : io_o_vector) return std_logic_vector;
+
 	function getInVector(io : std_io_vector) return io_i_vector;
 	function getOutVector(io : std_io_vector) return io_o_vector;
+
 	function setInVector(sc : io_i_vector; tg : std_io_vector) return std_io_vector;
 	function setOutVector(sc : io_o_vector; tg : std_io_vector) return std_io_vector;
+	
 
 end package GOLDI_IO_STANDARD;
 
 
 
 package body GOLDI_IO_STANDARD is
+
+	--!
+	function getIOInData(io : io_i_vector) return std_logic_vector is
+		variable data	:	std_logic_vector(io'range);
+	begin
+		for i in 0 to io'length-1 loop
+			data(i) := io(i).dat;
+ 		end loop;
+
+		return data;
+	end getIOInData;
+
+
+	--!
+	function getIOOutData(io : io_o_vector) return std_logic_vector is
+		variable data	:	std_logic_vector(io'range);
+	begin
+		for i in 0 to io'length-1 loop
+			data(i) := io(i).dat;
+		end loop;
+
+		return data;
+  	end getIOOutData;
+	
 
 	--!
 	function getInVector(io : std_io_vector) return io_i_vector is

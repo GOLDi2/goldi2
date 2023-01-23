@@ -3,7 +3,7 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/12/2022
--- Design Name:		Custom data types for Goldi_FPGA_CORE proyect
+-- Design Name:		Custom data types for Goldi_FPGA_CORE project
 -- Module Name:		GOLDI_BUS_STANDARD
 -- Project Name:	GOLDi_FPGA_CORE
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -29,9 +29,10 @@ use work.GOLDI_MODULE_CONFIG.all;
 package GOLDI_COMM_STANDARD is
 	--*********************************************************************************************
     --Internal communication data structures
-    subtype address_word is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
-    subtype data_word is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-    type data_word_vector is array (natural range <>) of data_word;
+    subtype address_word 	is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
+    subtype data_word 		is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+
+	type data_word_vector 	is array (natural range <>) of data_word;
 
 
 	--*********************************************************************************************
@@ -48,15 +49,26 @@ package GOLDI_COMM_STANDARD is
 		val :	std_logic;
 	end record;
 	
+	type sbus_i_vector is array(natural range <>) of sbus_in;
+	type sbus_o_vector is array(natural range <>) of sbus_out;
+
+
 	--Master Interface Data Structures
 	alias mbus_in is sbus_out;
 	alias mbus_out is sbus_in;
 
-
+	--BUS constants
+	constant bus_disabled	:	sbus_in := 
+	(
+		we => '0', 
+		adr => (others => '0'), 
+		dat => (others =>'0')
+	);
 	--*********************************************************************************************
 	--Functions
 	function getMemoryLength(a : natural) return natural;
 	function assignMemory(data : std_logic_vector) return data_word_vector;
+	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
 
 end package;
 
@@ -84,18 +96,30 @@ package body GOLDI_COMM_STANDARD is
 	function assignMemory(data : std_logic_vector) return data_word_vector is
 		constant memory_length 	: 	natural := getMemoryLength(data'length);
 		variable memory			:	data_word_vector(memory_length-1 downto 0);
+		variable vector_buff	:	std_logic_vector((memory_length*SYSTEM_DATA_WIDTH)-1 downto 0);
 	begin
+		vector_buff := (others => '0');
+		vector_buff(data'range) := data;
+		
 		for i in 0 to memory_length-1 loop
-			if(i = memory_length-1) then
-				memory(i) := (SYSTEM_DATA_WIDTH-1 downto data'left+1 => '0') & 
-							 data(data'left downto i*SYSTEM_DATA_WIDTH);
-			else
-				memory(i) := data(((i+1)*SYSTEM_DATA_WIDTH)-1 downto (i*SYSTEM_DATA_WIDTH));
-			end if;
+			memory(i) := vector_buff(((i+1)*SYSTEM_DATA_WIDTH)-1 downto (i*SYSTEM_DATA_WIDTH));
 		end loop;
 
 		return memory;
 	end assignMemory;
 
+
+	--!
+	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
+		variable index 	:	natural;
+  	begin
+		for i in 0 to bus_vector'length-1 loop
+			if(bus_vector(i).val = '1') then
+				index := i;
+			end if;
+		end loop;
+
+		return bus_vector(index);
+	end reduceBusVector;
 
 end package body GOLDI_COMM_STANDARD;
