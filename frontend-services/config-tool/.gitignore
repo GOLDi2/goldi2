@@ -4,3 +4,4 @@ http-dist
 chrome-user-data
 .npmrc
 .packages
+package.resolved.json
