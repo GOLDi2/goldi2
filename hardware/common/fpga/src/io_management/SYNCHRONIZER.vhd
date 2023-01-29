@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Double FF syncronization chain
 -- Module Name:		SYNCHRONIZER
 -- Project Name:	GOLDi_FPGA_CORE

@@ -2,14 +2,14 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
--- Design Name:		Custom data types for Goldi_FPGA_CORE project
+-- Create Date:		01/01/2023
+-- Design Name:		Custom communication data types for Goldi_FPGA_CORE project
 -- Module Name:		GOLDI_BUS_STANDARD
 -- Project Name:	GOLDi_FPGA_CORE
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
--- Dependencies: 	none
+-- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
@@ -27,16 +27,19 @@ use work.GOLDI_MODULE_CONFIG.all;
 
 
 package GOLDI_COMM_STANDARD is
-	--*********************************************************************************************
-    --Internal communication data structures
+	
+	--****Internal Communication Data Structures****
+	-----------------------------------------------------------------------------------------------
     subtype address_word 	is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
     subtype data_word 		is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 
 	type data_word_vector 	is array (natural range <>) of data_word;
+	-----------------------------------------------------------------------------------------------
 
 
-	--*********************************************************************************************
-	--**BUS**
+
+	--****BUS****
+	-----------------------------------------------------------------------------------------------
 	--Slave Interface Data structures
 	type sbus_in is record
 		we	:	std_logic;
@@ -49,13 +52,13 @@ package GOLDI_COMM_STANDARD is
 		val :	std_logic;
 	end record;
 	
-	type sbus_i_vector is array(natural range <>) of sbus_in;
-	type sbus_o_vector is array(natural range <>) of sbus_out;
-
-
 	--Master Interface Data Structures
 	alias mbus_in is sbus_out;
 	alias mbus_out is sbus_in;
+
+	--BUS vectors
+	type sbus_i_vector is array(natural range <>) of sbus_in;
+	type sbus_o_vector is array(natural range <>) of sbus_out;
 
 	--BUS constants
 	constant bus_disabled	:	sbus_in := 
@@ -64,11 +67,16 @@ package GOLDI_COMM_STANDARD is
 		adr => (others => '0'), 
 		dat => (others =>'0')
 	);
-	--*********************************************************************************************
-	--Functions
+	-----------------------------------------------------------------------------------------------
+	
+	
+	
+	--****Functions****
+	-----------------------------------------------------------------------------------------------
 	function getMemoryLength(a : natural) return natural;
 	function assignMemory(data : std_logic_vector) return data_word_vector;
 	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
+	-----------------------------------------------------------------------------------------------
 
 end package;
 
@@ -76,7 +84,9 @@ end package;
 
 package body GOLDI_COMM_STANDARD is
 
-	--!
+	-- Returns the minimum number of registers needed to 
+	-- save a vector of size a; based on the SYSTEM_DATA_WIDTH of 
+	-- the GOLDI_MODULE_CONFIG package.
 	function getMemoryLength(a : natural) return natural is
 		variable quotient	:	natural;
 		variable rest		:	natural;
@@ -92,7 +102,10 @@ package body GOLDI_COMM_STANDARD is
 	end getMemoryLength;
 
 
-	--! 
+	-- Returns a data_word_vector corresponding to the minimum number
+	-- of register to save "data". The index 0 of the logic_vector is taken
+	-- as the lowest index of the register 0 and "data" is assigned in ascending
+	-- order.
 	function assignMemory(data : std_logic_vector) return data_word_vector is
 		constant memory_length 	: 	natural := getMemoryLength(data'length);
 		variable memory			:	data_word_vector(memory_length-1 downto 0);
@@ -109,7 +122,8 @@ package body GOLDI_COMM_STANDARD is
 	end assignMemory;
 
 
-	--!
+	-- Returns a sbus_out structure corresponding to the addressed register.
+	-- Used in synthesis to generate multiplexer for multiple register tables.
 	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
 		variable index 	:	natural;
   	begin

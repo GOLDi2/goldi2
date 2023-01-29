@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/01/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Incremental encoder dsp 
 -- Module Name:		INC_ENCODER
 -- Project Name:	GOLDi_FPGA_CORE
@@ -17,15 +17,6 @@
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
---
--- Revision V0.01.02 - Changes to register table and code style
--- Additional Comments: Change of code style to clean the design. Change
---						to the Register tabel functionality.
---
--- Revision V0.01.03 - Modification to BUS and IO standards
--- Additional Comments: Addition of valid signal to data output and change to 
---                      naming convention. Change to register sizing and port
---						data types.
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -  

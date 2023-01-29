@@ -2,27 +2,21 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		DC Motor Driver - H-Bridge L293DD 
 -- Module Name:		DC_MOTOR_DRIVER
 -- Project Name:	GOLDi_FPGA_CORE
 -- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Quartus Prime Lite 21.1, Lattice Diamond 3.12
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_DATA_TYPES.vhd
+-- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
+--					-> GOLDI_COMM_STANDARD.vhd
+--					-> GOLDI_IO_STANDARD.vhd
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
 -- Revision V0.01.01 - File Created
 -- Additional Comments: First commitment
---
--- Revision V0.01.02 - Changes to register table and code style
--- Additional Comments: Change of code style to clean the design. Change
---						to the Register tabel functionality.
---
--- Revision V0.01.03 - Modification to BUS convention
--- Additional Comments: Addition of valid signal to data output and change to 
---                      naming convention.
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -  

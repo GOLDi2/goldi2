@@ -2,14 +2,15 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		LED Driver
 -- Module Name:		LED_DRIVER
 -- Project Name:	GOLDi_FPGA_CORE
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+-- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
+--                  -> GOLDI_COMM_STANDARD.vhd
 --					-> GOLDI_IO_STANDARD.vhd
 --					-> REGISTER_TABLE.vhd
 --

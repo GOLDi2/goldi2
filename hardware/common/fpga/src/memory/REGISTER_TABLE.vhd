@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Customizable Register Table 
 -- Module Name:		REGISTER_TABLE
 -- Project Name:	GOLDi_FPGA_CORE
@@ -15,17 +15,6 @@
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
---
--- Revision V0.01.02 - Changes to the code stye, performance and documentation
--- Additional Comments: Refactor of code to reduce code indents and complexity.
---                      Addition of module header and comments.
---                      Elimination of some module generics to introduce
---						the GOLDI_COMM_STANDARD package which sets a
---						unified standard for all communication modules
--- 
--- Revision V0.01.03 - Modification to BUS convention
--- Additional Comments: Addition of valid signal to data output and change to 
---                      naming convention.
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -

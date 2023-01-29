@@ -2,8 +2,8 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
--- Design Name:		Electromagnet driver - H-Bridge L293DD [onesided]
+-- Create Date:		01/01/2023
+-- Design Name:		Electromagnet driver - H-Bridge L293DD
 -- Module Name:		EMAGNET_DRIVER
 -- Project Name:	GOLDi_FPGA_CORE
 -- Target Devices:	LCMXO2-7000HC-4TG144C
