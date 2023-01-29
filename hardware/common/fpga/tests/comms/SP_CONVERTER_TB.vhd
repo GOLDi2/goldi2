@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Bidirectional Serial to/form Parallel converter testbench
 -- Module Name:		SP_CONVERTER_TB
 -- Project Name:	GOLDi_FPGA_CORE
@@ -105,9 +105,9 @@ begin
 		
 		
 		--Test reset conditions
-		assert(miso = '0') 		 report "line(106): Test reset - expecting miso = '0'" severity error;
-		assert(word_valid = '0') report "line(107): Test reset - expecting word_valid = '0'" severity error;	
-		assert(dat_o = x"00")	 report "line(108): Test reset - expecting dat_o = x00" severity error;
+		assert(miso = '0') 		 report "line(108): Test reset - expecting miso = '0'" severity error;
+		assert(word_valid = '0') report "line(109): Test reset - expecting word_valid = '0'" severity error;	
+		assert(dat_o = x"00")	 report "line(110): Test reset - expecting dat_o = x00" severity error;
 		
 		
 		wait for 5*clk_period;

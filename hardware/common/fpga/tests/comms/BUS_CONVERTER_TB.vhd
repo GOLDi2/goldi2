@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Parallel data to BUS standard testbench
 -- Module Name:		BUS_CONVERTER_TB
 -- Project Name:	GOLDi_FPGA_CORE
@@ -110,11 +110,11 @@ begin
 		
 		--Test reset conditions
 		assert(master_bus_o.we  = '0')
-			report "line(108): Test reset - expecting master_bus_o.we = '0'" severity error;
+			report "line(113): Test reset - expecting master_bus_o.we = '0'" severity error;
 		assert(master_bus_o.adr = std_logic_vector(to_unsigned(0,7)))
-			report "line(110): Test reset - expecting master_bus_o.adr = x00" severity error;
+			report "line(115): Test reset - expecting master_bus_o.adr = x00" severity error;
 		assert(master_bus_o.dat = x"00")
-			report "line(112): Test reset - expecting master_bus_o.dat = x00" severity error;
+			report "line(117): Test reset - expecting master_bus_o.dat = x00" severity error;
 		
 		
 		wait for 5*clk_period;
@@ -132,11 +132,11 @@ begin
 		
 		wait for clk_period/2;
 		assert(master_bus_o.we = '0')
-			report "line(130): Test simple transaction - expecting master_bus_o.we = '0'" severity error;
+			report "line(135): Test simple transaction - expecting master_bus_o.we = '0'" severity error;
 		assert(master_bus_o.adr = "1111111")
-			report "line(132): Test simple transaction - expecting master_bus_o.adr = x7F" severity error;
+			report "line(137): Test simple transaction - expecting master_bus_o.adr = x7F" severity error;
 		assert(master_bus_o.dat = x"00")
-			report "line(134): Test simple transaction - expecting master_bus_o.dat = x00" severity error;
+			report "line(139): Test simple transaction - expecting master_bus_o.dat = x00" severity error;
 		wait for clk_period/2;
 		
 		data_word_in <= x"0F";
@@ -147,11 +147,11 @@ begin
 		
 		wait for clk_period/2;
 		assert(master_bus_o.we = '1')
-			report "line(145): Test simple transaction - expecting master_bus_o.we = '1'" severity error;
+			report "line(150): Test simple transaction - expecting master_bus_o.we = '1'" severity error;
 		assert(master_bus_o.adr = "1111111")
-			report "line(147): Test simple transaction - expecting master_bus_o.adr = x7F" severity error;
+			report "line(152): Test simple transaction - expecting master_bus_o.adr = x7F" severity error;
 		assert(master_bus_o.dat = x"0F")
-			report "line(149): Test simple transaction - expecting master_bus_o.dat = x0F" severity error;
+			report "line(154): Test simple transaction - expecting master_bus_o.dat = x0F" severity error;
 		wait for clk_period/2;
 		
 		
@@ -167,11 +167,11 @@ begin
 		
 		wait for clk_period/2;
 		assert(master_bus_o.we = '1')
-			report "line(165): Test simple transaction - expecting master_bus_o.we = '1'" severity error;
+			report "line(170): Test simple transaction - expecting master_bus_o.we = '1'" severity error;
 		assert(master_bus_o.adr = "0000000")
-			report "line(167): Test simple transaction - expecting master_bus_o.adr = x00" severity error;
+			report "line(172): Test simple transaction - expecting master_bus_o.adr = x00" severity error;
 		assert(master_bus_o.dat = x"F0")
-			report "line(169): Test simple transaction - expecting master_bus_o.dat = xF0" severity error;
+			report "line(174): Test simple transaction - expecting master_bus_o.dat = xF0" severity error;
 		wait for clk_period/2;
 		ce <= '0';
 		

@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Customizable Register Table Testbench
 -- Module Name:		REGISTER_TABLE_TB
 -- Project Name:	GOLDIi_FPGA_CORE
@@ -15,13 +15,6 @@
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
---
--- Revision V0.01.02 - Test simplification
--- Additional Comments: Simplification of test cases due to mayor refactor
---						of DUT.
---
--- Revision V0.01.03 - Changes to the BUS standard
--- Additional Comments: Addition of valid signal to read operation
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -
@@ -115,13 +108,13 @@ begin
 		
 		--Test reset conditions
 		assert(reg_data_out(0) = x"0F") 
-			report "line(112): Test reset - expecting reg_data_out(0) = x0F" severity error;
+			report "line(111): Test reset - expecting reg_data_out(0) = x0F" severity error;
 		assert(reg_data_out(1) = x"F0") 
-			report "line(114): Test reset - expecting reg_data_out(1) = xF0" severity error;
+			report "line(113): Test reset - expecting reg_data_out(1) = xF0" severity error;
 		assert(reg_data_out(2) = x"FF") 
-			report "line(116): Test reset - expecting reg_data_out(2) = xFF" severity error;
+			report "line(115): Test reset - expecting reg_data_out(2) = xFF" severity error;
 		assert(reg_data_stb = "111")
-			report "line(118): Test reset - expecting reg_data_stb = 111" severity error;
+			report "line(117): Test reset - expecting reg_data_stb = 111" severity error;
 		wait for post_hold;
 		
 		
@@ -135,10 +128,10 @@ begin
 			sys_bus_i.dat <= x"FF";
 			wait for assert_hold;
 			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,8))) 
-				report "line(132): Test bus read - expecting sys_bus_o.dat =" & integer'image(i) 
+				report "line(131): Test bus read - expecting sys_bus_o.dat =" & integer'image(i) 
 				severity error;
 			assert(sys_bus_o.val = '1')
-				report "line(135): Test bus read - expecting sys_bus_o.val = '1'" severity error;
+				report "line(134): Test bus read - expecting sys_bus_o.val = '1'" severity error;
 			wait for post_hold;
 		end loop;
 
@@ -153,9 +146,9 @@ begin
 			sys_bus_i.dat <= x"0F";
 			wait for assert_hold;
 			assert(sys_bus_o.dat = x"00") 
-				report "line(150): Test bus write - expecting sys_bus_o.dat = x00" severity error;
+				report "line(149): Test bus write - expecting sys_bus_o.dat = x00" severity error;
 			assert(reg_data_out(i-1) = x"0F") 
-				report "line(152): Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
+				report "line(151): Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
 				severity error;
 			wait for post_hold;
 		end loop;		

@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/01/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Incremental encoder dsp testbench
 -- Module Name:		INC_ENCODER_TB
 -- Project Name:	GOLDi_FPGA_CORE

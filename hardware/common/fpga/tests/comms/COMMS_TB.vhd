@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Communication testbench
 -- Module Name:		COMMS_TB
 -- Project Name:	GOLDi_FPGA_CORE
@@ -74,6 +74,7 @@ architecture TB of COMMS_TB is
 	--Simulation timing 
 	constant clk_period		:	time := 10 ns;
 	constant sclk_period	:	time := 40 ns;
+	constant data_in_assign	:	std_logic_vector(15 downto 0) := x"00FF";
 	signal clock			:	std_logic := '0';
 	signal reset			:	std_logic;
 	signal run_sim			:	std_logic := '1';
@@ -84,9 +85,11 @@ architecture TB of COMMS_TB is
 	signal mosi				:	std_logic;
 	signal miso				:	std_logic;
 	signal sys_bus_i		:	sbus_in;
-	signal sys_bus_o		:	sbus_out;
+	signal sys_bus_o_vector	:	sbus_o_vector(1 downto 0);
 	--reg table
 	signal reg_data_in		:	data_word_vector(1 downto 0);
+	signal reg_data_out_1	:	data_word_vector(1 downto 0);
+	signal reg_data_out_2	:	data_word_vector(1 downto 0);
 	--Simulation data
 	signal mosi_buff		:	std_logic_vector(7 downto 0);
 	signal miso_buff		:	std_logic_vector(7 downto 0);
@@ -103,21 +106,43 @@ begin
 		mosi			=> mosi,
 		miso			=> miso,
 		master_bus_o	=> sys_bus_i,
-		master_bus_i	=> sys_bus_o
+		master_bus_i	=> reduceBusVector(sys_bus_o_vector)
 	);
 	
-	DUT_MEMORY : REGISTER_TABLE
+	DUT_MEMORY_1 : REGISTER_TABLE
+	generic map(
+		BASE_ADDRESS 		=> 1,
+		NUMBER_REGISTERS 	=> 2,
+		REG_DEFAULT_VALUES 	=> (x"00",x"00")
+	)
 	port map(
 		clk				=> clock,
 		rst				=> reset,
 		sys_bus_i		=> sys_bus_i,
-		sys_bus_o		=> sys_bus_o,
+		sys_bus_o		=> sys_bus_o_vector(0),
 		reg_data_in		=> reg_data_in,
-		reg_data_out	=> open,
+		reg_data_out	=> reg_data_out_1,
 		reg_data_stb	=> open
 	);
 
 
+	DUT_MEMORY_2 : REGISTER_TABLE
+	generic map(
+		BASE_ADDRESS 		=> 3,
+		NUMBER_REGISTERS 	=> 2,
+		REG_DEFAULT_VALUES 	=> (x"00",x"00")
+	)
+	port map(
+		clk				=> clock,
+		rst				=> reset,
+		sys_bus_i		=> sys_bus_i,
+		sys_bus_o		=> sys_bus_o_vector(1),
+		reg_data_in		=> assignMemory(data_in_assign),
+		reg_data_out	=> reg_data_out_2,
+		reg_data_stb	=> open
+	);
+
+	
 	--Timing
 	clock <= run_sim and (not clock) after clk_period/2;
 	reset <= '1' after 0 ns, '0' after 15 ns;
@@ -155,7 +180,7 @@ begin
 			if(i>1) then
 				wait for clk_period/2;
 				assert(miso_buff = std_logic_vector(to_unsigned(i,8)))
-					report "line(161): Test register comms - expecting miso_buff = " & integer'image(i) severity error;
+					report "line(183): Test register comms - expecting miso_buff = " & integer'image(i) severity error;
 				wait for clk_period/2;
 			end if;
 		end loop;
