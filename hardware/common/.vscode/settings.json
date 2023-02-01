@@ -2,16 +2,18 @@
     "files.exclude": {
         //begin generated
         "spi-driver/.*_cache": true,
+        "spi-driver/.mypy_cache/*": true,
         "spi-driver/src/**/__pycache__": true,
         "spi-driver/src/spi_driver.egg-info": true,
         "spi-driver/tests/**/__pycache__": true,
+        "spi-driver/.tox/*": true,
         "spi-driver/venv": true,
-        "svf-player/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-
+        "spi-driver/.mypy_cache": true,
+        "spi-driver/.tox": true,
         //end generated
     }
 }

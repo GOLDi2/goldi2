@@ -1,11 +1,11 @@
-import {Experiment} from '@cross-lab-project/api-client/dist/generated/experiment/types';
+import { ExperimentServiceTypes } from "@cross-lab-project/api-client";
 
-export const three_axes_portal: Experiment = {
+export const three_axes_portal: ExperimentServiceTypes.Experiment = {
   status: 'running',
   roles: [
     {
       name: '3-Axis-Portal V1',
-      template_device: 'https://api.goldi-labs.de/devices/40f25599-b62c-4580-82dc-3889c641bf77',
+      template_device: 'https://api.goldi-labs.de/devices/5bce3eb7-f094-4be4-8469-8768b921d620',
       'x-esc-position': {
         x: 800,
         y: 300,
@@ -13,7 +13,7 @@ export const three_axes_portal: Experiment = {
     },
     {
       name: 'ECP',
-      template_device: 'https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e',
+      template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
       'x-esc-position': {
         x: 200,
         y: 400,
@@ -280,12 +280,12 @@ export const three_axes_portal: Experiment = {
   ],
 };
 
-export const three_axes_portal_mc: Experiment = {
+export const three_axes_portal_mc: ExperimentServiceTypes.Experiment = {
   status: 'running',
   roles: [
     {
       name: '3-Axis-Portal V1',
-      template_device: 'https://api.goldi-labs.de/devices/40f25599-b62c-4580-82dc-3889c641bf77',
+      template_device: 'https://api.goldi-labs.de/devices/5bce3eb7-f094-4be4-8469-8768b921d620',
       'x-esc-position': {
         x: 800,
         y: 300,
@@ -293,7 +293,7 @@ export const three_axes_portal_mc: Experiment = {
     },
     {
       name: 'Microcontroller',
-      template_device: 'https://api.goldi-labs.de/devices/c1359733-ccbd-46e2-9e99-6d9b1e12fe7b',
+      template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
       'x-esc-position': {
         x: 800,
         y: 600,
@@ -301,7 +301,7 @@ export const three_axes_portal_mc: Experiment = {
     },
     {
       name: 'ECP',
-      template_device: 'https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e',
+      template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
       'x-esc-position': {
         x: 200,
         y: 400,
@@ -680,12 +680,12 @@ export const three_axes_portal_mc: Experiment = {
   ],
 };
 
-export const mc: Experiment = {
+export const mc: ExperimentServiceTypes.Experiment = {
     status: 'running',
     roles: [
       {
         name: 'ECP',
-        template_device: 'https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e',
+        template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
         'x-esc-position': {
           x: 200,
           y: 400,
@@ -693,7 +693,7 @@ export const mc: Experiment = {
       },
       {
         name: 'Microcontroller',
-        template_device: 'https://api.goldi-labs.de/devices/c1359733-ccbd-46e2-9e99-6d9b1e12fe7b',
+        template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
         'x-esc-position': {
           x: 800,
           y: 600,
@@ -953,12 +953,12 @@ export const mc: Experiment = {
   };
   
 
-  export const three_axes_portal_io: Experiment = {
+  export const three_axes_portal_io: ExperimentServiceTypes.Experiment = {
     status: 'running',
     roles: [
       {
         name: '3-Axis-Portal V1',
-        template_device: 'https://api.goldi-labs.de/devices/40f25599-b62c-4580-82dc-3889c641bf77',
+        template_device: 'https://api.goldi-labs.de/devices/5bce3eb7-f094-4be4-8469-8768b921d620',
         'x-esc-position': {
           x: 800,
           y: 300,
@@ -966,7 +966,7 @@ export const mc: Experiment = {
       },
       {
         name: 'IO-Board',
-        template_device: 'https://api.goldi-labs.de/devices/c1359733-ccbd-46e2-9e99-6d9b1e12fe7b',
+        template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
         'x-esc-position': {
           x: 800,
           y: 600,
@@ -974,7 +974,7 @@ export const mc: Experiment = {
       },
       {
         name: 'ECP',
-        template_device: 'https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e',
+        template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
         'x-esc-position': {
           x: 200,
           y: 400,

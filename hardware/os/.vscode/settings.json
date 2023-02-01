@@ -1,18 +1,18 @@
 {
     "files.watcherExclude": {
-        "build/cache/**": true,
-        "build/conf/**": true,
-        "build/downloads/**": true,
-        "build/sstate-cache/**": true,
-        "build/tmp/**": true,
-        "build/workspace/**": false,
+        "build": true,
+        "meta-openembedded": true,
+        "meta-raspberrypi": true,
+        "meta-rauc": true,
+        "poky": true,
         //begin generated
-        
+
         //end generated
     },
     "files.exclude": {
         //begin generated
-        
+        "meta-goldi-distro/recipes-core/.vscode": true,
+        "meta-goldi-distro/.vscode": true,
         //end generated
     }
 }

@@ -1,0 +1,74 @@
+---
+version: '2'
+services:
+
+# Reverse Proxy ###################################################################################
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.0.4
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: on-failure
+    networks:
+      default:
+        aliases:
+          - api.$DOMAIN
+
+  acme-companion:
+    image: nginxproxy/acme-companion:2.2.3
+    container_name: nginx-proxy-acme
+    environment:
+      - DEFAULT_EMAIL=$EMAIL
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: on-failure
+
+# Hardware Support ################################################################################
+  vpn-server:
+    image: goldi2/vpn-server
+    volumes:
+      - "/lib/modules:/lib/modules"
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    network_mode: "host"
+    environment:
+      - PEERS=$VPN_PEERS
+      - KEY=$VPN_KEY
+    restart: on-failure
+
+# Coturn ##########################################################################################
+  coturn:
+    image: coturn/coturn
+    network_mode: "host"
+
+# Logging #########################################################################################
+  logs:
+    image: amir20/dozzle
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - VIRTUAL_HOST=logs.$DOMAIN
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=logs.$DOMAIN
+      - DOZZLE_USERNAME=$DOZZLE_USERNAME
+      - DOZZLE_PASSWORD=$DOZZLE_PASSWORD
+    restart: on-failure
+
+volumes:
+  conf:
+  vhost:
+  html:
+  certs:
+  acme:

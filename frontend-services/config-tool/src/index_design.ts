@@ -1,5 +1,4 @@
 import { APIClient } from './client';
-import { DeviceOverview } from "@cross-lab-project/api-client/dist/generated/device/types";
 import { LitElement, html, adoptStyles, unsafeCSS } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
@@ -11,11 +10,12 @@ import style from './styles.css'
 const stylesheet = unsafeCSS(style)
 
 import './plugablejs/viewport'
+import { DeviceServiceTypes } from '@cross-lab-project/api-client';
 
 @customElement('esp-app')
 export class App extends LitElement {
     @state()
-    devices: DeviceOverview[] = [];
+    devices: DeviceServiceTypes.DeviceOverview[] = [];
 
     async connectedCallback() {
         super.connectedCallback();

@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         //begin generated
+        "crosslab-cli/node_modules": true,
         "crosslab-typescript-addon/node_modules": true,
         "openapi-codegeneration/node_modules": true,
         "tsdoc-theme/node_modules": true,
@@ -8,6 +9,8 @@
     },
     "files.watcherExclude": {
         //begin generated
+        "crosslab-cli/app/**": true,
+        "crosslab-cli/node_modules": true,
         "crosslab-typescript-addon/node_modules": true,
         "openapi-codegeneration/node_modules": true,
         "tsdoc-theme/node_modules": true,

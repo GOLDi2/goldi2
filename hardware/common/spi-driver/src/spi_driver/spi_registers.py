@@ -1,3 +1,4 @@
+import asyncio
 from typing import Callable, List, Optional, Set
 
 import spidev
@@ -34,6 +35,11 @@ class SpiRegisters:
     def __setitem__(self, key: int, value: int):
         self._registers_buffer[key] = value
         self._register_write_addresses.add(key)
+
+    async def communicate_coroutine(self):
+        while True:
+            self.communicate()
+            await asyncio.sleep(0.05)
 
     def communicate(self):
         addresses = list(

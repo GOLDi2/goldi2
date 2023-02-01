@@ -6,10 +6,10 @@ LIC_FILES_CHKSUM=""
 MULTIMACH_TARGET_SYS = "${MACHINE_VARIANT}-${PACKAGE_ARCH}${TARGET_VENDOR}-${TARGET_OS}"
 
 GIT_DIR = "${THISDIR}/../../../../../"
-FILESEXTRAPATHS:prepend := "${GIT_DIR}/hardware/boards/${MACHINE_VARIANT}/fpga/dist:"
+FILESEXTRAPATHS:prepend := "${GIT_DIR}hardware/boards/${MACHINE_VARIANT}/fpga/dist:"
 
 #OVERRIDES:append = ":${MACHINE_VARIANT}"
-#FILESEXTRAPATHS:prepend:io-board := "${GIT_DIR}/hardware/boards/io-board/fpga/dist:"
+#FILESEXTRAPATHS:prepend:io-board := "${GIT_DIR}hardware/boards/io-board/fpga/dist:"
 
 SRC_URI = " \
     file://load-fpga-firmware.service \

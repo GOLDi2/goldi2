@@ -6,6 +6,8 @@
         //end generated
     },
     "files.watcherExclude": {
-        "build": true,
+        //begin generated
+        
+        //end generated
     }
 }

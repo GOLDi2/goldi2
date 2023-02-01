@@ -9,11 +9,11 @@ const config = {
   entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "http-dist"),
     devtoolModuleFilenameTemplate: 'file:///[absolute-resource-path]'
   },
   devtool: 'source-map',
-  devServer: { liveReload: false, static: "./dist", hot: true },
+  devServer: { liveReload: false, static: "./http-dist", hot: true },
   plugins: [
     new HtmlWebpackPlugin({
       template: "index.html",

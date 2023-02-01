@@ -6,7 +6,7 @@ import { ElectricalConnection } from "./electricalConnection";
 import { FileUpload } from './file';
 import { Webcam } from "./webcam";
 
-const device_id = "60895feb-00cb-4f60-bb96-2ee5a8edab14";
+let device_url = "";
 const client = new APIClient("https://api.goldi-labs.de");
 const deviceHandler = new DeviceHandler();
 
@@ -30,6 +30,7 @@ export class App extends LitElement {
 
     window.addEventListener("message", (event) => {
       if(event.data.token){
+        device_url = event.data.device_url;
         this.start(event.data.token)
       }
     });
@@ -38,10 +39,9 @@ export class App extends LitElement {
   }
 
   async start(accesstoken: string) {
+    console.log({accesstoken, device_url})
     client.accessToken=accesstoken;
-    const token = await client.getToken(
-      "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
-    );
+    const token = await client.createWebsocketToken(device_url+'/websocket');
 
     this.electrical = new ElectricalConnection("electrical");
     this.electrical.register(deviceHandler);
@@ -53,8 +53,8 @@ export class App extends LitElement {
     this.webcam.register(deviceHandler);
 
     await deviceHandler.connect({
-      endpoint: "wss://api.goldi-labs.de/devices/ws",
-      id: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e",
+      endpoint: "wss://api.goldi-labs.de/devices/websocket",
+      id: device_url,
       token,
     });
 

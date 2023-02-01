@@ -1,12 +1,19 @@
 {
     "files.exclude": {
         //begin generated
-
+        "config-tool/node_modules": true,
+        "experiment-control-panel/node_modules": true,
+        "website/node_modules": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-
+        "config-tool/lib": true,
+        "config-tool/node_modules": true,
+        "experiment-control-panel/lib": true,
+        "experiment-control-panel/node_modules": true,
+        "website/lib": true,
+        "website/node_modules": true,
         //end generated
     }
 }

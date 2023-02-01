@@ -1,0 +1,12 @@
+[Unit]
+Description=GOLDi2 Crosslab Client
+After=network.target
+
+[Service]
+Restart=on-failure
+ExecStartPre=/usr/bin/set_led_connecting
+ExecStart=crosslab_client
+ExecStopPost=/usr/bin/set_led_connection_lost
+
+[Install]
+WantedBy=multi-user.target

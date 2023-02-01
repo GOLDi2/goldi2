@@ -3,10 +3,6 @@ import {
   ElectricalConnectionService,
   GPIO,
 } from "@cross-lab-project/soa-service-electrical";
-import {
-  GPIOInterface,
-  GPIOState,
-} from "@cross-lab-project/soa-service-electrical/dist/gpio";
 import { LitElement, html, adoptStyles, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import produce from "immer";
@@ -28,11 +24,11 @@ export class ElectricalConnection extends LitElement {
   }
 
   @state()
-  protected _signals: { [key: string]: GPIOState } = {};
+  protected _signals: { [key: string]: GPIO.GPIOState } = {};
   @state()
-  protected _signals_driver: { [key: string]: GPIOState } = {};
+  protected _signals_driver: { [key: string]: GPIO.GPIOState } = {};
 
-  protected _interfaces: { [key: string]: GPIOInterface } = {};
+  protected _interfaces: { [key: string]: GPIO.GPIOInterface } = {};
 
   register(deviceHandler: DeviceHandler) {
     const sensor_service = new ElectricalConnectionService(this.name, []);
@@ -42,11 +38,11 @@ export class ElectricalConnection extends LitElement {
     sensor_service.on("newInterface", (event) => {
       console.log(event);
       if (event.connectionInterface.interfaceType == "gpio") {
-        const gpioInterface = event.connectionInterface as GPIOInterface;
+        const gpioInterface = event.connectionInterface as GPIO.GPIOInterface;
         this._interfaces[gpioInterface.configuration.signals.gpio] =
           gpioInterface;
         this._signals = produce(this._signals, (draft) => {
-          draft[gpioInterface.configuration.signals.gpio] = GPIOState.Unknown;
+          draft[gpioInterface.configuration.signals.gpio] = GPIO.GPIOState.Unknown;
         });
         gpioInterface.on("signalChange", (signalEvent) => {
           this._signals = produce(this._signals, (draft) => {
@@ -61,17 +57,17 @@ export class ElectricalConnection extends LitElement {
 
   private _rotateDriver(name: string) {
     this._signals_driver = produce(this._signals_driver, (draft) => {
-      const old_state = draft[name] || GPIOState.HighZ;
-      let new_state = GPIOState.Unknown;
+      const old_state = draft[name] || GPIO.GPIOState.HighZ;
+      let new_state = GPIO.GPIOState.Unknown;
       switch (old_state) {
-        case GPIOState.HighZ:
-          new_state = GPIOState.StrongLow;
+        case GPIO.GPIOState.HighZ:
+          new_state = GPIO.GPIOState.StrongLow;
           break;
-        case GPIOState.StrongLow:
-          new_state = GPIOState.StrongHigh;
+        case GPIO.GPIOState.StrongLow:
+          new_state = GPIO.GPIOState.StrongHigh;
           break;
-        case GPIOState.StrongHigh:
-          new_state = GPIOState.HighZ;
+        case GPIO.GPIOState.StrongHigh:
+          new_state = GPIO.GPIOState.HighZ;
           break;
       }
 
@@ -82,7 +78,7 @@ export class ElectricalConnection extends LitElement {
 
   private _driveHigh(name: string) {
     this._signals_driver = produce(this._signals_driver, (draft) => {
-      let new_state = GPIOState.StrongHigh;
+      let new_state = GPIO.GPIOState.StrongHigh;
       this._interfaces[name].changeDriver(new_state);
       draft[name] = new_state;
     });
@@ -90,7 +86,7 @@ export class ElectricalConnection extends LitElement {
 
   private _driveLow(name: string) {
     this._signals_driver = produce(this._signals_driver, (draft) => {
-      let new_state = GPIOState.StrongLow;
+      let new_state = GPIO.GPIOState.StrongLow;
       this._interfaces[name].changeDriver(new_state);
       draft[name] = new_state;
     });
@@ -98,7 +94,7 @@ export class ElectricalConnection extends LitElement {
 
   private _driveHighZ(name: string) {
     this._signals_driver = produce(this._signals_driver, (draft) => {
-      let new_state = GPIOState.HighZ;
+      let new_state = GPIO.GPIOState.HighZ;
       this._interfaces[name].changeDriver(new_state);
       draft[name] = new_state;
     });
@@ -106,13 +102,13 @@ export class ElectricalConnection extends LitElement {
 
   private _renderSignal(
     name: string,
-    state: GPIOState,
-    driver: GPIOState = GPIOState.HighZ
+    state: GPIO.GPIOState,
+    driver: GPIO.GPIOState = GPIO.GPIOState.HighZ
   ) {
     let color = "bg-primary-50";
-    if (state == GPIOState.StrongHigh || state == GPIOState.WeakHigh) {
+    if (state == GPIO.GPIOState.StrongHigh || state == GPIO.GPIOState.WeakHigh) {
       color = "bg-secondary";
-    } else if (state == GPIOState.StrongLow || state == GPIOState.WeakLow) {
+    } else if (state == GPIO.GPIOState.StrongLow || state == GPIO.GPIOState.WeakLow) {
       color = "bg-primary-100";
     }
     return html`
@@ -120,7 +116,7 @@ export class ElectricalConnection extends LitElement {
         <div class="grow"></div>
         <div class="p-1">${name}</div>
         <div class="${color} h-7 text-lg w-28 text-center rounded-l-lg m-0">
-          ${GPIOState[state]}
+          ${GPIO.GPIOState[state]}
         </div>
         <button
           class="bg-primary h-7 text-sm w-28 text-center m-0 border-l-2 border-r-2 active:bg-secondary"

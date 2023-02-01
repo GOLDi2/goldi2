@@ -1,5 +1,4 @@
 import {APIClient} from './client';
-import {Experiment, Participant, Role, ServiceConfiguration} from '@cross-lab-project/api-client/dist/generated/experiment/types';
 import {LitElement, html, css, adoptStyles, unsafeCSS, PropertyValueMap} from 'lit';
 import {customElement, property, query, state} from 'lit/decorators.js';
 import {v4 as uuidv4} from 'uuid';
@@ -8,7 +7,6 @@ import style from './styles.css';
 import {until} from 'lit-html/directives/until.js';
 import interact from 'interactjs';
 import produce from 'immer';
-import {DeviceOverview, ServiceConfig} from '@cross-lab-project/api-client/dist/generated/device/types';
 import {
   Connection,
   ConnectionCoordinates,
@@ -26,6 +24,7 @@ import './plugablejs';
 import {PlugableViewport} from './plugablejs/viewport';
 import {Focusable, makeFocusable} from './plugablejs/focusable';
 import { three_axes_portal_mc } from './predefined';
+import { DeviceServiceTypes, ExperimentServiceTypes } from '@cross-lab-project/api-client';
 
 const stylesheet = unsafeCSS(style);
 
@@ -118,7 +117,7 @@ export class RoleBoxDummy extends LitElement implements Dragable {
 @customElement('role-box')
 export class RoleBox extends LitElement implements Dragable, Focusable {
   @property()
-  role: Role;
+  ServiceRole: ExperimentServiceTypes.Role;
 
   client: APIClient;
 
@@ -139,7 +138,7 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
 
   shouldUpdate(changedProperties: PropertyValueMap<this>) {
     if (changedProperties.has('role')) {
-      this.client.getDevice((this.role as any).template_device).then(device => {
+      this.client.getDevice((this.ServiceRole as any).template_device).then(device => {
         this.templateDevice = device;
       });
     }
@@ -147,7 +146,7 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
   }
 
   @state()
-  templateDevice?: DeviceOverview;
+  templateDevice?: DeviceServiceTypes.DeviceOverview;
 
   render() {
     const positionStyle = `left: ${this.position.x}px;top: ${this.position.y}px;`;
@@ -156,11 +155,11 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
         ? ' outline'
         : ''} outline-2 outline-secondary"
       style="${positionStyle}">
-      <div class="font-bold p-5">${this.role.name.toUpperCase()}</div>
+      <div class="font-bold p-5">${this.ServiceRole.name.toUpperCase()}</div>
       <div class="flex flex-col gap-4">
         ${this.templateDevice
           ? (this.templateDevice.services as any).map(
-              (service: any) => html`<service-box .service=${service} .rolename=${this.role.name} />`,
+              (service: any) => html`<service-box .service=${service} .rolename=${this.ServiceRole.name} />`,
             )
           : html`Loading...`}
       </div>
@@ -168,7 +167,7 @@ export class RoleBox extends LitElement implements Dragable, Focusable {
   }
 
   firstUpdated(): void {
-    const configPos = (this.role['x-esc-position'] as {x: number; y: number}) || {x: 0, y: 0};
+    const configPos = (this.ServiceRole['x-esc-position'] as {x: number; y: number}) || {x: 0, y: 0};
     this.position = new Coordinate(configPos.x, configPos.y);
     makeDragable(this);
     makeFocusable(this);
@@ -214,7 +213,7 @@ export class ESPServiceConnection extends LitElement implements Focusable {
     const lines = getConnectionLines(this.connection).map(this.renderLine.bind(this));
 
     if (this.connection.details) {
-      const details: ServiceConfiguration = this.connection.details;
+      const details: ExperimentServiceTypes.ServiceConfiguration = this.connection.details;
       const key = JSON.stringify(details);
       const plug_types = [JSON.stringify([details.serviceType, 'inout'])];
       const compatible_plug_types = plug_types;
@@ -251,7 +250,7 @@ function isESPServiceConnection(element: HTMLElement): element is ESPServiceConn
   return element.tagName.toLowerCase() === 'esp-service-connection';
 }
 
-async function autoUpdateConfig(config: ServiceConfiguration, experiment: Experiment, client: APIClient) {
+async function autoUpdateConfig(config: ExperimentServiceTypes.ServiceConfiguration, experiment: ExperimentServiceTypes.Experiment, client: APIClient) {
   if (config.serviceType === 'http://api.goldi-labs.de/serviceTypes/electrical') {
     const participantDeviceIds: string[] = config.participants.map(
       p => experiment.roles.find(r => r.name === p.role).template_device,
@@ -354,7 +353,7 @@ export class ConfigPane extends LitElement {
   }
 
   @property()
-  experimentConfiguration: Experiment = {
+  experimentConfiguration: ExperimentServiceTypes.Experiment = {
     status: 'running',
     roles: [],
     serviceConfigurations: [],
@@ -381,7 +380,7 @@ export class ConfigPane extends LitElement {
           ? e.detail.A
           : (e.detail.B as ESPServiceConnection);
         const serviceBox: ServiceBox = isServiceBox(e.detail.A) ? e.detail.A : (e.detail.B as ServiceBox);
-        const existingConfig: ServiceConfiguration = serviceConnection.connection.details;
+        const existingConfig: ExperimentServiceTypes.ServiceConfiguration = serviceConnection.connection.details;
         const participantService = serviceBox.service;
         const existingConfigDraft = draft.serviceConfigurations.find(c => c.id === existingConfig.id);
         existingConfigDraft.participants.push({serviceId: participantService.serviceId, role: serviceBox.rolename, config: {}});
@@ -398,7 +397,7 @@ export class ConfigPane extends LitElement {
   private viewport!: PlugableViewport;
 
   render() {
-    const updateRole = (idx: number, role: Role) => {
+    const updateRole = (idx: number, role: ExperimentServiceTypes.Role) => {
       this.experimentConfiguration = produce(this.experimentConfiguration, draft => {
         draft.roles[idx] = role;
       });
@@ -436,7 +435,7 @@ export class ConfigPane extends LitElement {
           @service-configuration-create=${this.createServiceConf}
           .renderConnection="${this.renderConnection}">
           ${this.experimentConfiguration.roles.map(
-            (role, idx) => html`<role-box .role="${role}" @role-updated="${(e: CustomEvent) => updateRole(idx, e.detail)}" />`,
+            (role, idx) => html`<role-box .ServiceRole="${role}" @role-updated="${(e: CustomEvent) => updateRole(idx, e.detail)}" />`,
           )}
         </plugable-viewport>
         <div class="bg-primary-100 w-80 h-full shadow-[inset_0rem_0.3rem_0.3rem_-0.3em_rgba(0,0,0,0.3)]">
@@ -446,7 +445,7 @@ export class ConfigPane extends LitElement {
     `;
   }
 
-  addDeviceRole(device: DeviceOverview, position: any) {
+  addDeviceRole(device: DeviceServiceTypes.DeviceOverview, position: any) {
     this.experimentConfiguration = produce(this.experimentConfiguration, draft => {
       const uniqueName = (n: string): string => {
         const role = draft.roles.find(r => r.name === n);

@@ -1,4 +1,5 @@
-import { DeviceOverview } from '@cross-lab-project/api-client/dist/generated/device/types';
+
+import { DeviceServiceTypes } from '@cross-lab-project/api-client';
 import { LitElement, html, css, adoptStyles, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -14,10 +15,10 @@ export class DevicePanel extends LitElement {
     }
 
     @property()
-    device: DeviceOverview[];
+    device: DeviceServiceTypes.DeviceOverview[];
 
     render() {
-        return html``;
+        //return html``;
         return html`
         <div>
             <h2>Devices</h2>
