@@ -2,18 +2,9 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
 	"name": "Crosslab",
-	"image": "goldi-devcontainer:build",
+	"image": "crosslab/devcontainer:latest",
 
 	"runArgs": [
-		// give all capabilities to a container, in other words, the container can then do almost everything that the host can do
-        "--privileged",
-		// forwarding all host machine ports
-        "--net",
-        "host",
-		// mount connected USB devices to a container
-        "-v",
-        "/dev:/dev",
-		// mount docker socker
 		"-v",
 		"/var/run/docker.sock:/var/run/docker.sock"
     ],
@@ -39,8 +30,8 @@
 				"onatm.open-in-new-window"
 			]
 		}
-	}
+	},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"remoteUser": "dev"
 }
