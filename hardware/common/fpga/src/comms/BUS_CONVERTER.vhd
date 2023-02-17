@@ -33,13 +33,18 @@ use work.GOLDI_COMM_STANDARD.all;
 --! @details
 --! Module routes the incomming parallel data and performs the 
 --! communication operations with the slave modules in the system.
+--! Multiple continous data transactions are arranged in the
+--! most-significant-bit-first configuration. Data words are
+--! registered in decreasing addresses starting with the address
+--! provided in the configuration word.
 --! 
 --! ###Data format:
 --!
 --! |      		|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
 --! |:----------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 --! |config_word|we	  | ADDRESS[6:0]|||||||
---! |data_word	| DATA[7:0] ||||||||
+--! |data_word_0| DATA[15:8] ||||||||
+--!	|data_word_1| DATA[7:0]  ||||||||
 --!
 --! **Latency:1**
 entity BUS_CONVERTER is
@@ -134,7 +139,7 @@ begin
 						data_word_buff	  <= data_word_in;
 						
 					elsif(multi_transaction = '1') then
-						address_buff <= std_logic_vector(unsigned(address_buff) + to_unsigned(1,BUS_ADDRESS_WIDTH));
+						address_buff <= std_logic_vector(unsigned(address_buff) - to_unsigned(1,BUS_ADDRESS_WIDTH));
 						multi_transaction <= '0';
 						bus_write_valid   <= '0';
 					
