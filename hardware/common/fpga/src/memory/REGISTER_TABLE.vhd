@@ -71,93 +71,61 @@ architecture RTL of REGISTER_TABLE is
 							    := to_unsigned(BASE_ADDRESS,BUS_ADDRESS_WIDTH);
 	constant max_address	:	unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
 							    := to_unsigned(BASE_ADDRESS+NUMBER_REGISTERS,BUS_ADDRESS_WIDTH);
-    --Buffers
-    signal reg_buff_r       :   data_word_vector(NUMBER_REGISTERS-1 downto 0);
-    signal reg_buff_w       :   data_word_vector(NUMBER_REGISTERS-1 downto 0);
 
 
 begin
-    --**Synthesis checks**
-    assert(BASE_ADDRESS < 2**BUS_ADDRESS_WIDTH)
-        report "Synthesis error - BASE_ADDRESS excedes BUS_ADDRESS bounds" severity failure;
-    assert(NUMBER_REGISTERS < 2**BUS_ADDRESS_WIDTH)
-        report "Synthesis error - Number of registers excedes BUS_ADDRESS bounds" severity failure;
-    assert(BASE_ADDRESS+NUMBER_REGISTERS < 2**BUS_ADDRESS_WIDTH)
-        report "Synthesis error - Selected register addresses out of bounds" severity failure;
-    assert(REG_DEFAULT_VALUES'length = NUMBER_REGISTERS)
-        report "Synthesis error - REG_DEFAULT_VALUES expects " & integer'image(NUMBER_REGISTERS) & " elements" 
-        severity failure;
-    --
 
-
-    --Route output data
-    reg_data_out <= reg_buff_w;
-
-
-    BUS_READ_OPERATION : process(clk)
-        variable reg_index  :   natural := 0;
+    READ_OPERATION : process(clk)
+        variable reg_index  :   integer;
     begin
         if(rising_edge(clk)) then
+            --Decode address
+            reg_index := to_integer(unsigned(sys_bus_i.adr))-BASE_ADDRESS;
+
             if(rst = '1') then
                 sys_bus_o.dat <= (others => '0');
                 sys_bus_o.val <= '0';
 
-            elsif((min_address <= unsigned(sys_bus_i.adr)) and
-                  (unsigned(sys_bus_i.adr) < max_address)  and
-                  (sys_bus_i.we = '0')) then
-
-                reg_index := to_integer(unsigned(sys_bus_i.adr))-BASE_ADDRESS;
-                sys_bus_o.dat <= reg_buff_r(reg_index);
+            elsif((min_address <= unsigned(sys_bus_i.adr))  and
+                  (unsigned(sys_bus_i.adr) < max_address)   and
+                  (sys_bus_i.we = '0'))                     then            
+                sys_bus_o.dat <= reg_data_in(reg_index);
                 sys_bus_o.val <= '1';
             
             else
-                reg_index := 0;
                 sys_bus_o.dat <= (others => '0');
                 sys_bus_o.val <= '0';
             end if;
-
+         
         end if;
     end process;
 
 
-    BUS_WRITE_OPERATION : process(clk)
-        variable reg_index : natural;
-    begin		
-		if(rising_edge(clk)) then
-            if(rst = '1') then 
-                --Reset internal port of register table
-                reg_buff_w <= REG_DEFAULT_VALUES;
-                --Strobe to indicate reset of registers
-                reg_data_stb <= (others => '1');
 
-            elsif((min_address <= unsigned(sys_bus_i.adr)) and
-                  (unsigned(sys_bus_i.adr) < max_address)  and
-                  (sys_bus_i.we = '1')) then
-                
-                reg_index := to_integer(unsigned(sys_bus_i.adr))-BASE_ADDRESS;
-                reg_buff_w(reg_index) <= sys_bus_i.dat;
-				
-                --Generate strobe signal only when value is changed
-                if(reg_buff_w(reg_index) /= sys_bus_i.dat) then
-                    reg_data_stb <= (others => '0');
-                    reg_data_stb(reg_index) <= '1';
-                else
-                    reg_data_stb <= (others => '0');
-                end if;
-
-            else
-                --Deassert strobe flags
-                reg_data_stb <= (others => '0');
-            end if;
-        
-        end if;
-    end process;
-
-
-    INTERNAL_READ_OPERATION : process(clk)
+    WRITE_OPERATION : process(clk)
+        variable reg_index  :   integer;
     begin
         if(rising_edge(clk)) then
-            reg_buff_r <= reg_data_in;
+            --Decode address
+            reg_index := to_integer(unsigned(sys_bus_i.adr)) - BASE_ADDRESS;
+            
+            if(rst = '1') then
+                --Reset internal port
+                reg_data_out <= REG_DEFAULT_VALUES;
+                reg_data_stb <= (others => '1');
+
+            elsif((min_address <= unsigned(sys_bus_i.adr))  and 
+                  (unsigned(sys_bus_i.adr) < max_address)   and
+                  (sys_bus_i.we = '1'))                     then
+
+                --Update internal port 
+                reg_data_out(reg_index) <= sys_bus_i.dat;
+                reg_data_stb(reg_index) <= '1';
+
+            else
+                reg_data_stb <= (others => '0'); 
+            end if;
+
         end if;
     end process;
 
