@@ -22,6 +22,8 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+--! Use custom library
+library work;
 use work.GOLDI_MODULE_CONFIG.all;
 
 
@@ -52,20 +54,36 @@ package GOLDI_COMM_STANDARD is
 		val :	std_logic;
 	end record;
 	
+
 	--Master Interface Data Structures
 	alias mbus_in is sbus_out;
 	alias mbus_out is sbus_in;
+
 
 	--BUS vectors
 	type sbus_i_vector is array(natural range <>) of sbus_in;
 	type sbus_o_vector is array(natural range <>) of sbus_out;
 
+
 	--BUS constants
-	constant bus_disabled	:	sbus_in := 
+	constant gnd_mbus_o		:	mbus_out :=
 	(
-		we => '0', 
+		we  => '0',
+		adr => (others => '0'),
+		dat => (others => '0')
+	);
+
+	constant gnd_sbus_i		:	sbus_in := 
+	(
+		we  => '0', 
 		adr => (others => '0'), 
 		dat => (others =>'0')
+	);
+
+	constant gnd_sbus_o		:	sbus_out :=
+	(
+		dat => (others => '0'),
+		val => '0'
 	);
 	-----------------------------------------------------------------------------------------------
 	
@@ -73,6 +91,7 @@ package GOLDI_COMM_STANDARD is
 	
 	--****Functions****
 	-----------------------------------------------------------------------------------------------
+	--function dataVectorToStdVector(vector : data_word_vector) return std_logic_vector;
 	function getMemoryLength(a : natural) return natural;
 	function assignMemory(data : std_logic_vector) return data_word_vector;
 	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
@@ -83,6 +102,18 @@ end package;
 
 
 package body GOLDI_COMM_STANDARD is
+
+	--
+	-- function dataVectorToStdVector(vector : data_word_vector) return std_logic_vector is
+	-- 	variable vector_buff	:	std_logic_vector((vector'length*SYSTEM_DATA_WIDTH)-1 downto 0);
+	-- begin
+	-- 	for i in 0 to vector'length-1 loop
+	-- 		vector_buff((SYSTEM_DATA_WIDTH*(i+1)-1) downto i*SYSTEM_DATA_WIDTH) := vector_buff(i);
+	-- 	end loop;
+
+	-- 	return vector_buff;
+	-- end dataVectorToStdVector;
+
 
 	-- Returns the minimum number of registers needed to 
 	-- save a vector of size a; based on the SYSTEM_DATA_WIDTH of 

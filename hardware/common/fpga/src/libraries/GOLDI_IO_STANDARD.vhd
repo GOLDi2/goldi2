@@ -22,25 +22,15 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert libarry 
-use std.standard.all;
+--! Use custom libraries
+library work;
+use work.GOLDI_MODULE_CONFIG.all;
 
 
 
 package GOLDI_IO_STANDARD is	
 	
-	--****Data arrays****
-	-----------------------------------------------------------------------------------------------
-	type word_8_bit_array  	is array (natural range <>) of std_logic_vector(7 downto 0);
-	type word_16_bit_array 	is array (natural range <>) of std_logic_vector(15 downto 0);
-	type word_20_bit_array 	is array (natural range <>) of std_logic_vector(19 downto 0);
-	type natural_array		is array (natural range <>) of natural;
-	type boolean_array		is arraY (natural range <>) of boolean;
-	-----------------------------------------------------------------------------------------------
-
-	
-
-	--****Data structures****
+	--****IO Data Structures****
 	-----------------------------------------------------------------------------------------------
 	--IO fpga system input signals
 	type io_i is record
@@ -53,17 +43,12 @@ package GOLDI_IO_STANDARD is
 		dat		:	std_logic;
 	end record;	
 
-	--Packaging record for assignment simplification
-	type std_io is record
-		input	:	io_i;
-		output  :	io_o;
-	end record;
-	
+
 	--Array structures
-	type io_i_vector is array (natural range <>) of io_i;
-	type io_o_vector is array (natural range <>) of io_o;
-	type std_io_vector is array (natural range <>) of std_io;
-	
+	type io_i_vector is array(natural range <>) of io_i;
+	type io_o_vector is array(natural range <>) of io_o;
+
+
 	--Constant values
 	constant gnd_io_i : io_i := (dat => '0');
 	constant gnd_io_o : io_o := (enb => '0', dat => '0');
@@ -71,11 +56,32 @@ package GOLDI_IO_STANDARD is
 	
 
 
-	--****Functions****
+	--****Crossbar Data Structures****
 	-----------------------------------------------------------------------------------------------
+	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
+	-----------------------------------------------------------------------------------------------
+
+
+
+	--****Functions****
+	-----------------------------------------------------------------------------------------------	
 	function getIOInData(io : io_i_vector) return std_logic_vector;
 	function getIOOutData(io : io_o_vector) return std_logic_vector;
+	-----------------------------------------------------------------------------------------------
 
+
+
+	--****Experimental****
+	-----------------------------------------------------------------------------------------------
+	type std_io is record
+		input	:	io_i;
+		output	:	io_o;
+	end record;
+
+	type std_io_vector is array(natural range <>) of std_io;
+
+	
 	function getInVector(io : std_io_vector) return io_i_vector;
 	function getOutVector(io : std_io_vector) return io_o_vector;
 
@@ -89,7 +95,18 @@ end package GOLDI_IO_STANDARD;
 
 package body GOLDI_IO_STANDARD is
 
+	function outputStdLogic(data : std_logic; io : std_io) return std_io is
+		variable io_buff	:	std_io;
+	begin
+		io_buff.input.dat  := '0';
+		io_buff.output.enb := '1';
+		io_buff.output.dat := data;
+
+		return io_buff;
+  	end outputStdLogic;
 	
+
+
 	function getIOInData(io : io_i_vector) return std_logic_vector is
 		variable data	:	std_logic_vector(io'range);
 	begin
