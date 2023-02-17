@@ -41,11 +41,11 @@ use work.GOLDI_IO_STANDARD.all;
 --!
 --! |Address    |Bit 7  |Bit 6  |Bit 5  |Bit 4  |Bit 3  |Bit 1  |Bit 0  |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
---! |+0         |       |       |       |       |enb    |data_o |data_i |
+--! |+0         |       |       |       |       |       |enb    |data   |
 --!
 --! + enb: [1 - output mode | 0 - input mode]
---! + data_o: write only value - sets output value when output mode selected
---! + data_i: read only value - input data in input mode output data in output mode
+--! + data: output value when output mode selected;
+--!         input value when input mode selected
 --!
 --! **Latency: 1cyl**
 entity GPIO_DRIVER_ARRAY is
@@ -72,29 +72,9 @@ end entity GPIO_DRIVER_ARRAY;
 --! General architecture
 architecture RTL of GPIO_DRIVER_ARRAY is
 
-    --Components
-    component REGISTER_TABLE
-        generic(
-            BASE_ADDRESS		:	natural;
-            NUMBER_REGISTERS	:	natural;
-            REG_DEFAULT_VALUES	:	data_word_vector
-        );
-        port(
-            clk				: in	std_logic;
-            rst				: in	std_logic;
-            sys_bus_i		: in	sbus_in;
-            sys_bus_o		: out	sbus_out;
-            reg_data_in		: in	data_word_vector(NUMBER_REGISTERS-1 downto 0);
-            reg_data_out	: out   data_word_vector(NUMBER_REGISTERS-1 downto 0);
-            reg_data_stb	: out	std_logic_vector(NUMBER_REGISTERS-1 downto 0)
-        );
-    end component;
-
-
     --Intermediate signals
     --Constant
-	constant reg_default	:	data_word_vector(GPIO_NUMBER-1 downto 0)	--Use of larger constant due to problems with generics
-		:= (others => (others => '0'));			
+	constant reg_default	:	data_word_vector(GPIO_NUMBER-1 downto 0) := (others => (others => '0'));			
 	--Registers
     signal reg_data_o   :   data_word_vector(GPIO_NUMBER-1 downto 0);
     signal reg_data_i   :   data_word_vector(GPIO_NUMBER-1 downto 0);
@@ -103,17 +83,19 @@ architecture RTL of GPIO_DRIVER_ARRAY is
 begin
 
     GPIO_ROUTING : for i in 0 to GPIO_NUMBER-1 generate
-        reg_data_i(i)(0)  <= gpio_i_vector(i).dat;
-        reg_data_i(i)(1)  <= reg_data_o(i)(1);
-		reg_data_i(i)(2)  <= reg_data_o(i)(2);
-		reg_data_i(i)(7 downto 3) <= (others => '0');
-		gpio_o_vector(i).enb <= reg_data_o(i)(2);
-        gpio_o_vector(i).dat <= reg_data_o(i)(1);
+        --Route register outputs
+        gpio_o_vector(i).enb <= reg_data_o(i)(1);
+        gpio_o_vector(i).dat <= reg_data_o(i)(0);
+        --Route register inputs
+        reg_data_i(i)(7 downto 2) <= (others => '0');
+        reg_data_i(i)(1) <= reg_data_o(i)(1);
+        reg_data_i(i)(0) <= reg_data_o(i)(0) when(reg_data_o(i)(1) = '1') else 
+                            gpio_i_vector(i).dat;
     end generate;
 
 
 
-    MEMORY : REGISTER_TABLE
+    MEMORY : entity work.REGISTER_TABLE
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
 		NUMBER_REGISTERS	=> GPIO_NUMBER,
