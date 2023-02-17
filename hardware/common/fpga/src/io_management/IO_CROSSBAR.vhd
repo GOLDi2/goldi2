@@ -12,11 +12,15 @@
 -- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd;
 --                  -> GOLDI_COMM_STANDARD.vhd;
 --                  -> GOLDI_IO_STANDARD.vhd; 
---                  -> GOLDI_CROSSBAR_STANDARD.vhd
+--                  -> GOLDI_CROSSBAR_DEFAULT.vhd
 --
 -- Revisions:
 -- Revision V0.01.03 - File Created
 -- Additional Comments: First commit
+--
+-- Revision V0.01.04 - Refactor of Crossbar data structures
+-- Additional Comments: Data structures in packages restructured
+--                      to provide user flexibility.
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -
@@ -26,9 +30,11 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom libraries
+library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_CROSSBAR_DEFAULT.all;
 
 
 
@@ -58,21 +64,24 @@ use work.GOLDI_IO_STANDARD.all;
 --! |1      |2                      |2                      |
 entity IO_CROSSBAR is
     generic(
-        LAYOUT_BLOCKED  :   boolean := false                                --! Block access to crossbar
+        LEFT_PORT_LENGTH    :   natural := 6;                                   --! Left Crossbar port - System IO Interface
+        RIGHT_PORT_LENGTH   :   natural := 3;                                   --! Right Crossbar port - FPGA Pin Interface
+        LAYOUT_BLOCKED      :   boolean := false;                               --! Block access to crossbar
+        DEFAULT_CB_LAYOUT   :   cb_right_port_ram := DEFAULT_CROSSBAR_LAYOUT    --! Default crossbar configuration
     );
     port(
         --General
-        clk         : in    std_logic;                                      --! System clock
-        rst         : in    std_logic;                                      --! Synchronous reset
+        clk                 : in    std_logic;                                  --! System clock
+        rst                 : in    std_logic;                                  --! Synchronous reset
         --Communication
-        cross_bus_i : in    sbus_in;                                        --! BUS slave input signals [we,adr,dat] 
-        cross_bus_o : out   sbus_out;                                       --! BUS slave output signals [dat,val]
-        --Virtual io pin interface
-        vir_io_in   : out   io_i_vector(VIRTUAL_PIN_NUMBER-1 downto 0);     --! Virtual data in vector
-        vir_io_out  : in    io_o_vector(VIRTUAL_PIN_NUMBER-1 downto 0);     --! Virtual data out vector
-        --Physical io pin interface
-        phy_io_in   : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! Physical data in vector
-        phy_io_out  : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! Physical data out vector
+        cb_bus_i            : in    sbus_in;                                    --! BUS slave input signals [we,adr,dat] 
+        cb_bus_o            : out   sbus_out;                                   --! BUS slave output signals [dat,val]
+        --System io pin interface
+        left_io_i_vector    : out   io_i_vector(LEFT_PORT_LENGTH-1 downto 0);   --! Virtual data in vector
+        left_io_o_vector    : in    io_o_vector(LEFT_PORT_LENGTH-1 downto 0);   --! Virtual data out vector
+        --FPGA pin interface
+        right_io_i_vector   : in    io_i_vector(RIGHT_PORT_LENGTH-1 downto 0);  --! Physical data in vector
+        right_io_o_vector   : out   io_o_vector(RIGHT_PORT_LENGTH-1 downto 0)   --! Physical data out vector
     );
 end entity IO_CROSSBAR;
 
@@ -81,88 +90,95 @@ end entity IO_CROSSBAR;
 
 --! General architecture
 architecture RTL of IO_CROSSBAR is
-    
+
     --Intermediate signals
-    --RAM
-    signal ram_phy_io_layout    :   phy_io_layout;
-    signal ram_vir_io_layout    :   vir_io_layout;
-    --RAM address
-    constant min_address        :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
-                                    := to_unsigned(2,BUS_ADDRESS_WIDTH);
-    constant max_address        :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
-                                    := to_unsigned(PHYSICAL_PIN_NUMBER+2,BUS_ADDRESS_WIDTH);
+    --Crossbar Matrix
+    signal ram_left_port_layout     :   cb_left_port_ram(LEFT_PORT_LENGTH-1 downto 0);
+    signal ram_right_port_layout    :   cb_right_port_ram(RIGHT_PORT_LENGTH-1 downto 0);
+    --RAM Address
+    constant min_adr                  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
+        := to_unsigned(2,BUS_ADDRESS_WIDTH);
+    constant max_adr                  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
+        := to_unsigned(RIGHT_PORT_LENGTH+2,BUS_ADDRESS_WIDTH);
 
 
 begin
 
-
-    --Main routing
-    ROUTING_SYSTEM_OUTPUTS : for i in 0 to PHYSICAL_PIN_NUMBER-1 generate
-        phy_io_out(i) <= vir_io_out(to_integer(ram_phy_io_layout(i))); 
+    --****Crossbar Routing****
+    -----------------------------------------------------------------------------------------------
+    LEFT_PORT_ROUTING : for i in 0 to LEFT_PORT_LENGTH-1 generate
+        left_io_i_vector(i) <= right_io_i_vector(to_integer(ram_left_port_layout(i)));
     end generate;
 
-    ROUTING_SYSTEM_INPUTS : for i in 0 to VIRTUAL_PIN_NUMBER-1 generate
-        vir_io_in(i) <= phy_io_in(to_integer(ram_vir_io_layout(i)));
+    RIGHT_PORT_ROUTING : for i in 0 to RIGHT_PORT_LENGTH-1 generate
+        right_io_o_vector(i) <= left_io_o_vector(to_integer(ram_right_port_layout(i)));
     end generate;
+    -----------------------------------------------------------------------------------------------
+
+
+
+
+    --****Layout Modification****
+    -----------------------------------------------------------------------------------------------
+    LAYOUT_READ : process(clk)
+        variable index  :   integer;
+    begin
+        if(rising_edge(clk)) then
+            --Decode bus address
+            index := to_integer(unsigned(cb_bus_i.adr))-2;
+            
+            if(rst = '1') then
+                cb_bus_o <= gnd_sbus_o;
+            elsif((min_adr <= unsigned(cb_bus_i.adr)) and 
+                  (unsigned(cb_bus_i.adr) <= max_adr) and
+                  (cb_bus_i.we = '0'))                then
+                --Return the configuration of the FPGA Pin interface
+                cb_bus_o.dat <= std_logic_vector(ram_right_port_layout(index));
+                cb_bus_o.val <= '1';
+            else
+                cb_bus_o <= gnd_sbus_o;                    
+            end if;
+
+        end if;
+    end process;
 
 
 
     LAYOUT_WRITE : process(clk)
-        variable index      :   natural := 0;
-        variable vir_value  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0) := (others => '0');
+        variable index          :   integer;
     begin
         if(rising_edge(clk)) then
+            --Decode bus address
+            index := to_integer(unsigned(cb_bus_i.adr))-2;
+            
             if(rst = '1') then
                 --Load ram with predefined layout
-                ram_phy_io_layout <= DEFAULT_IO_LAYOUT;
-				
-				ram_vir_io_layout <= (others => (others => '0'));
-                for i in 0 to PHYSICAL_PIN_NUMBER-1 loop
-                    index := to_integer(DEFAULT_IO_LAYOUT(i));
-                    vir_value := to_unsigned(i,BUS_ADDRESS_WIDTH); 
-
-                    ram_vir_io_layout(index) <= vir_value;
+                --Right port ram uses predefined layout 
+                ram_right_port_layout <= DEFAULT_CB_LAYOUT;
+                
+                --Left port extracts layout form right port
+                ram_left_port_layout <= (others => (others => '0'));
+                for i in 0 to RIGHT_PORT_LENGTH-1 loop
+                    ram_left_port_layout(to_integer(DEFAULT_CB_LAYOUT(i))) 
+                        <= to_unsigned(i,BUS_ADDRESS_WIDTH);
                 end loop;
-            
-            elsif((min_address <= unsigned(cross_bus_i.adr)) and
-                  (unsigned(cross_bus_i.adr) <= max_address) and
-                  (cross_bus_i.we = '1') and (LAYOUT_BLOCKED = false)) then
 
-                index := to_integer(unsigned(cross_bus_i.adr))-2;
-                ram_phy_io_layout(index) <= unsigned(cross_bus_i.dat);
-                ram_vir_io_layout(to_integer(unsigned(cross_bus_i.dat))) <= to_unsigned(index,BUS_ADDRESS_WIDTH);
+            elsif((min_adr <= unsigned(cb_bus_i.adr))   and
+                  (unsigned(cb_bus_i.adr) <= max_adr)   and
+                  (cb_bus_i.we = '1')                   and
+                  (LAYOUT_BLOCKED = false))             then
+                --Write bus data to right port configuration and 
+                --addres to left port configuration
+                ram_right_port_layout(index) <= unsigned(cb_bus_i.dat);
+                ram_left_port_layout(to_integer(unsigned(cb_bus_i.dat)))
+                    <= unsigned(cb_bus_i.adr)-2;
 
-            else
-                index := 0;
+            else null;            
             end if;
+
         end if;
     end process;
-    
-    
-
-    LAYOUT_READ : process(clk)
-        variable index  :   natural := 0;
-    begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                cross_bus_o.dat <= (others => '0');
-                cross_bus_o.val <= '0';
-
-            elsif((min_address <= unsigned(cross_bus_i.adr)) and
-                  (unsigned(cross_bus_i.adr) <= max_address) and
-                  (cross_bus_i.we = '0')) then
-
-                index := to_integer(unsigned(cross_bus_i.adr))-2;
-                cross_bus_o.dat <= std_logic_vector(ram_phy_io_layout(index));
-                cross_bus_o.val <= '1';
-
-            else
-                index := 0;
-                cross_bus_o.dat <= (others => '0');
-                cross_bus_o.val <= '0';
-            end if;
-        end if;
-    end process;
+    -----------------------------------------------------------------------------------------------
 
 
 end architecture;
