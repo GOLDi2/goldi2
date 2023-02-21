@@ -116,7 +116,7 @@ export class ElectricalConnection extends LitElement {
         <div class="grow"></div>
         <div class="p-1">${name}</div>
         <div class="${color} h-7 text-lg w-28 text-center rounded-l-lg m-0">
-          ${GPIO.GPIOState[state]}
+          ${state}
         </div>
         <button
           class="bg-primary h-7 text-sm w-28 text-center m-0 border-l-2 border-r-2 active:bg-secondary"

@@ -33,6 +33,7 @@ module.exports = {
     },
     fontFamily: {
       body: 'Roboto Condensed',
+      mono: 'monospace',
     }  
   },
   plugins: [],
