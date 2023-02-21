@@ -55,6 +55,8 @@ entity TOP_MODULE is
         SPI1_nCE0       : in    std_logic;
         SPI1_nCE1       : in    std_logic;
         --GPIO
+        GPIO0           : inout std_logic;
+        GPIO1           : inout std_logic;
         IN_OUT_DATA     : inout std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
     );
 end entity TOP_LEVEL;
@@ -266,9 +268,7 @@ begin
         sys_bus_o       => sys_bus_o(1),
         gpio_i_vector   => internal_io_i(63 downto 0),
         gpio_o_vector   => internal_io_o(63 downto 0)
-    );
-
-    
+    );  
     -----------------------------------------------------------------------------------------------
 
 
@@ -303,6 +303,94 @@ begin
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(3),
         led_output      => internal_io_o(65)
+    );
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****PWM GENERATORS****
+    -----------------------------------------------------------------------------------------------
+    ANALOG_DRIVER_1 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_1_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_1_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(4),
+        pwm_io          => internal_io_o(66)
+    );
+
+
+    ANALOG_DRIVER_2 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_2_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_2_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(5),
+        pwm_io          => internal_io_o(67)
+    );
+
+
+    ANALOG_DRIVER_3 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_3_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_3_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(6),
+        pwm_io          => internal_io_o(68)
+    );
+
+
+    ANALOG_DRIVER_4 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_4_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_4_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(7),
+        pwm_io          => internal_io_o(69)
+    );
+
+    
+    ANALOG_DRIVER_5 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_5_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_5_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(8),
+        pwm_io          => internal_io_o(70)
+    );
+
+
+    ANALOG_DRIVER_6 : entity work.PWM_GENERATOR
+    generic map(
+        ADDRESS         => ANALOG_DRIVER_6_ADDRESS,
+        PWM_FREQUENCY   => ANALOG_DRIVER_6_FREQUENCY
+    )
+    port map(
+        clk             => ClockFPGA,
+        rst             => Reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(9),
+        pwm_io          => internal_io_o(71)
     );
     -----------------------------------------------------------------------------------------------
 

@@ -41,7 +41,7 @@ package GOLDI_MODULE_CONFIG is
     --Number of physical FPGA pins that are available for IO functions
     constant PHYSICAL_PIN_NUMBER   	:   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 66;
     --Number of IO formatted signals used by the system modules
-    constant VIRTUAL_PIN_NUMBER    	:   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 66;
+    constant VIRTUAL_PIN_NUMBER    	:   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 72;
     -----------------------------------------------------------------------------------------------
 
 
@@ -49,14 +49,19 @@ package GOLDI_MODULE_CONFIG is
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     --Module Base Addresses; Lenght based on system_data_width = 8
-    constant CONFIG_REG_ADDRESS     :   natural := 1;       --Table Length: 1
-    constant GPIO_DRIVER_ADDRESS    :   natural := 2;       --Table Length: 64
-    constant POW_R_LED_ADDRESS      :   natural := 66;      --Table Length: 1
-    constant POW_G_LED_ADDRESS      :   natural := 67;      --Table Length: 1
-
+    constant CONFIG_REG_ADDRESS         :   natural := 1;       --Table Length: 1
+    constant GPIO_DRIVER_ADDRESS        :   natural := 2;       --Table Length: 64
+    constant POW_R_LED_ADDRESS          :   natural := 66;      --Table Length: 1
+    constant POW_G_LED_ADDRESS          :   natural := 67;      --Table Length: 1
+    constant ANALOG_DRIVER_1_ADDRESS    :   natural := 68;      --Table Length: 1
+    constant ANALOG_DRIVER_2_ADDRESS    :   natural := 69;      --Table Length: 1
+    constant ANALOG_DRIVER_3_ADDRESS    :   natural := 70;      --Table Length: 1
+    constant ANALOG_DRIVER_4_ADDRESS    :   natural := 71;      --Table Length: 1
+    constant ANALOG_DRIVER_5_ADDRESS    :   natural := 72;      --Table Length: 1
+    constant ANALOG_DRIVER_6_ADDRESS    :   natural := 73;      --Table Length: 1
 
     --Default Value for Configuration Register
-    constant REG_CONFIG_DEFAULT     :   std_logic_vector(7 downto 0) := (others => '0'); 
+    constant REG_CONFIG_DEFAULT         :   std_logic_vector(7 downto 0) := (others => '0'); 
     -----------------------------------------------------------------------------------------------
 
 
@@ -68,6 +73,18 @@ package GOLDI_MODULE_CONFIG is
     constant POW_G_LED_FREQUENCY    :   natural := 1133000000;
     constant POW_R_LED_INVERTED     :   boolean := false;
     constant POW_G_LED_FREQUENCY    :   boolean := false;
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****ANALOG DRIVERS / PWM SIGNAL GENERATORS****
+    -----------------------------------------------------------------------------------------------
+    constant ANALOG_DRIVER_1_FREQUENCY  :   natural := 377;
+    constant ANALOG_DRIVER_2_FREQUENCY  :   natural := 377;
+    constant ANALOG_DRIVER_3_FREQUENCY  :   natural := 377;
+    constant ANALOG_DRIVER_4_FREQUENCY  :   natural := 377;
+    constant ANALOG_DRIVER_5_FREQUENCY  :   natural := 377;
+    constant ANALOG_DRIVER_6_FREQUENCY  :   natural := 377;
     -----------------------------------------------------------------------------------------------
 
 
