@@ -41,9 +41,14 @@ if [ "$CLEAN" = true ] ; then
 fi
 
 if [ "$WORLD" = true ] ; then
-  kas shell $VARIANT.yml -c "bitbake -k -c build world"
+  kas shell $VARIANT.yml -c "\
+    bitbake -k -c build world \
+  "
 else
-  kas shell $VARIANT.yml -c "bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle"
+  kas shell $VARIANT.yml -c "\
+    bitbake -c cleanall goldi-crosslab fpga-firmware goldi-config-interface \
+    && bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle \
+  "
 fi
 
 mkdir -p ./dist
