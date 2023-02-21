@@ -74,7 +74,7 @@ architecture TB of COMMS_TB is
 	--Simulation timing 
 	constant clk_period		:	time := 10 ns;
 	constant sclk_period	:	time := 40 ns;
-	constant data_in_assign	:	std_logic_vector(15 downto 0) := x"00FF";
+	constant data_in_assign	:	std_logic_vector(15 downto 0) := x"0003";
 	signal clock			:	std_logic := '0';
 	signal reset			:	std_logic;
 	signal run_sim			:	std_logic := '1';
@@ -111,7 +111,7 @@ begin
 	
 	DUT_MEMORY_1 : REGISTER_TABLE
 	generic map(
-		BASE_ADDRESS 		=> 1,
+		BASE_ADDRESS 		=> 4,
 		NUMBER_REGISTERS 	=> 2,
 		REG_DEFAULT_VALUES 	=> (x"00",x"00")
 	)
@@ -128,7 +128,7 @@ begin
 
 	DUT_MEMORY_2 : REGISTER_TABLE
 	generic map(
-		BASE_ADDRESS 		=> 3,
+		BASE_ADDRESS 		=> 2,
 		NUMBER_REGISTERS 	=> 2,
 		REG_DEFAULT_VALUES 	=> (x"00",x"00")
 	)
@@ -158,13 +158,13 @@ begin
 		--Initial setup
 		ce <= '0';
 		sclk <= '0';
-		reg_data_in <= (x"03",x"02");
+		reg_data_in <= (x"05",x"04");
 		wait for init_hold;
 		
 		
 		--Test registers
 		ce <= '1';
-		for i in 1 to 3 loop
+		for i in 5 downto 3  loop
 			mosi_buff <= std_logic_vector(to_unsigned(i,8));
 			wait for clk_period;
 			
@@ -177,9 +177,9 @@ begin
 				sclk <= '0';
 			end loop;
 			
-			if(i>1) then
+			if(i<5) then
 				wait for clk_period/2;
-				assert(miso_buff = std_logic_vector(to_unsigned(i,8)))
+				assert(miso_buff = std_logic_vector(to_unsigned(i+1,8)))
 					report "line(183): Test register comms - expecting miso_buff = " & integer'image(i) severity error;
 				wait for clk_period/2;
 			end if;

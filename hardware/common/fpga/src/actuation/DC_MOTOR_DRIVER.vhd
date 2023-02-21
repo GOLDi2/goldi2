@@ -50,7 +50,7 @@ use work.GOLDI_IO_STANDARD.all;
 --! |+0			|		|	    |       |   	|		|		|Out 2	| Out 1	|
 --!	|+1			| PWM[7:0]||||||||
 --!
---! **Latency: 4**
+--! **Latency: 3**
 entity DC_MOTOR_DRIVER is
 	generic(
 		ADDRESS			:	natural := 1;	--! Module's base address
@@ -135,11 +135,10 @@ begin
 				pwm_counter <= 1;
 				pwm_out_valid <= '0';
 				
-			elsif(pwm_count_flag = '1') then
-				--Manage pwm signal counter
-				if(pwm_counter = 255) then
+			else
+				if((pwm_count_flag = '1') and (pwm_counter = 255)) then
 					pwm_counter <= 1;
-				else
+				elsif(pwm_count_flag <= '1') then
 					pwm_counter <= pwm_counter + 1;
 				end if;
 				
@@ -168,14 +167,9 @@ begin
 				
 			elsif(counter = CLK_FACTOR-1) then
 				counter := 0;
-			else
-				counter := counter + 1;
-			end if;
-			
-			--Manage pwm frequency flag
-			if(counter = 0) then
 				pwm_count_flag <= '1';
 			else
+				counter := counter + 1;
 				pwm_count_flag <= '0';
 			end if;
 		end if;

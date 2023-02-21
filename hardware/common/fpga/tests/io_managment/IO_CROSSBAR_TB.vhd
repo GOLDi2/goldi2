@@ -30,6 +30,7 @@ use IEEE.numeric_std.all;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_CROSSBAR_DEFAULT.all;
 
 
 
@@ -46,77 +47,66 @@ architecture TB of IO_CROSSBAR_TB is
     --CUT
     component IO_CROSSBAR
         generic(
-            LAYOUT_BLOCKED  :   boolean := false
+            LEFT_PORT_LENGTH    :   natural := 6;
+            RIGHT_PORT_LENGTH   :   natural := 3;
+            LAYOUT_BLOCKED      :   boolean := false;
+            DEFAULT_CB_LAYOUT   :   cb_right_port_ram := DEFAULT_CROSSBAR_LAYOUT 
         );
         port(
-            clk         : in    std_logic;
-            rst         : in    std_logic;
-            cross_bus_i : in    sbus_in;
-            cross_bus_o : out   sbus_out;
-            vir_io_in   : out   io_i_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
-            vir_io_out  : in    io_o_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
-            phy_io_in   : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            phy_io_out  : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+            clk                 : in    std_logic;
+            rst                 : in    std_logic;
+            cb_bus_i            : in    sbus_in;
+            cb_bus_o            : out   sbus_out;
+            left_io_i_vector    : out   io_i_vector(LEFT_PORT_LENGTH-1 downto 0);
+            left_io_o_vector    : in    io_o_vector(LEFT_PORT_LENGTH-1 downto 0);
+            right_io_i_vector   : in    io_i_vector(RIGHT_PORT_LENGTH-1 downto 0); 
+            right_io_o_vector   : out   io_o_vector(RIGHT_PORT_LENGTH-1 downto 0)
         );
     end component;
 
 
     --Intermediate Signals
     --Simulation timing
-    constant clk_period		:	time := 10 ns;
-	signal reset			:	std_logic;
-	signal clock			:	std_logic := '0';
-	signal run_sim			:	std_logic := '1';
+    constant clk_period		    :	time := 10 ns;
+	signal reset			    :	std_logic;
+	signal clock			    :	std_logic := '0';
+	signal run_sim			    :	std_logic := '1';
 	--DUT i/o
-    signal cross_bus_i      :   sbus_in;
-    signal cross_bus_o_1    :   sbus_out;
-    signal cross_bus_o_2    :   sbus_out;
-    signal vir_io_in_1      :   io_i_vector(5 downto 0);
-    signal vir_io_in_2      :   io_i_vector(5 downto 0);
-    signal vir_io_out_1     :   io_o_vector(5 downto 0);
-    signal vir_io_out_2     :   io_o_vector(5 downto 0);
-    signal phy_io_in_1      :   io_i_vector(2 downto 0);
-    signal phy_io_in_2      :   io_i_vector(2 downto 0);
-    signal phy_io_out_1     :   io_o_vector(2 downto 0);
-    signal phy_io_out_2     :   io_o_vector(2 downto 0);
+    signal cb_bus_i             :   sbus_in;
+    signal cb_bus_o             :   sbus_out;
+    --
+    signal left_io_i_vector     :   io_i_vector(5 downto 0);
+    signal left_io_o_vector     :   io_o_vector(5 downto 0);
+    signal right_io_i_vector    :   io_i_vector(2 downto 0);
+    signal right_io_o_vector    :   io_o_vector(2 downto 0);
     
 
 begin
 
-    DUT_1 : IO_CROSSBAR
+    DUT : IO_CROSSBAR
     generic map(
-        LAYOUT_BLOCKED  => false
+        LEFT_PORT_LENGTH    => 6,
+        RIGHT_PORT_LENGTH   => 3,
+        LAYOUT_BLOCKED      => false,
+        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT 
     )
     port map(
-        clk         => clock,
-        rst         => reset,
-        cross_bus_i => cross_bus_i,
-        cross_bus_o => cross_bus_o_1,
-        vir_io_in   => vir_io_in_1,
-        vir_io_out  => vir_io_out_1,
-        phy_io_in   => phy_io_in_1,
-        phy_io_out  => phy_io_out_1
+        clk                 => clock,
+        rst                 => reset,
+        cb_bus_i            => cb_bus_i,
+        cb_bus_o            => cb_bus_o,
+        left_io_i_vector    => left_io_i_vector,
+        left_io_o_vector    => left_io_o_vector,
+        right_io_i_vector   => right_io_i_vector, 
+        right_io_o_vector   => right_io_o_vector
     );
 
-    DUT_2 : IO_CROSSBAR
-    generic map(
-        LAYOUT_BLOCKED  => true
-    )
-    port map(
-        clk         => clock,
-        rst         => reset,
-        cross_bus_i => cross_bus_i,
-        cross_bus_o => cross_bus_o_2,
-        vir_io_in   => vir_io_in_2,
-        vir_io_out  => vir_io_out_2,
-        phy_io_in   => phy_io_in_2,
-        phy_io_out  => phy_io_out_2
-    );
 
 
     --Timing
 	clock <= run_sim and (not clock) after clk_period/2;
     reset <= '1' after 0 ns, '0' after 15 ns;
+
 
 
     TEST : process
@@ -126,107 +116,72 @@ begin
     begin
         
 		--Preset master interface of bus
-        cross_bus_i.we <= '0';
-        cross_bus_i.adr <= (others => '0');
-        cross_bus_i.dat <= (others => '0');
-		--Preset the Physical pins
-        phy_io_in_1(0).dat <= '1';
-        phy_io_in_1(1).dat <= '1';
-        phy_io_in_1(2).dat <= '1';
-
-        phy_io_in_2(0).dat <= '1';
-        phy_io_in_2(1).dat <= '1';
-        phy_io_in_2(2).dat <= '1';
-        
-        --Preset virtual pins
-        vir_io_out_1(0).enb <= '0';
-        vir_io_out_1(1).enb <= '1';
-        vir_io_out_1(2).enb <= '1';
-        vir_io_out_1(0).dat <= '1';
-        vir_io_out_1(1).dat <= '0';
-        vir_io_out_1(2).dat <= '1';
-        vir_io_out_1(3) <= gnd_io_o;
-        vir_io_out_1(4) <= gnd_io_o;
-        vir_io_out_1(5) <= gnd_io_o;
-
-        vir_io_out_2(0).enb <= '0';
-        vir_io_out_2(1).enb <= '1';
-        vir_io_out_2(2).enb <= '1';
-        vir_io_out_2(0).dat <= '1';
-        vir_io_out_2(1).dat <= '0';
-        vir_io_out_2(2).dat <= '1';
-        vir_io_out_2(3) <= gnd_io_o;
-        vir_io_out_2(4) <= gnd_io_o;
-        vir_io_out_2(5) <= gnd_io_o;
+        cb_bus_i.we <= '0';
+        cb_bus_i.adr <= (others => '0');
+        cb_bus_i.dat <= (others => '0');
+		--Preset the right port pins
+        right_io_i_vector(0).dat <= '0';
+        right_io_i_vector(1).dat <= '1';
+        right_io_i_vector(2).dat <= '1';
+        --Preset left port pins
+        left_io_o_vector(0) <= (enb => '0', dat => '0');
+        left_io_o_vector(1) <= (enb => '0', dat => '1');
+        left_io_o_vector(2) <= (enb => '1', dat => '1');
+        left_io_o_vector(3) <= (enb => '1', dat => '1');
+        left_io_o_vector(4) <= (enb => '0', dat => '1');
+        left_io_o_vector(5) <= (enb => '0', dat => '0');
 
         wait for init_hold;
 
 
         --Test reset state
-        assert(vir_io_in_1(0).dat = '1') 
-            report "line(167): Test reset - expecting vir(0) = '1'" severity error;
-        assert(vir_io_in_1(1).dat = '1')
-            report "line(169): Test reset - expecting vir(1) = '1'" severity error;
-        assert(vir_io_in_1(2).dat = '1')
-            report "line(171): Test reset - expecting vir(2) = '1'" severity error; 
-
-        assert(phy_io_out_1(0).enb = '0' and phy_io_out_1(0).dat = '1')
-            report "line(174): Test reset - expecting phy(0) = ('0','1')" severity error;
-        assert(phy_io_out_1(1).enb = '1' and phy_io_out_1(1).dat = '0')
-            report "line(176): Test reset - expecting phy(1) = ('1','0')" severity error;
-        assert(phy_io_out_1(2).enb = '1' and phy_io_out_1(2).dat = '1')
-            report "line(178): Test reset - expecting phy(2) = ('1','1')" severity error;
+        assert(left_io_i_vector(0).dat = '0') 
+            report "line(138): Test reset - expecting left_i(0) = '0'" severity error;
+        assert(left_io_i_vector(1).dat = '1')
+            report "line(140): Test reset - expecting left_i(1) = '1'" severity error;
+        assert(left_io_i_vector(2).dat = '1')
+            report "line(142): Test reset - expecting left_i(2) = '1'" severity error; 
+        assert(right_io_o_vector(0).enb = '0' and right_io_o_vector(0).dat = '0')
+            report "line(144): Test reset - expecting right_o(0) = ('0','0')" severity error;
+        assert(right_io_o_vector(1).enb = '0' and right_io_o_vector(1).dat = '1')
+            report "line(146): Test reset - expecting right_o(1) = ('0','1')" severity error;
+        assert(right_io_o_vector(2).enb = '1' and right_io_o_vector(2).dat = '1')
+            report "line(148): Test reset - expecting right_o(2) = ('1','1')" severity error;
         --
 
 
+
         --Test read operation
-        cross_bus_i.adr <= "0000011";
+        wait for 50 ns;
+        cb_bus_i.adr <= "0000011";
         wait for assert_hold;
-        assert(cross_bus_o_1.dat = x"01") 
-            report "line(186): Test read operation - expecting bus_o_1.dat = x01" severity error;
-        assert(cross_bus_o_1.val = '1')
-            report "line(188): Test read operation - expecting bus_o_1.val = '1'" severity error;
+        assert(cb_bus_o.dat = x"01") 
+            report "line(158): Test read operation - expecting bus_o.dat = x01" severity error;
+        assert(cb_bus_o.val = '1')
+            report "line(160): Test read operation - expecting bus_o.val = '1'" severity error;
         wait for post_hold;
         --
         
 
         --Test write operation
         wait for 50 ns;
-        cross_bus_i.we <= '1';
-        cross_bus_i.adr <= "0000100";
-        cross_bus_i.dat <= x"05";
+        cb_bus_i.we <= '1';
+        cb_bus_i.adr <= "0000100";
+        cb_bus_i.dat <= x"05";
         wait for assert_hold;
-        assert(phy_io_out_1(2).enb = '0' and phy_io_out_1(2).dat = '0')
-            report "line(200): Test write operation - expecing phy(2) = ('0','0')" severity error;
-        assert(vir_io_in_1(5).dat = '1')
-            report "line(202): Test write operation - expecting vir(2) = '1'" severity error;
+        assert(right_io_o_vector(2).enb = '0' and right_io_o_vector(2).dat = '0')
+            report "line(172): Test write operation - expecting right_o(2) = ('0','0')" severity error;
+        assert(left_io_i_vector(5).dat = '1')
+            report "line(174): Test write operation - expecting left_i(2) = '1'" severity error;
         wait for post_hold;
         --
-
-
-        --Test Blocked Crossbar
-        wait for 50 ns;
-        cross_bus_i.we <= '0';
-        wait for assert_hold;
-        assert(cross_bus_o_1.dat = x"05") 
-            report "line(212): Test blocked crossbar - expecting bus_o_1.dat = x05" severity error;
-        assert(cross_bus_o_1.val = '1')
-            report "line(214): Test blocked crossbar - expecting bus_o_1.val = '1'" severity error;
-        assert(cross_bus_o_2.dat = x"02") 
-            report "line(216): Test blocked crossbar - expecting bus_o_2.dat = x02" severity error;
-        assert(cross_bus_o_2.val = '1')
-            report "line(218): Test blocked crossbar - expecting bus_o_2.val = '1'" severity error;
-        assert(phy_io_out_2(2).enb = '1' and phy_io_out_2(2).dat = '1')
-            report "line(220): Test blocked crossbar - expecting phy_2(2) = ('1','1')" severity error;
-        assert(vir_io_in_2(2).dat = '1') 
-            report "lien(222): Test blocked crossbar - expecting vir_2(2) = '1'" severity error;
-        wait for post_hold;
 
 
         --End simulation
         wait for 50 ns;
 		run_sim <= '0';
-        wait;    
+        wait;
+
     end process;
 
 

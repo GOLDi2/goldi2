@@ -87,31 +87,29 @@ begin
 	
 	--Timing
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 0 ns, '0' after 15 ns;
+	reset <= '0' after 0 ns, '1' after 5 ns, '0' after 15 ns;
 	
 	
 	TEST : process
 		--Timing
-		variable init_hold			:	time :=	4*clk_period/2;
-		variable assert_hold		:	time := 7*clk_period/2;
+		variable init_hold			:	time :=	5*clk_period/2;
+		variable assert_hold		:	time := 5*clk_period/2;
 		variable post_hold			:	time := clk_period/2;
 	begin
 		--Preset bus
-		sys_bus_i.we  <= '0';
-		sys_bus_i.adr <= (others => '0');
-		sys_bus_i.dat <= (others => '0');
-		--Wait for initial setup
+		sys_bus_i <= gnd_sbus_i;
 		wait for init_hold;
 		
+
 		--Test reset values
 		assert(DC_enb.dat = '0')
-			report "line(108): Test reset - expecting DC_enb.dat = '0'" severity error;
+			report "line(106): Test reset - expecting DC_enb.dat = '0'" severity error;
 		assert(DC_out_1.dat = '0')
-			report "line(110): Test reset - expecting DC_out_1.dat = '0'" severity error;
+			report "line(108): Test reset - expecting DC_out_1.dat = '0'" severity error;
 		assert(DC_out_2.dat = '0')
-			report "line(112): Test reset - expecting DC_out_2.dat = '0'" severity error;
-		wait for post_hold;
+			report "line(110): Test reset - expecting DC_out_2.dat = '0'" severity error;
 			
+
 		wait for 5*clk_period;
 		
 		
@@ -121,16 +119,18 @@ begin
 		sys_bus_i.dat <= x"00";
 		wait for clk_period;
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"81";
+		sys_bus_i.dat <= x"01";
+		wait for clk_period;
+		sys_bus_i <= gnd_sbus_i;
 		
 		wait for assert_hold;
-		for i in 0 to 255 loop
+		for i in 1 to 255 loop
 			assert(DC_enb.dat = '0')
-				report "line(129): Test PWM=0 - expecting DC_enb.dat = '0'" severity error;
+				report "line(130): Test PWM=0 - expecting DC_enb.dat = '0'" severity error;
 			assert(DC_out_1.dat = '1')
-				report "line(131): Test PWM=0 - expecting DC_out_1.dat = '1'" severity error;
+				report "line(132): Test PWM=0 - expecting DC_out_1.dat = '1'" severity error;
 			assert(DC_out_2.dat = '0')
-				report "line(133): Test PWM=0 - expecting DC_out_2.dat = '0'" severity error;
+				report "line(134): Test PWM=0 - expecting DC_out_2.dat = '0'" severity error;
 			wait for clk_period;
 		end loop;
 		wait for post_hold;
@@ -145,23 +145,22 @@ begin
 		sys_bus_i.dat <= x"FF";
 		wait for clk_period;
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"82";
-		
+		sys_bus_i.dat <= x"02";
+		wait for clk_period;
+		sys_bus_i <= gnd_sbus_i;
+
+
 		wait for assert_hold;
-		for i in 0 to 255 loop
+		for i in 1 to 255 loop
 			assert(DC_enb.dat = '1')
-				report "line(153): Test PWM=FF - expecting DC_enb.dat = '1'" severity error;
+				report "line(157): Test PWM=FF - expecting DC_enb.dat = '1'" severity error;
 			assert(DC_out_1.dat = '0')
-				report "line(155): Test PWM=FF - expecting DC_out_1.dat = '0'" severity error;
+				report "line(159): Test PWM=FF - expecting DC_out_1.dat = '0'" severity error;
 			assert(DC_out_2.dat = '1')
-				report "line(157): Test PWM=FF - expecting DC_out_2.dat = '1'" severity error;
+				report "line(161): Test PWM=FF - expecting DC_out_2.dat = '1'" severity error;
 			wait for clk_period;
 		end loop;
-		wait for post_hold;
-		sys_bus_i.we  <= '1';
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"80";
-		
+
 		
 		wait for 5*clk_period;
 		
@@ -172,25 +171,27 @@ begin
 		sys_bus_i.dat <= x"7F";
 		wait for clk_period;
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"82";
+		sys_bus_i.dat <= x"02";
+		wait for clk_period;
+		sys_bus_i 	  <= gnd_sbus_i;
 
 		wait for assert_hold;
-		for i in 0 to 254 loop
-			if(i<127) then
+		for i in 1 to 255 loop
+			if(i<=127) then
 				assert(DC_enb.dat = '1')
-					report "line(181): Test PWM=0F - expecting DC_enb.dat = '1'" & integer'image(i) severity error;
+					report "line(183): Test PWM=0F - expecting DC_enb.dat = '1'" & integer'image(i) severity error;
 				assert(DC_out_1.dat = '0')
-					report "line(183): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
+					report "line(185): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
 				assert(DC_out_2.dat = '1')
-					report "line(185): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
+					report "line(187): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
 				wait for clk_period;
 			else
 				assert(DC_enb.dat = '0')
-					report "line(189): Test PWM=0F - expecting DC_enb.dat = '0'" & integer'image(i) severity error;
+					report "line(191): Test PWM=0F - expecting DC_enb.dat = '0'" & integer'image(i) severity error;
 				assert(DC_out_1.dat = '0')
-					report "line(191): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
+					report "line(193): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
 				assert(DC_out_2.dat = '1')
-					report "line(193): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
+					report "line(195): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
 				wait for clk_period;
 			end if;			
 		end loop;
@@ -203,18 +204,21 @@ begin
 		--Test error case [both pos and neg enabled]
 		sys_bus_i.we  <= '1';
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"83";
+		sys_bus_i.dat <= x"03";
+		wait for clk_period;
+		sys_bus_i <= gnd_sbus_i;
 		
-		wait for 3*clk_period/2;
+		wait for assert_hold;
 		assert(DC_enb.dat = '0')
-			report "line(210): Test error case - expecting DC_enb.dat = '0'" severity error;
+			report "line(214): Test error case - expecting DC_enb.dat = '0'" severity error;
 		assert(DC_out_1.dat = '1')
-			report "line(212): Test error case - expecting DC_out_1.dat = '1'" severity error;
+			report "line(216): Test error case - expecting DC_out_1.dat = '1'" severity error;
 		assert(DC_out_2.dat = '1')
-			report "line(214): Test error case - expecting DC_out_2.dat = '1'" severity error;
+			report "line(218): Test error case - expecting DC_out_2.dat = '1'" severity error;
 		wait for post_hold;
 		
 		
+
 		--End simulation
 		wait for 50 ns;
 		run_sim <= '0';

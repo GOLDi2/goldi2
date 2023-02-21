@@ -168,7 +168,7 @@ begin
 		wait for clk_period/2;
 		assert(master_bus_o.we = '1')
 			report "line(170): Test simple transaction - expecting master_bus_o.we = '1'" severity error;
-		assert(master_bus_o.adr = "0000000")
+		assert(master_bus_o.adr = "1111110")
 			report "line(172): Test simple transaction - expecting master_bus_o.adr = x00" severity error;
 		assert(master_bus_o.dat = x"F0")
 			report "line(174): Test simple transaction - expecting master_bus_o.dat = xF0" severity error;

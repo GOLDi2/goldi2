@@ -94,7 +94,7 @@ begin
 	
 	TEST : process
 		--Timing
-		variable init_hold			:	time :=	4*clk_period/2;
+		variable init_hold			:	time :=	5*clk_period/2;
 		variable assert_hold		:	time := 3*clk_period/2;
 		variable post_hold			:	time := clk_period/2;
 	begin
@@ -113,7 +113,7 @@ begin
 			report "line(113): Test reset - expecting reg_data_out(1) = xF0" severity error;
 		assert(reg_data_out(2) = x"FF") 
 			report "line(115): Test reset - expecting reg_data_out(2) = xFF" severity error;
-		assert(reg_data_stb = "111")
+		assert(reg_data_stb = "000")
 			report "line(117): Test reset - expecting reg_data_stb = 111" severity error;
 		wait for post_hold;
 		

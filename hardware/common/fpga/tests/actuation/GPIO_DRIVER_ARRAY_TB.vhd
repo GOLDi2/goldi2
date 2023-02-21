@@ -106,15 +106,16 @@ begin
         wait for init_hold;
 
 
-        --Test reset values
+        --Test read values
         sys_bus_i.adr <= "0000001";
+        gpio_i_vector(0).dat <= '1';
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"00")
-            report "line(113): Test reset - expecting bus.dat = x00" severity error;
+        assert(sys_bus_o.dat = x"01")
+            report "line(114): Test reset - expecting bus.dat = x01" severity error;
         assert(gpio_o_vector(0).enb = '0')
-            report "line(115): Test reset - expecting enb = '0'" severity error;
+            report "line(116): Test reset - expecting enb = '0'" severity error;
         assert(gpio_o_vector(0).dat = '0')
-            report "line(117): Test reset - expecting dat = '0'" severity error;
+            report "line(118): Test reset - expecting dat = '0'" severity error;
         wait for post_hold;
 
 
@@ -123,19 +124,19 @@ begin
         
         --Test functionality
         sys_bus_i.we <= '1';
-        sys_bus_i.dat <= x"06";
-        gpio_i_vector(0).dat <= '1';
+        sys_bus_i.dat <= x"03";
+        gpio_i_vector(0).dat <= '0';
         wait for assert_hold;
         assert(gpio_o_vector(0).enb = '1')
-            report "line(130): Functionality test - expecting enb = '1'" severity error;
+            report "line(131): Functionality test - expecting enb = '1'" severity error;
         assert(gpio_o_vector(0).dat = '1')
-            report "line(132): Functionality test - expecting dat = '1'" severity error;
+            report "line(133): Functionality test - expecting dat = '1'" severity error;
         wait for post_hold;
 
         sys_bus_i.we <= '0';
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"07")
-            report "line(138): Functionality test - expecting bus.dat = x07" severity error;
+        assert(sys_bus_o.dat = x"03")
+            report "line(139): Functionality test - expecting bus.dat = x03" severity error;
         wait for post_hold;
 
 
