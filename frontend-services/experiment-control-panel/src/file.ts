@@ -1,5 +1,5 @@
 import { DeviceHandler } from "@cross-lab-project/soa-client";
-import { FileService__Producer, FileType } from "@cross-lab-project/soa-service-file";
+import { FileService__Producer } from "@cross-lab-project/soa-service-file";
 import { LitElement, html, adoptStyles, unsafeCSS } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
@@ -33,7 +33,9 @@ export class FileUpload extends LitElement {
   change = async (event: Event) => {
     console.log(this.input.files[0])
     const content = new Uint8Array(await this.input.files[0].arrayBuffer());
-    this.file_service.sendFile({fileType: FileType.Hex, content});
+    const fileNameArray = this.input.files[0].name.split('.');
+    const fileType = fileNameArray[fileNameArray.length-1];
+    this.file_service.sendFile(fileType, content);
   }
 
   render() {

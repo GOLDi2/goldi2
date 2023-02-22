@@ -6,6 +6,7 @@ cd "$SCRIPT_DIR"/../
 
 # Default values
 DEPOLY_GLOBAL=false
+VARIANT=prod
 
 # Read the commands
 while [[ $# -gt 0 ]]; do
@@ -19,6 +20,12 @@ while [[ $# -gt 0 ]]; do
 
     -h|--host)
       HOST="$2"
+      shift # past argument
+      shift # past value
+      ;;
+
+    --variant)
+      VARIANT="$2"
       shift # past argument
       shift # past value
       ;;
@@ -56,7 +63,7 @@ if [ "$DEPOLY_GLOBAL" = true ]; then
 else
   echo "Deploying instance"
 
-  ssh "$HOST" "cd $DIR/prod; docker-compose down || true"
+  ssh "$HOST" "cd $DIR/$VARIANT; docker-compose down || true"
 
   function load_docker_image(){
     cat $1 | ssh "$HOST" "cat - | docker load" | sed -e 's/^.* //'
@@ -74,6 +81,6 @@ else
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: '$( load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
 
-  echo "$COMPOSE" | ssh "$HOST" "source $DIR/prod.secrets; cat - | envsubst > $DIR/prod/docker-compose.yml"
-  ssh "$HOST" "cd $DIR/prod; docker-compose up -d"
+  echo "$COMPOSE" | ssh "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
+  ssh "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
 fi
