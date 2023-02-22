@@ -80,6 +80,7 @@ else
 
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: '$( load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend/image: '$(load_docker_image "frontend-services/website/dist/docker-image.tar")'/g')
 
   echo "$COMPOSE" | ssh "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
   ssh "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"

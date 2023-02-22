@@ -77,13 +77,12 @@ services:
 
 # Frontend ########################################################################################
   frontend:
-    image: goldi2/web-frontend
+    image: frontend
     environment:
       - VIRTUAL_HOST=www.$DOMAIN
       - VIRTUAL_PORT=8080
       - VIRTUAL_PATH=/
       - LETSENCRYPT_HOST=www.$DOMAIN
-    
     networks:
       global_default:
     restart: on-failure

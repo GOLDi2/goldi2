@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { config } from "./config"
 import express, { NextFunction, Request, Response } from 'express';
 import nunjucks from 'nunjucks';
@@ -19,7 +21,7 @@ declare module 'express-serve-static-core' {
 }
 
 
-const content_path = config.NODE_ENV === 'development' ? 'src/content' : 'dist/content';
+const content_path = config.NODE_ENV === 'development' ? 'src/content' : path.dirname(__filename)+'/content';
 const nunjucks_configuration = {
     autoescape: true,
     noCache: config.NODE_ENV === 'development'
@@ -63,7 +65,7 @@ app.use(expressWinston.logger({
     msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
     expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
     colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-    ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
+    ignoreRoute: function () { return false; } // optional: allows to skip some log messages based on request and/or response
 }));
 
 async function handle_login(req: Request, res: Response, next: NextFunction) {
