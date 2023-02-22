@@ -1,5 +1,5 @@
 [Unit]
-Description=GOLDi2 Admin Interface
+Description=GOLDi Configuration Interface
 After=network.target
 
 [Service]
@@ -7,7 +7,7 @@ Environment=GOLDI_HARDWARE_ADMIN_PORT=443
 Environment=GOLDI_HARDWARE_ADMIN_DEFAULT_LANGUAGE=en
 Environment=NODE_ENV=production
 Restart=on-failure
-ExecStart=/usr/bin/node /usr/lib/node_modules/@goldi2/hardware-admin/dist/index.js
+ExecStart=/usr/bin/node /usr/lib/node_modules/@goldi2/hardware-admin/app/index.js
 
 [Install]
 WantedBy=multi-user.target

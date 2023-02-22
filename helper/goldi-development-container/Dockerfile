@@ -81,5 +81,3 @@ RUN mv /entrypoint.sh /crosslab-entrypoint.sh
 COPY container-scripts/entrypoint.sh /
 
 COPY licenses/lattice.dat /usr/local/diamond/3.12/license/license.dat
-
-USER $USERNAME

@@ -1,5 +1,7 @@
 node_modules
 dist
+app
 .npmrc
 cert.pem
 key.pem
+package.resolved.json

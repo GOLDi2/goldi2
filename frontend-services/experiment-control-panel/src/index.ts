@@ -11,6 +11,7 @@ const client = new APIClient("https://api.goldi-labs.de");
 const deviceHandler = new DeviceHandler();
 
 import style from "./styles.css";
+import { Message } from "./message";
 const stylesheet = unsafeCSS(style);
 @customElement("ecp-app")
 export class App extends LitElement {
@@ -20,6 +21,8 @@ export class App extends LitElement {
   private file: FileUpload;
   @state()
   private webcam: Webcam;
+  @state()
+  private message: Message;
 
   @state()
   private isLoading: boolean = false;
@@ -36,12 +39,13 @@ export class App extends LitElement {
     });
     // Send a message to the parent window
     window.parent.postMessage("ecp-loaded", "*");
+    window.opener.postMessage("ecp-loaded", "*")
   }
 
   async start(accesstoken: string) {
     console.log({accesstoken, device_url})
     client.accessToken=accesstoken;
-    const token = await client.createWebsocketToken(device_url+'/websocket');
+    const token = await client.createWebsocketToken(device_url);
 
     this.electrical = new ElectricalConnection("electrical");
     this.electrical.register(deviceHandler);
@@ -52,6 +56,9 @@ export class App extends LitElement {
     this.webcam = new Webcam();
     this.webcam.register(deviceHandler);
 
+    this.message = new Message("message");
+    this.message.register(deviceHandler);
+
     await deviceHandler.connect({
       endpoint: "wss://api.goldi-labs.de/devices/websocket",
       id: device_url,
@@ -61,6 +68,7 @@ export class App extends LitElement {
     // Wait for a second
     await new Promise((resolve) => setTimeout(resolve, 1000));
     window.parent.postMessage("ecp-authorized", "*");
+    window.opener.postMessage("ecp-authorized", "*");
   }
 
   render() {
@@ -73,6 +81,9 @@ export class App extends LitElement {
             <div class="p-4">${this.file}</div>
             <div class="p-4">${this.electrical}</div>
           </div>
+        </div>
+        <div>
+          ${this.message}
         </div>
         <div class="bg-primary-100 w-full h-12"></div>
       </div>

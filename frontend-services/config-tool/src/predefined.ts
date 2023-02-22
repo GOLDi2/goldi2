@@ -293,7 +293,7 @@ export const three_axes_portal_mc: ExperimentServiceTypes.Experiment = {
     },
     {
       name: 'Microcontroller',
-      template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
+      template_device: 'https://api.goldi-labs.de/devices/577fd185-9f45-476c-b1de-1a8e5406ff96',
       'x-esc-position': {
         x: 800,
         y: 600,
@@ -693,7 +693,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
       },
       {
         name: 'Microcontroller',
-        template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
+        template_device: 'https://api.goldi-labs.de/devices/577fd185-9f45-476c-b1de-1a8e5406ff96',
         'x-esc-position': {
           x: 800,
           y: 600,
@@ -701,7 +701,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
       },
     ],
     serviceConfigurations: [
-      {
+      /*{
         serviceType: 'http://api.goldi-labs.de/serviceTypes/file',
         configuration: {},
         participants: [
@@ -717,7 +717,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
           },
         ],
         id: '3182f339-4968-4413-a0f0-cbf559deca74',
-      },
+      },*/
       {
         serviceType: 'http://api.goldi-labs.de/serviceTypes/electrical',
         configuration: {},
@@ -846,6 +846,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH0',
                   },
                   busId: 'LimitXLeft',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '2',
@@ -854,6 +855,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH1',
                   },
                   busId: 'LimitXRight',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '3',
@@ -862,6 +864,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH3',
                   },
                   busId: 'LimitYBack',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '4',
@@ -870,6 +873,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH4',
                   },
                   busId: 'LimitYFront',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '5',
@@ -878,6 +882,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH5',
                   },
                   busId: 'LimitZBottom',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '6',
@@ -886,6 +891,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PH6',
                   },
                   busId: 'LimitZTop',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '7',
@@ -894,6 +900,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PE7',
                   },
                   busId: 'Proximity',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '8',
@@ -902,6 +909,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA0',
                   },
                   busId: 'XMotorLeft',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '9',
@@ -910,6 +918,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA1',
                   },
                   busId: 'XMotorRight',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '10',
@@ -918,6 +927,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA2',
                   },
                   busId: 'YMotorBack',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '11',
@@ -926,6 +936,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA3',
                   },
                   busId: 'YMotorFront',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '12',
@@ -934,6 +945,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA4',
                   },
                   busId: 'ZMotorBottom',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '13',
@@ -942,6 +954,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'PA5',
                   },
                   busId: 'ZMotorTop',
+                  direction: 'in',
                 },
               ],
             },
@@ -982,7 +995,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
       },
     ],
     serviceConfigurations: [
-      {
+      /*{
         serviceType: 'http://api.goldi-labs.de/serviceTypes/file',
         configuration: {},
         participants: [
@@ -993,8 +1006,8 @@ export const mc: ExperimentServiceTypes.Experiment = {
           }
         ],
         id: '3182f339-4968-4413-a0f0-cbf559deca74',
-      },
-      {
+      },*/
+      /*{
         serviceType: 'http://api.goldi-labs.de/serviceTypes/webcam',
         configuration: {},
         participants: [
@@ -1010,7 +1023,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
           },
         ],
         id: 'ce2ca59d-2c25-4e52-bd03-829f9ab6fa10',
-      },
+      },*/
       {
         serviceType: 'http://api.goldi-labs.de/serviceTypes/electrical',
         configuration: {},
@@ -1027,6 +1040,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitXLeft',
                   },
                   busId: 'LimitXLeft',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '2',
@@ -1035,6 +1049,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitXRight',
                   },
                   busId: 'LimitXRight',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '3',
@@ -1043,6 +1058,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitYBack',
                   },
                   busId: 'LimitYBack',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '4',
@@ -1051,6 +1067,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitYFront',
                   },
                   busId: 'LimitYFront',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '5',
@@ -1059,6 +1076,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitZBottom',
                   },
                   busId: 'LimitZBottom',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '6',
@@ -1067,6 +1085,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitZTop',
                   },
                   busId: 'LimitZTop',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '7',
@@ -1075,6 +1094,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'Proximity',
                   },
                   busId: 'Proximity',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '8',
@@ -1083,6 +1103,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'XMotorLeft',
                   },
                   busId: 'XMotorLeft',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '9',
@@ -1091,6 +1112,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'XMotorRight',
                   },
                   busId: 'XMotorRight',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '10',
@@ -1099,6 +1121,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'YMotorBack',
                   },
                   busId: 'YMotorBack',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '11',
@@ -1107,6 +1130,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'YMotorFront',
                   },
                   busId: 'YMotorFront',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '12',
@@ -1115,6 +1139,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'ZMotorBottom',
                   },
                   busId: 'ZMotorBottom',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '13',
@@ -1123,6 +1148,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'ZMotorTop',
                   },
                   busId: 'ZMotorTop',
+                  direction: 'in',
                 },
               ],
             },
@@ -1139,6 +1165,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitXLeft',
                   },
                   busId: 'LimitXLeft',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '2',
@@ -1147,6 +1174,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitXRight',
                   },
                   busId: 'LimitXRight',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '3',
@@ -1155,6 +1183,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitYBack',
                   },
                   busId: 'LimitYBack',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '4',
@@ -1163,6 +1192,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitYFront',
                   },
                   busId: 'LimitYFront',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '5',
@@ -1171,6 +1201,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitZBottom',
                   },
                   busId: 'LimitZBottom',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '6',
@@ -1179,6 +1210,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'LimitZTop',
                   },
                   busId: 'LimitZTop',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '7',
@@ -1187,6 +1219,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'Proximity',
                   },
                   busId: 'Proximity',
+                  direction: 'out',
                 },
               ],
             },
@@ -1203,6 +1236,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'XMotorLeft',
                   },
                   busId: 'XMotorLeft',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '9',
@@ -1211,6 +1245,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'XMotorRight',
                   },
                   busId: 'XMotorRight',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '10',
@@ -1219,6 +1254,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'YMotorBack',
                   },
                   busId: 'YMotorBack',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '11',
@@ -1227,6 +1263,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'YMotorFront',
                   },
                   busId: 'YMotorFront',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '12',
@@ -1235,6 +1272,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'ZMotorBottom',
                   },
                   busId: 'ZMotorBottom',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '13',
@@ -1243,6 +1281,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'ZMotorTop',
                   },
                   busId: 'ZMotorTop',
+                  direction: 'in',
                 },
               ],
             },
@@ -1259,6 +1298,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A1',
                   },
                   busId: 'LimitXLeft',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '2',
@@ -1267,6 +1307,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A2',
                   },
                   busId: 'LimitXRight',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '3',
@@ -1275,6 +1316,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A3',
                   },
                   busId: 'LimitYBack',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '4',
@@ -1283,6 +1325,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A4',
                   },
                   busId: 'LimitYFront',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '5',
@@ -1291,6 +1334,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A5',
                   },
                   busId: 'LimitZBottom',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '6',
@@ -1299,6 +1343,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A6',
                   },
                   busId: 'LimitZTop',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '7',
@@ -1307,6 +1352,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'A7',
                   },
                   busId: 'Proximity',
+                  direction: 'in',
                 },
                 {
                   interfaceId: '8',
@@ -1315,6 +1361,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B1',
                   },
                   busId: 'XMotorLeft',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '9',
@@ -1323,6 +1370,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B2',
                   },
                   busId: 'XMotorRight',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '10',
@@ -1331,6 +1379,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B3',
                   },
                   busId: 'YMotorBack',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '11',
@@ -1339,6 +1388,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B4',
                   },
                   busId: 'YMotorFront',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '12',
@@ -1347,6 +1397,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B5',
                   },
                   busId: 'ZMotorBottom',
+                  direction: 'out',
                 },
                 {
                   interfaceId: '13',
@@ -1355,12 +1406,80 @@ export const mc: ExperimentServiceTypes.Experiment = {
                     gpio: 'B6',
                   },
                   busId: 'ZMotorTop',
+                  direction: 'out',
                 },
               ],
             },
           },
         ],
         id: 'd1b922d7-40d8-4718-a90c-dca2ad9fc3b6',
+      },
+    ],
+  };
+
+  export const nak: ExperimentServiceTypes.Experiment = {
+    status: 'running',
+    roles: [
+      {
+        name: 'NAK Robot',
+        template_device: 'https://api.goldi-labs.de/devices/3eacc285-43d2-402e-bc5b-7a0ee7d6e693',
+      },
+      {
+        name: 'ECP',
+        template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
+      },
+    ],
+    serviceConfigurations: [
+      {
+        serviceType: 'https://api.goldi-labs.de/serviceTypes/file',
+        configuration: {},
+        participants: [
+          {
+            serviceId: 'file',
+            role: 'ECP',
+            config: {},
+          },
+          {
+            serviceId: 'file',
+            role: 'NAK Robot',
+            config: {},
+          },
+        ],
+        id: '3182f339-4968-4413-a0f0-cbf559deca74',
+      },
+      {
+        serviceType: 'https://api.goldi-labs.de/serviceTypes/webcam',
+        configuration: {},
+        participants: [
+          {
+            serviceId: 'webcam',
+            role: 'ECP',
+            config: {},
+          },
+          {
+            serviceId: 'webcam',
+            role: 'NAK Robot',
+            config: {},
+          },
+        ],
+        id: 'ce2ca59d-2c25-4e52-bd03-829f9ab6fa10',
+      },
+      {
+        serviceType: 'https://api.goldi-labs.de/serviceTypes/message',
+        configuration: {},
+        participants: [
+          {
+            serviceId: 'message',
+            role: 'ECP',
+            config: {},
+          },
+          {
+            serviceId: 'message',
+            role: 'NAK Robot',
+            config: {},
+          },
+        ],
+        id: 'ce2ca59d-2c25-4e52-bd03-829f9ab6fa91',
       },
     ],
   };
