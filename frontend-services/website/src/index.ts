@@ -67,20 +67,34 @@ app.use(expressWinston.logger({
 }));
 
 async function handle_login(req: Request, res: Response, next: NextFunction) {
-    try{
-        await req.apiClient.login(req.body.username, req.body.password, { method: "tui" });
-        res.cookie('token', req.apiClient.accessToken, { secure: true, httpOnly: true, sameSite: 'strict' })
-        req.user = {
-            username: await (await req.apiClient.getIdentity()).username
+    let loggedIn = false
+    for (const method of ['tui','local'] as const) {
+        try {
+            await req.apiClient.login(req.body.username, req.body.password, { method });
+            res.cookie('token', req.apiClient.accessToken, { secure: true, httpOnly: true, sameSite: 'strict' })
+            loggedIn = true
+        } catch (error) {
+            logger.log('info', `Could not login with method '${method}`)
         }
-        if (req.query.redirect ){
-            res.redirect(303, req.query.redirect as string);
-        }else{
-            res.redirect(303, 'index.html' as string);
+    }
+    if (loggedIn) {
+        try {
+            req.user = {
+                username: (await req.apiClient.getIdentity()).username
+            }
+            if (req.query.redirect ){
+                res.redirect(303, req.query.redirect as string);
+            }else{
+                res.redirect(303, 'index.html' as string);
+            }
+        } catch(e) {
+            logger.warn(e)
+            res.clearCookie('token')
+            next()
         }
-    }catch(e){
-        logger.warn(e)
+    } else {
         res.clearCookie('token')
+        logger.warn('user could not be logged in!')
         next()
     }
 }

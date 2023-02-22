@@ -293,7 +293,7 @@ export const three_axes_portal_mc: ExperimentServiceTypes.Experiment = {
     },
     {
       name: 'Microcontroller',
-      template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
+      template_device: 'https://api.goldi-labs.de/devices/577fd185-9f45-476c-b1de-1a8e5406ff96',
       'x-esc-position': {
         x: 800,
         y: 600,
@@ -693,7 +693,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
       },
       {
         name: 'Microcontroller',
-        template_device: 'https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc',
+        template_device: 'https://api.goldi-labs.de/devices/577fd185-9f45-476c-b1de-1a8e5406ff96',
         'x-esc-position': {
           x: 800,
           y: 600,

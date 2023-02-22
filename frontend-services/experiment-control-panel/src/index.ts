@@ -39,12 +39,13 @@ export class App extends LitElement {
     });
     // Send a message to the parent window
     window.parent.postMessage("ecp-loaded", "*");
+    window.opener.postMessage("ecp-loaded", "*")
   }
 
   async start(accesstoken: string) {
     console.log({accesstoken, device_url})
     client.accessToken=accesstoken;
-    const token = await client.createWebsocketToken(device_url+'/websocket');
+    const token = await client.createWebsocketToken(device_url);
 
     this.electrical = new ElectricalConnection("electrical");
     this.electrical.register(deviceHandler);
@@ -67,6 +68,7 @@ export class App extends LitElement {
     // Wait for a second
     await new Promise((resolve) => setTimeout(resolve, 1000));
     window.parent.postMessage("ecp-authorized", "*");
+    window.opener.postMessage("ecp-authorized", "*");
   }
 
   render() {
