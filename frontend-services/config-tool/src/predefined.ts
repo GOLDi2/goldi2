@@ -13,7 +13,7 @@ export const three_axes_portal: ExperimentServiceTypes.Experiment = {
     },
     {
       name: 'ECP',
-      template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
+      template_device: 'https://api.goldi-labs.de/devices/9b283217-e90c-42c2-9d44-18293bc7b1da',
       'x-esc-position': {
         x: 200,
         y: 400,
@@ -301,7 +301,7 @@ export const three_axes_portal_mc: ExperimentServiceTypes.Experiment = {
     },
     {
       name: 'ECP',
-      template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
+      template_device: 'https://api.goldi-labs.de/devices/9b283217-e90c-42c2-9d44-18293bc7b1da',
       'x-esc-position': {
         x: 200,
         y: 400,
@@ -685,7 +685,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
     roles: [
       {
         name: 'ECP',
-        template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
+        template_device: 'https://api.goldi-labs.de/devices/9b283217-e90c-42c2-9d44-18293bc7b1da',
         'x-esc-position': {
           x: 200,
           y: 400,
@@ -987,7 +987,7 @@ export const mc: ExperimentServiceTypes.Experiment = {
       },
       {
         name: 'ECP',
-        template_device: 'https://api.goldi-labs.de/devices/91c48ca7-d666-4f9b-9d3a-628f09daa058',
+        template_device: 'https://api.goldi-labs.de/devices/9b283217-e90c-42c2-9d44-18293bc7b1da',
         'x-esc-position': {
           x: 200,
           y: 400,
