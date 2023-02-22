@@ -11,7 +11,7 @@ const stylesheet = unsafeCSS(style);
 
 import './plugablejs/viewport';
 import { ConfigPane } from './esp-config-pane';
-import { mc, three_axes_portal, three_axes_portal_io, three_axes_portal_mc } from './predefined';
+import { mc, nak, three_axes_portal, three_axes_portal_io, three_axes_portal_mc } from './predefined';
 import { DeviceServiceTypes, ExperimentServiceTypes } from '@cross-lab-project/api-client';
 
 @customElement('esp-app')
@@ -57,6 +57,7 @@ export class App extends LitElement {
     <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal_mc; this.start()}}>3 Achs Portal + Microcontroller</button>
     <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=three_axes_portal_io; this.start()}}>3 Achs Portal + IO Board</button>
     <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=mc; this.start()}}>Microcontroller</button>
+    <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.exp=nak; this.start()}}>NAK Robot</button>
     `;
   }
 }
