@@ -58,7 +58,10 @@ class SpiRegisters:
                 higher_address += 1
 
             new_registers[lower_address:higher_address] = self.spi.xfer2(
-                [lower_address, *self._registers_buffer[lower_address:higher_address]]
+                [
+                    lower_address,
+                    *self._registers_buffer[lower_address:higher_address],
+                ]
             )[1:]
 
         # check for changes between new_registers and self._registers_buffer

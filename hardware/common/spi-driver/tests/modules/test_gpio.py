@@ -49,12 +49,25 @@ def test_gpio_events():
 
     gpio.on("change", on_change)
 
+    registers.change_callbacks[0x10](registers)
+
     registers[0x10] = 0b00000001
     registers[0x11] = 0b00000010
 
     registers.change_callbacks[0x10](registers)
 
-    assert events == [(0, True), (5, True)]
+    assert events == [
+        (0, False),
+        (1, False),
+        (2, False),
+        (3, False),
+        (4, False),
+        (5, False),
+        (6, False),
+        (7, False),
+        (0, True),
+        (5, True),
+    ]
 
 
 def test_gpio_write():
@@ -69,6 +82,9 @@ def test_gpio_write():
     gpio[5] = None
     gpio[6] = True
     gpio[7] = False
+
+    print(bin(registers[0x10]))
+    print(bin(registers[0x11]))
 
     assert registers[0x10] == 0b10111001
     assert registers[0x11] == 0b11010100
@@ -97,3 +113,46 @@ def test_gpio_unreachable():
     gpio._gpio_cnt = 0
 
     pytest.raises(AssertionError, gpio._on_change, registers)
+
+
+def test_gpio_write_read_sequence():
+    registers = MockRegisters()
+    gpio = GPIO(registers, 0x10, 2)
+
+    events = []
+
+    def on_change(index, value):
+        events.append((index, value))
+
+    gpio.on("change", on_change)
+
+    gpio[0] = True
+    gpio[1] = False
+    gpio[2] = None
+    gpio[3] = True
+    gpio[4] = False
+    gpio[5] = None
+    gpio[6] = True
+    gpio[7] = False
+
+    assert registers[0x10] == 0b10111001
+    assert registers[0x11] == 0b11010100
+
+    registers[0x10] = 0b00000100
+    registers[0x11] = 0b00000000
+
+    registers.change_callbacks[0x10](registers)
+
+    assert registers[0x10] == 0b10111101
+    assert registers[0x11] == 0b11010100
+
+    assert events == [
+        (0, True),
+        (1, False),
+        (2, True),
+        (3, True),
+        (4, False),
+        (5, False),
+        (6, True),
+        (7, False),
+    ]

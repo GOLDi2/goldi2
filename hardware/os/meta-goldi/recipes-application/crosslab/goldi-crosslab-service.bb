@@ -12,6 +12,8 @@ RDEPENDS:${PN} = "goldi-crosslab"
 do_install() {
     install -d ${D}/${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/goldi-crosslab.service ${D}/${systemd_system_unitdir}
+
+    sed -i 's/crosslab_client/'"crosslab-${MACHINE_VARIANT}"'/' ${D}/${systemd_system_unitdir}/goldi-crosslab.service
 }
 
 inherit systemd

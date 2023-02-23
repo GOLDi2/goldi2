@@ -107,6 +107,7 @@ router.all('/crosslab', firmware_upload.none(), async (req, res) => {
       ...crosslab_settings,
       deviceId: req.body.id,
       authToken: req.body.token,
+      url: req.body.url,
     };
     fs.writeFileSync(config.CROSSLAB_CONFIG_FILE, JSON.stringify(crosslab_settings));
     spawnSync('systemctl restart goldi-crosslab.service', {shell: true});
@@ -114,6 +115,7 @@ router.all('/crosslab', firmware_upload.none(), async (req, res) => {
   await renderPage(req.path, req.language, res, {
     id: crosslab_settings.deviceId,
     token: crosslab_settings.authToken,
+    url: crosslab_settings.url,
   });
 });
 

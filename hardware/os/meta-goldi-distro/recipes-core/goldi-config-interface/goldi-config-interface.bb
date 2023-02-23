@@ -18,9 +18,6 @@ S = "${WORKDIR}"
 do_compile(){
     cd ${S}/package
     rm -rf node_modules
-    npm --arch=$BUILD_ARCH --verbose install
-    rm -rf node_modules
-    rm -rf src
     npm --ignore-scripts --arch=$TARGET_ARCH --production --verbose install
 }
 

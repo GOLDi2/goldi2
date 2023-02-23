@@ -46,7 +46,7 @@ if [ "$WORLD" = true ] ; then
   "
 else
   kas shell $VARIANT.yml -c "\
-    bitbake -c cleanall goldi-crosslab fpga-firmware goldi-config-interface \
+    bitbake -c cleanall goldi-crosslab fpga-firmware goldi-config-interface python3-spi-driver \
     && bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle \
   "
 fi

@@ -3,6 +3,7 @@
 {% block main %}
 
 <form method="post" enctype="multipart/form-data">
+    <label class="w-72 inline-block" for="url">API URL</label><input class="mt-1 border-2" type="text" id="url" name="url" value="{{url}}"><br>
     <label class="w-72 inline-block" for="id">Device ID</label><input class="mt-1 border-2" type="text" id="id" name="id" value="{{id}}"><br>
     <label class="w-72 inline-block" for="token">Device Token</label><input class="mt-1 border-2" type="text" id="token" name="token" value="{{token}}"><br>
     <button class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>

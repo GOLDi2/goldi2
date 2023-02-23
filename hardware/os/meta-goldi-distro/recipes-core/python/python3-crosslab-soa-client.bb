@@ -10,6 +10,6 @@ SRC_URI = " \
 
 S = "${WORKDIR}/crosslab_soa_client-0.0.1"
 
-RDEPENDS:${PN} = "python3-crosslab-api-client python3-aiortc"
+RDEPENDS:${PN} = "python3-crosslab-api-client python3-crosslab-aiortc"
 
 inherit setuptools3
