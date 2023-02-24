@@ -5,10 +5,17 @@ LIC_FILES_CHKSUM = ""
 GIT_DIR = "${THISDIR}/../../../../.."
 
 SRC_URI = " \
-        file://${GIT_DIR}/clients/api/python/dist/crosslab_api_client-0.0.1.tar.gz \
+        file://${GIT_DIR}/crosslab/clients/api/python/dist/python-latest.tar.gz \
 "
 
-S = "${WORKDIR}/crosslab_api_client-0.0.1"
+S = "${WORKDIR}"
+
+do_compile:prepend() {
+    cd ${S}
+    mv crosslab_api_client* crosslab_api_client
+}
+
+DISTUTILS_SETUP_PATH = "${WORKDIR}/crosslab_api_client"
 
 RDEPENDS:${PN} = "python3-aiohttp python3-dateutil"
 

@@ -8,13 +8,11 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/src/io_board_crosslab",
+            "program": "${workspaceFolder}/src/three_axes_portal_v1_crosslab",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--url", "http://localhost",
-                "--auth-token", "7e0b229c-03e6-4319-91d1-9aaad32abd1b",
-                "--device-id", "http://localhost/devices/ef416742-5c7c-42e4-8176-df8a7bf051eb",
+                "-c", "config.test",
                 "--virtual"
             ]
         }
