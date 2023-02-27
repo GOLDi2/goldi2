@@ -4,9 +4,9 @@
     navbar = {
         secondary: [
             {name: 'Login', href: '/login.html'},
-            {name: 'Register', href: '/about'}
+            {name: 'Register', href: '/register.html'}    
         ],
-
+        
         doc: 'Documentation',
         controller: 'Steuereinheiten',
         con_1: 'Manuelle Steuerung',
@@ -85,9 +85,9 @@
                 <span class="font-bold text-2xl text-primary">GOLDi LABS</span>
             </a>
             <!--Navbar items -->
-            <div class="hidden md:flex items-center space-x-3">
+            <div class="hidden md:flex items-center space-x-3 sm:hidden">
                 <div class="hidden md:flex items-center space-x-10 pr-10">
-
+                    
                     <div class="navbar">
                         <div class="dropdown">
                         <button class="dropbtn hover:bg-secondary-dark rounded transition duration-200">Dokumentation<i class="fa fa-caret-down"></i>
@@ -151,19 +151,18 @@
                 <!--Language-->
                 <div class="normal-dropdown">
                     <button class="normal-dropbtn my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200 ">
-                        <img class="h-7" src="/img/language_icon.svg" alt="language">
+                        <img class="h-7 md:block h-7 sm:block" src="/img/language_icon.svg" alt="language">
                     </button>
                     <div class="normal-dropdown-content">
                       <a href="/de/{{page}}" language='de'>DE</a>
                       <a href="/en/{{page}}" language='en'>EN</a>
-                </div>            
-
+                </div>   
             </div>
-
-        -->
+        </div>
+        
             <!-- Hamburger Menu button -->
             <div class="md:hidden flex items-center">
-                <button class="outline-none mobile-menu-button">
+                <button name="menu" class="outline-none mobile-menu-button">
                     <svg class=" w-6 h-6 text-gray-500 hover:text-green-500 " x-show="!showMenu" fill="none"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -173,11 +172,28 @@
             </div>
         </div>
     </div>
-    <div class="hidden mobile-menu md:hidden">
-        <ul class="">
-            {% for item in navbar.primary %}
-            <a href="" class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">{{ item.name }}</a>
-            {% endfor %}
+    <div class=" hidden mobile-menu md:hidden w-full">
+        <ul class="md:flex md:items-center h-50 py-1">
+            <li class="mx-4 md:my-0 text-xl py-1">
+                <a href="/{{language}}/experiment.html"
+                    class="my-2 py-1 px-2 w-full text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Experiment</a>
+            </li>
+            <li class="mx-4 md:my-0 text-xl py-1">
+                <a href="/{{language}}/tools.html"
+                    class="my-2 py-1 px-2 text-gray-100 hover:bg-secondary-dark rounded transition duration-200">Werkzeuge</a>
+            </li>
+            <li class="mx-4 md:my-0 text-xl py-1">
+                <a href="/{{language}}{{item.href}}"
+                    class="my-2 py-1 px-2 text-xl text-gray-100 hover:bg-secondary-dark rounded transition duration-200">
+                    {{navbar.secondary[0].name }}
+                </a>
+            </li>
+            <li class="mx-4 md:my-0 text-xl py-1">
+                <a href="/{{language}}{{item.href}}"
+                    class="my-2 py-1 px-2 text-xl text-gray-100 hover:bg-secondary-dark rounded transition duration-200">
+                    {{navbar.secondary[1].name }}
+                </a>
+            </li>
         </ul>
     </div>
     <script>
@@ -189,4 +205,3 @@
         });
     </script>
 </nav>
-<div class="mt-14"></div>
