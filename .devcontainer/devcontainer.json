@@ -2,11 +2,16 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
 	"name": "Crosslab",
-	"image": "crosslab/devcontainer:latest",
+	"image": "goldi-devcontainer:build",
 
 	"runArgs": [
 		"-v",
-		"/var/run/docker.sock:/var/run/docker.sock"
+		"/var/run/docker.sock:/var/run/docker.sock",
+		"-v",
+        "/dev:/dev",
+		"--net",
+        "host",
+		"--privileged"
     ],
 
 	"overrideCommand": false,

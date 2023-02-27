@@ -6,6 +6,7 @@ export function login(program: Command, getClient: () => APIClient){
     program.command('login')
     .description('Authenticate to CrossLab using your credentials')
     .option('--raw', 'Output the raw JSON response')
+    .option('--local', 'Use the local authentification schema')
     .action(async (options, command)=> {
         const client = getClient();
         let username: string = options.username;
@@ -19,7 +20,7 @@ export function login(program: Command, getClient: () => APIClient){
             password = await prompt("Password: ", true);
         }
     
-        await client.login(username, password, { method: "tui" })
+        await client.login(username, password, { method: options.local?"local":"tui" })
     
         if (!options.raw) {
             process.stdout.write("Logged in successfully\n\n");
