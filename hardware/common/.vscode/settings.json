@@ -1,19 +1,35 @@
 {
     "files.exclude": {
         //begin generated
-        "spi-driver/.*_cache": true,
-        "spi-driver/.mypy_cache/*": true,
-        "spi-driver/src/**/__pycache__": true,
-        "spi-driver/src/spi_driver.egg-info": true,
-        "spi-driver/tests/**/__pycache__": true,
-        "spi-driver/.tox/*": true,
-        "spi-driver/venv": true,
+        
+        "**/app": true,
+        "**/build": true,
+        "**/*.egg-info": true,
+        "**/lib": true,
+        "**/.mypy_cache": true,
+        "**/node_modules": true,
+        "**/.packages": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/venv": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-        "spi-driver/.mypy_cache": true,
-        "spi-driver/.tox": true,
+        
+        "**/app": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/*.egg-info": true,
+        "**/lib": true,
+        "**/.mypy_cache": true,
+        "**/node_modules": true,
+        "**/.packages": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/venv": true,
         //end generated
     }
 }

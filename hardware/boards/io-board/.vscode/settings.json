@@ -1,27 +1,33 @@
 {
     "files.exclude": {
         //begin generated
-        "crosslab/.mypy_cache": true,
-        "crosslab/.tox": true,
-        "crosslab/venv": true,
-        "firmware/build": true,
-        "firmware/meta-goldi-bsp": true,
-        "firmware/meta-goldi-distro/recipes-core/.vscode": true,
-        "firmware/meta-goldi-distro": true,
-        "firmware/meta-goldi-distro/.vscode": true,
-        "firmware/meta-goldi": true,
-        "firmware/meta-openembedded": true,
-        "firmware/meta-raspberrypi": true,
-        "firmware/meta-rauc": true,
-        "firmware/poky": true,
-        "fpga/build": true,
+        "**/app": true,
+        "**/build": true,
+        "**/*.egg-info": true,
+        "**/lib": true,
+        "**/.mypy_cache": true,
+        "**/node_modules": true,
+        "**/.packages": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/venv": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-        "crosslab/.mypy_cache": true,
-        "crosslab/.tox": true,
-        "crosslab/venv": true,
+        "**/app": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/*.egg-info": true,
+        "**/lib": true,
+        "**/.mypy_cache": true,
+        "**/node_modules": true,
+        "**/.packages": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/venv": true,
         //end generated
     }
 }
