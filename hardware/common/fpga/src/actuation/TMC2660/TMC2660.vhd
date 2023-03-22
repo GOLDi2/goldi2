@@ -52,6 +52,9 @@ entity TMC2660 is
         --Bus 
         sys_bus_i           : in    sbus_in;
         sys_bus_o           : out   sbus_out;
+        --Flags
+        sdi_neg_valid       : out   std_logic;
+        sdi_pos_valid       : out   std_logic;
         --TMC2660 interface
         tmc2660_clk         : out   io_o;
         tmc2660_enn         : out   io_o;
@@ -117,7 +120,9 @@ begin
         reg_data_out        => sdi_memory_in,
         reg_data_stb        => sdi_memory_stb
     );
-    sdi_memory_out <= sdi_memory_in;
+    sdi_memory_out(7 downto 3) <= sdi_memory_in(7 downto 3);
+    sdi_memory_out(2)          <= tmc2660_sg.dat;
+    sdi_memory_out(1 downto 0) <= sdi_memory_in(1 downto 0);
 
 
 
@@ -125,8 +130,8 @@ begin
     port map(
         clk                     => clk,
         rst                     => rst,
-        sd_move_negative_valid  => sdi_memory_in(0)(0),
-        sd_move_positive_valid  => sdi_memory_in(0)(1),
+        sd_move_enable          => sdi_memory_in(0)(0),
+        sd_move_direction       => sdi_memory_in(0)(1),
         sd_nominal_frequency    => sdi_memory_in(1)(7 downto 0),
         sd_configuration_valid  => sdi_memory_stb(1),
         tmc2660_step            => tmc2660_step.dat,
@@ -134,6 +139,10 @@ begin
     );
     tmc2660_step.enb <= '1';
     tmc2660_dir.enb  <= '1';
+
+
+    sdi_neg_valid <= sdi_memory_out(0)(1) and sdi_memory_out(0)(0);
+    sdi_pos_valid <= sdi_memory_out(0)(1) and (not sdi_memory_out(0)(0));
     -----------------------------------------------------------------------------------------------
 
 

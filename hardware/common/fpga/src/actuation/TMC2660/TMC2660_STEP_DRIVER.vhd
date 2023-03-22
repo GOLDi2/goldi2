@@ -34,8 +34,8 @@ entity TMC2660_STEP_DRIVER is
         clk                     : in    std_logic;
         rst                     : in    std_logic;
         --Movement interface
-        sd_move_negative_valid  : in    std_logic;
-        sd_move_positive_valid  : in    std_logic;
+        sd_move_enable          : in    std_logic;
+        sd_move_direction       : in    std_logic;
         --Speed interface
         sd_nominal_frequency    : in    std_logic_vector(7 downto 0);
         sd_configuration_valid  : in    std_logic;
@@ -148,7 +148,7 @@ begin
                 step_velocity_counter <= 0;
                 step_valid <= '0';
             
-            elsif(sd_move_negative_valid = '1' xor sd_move_positive_valid = '1') then                
+            elsif(sd_move_enable = '1') then                
                 if (step_velocity_counter >= nominal_frequency_buff + 1535) then
                     step_velocity_counter <= 0;
                     step_valid <= '1';
@@ -164,7 +164,7 @@ begin
 
             end if;
 
-            direction_buff <= sd_move_negative_valid;
+            direction_buff <= sd_move_direction;
         end if;
     end process;
     ---------------------------------------------------------------------------
