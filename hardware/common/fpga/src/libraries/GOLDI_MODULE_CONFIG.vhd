@@ -35,5 +35,22 @@ package GOLDI_MODULE_CONFIG is
     constant PHYSICAL_PIN_NUMBER   	:   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 66;
     constant VIRTUAL_PIN_NUMBER    	:   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 6;
     
-  
+    
+    --****TMC2660****
+    -----------------------------------------------------------------------------------------------
+    constant ROM_DEPTH  :   natural := 5;
+    constant ROM_WIDTH  :   natural := 20;
+    type rom_type is array(ROM_DEPTH-1 downto 0) of std_logic_vector(ROM_WIDTH-1 downto 0);
+    
+    constant memory     :   rom_type :=
+    (
+        x"0000F",
+        x"000F0",
+        x"00F00",
+        x"0F000",
+        x"F0000"
+    );
+    -----------------------------------------------------------------------------------------------
+
+
 end package;

@@ -63,14 +63,23 @@ package GOLDI_COMM_STANDARD is
 	--BUS vectors
 	type sbus_i_vector is array(natural range <>) of sbus_in;
 	type sbus_o_vector is array(natural range <>) of sbus_out;
+	-----------------------------------------------------------------------------------------------
 
 
-	--BUS constants
+
+	--****BUS constants****
+	-----------------------------------------------------------------------------------------------
 	constant gnd_mbus_o		:	mbus_out :=
 	(
 		we  => '0',
 		adr => (others => '0'),
 		dat => (others => '0')
+	);
+
+	constant gnd_mbus_i		:	mbus_in :=
+	(
+		dat => (others => '0'),
+		val => '0'
 	);
 
 	constant gnd_sbus_i		:	sbus_in := 
@@ -91,10 +100,10 @@ package GOLDI_COMM_STANDARD is
 	
 	--****Functions****
 	-----------------------------------------------------------------------------------------------
-	--function dataVectorToStdVector(vector : data_word_vector) return std_logic_vector;
+	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
 	function getMemoryLength(a : natural) return natural;
 	function assignMemory(data : std_logic_vector) return data_word_vector;
-	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
+	function registerToVector(data_vector : data_word_vector) return std_logic_vector;
 	-----------------------------------------------------------------------------------------------
 
 end package;
@@ -103,18 +112,21 @@ end package;
 
 package body GOLDI_COMM_STANDARD is
 
-	--
-	-- function dataVectorToStdVector(vector : data_word_vector) return std_logic_vector is
-	-- 	variable vector_buff	:	std_logic_vector((vector'length*SYSTEM_DATA_WIDTH)-1 downto 0);
-	-- begin
-	-- 	for i in 0 to vector'length-1 loop
-	-- 		vector_buff((SYSTEM_DATA_WIDTH*(i+1)-1) downto i*SYSTEM_DATA_WIDTH) := vector_buff(i);
-	-- 	end loop;
+	-- Returns a sbus_out structure corresponding to the addressed register.
+	-- Used in synthesis to generate multiplexer for multiple register tables.
+	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
+		variable index 	:	natural;
+  	begin
+		for i in 0 to bus_vector'length-1 loop
+			if(bus_vector(i).val = '1') then
+				index := i;
+			end if;
+		end loop;
 
-	-- 	return vector_buff;
-	-- end dataVectorToStdVector;
-
-
+		return bus_vector(index);
+	end reduceBusVector;
+	
+	
 	-- Returns the minimum number of registers needed to 
 	-- save a vector of size a; based on the SYSTEM_DATA_WIDTH of 
 	-- the GOLDI_MODULE_CONFIG package.
@@ -153,18 +165,18 @@ package body GOLDI_COMM_STANDARD is
 	end assignMemory;
 
 
-	-- Returns a sbus_out structure corresponding to the addressed register.
-	-- Used in synthesis to generate multiplexer for multiple register tables.
-	function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
-		variable index 	:	natural;
+	-- Function converts a subset of registers into a std_logic_vector
+	-- Use for vector divided in multiple registers.
+	function registerToVector(data_vector : data_word_vector) return std_logic_vector is
+		variable std_vector	:	std_logic_vector(data_vector'length*8-1 downto 0);
   	begin
-		for i in 0 to bus_vector'length-1 loop
-			if(bus_vector(i).val = '1') then
-				index := i;
-			end if;
+		for i in 0 to data_vector'length-1 loop
+			std_vector((SYSTEM_DATA_WIDTH*(i+1))-1 downto SYSTEM_DATA_WIDTH*i) := data_vector(i);
 		end loop;
 
-		return bus_vector(index);
-	end reduceBusVector;
+		return std_vector;
+	end function;
+  
+
 
 end package body GOLDI_COMM_STANDARD;
