@@ -53,14 +53,6 @@ package GOLDI_IO_STANDARD is
 	constant gnd_io_i : io_i := (dat => '0');
 	constant gnd_io_o : io_o := (enb => '0', dat => '0');
 	-----------------------------------------------------------------------------------------------
-	
-
-
-	--****Crossbar Data Structures****
-	-----------------------------------------------------------------------------------------------
-	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
-	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
-	-----------------------------------------------------------------------------------------------
 
 
 
@@ -95,15 +87,15 @@ end package GOLDI_IO_STANDARD;
 
 package body GOLDI_IO_STANDARD is
 
-	function outputStdLogic(data : std_logic; io : std_io) return std_io is
-		variable io_buff	:	std_io;
-	begin
-		io_buff.input.dat  := '0';
-		io_buff.output.enb := '1';
-		io_buff.output.dat := data;
+	-- function outputStdLogic(data : std_logic; io : std_io) return std_io is
+	-- 	variable io_buff	:	std_io;
+	-- begin
+	-- 	io_buff.input.dat  := '0';
+	-- 	io_buff.output.enb := '1';
+	-- 	io_buff.output.dat := data;
 
-		return io_buff;
-  	end outputStdLogic;
+	-- 	return io_buff;
+  	-- end outputStdLogic;
 	
 
 
