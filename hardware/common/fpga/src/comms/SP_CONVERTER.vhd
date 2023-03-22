@@ -30,6 +30,8 @@ use IEEE.numeric_std.all;
 --! Bidirectional serial and parallel data converter for use in SPI 
 --! communication. Module transforms SPI incomming signals into parallel
 --! data and the outgoing parallel data into miso serial data.
+--! The default SPI configuration assumes and active low ce signal, msbf
+--! data transfer, and data valid on the rising edge of sclk.
 --!
 --! **Latency:1**
 entity SP_CONVERTER is

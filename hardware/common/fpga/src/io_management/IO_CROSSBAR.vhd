@@ -92,14 +92,15 @@ end entity IO_CROSSBAR;
 architecture RTL of IO_CROSSBAR is
 
     --Intermediate signals
+    --RAM Address
+    constant min_adr    :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
+        := to_unsigned(2,BUS_ADDRESS_WIDTH);
+    constant max_adr    :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
+        := to_unsigned(RIGHT_PORT_LENGTH+2,BUS_ADDRESS_WIDTH);
     --Crossbar Matrix
     signal ram_left_port_layout     :   cb_left_port_ram(LEFT_PORT_LENGTH-1 downto 0);
     signal ram_right_port_layout    :   cb_right_port_ram(RIGHT_PORT_LENGTH-1 downto 0);
-    --RAM Address
-    constant min_adr                  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
-        := to_unsigned(2,BUS_ADDRESS_WIDTH);
-    constant max_adr                  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
-        := to_unsigned(RIGHT_PORT_LENGTH+2,BUS_ADDRESS_WIDTH);
+    
 
 
 begin
