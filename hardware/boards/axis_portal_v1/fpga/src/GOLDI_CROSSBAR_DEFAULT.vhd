@@ -35,6 +35,16 @@ use work.GOLDI_IO_STANDARD.all;
 
 package GOLDI_CROSSBAR_DEFAULT is
 
+    --****Crossbar Data Structures****
+	-----------------------------------------------------------------------------------------------
+	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
+	-----------------------------------------------------------------------------------------------
+    
+
+    
+    --****Constants***
+    -----------------------------------------------------------------------------------------------
     --Block dynamic changes to crossbar in design.
     --The default layout will be used as the routing map
     constant block_layout   :   boolean := true;
@@ -85,6 +95,6 @@ package GOLDI_CROSSBAR_DEFAULT is
         39 => x"27",
         40 => x"28"
     );
-    
+    -----------------------------------------------------------------------------------------------
 
 end package GOLDI_CROSSBAR_DEFAULT;
