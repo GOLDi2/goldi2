@@ -22,7 +22,8 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
-
+library work;
+use work.GOLDI_MODULE_CONFIG.all;
 
 
 
@@ -32,7 +33,8 @@ use IEEE.numeric_std.all;
 entity AXI_ROM_FIFO is
     generic(
         FIFO_WIDTH      :   natural := 8;
-        FIFO_DEPTH      :   natural := 16
+        FIFO_DEPTH      :   natural := 16;
+        ROM             :   rom_type := (others=> (others => '0'))
     );
     port(
         --General
@@ -52,27 +54,6 @@ end entity AXI_ROM_FIFO;
 architecture RTL of AXI_ROM_FIFO is
 
     --****Internal signals****
-    --Memory
-    type rom_type is array(FIFO_DEPTH-1 downto 0) of std_logic_vector(FIFO_WIDTH-1 downto 0);
-    constant memory     :   rom_type :=
-    (
-        x"00",
-        x"01",
-        x"02",
-        x"03",
-        x"04",
-        x"05",
-        x"06",
-        x"07",
-        x"08",
-        x"09",
-        x"0A",
-        x"0B",
-        x"0C",
-        x"0D",
-        x"0E",
-        x"0F"
-    );
     --Memory pointer
     signal rd_pointer   :   natural range 0 to FIFO_DEPTH-1;
     signal memory_count :   natural range 0 to FIFO_DEPTH;
@@ -109,7 +90,7 @@ begin
             if(rst = '1') then
                 m_read_tdata <= (others => '0');
             else
-                m_read_tdata <= memory(getIndex(rd_pointer,m_read_tready,read_valid_i));
+                m_read_tdata <= ROM(getIndex(rd_pointer,m_read_tready,read_valid_i));
             end if;
         end if;
     end process;
