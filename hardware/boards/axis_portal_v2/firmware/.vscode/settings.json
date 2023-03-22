@@ -1,0 +1,25 @@
+{
+    "files.exclude": {
+        "build": true,
+        "meta-goldi": true,
+        "meta-goldi-bsp": true,
+        "meta-goldi-distro": true,
+        "meta-openembedded": true,
+        "meta-raspberrypi": true,
+        "meta-rauc": true,
+        "poky": true,
+        //begin generated
+        
+        //end generated
+    },
+    "files.watcherExclude": {
+        "build": true,
+        "meta-goldi": true,
+        "meta-goldi-bsp": true,
+        "meta-goldi-distro": true,
+        "meta-openembedded": true,
+        "meta-raspberrypi": true,
+        "meta-rauc": true,
+        "poky": true,
+    }
+}
