@@ -49,7 +49,7 @@ use work.GOLDI_IO_STANDARD.all;
 entity LED_DRIVER is
     generic(
         ADDRESS         :   natural := 1;       --! Module's base address
-        CLK_FEQUENCY    :   natural := 16;      --! Blinking pattern frequency
+        CLK_FREQUENCY    :   natural := 16;     --! Blinking pattern frequency
         INVERTED        :   boolean := false    --! Blinking pattern inverted
     );
     port(
@@ -100,7 +100,7 @@ architecture RTL of LED_DRIVER is
         alias led_on_delay      :   std_logic_vector(2 downto 0) is reg_data(0)(5 downto 3);
         alias led_off_delay     :   std_logic_vector(2 downto 0) is reg_data(0)(2 downto 0);
     --Internal 
-    constant counter_high       :   natural := CLK_FEQUENCY/16;
+    constant counter_high       :   natural := CLK_FREQUENCY/16;
     signal counter              :   natural range 0 to counter_high;
     signal blink_counter        :   natural range 0 to 16;
     signal blinker_state        :   std_logic;

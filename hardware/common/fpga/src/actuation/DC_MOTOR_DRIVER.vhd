@@ -76,123 +76,102 @@ end entity DC_MOTOR_DRIVER;
 --! General architecture
 architecture RTL of DC_MOTOR_DRIVER is
 
-	--Components
-	component REGISTER_TABLE
-	generic(
-		BASE_ADDRESS		:	natural;
-		NUMBER_REGISTERS	:	natural;
-		REG_DEFAULT_VALUES	:	data_word_vector
-	);
-	port(
-		clk				: in	std_logic;
-		rst				: in	std_logic;
-		sys_bus_i		: in	sbus_in;
-		sys_bus_o		: out	sbus_out;
-		reg_data_in		: in	data_word_vector(NUMBER_REGISTERS-1 downto 0);
-		reg_data_out	: out   data_word_vector(NUMBER_REGISTERS-1 downto 0);
-		reg_data_stb	: out	std_logic_vector(NUMBER_REGISTERS-1 downto 0)
-	);
-	end component;
-	
-	
-	--Intermediate signals
-	--Constants
-	constant reg_default	:	data_word_vector(1 downto 0) 
-		:= (std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH)),
-			std_logic_vector(to_unsigned(0,SYSTEM_DATA_WIDTH)));
+	--****INTERNAL SIGNALS****
 	--Registers
-	signal reg_data			:	data_word_vector(1 downto 0);
-		alias enb_neg		:	std_logic is reg_data(0)(0);
-		alias enb_pos		:	std_logic is reg_data(0)(1);
-		alias pwm			:	std_logic_vector(7 downto 0) is reg_data(1)(7 downto 0);
+	constant reg_default	:	data_word_vector(1 downto 0)
+	:=(
+		0 => std_logic_vector(to_unsigned(0,SYSTEM_DATA_WIDTH)),
+		1 => std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH))
+	);
+	
+	signal reg_data 		:	data_word_vector(1 downto 0);
+		alias enb_neg 		:	std_logic is reg_data(0)(0);
+		alias enb_pos 		:	std_logic is reg_data(0)(1);
+		alias pwm 			:	std_logic_vector(7 downto 0) is reg_data(1)(7 downto 0);
 	signal reg_data_stb 	:	std_logic_vector(1 downto 0);
-	--PWM
-	signal pwm_count_flag	:	std_logic;
-	signal pwm_out_valid	:	std_logic;
-	signal pwm_counter		:	natural range 0 to 256 := 0;
-
 	
+	--Counter
+	signal clk_counter		:	natural range 0 to CLK_FACTOR-1;
+	signal pwm_counter		:	natural range 0 to 255;
+	--Flag
+	signal pwm_valid 		:	std_logic;
+
+
 begin
-	--Output routing
-	DC_enb.enb 	 <= '1';
-	DC_enb.dat	 <= '1' when((pwm_out_valid = '1') and ((enb_pos = '1') xor (enb_neg = '1'))) else '0';
 
-	DC_out_1.enb 	<= '1';
-	DC_out_1.dat	<= '1' 	when(enb_neg = '1') else '0';
-	
-	DC_out_2.enb	<= '1';
-	DC_out_2.dat	<= '1'	when(enb_pos = '1') else '0';
-	
-	
-	
-	--! Generates PWM signal for DC_enb
-	--! [Period 255/x"FF"]
-	--! Recomended frequency 500Hz [CLK_FACTOR = 377]
-	PWM_SIGNAL_GENERATOR : process(clk)
+	--****OUTPUT ROUTING****
+	-----------------------------------------------------------------------------------------------
+	DC_enb.enb 	 <= '1';
+	DC_enb.dat 	 <= '1' when((pwm_valid = '1') and ((enb_pos = '1') xor (enb_neg = '1'))) else '0';
+
+	DC_out_1.enb <= '1';
+	DC_out_1.dat <= '1' when(enb_neg = '1') else '0';
+
+	DC_out_2.enb <= '1';
+	DC_out_2.dat <= '1' when(enb_pos = '1') else '0';
+	-----------------------------------------------------------------------------------------------
+
+
+	--****COUNTERS****
+	-----------------------------------------------------------------------------------------------
+	PWM_FRANCTION_COUNTER : process(clk)
 	begin
 		if(rising_edge(clk)) then
-			if((rst = '1') or (reg_data_stb /= "00")) then
-				pwm_counter <= 1;
-				pwm_out_valid <= '0';
-				
+			--Reset counter when new data arrives to the registers
+			if((rst = '1') or (reg_data_stb /= (reg_data_stb'range => '0'))) then
+				clk_counter <= 0;
+			elsif(clk_counter = CLK_FACTOR-1) then
+				clk_counter <= 0;
 			else
-				if((pwm_count_flag = '1') and (pwm_counter = 255)) then
-					pwm_counter <= 1;
-				elsif(pwm_count_flag <= '1') then
-					pwm_counter <= pwm_counter + 1;
-				end if;
-				
-				--Manage pwm valid flag
-				if(pwm_counter <= to_integer(unsigned(pwm))) then
-					pwm_out_valid <= '1';
-				else
-					pwm_out_valid <= '0';
-				end if;
+				clk_counter <= clk_counter + 1;
 			end if;
-			
 		end if;
 	end process;
 
 
-	--! Clock divider to provide correct PWM frequency. Reset when reg 
-	--! contents change and global reset is asserted.
-	CLOCK_DIVIDER : process(clk)
-		variable counter : natural range 0 to CLK_FACTOR := 0;
+	PWM_ASSERTION_COUNTER : process(clk)
 	begin
 		if(rising_edge(clk)) then
-			--Manage counter value
-			if((rst = '1') or (reg_data_stb /= "00")) then
-				counter := 0;
-				pwm_count_flag <= '0';
-				
-			elsif(counter = CLK_FACTOR-1) then
-				counter := 0;
-				pwm_count_flag <= '1';
-			else
-				counter := counter + 1;
-				pwm_count_flag <= '0';
+			--Counter divides the signal into 255 segments
+			if((rst = '1') or (reg_data_stb /= (reg_data_stb'range => '0'))) then
+				pwm_counter <= 1;
+			elsif((pwm_counter = 255) and (clk_counter = CLK_FACTOR-1)) then
+				pwm_counter <= 1;
+			elsif(clk_counter = CLK_FACTOR-1) then
+				pwm_counter <= pwm_counter + 1;
 			end if;
+
+			--Control valid flag
+			if(pwm_counter > to_integer(unsigned(pwm))) then
+				pwm_valid <= '0';
+			else
+				pwm_valid <= '1';
+			end if;
+
 		end if;
-	end process;	
-	
+	end process;
+	-----------------------------------------------------------------------------------------------
 
 
-	--Module memory
-	MEMORY : REGISTER_TABLE
+
+	--****MEMORY****
+	-----------------------------------------------------------------------------------------------
+	MEMORY : entity work.REGISTER_TABLE
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
 		NUMBER_REGISTERS	=> 2,
 		REG_DEFAULT_VALUES	=> reg_default
 	)
 	port map(
-		clk				=> clk,
-		rst				=> rst,
-		sys_bus_i		=> sys_bus_i,
-		sys_bus_o		=> sys_bus_o,
-		reg_data_in		=> reg_data,
-		reg_data_out	=> reg_data,
-		reg_data_stb	=> reg_data_stb
+		clk 				=> clk,
+		rst					=> rst,
+		sys_bus_i			=> sys_bus_i,
+		sys_bus_o			=> sys_bus_o,
+		reg_data_in			=> reg_data,
+		reg_data_out		=> reg_data,
+		reg_data_stb		=> reg_data_stb
 	);
-	
-	
+	-----------------------------------------------------------------------------------------------
+
+
 end RTL;

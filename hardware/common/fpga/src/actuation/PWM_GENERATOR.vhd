@@ -71,67 +71,59 @@ architecture RTL of PWM_GENERATOR is
     constant reg_default    :   data_word_vector(1 downto 0) := (others => (others => '0'));
     --Register data
     signal reg_data         :   data_word_vector(0 downto 0);
+        alias pwm           :   std_logic_vector(7 downto 0) is reg_data(0)(7 downto 0);
     signal reg_data_stb     :   std_logic_vector(0 downto 0);
     --Counters and flags
-    signal frequency_count  :   natural range 0 to PWM_FREQUENCY;
+    signal clk_counter      :   natural range 0 to PWM_FREQUENCY;
     signal pwm_counter      :   natural range 0 to 256;
-    signal pwm_count_flag   :   std_logic;
-    signal pwm_out_valid    :   std_logic; 
+    signal pwm_valid        :   std_logic; 
 
 
 begin
 
     --****Signal Generator****
     -----------------------------------------------------------------------------------------------
-    PWM_FREQUENCY_CLK : process(clk)
-    begin
-        if(rising_edge(clk)) then
-            if((rst = '1') or (reg_data_stb(0) = '1')) then
-                frequency_count <= 0;
-                pwm_count_flag  <= '0';
-
-            elsif(frequency_count = PWM_FREQUENCY-1) then
-                frequency_count <= 0;
-                pwm_count_flag  <= '1';
-            
-            else    
-                frequency_count <= frequency_count + 1;
-                pwm_count_flag  <= '0';
-            end if;
-        end if;
-    end process;
+    PWM_FRANCTION_COUNTER : process(clk)
+	begin
+		if(rising_edge(clk)) then
+			--Reset counter when new data arrives to the registers
+			if((rst = '1') or (reg_data_stb /= (reg_data_stb'range => '0'))) then
+				clk_counter <= 0;
+			elsif(clk_counter = PWM_FREQUENCY-1) then
+				clk_counter <= 0;
+			else
+				clk_counter <= clk_counter + 1;
+			end if;
+		end if;
+	end process;
     
 
-    PWM_SIGNAL_GENERATOR : process(clk)
-    begin
-        if(rising_edge(clk)) then
-            if((rst = '1') or (reg_data_stb(0) = '1')) then
-                pwm_counter   <= 1;
-                pwm_out_valid <= '0';
+    PWM_ASSERTION_COUNTER : process(clk)
+	begin
+		if(rising_edge(clk)) then
+			--Counter divides the signal into 255 segments
+			if((rst = '1') or (reg_data_stb /= (reg_data_stb'range => '0'))) then
+				pwm_counter <= 1;
+			elsif((pwm_counter = 255) and (clk_counter = PWM_FREQUENCY-1)) then
+				pwm_counter <= 1;
+			elsif(clk_counter = PWM_FREQUENCY-1) then
+				pwm_counter <= pwm_counter + 1;
+			end if;
 
-            else
-                --Manage pwm counter
-                if((pwm_count_flag = '1') and (pwm_counter = 255)) then
-                    pwm_counter <= 1;
-                elsif(pwm_count_flag = '1') then
-                    pwm_counter <= pwm_counter + 1;
-                else null;
-                end if;
+			--Control valid flag
+			if(pwm_counter > to_integer(unsigned(pwm))) then
+				pwm_valid <= '0';
+			else
+				pwm_valid <= '1';
+			end if;
 
-                --Manage pwm out flag
-                if(pwm_counter <= to_integer(unsigned(reg_data(0)))) then
-                    pwm_out_valid <= '1';
-                else
-                    pwm_out_valid <= '0';
-                end if;
-            end if;
-        end if;
-    end process;
+		end if;
+	end process;
     
 
     --Route output
     pwm_io.enb <= '1';
-    pwm_io.dat <= pwm_out_valid; 
+    pwm_io.dat <= pwm_valid; 
     -----------------------------------------------------------------------------------------------
 
 

@@ -43,7 +43,7 @@ architecture TB of DC_MOTOR_DRIVER_TB is
 	component DC_MOTOR_DRIVER
 		generic(
 			ADDRESS			:	natural := 1;
-			CLK_FACTOR		:	natural := 1
+			CLK_FACTOR		:	natural := 10
 		);
 		port(
 			clk			: in	std_logic;
@@ -60,10 +60,11 @@ architecture TB of DC_MOTOR_DRIVER_TB is
 	--Intermeidate signals
 	--Simulation timing
 	constant clk_period		:	time := 10 ns;
-	signal reset			:	std_logic;
+	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
 	--DUT i/o
+	constant clk_factor 	:	natural := 10;
 	signal sys_bus_i		:	sbus_in;
 	signal sys_bus_o		:	sbus_out;
 	signal DC_enb			:	io_o;
@@ -74,6 +75,10 @@ architecture TB of DC_MOTOR_DRIVER_TB is
 begin
 
 	DUT : DC_MOTOR_DRIVER
+	generic map(
+		ADDRESS 	=> 1,
+		CLK_FACTOR 	=> clk_factor
+	)
 	port map(
 		clk			=> clock,
 		rst			=> reset,
@@ -87,7 +92,7 @@ begin
 	
 	--Timing
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '0' after 0 ns, '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 5 ns, '0' after 15 ns;
 	
 	
 	TEST : process
@@ -108,8 +113,6 @@ begin
 			report "line(108): Test reset - expecting DC_out_1.dat = '0'" severity error;
 		assert(DC_out_2.dat = '0')
 			report "line(110): Test reset - expecting DC_out_2.dat = '0'" severity error;
-			
-
 		wait for 5*clk_period;
 		
 		
@@ -126,12 +129,12 @@ begin
 		wait for assert_hold;
 		for i in 1 to 255 loop
 			assert(DC_enb.dat = '0')
-				report "line(130): Test PWM=0 - expecting DC_enb.dat = '0'" severity error;
+				report "line(132): Test PWM=0 - expecting DC_enb.dat = '0'" severity error;
 			assert(DC_out_1.dat = '1')
-				report "line(132): Test PWM=0 - expecting DC_out_1.dat = '1'" severity error;
+				report "line(134): Test PWM=0 - expecting DC_out_1.dat = '1'" severity error;
 			assert(DC_out_2.dat = '0')
-				report "line(134): Test PWM=0 - expecting DC_out_2.dat = '0'" severity error;
-			wait for clk_period;
+				report "line(136): Test PWM=0 - expecting DC_out_2.dat = '0'" severity error;
+			wait for clk_factor*clk_period;
 		end loop;
 		wait for post_hold;
 		
@@ -153,12 +156,12 @@ begin
 		wait for assert_hold;
 		for i in 1 to 255 loop
 			assert(DC_enb.dat = '1')
-				report "line(157): Test PWM=FF - expecting DC_enb.dat = '1'" severity error;
+				report "line(159): Test PWM=FF - expecting DC_enb.dat = '1'" severity error;
 			assert(DC_out_1.dat = '0')
-				report "line(159): Test PWM=FF - expecting DC_out_1.dat = '0'" severity error;
+				report "line(161): Test PWM=FF - expecting DC_out_1.dat = '0'" severity error;
 			assert(DC_out_2.dat = '1')
-				report "line(161): Test PWM=FF - expecting DC_out_2.dat = '1'" severity error;
-			wait for clk_period;
+				report "line(163): Test PWM=FF - expecting DC_out_2.dat = '1'" severity error;
+			wait for clk_factor*clk_period;
 		end loop;
 
 		
@@ -168,7 +171,7 @@ begin
 		--Test pwm=0F
 		sys_bus_i.we  <= '1';
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(2,7));
-		sys_bus_i.dat <= x"7F";
+		sys_bus_i.dat <= x"0F";
 		wait for clk_period;
 		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
 		sys_bus_i.dat <= x"02";
@@ -177,14 +180,14 @@ begin
 
 		wait for assert_hold;
 		for i in 1 to 255 loop
-			if(i<=127) then
+			if(i<=15) then
 				assert(DC_enb.dat = '1')
 					report "line(183): Test PWM=0F - expecting DC_enb.dat = '1'" & integer'image(i) severity error;
 				assert(DC_out_1.dat = '0')
 					report "line(185): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
 				assert(DC_out_2.dat = '1')
 					report "line(187): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
-				wait for clk_period;
+				wait for clk_factor*clk_period;
 			else
 				assert(DC_enb.dat = '0')
 					report "line(191): Test PWM=0F - expecting DC_enb.dat = '0'" & integer'image(i) severity error;
@@ -192,7 +195,7 @@ begin
 					report "line(193): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
 				assert(DC_out_2.dat = '1')
 					report "line(195): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
-				wait for clk_period;
+				wait for clk_factor*clk_period;
 			end if;			
 		end loop;
 		wait for post_hold;
@@ -210,11 +213,11 @@ begin
 		
 		wait for assert_hold;
 		assert(DC_enb.dat = '0')
-			report "line(214): Test error case - expecting DC_enb.dat = '0'" severity error;
-		assert(DC_out_1.dat = '1')
-			report "line(216): Test error case - expecting DC_out_1.dat = '1'" severity error;
-		assert(DC_out_2.dat = '1')
-			report "line(218): Test error case - expecting DC_out_2.dat = '1'" severity error;
+			report "line(216): Test error case - expecting DC_enb.dat = '0'" severity error;
+		assert(DC_out_1.dat = '0')
+			report "line(218): Test error case - expecting DC_out_1.dat = '1'" severity error;
+		assert(DC_out_2.dat = '0')
+			report "line(220): Test error case - expecting DC_out_2.dat = '1'" severity error;
 		wait for post_hold;
 		
 		
