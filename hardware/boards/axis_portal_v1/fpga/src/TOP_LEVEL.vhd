@@ -194,28 +194,11 @@ begin
 
 
     --Selection of correct bus based on current configuration
-    BUS_MULTIPLEXER : process(ClockFPGA)
-    begin
-        if(rising_edge(ClockFPGA)) then
-            case selected_bus is
-            when '0' =>
-                --Route communication to system registers
-                sys_bus_i    <= master_bus_o;
-                master_bus_i <= reduceBusVector(sys_bus_o);
-                --Ground IO crossbar bus
-                cb_bus_i     <= gnd_sbus_i;
-            
-            when '1' =>
-                --Route communication to io crossbar
-                cb_bus_i     <= master_bus_o;
-                master_bus_i <= reduceBusVector(cb_bus_o);
-                --Ground communication bus
-                sys_bus_i    <= gnd_sbus_i;
-
-            when others => null;
-            end case;
-        end if;
-    end process;
+	sys_bus_i 	 <= master_bus_o when(selected_bus = '0') else gnd_sbus_i;
+	cb_bus_i  	 <= master_bus_o when(selected_bus = '1') else gnd_sbus_i;
+	master_bus_i <= reduceBusVector(sys_bus_o) when(selected_bus = '0') else
+					reduceBusVector(cb_bus_o)  when(selected_bus = '1') else
+					gnd_mbus_i;
     -----------------------------------------------------------------------------------------------
 
 
@@ -439,7 +422,7 @@ begin
     POWER_RED : entity work.LED_DRIVER
     generic map(
         ADDRESS         => PR_LED_ADDRESS,
-        CLK_FEQUENCY    => PR_LED_FREQUENCY,
+        CLK_FREQUENCY   => PR_LED_FREQUENCY,
         INVERTED        => PR_LED_INVERTED
     )
     port map(
@@ -453,7 +436,7 @@ begin
     POWER_GREEN : entity work.LED_DRIVER
     generic map(
         ADDRESS         => PG_LED_ADDRESS,
-        CLK_FEQUENCY    => PG_LED_FREQUENCY,
+        CLK_FREQUENCY   => PG_LED_FREQUENCY,
         INVERTED        => PG_LED_INVERTED
     )
     port map(
@@ -467,7 +450,7 @@ begin
     ENVIRONMENT_RED : entity work.LED_DRIVER
     generic map(
         ADDRESS         => ER_LED_ADDRESS,
-        CLK_FEQUENCY    => ER_LED_FREQUENCY,
+        CLK_FREQUENCY   => ER_LED_FREQUENCY,
         INVERTED        => ER_LED_INVERTED
     )
     port map(
@@ -481,7 +464,7 @@ begin
     ENVIRONMENT_WHITE : entity work.LED_DRIVER
     generic map(
         ADDRESS         => EW_LED_ADDRESS,
-        CLK_FEQUENCY    => EW_LED_FREQUENCY,
+        CLK_FREQUENCY   => EW_LED_FREQUENCY,
         INVERTED        => EW_LED_INVERTED
     )
     port map(
@@ -495,7 +478,7 @@ begin
     ENVIRONMENT_GREEN : entity work.LED_DRIVER
     generic map(
         ADDRESS         => EG_LED_ADDRESS,
-        CLK_FEQUENCY    => EG_LED_FREQUENCY,
+        CLK_FREQUENCY   => EG_LED_FREQUENCY,
         INVERTED        => EG_LED_INVERTED
     )
     port map(

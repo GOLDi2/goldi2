@@ -93,9 +93,9 @@ package GOLDI_MODULE_CONFIG is
     --****ACTUATORS****
     -----------------------------------------------------------------------------------------------
     --Frequency of PWM signal
-    constant X_MOTOR_FREQUENCY  :   natural := 377;
-    constant Y_MOTOR_FREQUENCY  :   natural := 377;
-    constant Z_MOTOR_FREQUENCY  :   natural := 377;
+    constant X_MOTOR_FREQUENCY  :   natural := 3765;
+    constant Y_MOTOR_FREQUENCY  :   natural := 3765;
+    constant Z_MOTOR_FREQUENCY  :   natural := 3765;
     -----------------------------------------------------------------------------------------------
     
 
@@ -103,11 +103,11 @@ package GOLDI_MODULE_CONFIG is
     --****LED****
     -----------------------------------------------------------------------------------------------
     --Module constants
-    constant PR_LED_FREQUENCY   :   natural := 1133000000;
-    constant PG_LED_FREQUENCY   :   natural := 1133000000;
-    constant ER_LED_FREQUENCY   :   natural := 1133000000;
-    constant EW_LED_FREQUENCY   :   natural := 1133000000;
-    constant EG_LED_FREQUENCY   :   natural := 1133000000;
+    constant PR_LED_FREQUENCY   :   natural := 50000000;
+    constant PG_LED_FREQUENCY   :   natural := 50000000;
+    constant ER_LED_FREQUENCY   :   natural := 50000000;
+    constant EW_LED_FREQUENCY   :   natural := 50000000;
+    constant EG_LED_FREQUENCY   :   natural := 50000000;
     constant PR_LED_INVERTED    :   boolean := false;
     constant PG_LED_INVERTED    :   boolean := false; 
     constant ER_LED_INVERTED    :   boolean := false;
