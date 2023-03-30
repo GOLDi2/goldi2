@@ -2,13 +2,10 @@
 # Build Development Container ##################################################
 ################################################################################
 
-helper/crosslab-development-container:
-  - script: build -t crosslab-development-container:latest
-
 helper/goldi-development-container:
   - script: build
     dependencies:
-      - helper/crosslab-development-container:build
+      - crosslab/helper/development-container:build
 
 ################################################################################
 # Frontend Services ############################################################
@@ -16,17 +13,17 @@ helper/goldi-development-container:
 
 frontend-services/config-tool:
   - script: build
-#    dependencies:
-#      - clients/api/js:build
+    dependencies:
+      - crosslab/clients/api/js:build
 
 frontend-services/experiment-control-panel:
   - script: build
- #   dependencies:
- #     - clients/api/js:build
- #     - clients/soa/js:build
- #     - clients/soa_services/electricalConnection/js:build
- #     - clients/soa_services/webcam/js:build
- #     - clients/soa_services/file/js:build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+      - crosslab/clients/soa_services/webcam/js:build
+      - crosslab/clients/soa_services/file/js:build
 
 hardware/common/config-interface:
   - script: build
