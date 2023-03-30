@@ -23,7 +23,6 @@ import {Dragable, makeDragable} from './plugablejs/dragable';
 import './plugablejs';
 import {PlugableViewport} from './plugablejs/viewport';
 import {Focusable, makeFocusable} from './plugablejs/focusable';
-import { three_axes_portal_mc } from './predefined';
 import { DeviceServiceTypes, ExperimentServiceTypes } from '@cross-lab-project/api-client';
 
 const stylesheet = unsafeCSS(style);
