@@ -164,6 +164,27 @@ begin
 
 
 
+        --****Test empty queue****
+        --Request data from empty queue
+        --Expecting data_out to remain grounded and empty flag
+        read_enb <= '1';
+        wait for clk_period;
+        read_enb <= '0';
+
+        wait for assert_hold;
+        assert(data_out = (data_out'range => '0'))
+            report "line(176): Test empty queue - expecting data_out = x0" severity error;
+        assert(queue_empty = '1')
+            report "line(178): Test empty queue - expecting queue_empty = '1'" severity error;
+        wait for post_hold;
+
+
+
+        wait for 50 ns;
+       
+
+
+
         --***Test overflow***
         --Fill queue over the limit and read output data
         --Expecting full flag and data to be lost 
@@ -176,7 +197,7 @@ begin
 
         wait for assert_hold;
         assert(queue_full = '1')
-            report"line(179): Test overflow - expecting queue_full = '1'" severity error;
+            report"line(200): Test overflow - expecting queue_full = '1'" severity error;
         wait for post_hold;
 
         read_enb <= '1';
@@ -185,9 +206,9 @@ begin
 
         wait for assert_hold;
         assert(data_out = x"00")
-            report "line(188): Test overflow - expecting data_out = 3" severity error;
+            report "line(209): Test overflow - expecting data_out = 3" severity error;
         assert(queue_full = '0')
-            report "line(190): Test overflow - expecting queue_full = '0'" severity error;
+            report "line(211): Test overflow - expecting queue_full = '0'" severity error;
         wait for post_hold;
 
 

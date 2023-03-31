@@ -109,6 +109,17 @@ architecture RTL of TOP_LEVEL is
 
 begin
 
+    --****TIMING****
+    -----------------------------------------------------------------------------------------------
+    CLOCK_16_MHZ : entity work.PLL_16MHz
+    port map (
+        CLKI    => ClockFPGA,
+        CLKOP   => clk_16_MHz
+    );
+    -----------------------------------------------------------------------------------------------
+
+
+
     --****RASPBERRYPIE SPI INTERFACE****
     -----------------------------------------------------------------------------------------------
     --Reset: Convertion to active high reset for system
@@ -454,7 +465,7 @@ begin
     POWER_RED : entity work.LED_DRIVER
     generic map(
         ADDRESS         => PR_LED_ADDRESS,
-        CLK_FEQUENCY    => PR_LED_FREQUENCY,
+        CLK_FREQUENCY   => PR_LED_FREQUENCY,
         INVERTED        => PR_LED_INVERTED
     )
     port map(
@@ -468,7 +479,7 @@ begin
     POWER_GREEN : entity work.LED_DRIVER
     generic map(
         ADDRESS         => PG_LED_ADDRESS,
-        CLK_FEQUENCY    => PG_LED_FREQUENCY,
+        CLK_FREQUENCY   => PG_LED_FREQUENCY,
         INVERTED        => PG_LED_INVERTED
     )
     port map(
@@ -482,7 +493,7 @@ begin
     ENVIRONMENT_RED : entity work.LED_DRIVER
     generic map(
         ADDRESS         => ER_LED_ADDRESS,
-        CLK_FEQUENCY    => ER_LED_FREQUENCY,
+        CLK_FREQUENCY   => ER_LED_FREQUENCY,
         INVERTED        => ER_LED_INVERTED
     )
     port map(
@@ -496,7 +507,7 @@ begin
     ENVIRONMENT_WHITE : entity work.LED_DRIVER
     generic map(
         ADDRESS         => EW_LED_ADDRESS,
-        CLK_FEQUENCY    => EW_LED_FREQUENCY,
+        CLK_FREQUENCY   => EW_LED_FREQUENCY,
         INVERTED        => EW_LED_INVERTED
     )
     port map(
@@ -510,7 +521,7 @@ begin
     ENVIRONMENT_GREEN : entity work.LED_DRIVER
     generic map(
         ADDRESS         => EG_LED_ADDRESS,
-        CLK_FEQUENCY    => EG_LED_FREQUENCY,
+        CLK_FREQUENCY   => EG_LED_FREQUENCY,
         INVERTED        => EG_LED_INVERTED
     )
     port map(
