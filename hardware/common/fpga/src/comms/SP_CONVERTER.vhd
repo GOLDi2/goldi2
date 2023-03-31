@@ -2,7 +2,7 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		01/01/2023
 -- Design Name:		Bidirectional Serial to/form Parallel converter
 -- Module Name:		SP_CONVERTER
 -- Project Name:	GOLDi_FPGA_CORE
@@ -14,6 +14,9 @@
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -27,23 +30,27 @@ use IEEE.numeric_std.all;
 --! Bidirectional serial and parallel data converter for use in SPI 
 --! communication. Module transforms SPI incomming signals into parallel
 --! data and the outgoing parallel data into miso serial data.
+--! The default SPI configuration assumes and active low ce signal, msbf
+--! data transfer, and data valid on the rising edge of sclk.
+--!
+--! **Latency:1**
 entity SP_CONVERTER is
 	generic(
 		WORD_LENGTH		:	natural := 8
 	);
 	port(
 		--General
-		clk				: in	std_logic;
-		rst				: in	std_logic;
+		clk				: in	std_logic;									--! System clock
+		rst				: in	std_logic;									--! Synchronous reset
 		--Serial interface
-		ce				: in	std_logic;
-		sclk			: in	std_logic;
-		mosi			: in	std_logic;
-		miso			: out	std_logic;
+		ce				: in	std_logic;									--! SPI - Chip enable signal
+		sclk			: in	std_logic;									--! SPI - Serial clock
+		mosi			: in	std_logic;									--! SPI - Master out, Slave in 
+		miso			: out	std_logic;									--! SPI - Mastter in, Slave out
 		--Parallel interface
-		word_valid		: out	std_logic;
-		dat_i			: in	std_logic_vector(WORD_LENGTH-1 downto 0);
-		dat_o			: out	std_logic_vector(WORD_LENGTH-1 downto 0)
+		word_valid		: out	std_logic;									--! Decoding of serial word valid
+		dat_i			: in	std_logic_vector(WORD_LENGTH-1 downto 0);	--! Parallel data to serial
+		dat_o			: out	std_logic_vector(WORD_LENGTH-1 downto 0)	--! Serial data to parallel
 	);
 end entity SP_CONVERTER;
 
@@ -64,7 +71,7 @@ begin
 			if((rst = '1') or (ce /= '1')) then
 				--Reset internal
 				bit_counter <= 0;
-				sclk_old    <= '0';
+				sclk_old    <= '1';
 				--Reset serial interface
 				miso <= '0';
 				--Reset parallel
