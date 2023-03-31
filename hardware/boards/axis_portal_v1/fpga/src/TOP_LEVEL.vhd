@@ -60,12 +60,12 @@ architecture RTL of top_level is
     signal spi0_ce0             :   std_logic;
     signal spi0_nce0_sync       :   std_logic;
     signal spi0_ce    		    :   std_logic;
-    signal spi0_n_miso		    :   std_logic;
     --System internal communication
-    constant master_bus_i       :   mbus_in := (dat => x"0F", val => '0');
+    signal master_bus_i         :   mbus_in;
     signal master_bus_o         :   mbus_out;
-
-		
+    constant const_reg_data     :   data_word_vector(1 downto 0) := (others => x"F0"); 
+    signal def_reg_data         :   data_word_vector(1 downto 0);
+    		
 begin
 	
     --****GENERAL****
@@ -130,15 +130,29 @@ begin
         ce				=> spi0_ce,
         sclk		    => spi0_sclk_sync,
         mosi			=> spi0_mosi_sync,
-        miso			=> spi0_n_miso,
+        miso			=> SPI0_MISO,
         master_bus_o	=> master_bus_o,
         master_bus_i	=> master_bus_i
     );
-	SPI0_MISO <= not spi0_n_miso;
+
     -----------------------------------------------------------------------------------------------
     
-    
-    
 
+
+    SENSOR_REGISTER : entity work.REGISTER_TABLE
+    generic map(
+        BASE_ADDRESS		=> 1,
+        NUMBER_REGISTERS	=> 2,
+        REG_DEFAULT_VALUES	=> const_reg_data 
+    )
+    port map(
+        clk				=> clk,
+        rst			    => rst,
+        sys_bus_i		=> master_bus_o,
+        sys_bus_o		=> master_bus_i,
+        reg_data_in		=> def_reg_data,
+        reg_data_out	=> def_reg_data,
+        reg_data_stb	=> open
+    );
 
 end architecture RTL;
