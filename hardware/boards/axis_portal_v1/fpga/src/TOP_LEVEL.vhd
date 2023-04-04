@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische UniversitÃƒÂ¤t Ilmenau
+-- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		01/04/2022
@@ -271,7 +271,7 @@ begin
     port map(
         sys_io_i    => external_io_i_async,
         sys_io_o    => external_io_o,
-        safe_io_out     => external_io_o_safe
+        safe_io_out => external_io_o_safe
     );
     -----------------------------------------------------------------------------------------------
 
@@ -379,8 +379,8 @@ begin
         sys_bus_i	=> sys_bus_i,
         sys_bus_o	=> sys_bus_o(6),
         DC_enb		=> internal_io_o(17),
-        DC_out_1	=> internal_io_o(18),
-        DC_out_2	=> internal_io_o(19)
+        DC_out_1	=> internal_io_o(19),
+        DC_out_2	=> internal_io_o(18)
     );
 
 
@@ -395,8 +395,8 @@ begin
         sys_bus_i	=> sys_bus_i,
         sys_bus_o	=> sys_bus_o(7),
         DC_enb		=> internal_io_o(20),
-        DC_out_1	=> internal_io_o(21),
-        DC_out_2	=> internal_io_o(22)
+        DC_out_1	=> internal_io_o(22),
+        DC_out_2	=> internal_io_o(21)
     );
 
 
@@ -411,8 +411,8 @@ begin
         sys_bus_i	=> sys_bus_i,
         sys_bus_o	=> sys_bus_o(8),
         DC_enb		=> internal_io_o(23),
-        DC_out_1	=> internal_io_o(24),
-        DC_out_2	=> internal_io_o(25)
+        DC_out_1	=> internal_io_o(25),
+        DC_out_2	=> internal_io_o(24)
     );
 
 

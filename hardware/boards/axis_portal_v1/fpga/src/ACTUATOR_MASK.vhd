@@ -81,6 +81,8 @@ begin
                              (limit_x_neg = '1' and limit_x_ref = '1') or
                              (limit_x_pos = '1' and limit_x_ref = '1') or 
                              (x_out_1 = '1'     and x_out_2 = '1')     or
+                             (x_out_1 = '1'     and limit_x_pos = '1') or
+                             (x_out_2 = '1'     and limit_x_neg = '1') or
                              (limit_z_pos = '0' and x_enable = '1'))   else
                     '1';
     act_mask(18) <= '0' when((limit_x_neg = '1' and limit_x_pos = '1') or
@@ -101,6 +103,8 @@ begin
                              (limit_y_neg = '1' and limit_y_ref = '1') or
                              (limit_y_pos = '1' and limit_y_ref = '1') or
                              (y_out_1 = '1'     and y_out_2     = '1') or
+                             (y_out_1 = '1'     and limit_y_pos = '1') or
+                             (y_out_2 = '1'     and limit_y_neg = '1') or
                              (limit_z_pos = '0' and y_enable = '1'))   else
                     '1';
     act_mask(21) <= '0' when((limit_y_neg = '1' and limit_y_pos = '1') or
@@ -118,6 +122,8 @@ begin
                              (limit_y_pos = '1' and y_out_2 = '1'))    else
                    '1';
     act_mask(23) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1') or
+                             (z_out_1 = '1'     and limit_z_pos = '1') or
+                             (z_out_2 = '1'     and limit_z_neg = '1') or
                              (z_out_1 = '1'     and z_out_2 = '1'))    else
                     '1';
     act_mask(24) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1') or
