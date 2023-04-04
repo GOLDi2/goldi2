@@ -24,6 +24,10 @@
         <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
+        <Source name="src/GOLDI_CROSSBAR_DEFAULT.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
