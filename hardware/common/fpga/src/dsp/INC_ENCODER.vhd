@@ -114,7 +114,7 @@ begin
 
 	--Output routing
 	enc_counter_buff <= std_logic_vector(to_unsigned(enc_counter,16));
-	reg_data_in <= assignMemory(enc_counter_buff);
+	reg_data_in <= setMemory(enc_counter_buff);
 
 
 

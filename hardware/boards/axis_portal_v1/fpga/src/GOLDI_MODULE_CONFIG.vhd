@@ -43,33 +43,29 @@ package GOLDI_MODULE_CONFIG is
     --Number of physical FPGA pins that are available for IO functions
     constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;
     --Number of IO pins needed for the system modules
-    constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 42;
+    constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
     -----------------------------------------------------------------------------------------------
  
     
-
-    --****MEMORY****
-    -----------------------------------------------------------------------------------------------
-    --Module Base Addresses; Length based on a system_data_width = 8
-    constant CONFIG_REG_ADDRESS     :   natural := 1;       --Table length: 1
-    constant SENSOR_REG_ADDRESS     :   natural := 2;       --Table length: 2
-    constant ERROR_LIST_ADDRESS     :   natural := 4;       --Table length: 3
-    constant GPIO_DRIVER_ADDRESS    :   natural := 7;       --Table length: 2
-    constant X_MOTOR_ADDRESS        :   natural := 9;       --Table length: 2
-    constant Y_MOTOR_ADDRESS        :   natural := 11;      --Table length: 2
-    constant Z_MOTOR_ADDRESS        :   natural := 13;      --Table length: 2
-    constant EMAG_ADDRESS           :   natural := 15;      --Table length: 1
-    constant X_ENCODER_ADDRESS      :   natural := 16;      --Table length: 2
-    constant Y_ENCODER_ADDRESS      :   natural := 18;      --Table length: 2
-    constant PR_LED_ADDRESS         :   natural := 20;      --Table length: 1
-    constant PG_LED_ADDRESS         :   natural := 21;      --Table length: 1
-    constant ER_LED_ADDRESS         :   natural := 22;      --Table length: 1
-    constant EW_LED_ADDRESS         :   natural := 23;      --Table length: 1
-    constant EG_LED_ADDRESS         :   natural := 24;      --Table length: 1
-    
 	
-	--Default Value for Configuration Register
-	constant REG_CONFIG_DEFAULT		:	std_logic_vector(7 downto 0) :=  (others => '0');
+	--****MEMORY****
+	-----------------------------------------------------------------------------------------------
+	--Module Base Adderesses; Length based on a system_data_width = 8
+	constant CONFIG_REG_ADDRESS		:	natural := 1;		--Table length: 1
+	constant SENSOR_REG_ADDRESS		:	natural := 2;		--Table length: 2
+	constant ERROR_LIST_ADDRESS		:	natural := 4;		--Table length: 3
+	constant GPIO_DRIVER_ADDRESS	:	natural := 7;		--Table length: 2
+	constant X_ENCODER_ADDRESS		:	natural := 9;		--Table length: 2
+	constant Y_ENCODER_ADDRESS		:	natural := 11;		--Table length: 2
+	constant X_MOTOR_ADDRESS		:	natural := 13;		--Table length: 2
+	constant Y_MOTOR_ADDRESS		:	natural := 15;		--Table length: 2
+	constant Z_MOTOR_ADDRESS		:	natural := 17;		--Table length: 2
+	constant EMAG_ADDRESS			:	natural := 19;		--Table length: 1
+	constant PR_LED_ADDRESS			:	natural := 20;		--Table length: 1
+	constant PG_LED_ADDRESS			:	natural := 21;		--Table length: 1
+	constant ER_LED_ADDRESS			:	natural := 22;		--Table length: 1
+	constant EW_LED_ADDRESS			:	natural := 23;		--Table length: 1
+	constant EG_LED_ADDRESS			:	natural := 24; 		--Table length: 1
 	-----------------------------------------------------------------------------------------------
 
     

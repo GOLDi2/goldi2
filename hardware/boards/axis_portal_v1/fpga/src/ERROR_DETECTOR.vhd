@@ -144,7 +144,7 @@ begin
 
 
     --Route memory
-    reg_buff <= assignMemory(error_list_sync);
+    reg_buff <= setMemory(error_list_sync);
 
 
 
