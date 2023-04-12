@@ -10,5 +10,6 @@ var class_s_p___c_o_n_v_e_r_t_e_r =
     [ "mosi", "class_s_p___c_o_n_v_e_r_t_e_r.html#a679201d9f840b4b600faae21ffc74184", null ],
     [ "rst", "class_s_p___c_o_n_v_e_r_t_e_r.html#ae106f17a2b73445119c8eb039d3e102e", null ],
     [ "sclk", "class_s_p___c_o_n_v_e_r_t_e_r.html#a78ff554993e90c0072782a1bddc8e7d8", null ],
+    [ "WORD_LENGTH", "class_s_p___c_o_n_v_e_r_t_e_r.html#a6de469ac8cb14e06885be035d5d1a4ae", null ],
     [ "word_valid", "class_s_p___c_o_n_v_e_r_t_e_r.html#a0e461293fef54eb9f0973971379987bb", null ]
 ];

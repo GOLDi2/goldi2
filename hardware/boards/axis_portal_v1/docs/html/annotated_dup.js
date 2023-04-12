@@ -3,6 +3,7 @@ var annotated_dup =
     [ "ACTUATOR_MASK", "class_a_c_t_u_a_t_o_r___m_a_s_k.html", "class_a_c_t_u_a_t_o_r___m_a_s_k" ],
     [ "BUS_CONVERTER", "class_b_u_s___c_o_n_v_e_r_t_e_r.html", "class_b_u_s___c_o_n_v_e_r_t_e_r" ],
     [ "DC_MOTOR_DRIVER", "class_d_c___m_o_t_o_r___d_r_i_v_e_r.html", "class_d_c___m_o_t_o_r___d_r_i_v_e_r" ],
+    [ "EDGE_DETECTOR", "class_e_d_g_e___d_e_t_e_c_t_o_r.html", "class_e_d_g_e___d_e_t_e_c_t_o_r" ],
     [ "EMAGNET_DRIVER", "class_e_m_a_g_n_e_t___d_r_i_v_e_r.html", "class_e_m_a_g_n_e_t___d_r_i_v_e_r" ],
     [ "ERROR_DETECTOR", "class_e_r_r_o_r___d_e_t_e_c_t_o_r.html", "class_e_r_r_o_r___d_e_t_e_c_t_o_r" ],
     [ "GPIO_DRIVER_ARRAY", "class_g_p_i_o___d_r_i_v_e_r___a_r_r_a_y.html", "class_g_p_i_o___d_r_i_v_e_r___a_r_r_a_y" ],

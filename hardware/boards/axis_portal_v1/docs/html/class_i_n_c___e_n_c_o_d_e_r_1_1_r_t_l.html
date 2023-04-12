@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>3_axis_portal_v1: RTL Architecture Reference</title>
+<title>GOLDi - Axis Portal: RTL Architecture Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -31,9 +31,9 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="download.png"/></td>
   <td id="projectalign">
-   <div id="projectname">3_axis_portal_v1<span id="projectnumber">&#160;V1.00.0</span>
+   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1.00.00</span>
    </div>
-   <div id="projectbrief">GOLDI physical systems implementation</div>
+   <div id="projectbrief">GOLDi FPGA system</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -94,7 +94,6 @@ $(document).ready(function(){initNavTree('class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.
 
 <div class="header">
   <div class="summary">
-<a href="#Components">Components</a> &#124;
 <a href="#Constants">Constants</a> &#124;
 <a href="#Instantiations">Instantiations</a> &#124;
 <a href="#Processes">Processes</a> &#124;
@@ -102,35 +101,31 @@ $(document).ready(function(){initNavTree('class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.
   <div class="headertitle"><div class="title">RTL Architecture Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>General architecture.  
+ <a href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#details">More...</a></p>
 <b>Architecture &gt;&gt; </b><a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html">RTL</a><br />
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Processes" name="Processes"></a>
 Processes</h2></td></tr>
- <tr class="memitem:affe79ba071fc9759abdd135fb8b821ab"><td class="memItemLeft" align="right" valign="top"><a id="affe79ba071fc9759abdd135fb8b821ab" name="affe79ba071fc9759abdd135fb8b821ab"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#affe79ba071fc9759abdd135fb8b821ab">SIGNAL_DECODE</a>&#160;</td><td class="memItemRight" valign="bottom"><b> ( <b><b><a class="el" href="class_i_n_c___e_n_c_o_d_e_r.html#a50da91b765765ac486df1b41692e962f">clk</a></b> <span class="vhdlchar"> </span></b> )</b></td></tr>
+ <tr class="memitem:a36de6ccc8fc42c46a7b57676b892cfaf"><td class="memItemLeft" align="right" valign="top"><a id="a36de6ccc8fc42c46a7b57676b892cfaf" name="a36de6ccc8fc42c46a7b57676b892cfaf"></a>
+<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a36de6ccc8fc42c46a7b57676b892cfaf">SIGNAL_DECODER</a>&#160;</td><td class="memItemRight" valign="bottom"><b> ( <b><b><a class="el" href="class_i_n_c___e_n_c_o_d_e_r.html#a50da91b765765ac486df1b41692e962f">clk</a></b> <span class="vhdlchar"> </span></b> )</b></td></tr>
 <tr class="memitem:ac8a88e01e91e00eae13f2683921ec82a"><td class="memItemLeft" align="right" valign="top"><a id="ac8a88e01e91e00eae13f2683921ec82a" name="ac8a88e01e91e00eae13f2683921ec82a"></a>
 <a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#ac8a88e01e91e00eae13f2683921ec82a">RST_MODE_SELECTION</a>&#160;</td><td class="memItemRight" valign="bottom"><b> ( <b><b><a class="el" href="class_i_n_c___e_n_c_o_d_e_r.html#a50da91b765765ac486df1b41692e962f">clk</a></b> <span class="vhdlchar"> </span></b> )</b></td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Components" name="Components"></a>
-Components</h2></td></tr>
- <tr class="memitem:a67e3c301ad37231df16e528ae7d7c13e"><td class="memItemLeft" align="right" valign="top"><a id="a67e3c301ad37231df16e528ae7d7c13e" name="a67e3c301ad37231df16e528ae7d7c13e"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a67e3c301ad37231df16e528ae7d7c13e">REGISTER_TABLE</a>&#160;</td><td class="memItemRight" valign="bottom">  <b></b>  <em><a class="el" href="class_r_e_g_i_s_t_e_r___t_a_b_l_e.html">&lt;Entity REGISTER_TABLE&gt; </a></em></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Constants" name="Constants"></a>
 Constants</h2></td></tr>
  <tr class="memitem:a410d6988fbb8d8e4578b0f621af91f88"><td class="memItemLeft" align="right" valign="top"><a id="a410d6988fbb8d8e4578b0f621af91f88" name="a410d6988fbb8d8e4578b0f621af91f88"></a>
 <a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a410d6988fbb8d8e4578b0f621af91f88">memory_length</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="keywordtype">natural</span><span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">getMemoryLength</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">16</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memitem:a7b005723db88ac57fd903ce8c4a04e32"><td class="memItemLeft" align="right" valign="top"><a id="a7b005723db88ac57fd903ce8c4a04e32" name="a7b005723db88ac57fd903ce8c4a04e32"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a7b005723db88ac57fd903ce8c4a04e32">reg_defaults</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="vhdlchar">data_word_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">memory_length</span><span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="keywordflow">others</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">&gt;</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="keywordflow">others</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">&gt;</span><span class="vhdlchar"> </span><span class="vhdlchar">'</span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">'</span><span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
+<tr class="memitem:a9286c6bb949a52f2376a0b7bffcd429c"><td class="memItemLeft" align="right" valign="top"><a id="a9286c6bb949a52f2376a0b7bffcd429c" name="a9286c6bb949a52f2376a0b7bffcd429c"></a>
+<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a9286c6bb949a52f2376a0b7bffcd429c">reg_default</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="vhdlchar">data_word_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">memory_length</span><span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="keywordflow">others</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">&gt;</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="keywordflow">others</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar">&gt;</span><span class="vhdlchar"> </span><span class="vhdlchar">'</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="vhdlchar">'</span><span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Signals" name="Signals"></a>
 Signals</h2></td></tr>
  <tr class="memitem:ac665846be4236d5a9be30c63b94863ef"><td class="memItemLeft" align="right" valign="top"><a id="ac665846be4236d5a9be30c63b94863ef" name="ac665846be4236d5a9be30c63b94863ef"></a>
 <a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#ac665846be4236d5a9be30c63b94863ef">reg_data_in</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="vhdlchar">data_word_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">memory_length</span><span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memitem:a0371637c01f3b4531a7ce9366f932dee"><td class="memItemLeft" align="right" valign="top"><a id="a0371637c01f3b4531a7ce9366f932dee" name="a0371637c01f3b4531a7ce9366f932dee"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a0371637c01f3b4531a7ce9366f932dee">enc_counter_buff</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">15</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memitem:aab23bcddf291d1f6eb27ce84f9cc9e2c"><td class="memItemLeft" align="right" valign="top"><a id="aab23bcddf291d1f6eb27ce84f9cc9e2c" name="aab23bcddf291d1f6eb27ce84f9cc9e2c"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#aab23bcddf291d1f6eb27ce84f9cc9e2c">enc_counter</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="keywordtype">integer</span><span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span></b></td></tr>
+<tr class="memitem:af3b0a0c436d74b997c475f2d2e1c66c5"><td class="memItemLeft" align="right" valign="top"><a id="af3b0a0c436d74b997c475f2d2e1c66c5" name="af3b0a0c436d74b997c475f2d2e1c66c5"></a>
+<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#af3b0a0c436d74b997c475f2d2e1c66c5">enc_counter</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="keywordtype">integer</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="keywordflow">range</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="keywordflow">to</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">2</span> <span class="vhdlchar">*</span><span class="vhdlchar">*</span><span class="vhdlchar"> </span> <span class="vhdldigit">16</span> <span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span></b></td></tr>
 <tr class="memitem:ae6a43236dc9a5a2001ca5cf4f5266e41"><td class="memItemLeft" align="right" valign="top"><a id="ae6a43236dc9a5a2001ca5cf4f5266e41" name="ae6a43236dc9a5a2001ca5cf4f5266e41"></a>
 <a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#ae6a43236dc9a5a2001ca5cf4f5266e41">enc_signal_a</a> &#160;</td><td class="memItemRight" valign="bottom"><b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
 <tr class="memitem:a3dd5e2386053dd29ef7d870de46a63fd"><td class="memItemLeft" align="right" valign="top"><a id="a3dd5e2386053dd29ef7d870de46a63fd" name="a3dd5e2386053dd29ef7d870de46a63fd"></a>
@@ -140,10 +135,12 @@ Signals</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Instantiations" name="Instantiations"></a>
 Instantiations</h2></td></tr>
- <tr class="memitem:a61a963e6e2f81b884bc6d17c72777b42"><td class="memItemLeft" align="right" valign="top"><a id="a61a963e6e2f81b884bc6d17c72777b42" name="a61a963e6e2f81b884bc6d17c72777b42"></a>
-<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#a61a963e6e2f81b884bc6d17c72777b42">memory</a>&#160;</td><td class="memItemRight" valign="bottom">  <b>REGISTER_TABLE</b>  <em><a class="el" href="class_r_e_g_i_s_t_e_r___t_a_b_l_e.html">&lt;Entity REGISTER_TABLE&gt;</a></em></td></tr>
+ <tr class="memitem:acf2874356569b6a2aeb1efd97926c3aa"><td class="memItemLeft" align="right" valign="top"><a id="acf2874356569b6a2aeb1efd97926c3aa" name="acf2874356569b6a2aeb1efd97926c3aa"></a>
+<a class="el" href="class_i_n_c___e_n_c_o_d_e_r_1_1_r_t_l.html#acf2874356569b6a2aeb1efd97926c3aa">memroy</a>&#160;</td><td class="memItemRight" valign="bottom">  <b>REGISTER_TABLE</b>  <em><a class="el" href="class_r_e_g_i_s_t_e_r___t_a_b_l_e.html">&lt;Entity REGISTER_TABLE&gt;</a></em></td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >General architecture. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

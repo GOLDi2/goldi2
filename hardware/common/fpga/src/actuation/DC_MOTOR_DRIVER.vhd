@@ -2,12 +2,12 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		DC Motor Driver - H-Bridge L293DD 
 -- Module Name:		DC_MOTOR_DRIVER
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
 -- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
 --					-> GOLDI_COMM_STANDARD.vhd
@@ -15,17 +15,18 @@
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
--- Revision V0.01.01 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -  
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom library
+--! Use custom packages
+library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -47,7 +48,7 @@ use work.GOLDI_IO_STANDARD.all;
 --!
 --! | Address 	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
---! |+0			|		|	    |       |   	|		|		|Out 2	| Out 1	|
+--! |+0			|		|	    |       |   	|		|		|Out 1	| Out 2	|
 --!	|+1			| PWM[7:0]||||||||
 --!
 --! **Latency: 3**
@@ -105,10 +106,10 @@ begin
 	DC_enb.dat 	 <= '1' when((pwm_valid = '1') and ((enb_pos = '1') xor (enb_neg = '1'))) else '0';
 
 	DC_out_1.enb <= '1';
-	DC_out_1.dat <= '1' when(enb_neg = '1') else '0';
+	DC_out_1.dat <= '1' when(enb_pos = '1') else '0';
 
 	DC_out_2.enb <= '1';
-	DC_out_2.dat <= '1' when(enb_pos = '1') else '0';
+	DC_out_2.dat <= '1' when(enb_neg = '1') else '0';
 	-----------------------------------------------------------------------------------------------
 
 

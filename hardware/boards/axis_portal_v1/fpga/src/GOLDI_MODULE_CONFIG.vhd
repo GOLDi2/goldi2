@@ -2,21 +2,21 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/12/2022
+-- Create Date:		15/04/2023
 -- Design Name:		Configuration parameters for 3_axis_portal_v1
 -- Module Name:		GOLDI_MODULE_CONFIG
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
 -- Dependencies: 	none
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -72,7 +72,7 @@ package GOLDI_MODULE_CONFIG is
 
 	--****SENSOR DATA MANAGEMENT****
 	-----------------------------------------------------------------------------------------------
-	constant SENSORS_DEFAULT	:	std_logic_vector(8 downto 0) := (others => '0');
+	constant SENSORS_DEFAULT	    :	std_logic_vector(9 downto 0) := (others => '0');
 	-----------------------------------------------------------------------------------------------
 	
 	
@@ -81,7 +81,9 @@ package GOLDI_MODULE_CONFIG is
     ----------------------------------------------------------------------------------------------
     --Activates the use of Channel_I for reference
     constant X_ENCODER_RST_TYPE :   boolean := false;
+    constant X_ENCODER_INVERT   :   boolean := false;
     constant Y_ENCODER_RST_TYPE :   boolean := false;
+    constant Y_ENCODER_INVERT   :   boolean := true;
     -----------------------------------------------------------------------------------------------
 
 
@@ -89,9 +91,9 @@ package GOLDI_MODULE_CONFIG is
     --****ACTUATORS****
     -----------------------------------------------------------------------------------------------
     --Frequency of PWM signal
-    constant X_MOTOR_FREQUENCY  :   natural := 3765;
-    constant Y_MOTOR_FREQUENCY  :   natural := 3765;
-    constant Z_MOTOR_FREQUENCY  :   natural := 3765;
+    constant X_MOTOR_FREQUENCY  :   natural := 27;
+    constant Y_MOTOR_FREQUENCY  :   natural := 27;
+    constant Z_MOTOR_FREQUENCY  :   natural := 27;
     -----------------------------------------------------------------------------------------------
     
 

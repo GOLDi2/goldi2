@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		Bidirectional Serial to/form Parallel converter
 -- Module Name:		SP_CONVERTER
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
@@ -16,7 +16,7 @@
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -36,7 +36,7 @@ use IEEE.numeric_std.all;
 --! **Latency:1**
 entity SP_CONVERTER is
 	generic(
-		WORD_LENGTH		:	natural := 8
+		WORD_LENGTH		:	natural := 8									--! Length of serial word
 	);
 	port(
 		--General
@@ -59,7 +59,8 @@ end entity SP_CONVERTER;
 
 --! General architecture
 architecture RTL of SP_CONVERTER is
-	--Signals
+	
+	--****INTERNAL SIGNALS****
 	signal bit_counter	:	integer range 0 to WORD_LENGTH;
 	signal sclk_old		:	std_logic;
 	

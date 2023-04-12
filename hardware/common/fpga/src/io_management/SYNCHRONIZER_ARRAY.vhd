@@ -2,21 +2,21 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		Double FF syncronization chain array
 -- Module Name:		SYNCHRONIZER_ARRAY
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
 -- Dependencies: 	-> SYNCHRONIZER.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -49,30 +49,17 @@ end entity SYNCHRONIZER_ARRAY;
 
 --! General architecture
 architecture RTL of SYNCHRONIZER_ARRAY is
-	--Component
-	component SYNCHRONIZER 
-		generic (
-			STAGES 	: natural 		
-		);
-		port (
-			clk		: in	std_logic;
-			rst		: in	std_logic;
-			io_i		: in	std_logic;
-			io_sync	: out std_logic
-		);
-	end component;
-	
 begin
 	
 	SYNC_ARRAY	:	for i in 0 to ARRAY_WIDTH-1 generate
-		SYNC_CHAIN : SYNCHRONIZER
+		SYNC_CHAIN : entity work.SYNCHRONIZER
 		generic map(
 			STAGES	=> STAGES
 		)
 		port map(
 			clk		=> clk,
 			rst		=> rst,
-			io_i		=> io_i(i),
+			io_i	=> io_i(i),
 			io_sync	=> io_sync(i)
 		);
 	end generate;

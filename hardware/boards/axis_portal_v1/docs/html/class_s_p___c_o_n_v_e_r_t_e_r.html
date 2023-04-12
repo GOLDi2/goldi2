@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.4"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>3_axis_portal_v1: SP_CONVERTER Entity Reference</title>
+<title>GOLDi - Axis Portal: SP_CONVERTER Entity Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -31,9 +31,9 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="download.png"/></td>
   <td id="projectalign">
-   <div id="projectname">3_axis_portal_v1<span id="projectnumber">&#160;V1.00.0</span>
+   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1.00.00</span>
    </div>
-   <div id="projectbrief">GOLDI physical systems implementation</div>
+   <div id="projectbrief">GOLDi FPGA system</div>
   </td>
     <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -111,7 +111,6 @@ Inheritance diagram for SP_CONVERTER:</div>
   <img src="class_s_p___c_o_n_v_e_r_t_e_r.png" usemap="#SP_5FCONVERTER_map" alt=""/>
   <map id="SP_5FCONVERTER_map" name="SP_5FCONVERTER_map">
 <area href="class_s_p_i___t_o___b_u_s.html" title="SPI to internal BUS standard." alt="SPI_TO_BUS" shape="rect" coords="0,56,111,80"/>
-<area href="class_t_o_p___l_e_v_e_l.html" title="Actuator drivers and protection system the for GOLDI 3 Axis Portal (V1)" alt="TOP_LEVEL" shape="rect" coords="0,112,111,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -138,6 +137,7 @@ Use Clauses</h2></td></tr>
 Generics</h2></td></tr>
  <tr class="memitem:a6de469ac8cb14e06885be035d5d1a4ae"><td class="memItemLeft" align="right" valign="top"><a id="a6de469ac8cb14e06885be035d5d1a4ae" name="a6de469ac8cb14e06885be035d5d1a4ae"></a>
 <a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a6de469ac8cb14e06885be035d5d1a4ae">WORD_LENGTH</a> &#160;</td><td class="memItemRight" valign="bottom"><b><b><span class="keywordtype">natural</span><span class="vhdlchar"> </span><span class="vhdlchar">:</span><span class="vhdlchar">=</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">8</span> <span class="vhdlchar"> </span></b></b></td></tr>
+<tr class="memdesc:a6de469ac8cb14e06885be035d5d1a4ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length of serial word. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="3"><h2 class="groupheader"><a id="Ports" name="Ports"></a>
 Ports</h2></td></tr>
@@ -163,15 +163,15 @@ Ports</h2></td></tr>
 <a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a0e461293fef54eb9f0973971379987bb">word_valid</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
 <tr class="memdesc:a0e461293fef54eb9f0973971379987bb"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Decoding of serial word valid. <br /></td></tr>
 <tr class="memitem:a654d2aab6d9ce47e7c84f6c62d3e8dc4"><td class="memItemLeft" align="right" valign="top"><a id="a654d2aab6d9ce47e7c84f6c62d3e8dc4" name="a654d2aab6d9ce47e7c84f6c62d3e8dc4"></a>
-<a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a654d2aab6d9ce47e7c84f6c62d3e8dc4">dat_i</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">in</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">WORD_LENGTH</span><span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
+<a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a654d2aab6d9ce47e7c84f6c62d3e8dc4">dat_i</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">in</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><b><a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a6de469ac8cb14e06885be035d5d1a4ae">WORD_LENGTH</a></b> <span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
 <tr class="memdesc:a654d2aab6d9ce47e7c84f6c62d3e8dc4"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallel data to serial. <br /></td></tr>
 <tr class="memitem:af558cbc8ad581cf7371e4cbc475dac63"><td class="memItemLeft" align="right" valign="top"><a id="af558cbc8ad581cf7371e4cbc475dac63" name="af558cbc8ad581cf7371e4cbc475dac63"></a>
-<a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#af558cbc8ad581cf7371e4cbc475dac63">dat_o</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar">WORD_LENGTH</span><span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
+<a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#af558cbc8ad581cf7371e4cbc475dac63">dat_o</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic_vector</span><span class="vhdlchar"> </span><span class="vhdlchar">(</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><span class="vhdlchar"> </span><b><a class="el" href="class_s_p___c_o_n_v_e_r_t_e_r.html#a6de469ac8cb14e06885be035d5d1a4ae">WORD_LENGTH</a></b> <span class="vhdlchar">-</span><span class="vhdlchar"> </span> <span class="vhdldigit">1</span> <span class="vhdlchar"> </span><span class="keywordflow">downto</span><span class="vhdlchar"> </span><span class="vhdlchar"> </span> <span class="vhdldigit">0</span> <span class="vhdlchar"> </span><span class="vhdlchar">)</span><span class="vhdlchar"> </span></b></td></tr>
 <tr class="memdesc:af558cbc8ad581cf7371e4cbc475dac63"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Serial data to parallel. <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Serial &lt;-&gt; Parallel data converter. </p>
-<p >Bidirectional serial and parallel data converter for use in SPI communication. Module transforms SPI incomming signals into parallel data and the outgoing parallel data into miso serial data.</p>
+<p >Bidirectional serial and parallel data converter for use in SPI communication. Module transforms SPI incomming signals into parallel data and the outgoing parallel data into miso serial data. The default SPI configuration assumes and active low ce signal, msbf data transfer, and data valid on the rising edge of sclk.</p>
 <p ><b>Latency:1</b> </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

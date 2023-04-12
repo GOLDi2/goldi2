@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
--- Design Name:		GPIO Driver - Array
+-- Create Date:		15/04/2023
+-- Design Name:		GPIO Driver Array
 -- Module Name:		GPIO_DRIVER_ARRAY
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
@@ -14,24 +14,25 @@
 --                  -> REGISTER_TABLE.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraries
+--! Use custom packages
+library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
 
 
 
---! @brief Standard IO driver
+--! @brief Standard IO driver array
 --! @details
 --! Module contanins a list of registers to set the values of 
 --! gpio pins. The individual pins can be configured as input or output
@@ -72,7 +73,7 @@ end entity GPIO_DRIVER_ARRAY;
 --! General architecture
 architecture RTL of GPIO_DRIVER_ARRAY is
 
-    --Intermediate signals
+    --****INTERNAL SIGNALS****
     --Constant
 	constant reg_default	:	data_word_vector(GPIO_NUMBER-1 downto 0) := (others => (others => '0'));			
 	--Registers

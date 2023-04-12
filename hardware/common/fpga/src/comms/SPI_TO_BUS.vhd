@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		SPI to BUS converter
 -- Module Name:		SPI_TO_BUS
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
@@ -19,13 +19,14 @@
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom communication library
+--! Use custom packages
+library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 
@@ -41,7 +42,6 @@ use work.GOLDI_COMM_STANDARD.all;
 --! package (default: adr -> 7bit, dat -> 8 bit)
 --!
 --! ###Data format:
---!	
 --! 
 --! |Byte  				|Bit 7|Bit 6|Bit 5|Bit 4|Bit 3|Bit 2|Bit 1|Bit 0|
 --! |:------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -72,40 +72,7 @@ end entity SPI_TO_BUS;
 --! General architecture
 architecture RTL of SPI_TO_BUS is
 	
-	--Components
-	component SP_CONVERTER
-		generic(
-			WORD_LENGTH		:	natural
-		);
-		port(
-			clk				: in	std_logic;
-			rst				: in	std_logic;
-			ce				: in	std_logic;
-			sclk			: in	std_logic;
-			mosi			: in	std_logic;
-			miso			: out	std_logic;
-			word_valid		: out	std_logic;
-			dat_i			: in	std_logic_vector(WORD_LENGTH-1 downto 0);
-			dat_o			: out	std_logic_vector(WORD_LENGTH-1 downto 0)
-		);
-	end component;
-	
-	component BUS_CONVERTER
-		port(
-			clk				: in	std_logic;
-			rst				: in	std_logic;
-			ce				: in	std_logic;
-			word_valid		: in	std_logic;
-			config_word		: in	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
-			data_word_in	: in	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-			data_word_out	: out	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-			master_bus_o	: out	mbus_out;
-			master_bus_i	: in	mbus_in
-		);
-	end component;
-	
-	
-	--Signals
+	--****INTERNAL SIGNALS****
 	signal config_word		:	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
 	signal data_word_in		:	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
 	signal data_word_out	:	std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
@@ -140,7 +107,7 @@ begin
 	
 	
 	
-	BUS_MANAGER : BUS_CONVERTER
+	BUS_MANAGER : entity work.BUS_CONVERTER
 	port map(
 		clk				=> clk,
 		rst				=> rst,
@@ -154,7 +121,7 @@ begin
 	);
 	
 	
-	CONFIG_WORD_CONVERTER : SP_CONVERTER
+	CONFIG_WORD_CONVERTER : entity work.SP_CONVERTER
 	generic map(
 		WORD_LENGTH		=> BUS_ADDRESS_WIDTH+1
 	)
@@ -170,7 +137,7 @@ begin
 		dat_o			=> config_word
 	);
 	
-	DATA_WORD_CONVERTER : SP_CONVERTER
+	DATA_WORD_CONVERTER : entity work.SP_CONVERTER
 	generic map(
 		WORD_LENGTH		=> SYSTEM_DATA_WIDTH
 	)

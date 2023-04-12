@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		Electromagnet driver - H-Bridge L293DD
 -- Module Name:		EMAGNET_DRIVER
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
@@ -14,17 +14,18 @@
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom library
+--! Use custom packages
+library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -38,18 +39,18 @@ use work.GOLDI_IO_STANDARD.all;
 --! prevent a shortcut or overload the module first waits for the current 
 --! to decrease in order to limit the inductive effects. 	
 --!
---! **Latency: 3 **
---!
 --! #### Register:
 --!
 --! | Address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! | +0		|		|		|		|		|		|		|		|EM_pwr	|
+--!
+--! **Latency: 3 **
 entity EMAGNET_DRIVER is
 	generic(
 		ADDRESS		:	natural := 1;		--! Module's base address
 		MAGNET_TAO	:	natural := 100;		--! Electromagnet time constant
-		DEMAG_TIME	:	natural := 50 		--! Demagnetization time 
+		DEMAG_TIME	:	natural := 50 		--! Demagnetization time constant
 	);
 	port(
 		--General
@@ -71,33 +72,13 @@ end entity EMAGNET_DRIVER;
 --! General architecture
 architecture RTL of EMAGNET_DRIVER is
 	
-	--Components
-	component REGISTER_TABLE
-		generic(
-			BASE_ADDRESS		:	natural;
-			NUMBER_REGISTERS	:	natural;
-			REG_DEFAULT_VALUES	:	data_word_vector
-		);
-		port(
-			clk				: in	std_logic;
-			rst				: in	std_logic;
-			sys_bus_i		: in	sbus_in;
-			sys_bus_o		: out	sbus_out;
-			reg_data_in		: in	data_word_vector(NUMBER_REGISTERS-1 downto 0);
-			reg_data_out	: out	data_word_vector(NUMBER_REGISTERS-1 downto 0);
-			reg_data_stb	: out	std_logic_vector(NUMBER_REGISTERS-1 downto 0)
-		);
-	end component;
-	
-	
-	--Intermediate signals
+	--I****INTERNAL SIGNALS****
 	--Constants
-	constant reg_default	:	data_word_vector(getMemoryLength(3)-1 downto 0) 		--Use of larger constant due to problems with generics
-								:= (others => (others => '0'));  
+	--Use of larger constant due to problems with generics
+	constant reg_default	:	data_word_vector(getMemoryLength(3)-1 downto 0) := (others => (others => '0'));  
 	--Registers
 	signal reg_data			:	data_word_vector(0 downto 0);
 		alias emag_enb		:	std_logic is reg_data(0)(0);
-	signal reg_data_stb 	:	std_logic_vector(0 downto 0);
 	--State machine
 	type STATE is (IDLE,POW_ON,POW_HOLD,POW_OFF);
 	signal PS				:	STATE := IDLE;
@@ -194,7 +175,7 @@ begin
 	
 
 	--Module memory
-	MEMORY : REGISTER_TABLE
+	MEMORY : entity work.REGISTER_TABLE
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
 		NUMBER_REGISTERS	=> 1,
@@ -207,7 +188,7 @@ begin
 		sys_bus_o		=> sys_bus_o,
 		reg_data_in		=> reg_data,
 		reg_data_out	=> reg_data,
-		reg_data_stb	=> reg_data_stb
+		reg_data_stb	=> open
 	);
 
 end architecture RTL;

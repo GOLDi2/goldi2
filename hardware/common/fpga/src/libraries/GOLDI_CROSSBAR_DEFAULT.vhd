@@ -1,8 +1,30 @@
+-------------------------------------------------------------------------------
+-- Company:			Technische Universität Ilmenau
+-- Engineer:		JP_CC <josepablo.chew@gmail.com>
+--
+-- Create Date:		15/04/2023
+-- Design Name:		Default Crossbar Configuration for axis_porta_v1 Model
+-- Module Name:		GOLDI_CROSSBAR_DEFAULT
+-- Project Name:	GOLDi_FPGA_SRC
+-- Target Devices:	LCMXO2-7000HC-4TG144C
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
+--
+-- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
+--                  -> GOLDI_COMM_STANDARD.vhd
+--                  -> GOLDI_IO_STANDARD.vhd
+--
+-- Revisions:
+-- Revision V0.01.00 - File Created
+-- Additional Comments: First commitment
+--
+-- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: Release for Axis Portal V1 (AP1)
+-------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraires
+--! Use custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;

@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmai.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		IO Crossbar Structure
 -- Module Name:		IO_CROSSBAR
--- Project Name:	GOLDIi_FPGA_CORE
+-- Project Name:	GOLDIi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
@@ -15,21 +15,17 @@
 --                  -> GOLDI_CROSSBAR_DEFAULT.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
 --
--- Revision V0.01.04 - Refactor of Crossbar data structures
--- Additional Comments: Data structures in packages restructured
---                      to provide user flexibility.
---
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraries
+--! Use custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
@@ -91,7 +87,7 @@ end entity IO_CROSSBAR;
 --! General architecture
 architecture RTL of IO_CROSSBAR is
 
-    --Intermediate signals
+    --****INTERNAL SIGNALS****
     --RAM Address
     constant min_adr    :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0)
         := to_unsigned(2,BUS_ADDRESS_WIDTH);

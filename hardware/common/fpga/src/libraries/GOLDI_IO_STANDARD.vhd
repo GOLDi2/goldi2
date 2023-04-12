@@ -2,27 +2,27 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		Custom io data types for Goldi_FPGA_CORE proyect
 -- Module Name:		GOLDI_IO_STANDARD
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
--- Dependencies: 	none
+-- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Include standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraries
+--! Use custom configuration package
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 

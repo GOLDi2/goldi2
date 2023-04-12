@@ -2,28 +2,29 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		15/12/2022
+-- Create Date:		15/04/2023
 -- Design Name:		Tristate Output/Input Buffer from MachXO2 library
 -- Module Name:		TRIS_BUFFER
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
--- Dependencies: 	none
+-- Dependencies: 	-> GOLDI_IO_STANDARD.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 --! Use Lattice MachXO2 library
 library machxo2;
---! Use custom libraries;
+--! Use custom packages
+library work;
 use work.GOLDI_IO_STANDARD.all;
 
 
@@ -55,20 +56,7 @@ end entity TRIS_BUFFER;
 --! General architecture
 architecture RTL of TRIS_BUFFER is
 	
-    --Components
-    component SYNCHRONIZER
-        generic(
-            STAGES 	: natural := 2
-        );
-        port (
-            clk		: in	std_logic;
-            rst		: in	std_logic;
-            io_i	: in	std_logic;
-            io_sync	: out 	std_logic
-        );
-    end component;
-
-    --Intermediate signals
+    --****INTERNAL SIGNALS****
     --Buffer
     signal io_buffer    :   io_i;
     signal io_sync      :   io_i;
@@ -93,7 +81,7 @@ begin
     port_in_async <= io_buffer;
     port_in_sync  <= io_sync;
 
-    SYNC_INPUT : SYNCHRONIZER
+    SYNC_INPUT : entity work.SYNCHRONIZER
     port map(
         clk     => clk,
         rst     => rst,

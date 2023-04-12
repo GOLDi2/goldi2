@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
--- Design Name:		Custom communication data types for Goldi_FPGA_CORE project
+-- Create Date:		15/04/2023
+-- Design Name:		Custom communication data types for Goldi_FPGA_SRC project
 -- Module Name:		GOLDI_BUS_STANDARD
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
@@ -16,7 +16,7 @@
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -149,14 +149,14 @@ package body GOLDI_COMM_STANDARD is
 	-- as the lowest index of the register 0 and "data" is assigned in ascending
 	-- order.
     function setMemory(data_vector : std_logic_vector) return data_word_vector is
-        constant memory_length  :   natural := getMemoryLength(data_vector'length);
+        variable memory_length  :   natural := getMemoryLength(data_vector'length);
         variable memory         :   data_word_vector(memory_length-1 downto 0);
         variable vector_buff    :   std_logic_vector((memory_length*SYSTEM_DATA_WIDTH)-1 downto 0);
     begin
         vector_buff := (others => '0');
         vector_buff(data_vector'range) := data_vector;
 
-        for i in memory_length-1 downto 0 loop
+        for i in 0 to memory_length-1 loop
             memory(i) := vector_buff(((i+1)*SYSTEM_DATA_WIDTH)-1 downto (i*SYSTEM_DATA_WIDTH));
         end loop;
 

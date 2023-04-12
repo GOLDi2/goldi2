@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/01/2023
+-- Create Date:		15/04/2023
 -- Design Name:		LED Driver
 -- Module Name:		LED_DRIVER
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
@@ -15,20 +15,22 @@
 --					-> REGISTER_TABLE.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom library
+--! Use custom packages
+library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+
 
 
 
@@ -49,50 +51,31 @@ use work.GOLDI_IO_STANDARD.all;
 entity LED_DRIVER is
     generic(
         ADDRESS         :   natural := 1;       --! Module's base address
-        CLK_FREQUENCY    :   natural := 16;     --! Blinking pattern frequency
+        CLK_FREQUENCY   :   natural := 16;      --! Blinking pattern frequency
         INVERTED        :   boolean := false    --! Blinking pattern inverted
     );
     port(
         --General
-        clk         : in    std_logic;          --! System clock
-        rst         : in    std_logic;          --! Synchronous reset
+        clk             : in    std_logic;      --! System clock
+        rst             : in    std_logic;      --! Synchronous reset
         --BUS slave interface
-        sys_bus_i   : in    sbus_in;            --! BUS slave input signals [we,adr,dat]
-        sys_bus_o   : out   sbus_out;           --! BUS slave output signals [dat,val]
+        sys_bus_i       : in    sbus_in;        --! BUS slave input signals [we,adr,dat]
+        sys_bus_o       : out   sbus_out;       --! BUS slave output signals [dat,val]
         --LED signal
-        led_output  : out   io_o                --! Led power signal
+        led_output      : out   io_o            --! Led power signal
     );
 end entity LED_DRIVER;
+
 
 
 
 --! General architecture
 architecture RTL of LED_DRIVER is
 
-    --Components
-    component REGISTER_TABLE
-        generic(
-            BASE_ADDRESS		:	natural;
-            NUMBER_REGISTERS	:	natural;
-            REG_DEFAULT_VALUES	:	data_word_vector
-        );
-        port(
-            clk				: in	std_logic;
-            rst				: in	std_logic;
-            sys_bus_i		: in	sbus_in;
-            sys_bus_o		: out	sbus_out;
-            reg_data_in		: in	data_word_vector(NUMBER_REGISTERS-1 downto 0);
-            reg_data_out	: out   data_word_vector(NUMBER_REGISTERS-1 downto 0);
-            reg_data_stb	: out	std_logic_vector(NUMBER_REGISTERS-1 downto 0)
-        );
-    end component;
-
-
-    --Intermediate signals
+    --****INTERNAL SIGNALS****
     --Constants
-    constant reg_default	:	data_word_vector(getMemoryLength(8)-1 downto 0)	--Use of larger constant due to problems with generics
-								:= (others => (others => '0'));		
-		
+    --Use of larger constant due to problems with generics
+    constant reg_default	:	data_word_vector(getMemoryLength(8)-1 downto 0) := (others => (others => '0'));		
     --Register
     signal reg_data             :   data_word_vector(0 downto 0);
         alias led_enb           :   std_logic is reg_data(0)(7);
@@ -178,7 +161,7 @@ begin
 
 
 
-    MEMORY :REGISTER_TABLE
+    MEMORY : entity work.REGISTER_TABLE
     generic map(
         BASE_ADDRESS		=> ADDRESS,
         NUMBER_REGISTERS    => getMemoryLength(8),
