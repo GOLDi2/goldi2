@@ -98,10 +98,16 @@ package GOLDI_COMM_STANDARD is
 
     --****FUNCTIONS****
     -----------------------------------------------------------------------------------------------
+    --Synthesisable functions
     function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
     function getMemoryLength(vector_length : natural) return natural;
     function setMemory(data_vector : std_logic_vector) return data_word_vector;
     function getMemory(data_vector : data_word_vector) return std_logic_vector;
+    --Simulation functions
+    function readBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out;
+    function readBus(adr : natural; dat : natural) return mbus_out;
+    function writeBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out;
+    function writeBus(adr : natural; dat : natural) return mbus_out;
     -----------------------------------------------------------------------------------------------
 
 
@@ -175,6 +181,53 @@ package body GOLDI_COMM_STANDARD is
 
 		return vector;
 	end function;
+
+
+    -- Function used for simulation. Converts std_logic_vector into 
+    -- master bus input configured for read operation
+    function readBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out is
+        variable sys_bus : mbus_out;
+    begin
+        sys_bus.we  := '0';
+        sys_bus.adr := adr(1 to BUS_ADDRESS_WIDTH);
+        sys_bus.dat := dat(0 to SYSTEM_DATA_WIDTH-1);
+        return sys_bus;
+    end function;
+
+    -- Function used for simulation. Converts natural integer into 
+    -- master bus input configured for read operation
+    function readBus(adr : natural; dat : natural) return mbus_out is
+        variable sys_bus : mbus_out;
+    begin
+        sys_bus.we  := '0';
+        sys_bus.adr := std_logic_vector(to_unsigned(adr,BUS_ADDRESS_WIDTH));
+        sys_bus.dat := std_logic_vector(to_unsigned(dat,SYSTEM_DATA_WIDTH));
+        return sys_bus;
+    end function;
+
+
+    -- Function used for simulation. Converts std_logic_vector into 
+    -- master bus input configured for read operation
+    function writeBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out is
+        variable sys_bus : mbus_out;
+    begin
+        sys_bus.we  := '1';
+        sys_bus.adr := adr(1 to BUS_ADDRESS_WIDTH);
+        sys_bus.dat := dat(0 to SYSTEM_DATA_WIDTH-1);
+        return sys_bus;
+    end function;
+
+
+    -- Function used for simulation. Converts natural integer into 
+    -- master bus input configured for read operation
+    function writeBus(adr : natural; dat : natural) return mbus_out is
+        variable sys_bus : mbus_out;
+    begin
+        sys_bus.we  := '1';
+        sys_bus.adr := std_logic_vector(to_unsigned(adr,BUS_ADDRESS_WIDTH));
+        sys_bus.dat := std_logic_vector(to_unsigned(dat,SYSTEM_DATA_WIDTH));
+        return sys_bus;
+    end function;
 
 
 end package body GOLDI_COMM_STANDARD;
