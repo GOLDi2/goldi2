@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DiamondModule name="PLL_16MHz" module="PLL" VendorName="Lattice Semiconductor Corporation" generator="IPexpress" date="2023 03 23 17:38:31.930" version="5.8" type="Module" synthesis="lse" source_format="VHDL">
-  <Package>
-		<File name="PLL_16MHz.lpc" type="lpc" modified="2023 03 23 17:38:29.876"/>
-		<File name="PLL_16MHz.vhd" type="top_level_vhdl" modified="2023 03 23 17:38:29.957"/>
-		<File name="PLL_16MHz_tmpl.vhd" type="template_vhdl" modified="2023 03 23 17:38:29.957"/>
-  </Package>
-</DiamondModule>
