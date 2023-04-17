@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BaliProject version="3.2" title="Project" device="LCMXO2-7000HC-4TG144C" default_implementation="impl1">
+    <Options/>
     <Implementation title="impl1" dir="build" description="impl1" synthesis="lse" default_strategy="Strategy1">
-        <Options def_top = "TOP_LEVEL" top="TOP_LEVEL"/>
-        
+        <Options top="TOP_LEVEL"/>
         <Source name="src/ACTUATOR_MASK.vhd" type="VHDL" type_short="VHDL">
             <Options/>
-        </Source>    
+        </Source>
         <Source name="src/common/comms/BUS_CONVERTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -27,7 +27,9 @@
         <Source name="src/GOLDI_CROSSBAR_DEFAULT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        
+        <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -59,7 +61,7 @@
             <Options/>
         </Source>
         <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
-            <Options top_module="TOP_LEVEL"/>
+            <Options/>
         </Source>
         <Source name="src/common/io_management/TRIS_BUFFER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
@@ -70,7 +72,6 @@
         <Source name="constraints.lpf" type="Logic Preference" type_short="LPF">
             <Options/>
         </Source>
-
     </Implementation>
     <Strategy name="Strategy1" file="strategy.sty"/>
 </BaliProject>
