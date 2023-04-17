@@ -50,7 +50,7 @@ package GOLDI_CROSSBAR_DEFAULT is
     
     --Layout of right side port of crossbar. Assignment of multiple 
     --right side port lines to the same left side port line will provoque an operation error.
-    constant DEFAULT_CROSSBAR_LAYOUT :   cb_right_port_ram(4 downto 0) :=
+    constant DEFAULT_CROSSBAR_LAYOUT :   cb_right_port_ram(3 downto 0) :=
     (
         0 => x"00",
         1 => x"01",
