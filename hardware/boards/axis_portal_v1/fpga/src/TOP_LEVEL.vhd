@@ -305,16 +305,16 @@ begin
     );
 
     --Recover memory data form io_vector
-    sensor_data_vector(1)(0) <= internal_io_i(2).dat;
-    sensor_data_vector(1)(1) <= internal_io_i(3).dat;
-    sensor_data_vector(1)(2) <= internal_io_i(4).dat;
-    sensor_data_vector(1)(3) <= internal_io_i(5).dat;
-    sensor_data_vector(1)(4) <= internal_io_i(6).dat;
-    sensor_data_vector(1)(5) <= internal_io_i(7).dat;
-    sensor_data_vector(1)(6) <= internal_io_i(8).dat;
-    sensor_data_vector(1)(7) <= internal_io_i(9).dat;
-    sensor_data_vector(0)(0) <= internal_io_i(10).dat;
-    sensor_data_vector(0)(7 downto 1) <= (others => '0');
+    sensor_data_vector(0)(0) <= internal_io_i(2).dat;
+    sensor_data_vector(0)(1) <= internal_io_i(3).dat;
+    sensor_data_vector(0)(2) <= internal_io_i(4).dat;
+    sensor_data_vector(0)(3) <= internal_io_i(5).dat;
+    sensor_data_vector(0)(4) <= internal_io_i(6).dat;
+    sensor_data_vector(0)(5) <= internal_io_i(7).dat;
+    sensor_data_vector(0)(6) <= internal_io_i(8).dat;
+    sensor_data_vector(0)(7) <= internal_io_i(9).dat;
+    sensor_data_vector(1)(0) <= internal_io_i(10).dat;
+    sensor_data_vector(1)(7 downto 1) <= (others => '0');
     internal_io_o(10 downto 2) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
 	

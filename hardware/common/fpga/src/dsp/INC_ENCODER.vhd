@@ -102,8 +102,6 @@ begin
             --Reset encoder and block until index channel detection
             if(rst = '1' or enc_block /= '0') then
                 enc_counter  <= 0;
-                enc_signal_a <= (others => '0');
-                enc_signal_b <= '0';
 
             else
                 --Buffer signals to detect rising and falling
