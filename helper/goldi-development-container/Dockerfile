@@ -60,15 +60,15 @@ RUN apt-get update \
 
 # install Lattice Diamond
 COPY ./diamond/diamond-3-12-base_3.12-241_amd64.deb /tmp/diamond-3-12-base_3.12-241_amd64.deb
-COPY ./diamond/diamond-3-12-sp1_3.12-455_amd64.deb /tmp/diamond-3-12-sp1_3.12-455_amd64.deb
+#COPY ./diamond/diamond-3-12-sp1_3.12-455_amd64.deb /tmp/diamond-3-12-sp1_3.12-455_amd64.deb
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         csh \
         libusb-0.1-4 \
     && dpkg -i /tmp/diamond-3-12-base_3.12-241_amd64.deb \
-    && dpkg -i /tmp/diamond-3-12-sp1_3.12-455_amd64.deb \
-    && rm /tmp/diamond-3-12-base_3.12-241_amd64.deb \
-    && rm /tmp/diamond-3-12-sp1_3.12-455_amd64.deb
+    #&& dpkg -i /tmp/diamond-3-12-sp1_3.12-455_amd64.deb \
+    && rm /tmp/diamond-3-12-base_3.12-241_amd64.deb
+    #&& rm /tmp/diamond-3-12-sp1_3.12-455_amd64.deb
 
 ENV DIAMOND_DIR="/usr/local/diamond/3.12" \
     bindir="/usr/local/diamond/3.12/bin/lin64"

@@ -9,8 +9,8 @@
 		"/var/run/docker.sock:/var/run/docker.sock",
 		"-v",
         "/dev:/dev",
-		"--net",
-        "host",
+		//"--net",
+        //"host",
 		"--privileged"
     ],
 
