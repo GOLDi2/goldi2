@@ -27,18 +27,8 @@ use IEEE.numeric_std.all;
 
 package GOLDI_MODULE_CONFIG is
     
-    --****SYSTEM CONSTANTS****
+    --****BOARD PINS****
     -----------------------------------------------------------------------------------------------
-    --System size
-    --Address width sets the protocol for SPI communication and the number of possible registers
-    --SPI communication protocol takes first bit of the configuration byte's for write enable
-    --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
-    constant BUS_ADDRESS_WIDTH	:	natural range 7 to 63 := 7;
-    
-    --Main parameter of the system. Sets the width of data words 
-    constant SYSTEM_DATA_WIDTH	:	natural range 8 to 64 := 8;
-    
-
     --Model pins
     --Number of physical FPGA pins that are available for IO functions
     constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;

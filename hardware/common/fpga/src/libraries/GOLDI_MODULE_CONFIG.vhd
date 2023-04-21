@@ -27,10 +27,6 @@ use IEEE.numeric_std.all;
 
 package GOLDI_MODULE_CONFIG is
 
-    --System constants
-	constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 63 := 7;
-	constant SYSTEM_DATA_WIDTH	    :	natural range 8 to 64 := 8;
-
     --Module pins
     constant PHYSICAL_PIN_NUMBER   	:   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 66;
     constant VIRTUAL_PIN_NUMBER    	:   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 6;
