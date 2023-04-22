@@ -9,6 +9,7 @@ default:
   before_script:
     - sudo chown -R $(whoami) .
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+    - mkdir -p ./helper/goldi-development-container/licenses && cp "$LATTICE_LICENSE" ./helper/goldi-development-container/licenses/lattice.dat
 
 workflow:
   rules:
