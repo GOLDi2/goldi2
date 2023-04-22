@@ -1,9 +1,8 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-image: crosslab-devcontainer:build
-
 stages:
+  - build-environment
   - build
 
 default:
@@ -13,12 +12,26 @@ default:
 
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG==""'
       variables:
         PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
         BRANCH: $CI_COMMIT_BRANCH
+        RELEASE: ''
+#   - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=""'
+#     variables:
+#       PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
+#       BRANCH: CI_COMMIT_TAG
+#       RELEASE: '--release'
+
+build-environment:
+  image: goldi-devcontainer:latest
+  stage: build-environment
+  script:
+    - ./scripts/ci.sh --tag environment --no-upload --branch $BRANCH
+    - cat ./helper/goldi-development-container/dist/goldi-devcontainer.tar | docker load
 
 build:
+  image: goldi-devcontainer:build
   stage: build
   script:
-    - ./scripts/ci.sh --branch $BRANCH
+    - ./scripts/ci.sh --upload --branch $BRANCH $RELEASE

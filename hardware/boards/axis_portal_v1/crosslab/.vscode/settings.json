@@ -1,4 +1,6 @@
 {
+    "python.defaultInterpreterPath": "venv/bin/python",
+    "python.analysis.typeCheckingMode": "basic",
     "files.exclude": {
         //begin generated
         "**/*.egg-info": true,
@@ -12,16 +14,6 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "boards/.vscode": true,
-        "boards/axis_portal_v1/.vscode": true,
-        "boards/axis_portal_v1/fpga/build": true,
-        "boards/axis_portal_v2/.vscode": true,
-        "boards/axis_portal_v2/fpga/build": true,
-        "boards/io-board/.vscode": true,
-        "boards/template/.vscode": true,
-        "boards/thk/.vscode": true,
-        "boards/three-axes-portal-v1/.vscode": true,
-        "common/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
@@ -38,12 +30,6 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "boards/axis_portal_v1/fpga/build": true,
-        "boards/axis_portal_v2/fpga/build": true,
-        "os/meta-openembedded": true,
-        "os/meta-raspberrypi": true,
-        "os/meta-rauc": true,
-        "os/poky": true,
         //end generated
     }
 }
