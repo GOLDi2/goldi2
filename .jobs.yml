@@ -6,6 +6,8 @@ helper/goldi-development-container:
   - script: build
     dependencies:
       - crosslab/helper/development-container:build
+    tags:
+      - environment
 
 ################################################################################
 # Frontend Services ############################################################
