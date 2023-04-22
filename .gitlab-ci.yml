@@ -24,7 +24,7 @@ workflow:
 #       RELEASE: '--release'
 
 build-environment:
-  image: crosslab/devcontainer:latest
+  image: goldi-devcontainer:build
   stage: build-environment
   script:
     - ./scripts/ci.sh --tag environment --no-upload --branch $BRANCH
