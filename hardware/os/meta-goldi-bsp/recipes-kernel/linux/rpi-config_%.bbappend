@@ -1,3 +1,7 @@
 do_deploy:append() {
-	echo "dtoverlay=goldi1" >> ${DEPLOYDIR}/bootfiles/config.txt
+	case ${MACHINE} in
+		"goldi1")
+			echo "dtoverlay=goldi1" >> ${DEPLOYDIR}/bootfiles/config.txt
+			;;
+	esac
 }

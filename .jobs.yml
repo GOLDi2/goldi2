@@ -25,6 +25,13 @@ frontend-services/experiment-control-panel:
       - crosslab/clients/soa_services/webcam/js:build
       - crosslab/clients/soa_services/file/js:build
 
+################################################################################
+# Hardware #####################################################################
+################################################################################
+
 hardware/common/config-interface:
   - script: build
   - script: lint
+
+hardware/boards/axis_portal_v1/fpga:
+  - script: build

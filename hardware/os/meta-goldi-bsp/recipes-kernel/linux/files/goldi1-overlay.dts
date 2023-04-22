@@ -29,25 +29,25 @@
 			red_active {
 				label = "red:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 26 0>;
+				gpios = <&gpio 26 1>;
 			};
 
             green_active {
 				label = "green:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 13 0>;
+				gpios = <&gpio 13 1>;
 			};
 
             red_cloud {
 				label = "red:cloud";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 6 0>;
+				gpios = <&gpio 6 1>;
 			};
 
             green_cloud {
 				label = "green:cloud";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 5 0>;
+				gpios = <&gpio 5 1>;
 			};
 		};
 	};

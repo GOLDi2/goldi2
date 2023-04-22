@@ -4,4 +4,4 @@ header:
    - ./kas.yml
 local_conf_header:
   io-board: |
-    MACHINE_VARIANT = "io-board"
+    MACHINE_VARIANT = "warehouse"
