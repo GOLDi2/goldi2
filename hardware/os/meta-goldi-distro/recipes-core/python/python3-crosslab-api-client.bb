@@ -17,6 +17,6 @@ do_compile:prepend() {
 
 DISTUTILS_SETUP_PATH = "${WORKDIR}/crosslab_api_client"
 
-RDEPENDS:${PN} = "python3-aiohttp python3-dateutil"
+RDEPENDS:${PN} = "python3-aiohttp python3-dateutil python3-typing-extensions"
 
 inherit setuptools3
