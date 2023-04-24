@@ -27,7 +27,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -75,7 +74,7 @@ architecture RTL of LED_DRIVER is
     --****INTERNAL SIGNALS****
     --Constants
     --Use of larger constant due to problems with generics
-    constant reg_default	:	data_word_vector(getMemoryLength(8)-1 downto 0) := (others => (others => '0'));		
+    constant reg_default	    :	data_word_vector(getMemoryLength(8)-1 downto 0) := (others => (others => '0'));		
     --Register
     signal reg_data             :   data_word_vector(0 downto 0);
         alias led_enb           :   std_logic is reg_data(0)(7);
