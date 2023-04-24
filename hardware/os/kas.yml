@@ -23,18 +23,18 @@ repos:
 
   poky:
     url: https://github.com/yoctoproject/poky.git
-    refspec: 630d754ea3d7206976b1e0f4489e054cdbc08fe8
+    refspec: 74c92e38c701e268406bb656b45ccd68471c217e
     layers:
       meta:
       meta-poky:
 
   meta-raspberrypi:
-    url: https://git.yoctoproject.org/git/meta-raspberrypi
-    refspec: 378d4b6e7ba64b6a9a701457cc3780fa896ba5dc
+    url: https://git.yoctoproject.org/meta-raspberrypi
+    refspec: 6f5771d2bcfbfb8f8ce17b455c29a5703f2027c9
 
   meta-openembedded:
     url: https://github.com/openembedded/meta-openembedded.git
-    refspec: 061b7fc74f887454251307ef119b808a90654d3f
+    refspec: 3d1ec70ed319c1b7f561fcda7b8cd0c2e0b2c262
     layers:
       meta-oe:
       meta-python:
@@ -43,4 +43,4 @@ repos:
 
   meta-rauc:
     url: https://github.com/rauc/meta-rauc.git
-    refspec: 800feeca2f8ba17b4f0dcb4b71aae21a567d06aa
+    refspec: 5331d782e42fbaef2421a18b6fc44d405a90df8c
