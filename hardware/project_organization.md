@@ -2,7 +2,8 @@
 
 ## Development structure: [C]
 
-- (0) Test board  
+- (0) Test board
+  - [1]: TMC2660 driver  
 - (1) Common code
   - [1]: General features added to libaries
   - [2]: Actuation modules

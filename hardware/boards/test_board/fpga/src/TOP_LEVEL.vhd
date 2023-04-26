@@ -44,7 +44,7 @@ entity TOP_LEVEL is
         SPI0_MISO   : out   std_logic;
         SPI0_nCE0   : in    std_logic;
         --IO
-        IO_DATA     : inout std_logic_vector(15 downto 0);
+        IO_DATA     : inout std_logic_vector(15 downto 0)
     );
 end entity TOP_LEVEL;
 
@@ -79,7 +79,7 @@ begin
     --clk <= ClockFPGA;
     OSCInst0 : component machxo2.components.OSCH
     generic map(
-        NOM_FREQ => "133.00"
+        NOM_FREQ => "44.33"
     )
     port map(
         STDBY    => '0',
@@ -171,6 +171,32 @@ begin
 
     --****DUT****
     -----------------------------------------------------------------------------------------------
+    STEPPER_DRIVER : entity work.TMC2660_DRIVER
+    generic map(
+        ADDRESS         => 1,
+        SD_FACTOR       => 1000,
+        SCLK_FACTOR     => 12,
+        TMC2660_CONFIG  => (x"FFF00",x"F00FF")
+    )
+    port map(
+        clk             => clk,
+        rst             => rst,
+        clk_16MHz       => '0',
+        sys_bus_i       => master_bus_o,
+        sys_bus_o       => master_bus_i,
+        tmc2660_clk     => sys_io_o(0),
+        tmc2660_enn     => sys_io_o(1),
+        tmc2660_sg      => sys_io_i(2),
+        tmc2660_dir     => sys_io_o(8),
+        tmc2660_step    => sys_io_o(9),
+        tmc2660_sclk    => sys_io_o(10),
+        tmc2660_ncs     => sys_io_o(11),
+        tmc2660_mosi    => sys_io_o(12),
+        tmc2660_miso    => sys_io_i(13)
+    );
+
+    sys_io_o(7 downto 2)   <= (others => gnd_io_o);
+    sys_io_o(15 downto 13) <= (others => gnd_io_o); 
     -----------------------------------------------------------------------------------------------
 
 
