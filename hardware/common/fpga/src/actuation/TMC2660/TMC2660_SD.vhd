@@ -57,12 +57,13 @@ architecture RTL of TMC2660_SD is
 
     --****INTERNAL SIGNALS****
     --Data buffers
-    signal nominal_frequency_buff       :   integer range -1 to 256;
+    signal nominal_frequency_buff       :   std_logic_vector(7 downto 0);
+    signal operation_frequency_buff     :   integer range 0  to 256;
     --Counters
     signal step_period_counter          :   integer;
     --Flags
-    signal config_valid_i               :   std_logic;
-
+    signal configuration_valid          :   std_logic;
+    signal calculation_valid            :   std_logic;
 
 begin
 
@@ -73,16 +74,30 @@ begin
     begin
         if(rising_edge(clk)) then
             if(rst = '1') then
-                nominal_frequency_buff <= 0;
-                config_valid_i         <= '0';
+                nominal_frequency_buff <= (others => '0');
+                configuration_valid    <= '0';
             elsif(sd_configuration_valid /= '1') then
-                config_valid_i         <= '0';
+                configuration_valid    <= '0';
             else
-                --Convert value to counter delay
-                nominal_frequency_buff <= 256-to_integer(unsigned(sd_nominal_frequency));
                 --Flag new incomming change
-                config_valid_i         <= '1';
-                
+                nominal_frequency_buff <= sd_nominal_frequency;
+                configuration_valid    <= '1';
+            end if;
+        end if;
+    end process;
+
+
+    FREQUENCY_CONVERSION : process(clk)
+    begin
+        if(rising_edge(clk)) then
+            if(rst = '1') then
+                operation_frequency_buff <= 256;
+                calculation_valid        <= '1';
+            elsif(configuration_valid = '1') then
+                operation_frequency_buff <= 256 - to_integer(unsigned(nominal_frequency_buff));
+                calculation_valid        <= '1';
+            else
+                calculation_valid        <= '0';
             end if;
         end if;
     end process;
@@ -96,11 +111,11 @@ begin
     FREQUENCY_CONTROL : process(clk)
     begin
         if(rising_edge(clk)) then
-            if(rst = '1' or config_valid_i = '1') then
+            if(calculation_valid = '1') then
                 step_period_counter <= 0;
             elsif(sd_enable_neg = '1' xnor sd_enable_pos = '1') then
                 step_period_counter <= 0;
-            elsif(step_period_counter = (nominal_frequency_buff*SPEED_FACTOR)-1) then
+            elsif(step_period_counter = (operation_frequency_buff*SPEED_FACTOR)-1) then
                 step_period_counter <= 0;
             else
                 step_period_counter <= step_period_counter + 1;
@@ -112,20 +127,20 @@ begin
     SD_INTERFACE : process(clk)
     begin
         if(rising_edge(clk)) then
-            if(rst = '1' or config_valid_i = '1') then
-                step      <= '0';
-                direction <= '0';
+            if(rst = '1') then
+                step        <= '0';
+                direction   <= '0';
 
             elsif(sd_enable_neg = '1' xnor sd_enable_pos = '1') then
-                step      <= '0';
-                direction <= '0';
+                step        <= '0';
+                direction   <= '0';
 
             else
                 --Manage step direction
                 direction <= sd_enable_neg;
 
                 --Manage pulse generation
-                if(step_period_counter < nominal_frequency_buff*SPEED_FACTOR/2) then
+                if(step_period_counter < operation_frequency_buff*SPEED_FACTOR/2) then
                     step <= '0';
                 else
                     step <= '1';
