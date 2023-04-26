@@ -108,7 +108,7 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         variable init_hold      :   time := 5*clk_period/2;
-        variable assert_hold    :   time := 5*clk_period/2;
+        variable assert_hold    :   time := 7*clk_period/2;
         variable post_hold      :   time := clk_period/2;
     begin
         --Preset signals

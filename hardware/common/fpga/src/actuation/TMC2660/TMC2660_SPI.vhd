@@ -57,6 +57,7 @@ end entity TMC2660_SPI;
 architecture RTL of TMC2660_SPI is
 
     --****INTENAL SIGNALS****
+    signal rst_buff     :   std_logic;
     --Data buffers
     signal word_i_buff  :   std_logic_vector(19 downto 0);
     signal word_o_buff  :   std_logic_vector(19 downto 0);
@@ -82,7 +83,7 @@ begin
             
             --Control module parallel interface and spi transfer
             case spi_ps is
-                when IDLE =>
+                when IDLE =>        
                     word_i_buff <= s_word_i_tdata;
                     m_word_o_tdata <= word_o_buff;
                     --Start transfer once a new data word has been latched
@@ -107,19 +108,24 @@ begin
             
             --Reset module
             if(rst = '1') then
+                rst_buff    <= '1';
                 word_i_buff <= (others => '0');
                 tx_valid    <= '0';
                 spi_ps      <= IDLE;
+            else
+                rst_buff    <= '0';
             end if;
         
         end if;
     end process;
 
 
-    S_READY_FLAG_MANAGEMENT : process(spi_ps, tx_valid)
+    S_READY_FLAG_MANAGEMENT : process(rst_buff, spi_ps, tx_valid)
     begin
         --Manage ready flag
-        if(spi_ps = IDLE) then
+        if(rst_buff = '1') then
+            s_ready_i <= '0';
+        elsif(spi_ps = IDLE) then
             s_ready_i <= '1';
         else
             s_ready_i <= '0';
