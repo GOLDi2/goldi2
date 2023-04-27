@@ -75,7 +75,7 @@ ENV DIAMOND_DIR="/usr/local/diamond/3.12" \
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        sshpass
+        sshpass pv
 
 RUN mv /entrypoint.sh /crosslab-entrypoint.sh
 COPY container-scripts/entrypoint.sh /

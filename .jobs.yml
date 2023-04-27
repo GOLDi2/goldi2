@@ -34,6 +34,34 @@ frontend-services/experiment-control-panel:
 hardware/common/config-interface:
   - script: build
   - script: lint
+    dependencies:
+      - hardware/common/config-interface:build
+
+hardware/common/spi-driver:
+  - script: build
+  - script: lint
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: test
+    dependencies:
+      - hardware/common/spi-driver:build
+
 
 hardware/boards/axis_portal_v1/fpga:
   - script: build
+
+hardware/boards/axis_portal_v1/crosslab:
+  - script: build
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: lint
+    dependencies:
+      - hardware/boards/axis_portal_v1/crosslab:build
+
+hardware/os:
+  - script: build -v axis_portal_v1
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/axis_portal_v1/fpga:build
+      - hardware/boards/axis_portal_v1/crosslab:build
