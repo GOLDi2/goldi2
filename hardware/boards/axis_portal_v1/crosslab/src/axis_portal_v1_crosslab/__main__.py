@@ -2,12 +2,10 @@
 
 import argparse
 import asyncio
-from functools import partial
 from json import JSONDecoder
 from typing import Dict, Optional
 from axis_portal_v1_crosslab.hal import HAL
-from spi_driver import SpiRegisters
-from spi_driver.modules import GPIO
+from axis_portal_v1_crosslab.model_logic import evaluateActuators
 import os
 
 from crosslab.api_client.improved_client import APIClient
@@ -19,6 +17,9 @@ from crosslab.soa_services.electrical.signal_interfaces.gpio import (
     ConstractableGPIOInterface,
 )
 
+interfaces: Dict[str, GPIOInterface] = dict()
+hal: HAL
+
 sensor_names = [
     "LimitXLeft",
     "LimitXRight",
@@ -28,6 +29,7 @@ sensor_names = [
     "LimitZTop",
     "Proximity",
 ]
+
 actuators_names = [
     "XMotorLeft",
     "XMotorRight",
@@ -35,52 +37,80 @@ actuators_names = [
     "YMotorFront",
     "ZMotorBottom",
     "ZMotorTop",
+    "Magnet",
 ]
 
-hal_names = actuators_names + ["reserved"] * 2 + sensor_names + ["reserved"]
 
-interfaces: Dict[str, GPIOInterface] = dict()
-hal: HAL
+def panic(message: str):
+    pass
 
 
-def signal_changed(name: str, value: bool):
-    interface = interfaces.get(name, None)
-    if interface is not None and interface.configuration.get("direction", "in") in [
-        "inout",
-        "out",
-    ]:
-        interface.changeDriver("strongH" if value else "strongL")
+def userError(message: str):
+    pass
 
 
 def newActuatorInterface(interface):
+    global hal
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
         isOutput = interface.configuration.get("direction", "in") in ["inout", "out"]
 
-        assert isInput and not isOutput
+        if name not in actuators_names:
+            panic("Actuator interface must be named like a actuator")
+
+        if not isInput or isOutput:
+            panic("Actuator interface must be input only")
 
         interfaces[name] = interface
 
-        hal.setSignal(name, "highZ")
-
-        interface.on("signalChange", lambda event: hal.setSignal(name, event.state))
+        interface.on(
+            "signalChange", lambda: evaluateActuators(interfaces, hal, panic, userError)
+        )
 
 
 def newSensorInterface(interface):
+    global hal
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
         isOutput = interface.configuration.get("direction", "in") in ["inout", "out"]
 
-        assert not isInput and isOutput
+        if name not in sensor_names:
+            panic("Sensor interface must be named like a sensor")
+
+        if not isOutput or isInput:
+            panic("Sensor interface must be output only")
 
         interfaces[name] = interface
 
-        hal.setSignal(name, "highZ")
+        def setBool(value: bool):
+            interface.changeDriver("strongH" if value else "strongL")
 
-        interface.changeDriver("strongH" if hal.getSignal(name) else "strongL")
+        value=False
+        if name == "LimitXLeft":
+            hal.LimitXLeft.on("change", setBool)
+            value = hal.LimitXLeft.value()
+        elif name == "LimitXRight":
+            hal.LimitXRight.on("change", setBool)
+            value = hal.LimitXRight.value()
+        elif name == "LimitYBack":
+            hal.LimitYBack.on("change", setBool)
+            value = hal.LimitYBack.value()
+        elif name == "LimitYFront":
+            hal.LimitYFront.on("change", setBool)
+            value = hal.LimitYFront.value()
+        elif name == "LimitZBottom":
+            hal.LimitZBottom.on("change", setBool)
+            value = hal.LimitZBottom.value()
+        elif name == "LimitZTop":
+            hal.LimitZTop.on("change", setBool)
+            value = hal.LimitZTop.value()
+        elif name == "Proximity":
+            hal.Proximity.on("change", setBool)
+            value = hal.Proximity.value()
 
+        interface.changeDriver("strongH" if value else "strongL")
 
 async def main_async():
     global hal
@@ -104,12 +134,7 @@ async def main_async():
         help="URL of the CrossLab instance",
         default=os.environ.get("CROSSLAB_CLI_URL"),
     )
-    #parser.add_argument(
-    #    "--virtual", help="Dont make any hardware outputs", action="store_true"
-    #)
     args = parser.parse_args()
-
-    # chek if commandline option --virtual is set
 
     auth_token: Optional[str] = None
     device_id: Optional[str] = None
@@ -141,8 +166,7 @@ async def main_async():
         print("Error: No url provided.")
         exit(1)
 
-    hal = HAL(hal_names)
-    hal.addSignalChangedHandler(signal_changed)
+    hal = HAL()
 
     deviceHandler = DeviceHandler()
 
@@ -158,8 +182,21 @@ async def main_async():
     actuators_service.on("newInterface", newActuatorInterface)
     deviceHandler.add_service(actuators_service)
 
-    webcamService=WebcamService__Producer(GstTrack("v4l2src device=/dev/video0 ! 'image/jpeg,width=640,height=480,framerate=30/1' ! v4l2jpegdec ! v4l2h264enc ! 'video/x-h264,level=(string)4'"), "webcam");
-    deviceHandler.add_service(webcamService);
+    webcamService = WebcamService__Producer(
+        GstTrack(
+            (" ! ").join(
+                [
+                    "v4l2src device=/dev/video0",
+                    "'image/jpeg,width=640,height=480,framerate=30/1'",
+                    "v4l2jpegdec",
+                    "v4l2h264enc",
+                    "'video/x-h264,level=(string)4'",
+                ]
+            ),
+        ),
+        "webcam",
+    )
+    deviceHandler.add_service(webcamService)
 
     async with APIClient(url) as client:
         client.set_auth_token(auth_token)
