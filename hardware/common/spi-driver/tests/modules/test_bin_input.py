@@ -29,8 +29,8 @@ def test_bin_input():
     assert registers.change_callbacks[0x10] != None
     assert registers.change_callbacks[0x11] != None
 
-    registers[0x10] = 0b00000001
-    registers[0x11] = 0b00000010
+    registers.setReadBuffer(0x10, 0b00000001)
+    registers.setReadBuffer(0x11, 0b00000010)
 
     assert input["A0"] == True
     assert input["A1"] == False
@@ -63,8 +63,8 @@ def test_bin_input_events():
 
     registers.change_callbacks[0x10](registers)
 
-    registers[0x10] = 0b00000001
-    registers[0x11] = 0b00000010
+    registers.setReadBuffer(0x10, 0b00000001)
+    registers.setReadBuffer(0x11, 0b00000010)
 
     registers.change_callbacks[0x10](registers)
 
@@ -97,8 +97,8 @@ def test_bin_input_switched():
     assert registers.change_callbacks[0x10] != None
     assert registers.change_callbacks[0x11] != None
 
-    registers[0x10] = 0b00000001
-    registers[0x11] = 0b00000010
+    registers.setReadBuffer(0x10, 0b00000001)
+    registers.setReadBuffer(0x11, 0b00000010)
 
     assert input["A0"] == False
     assert input["A1"] == True
@@ -129,8 +129,8 @@ def test_bin_input_sparse():
     assert registers.change_callbacks[0x10] != None
     assert registers.change_callbacks[0x11] != None
 
-    registers[0x10] = 0b00000001
-    registers[0x11] = 0b00000010
+    registers.setReadBuffer(0x10, 0b00000001)
+    registers.setReadBuffer(0x11, 0b00000010)
 
     assert input["A0"] == False
     assert input["A1"] == True

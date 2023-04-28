@@ -65,7 +65,8 @@ def newActuatorInterface(interface):
         interfaces[name] = interface
 
         interface.on(
-            "signalChange", lambda: evaluateActuators(interfaces, hal, panic, userError)
+            "signalChange",
+            lambda event: evaluateActuators(interfaces, hal, panic, userError),
         )
 
 
@@ -87,7 +88,7 @@ def newSensorInterface(interface):
         def setBool(value: bool):
             interface.changeDriver("strongH" if value else "strongL")
 
-        value=False
+        value = False
         if name == "LimitXLeft":
             hal.LimitXLeft.on("change", setBool)
             value = hal.LimitXLeft.value()
@@ -111,6 +112,7 @@ def newSensorInterface(interface):
             value = hal.Proximity.value()
 
         interface.changeDriver("strongH" if value else "strongL")
+
 
 async def main_async():
     global hal

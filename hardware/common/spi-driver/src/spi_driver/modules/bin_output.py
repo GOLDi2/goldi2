@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Union
 
 from spi_driver.spi_registers import SpiRegisters
 
@@ -25,19 +25,14 @@ class BinOutput:
             self._address = address
         assert len(self._address) == self._register_cnt
 
-    def __setitem__(self, key: str, value: Optional[bool]):
+    def __setitem__(self, key: str, value: bool):
         bitOffset = self._signalIndex[key]
         registerIndex = bitOffset // 8
         bitIndex = bitOffset % 8
-        if value:
-            self._registers[128 + self._address[registerIndex]] |= 1 << bitIndex
-        else:
-            self._registers[128 + self._address[registerIndex]] &= ~(1 << bitIndex)
+        self._registers.setBit(self._address[registerIndex], bitIndex, value)
 
     def __getitem__(self, key: str) -> bool:
         bitOffset = self._signalIndex[key]
         registerIndex = bitOffset // 8
         bitIndex = bitOffset % 8
-        return (
-            self._registers[128 + self._address[registerIndex]] & (1 << bitIndex) != 0
-        )
+        return self._registers.getBit(self._address[registerIndex], bitIndex)

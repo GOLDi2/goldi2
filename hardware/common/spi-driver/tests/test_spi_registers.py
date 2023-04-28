@@ -35,7 +35,7 @@ def test_spi_registers(monkeypatch):
     assert registers[0x00] == 0
     assert registers[0x01] == 0
     registers.communicate()
-    assert len(MockSpiDev.transactions) == 1
+    assert len(MockSpiDev.transactions) == 2
 
     assert changes == 1
     assert registers[0x00] == 0
@@ -55,7 +55,7 @@ def test_spi_registers(monkeypatch):
     assert changes == 1
 
     registers.communicate()
-    assert len(MockSpiDev.transactions) == 3
+    assert len(MockSpiDev.transactions) == 7
 
     assert registers[0x00] == 0
     assert registers[0x01] == 1
@@ -70,5 +70,5 @@ def test_spi_registers(monkeypatch):
 
     registers.communicate()
 
-    assert len(MockSpiDev.transactions) == 6
-    assert MockSpiDev.transactions[-1] == [0x10, 0x20]
+    assert len(MockSpiDev.transactions) == 13
+    assert MockSpiDev.transactions[-6] == [0x80 + 0x10, 0x20]

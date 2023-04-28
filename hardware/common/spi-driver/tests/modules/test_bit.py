@@ -9,7 +9,7 @@ def test_bit_as_input():
 
     assert registers.change_callbacks[0x10] != None
 
-    registers[0x10] = 0b00100000
+    registers.setReadBuffer(0x10, 0b00100000)
 
     assert bit.value() == True
 
@@ -22,7 +22,7 @@ def test_bit_as_output():
 
     bit.set(True)
 
-    assert registers[0x80 + 0x10] == 0b00100000
+    assert registers.getWriteBuffer(0x10) == 0b00100000
 
 
 def test_bit_event():
@@ -38,7 +38,7 @@ def test_bit_event():
 
     registers.change_callbacks[0x10](registers)
 
-    registers[0x10] = 0b00100000
+    registers.setReadBuffer(0x10, 0b00100000)
 
     registers.change_callbacks[0x10](registers)
 

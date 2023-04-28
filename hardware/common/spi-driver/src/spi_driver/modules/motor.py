@@ -16,9 +16,9 @@ class Motor(AsyncIOEventEmitter):
         if value < -256 or value > 256:
             raise ValueError("value must be between -256 and 256")
         if value > 0:
-            self._registers[128 + self._direction_address] = 0b01
+            self._registers[self._direction_address] = 0b01
         elif value < 0:
-            self._registers[128 + self._direction_address] = 0b10
+            self._registers[self._direction_address] = 0b10
         else:
-            self._registers[128 + self._direction_address] = 0b00
-        self._registers[128 + self._speed_address] = abs(value)
+            self._registers[self._direction_address] = 0b00
+        self._registers[self._speed_address] = abs(value)

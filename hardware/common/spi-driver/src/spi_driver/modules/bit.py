@@ -23,9 +23,9 @@ class Bit(AsyncIOEventEmitter):
 
     def set(self, value: bool):
         if value:
-            self._registers[128 + self._address] |= 1 << self._bit
+            self._registers[self._address] |= 1 << self._bit
         else:
-            self._registers[128 + self._address] &= ~(1 << self._bit)
+            self._registers[self._address] &= ~(1 << self._bit)
         if self._value != value:
             self._value = value
             self.emit("change", self._value)

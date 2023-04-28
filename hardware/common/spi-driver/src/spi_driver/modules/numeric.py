@@ -34,7 +34,7 @@ class Numeric(AsyncIOEventEmitter):
 
     def set(self, value: int):
         for i, address in enumerate(self._address):
-            self._registers[128 + address] = (value >> (i * 8)) & 0xFF
+            self._registers[address] = (value >> (i * 8)) & 0xFF
         if self._value != value:
             self._value = value
             self.emit("change", self._value)

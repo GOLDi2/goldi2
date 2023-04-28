@@ -43,8 +43,8 @@ def test_bin_output():
     output["B6"] = False
     output["B7"] = False
 
-    assert registers[0x80 + 0x10] == 0b00000001
-    assert registers[0x80 + 0x11] == 0b00000010
+    assert registers.getWriteBuffer(0x10) == 0b00000001
+    assert registers.getWriteBuffer(0x11) == 0b00000010
 
 
 def test_bin_output_switched():
@@ -68,8 +68,8 @@ def test_bin_output_switched():
     output["B6"] = False
     output["B7"] = False
 
-    assert registers[0x80 + 0x10] == 0b00000001
-    assert registers[0x80 + 0x11] == 0b00000010
+    assert registers.getWriteBuffer(0x10) == 0b00000001
+    assert registers.getWriteBuffer(0x11) == 0b00000010
 
 
 def test_bin_output_sparse():
@@ -85,5 +85,5 @@ def test_bin_output_sparse():
     output["B0"] = True
     output["B1"] = False
 
-    assert registers[0x80 + 0x10] == 0b00000001
-    assert registers[0x80 + 0x11] == 0b00000010
+    assert registers.getWriteBuffer(0x10) == 0b00000001
+    assert registers.getWriteBuffer(0x11) == 0b00000010

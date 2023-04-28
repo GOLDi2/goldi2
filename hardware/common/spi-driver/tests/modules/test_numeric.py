@@ -10,8 +10,8 @@ def test_numeric_as_input():
     assert registers.change_callbacks[0x10] != None
     assert registers.change_callbacks[0x11] != None
 
-    registers[0x10] = 0b00100000
-    registers[0x11] = 0b00000001
+    registers.setReadBuffer(0x10, 0b00100000)
+    registers.setReadBuffer(0x11, 0b00000001)
 
     assert numeric.value() == 288
 
@@ -25,8 +25,8 @@ def test_numeric_as_output():
 
     numeric.set(288)
 
-    assert registers[0x80 + 0x10] == 0b00100000
-    assert registers[0x80 + 0x11] == 0b00000001
+    assert registers.getWriteBuffer(0x10) == 0b00100000
+    assert registers.getWriteBuffer(0x11) == 0b00000001
 
 
 def test_numeric_event():
@@ -42,8 +42,8 @@ def test_numeric_event():
 
     registers.change_callbacks[0x10](registers)
 
-    registers[0x10] = 0b00100000
-    registers[0x11] = 0b00000001
+    registers.setReadBuffer(0x10, 0b00100000)
+    registers.setReadBuffer(0x11, 0b00000001)
 
     registers.change_callbacks[0x10](registers)
 
