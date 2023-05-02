@@ -19,6 +19,9 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V1.01.00 - Memory unit change
+-- Additional Comments: New memory modules introduced
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -74,28 +77,33 @@ end entity GPIO_DRIVER_ARRAY;
 architecture RTL of GPIO_DRIVER_ARRAY is
 
     --****INTERNAL SIGNALS****
-    --Constant
+    --Memory
 	constant reg_default	:	data_word_vector(GPIO_NUMBER-1 downto 0) := (others => (others => '0'));			
-	--Registers
     signal reg_data_o   :   data_word_vector(GPIO_NUMBER-1 downto 0);
     signal reg_data_i   :   data_word_vector(GPIO_NUMBER-1 downto 0);
 
 
 begin
 
+    --****GPIO SIGNALS****
+    -----------------------------------------------------------------------------------------------
     GPIO_ROUTING : for i in 0 to GPIO_NUMBER-1 generate
         --Route register outputs
         gpio_o_vector(i).enb <= reg_data_o(i)(1);
         gpio_o_vector(i).dat <= reg_data_o(i)(0);
         --Route register inputs
-        reg_data_i(i)(7 downto 2) <= (others => '0');
+        reg_data_i(i)(7 downto 2) <= reg_data_o(i)(7 downto 2);
         reg_data_i(i)(1) <= reg_data_o(i)(1);
         reg_data_i(i)(0) <= reg_data_o(i)(0) when(reg_data_o(i)(1) = '1') else 
                             gpio_i_vector(i).dat;
     end generate;
+    -----------------------------------------------------------------------------------------------
 
 
 
+
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
@@ -103,14 +111,15 @@ begin
 		REG_DEFAULT_VALUES	=> reg_default
 	)
 	port map(
-		clk				=> clk,
-		rst				=> rst,
-		sys_bus_i		=> sys_bus_i,
-		sys_bus_o		=> sys_bus_o,
-		reg_data_in		=> reg_data_i,
-		reg_data_out	=> reg_data_o,
-		reg_data_stb	=> open
-	);
-
+		clk				    => clk,
+		rst				    => rst,
+		sys_bus_i		    => sys_bus_i,
+		sys_bus_o		    => sys_bus_o,
+		data_in		        => reg_data_i,
+		data_out	        => reg_data_o,
+		read_stb	        => open,
+        write_stb           => open
+    );
+    -----------------------------------------------------------------------------------------------
     
 end RTL;

@@ -217,9 +217,10 @@ begin
         rst                 => rst,
         sys_bus_i           => sys_bus_i,
         sys_bus_o           => sys_bus_o,
-        reg_data_in         => reg_data_in,
-        reg_data_out        => reg_data_out,
-        reg_data_stb        => reg_data_stb
+        data_in             => reg_data_in,
+        data_out            => reg_data_out,
+        read_stb            => open,
+        write_stb           => reg_data_stb
     );
 
     reg_data_out_buff <= reg_data_out(4)(3 downto 0) & reg_data_out(3) & reg_data_out(2); 
