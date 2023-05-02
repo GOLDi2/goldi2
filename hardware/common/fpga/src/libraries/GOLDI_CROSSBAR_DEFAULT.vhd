@@ -31,11 +31,12 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 
+
 package GOLDI_CROSSBAR_DEFAULT is
 
     --****Crossbar Data Structures****
 	-----------------------------------------------------------------------------------------------
-	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+	type cb_left_port_ram  is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
 	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
 	-----------------------------------------------------------------------------------------------
 
