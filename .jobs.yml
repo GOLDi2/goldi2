@@ -71,7 +71,7 @@ hardware/os:
     dependencies:
       - hardware/common/config-interface:build
       - hardware/common/spi-driver:build
-      - hardware/boards/warehouse/fpga:build
-      - hardware/boards/warehouse/crosslab:build
+      #- hardware/boards/warehouse/fpga:build
+      #- hardware/boards/warehouse/crosslab:build
     tags:
       - firmware
