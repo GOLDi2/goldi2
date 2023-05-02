@@ -4,6 +4,7 @@
 
 - (0) Test board
   - [1]: TMC2660 driver  
+  - [2]: Memory units
 - (1) Common code
   - [1]: General features added to libaries
   - [2]: Actuation modules
@@ -25,3 +26,5 @@
 
 - (0) File reorganization and base release
   - [1]: Documentation of new file and repository structure
+- (1) Release of Axis Portal V1 stable version V1.00.00
+  - [1]: Integration of improved memory units (Register Unit/Register Table)
