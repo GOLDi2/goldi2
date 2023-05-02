@@ -14,7 +14,6 @@ default:
 .default_rules:
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG==null'
       variables:
-        PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
 #   - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
@@ -47,9 +46,11 @@ build:
 build-daily:
   image: goldi-devcontainer:build
   rules:
-    - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
       when: always
+      variables:
+        BRANCH: $CI_COMMIT_BRANCH
+        RELEASE: ''
   stage: build
   script:
     - ./scripts/ci.sh --upload --branch $BRANCH $RELEASE
