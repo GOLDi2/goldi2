@@ -9,8 +9,11 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	-> REGISTER_TABLE.vhd
---                  -> VIRTUAL_SENSOR.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+--                  -> GOLDI_IO_STANDARD.vhd
+--                  -> GOLDI_DATA_TYPES.vhd
+--                  -> REGISTER_TABLE.vhd
+--                  -> VIRTUAL_SENSOR_ARRAY.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
@@ -25,9 +28,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_DATA_TYPES.all;
 
 
 
@@ -39,7 +42,9 @@ entity SENSOR_ARRAY is
     generic(
         ADDRESS         :   natural := 1;
         ENC_X_INVERT    :   boolean := false;
-        ENC_Z_INVERT    :   boolean := false
+        ENC_Z_INVERT    :   boolean := false;
+        LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (10,0));
+        LIMIT_Z_SENSORS :   sensor_limit_array(5 downto 0) := (others => (10,0))
     );
     port(
         --General
@@ -55,11 +60,12 @@ entity SENSOR_ARRAY is
         lim_y_pos       : in    io_i;
         lim_z_neg       : in    io_i;
         lim_z_pos       : in    io_i;
+        inductive       : in    io_i;
         --Encoder signals
-        enc_x_a         : in    io_i;
-        enc_x_b         : in    io_i;
-        enc_z_a         : in    io_i;
-        enc_z_b         : in    io_i
+        enc_channel_x_a : in    io_i;
+        enc_channel_x_b : in    io_i;
+        enc_channel_z_a : in    io_i;
+        enc_channel_z_b : in    io_i
     );
 end entity SENSOR_ARRAY;
 
@@ -70,91 +76,97 @@ end entity SENSOR_ARRAY;
 architecture RTL of SENSOR_ARRAY is
 
     --****INTERNAL SIGNALS****
-    --Virtual sensor numbers
-    constant vsens_x        :   natural := 5;
-    constant vsens_z        :   natural := 5;
-    --Virtual sensor limits
-    type sensor_limit is array(1 downto 0) of natural;
-    type sensor_limit_array is array(natural range <>) of sensor_limit;
-    
-    constant lim_x_sensors  :   sensor_limit_array(vsens_x-1 downto 0) :=
-        (
-            0 => (1,0),
-            1 => (1,0),
-            2 => (1,0),
-            3 => (1,0),
-            4 => (1,0)
-        );
-    constant lim_z_sensors  :   sensor_limit_array(vsens_z-1 downto 0) :=
-        (
-            0 => (1,0),
-            1 => (1,0),
-            2 => (1,0),
-            3 => (1,0),
-            4 => (1,0)
-        );
-    --Data buffers
-    signal enc_x_a_buff     :   std_logic_vector(1 downto 0);
-    signal enc_x_b_buff     :   std_logic;
-    signal enc_z_a_buff     :   std_logic_vector(1 downto 0);
-    signal enc_z_b_buff     :   std_logic;
-    --Counters
-    signal enc_x_counter    :   integer range 0 to 2**16 := 0;
-    signal enc_z_counter    :   integer range 0 to 2**16 := 0;
-    --Sensor signals
-    signal sensors          :   std_logic_vector(20 downto 0);
+    --Memory
+    constant memory_length  :   natural := getMemoryLength(24);
+    constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
+    signal reg_data         :   data_word_vector(memory_length-1 downto 0); 
+    --Sensor buffer
+    signal sensor_buff      :   std_logic_vector(23 downto 0);
+    signal virtual_x_rst    :   std_logic;
+    signal virtual_z_rst    :   std_logic;
 
 
 begin
 
-    --****X AXIS VIRTUAL SENSORS****
+    --****LIMIT SENSORS****
     -----------------------------------------------------------------------------------------------
-    X_DECODER : process(clk)
-    begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                enc_x_counter <= 0;
-            else
-                --Buffer signals to detect rising and falling
-                enc_x_a_buff <= enc_x_a_buff(0) & enc_x_a.dat;
-                enc_x_b_buff <= enc_x_b.dat;
-
-                case enc_x_a_buff is
-                    when "01" =>
-                        if(enc_x_b_buff = '1' and ENC_X_INVERT = false) then
-                            enc_x_counter <= enc_x_counter + 1;
-                        elsif(enc_x_b_buff = '1' and ENC_X_INVERT = true) then
-                            enc_x_counter <= enc_x_counter - 1;
-                        elsif(enc_x_b_buff = '0' and ENC_X_INVERT = false) then
-                            enc_x_counter <= enc_x_counter - 1;
-                        elsif(enc_x_b_buff = '0' and ENC_X_INVERT = true) then
-                            enc_x_counter <= enc_x_counter + 1;
-                        else null; 
-                        end if;
-                    
-                    when "10" =>
-                        if(enc_x_b_buff = '1' and ENC_X_INVERT = false) then
-                            enc_x_counter <= enc_x_counter - 1;
-                        elsif(enc_x_b_buff = '1' and ENC_X_INVERT = true) then
-                            enc_x_counter <= enc_x_counter + 1;
-                        elsif(enc_x_b_buff = '0' and ENC_X_INVERT = false) then
-                            enc_x_counter <= enc_x_counter + 1;
-                        elsif(enc_x_b_buff = '0' and ENC_X_INVERT = true) then
-                            enc_x_counter <= enc_x_counter - 1;
-                        else null;
-                        end if;
-                    
-                    when others => null;
-                end case;
-
-            end if;
-        end if;
-    end process;
-
-
-
-
+    sensor_buff(0) <= lim_x_neg.dat;
+    sensor_buff(1) <= lim_x_pos.dat;
+    sensor_buff(2) <= lim_y_neg.dat;
+    sensor_buff(3) <= lim_y_pos.dat;
+    sensor_buff(4) <= lim_z_neg.dat;
+    sensor_buff(5) <= lim_z_pos.dat;
+    sensor_buff(6) <= inductive.dat;
+    sensor_buff(7) <= '0';
     -----------------------------------------------------------------------------------------------
 
 
-end RTL;
+
+    --****VIRTUAL SENSORS X AXIS****
+    -----------------------------------------------------------------------------------------------
+    --Reset sensor array with normal reset and when sensor lim_x_neg is triggered
+    virtual_x_rst <= rst or lim_x_neg.dat;
+
+    X_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
+    generic map(
+        INVERT          => ENC_X_INVERT,
+        NUMBER_SENSORS  => 10,
+        SENSOR_LIMITS   => LIMIT_X_SENSORS
+    )
+    port map(
+        clk             => clk,
+        rst             => virtual_x_rst,
+        enc_channel_a   => enc_channel_x_a.dat,
+        enc_channel_b   => enc_channel_x_b.dat,
+        sensor_data_out => sensor_buff(17 downto 8)
+    );
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****VIRTUAL SENSORS Z AXIS****
+    -----------------------------------------------------------------------------------------------
+    --Reset sensor array with normal reset and when sensor lim_z_neg is triggered
+    virtual_z_rst <= rst or lim_z_neg.dat;
+    
+    Z_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
+    generic map(
+        INVERT          => ENC_Z_INVERT,
+        NUMBER_SENSORS  => 6,
+        SENSOR_LIMITS   => LIMIT_Z_SENSORS
+    )
+    port map(
+        clk             => clk,
+        rst             => virtual_z_rst,
+        enc_channel_a   => enc_channel_z_a.dat,
+        enc_channel_b   => enc_channel_z_b.dat,
+        sensor_data_out => sensor_buff(23 downto 18)
+    );
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    MEMORY : entity work.REGISTER_TABLE
+    generic map(
+        BASE_ADDRESS        => ADDRESS,
+        NUMBER_REGISTERS    => memory_length,
+        REG_DEFAULT_VALUES  => reg_default
+    )
+    port map(
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o,
+        data_in             => reg_data,
+        data_out            => open,
+        read_stb            => open,
+        write_stb           => open
+    );
+	
+	reg_data <= setMemory(sensor_buff);
+    -----------------------------------------------------------------------------------------------
+
+
+end RTL; 
