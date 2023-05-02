@@ -12,6 +12,7 @@
 -- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
 --                  -> GOLDI_DATA_TYPES.vhd
+--                  -> GOLDI_MODULE_CONFIG.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
@@ -29,6 +30,7 @@ library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
+use work.GOLDI_MODULE_CONFIG.all;
 
 
 
@@ -44,9 +46,10 @@ entity TOP_LEVEL is
         SPI0_MISO   : out   std_logic;
         SPI0_nCE0   : in    std_logic;
         --IO
-        IO_DATA     : inout std_logic_vector(15 downto 0)
+        IO_DATA     : inout std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
     );
 end entity TOP_LEVEL;
+
 
 
 
@@ -67,9 +70,21 @@ architecture RTL of TOP_LEVEL is
     --System Internal communications
     signal master_bus_o         :   mbus_out;
     signal master_bus_i   	    :   mbus_in;
+    signal sys_bus_i            :   sbus_in;
+    signal sys_bus_o            :   sbus_o_vector(9 downto 0) := (others => gnd_sbus_o);
+    --Control memory
+    constant reg_default_1      :   data_word_vector(0 downto 0) := (others => x"0F");
+    constant reg_default_2      :   data_word_vector(1 downto 0) := (others => x"F0");
+    constant reg_default_3      :   data_word_vector(2 downto 0) := (others => x"FF");
+    signal reg_data_1           :   data_word_vector(0 downto 0);
+    signal reg_data_2           :   data_word_vector(1 downto 0);
+    signal reg_data_3           :   data_word_vector(2 downto 0);
+    signal reg_data_1_buff      :   data_word_vector(0 downto 0);
+    signal reg_data_2_buff      :   data_word_vector(1 downto 0);
+    signal reg_data_3_buff      :   data_word_vector(2 downto 0);
     --Data interface
-    signal sys_io_i             :   io_i_vector(15 downto 0);
-    signal sys_io_o             :   io_o_vector(15 downto 0);
+    signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
 
 
 begin
@@ -79,7 +94,7 @@ begin
     --clk <= ClockFPGA;
     OSCInst0 : component machxo2.components.OSCH
     generic map(
-        NOM_FREQ => "44.33"
+        NOM_FREQ => "53.2"
     )
     port map(
         STDBY    => '0',
@@ -150,53 +165,104 @@ begin
 
 
 
+    --****INTERNAL COMMUNICATION MANAGEMENT****
+    -----------------------------------------------------------------------------------------------    
+    --Multiplexing of BUS
+    sys_bus_i <= master_bus_o;
+
+    BUS_MUX : process(clk)
+    begin
+        if(rising_edge(clk)) then
+            master_bus_i <= reduceBusVector(sys_bus_o);
+        end if;
+    end process;
+    -----------------------------------------------------------------------------------------------
+
+
+
+
     --****IO DATA MANAGEMENT****
     -----------------------------------------------------------------------------------------------
     FPGA_PIN_INTERFACE : entity work.TRIS_BUFFER_ARRAY
     generic map(
-        BUFF_NUMBER     => 16
+        BUFF_NUMBER     => PHYSICAL_PIN_NUMBER
     )
     port map(
         clk             => clk,
         rst             => rst,
-        port_out        => sys_io_o,
+        port_out        => external_io_o,
         port_in_async   => open,
-        port_in_sync    => sys_io_i,
+        port_in_sync    => external_io_i,
         io_vector       => IO_DATA
     );
+    external_io_o <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
 
 
 
 
-    --****DUT****
+    --****INCREMENTAL ENCODERS****
     -----------------------------------------------------------------------------------------------
-    STEPPER_DRIVER : entity work.TMC2660_DRIVER
+    TB_1 : entity work.REGISTER_TABLE
     generic map(
-        ADDRESS         => 1,
-        SD_FACTOR       => 1000,
-        SCLK_FACTOR     => 12,
-        TMC2660_CONFIG  => (x"FFF00",x"F00FF")
+        BASE_ADDRESS        => 1,
+        NUMBER_REGISTERS    => 1,
+        REG_DEFAULT_VALUES  => reg_default_1
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        clk_16MHz       => '0',
-        sys_bus_i       => master_bus_o,
-        sys_bus_o       => master_bus_i,
-        tmc2660_clk     => sys_io_o(0),
-        tmc2660_enn     => sys_io_o(1),
-        tmc2660_sg      => sys_io_i(2),
-        tmc2660_dir     => sys_io_o(8),
-        tmc2660_step    => sys_io_o(9),
-        tmc2660_sclk    => sys_io_o(10),
-        tmc2660_ncs     => sys_io_o(11),
-        tmc2660_mosi    => sys_io_o(12),
-        tmc2660_miso    => sys_io_i(13)
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(0),
+        data_in             => reg_data_1_buff,
+        data_out            => reg_data_1,
+        read_stb            => open,
+        write_stb           => open
     );
+    reg_data_1_buff(0) <= x"10" or reg_data_1(0);
 
-    sys_io_o(7 downto 2)   <= (others => gnd_io_o);
-    sys_io_o(15 downto 13) <= (others => gnd_io_o); 
+
+      
+    TB_2 : entity work.REGISTER_TABLE
+    generic map(
+        BASE_ADDRESS        => 2,
+        NUMBER_REGISTERS    => 2,
+        REG_DEFAULT_VALUES  => reg_default_2
+    )
+    port map(
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(1),
+        data_in             => reg_data_2_buff,
+        data_out            => reg_data_2,
+        read_stb            => open,
+        write_stb           => open
+    );
+    reg_data_2_buff(0) <= x"20" or reg_data_2(0);
+    reg_data_2_buff(1) <= x"30" or reg_data_2(1);
+
+
+
+    TB_3 : entity work.REGISTER_TABLE
+    generic map(
+        BASE_ADDRESS        => 4,
+        NUMBER_REGISTERS    => 3,
+        REG_DEFAULT_VALUES  => reg_default_3
+    )
+    port map(
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(2),
+        data_in             => reg_data_3_buff,
+        data_out            => reg_data_3,
+        read_stb            => open,
+        write_stb           => open
+    );
+    reg_data_3_buff(0) <= x"40" or reg_data_3(0);
+    reg_data_3_buff(1) <= x"50" or reg_data_3(1);
+    reg_data_3_buff(2) <= x"60" or reg_data_3(2);
     -----------------------------------------------------------------------------------------------
 
 
