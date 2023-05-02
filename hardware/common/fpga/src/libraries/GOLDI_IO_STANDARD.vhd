@@ -22,7 +22,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom configuration package
 
 
 
@@ -61,47 +60,18 @@ package GOLDI_IO_STANDARD is
 	function getIOOutData(io : io_o_vector) return std_logic_vector;
 	-----------------------------------------------------------------------------------------------
 
-
-
-	--****Experimental****
-	-----------------------------------------------------------------------------------------------
-	type std_io is record
-		input	:	io_i;
-		output	:	io_o;
-	end record;
-
-	type std_io_vector is array(natural range <>) of std_io;
-
-	
-	function getInVector(io : std_io_vector) return io_i_vector;
-	function getOutVector(io : std_io_vector) return io_o_vector;
-
-	function setInVector(sc : io_i_vector; tg : std_io_vector) return std_io_vector;
-	function setOutVector(sc : io_o_vector; tg : std_io_vector) return std_io_vector;
-	-----------------------------------------------------------------------------------------------
-
 end package GOLDI_IO_STANDARD;
+
 
 
 
 package body GOLDI_IO_STANDARD is
 
-	-- function outputStdLogic(data : std_logic; io : std_io) return std_io is
-	-- 	variable io_buff	:	std_io;
-	-- begin
-	-- 	io_buff.input.dat  := '0';
-	-- 	io_buff.output.enb := '1';
-	-- 	io_buff.output.dat := data;
-
-	-- 	return io_buff;
-  	-- end outputStdLogic;
-	
-
 
 	function getIOInData(io : io_i_vector) return std_logic_vector is
 		variable data	:	std_logic_vector(io'range);
 	begin
-		for i in 0 to io'length-1 loop
+		for i in io'range loop
 			data(i) := io(i).dat;
  		end loop;
 
@@ -113,64 +83,12 @@ package body GOLDI_IO_STANDARD is
 	function getIOOutData(io : io_o_vector) return std_logic_vector is
 		variable data	:	std_logic_vector(io'range);
 	begin
-		for i in 0 to io'length-1 loop
+		for i in io'range loop
 			data(i) := io(i).dat;
 		end loop;
 
 		return data;
   	end getIOOutData;
-	
-
-	
-	function getInVector(io : std_io_vector) return io_i_vector is
-		variable io_vector 	:	io_i_vector(io'range);
-	begin
-		for i in 0 to io'length-1 loop
-			io_vector(i) := io(i).input;
-		end loop;
-
-		return io_vector;
-	end getInVector;
 
 
-	
-	function getOutVector(io : std_io_vector) return io_o_vector is
-		variable io_vector	:	io_o_vector(io'range);
-  	begin
-		for i in 0 to io'length-1 loop
-			io_vector(i) := io(i).output;
-		end loop;
-		
-		return io_vector;
-	end getOutVector;
-
-
-	 
-	function setInVector(sc : io_i_vector; tg : std_io_vector) return std_io_vector is
-		variable io_vector	:	std_io_vector(tg'range);
- 	begin
-		assert(sc'length = tg'length) report "Unequal vector ranges" severity error;
-		for i in 0 to tg'length loop
-			io_vector(i).input  := sc(i);
-			io_vector(i).output := tg(i).output; 
-		end loop;
-
-		return io_vector;
-	end setInVector;
-
-
-	
-	function setOutVector(sc : io_o_vector; tg : std_io_vector) return std_io_vector is
-		variable io_vector	:	std_io_vector(tg'range);
- 	begin
-		assert(sc'length = tg'length) report "Unequal vector ranges" severity error;
-		for i in 0 to tg'length loop
-			io_vector(i).input  := tg(i).input;
-			io_vector(i).output := sc(i); 
-		end loop;
-
-		return io_vector;
-	end setOutVector;
-
-	
 end package body GOLDI_IO_STANDARD;

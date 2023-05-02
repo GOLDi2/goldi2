@@ -17,6 +17,10 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V2.00.00 - Defualt module version for release 2.00.00
+-- Additional Comments: Release of Highbay-Warehouse. Correction of
+--                      slice ranges
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -33,18 +37,18 @@ package GOLDI_COMM_STANDARD is
 	--Address width sets the protocol for SPI communication and the number of possible registers
     --SPI communication protocol takes first bit of the configuration byte's for write enable
     --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
-    constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 63 := 7;
+    constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 31 := 7;
 
     --Main parameter of the system. Sets the width of data words 
-	constant SYSTEM_DATA_WIDTH	    :	natural range 8 to 64 := 8;
+	constant SYSTEM_DATA_WIDTH	    :	natural range 8 to 32 := 8;
     -----------------------------------------------------------------------------------------------
 
 
 
     --****SYSTEM DATA VECTORS****
     -----------------------------------------------------------------------------------------------
-    subtype address_word is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
-    subtype data_word is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+    subtype address_word  is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
+    subtype data_word     is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
     
     type data_word_vector is array(natural range <>) of data_word;
     -----------------------------------------------------------------------------------------------
@@ -66,7 +70,7 @@ package GOLDI_COMM_STANDARD is
     end record;
 
     --Slave interface structures
-    alias sbus_in is mbus_out;
+    alias sbus_in  is mbus_out;
     alias sbus_out is mbus_in;
 
     --Vectors
@@ -113,34 +117,37 @@ package GOLDI_COMM_STANDARD is
     function getMemoryLength(vector_length : natural) return natural;
     function setMemory(data_vector : std_logic_vector) return data_word_vector;
     function getMemory(data_vector : data_word_vector) return std_logic_vector;
+    function invertIndex(data_vector : std_logic_vector) return std_logic_vector;
     --Simulation functions
-    function readBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out;
-    function readBus(adr : natural; dat : natural) return mbus_out;
+    function readBus(adr : std_logic_vector) return mbus_out;
+    function readBus(adr : natural) return mbus_out;
     function writeBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out;
     function writeBus(adr : natural; dat : natural) return mbus_out;
     -----------------------------------------------------------------------------------------------
 
 
-end package;
+end package GOLDI_COMM_STANDARD;
 
 
 
 
 package body GOLDI_COMM_STANDARD is
 
+    --****SYNTHESIS FUNCTIONS****
+    -----------------------------------------------------------------------------------------------
     -- Returns a sbus_out structure corresponding to the addressed register.
 	-- Used in synthesis to generate multiplexer for multiple register tables.
     function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
-        variable index  :   natural;
     begin
-        for i in 0 to bus_vector'length-1 loop
+        for i in bus_vector'range loop
             if(bus_vector(i).val = '1') then
-                index := i;
+                return bus_vector(i);
             end if;
         end loop;
 
-        return bus_vector(index);
+        return gnd_sbus_o;
     end function;
+
 
 
     -- Returns the minimum number of registers needed to save a vector of  a given 
@@ -160,24 +167,35 @@ package body GOLDI_COMM_STANDARD is
     end function;
 
 
+
     -- Returns a data_word_vector corresponding to the minimum number
 	-- of register to save "data". The index 0 of the logic_vector is taken
 	-- as the lowest index of the register 0 and "data" is assigned in ascending
 	-- order.
     function setMemory(data_vector : std_logic_vector) return data_word_vector is
-        variable memory_length  :   natural := getMemoryLength(data_vector'length);
-        variable memory         :   data_word_vector(memory_length-1 downto 0);
-        variable vector_buff    :   std_logic_vector((memory_length*SYSTEM_DATA_WIDTH)-1 downto 0);
+        variable memory         :   data_word_vector(getMemoryLength(data_vector'length)-1 downto 0);
+        variable data_buff      :   std_logic_vector((getMemoryLength(data_vector'length)*SYSTEM_DATA_WIDTH)-1 downto 0);
     begin
-        vector_buff := (others => '0');
-        vector_buff(data_vector'range) := data_vector;
+        --Ground unused bits
+        if(data_buff'high /= data_vector'high) then
+            data_buff(data_buff'high downto data_vector'high+1) := (others => '0');
+        end if;
 
-        for i in 0 to memory_length-1 loop
-            memory(i) := vector_buff(((i+1)*SYSTEM_DATA_WIDTH)-1 downto (i*SYSTEM_DATA_WIDTH));
+        --Format data to "downto" standard
+        if(data_vector'ascending = true) then
+            data_buff(data_vector'reverse_range) := invertIndex(data_vector);
+        else
+            data_buff(data_vector'range) := data_vector;
+        end if;
+
+        --Assign to data word vector
+        for i in memory'range loop
+            memory(i) := data_buff(((i+1)*SYSTEM_DATA_WIDTH)-1 downto (i*SYSTEM_DATA_WIDTH));
         end loop;
 
         return memory;
     end function;
+
 
 
     -- Function converts a subset of registers into a std_logic_vector
@@ -185,7 +203,7 @@ package body GOLDI_COMM_STANDARD is
     function getMemory(data_vector : data_word_vector) return std_logic_vector is
 		variable vector : std_logic_vector((data_vector'length*SYSTEM_DATA_WIDTH)-1 downto 0);
   	begin
-		for i in 0 to data_vector'length-1 loop
+		for i in data_vector'range loop
 			vector((SYSTEM_DATA_WIDTH*(i+1))-1 downto SYSTEM_DATA_WIDTH*i) := data_vector(i);
 		end loop;
 
@@ -193,39 +211,91 @@ package body GOLDI_COMM_STANDARD is
 	end function;
 
 
+
+    -- Function used to invert the index of a std_logic_vector in case of
+    -- "to" use instead of standard "downto"
+    function invertIndex(data_vector : std_logic_vector) return std_logic_vector is
+        variable data_buff : std_logic_vector(data_vector'reverse_range);
+    begin
+        for i in data_vector'range loop
+            data_buff(i) := data_vector((data_vector'length-1) - i);
+        end loop;
+
+        return data_buff;
+    end function;  
+    -----------------------------------------------------------------------------------------------
+
+
+
+
+    --****SIMULATION FUNCTIONS****
+    -----------------------------------------------------------------------------------------------
     -- Function used for simulation. Converts std_logic_vector into 
     -- master bus input configured for read operation
-    function readBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out is
-        variable sys_bus : mbus_out;
+    function readBus(adr : std_logic_vector) return mbus_out is
+        variable adr_buff   :   std_logic_vector(adr'length-1 downto 0);
+        variable sys_bus    :   mbus_out;
+    
     begin
+        --Normalize address to "downto" convention
+        if(adr'ascending = true) then
+            adr_buff := invertIndex(adr);
+        else
+            adr_buff := adr;
+        end if;
+
+        --Read bus configuration
         sys_bus.we  := '0';
-        sys_bus.adr := adr(1 to BUS_ADDRESS_WIDTH);
-        sys_bus.dat := dat(0 to SYSTEM_DATA_WIDTH-1);
+        sys_bus.adr := adr_buff(BUS_ADDRESS_WIDTH-1 downto 0);
+        sys_bus.dat := (others => '0');
+        
         return sys_bus;
     end function;
 
+
+
     -- Function used for simulation. Converts natural integer into 
     -- master bus input configured for read operation
-    function readBus(adr : natural; dat : natural) return mbus_out is
+    function readBus(adr : natural) return mbus_out is
         variable sys_bus : mbus_out;
     begin
         sys_bus.we  := '0';
         sys_bus.adr := std_logic_vector(to_unsigned(adr,BUS_ADDRESS_WIDTH));
-        sys_bus.dat := std_logic_vector(to_unsigned(dat,SYSTEM_DATA_WIDTH));
+        sys_bus.dat := (others => '0');
         return sys_bus;
     end function;
+
 
 
     -- Function used for simulation. Converts std_logic_vector into 
     -- master bus input configured for read operation
     function writeBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out is
-        variable sys_bus : mbus_out;
+        variable adr_buff   :   std_logic_vector(adr'high downto adr'low);
+        variable dat_buff   :   std_logic_vector(dat'high downto dat'low);
+        variable sys_bus    :   mbus_out;
     begin
+        --Normalize address to "downto" convention
+        if(adr'ascending = false) then
+            adr_buff := invertIndex(adr);
+        else 
+            adr_buff := adr;
+        end if;
+
+        --Nomalize data to "downto" convention
+        if(dat'ascending = true) then
+            dat_buff := invertIndex(dat);
+        else
+            dat_buff := dat;
+        end if;
+
+        --Write bus
         sys_bus.we  := '1';
-        sys_bus.adr := adr(1 to BUS_ADDRESS_WIDTH);
-        sys_bus.dat := dat(0 to SYSTEM_DATA_WIDTH-1);
+        sys_bus.adr := adr_buff(BUS_ADDRESS_WIDTH-1 downto 0);
+        sys_bus.dat := dat_buff(SYSTEM_DATA_WIDTH-1 downto 0);
+        
         return sys_bus;
     end function;
+
 
 
     -- Function used for simulation. Converts natural integer into 
@@ -237,7 +307,8 @@ package body GOLDI_COMM_STANDARD is
         sys_bus.adr := std_logic_vector(to_unsigned(adr,BUS_ADDRESS_WIDTH));
         sys_bus.dat := std_logic_vector(to_unsigned(dat,SYSTEM_DATA_WIDTH));
         return sys_bus;
-    end function;
-
-
+    end function;    
+    -----------------------------------------------------------------------------------------------  
+ 
+ 
 end package body GOLDI_COMM_STANDARD;

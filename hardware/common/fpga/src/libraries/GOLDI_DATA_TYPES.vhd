@@ -37,7 +37,7 @@ package GOLDI_DATA_TYPES is
 
     --****VIRTUAL SENSOR ARRAY LIMITS****
     -----------------------------------------------------------------------------------------------
-    type sensor_limit is array(0 to 1) of integer;
+    type sensor_limit is array(1 downto 0) of integer;
     type sensor_limit_array is array(natural range <>) of sensor_limit;
     -----------------------------------------------------------------------------------------------
 
