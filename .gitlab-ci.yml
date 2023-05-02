@@ -10,7 +10,8 @@ default:
     - sudo chown -R $(whoami) .
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
     - mkdir -p ./helper/goldi-development-container/licenses && cp "$LATTICE_LICENSE" ./helper/goldi-development-container/licenses/lattice.dat
-  rules:
+
+.default_rules:
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG==null'
       variables:
         PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
@@ -25,7 +26,7 @@ default:
 build-environment:
   image: goldi-devcontainer:build
   rules:
-    - !reference [default, rules]
+    - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
       when: always
   stage: build-environment
@@ -36,7 +37,7 @@ build-environment:
 build:
   image: goldi-devcontainer:build
   rules:
-    - !reference [default, rules]
+    - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
       when: never
   stage: build
@@ -46,7 +47,7 @@ build:
 build-daily:
   image: goldi-devcontainer:build
   rules:
-    - !reference [default, rules]
+    - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
       when: always
   stage: build
