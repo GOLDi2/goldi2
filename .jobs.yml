@@ -59,9 +59,19 @@ hardware/boards/axis_portal_v1/crosslab:
       - hardware/boards/axis_portal_v1/crosslab:build
 
 hardware/os:
-  - script: build -v axis_portal_v1
+  - script: build_axis_portal_v1
     dependencies:
       - hardware/common/config-interface:build
       - hardware/common/spi-driver:build
       - hardware/boards/axis_portal_v1/fpga:build
       - hardware/boards/axis_portal_v1/crosslab:build
+    tags:
+      - firmware
+  - script: build_warehouse
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/warehouse/fpga:build
+      - hardware/boards/warehouse/crosslab:build
+    tags:
+      - firmware

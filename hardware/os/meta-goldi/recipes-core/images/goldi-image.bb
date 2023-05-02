@@ -1,8 +1,10 @@
 SUMMARY = "GOLDi production image"
-
 LICENSE = "MIT"
+export IMAGE_BASENAME = "${MACHINE_VARIANT}"
 
-IMAGE_FEATURES = " read-only-rootfs"
+MULTIMACH_TARGET_SYS = "${MACHINE_VARIANT}-${PACKAGE_ARCH}${TARGET_VENDOR}-${TARGET_OS}"
+
+IMAGE_FEATURES = "ssh-server-dropbear read-only-rootfs"
 
 IMAGE_INSTALL:append = " fpga-firmware goldi-crosslab-service"
 
