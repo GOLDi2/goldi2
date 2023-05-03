@@ -3,7 +3,7 @@ header:
   includes:
    - ./local.yml
 local_conf_header:
-  standard: |
+  bb: |
     BB_SIGNATURE_HANDLER = "OEBasicHash"
     BB_HASHSERVE = ""
 machine: goldi1
