@@ -78,12 +78,14 @@ RUN apt-get update \
         sshpass pv
 
 # install ghdl
-git clone https://github.com/ghdl/ghdl.git
-cd ghdl
-sudo apt install gnat
-./configure --prefix=/usr/local
-make
-make install
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y gnat
+    && git clone https://github.com/ghdl/ghdl.git /tmp/ghdl \
+    && cd /tmp/ghdl \
+    && ./configure --prefix=/usr/local \
+    && make \
+    && make install \
+    && rm -rf /tmp/ghdl
 
 RUN mv /entrypoint.sh /crosslab-entrypoint.sh
 COPY container-scripts/entrypoint.sh /
