@@ -50,7 +50,7 @@ architecture RTL of PWM_GENERATOR_TB is
     component PWM_GENERATOR
         generic(
             ADDRESS         :   natural := 1;
-            PWM_FREQUNCY    :   natural := 377
+            PWM_FREQUENCY   :   natural := 377
         );
         port(
             clk             : in    std_logic;
@@ -79,7 +79,7 @@ begin
     DUT : PWM_GENERATOR
     generic map(
         ADDRESS         => 1,
-        PWM_FREQUNCY    => 1
+        PWM_FREQUENCY   => 1
     )
     port map(
         clk             => clock,

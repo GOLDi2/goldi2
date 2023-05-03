@@ -16,10 +16,6 @@
         "axis_portal_v1/fpga/build": true,
         "axis_portal_v2/.vscode": true,
         "axis_portal_v2/fpga/build": true,
-        "io-board/.vscode": true,
-        "template/.vscode": true,
-        "thk/.vscode": true,
-        "three-axes-portal-v1/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {

@@ -113,6 +113,7 @@ END COMPONENT;
    attribute syn_black_box of BB : Component is true;
    attribute black_box_pad_pin of bb : component is "b";
 --
+
 COMPONENT BBPD
 PORT(
         B:  INOUT std_logic := 'X';
