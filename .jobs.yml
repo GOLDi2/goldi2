@@ -62,9 +62,9 @@ hardware/boards/axis_portal_v1/crosslab:
     dependencies:
       - hardware/boards/axis_portal_v1/crosslab:build
 
-hardware/boards/axis_portal_v2/fpga:
-  - script: build
-  #- script: test
+#hardware/boards/axis_portal_v2/fpga:
+#  - script: build
+#  - script: test
 
 hardware/os:
   - script: build_axis_portal_v1
