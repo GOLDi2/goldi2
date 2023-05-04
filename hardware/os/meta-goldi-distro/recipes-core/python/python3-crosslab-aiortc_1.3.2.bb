@@ -2,7 +2,7 @@
 SUMMARY = "An implementation of WebRTC and ORTC"
 HOMEPAGE = "https://github.com/aiortc/aiortc"
 AUTHOR = "Jeremy Lainé <jeremy.laine@m4x.org>"
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=907b5e856b2e6bcd8a3cc8d338a6166f"
 
 SRC_URI = "https://files.pythonhosted.org/packages/3b/01/358818acabe9c0ae6ac6d4643200a8b2129b029e66ee94b4cd1be51d9d2e/crosslab-aiortc-1.3.2.tar.gz"

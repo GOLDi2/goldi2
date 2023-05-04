@@ -5,18 +5,20 @@ import spidev
 
 
 class SpiRegisters:
-    _registers_buffer: bytearray
-    _register_on_change_callbacks: List[List[Callable[["SpiRegisters"], None]]]
+    _read_buffer: bytearray
+    _write_buffer: bytearray
     _register_read_addresses: Set[int]
     _register_write_addresses: Set[int]
+    _register_on_change_callbacks: List[List[Callable[["SpiRegisters"], None]]]
 
     def __init__(self):
         self.spi = spidev.SpiDev()
         self.spi.open(0, 0)
         self.spi.max_speed_hz = 5000000
 
-        self._register_on_change_callbacks = [[] for _ in range(256)]
-        self._registers_buffer = bytearray(256)
+        self._register_on_change_callbacks = [[] for _ in range(128)]
+        self._read_buffer = bytearray(128)
+        self._write_buffer = bytearray(128)
         self._register_read_addresses = set()
         self._register_write_addresses = set()
 
@@ -30,10 +32,20 @@ class SpiRegisters:
         self._register_read_addresses.add(register_address)
 
     def __getitem__(self, key: int):
-        return self._registers_buffer[key]
+        return self._read_buffer[key]
+
+    def getBit(self, key: int, bit: int) -> bool:
+        return self._read_buffer[key] & (1 << bit) != 0
 
     def __setitem__(self, key: int, value: int):
-        self._registers_buffer[key] = value
+        self._register_write_addresses.add(key)
+        self._write_buffer[key] = value
+
+    def setBit(self, key: int, bit: int, value: bool):
+        if value:
+            self._write_buffer[key] |= 1 << bit
+        else:
+            self._write_buffer[key] &= ~(1 << bit)
         self._register_write_addresses.add(key)
 
     async def communicate_coroutine(self):
@@ -42,32 +54,18 @@ class SpiRegisters:
             await asyncio.sleep(0.05)
 
     def communicate(self):
-        addresses = list(
-            set.union(self._register_read_addresses, self._register_write_addresses)
-        )
-        addresses.sort(reverse=True)
+        for address in self._register_write_addresses:
+            self.spi.xfer2([128 + address, self._write_buffer[address]])
+        self._register_write_addresses.clear()
 
-        new_registers = bytearray(self._registers_buffer)
-
-        while len(addresses) > 0:
-            lower_address = addresses.pop()
-            # Look ahead for contiguous addresses
-            higher_address = lower_address + 1
-            while len(addresses) > 0 and addresses[-1] == higher_address:
-                addresses.pop()
-                higher_address += 1
-
-            new_registers[lower_address:higher_address] = self.spi.xfer2(
-                [
-                    lower_address,
-                    *self._registers_buffer[lower_address:higher_address],
-                ]
-            )[1:]
+        new_registers = bytearray(self._read_buffer)
+        for address in self._register_read_addresses:
+            new_registers[address] = self.spi.xfer2([address, 0])[1]
 
         # check for changes between new_registers and self._registers_buffer
-        changes = [a != b for a, b in zip(new_registers, self._registers_buffer)]
+        changes = [a != b for a, b in zip(new_registers, self._read_buffer)]
 
-        self._registers_buffer = new_registers
+        self._read_buffer = new_registers
 
         change_listeners = set()
         for address, changed in enumerate(changes):

@@ -40,6 +40,8 @@ if [ "$CLEAN" = true ] ; then
   set -e
 fi
 
+MACHINE=goldi1
+
 if [ "$WORLD" = true ] ; then
   kas shell $VARIANT.yml -c "\
     bitbake -k -c build world \
@@ -52,9 +54,5 @@ else
 fi
 
 mkdir -p ./dist
-cp $(ls ./build/tmp/deploy/images/*/goldi-dev-update-bundle*.*raucb | sort | head -n1) ./dist/goldi-dev-update-bundle.raucb
-cp $(ls ./build/tmp/deploy/images/*/goldi-update-bundle*.*raucb | sort | head -n1) ./dist/goldi-update-bundle.raucb
-cp $(ls ./build/tmp/deploy/images/*/goldi-dev-image*.*wic.bz2 | sort | head -n1) ./dist/goldi-dev-image.wic.bz2
-cp $(ls ./build/tmp/deploy/images/*/goldi-dev-image*.*wic.bmap | sort | head -n1) ./dist/goldi-dev-image.wic.bmap 
-cp $(ls ./build/tmp/deploy/images/*/goldi-image*.*wic.bmap | sort | head -n1) ./dist/goldi-image.wic.bz2
-cp $(ls ./build/tmp/deploy/images/*/goldi-image*.*wic.bz2 | sort | head -n1) ./dist/goldi-image.wic.bmap 
+shopt -s extglob
+cp $(ls ./build/tmp/deploy/images/$MACHINE/$VARIANT-?(dev-)$MACHINE@(.raucb|.wic*) | sort) ./dist/

@@ -12,4 +12,4 @@ S = "${WORKDIR}/spi_driver-0.0.1"
 
 RDEPENDS:${PN} = "python3-spidev python3-pyee"
 
-inherit setuptools3
+inherit python_setuptools_build_meta

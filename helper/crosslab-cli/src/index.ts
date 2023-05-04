@@ -5,6 +5,7 @@ import { Option, program } from 'commander';
 import { device } from './commands/device';
 import { experiment } from './commands/experiment';
 import { login } from './commands/login';
+import { user } from './commands/user';
 
 program
     .description('CLI to interact with CrossLab')
@@ -15,7 +16,8 @@ program
 
 login(program, getClient);
 device(program, getClient);
-experiment(program, getClient)
+experiment(program, getClient);
+user(program, getClient);
 
 
 

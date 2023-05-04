@@ -7,5 +7,5 @@ meta-rauc
 meta-rauc-community
 poky
 local.yml
-*.board.sh
+boards.yml
 *.pem

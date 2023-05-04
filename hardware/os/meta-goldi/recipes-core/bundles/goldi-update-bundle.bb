@@ -1,2 +1,7 @@
+BUNDLE_BASENAME = "${MACHINE_VARIANT}"
+
+MULTIMACH_TARGET_SYS = "${MACHINE_VARIANT}-${PACKAGE_ARCH}${TARGET_VENDOR}-${TARGET_OS}"
+
 RAUC_SLOT_rootfs = "goldi-image"
+RAUC_SLOT_rootfs[file] = "${MACHINE_VARIANT}-${MACHINE}.ext4"
 include update-bundle.inc

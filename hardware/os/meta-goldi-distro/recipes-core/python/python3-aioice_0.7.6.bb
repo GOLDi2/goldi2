@@ -2,7 +2,7 @@
 SUMMARY = "An implementation of Interactive Connectivity Establishment (RFC 5245)"
 HOMEPAGE = "https://github.com/aiortc/aioice"
 AUTHOR = "Jeremy Lainé <jeremy.laine@m4x.org>"
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f51a4013af37fa3764314e9b051513fd"
 
 SRC_URI = "https://files.pythonhosted.org/packages/2e/fa/08cd290724dd5b892fabc81684910b0f3f4c14d6abd80b24f248cfc7efdb/aioice-0.7.6.tar.gz"

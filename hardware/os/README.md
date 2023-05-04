@@ -44,3 +44,10 @@ To generate a signing key follow these steps:
     ```
 
 4. let the certificate request be signed
+
+
+# GStreamer Pipelines
+
+```
+gst-launch-1.0 udpsrc port=1234 caps="application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96" ! rtph264depay ! queue ! vaapih264dec ! queue ! videoconvert ! autovideosink
+```

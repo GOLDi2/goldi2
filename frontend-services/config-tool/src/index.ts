@@ -11,7 +11,7 @@ const stylesheet = unsafeCSS(style);
 
 import './plugablejs/viewport';
 import { ConfigPane } from './esp-config-pane';
-import { mc, nak, three_axes_portal, three_axes_portal_io, three_axes_portal_mc } from './predefined';
+import { nak, three_axes_portal, three_axes_portal_io_lte, three_axes_portal_io_old } from './predefined';
 import { DeviceServiceTypes, ExperimentServiceTypes } from '@cross-lab-project/api-client';
 
 @customElement('esp-app')
@@ -61,13 +61,11 @@ export class App extends LitElement {
 
   render() {
     return html`
-        <div class="flex flex-col w-full items-center h-[100vh]">
+        <div class="flex flex-col w-full items-center h-full">
             <p class="text-2xl">Example Experiment Configurations</p>
             <div class="flex">
-                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(three_axes_portal, null, 2)}}>3 Achs Portal</button>
-                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(three_axes_portal_mc, null, 2)}}>3 Achs Portal + Microcontroller</button>
-                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(three_axes_portal_io, null, 2)}}>3 Achs Portal + IO Board</button>
-                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(mc, null, 2)}}>Microcontroller</button>
+                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(three_axes_portal_io_old, null, 2)}}>3 Achs Portal + IO Board (alt)</button>
+                <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(three_axes_portal_io_lte, null, 2)}}>3 Achs Portal + IO Board (lte)</button>
                 <button class="m-2 p-4 bg-primary-900 text-white" @click=${()=>{this.experimentConfigInput.value=JSON.stringify(nak, null, 2)}}>NAK Robot</button>
             </div>
             <label for="experiment-config" class="text-2xl">Experiment Configuration</label>

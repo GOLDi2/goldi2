@@ -12,11 +12,11 @@ S = "${WORKDIR}"
 
 do_compile:prepend() {
     cd ${S}
-    mv crosslab_api_client* crosslab_api_client
+    mv crosslab_api_client-* crosslab_api_client
 }
 
-DISTUTILS_SETUP_PATH = "${WORKDIR}/crosslab_api_client"
+PEP517_SOURCE_PATH = "${WORKDIR}/crosslab_api_client"
 
-RDEPENDS:${PN} = "python3-aiohttp python3-dateutil"
+RDEPENDS:${PN} = "python3-aiohttp python3-dateutil python3-typing-extensions"
 
-inherit setuptools3
+inherit python_setuptools_build_meta

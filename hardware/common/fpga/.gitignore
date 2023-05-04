@@ -1,1 +1,3 @@
 .ghdl
+*.ghw
+dist

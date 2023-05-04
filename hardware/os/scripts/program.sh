@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/bin/bash
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+cd $SCRIPT_DIR/..
+
+. $SCRIPT_DIR/select_board.sh
+
+
 for i in $(seq 1 5); do
     devices=$(find /dev/disk/by-id -name "usb-RPi-*")
     # if there are no devices
@@ -20,14 +27,13 @@ device=$(realpath $(echo "$devices" | sort -n | head -n1))
 
 echo "Found device $device"
 
-sudo bmaptool copy ./dist/goldi-dev-image.wic.bz2 $device
+sudo bmaptool copy ./dist/old-goldi-dev-image.wic.bz2 $device
 
-exit 0
 mkdir tmp
-mount /dev/sda1 ./tmp
+sudo mount ${device}1 ./tmp
 #pwgen | tee password 
-echo $PASSWORD | openssl passwd -6 -stdin > ./tmp/password
-echo $VPN_CONFIG > ./tmp/vpn-config
+sudo sh -c "echo $PASSWORD | openssl passwd -6 -stdin > ./tmp/password"
+sudo sh -c "echo $VPN_CONFIG > ./tmp/vpn-config"
 sleep 5
-umount ./tmp
-rm -R ./tmp
+sudo umount ./tmp
+sudo rm -R ./tmp

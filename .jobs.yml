@@ -2,212 +2,12 @@
 # Build Development Container ##################################################
 ################################################################################
 
-helper/crosslab-development-container:
-  - script: build -t crosslab-development-container:latest
-
-#helper/goldi-development-container:
-#  - script: build
-#    dependencies:
-#      - helper/crosslab-development-container:build
-
-
-################################################################################
-# Helper #######################################################################
-################################################################################
-
-helper/tsdoc-theme:
-  - script: build
-
-helper/openapi-codegeneration:
-  - script: build
-
-helper/crosslab-typescript-addon:
+helper/goldi-development-container:
   - script: build
     dependencies:
-      - helper/openapi-codegeneration:build
-
-
-################################################################################
-# Backend ######################################################################
-################################################################################
-
-backend-services/common:
-  - script: build
-
-backend-services/auth:
-  - script: build-spec
-    paths:
-      - ./api
-  - script: lint
-    dependencies:
-      - backend-services/auth:build-spec
-  - script: build
-    dependencies:
-      - backend-services/auth:build-spec
-      - backend-services/common:build
-      - helper/crosslab-typescript-addon:build
-      - helper/openapi-codegeneration:build
-      - clients/api/js:build
-
-backend-services/booking:
-  - script: build-spec
-  - script: lint
-    dependencies:
-      - backend-services/booking:build-spec
-
-backend-services/device:
-  - script: build-spec
-    paths:
-      - ./api
-  - script: lint
-    dependencies:
-      - backend-services/device:build-spec
-  - script: build
-    dependencies:
-      - backend-services/device:build-spec
-      - backend-services/common:build
-      - helper/crosslab-typescript-addon:build
-      - helper/openapi-codegeneration:build
-      - clients/api/js:build
-
-backend-services/experiment:
-  - script: build-spec
-    paths:
-      - ./api
-  - script: lint
-    dependencies:
-      - backend-services/experiment:build-spec
-  - script: build
-    dependencies:
-      - backend-services/experiment:build-spec
-      - backend-services/common:build
-      - helper/crosslab-typescript-addon:build
-      - helper/openapi-codegeneration:build
-      - clients/api/js:build
-
-backend-services/federation:
-  - script: build-spec
-    paths:
-      - ./api
-  - script: lint
-    dependencies:
-      - backend-services/federation:build-spec
-  - script: build
-    dependencies:
-      - backend-services/federation:build-spec
-      - backend-services/common:build
-      - helper/crosslab-typescript-addon:build
-      - helper/openapi-codegeneration:build
-      - clients/api/js:build
-
-backend-services/update:
-  - script: build-spec
-    paths:
-      - ./api
-  - script: lint
-    dependencies:
-      - backend-services/update:build-spec
-  - script: build
-    dependencies:
-      - backend-services/update:build-spec
-      - backend-services/common:build
-      - helper/crosslab-typescript-addon:build
-      - helper/openapi-codegeneration:build
-      - clients/api/js:build
-
-
-backend-services/openapi:
-  - script: build-spec
-    dependencies: 
-      - backend-services/auth:build-spec
-      - backend-services/booking:build-spec
-      - backend-services/device:build-spec
-      - backend-services/experiment:build-spec
-      - backend-services/federation:build-spec
-      - backend-services/update:build-spec
-  - script: lint
-    dependencies:
-      - backend-services/openapi:build-spec
-
-backend-services/gateway:
-  - script: build
-
-
-################################################################################
-# Clients ######################################################################
-################################################################################
-
-clients/api/js:
-  - script: build
-    dependencies:
-      - backend-services/auth:build-spec
-      - backend-services/booking:build-spec
-      - backend-services/device:build-spec
-      - backend-services/experiment:build-spec
-      - backend-services/federation:build-spec
-      - backend-services/update:build-spec
-      - helper/crosslab-typescript-addon:build
-      - helper/tsdoc-theme:build
-      - helper/openapi-codegeneration:build
-
-clients/api/python:
-  - script: build
-    dependencies:
-      - backend-services/openapi:build-spec
-      - helper/openapi-codegeneration:build
-  - script: lint
-    dependencies:
-      - clients/api/python:build
-  - script: test
-    dependencies:
-      - clients/api/python:build
-
-clients/soa/python:
-  - script: build
-    dependencies:
-      - backend-services/openapi:build-spec
-      - helper/openapi-codegeneration:build
-      - clients/api/python:build
-  - script: lint
-    dependencies:
-      - clients/soa/python:build
-  - script: test
-    dependencies:
-      - clients/soa/python:build
-
-clients/soa/js:
-  - script: build
-
-
-# SOA Service ##################################################################
-
-clients/soa_services/electricalConnection/python:
-  - script: build
-    dependencies:
-      - helper/openapi-codegeneration:build
-      - clients/api/python:build
-      - clients/soa/python:build
-  - script: lint
-    dependencies:
-      - clients/soa_services/electricalConnection/python:build
-  - script: test
-    dependencies:
-      - clients/soa_services/electricalConnection/python:build
-
-clients/soa_services/electricalConnection/js:
-  - script: build
-    dependencies:
-      - clients/soa/js:build
-
-clients/soa_services/webcam/js:
-  - script: build
-    dependencies:
-      - clients/soa/js:build
-
-clients/soa_services/file/js:
-  - script: build
-    dependencies:
-      - clients/soa/js:build
+      - crosslab/helper/development-container:build
+    tags:
+      - environment
 
 ################################################################################
 # Frontend Services ############################################################
@@ -216,13 +16,70 @@ clients/soa_services/file/js:
 frontend-services/config-tool:
   - script: build
     dependencies:
-      - clients/api/js:build
+      - crosslab/clients/api/js:build
 
 frontend-services/experiment-control-panel:
   - script: build
     dependencies:
-      - clients/api/js:build
-      - clients/soa/js:build
-      - clients/soa_services/electricalConnection/js:build
-      - clients/soa_services/webcam/js:build
-      - clients/soa_services/file/js:build
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+      - crosslab/clients/soa_services/webcam/js:build
+      - crosslab/clients/soa_services/file/js:build
+
+################################################################################
+# Hardware #####################################################################
+################################################################################
+
+#hardware/common/fpga:
+#  - script: test
+
+hardware/common/config-interface:
+  - script: build
+  - script: lint
+    dependencies:
+      - hardware/common/config-interface:build
+
+hardware/common/spi-driver:
+  - script: build
+  - script: lint
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: test
+    dependencies:
+      - hardware/common/spi-driver:build
+
+
+hardware/boards/axis_portal_v1/fpga:
+  - script: build
+#  - script: test
+
+hardware/boards/axis_portal_v1/crosslab:
+  - script: build
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: lint
+    dependencies:
+      - hardware/boards/axis_portal_v1/crosslab:build
+
+#hardware/boards/axis_portal_v2/fpga:
+#  - script: build
+#  - script: test
+
+hardware/os:
+  - script: build_axis_portal_v1
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/axis_portal_v1/fpga:build
+      - hardware/boards/axis_portal_v1/crosslab:build
+    tags:
+      - firmware
+  - script: build_warehouse
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      #- hardware/boards/warehouse/fpga:build
+      #- hardware/boards/warehouse/crosslab:build
+    tags:
+      - firmware

@@ -1,19 +1,35 @@
 {
     "files.exclude": {
         //begin generated
-        "crosslab-cli/node_modules": true,
-        "crosslab-typescript-addon/node_modules": true,
-        "openapi-codegeneration/node_modules": true,
-        "tsdoc-theme/node_modules": true,
+        
+        "**/*.egg-info": true,
+        "**/.mypy_cache": true,
+        "**/.packages": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/__pycache__": true,
+        "**/app": true,
+        "**/build": true,
+        "**/lib": true,
+        "**/node_modules": true,
+        "**/venv": true,
         //end generated
     },
     "files.watcherExclude": {
         //begin generated
-        "crosslab-cli/app/**": true,
-        "crosslab-cli/node_modules": true,
-        "crosslab-typescript-addon/node_modules": true,
-        "openapi-codegeneration/node_modules": true,
-        "tsdoc-theme/node_modules": true,
+        
+        "**/*.egg-info": true,
+        "**/.mypy_cache": true,
+        "**/.packages": true,
+        "**/.pytest_cache": true,
+        "**/.tox": true,
+        "**/__pycache__": true,
+        "**/app": true,
+        "**/build": true,
+        "**/dist": true,
+        "**/lib": true,
+        "**/node_modules": true,
+        "**/venv": true,
         //end generated
     }
 }

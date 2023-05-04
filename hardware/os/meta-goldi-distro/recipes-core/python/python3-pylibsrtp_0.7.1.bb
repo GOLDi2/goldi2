@@ -2,7 +2,7 @@
 SUMMARY = "Python wrapper around the libsrtp library"
 HOMEPAGE = "https://github.com/aiortc/pylibsrtp"
 AUTHOR = "Jeremy Lainé <jeremy.laine@m4x.org>"
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f1ded46539ca0c935d7a402de36d2726"
 
 SRC_URI = "https://files.pythonhosted.org/packages/92/e5/09b3e8102ab7b7b73ea6e11e4d2c0e9f8249f3a0494ba3e5b35f419aea3e/pylibsrtp-0.7.1.tar.gz"

@@ -20,11 +20,11 @@
   ],
   "devices":[
     {
-      "device": "http://localhost/devices/ef416742-5c7c-42e4-8176-df8a7bf051eb",
+      "device": "https://api.goldi-labs.de/devices/b397908f-60ac-450d-a350-ee058341760e",
       "role": "3-Axis-Portal V1"
     },
     {
-      "device": "http://localhost/devices/391688aa-ee36-4da0-8bdd-447ee5070f16",
+      "device": "https://api.goldi-labs.de/devices/b634ca99-518a-40ad-8db9-62e8d2ed7efc",
       "role": "IO-Board"
     }
   ],

@@ -1,15 +1,28 @@
-#!/bin/sh
+#!/bin/bash
 
-IP=169.254.79.79
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+cd $SCRIPT_DIR/..
+
+. $SCRIPT_DIR/select_board.sh
 
 cd ./dist
 npx --yes http-server -p 8003 -s &
 ID=$!
 
-LOCAL_IP=$(ip route get ${IP} | head -1 | cut -d" " -f5)
-
 sleep 2
-sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "rauc install http://$LOCAL_IP:8003/goldi-dev-update-bundle.raucb"
-timeout 2s sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "/sbin/reboot"
+sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -R 8003:127.0.0.1:8003 root@${IP} "rauc install http://localhost:8003/goldi-dev-update-bundle.raucb"
 
+if [ $? -eq 0 ]; then
+    echo "Update successful"
+else
+    echo "Update failed"
+    kill $(ps -o pid= --ppid $(ps -o pid= --ppid $! ))
+    exit 1
+fi
+
+if [[ $1 == "unsafe" ]]; then
+    $SCRIPT_DIR/_upload_boot.sh
+fi
 kill $(ps -o pid= --ppid $(ps -o pid= --ppid $! ))
+
+timeout 2s sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "/sbin/reboot"

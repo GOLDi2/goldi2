@@ -29,25 +29,25 @@
 			red_active {
 				label = "red:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 26 0>;
+				gpios = <&gpio 26 1>;
 			};
 
             green_active {
 				label = "green:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 13 0>;
+				gpios = <&gpio 13 1>;
 			};
 
             red_cloud {
 				label = "red:cloud";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 6 0>;
+				gpios = <&gpio 6 1>;
 			};
 
             green_cloud {
 				label = "green:cloud";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 5 0>;
+				gpios = <&gpio 5 1>;
 			};
 		};
 	};
@@ -87,6 +87,22 @@
 		target = <&spidev1>;
 		__overlay__ {
 			status = "disabled";
+		};
+	};
+
+	/* USB */
+
+	fragment@7 {
+		target = <&usb>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		dwc2_usb: __overlay__ {
+			compatible = "brcm,bcm2835-usb";
+			dr_mode = "host";
+			g-np-tx-fifo-size = <32>;
+			g-rx-fifo-size = <558>;
+			g-tx-fifo-size = <512 512 512 512 512 256 256>;
+			status = "okay";
 		};
 	};
 };

@@ -12,12 +12,11 @@ S = "${WORKDIR}"
 
 do_compile:prepend() {
     cd ${S}
-    mv crosslab_soa_service_electrical* crosslab_soa_service_electrical
+    mv crosslab_soa_service_electrical-* crosslab_soa_service_electrical
 }
 
-DISTUTILS_SETUP_PATH = "${WORKDIR}/crosslab_soa_service_electrical"
-
+PEP517_SOURCE_PATH = "${WORKDIR}/crosslab_soa_service_electrical"
 
 RDEPENDS:${PN} = "python3-crosslab-soa-client"
 
-inherit setuptools3
+inherit python_setuptools_build_meta

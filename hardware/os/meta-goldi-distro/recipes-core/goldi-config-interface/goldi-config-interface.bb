@@ -21,6 +21,8 @@ do_compile(){
     npm --ignore-scripts --arch=$TARGET_ARCH --production --verbose install
 }
 
+do_compile[network] = "1"
+
 do_install() {
     install -d ${D}${libdir}/node_modules/@goldi2/hardware-admin/
     cp ${S}/package/package.json ${D}${libdir}/node_modules/@goldi2/hardware-admin/
