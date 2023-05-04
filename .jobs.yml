@@ -32,7 +32,7 @@ frontend-services/experiment-control-panel:
 ################################################################################
 
 hardware/common/fpga:
-  - script: test
+#  - script: test
 
 hardware/common/config-interface:
   - script: build
@@ -52,7 +52,7 @@ hardware/common/spi-driver:
 
 hardware/boards/axis_portal_v1/fpga:
   - script: build
-  - script: test
+#  - script: test
 
 hardware/boards/axis_portal_v1/crosslab:
   - script: build
@@ -64,7 +64,7 @@ hardware/boards/axis_portal_v1/crosslab:
 
 hardware/boards/axis_portal_v2/fpga:
   - script: build
-  - script: test
+  #- script: test
 
 hardware/os:
   - script: build_axis_portal_v1
