@@ -21,11 +21,6 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <link rel="stylesheet" href="/css/index.css">
-    {% block scripts %}
-    {% endblock %}
-
-    {% block javascript %}
-    {% endblock %}
 
 </head>
 
@@ -35,7 +30,6 @@
     {% block main %}{% endblock %}
 
     <div class="flex-grow"></div>
-    <script src="/dist/index.js"></script>
 
     {% include "includes/footer.html" %}
 </body>
