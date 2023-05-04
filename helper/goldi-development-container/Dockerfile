@@ -79,7 +79,7 @@ RUN apt-get update \
 
 # install ghdl
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y gnat
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y gnat \
     && git clone https://github.com/ghdl/ghdl.git /tmp/ghdl \
     && cd /tmp/ghdl \
     && ./configure --prefix=/usr/local \
