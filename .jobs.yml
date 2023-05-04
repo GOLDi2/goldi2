@@ -31,7 +31,7 @@ frontend-services/experiment-control-panel:
 # Hardware #####################################################################
 ################################################################################
 
-hardware/common/fpga:
+#hardware/common/fpga:
 #  - script: test
 
 hardware/common/config-interface:
