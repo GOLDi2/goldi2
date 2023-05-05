@@ -55,8 +55,9 @@ build-daily:
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
       when: always
       variables:
+        DEPLOY: '--deploy dev'
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH $DEPLOY $RELEASE

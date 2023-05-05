@@ -13,6 +13,11 @@ helper/goldi-development-container:
 # Frontend Services ############################################################
 ################################################################################
 
+frontend-services/website:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+
 frontend-services/config-tool:
   - script: build
     dependencies:

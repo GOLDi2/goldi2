@@ -20,6 +20,7 @@ services:
       default:
         aliases:
           - api.$DOMAIN
+          - api.dev.$DOMAIN
 
   acme-companion:
     image: nginxproxy/acme-companion:2.2.3
