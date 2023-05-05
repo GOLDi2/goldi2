@@ -72,6 +72,9 @@ hardware/boards/axis_portal_v1/crosslab:
 #  - script: test
 
 hardware/os:
+  - script: build_sstate_ipk
+    tags:
+      - weekly
   - script: build_axis_portal_v1
     dependencies:
       - hardware/common/config-interface:build
@@ -79,7 +82,7 @@ hardware/os:
       - hardware/boards/axis_portal_v1/fpga:build
       - hardware/boards/axis_portal_v1/crosslab:build
     tags:
-      - firmware
+      - daily
 #  - script: build_warehouse
 #    dependencies:
 #      - hardware/common/config-interface:build
@@ -87,4 +90,4 @@ hardware/os:
 #      #- hardware/boards/warehouse/fpga:build
 #      #- hardware/boards/warehouse/crosslab:build
 #    tags:
-#      - firmware
+#      - daily

@@ -47,12 +47,13 @@ build:
       when: never
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag firmware $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily --skip-tag weekly $RELEASE
 
 build-daily:
+  timeout: 6h
   image: goldi-devcontainer:build
   rules:
-    - if : '$CI_PIPELINE_SOURCE == "schedule"'
+    - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "daily"'
       when: always
       variables:
         DEPLOY: '--deploy dev'
@@ -60,4 +61,18 @@ build-daily:
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH $DEPLOY $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH  --skip-tag weekly $DEPLOY $RELEASE
+
+build-weekly:
+  timeout: 48h
+  image: goldi-devcontainer:build
+  rules:
+    - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
+      when: always
+      variables:
+        DEPLOY: '--deploy dev'
+        BRANCH: $CI_COMMIT_BRANCH
+        RELEASE: ''
+  stage: build
+  script:
+    - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily $DEPLOY $RELEASE
