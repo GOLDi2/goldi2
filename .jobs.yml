@@ -80,11 +80,11 @@ hardware/os:
       - hardware/boards/axis_portal_v1/crosslab:build
     tags:
       - firmware
-  - script: build_warehouse
-    dependencies:
-      - hardware/common/config-interface:build
-      - hardware/common/spi-driver:build
-      #- hardware/boards/warehouse/fpga:build
-      #- hardware/boards/warehouse/crosslab:build
-    tags:
-      - firmware
+#  - script: build_warehouse
+#    dependencies:
+#      - hardware/common/config-interface:build
+#      - hardware/common/spi-driver:build
+#      #- hardware/boards/warehouse/fpga:build
+#      #- hardware/boards/warehouse/crosslab:build
+#    tags:
+#      - firmware
