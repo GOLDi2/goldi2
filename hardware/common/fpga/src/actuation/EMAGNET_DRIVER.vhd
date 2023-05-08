@@ -74,7 +74,7 @@ architecture RTL of EMAGNET_DRIVER is
 	
 	--I****INTERNAL SIGNALS****
 	--Memory
-	constant reg_default	:	data_word := (others => (others => '0'));  
+	constant reg_default	:	data_word := (others => '0');  
 	signal reg_data			:	data_word;
 		alias emag_enb		:	std_logic is reg_data(0);
 	--State machine
