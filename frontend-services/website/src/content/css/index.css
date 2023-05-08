@@ -1,11 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+.bold-width{
+  text-align: center;
+}
+
+.bold-width::before {
+  display: block;
+  margin-top: 0;
+  content: attr(data-text);
+  font-weight: bold;
+  height: 1px;
+  color: transparent;
+  overflow: hidden;
+  visibility: hidden;
+}
+
 .h-line {
-  @apply w-full h-0.5 bg-primary;
+  @apply w-full h-0.5 bg-secondary;
 }
 
 input[type=text], input[type=password] {
@@ -13,20 +29,20 @@ input[type=text], input[type=password] {
 }
 
 .section {
-  @apply bg-secondary-light p-10 rounded-3xl out-shadow-section;
+  @apply bg-primary-100 p-10 rounded-3xl out-shadow-section;
 }
 
 .simple > section {
-  @apply bg-secondary-light p-10 rounded-3xl out-shadow-section;
+  @apply bg-primary-100 p-10 rounded-3xl out-shadow-section;
 }
 
 .simple > section > section {
-  @apply bg-secondary-lighter p-5 my-5 rounded-3xl inner-shadow-section;
+  @apply bg-primary-50 p-5 my-5 rounded-3xl inner-shadow-section;
 }
 
 
 .simple > h2 {
-  @apply text-secondary-dark text-xl;
+  @apply text-primary-700 text-xl;
 }
 
 .inner-shadow-section {
@@ -48,11 +64,11 @@ input[type=text], input[type=password] {
 }
 
 .primary-button {
-  @apply bg-primary rounded-3xl px-8 py-1 w-fit text-white text-xl hover:bg-secondary-primary-hover duration-300;
+  @apply bg-primary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-primary-700 duration-300;
 }
 
 .secondary-button {
-  @apply bg-secondary rounded-3xl px-8 py-1 w-fit text-white text-xl hover:bg-secondary-light-middle-hover duration-300;
+  @apply bg-secondary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-secondary-800 duration-300;
 }
 
 /*------------Header------------*/
@@ -93,6 +109,14 @@ input[type=text], input[type=password] {
 .normal-dropdown:hover .normal-dropdown-content {
   display: block;
   background-color: #06152a;
+}
+
+.dropdown > div:first-child {
+  display: none;
+}
+
+.dropdown:hover > div:first-child {
+  display: block;
 }
 
 /*--MEGA MENU--*/
@@ -175,7 +199,7 @@ h5 {
 
 /*------------FAQ------------*/
 .faq > section {
-  @apply bg-secondary-light p-5 rounded-3xl out-shadow-section;
+  @apply bg-primary-100 p-5 rounded-3xl out-shadow-section;
 }
 
 .faq > section:hover, .faq > section:active {

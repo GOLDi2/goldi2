@@ -67,17 +67,17 @@
 <div class="max-w-6xl w-full mx-auto pt-16 font-body mb-10">
     <div class="mx-auto flex justify-center">
         <div class="max-w-xl px-10 space-y-5 text-center">
-            <div class="text-7xl font-bold text-secondary-dark">{{text.heading}}</div>
+            <div class="text-7xl font-bold text-primary-700">{{text.heading}}</div>
             <div>{{text.description}}</div>
         </div>
     </div>
 </div>
 
 <!-- Vorstellung des Teams -->
-<div class="w-full bg-secondary mt-14 px-10">
+<div class="w-full bg-primary-200 mt-14 px-10">
     <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
         {% for item in text.panel %}
-        <div class="bg-secondary-light rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
+        <div class="bg-primary-50 rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
             <img class="h-20 mx-auto" src="{{item.image}}"/>
             <div class="text-2xl pb-2 font-bold mx-auto">{{item.name}}</div>
             <div>{{item.description}}</div>
