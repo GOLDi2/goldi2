@@ -34,7 +34,7 @@ use work.GOLDI_DATA_TYPES.all;
 --!
 entity TMC2660_CONFIG_FIFO is
     generic(
-        ROM             :   tmc2660_rom := (x"0000F",x"0000F",x"0000F")
+        ROM             :   tmc2660_rom := (x"00000F",x"00000F",x"00000F")
     );
     port(
         --General
@@ -43,7 +43,7 @@ entity TMC2660_CONFIG_FIFO is
         --Data
         m_read_tready   : in    std_logic;
         m_read_tvalid   : out   std_logic;
-        m_read_tdata    : out   std_logic_vector(19 downto 0)       
+        m_read_tdata    : out   std_logic_vector(23 downto 0)       
     );
 end entity TMC2660_CONFIG_FIFO;
 
