@@ -44,7 +44,7 @@ entity SENSOR_ARRAY is
         ENC_X_INVERT    :   boolean := false;
         ENC_Z_INVERT    :   boolean := false;
         LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (10,0));
-        LIMIT_Z_SENSORS :   sensor_limit_array(5 downto 0) := (others => (10,0))
+        LIMIT_Z_SENSORS :   sensor_limit_array(4 downto 0) := (others => (10,0))
     );
     port(
         --General
@@ -77,11 +77,11 @@ architecture RTL of SENSOR_ARRAY is
 
     --****INTERNAL SIGNALS****
     --Memory
-    constant memory_length  :   natural := getMemoryLength(24);
+    constant memory_length  :   natural := getMemoryLength(23);
     constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
     signal reg_data         :   data_word_vector(memory_length-1 downto 0); 
     --Sensor buffer
-    signal sensor_buff      :   std_logic_vector(23 downto 0);
+    signal sensor_buff      :   std_logic_vector(22 downto 0);
     signal virtual_x_rst    :   std_logic;
     signal virtual_z_rst    :   std_logic;
 
@@ -132,7 +132,7 @@ begin
     Z_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
         INVERT          => ENC_Z_INVERT,
-        NUMBER_SENSORS  => 6,
+        NUMBER_SENSORS  => 5,
         SENSOR_LIMITS   => LIMIT_Z_SENSORS
     )
     port map(
@@ -140,7 +140,7 @@ begin
         rst             => virtual_z_rst,
         enc_channel_a   => enc_channel_z_a.dat,
         enc_channel_b   => enc_channel_z_b.dat,
-        sensor_data_out => sensor_buff(23 downto 18)
+        sensor_data_out => sensor_buff(22 downto 18)
     );
     -----------------------------------------------------------------------------------------------
 

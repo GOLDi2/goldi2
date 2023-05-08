@@ -17,7 +17,7 @@
 - (3) Axis Portal V2
 - (4) Microcontroller
 - (5) IO board
-- (6) High-bay warehouse
+- (6) Warehouse_2
   - [0]: General construction
 
 
