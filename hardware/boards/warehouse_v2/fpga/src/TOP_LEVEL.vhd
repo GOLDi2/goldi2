@@ -362,7 +362,6 @@ begin
     X_AXIS_MOTOR : entity work.TMC2660_DRIVER
     generic map(
         ADDRESS         => X_MOTOR_ADDRESS,
-        SD_FACTOR       => X_MOTOR_SD_FACTOR,
         SCLK_FACTOR     => X_MOTOR_SCLK_FACTOR,
         TMC2660_CONFIG  => X_MOTOR_CONFIGURATION
     )
@@ -407,7 +406,6 @@ begin
     Z_AXIS_MOTOR : entity work.TMC2660_DRIVER
     generic map(
         ADDRESS         => Z_MOTOR_ADDRESS,
-        SD_FACTOR       => Z_MOTOR_SD_FACTOR,
         SCLK_FACTOR     => Z_MOTOR_SCLK_FACTOR,
         TMC2660_CONFIG  => Z_MOTOR_CONFIGURATION
     )

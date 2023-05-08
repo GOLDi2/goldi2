@@ -143,10 +143,6 @@ package GOLDI_MODULE_CONFIG is
 
     --****X AXIS STEPPER MOTOR****
     -----------------------------------------------------------------------------------------------
-    --Step/Direction Interface frequency scaling factor.
-    --Value is multiplied with the dynamic nominal_frequency to obtain the desired frequency range
-    constant X_MOTOR_SD_FACTOR      :   natural := 2750;
-
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
     constant X_MOTOR_SCLK_FACTOR    :   natural := 48;
@@ -184,7 +180,7 @@ package GOLDI_MODULE_CONFIG is
         --[6:5]     Current increment size
         --[4]       Reserved -> '0'
         --[3:0]     Lower coolStep threshold SEMIN
-        2 => x"0A000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+        2 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
 
         --**StallGuard2 Control Register (SGCSCONF)**
         --[19:17]   Address = 110
@@ -207,7 +203,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E007"--x"E0070"
+        4 => x"0E0070"--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 
@@ -223,10 +219,6 @@ package GOLDI_MODULE_CONFIG is
 
     --****Z AXIS STEPPER MOTOR****
     -----------------------------------------------------------------------------------------------
-    --Step/Direction Interface frequency scaling factor.
-    --Value is multiplied with the dynamic nominal_frequency to obtain the desired frequency range
-    constant Z_MOTOR_SD_FACTOR      :   natural := 2750;
-
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
     constant Z_MOTOR_SCLK_FACTOR    :   natural := 48;
@@ -264,7 +256,7 @@ package GOLDI_MODULE_CONFIG is
         --[6:5]     Current increment size
         --[4]       Reserved -> '0'
         --[3:0]     Lower coolStep threshold SEMIN
-        2 => x"0A000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+        2 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
 
         --**StallGuard2 Control Register (SGCSCONF)**
         --[19:17]   Address = 110
@@ -287,7 +279,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E007"--x"E0070"
+        4 => x"0E0070"--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 
