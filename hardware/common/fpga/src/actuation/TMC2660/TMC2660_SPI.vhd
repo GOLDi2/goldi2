@@ -39,9 +39,9 @@ entity TMC2660_SPI is
         --Parallel interface
         s_word_i_tready : out   std_logic;
         s_word_i_tvalid : in    std_logic;
-        s_word_i_tdata  : in    std_logic_vector(19 downto 0);
+        s_word_i_tdata  : in    std_logic_vector(23 downto 0);
         m_word_o_tvalid : out   std_logic;
-        m_word_o_tdata  : out   std_logic_vector(19 downto 0);
+        m_word_o_tdata  : out   std_logic_vector(23 downto 0);
         --Serial interface
         m_spi_sclk      : out   std_logic;
         m_spi_ncs       : out   std_logic;
@@ -56,21 +56,22 @@ end entity TMC2660_SPI;
 --! General architecture
 architecture RTL of TMC2660_SPI is
 
-    --****INTENAL SIGNALS****
+    --****INTERNAL SIGNALS****
+    --Reset delay
     signal rst_buff     :   std_logic;
     --Data buffers
-    signal word_i_buff  :   std_logic_vector(19 downto 0);
-    signal word_o_buff  :   std_logic_vector(19 downto 0);
-    --Counters
+    signal word_i_buff  :   std_logic_vector(23 downto 0);
+    signal word_o_buff  :   std_logic_vector(23 downto 0);
+    --Counter
     signal sclk_counter :   natural range 0 to CLOCK_FACTOR;
-    signal bit_counter  :   natural range 0 to 19;
+    signal bit_counter  :   natural range 0 to 23;
     --Flags
     signal s_ready_i    :   std_logic;
     signal m_valid_i    :   std_logic;
     signal tx_valid     :   std_logic;
     --State machine
     type spi_state is (IDLE, ENABLE, TRANSFER, DISABLE);
-    signal spi_ps : spi_state := IDLE;
+    signal spi_ps   :   spi_state;
 
 
 begin
@@ -80,33 +81,38 @@ begin
     STATE_MACHINE : process(clk)
     begin
         if(rising_edge(clk)) then
-            
-            --Control module parallel interface and spi transfer
+            --SPI Transaction control
             case spi_ps is
-                when IDLE =>        
-                    word_i_buff <= s_word_i_tdata;
-                    m_word_o_tdata <= word_o_buff;
-                    --Start transfer once a new data word has been latched
+                when IDLE =>
+                    word_i_buff     <= s_word_i_tdata;
+                    --Start transfer once a new data word has been registered
                     if(s_word_i_tvalid = '1' and s_ready_i = '1') then
                         spi_ps <= ENABLE;
                     end if;
 
                 when ENABLE =>
-                    spi_ps <= TRANSFER;
+                    --Hold for 1 sclk cycle to ensure correct ncs high time
+                    if(sclk_counter = CLOCK_FACTOR-1) then
+                        spi_ps <= TRANSFER;
+                    end if;
 
                 when TRANSFER =>
-                    if(bit_counter = 19 and sclk_counter = CLOCK_FACTOR/2+1) then
-                        spi_ps <= DISABLE;
+                    if(bit_counter = 23 and sclk_counter = CLOCK_FACTOR-1) then
+                        spi_ps   <= DISABLE;
                         tx_valid <= '1';
                     end if;
 
                 when DISABLE =>
-                    spi_ps <= IDLE;
+                    if(sclk_counter = CLOCK_FACTOR-1) then
+                        m_word_o_tdata  <= word_o_buff;
+                        spi_ps          <= IDLE;
+                    end if;
                 
+                when others => null;
             end case;
 
-            
-            --Reset module
+
+            --Reset conditions for modle
             if(rst = '1') then
                 rst_buff    <= '1';
                 word_i_buff <= (others => '0');
@@ -115,12 +121,12 @@ begin
             else
                 rst_buff    <= '0';
             end if;
-        
+
         end if;
     end process;
 
 
-    S_READY_FLAG_MANAGEMENT : process(rst_buff, spi_ps, tx_valid)
+    S_READY_FLAG_MANAGEMENT : process(rst_buff,spi_ps)
     begin
         --Manage ready flag
         if(rst_buff = '1') then
@@ -133,17 +139,14 @@ begin
     end process;
 
 
-    M_VALID_FLAG_MANAGEMENT : process(clk)
+    M_VALID_FLAG_MANAGEMENT : process(rst_buff,spi_ps,tx_valid)
     begin
-        if(rising_edge(clk)) then
-            --Manage valid flag
-            if(rst = '1') then
-                m_valid_i <= '0';
-            elsif(spi_ps = IDLE and tx_valid = '1') then
-                m_valid_i <= '1';
-            else
-                m_valid_i <= '0';
-            end if;
+        if(rst_buff = '1') then
+            m_valid_i <= '0';
+        elsif(spi_ps = IDLE and tx_valid = '1') then
+            m_valid_i <= '1';
+        else
+            m_valid_i <= '0';
         end if;
     end process;
 
@@ -195,8 +198,8 @@ begin
                 m_spi_mosi <= '0';
             elsif(spi_ps /= TRANSFER) then
                 m_spi_mosi <= '0';
-            else
-                m_spi_mosi <= word_i_buff(19 - bit_counter);
+            else 
+                m_spi_mosi <= word_i_buff(23 - bit_counter);
             end if;
         end if;
     end process;
@@ -207,9 +210,9 @@ begin
         if(rising_edge(clk)) then
             if(rst = '1') then
                 word_o_buff <= (others => '0');
-            --Delay sample by two clk cycles to compensate for synchronizer delay
+            --Delay sample by two clk cycles to compensate for synchronizer latency
             elsif(spi_ps = TRANSFER and sclk_counter = CLOCK_FACTOR/2+1) then
-                word_o_buff(19 - bit_counter) <= m_spi_miso; 
+                word_o_buff(23 - bit_counter) <= m_spi_miso;
             end if;
         end if;
     end process;
@@ -220,30 +223,38 @@ begin
 
     --****COUNTERS****
     -----------------------------------------------------------------------------------------------
-    SYSTEM_COUNTERS : process(clk)
+    SCLK_PERIOD_COUNTER : process(clk)
     begin
         if(rising_edge(clk)) then
             if(rst = '1') then
                 sclk_counter <= 0;
-                bit_counter  <= 0;
-            elsif(spi_ps /= TRANSFER) then
+            elsif(spi_ps = IDLE) then
                 sclk_counter <= 0;
-                bit_counter  <= 0;
             else
-                --Cycle a counter for serial clock signal
                 if(sclk_counter = CLOCK_FACTOR-1) then
                     sclk_counter <= 0;
                 else
                     sclk_counter <= sclk_counter + 1;
                 end if;
+            end if;
+        end if;
+    end process;
 
-                --Cycle a 20 counter for bit transfer
-                if(bit_counter = 19 and sclk_counter = CLOCK_FACTOR-1) then
+
+    TRANSFER_BIT_COUNTER : process(clk)
+    begin
+        if(rising_edge(clk)) then
+            if(rst = '1') then
+                bit_counter <= 0;
+            elsif(spi_ps /= TRANSFER) then
+                bit_counter <= 0;
+            else
+                if(bit_counter = 23 and sclk_counter = CLOCK_FACTOR-1) then
                     bit_counter <= 0;
                 elsif(sclk_counter = CLOCK_FACTOR-1) then
-                    bit_counter <= bit_counter + 1;
+                    bit_counter <= bit_counter+1;
+                else null;
                 end if;
-            
             end if;
         end if;
     end process;
