@@ -18,7 +18,7 @@
 -- Additional Comments: First commitment
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: -  
+-- Additional Comments: Release for warehouse_v2  
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -55,14 +55,14 @@ package GOLDI_MODULE_CONFIG is
     constant GPIO_DRIVER_ADDRESS    :   natural := 7;       --Table length: 2
     constant X_ENCODER_ADDRESS      :   natural := 9;       --Table length: 2
     constant Z_ENCODER_ADDRESS      :   natural := 11;      --Table length: 2
-    constant X_MOTOR_ADDRESS        :   natural := 13;      --Table length: 5
-    constant Y_MOTOR_ADDRESS        :   natural := 18;      --Table length: 2
-    constant Z_MOTOR_ADDRESS        :   natural := 20;      --Table length: 5
-    constant PR_LED_ADDRESS         :   natural := 25;      --Table length: 1
-    constant PG_LED_ADDRESS         :   natural := 26;      --Table length: 1
-    constant ER_LED_ADDRESS         :   natural := 27;      --Table length: 1
-    constant EW_LED_ADDRESS         :   natural := 28;      --Table length: 1
-    constant EG_LED_ADDRESS         :   natural := 28;      --Table length: 1
+    constant X_MOTOR_ADDRESS        :   natural := 13;      --Table length: 6
+    constant Y_MOTOR_ADDRESS        :   natural := 19;      --Table length: 2
+    constant Z_MOTOR_ADDRESS        :   natural := 21;      --Table length: 6
+    constant PR_LED_ADDRESS         :   natural := 27;      --Table length: 1
+    constant PG_LED_ADDRESS         :   natural := 28;      --Table length: 1
+    constant ER_LED_ADDRESS         :   natural := 29;      --Table length: 1
+    constant EW_LED_ADDRESS         :   natural := 30;      --Table length: 1
+    constant EG_LED_ADDRESS         :   natural := 31;      --Table length: 1
     -----------------------------------------------------------------------------------------------
 
 
@@ -75,27 +75,26 @@ package GOLDI_MODULE_CONFIG is
     --Movement limits in horizontal axis inside a storage box
     --X Axis (10 sensors):
     constant X_MOVEMENT_LIMITS       :   sensor_limit_array(9 downto 0) := (
-        0 => (10, 1),
-        1 => (10, 2),
-        2 => (10, 3),
-        3 => (10, 4),
-        4 => (10, 5),
-        5 => (10, 6),
-        6 => (10, 7),
-        7 => (10, 8),
-        8 => (10, 9),
-        9 => (10,10)
+        0 => (  600,  575),
+        1 => ( 1805, 1780),
+        2 => ( 3007, 2982),
+        3 => ( 4195, 4170),
+        4 => ( 5375, 5350),
+        5 => ( 6575, 6550),
+        6 => ( 7875, 7850),
+        7 => ( 8075, 8050),
+        8 => (10225,10200),
+        9 => (11375,11350)
     );
 
     --Movement limits in vertical axis inside a storage box
     --Z Axis (6 sensors):
-    constant Z_MOVEMENT_LIMITS       :   sensor_limit_array(5 downto 0) := (
-        0 => (10,0),
-        1 => (10,1),
-        2 => (10,2),
-        3 => (10,3),
-        4 => (10,4),
-        5 => (10,5)     
+    constant Z_MOVEMENT_LIMITS       :   sensor_limit_array(4 downto 0) := (
+        0 => ( 2200,   10),
+        1 => (12550, 6400),
+        2 => (23100,16630),
+        3 => (33675,27130),
+        4 => (45145,37250)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -106,26 +105,25 @@ package GOLDI_MODULE_CONFIG is
     --Limits for virtual sensors
     --X Axis (10 sensors):
     constant X_SENSOR_LIMITS        :   sensor_limit_array(9 downto 0) := (
-        0 => (2,1),
-        1 => (4,3),
-        2 => (6,5),
-        3 => (8,7),
-        4 => (10,9),
-        5 => (12,11),
-        6 => (14,13),
-        7 => (16,15),
-        8 => (18,17),
-        9 => (20,19)
+        0 => (  600, 575),
+        1 => ( 1805, 1780),
+        2 => ( 3007, 2982),
+        3 => ( 4195, 4170),
+        4 => ( 5375, 5350),
+        5 => ( 6575, 6550),
+        6 => ( 7875, 7850),
+        7 => ( 8075, 8050),
+        8 => (10225,10200),
+        9 => (11375,11350)
     );
 
     --Z Axis (6 sensors):
-    constant Z_SENSOR_LIMITS        :   sensor_limit_array(5 downto 0) := (
-        0 => (2,1),
-        1 => (4,3),
-        2 => (6,5),
-        3 => (8,7),
-        4 => (10,9),
-        5 => (12,11)
+    constant Z_SENSOR_LIMITS        :   sensor_limit_array(4 downto 0) := (
+        0 => (100,10),
+        1 => (200,101),
+        2 => (300,201),
+        3 => (400,301),
+        4 => (500,401)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -147,19 +145,69 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     --Step/Direction Interface frequency scaling factor.
     --Value is multiplied with the dynamic nominal_frequency to obtain the desired frequency range
-    constant X_MOTOR_SD_FACTOR      :   natural := 10000;
+    constant X_MOTOR_SD_FACTOR      :   natural := 2750;
 
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant X_MOTOR_SCLK_FACTOR    :   natural := 12;
+    constant X_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
     constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
-        0 => x"00007",
-        1 => x"80000",
-        2 => x"A0F0F",
-        3 => x"C0000",
-        4 => x"E5100"
+        --**Driver Control Register STEP/DIR mode (DRVCTRL)**
+        --[19:18]   Address = 00
+        --[17:10]   Reserved -> '0'
+        --[9]       Enable STEP interpolation 
+        --[8]       Enable double edge STEP pulses
+        --[7:4]     Reserved -> '0'
+        --[3:0]     Microstep resolution for STEP/DIR mode
+        0 => x"000007",   --x"00004"
+
+        --**Chopper Control Register (CHOPCONF)**
+        --[19:17]   Address = 100
+        --[16:15]   Blanking time
+        --[14]      Chopper mode
+        --[13]      Random Toff time
+        --[12:11]   Hysteresis decrement interval
+        --[10:7]    Hysteresis end value (low)
+        --[6:4]     Hysteresis start value 
+        --[3:0]     Off time MOSFET disable  
+        1 => x"094557",   --x"94557"
+      
+        --**Coolstep Control Register (SMARTEN)**
+        --[19:17]   Address = 101
+        --[16]      Reserved -> '0'
+        --[15]      Minimum coolStep current
+        --[14:13]   Current decrement speed
+        --[12]      Reserved -> '0'
+        --[11:8]    Upper coolStep threshold SEMAX
+        --[7]       Reserved -> '0'
+        --[6:5]     Current increment size
+        --[4]       Reserved -> '0'
+        --[3:0]     Lower coolStep threshold SEMIN
+        2 => x"0A000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+
+        --**StallGuard2 Control Register (SGCSCONF)**
+        --[19:17]   Address = 110
+        --[16]      StallGuard2 filter enable
+        --[15]      Reserved -> '0'
+        --[14:8]    StallGuard2 threshold value
+        --[7:5]     Reserved -> '0'
+        --[4:0]     Current scale  
+        3 => x"0C040F",   --x"C040F"
+        
+        --**Driver Control Register (DRVCONF)**
+        --[19:17]   Address = 111
+        --[16]      Test Mode - reserved -> '0'
+        --[15:14]   Slope control, high side
+        --[13:12]   Slope control, low side
+        --[11]      Reserved -> '0'
+        --[10]      Short to GND protection disable
+        --[9:8]     Short to GND detection timer
+        --[7]       STEP/DIR interface disable 
+        --[6]       Sense resistor voltage-based current scaling
+        --[5:4]     Select value for read out
+        --[3:0]     Reserved -> '0'
+        4 => x"0E007"--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 
@@ -177,19 +225,69 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     --Step/Direction Interface frequency scaling factor.
     --Value is multiplied with the dynamic nominal_frequency to obtain the desired frequency range
-    constant Z_MOTOR_SD_FACTOR      :   natural := 10000;
+    constant Z_MOTOR_SD_FACTOR      :   natural := 2750;
 
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant Z_MOTOR_SCLK_FACTOR    :   natural := 12;
+    constant Z_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
     constant Z_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
-        0 => x"00007",
-        1 => x"80000",
-        2 => x"A0F0F",
-        3 => x"C0000",
-        4 => x"E5100"
+        --**Driver Control Register STEP/DIR mode (DRVCTRL)**
+        --[19:18]   Address = 00
+        --[17:10]   Reserved -> '0'
+        --[9]       Enable STEP interpolation 
+        --[8]       Enable double edge STEP pulses
+        --[7:4]     Reserved -> '0'
+        --[3:0]     Microstep resolution for STEP/DIR mode
+        0 => x"000007",   --x"00004"
+
+        --**Chopper Control Register (CHOPCONF)**
+        --[19:17]   Address = 100
+        --[16:15]   Blanking time
+        --[14]      Chopper mode
+        --[13]      Random Toff time
+        --[12:11]   Hysteresis decrement interval
+        --[10:7]    Hysteresis end value (low)
+        --[6:4]     Hysteresis start value 
+        --[3:0]     Off time MOSFET disable  
+        1 => x"094557",   --x"94557"
+      
+        --**Coolstep Control Register (SMARTEN)**
+        --[19:17]   Address = 101
+        --[16]      Reserved -> '0'
+        --[15]      Minimum coolStep current
+        --[14:13]   Current decrement speed
+        --[12]      Reserved -> '0'
+        --[11:8]    Upper coolStep threshold SEMAX
+        --[7]       Reserved -> '0'
+        --[6:5]     Current increment size
+        --[4]       Reserved -> '0'
+        --[3:0]     Lower coolStep threshold SEMIN
+        2 => x"0A000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+
+        --**StallGuard2 Control Register (SGCSCONF)**
+        --[19:17]   Address = 110
+        --[16]      StallGuard2 filter enable
+        --[15]      Reserved -> '0'
+        --[14:8]    StallGuard2 threshold value
+        --[7:5]     Reserved -> '0'
+        --[4:0]     Current scale  
+        3 => x"0C040F",   --x"C040F"
+        
+        --**Driver Control Register (DRVCONF)**
+        --[19:17]   Address = 111
+        --[16]      Test Mode - reserved -> '0'
+        --[15:14]   Slope control, high side
+        --[13:12]   Slope control, low side
+        --[11]      Reserved -> '0'
+        --[10]      Short to GND protection disable
+        --[9:8]     Short to GND detection timer
+        --[7]       STEP/DIR interface disable 
+        --[6]       Sense resistor voltage-based current scaling
+        --[5:4]     Select value for read out
+        --[3:0]     Reserved -> '0'
+        4 => x"0E007"--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 

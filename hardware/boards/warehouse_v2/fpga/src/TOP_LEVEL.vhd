@@ -2,8 +2,8 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		30/04/2023
--- Design Name:		Top level - High-bay warehouse
+-- Create Date:		10/05/2023
+-- Design Name:		Top level - Warehouse V2
 -- Module Name:		TOP_LEVEL
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -15,8 +15,11 @@
 --                  -> GOLDI_MODULE_CONFIG.vhd
 --
 -- Revisions:
--- Revision V2.00.00 - File Created
+-- Revision V1.00.00 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V2.00.00 - Default module version for release 2.00.00
+-- Additional Comments: Release for Warehouse_V2
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -40,7 +43,7 @@ use work.GOLDI_MODULE_CONFIG.all;
 entity TOP_LEVEL is
     port(
         --General
-        --ClockFPGA   : in    std_logic;
+        ClockFPGA   : in    std_logic;
         FPGA_nReset : in    std_logic;
         --Communication
         --SPI
@@ -62,7 +65,6 @@ architecture RTL of TOP_LEVEL is
     --****INTERNAL SIGNALS****
     --General
     signal clk                  :   std_logic;
-    signal clk_16MHz            :   std_logic;
     signal rst                  :   std_logic;
     signal FPGA_nReset_sync     :   std_logic;
     --External communication
@@ -83,6 +85,8 @@ architecture RTL of TOP_LEVEL is
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal external_io_o_safe   :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    --Sensor data
     --Independent reset
     signal x_encoder_rst        :   std_logic;
     signal z_encoder_rst        :   std_logic;
@@ -93,20 +97,17 @@ begin
     --****CLOCKING****
     -----------------------------------------------------------------------------------------------
     --External 48 MHz clk
-    --clk <= ClockFPGA;
+    clk <= ClockFPGA;
 
     -- INTERNAL_CLOCK : component machxo2.components.OSCH
     -- generic map(
-    --     NOM_FREQ => "53.2"
+    --     NOM_FREQ => "44.33"
     -- )
     -- port map(
     --     STDBY    => '0',
     --     OSC      => clk,
     --     SEDSTDBY => open
     -- );
-    
-    --Clock divider for TMC2660
-    clk_16MHz <= '0';
     -----------------------------------------------------------------------------------------------
 
 
@@ -121,7 +122,7 @@ begin
         io_i    => FPGA_nReset,
         io_sync => FPGA_nReset_sync
     );
-    rst <= not FPGA_nReset_sync;
+    rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
 
 
     --SPI communication sync
@@ -149,7 +150,7 @@ begin
         io_sync => spi0_nce0_sync
     );
 
-    --Negate nce for use in comm module
+    --Negate nce for use in comm module (ce - active high)
     spi0_ce0 <= not spi0_nce0_sync;
 
 
@@ -188,9 +189,10 @@ begin
     );
 
 
-    --Multiplexing of BUS
+    --Demultiplexer for master BUS interface used when crossbar structure is employed
     sys_bus_i <= master_bus_o;
 
+    --Multiplexer for slave BUS interface
     BUS_MUX : process(clk)
     begin
         if(rising_edge(clk)) then
@@ -198,6 +200,7 @@ begin
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
+
 
 
 
@@ -210,12 +213,13 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        port_out        => external_io_o,
+        port_out        => external_io_o_safe,
         port_in_async   => open,
         port_in_sync    => external_io_i,
         io_vector       => IO_DATA
     );
     -----------------------------------------------------------------------------------------------
+
 
 
 
@@ -254,7 +258,38 @@ begin
 
     --****SYSTEM PROTECTION****
     -----------------------------------------------------------------------------------------------
-    sys_bus_o(2) <= gnd_sbus_o;
+    PROTECTION_MASK : entity work.ACTUATOR_MASK
+    generic map(
+        ENC_X_INVERT    => X_ENCODER_INVERT,
+        ENC_Z_INVERT    => Z_ENCODER_INVERT,
+        LIMIT_X_SENSORS => X_MOVEMENT_LIMITS,
+        LIMIT_Z_SENSORS => Z_MOVEMENT_LIMITS
+    )
+    port map(
+        clk             => clk,
+        rst             => rst,
+        sys_io_i        => external_io_i,
+        sys_io_o        => external_io_o,
+        safe_io_o       => external_io_o_safe
+    );
+
+
+    ERROR_LIST : entity work.ERROR_DETECTOR
+    generic map(
+        ADDRESS         => ERROR_LIST_ADDRESS,
+        ENC_X_INVERT    => X_ENCODER_INVERT,
+        ENC_Z_INVERT    => Z_ENCODER_INVERT,
+        LIMIT_X_SENSORS => X_MOVEMENT_LIMITS,
+        LIMIT_Z_SENSORS => Z_MOVEMENT_LIMITS
+    )
+    port map(
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(2),
+        sys_io_i        => external_io_i,
+        sys_io_o        => external_io_o
+    );
     -----------------------------------------------------------------------------------------------
 
 
@@ -334,7 +369,6 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        clk_16MHz       => clk_16MHz,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(6),
         tmc2660_clk     => external_io_o(15),
@@ -380,7 +414,6 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        clk_16MHz       => clk_16MHz,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(8),
         tmc2660_clk     => external_io_o(27),
@@ -393,7 +426,7 @@ begin
         tmc2660_mosi    => external_io_o(34),
         tmc2660_miso    => external_io_i(35)
     );
-    --Configure io to input mode
+    -- --Configure io to input mode
     external_io_o(29) <= gnd_io_o;
     external_io_o(35) <= gnd_io_o;
     -----------------------------------------------------------------------------------------------
