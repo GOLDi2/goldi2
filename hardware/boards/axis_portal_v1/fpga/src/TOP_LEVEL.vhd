@@ -27,9 +27,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_CROSSBAR_DEFAULT.all;
 --! MachX02 library
 library machxo2;
@@ -82,10 +82,10 @@ architecture RTL of TOP_LEVEL is
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(14 downto 0);
     --System memory
-    constant REG_CONFIG_DEFAULT :   data_word_vector(0 downto 0) :=  (others => (others => '0'));
-    signal config_reg_data      :   data_word_vector(0 downto 0);
-        alias selected_bus      :   std_logic is config_reg_data(0)(0);
-        alias encoder_ref       :   std_logic is config_reg_data(0)(1);
+    constant control_default    :   data_word :=  x"A0";
+    signal control_data         :   data_word;
+        alias selected_bus      :   std_logic is control_data(0);
+        alias encoder_ref       :   std_logic is control_data(1);
     --External data interface
     signal internal_io_i        :   io_i_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
     signal internal_io_o        :   io_o_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
@@ -177,20 +177,20 @@ begin
     --****INTERNAL COMMUNICATION MANAGEMENT****
     -----------------------------------------------------------------------------------------------
     --Register to select the main communication bus or the io crossbar structure module
-    SYSTEM_CONFIG_REG : entity work.REGISTER_TABLE
+    SYSTEM_CONFIG_REG : entity work.REGISTER_UNIT
     generic map(
-        BASE_ADDRESS        => CONFIG_REG_ADDRESS,
-        NUMBER_REGISTERS    => 1,
-        REG_DEFAULT_VALUES  => REG_CONFIG_DEFAULT
+        ADDRESS         => CONFIG_REG_ADDRESS,
+        DEF_VALUE       => control_default
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        sys_bus_i           => master_bus_o,
-        sys_bus_o           => sys_bus_o(0),
-        reg_data_in         => config_reg_data,
-        reg_data_out        => config_reg_data,
-        reg_data_stb        => open
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => master_bus_o,
+        sys_bus_o       => sys_bus_o(0),
+        data_in         => control_data,
+        data_out        => control_data,
+        read_stb        => open,
+        write_stb       => open
     );
     
     --Mirror output bus to make register accessible in both modes of operation
@@ -299,22 +299,23 @@ begin
         rst			        => rst,
         sys_bus_i		    => sys_bus_i,
         sys_bus_o		    => sys_bus_o(2),
-        reg_data_in		    => sensor_data_vector,
-        reg_data_out	    => open,
-        reg_data_stb	    => open
+        data_in		        => sensor_data_vector,
+        data_out	        => open,
+        read_stb	        => open,
+        write_stb           => open
     );
 
     --Recover memory data form io_vector
-    sensor_data_vector(0)(0) <= internal_io_i(2).dat;
-    sensor_data_vector(0)(1) <= internal_io_i(3).dat;
-    sensor_data_vector(0)(2) <= internal_io_i(4).dat;
-    sensor_data_vector(0)(3) <= internal_io_i(5).dat;
-    sensor_data_vector(0)(4) <= internal_io_i(6).dat;
-    sensor_data_vector(0)(5) <= internal_io_i(7).dat;
-    sensor_data_vector(0)(6) <= internal_io_i(8).dat;
-    sensor_data_vector(0)(7) <= internal_io_i(9).dat;
-    sensor_data_vector(1)(0) <= internal_io_i(10).dat;
-    sensor_data_vector(1)(7 downto 1) <= (others => '0');
+    sensor_data_vector(1)(0) <= internal_io_i(2).dat;
+    sensor_data_vector(1)(1) <= internal_io_i(3).dat;
+    sensor_data_vector(1)(2) <= internal_io_i(4).dat;
+    sensor_data_vector(1)(3) <= internal_io_i(5).dat;
+    sensor_data_vector(1)(4) <= internal_io_i(6).dat;
+    sensor_data_vector(1)(5) <= internal_io_i(7).dat;
+    sensor_data_vector(1)(6) <= internal_io_i(8).dat;
+    sensor_data_vector(1)(7) <= internal_io_i(9).dat;
+    sensor_data_vector(0)(0) <= internal_io_i(10).dat;
+    sensor_data_vector(0)(7 downto 1) <= (others => '0');
     internal_io_o(10 downto 2) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
 	
