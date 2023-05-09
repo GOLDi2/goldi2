@@ -61,7 +61,9 @@ if sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/d
 fi
 
 export VPN_CONFIG=$(cat boards.yml | yq -r '.boards['$INDEX'].vpnConfig.private')
+export VARIANT=$(cat boards.yml | yq -r '.boards['$INDEX'].variant')
 
 echo "Set IP to $IP"
 echo "Set PASSWORD to $PASSWORD"
 echo "Set VPN_CONFIG to $VPN_CONFIG"
+echo "Set VARIANT to $VARIANT"
