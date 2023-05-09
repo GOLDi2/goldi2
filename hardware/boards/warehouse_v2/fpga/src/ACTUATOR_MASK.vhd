@@ -107,6 +107,10 @@ architecture RTL of ACTUATOR_MASK is
     signal z_direction_buff     :   std_logic;
     --Actuator mask
     signal mask                 :   std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    --Reset state machine
+    type mask_state is (STANDBY, OPERATE);
+    signal mask_ps      :   mask_state;
+    signal rst_counter  :   unsigned(3 downto 0);
 
 
 begin
@@ -249,7 +253,7 @@ begin
                     x_direction_buff <= '0';
                 end if;
 
-            elsif(x_p_edge = '1') then
+            elsif(mask_ps = OPERATE and x_p_edge = '1') then
                 x_direction_buff <= motor_x_dir;
             end if;
         end if;
@@ -270,7 +274,7 @@ begin
                 else
                     y_direction_buff <= (others => '0');
                 end if;
-            elsif(y_p_edge = '1') then
+            elsif(mask_ps = OPERATE and y_p_edge = '1') then
                 y_direction_buff(0) <= motor_y_out_1;
                 y_direction_buff(1) <= motor_y_out_2;
             end if;
@@ -289,7 +293,7 @@ begin
                     z_direction_buff <= '0';
                 end if;
 
-            elsif(z_p_edge = '1') then
+            elsif(mask_ps = OPERATE and z_p_edge = '1') then
                 z_direction_buff <= motor_z_dir;
             end if;
         end if;
@@ -303,7 +307,7 @@ begin
         if(rising_edge(clk)) then
             if(rst = '1') then
                 x_virtual_dir_buff <= '0';
-            elsif(x_virtual_p_edge = '1') then
+            elsif(mask_ps = OPERATE and x_virtual_p_edge = '1') then
                 x_virtual_dir_buff <= motor_x_dir;
             end if;
         end if;
@@ -315,8 +319,37 @@ begin
         if(rising_edge(clk)) then
             if(rst = '1') then
                 z_virtual_dir_buff <= '0';
-            elsif(z_virtual_p_edge = '1') then
+            elsif(mask_ps = OPERATE and z_virtual_p_edge = '1') then
                 z_virtual_dir_buff <= motor_x_dir;
+            end if;
+        end if;
+    end process;
+    -----------------------------------------------------------------------------------------------
+
+
+
+
+    --****RESET STATE MACHINE****
+    -----------------------------------------------------------------------------------------------
+    RST_COUNT : process(clk)
+    begin
+        if(rst = '1') then
+            rst_counter <= to_unsigned(0,rst_counter'length);
+        elsif(rising_edge(clk)) then
+            rst_counter <= rst_counter+1;
+        end if;
+    end process;
+
+
+    RST_SM : process(clk)
+    begin
+        if(rst = '1') then
+            mask_ps <= STANDBY;
+        elsif(rising_edge(clk)) then
+            if(rst_counter(rst_counter'left) = '1') then
+                mask_ps <= OPERATE;
+            else
+                mask_ps <= STANDBY;
             end if;
         end if;
     end process;
