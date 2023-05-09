@@ -8,6 +8,14 @@ while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
+    --daily)
+      DAILY=true
+      shift # past argument
+      ;;
+    --weekly)
+      WEEKLY=true
+      shift # past argument
+      ;;
     --deploy)
       DEPLOY="$2"
       shift # past argument
@@ -20,6 +28,14 @@ while [[ $# -gt 0 ]]; do
     ;;
   esac
 done
+
+if [ -z "$DAILY" ]; then
+  SUBCOMMANDVARS="$SUBCOMMANDVARS --skip-tag daily"
+fi
+
+if [ -z "$WEEKLY" ]; then
+  SUBCOMMANDVARS="$SUBCOMMANDVARS --skip-tag weekly"
+fi
 
 REPOSITORY=admin@ci.goldi-labs.de:/data/www/ci/goldi
 WEB_REPOSITORY=https://ci.goldi-labs.de/goldi
