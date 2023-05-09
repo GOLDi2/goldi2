@@ -16,7 +16,7 @@ import asyncHandler from 'express-async-handler';
 declare module 'express-serve-static-core' {
     interface Request {
         apiClient: APIClient
-        user?: AuthenticationServiceTypes.User
+        user?: AuthenticationServiceTypes.User<'response'>
     }
 }
 
@@ -81,9 +81,7 @@ async function handle_login(req: Request, res: Response, next: NextFunction) {
     }
     if (loggedIn) {
         try {
-            req.user = {
-                username: (await req.apiClient.getIdentity()).username
-            }
+            req.user = (await req.apiClient.getIdentity())
             if (req.query.redirect ){
                 res.redirect(303, req.query.redirect as string);
             }else{

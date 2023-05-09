@@ -33,7 +33,7 @@ export async function find_language_suffixed_files(filename: string, language: s
 export function renderPageInit(content_path: string, default_language: string) {
     const page_resolution = template_resolution(content_path + '/templates', 'pages', default_language);
 
-    return async function renderPage(page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User) {
+    return async function renderPage(page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User<'response'>) {
         const isLoggedIn = user !== undefined
         const _page=page.slice(1)
         try {
