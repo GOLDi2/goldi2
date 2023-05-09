@@ -29,7 +29,7 @@ export async function find_language_suffixed_files(filename: string, language: s
     throw new Error('Could not find file ' + filename);
 }
 
-export type renderPageType = (page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User, properties?: any)=>Promise<void>;
+export type renderPageType = (page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User<'response'>, properties?: any)=>Promise<void>;
 
 export function renderPageInit(content_path: string, default_language: string): renderPageType {
     const page_resolution = template_resolution(content_path + '/templates', 'pages', default_language);
