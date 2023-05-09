@@ -1,0 +1,70 @@
+{% extends "admin_layout.html" %}
+{% import "components/topbar.html" as topbar %}
+{% import "components/elements.html" as elements %}
+{% block content %}
+    {% call topbar.container() %}
+    {% call topbar.topbar() %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/groups/create", icon="add") %}Add Group{% endcall %}{% endcall %}
+    {% endcall %}
+    {% call topbar.content() %}
+    <div class="flex">
+        <div class="text-center w-32">
+            type
+        </div>
+        <div class="text-center w-6"></div>
+        <div class="text-ellipsis w-52 ml-4">
+            Name
+        </div>
+        <div class="text-ellipsis w-96">
+            Description
+        </div>
+        <div class="text-ellipsis w-52">
+            Username
+        </div>
+        <div class="w-52"></div>
+    </div>
+    {% for group in devices %}
+        <div class="flex flex-col hover:bg-primary-100">
+            <div class="flex flex-row">
+                <div class="text-sm text-center w-32">{{ group.type }}</div>
+                {% if deviceDetailsMap[device.url].connected %}
+                    <span class="material-symbols-rounded align-middle">link</span>
+                {% else %}
+                    <span class="material-symbols-rounded align-middle">link_off</span>
+                {% endif %}
+                <div class="text-ellipsis w-52 ml-4">
+                    {{ group.name }}
+                </div>
+                <details class="text-ellipsis w-96">
+                    <summary>Description</summary>
+                    <p>{{ group.description }}</p>
+                </details>
+                <div class="text-ellipsis w-52">
+                    {{ userMap[group.owner].username }}
+                </div>
+                <div class="w-52">
+                    <a href="groups/details?url={{ group.url }}" class="material-symbols-rounded">edit</a>
+                    <a href="groups/delete?url={{ group.url }}" class="material-symbols-rounded">delete</a>
+                </div>
+            </div>
+            {% for device in deviceDetailsMap[group.url].devices %}
+                <div class="flex flex-row">
+                    <div class="text-sm text-center w-32 ml-6">{{ device.type }}</div>
+                    <div class="text-ellipsis w-52 ml-4">
+                        {{ device.name }}
+                    </div>
+                    <details class="text-ellipsis w-96">
+                        <summary>Description</summary>
+                        <p>{{ device.description }}</p>
+                    </details>
+                    <div class="text-ellipsis w-52">
+                        {{ userMap[device.owner].username }}
+                    </div>
+                    <div class="w-52"></div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    {% endcall %}
+    {% endcall %}
+{% endblock %}

@@ -12,6 +12,7 @@ import expressWinston from 'express-winston';
 import winston from 'winston';
 import cookieParser from 'cookie-parser'
 import asyncHandler from 'express-async-handler';
+import { handle_admin } from "./admin";
 
 declare module 'express-serve-static-core' {
     interface Request {
@@ -130,6 +131,7 @@ app.use('/', asyncHandler(async (req: Request, res, next) => {
 for (const language of languages) {
     app.post('/' + language + '/login.html', asyncHandler(handle_login));
     app.get('/' + language + '/logout.html', asyncHandler(handle_logout));
+    app.use('/' + language + '/admin/', asyncHandler(handle_admin(language, renderPage, logger)))
     app.get('/' + language + '/', asyncHandler(async (req, res) => { await renderPage('index', language, res, req.user); }));
     app.use('/' + language + '/', asyncHandler(async (req, res) => { await renderPage(req.path, language, res, req.user); }));
 }
