@@ -148,7 +148,7 @@ package GOLDI_MODULE_CONFIG is
     constant X_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
-    constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
+    constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -156,7 +156,7 @@ package GOLDI_MODULE_CONFIG is
         --[8]       Enable double edge STEP pulses
         --[7:4]     Reserved -> '0'
         --[3:0]     Microstep resolution for STEP/DIR mode
-        0 => x"000007",   --x"00004"
+        0 => x"000004",   --x"00004"
 
         --**Chopper Control Register (CHOPCONF)**
         --[19:17]   Address = 100
@@ -203,7 +203,8 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070"--x"E0070"
+        4 => x"0E0070", --x"E0070"
+        5 => x"000004"
     );
     -----------------------------------------------------------------------------------------------
 
@@ -224,7 +225,7 @@ package GOLDI_MODULE_CONFIG is
     constant Z_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
-    constant Z_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
+    constant Z_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -232,7 +233,7 @@ package GOLDI_MODULE_CONFIG is
         --[8]       Enable double edge STEP pulses
         --[7:4]     Reserved -> '0'
         --[3:0]     Microstep resolution for STEP/DIR mode
-        0 => x"000007",   --x"00004"
+        0 => x"000004",   --x"00004"
 
         --**Chopper Control Register (CHOPCONF)**
         --[19:17]   Address = 100
@@ -279,7 +280,8 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070"--x"E0070"
+        4 => x"0E0070",--x"E0070"
+        5 => x"000004"
     );
     -----------------------------------------------------------------------------------------------
 
