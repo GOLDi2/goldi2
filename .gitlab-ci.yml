@@ -61,7 +61,7 @@ build-daily:
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH  --skip-tag weekly $DEPLOY $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH  --daily $DEPLOY $RELEASE
 
 build-weekly:
   timeout: 48h
@@ -75,4 +75,4 @@ build-weekly:
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily $DEPLOY $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH --weekly $DEPLOY $RELEASE
