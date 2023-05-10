@@ -253,7 +253,7 @@ begin
                     x_direction_buff <= '0';
                 end if;
 
-            elsif(mask_ps = OPERATE and x_p_edge = '1') then
+            elsif(x_p_edge = '1') then
                 x_direction_buff <= motor_x_dir;
             end if;
         end if;
@@ -274,7 +274,7 @@ begin
                 else
                     y_direction_buff <= (others => '0');
                 end if;
-            elsif(mask_ps = OPERATE and y_p_edge = '1') then
+            elsif(y_p_edge = '1') then
                 y_direction_buff(0) <= motor_y_out_1;
                 y_direction_buff(1) <= motor_y_out_2;
             end if;
@@ -293,7 +293,7 @@ begin
                     z_direction_buff <= '0';
                 end if;
 
-            elsif(mask_ps = OPERATE and z_p_edge = '1') then
+            elsif(z_p_edge = '1') then
                 z_direction_buff <= motor_z_dir;
             end if;
         end if;
@@ -333,20 +333,22 @@ begin
     -----------------------------------------------------------------------------------------------
     RST_COUNT : process(clk)
     begin
-        if(rst = '1') then
-            rst_counter <= to_unsigned(0,rst_counter'length);
-        elsif(rising_edge(clk)) then
-            rst_counter <= rst_counter+1;
-        end if;
+        if(rising_edge(clk)) then
+			if(rst = '1') then
+				rst_counter <= to_unsigned(0,rst_counter'length);
+			else
+				rst_counter <= rst_counter+1;
+			end if;
+		end if;
     end process;
 
 
     RST_SM : process(clk)
     begin
-        if(rst = '1') then
-            mask_ps <= STANDBY;
-        elsif(rising_edge(clk)) then
-            if(rst_counter(rst_counter'left) = '1') then
+        if(rising_edge(clk)) then
+			if(rst = '1') then
+				 mask_ps <= STANDBY;
+            elsif(rst_counter = to_unsigned(15,4)) then
                 mask_ps <= OPERATE;
             else
                 mask_ps <= STANDBY;
@@ -380,7 +382,9 @@ begin
 
     --Y motor protection
     --H-Bridge enable signal blocked to avoid damage
-    mask(24) <= '0' when((limit_y_neg  = '1' and limit_x_pos      = '1')            or
+    mask(24) <= '0' when((limit_y_neg  = '1' and limit_y_pos      = '1')            or
+                         (limit_y_neg  = '1' and motor_y_out_2    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
+                         (limit_y_pos  = '1' and motor_y_out_1    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
                          (y_limits     = '1'                                        and 
                           y_direction_buff = (motor_y_out_2 & motor_y_out_1)))      else
                 '1';

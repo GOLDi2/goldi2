@@ -2,7 +2,7 @@
 <BaliProject version="3.2" title="Project" device="LCMXO2-7000HC-4TG144C" default_implementation="impl1">
     <Options/>
     <Implementation title="impl1" dir="build" description="impl1" synthesis="lse" default_strategy="Strategy1">
-        <Options def_top="TMC2660_DRIVER" top="TOP_LEVEL"/>
+        <Options def_top="TMC2660_SD" top="TOP_LEVEL"/>
         <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
             <Options top_module="TOP_LEVEL"/>
         </Source>
@@ -79,6 +79,12 @@
             <Options/>
         </Source>
         <Source name="src/common/actuation/TMC2660/TMC2660_SPI.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/StepperControl_v1_00.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
