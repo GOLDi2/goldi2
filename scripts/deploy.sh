@@ -56,17 +56,17 @@ fi
 if [ "$DEPOLY_GLOBAL" = true ]; then
   echo "Deploying global docker-compose"
 
-  ssh "$HOST" "cd $DIR/global; docker-compose down || true"
-  cat helper/deploy-files/docker-compose.global.yml | ssh "$HOST" "source $DIR/global.secrets; cat - | envsubst > $DIR/global/docker-compose.yml"
-  ssh "$HOST" "cd $DIR/global; docker-compose up -d"
+  ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/global; docker-compose down || true"
+  cat helper/deploy-files/docker-compose.global.yml | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/global.secrets; cat - | envsubst > $DIR/global/docker-compose.yml"
+  ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/global; docker-compose up -d"
 
 else
   echo "Deploying instance"
 
-  ssh "$HOST" "cd $DIR/$VARIANT; docker-compose down || true"
+  ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose down || true"
 
   function load_docker_image(){
-    cat $1 | ssh "$HOST" "cat - | docker load" | sed -e 's/^.* //'
+    cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | sed -e 's/^.* //'
   }
 
   # Specify the exact version in the compose file
@@ -100,6 +100,6 @@ else
   echo "$(load_docker_image "frontend-services/website/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend/image: '$(load_docker_image "frontend-services/website/dist/docker-image.tar")'/g')
 
-  echo "$COMPOSE" | ssh "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
-  ssh "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
+  echo "$COMPOSE" | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
+  ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
 fi
