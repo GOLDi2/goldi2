@@ -37,7 +37,7 @@ package GOLDI_COMM_STANDARD is
 	--Address width sets the protocol for SPI communication and the number of possible registers
     --SPI communication protocol takes first bit of the configuration byte's for write enable
     --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
-    constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 31 := 7;
+    constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 31 := 15;
 
     --Main parameter of the system. Sets the width of data words 
 	constant SYSTEM_DATA_WIDTH	    :	natural range 8 to 32 := 8;
