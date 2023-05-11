@@ -18,8 +18,9 @@
 - (4) Microcontroller
 - (5) IO board
 - (6) Warehouse_2
-  - [0]: General construction
-
+  - [0]: Board construction
+- (7) Control Unit Mobile {control_unit_v1}
+  - [0]: Board construction 
 
 
 ## Release structure: [V]
@@ -28,3 +29,4 @@
   - [1]: Documentation of new file and repository structure
 - (1) Release of Axis Portal V1 stable version V1.00.00
   - [1]: Integration of improved memory units (Register Unit/Register Table)
+  - [2]: Reorganization of file structure to simplify future board
