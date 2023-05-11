@@ -19,6 +19,10 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+--! Use standard library
+library work;
+use work.GOLDI_COMM_STANDARD.all;
+use work.GOLDI_IO_STANDARD.all;
 
 
 
@@ -32,19 +36,19 @@ use IEEE.numeric_std.all;
 --! The module is enabled by the pwm_enb signal. 
 entity PWM_GENERATOR_UNIT is
     generic(
-        FRQ_SYSTEM      :   natural := 100000000;               --! System clock frequency in Hz
-        FRQ_PWM         :   natural := 5000                     --! PWM output signal frequency in Hz
+        ADDRESS         :   integer := 1;
+        FRQ_SYSTEM      :   natural := 100000000;   --! System clock frequency in Hz
+        FRQ_PWM         :   natural := 5000         --! PWM output signal frequency in Hz
     );
     port(
         --General
-        clk             : in    std_logic;                      --! System clock
-        rst             : in    std_logic;                      --! Asynchronous reset
-        --Configuration interface   
-        config_word     : in    std_logic_vector(7 downto 0);   --! PWM 8-bit configuration word
-        config_valid    : in    std_logic;                      --! Configuration word valid
-        --Control interface
-        pwm_enb         : in    std_logic;                      --! Enable PWM signal
-        pwm_out         : out   std_logic                       --! PWM signal
+        clk             : in    std_logic;          --! System clock
+        rst             : in    std_logic;          --! Asynchronous reset
+        --BUS slave interface 
+        sys_bus_i       : in    sbus_in;            --! BUS slave input signals [we,adr,dat]
+        sys_bus_o       : out   sbus_out;           --! BUS slave output signals [dat,val]
+        --PWM signal
+        pwm_out         : out   io_o                --! PWM signal
     );
 end entity PWM_GENERATOR_UNIT;
 
@@ -55,30 +59,17 @@ end entity PWM_GENERATOR_UNIT;
 architecture RTL of PWM_GENERATOR_UNIT is
 
     --****INTERNAL SIGNALS****
-    constant PWM_PERIOD :   natural := (FRQ_SYSTEM/(FRQ_PWM*255))-1;
-    signal pwm_word     :   unsigned(7 downto 0);
+    constant PWM_PERIOD     :   natural := (FRQ_SYSTEM/(FRQ_PWM*255))-1;    
+    --Memory 
+    constant reg_default    :   data_word := (others => '0');   
+    signal pwm_word         :   data_word;
+    signal pwm_stb          :   std_logic;
     --Counters
-    signal clk_counter  :   unsigned(15 downto 0);
-    signal pwm_counter  :   unsigned(7 downto 0);
+    signal clk_counter      :   unsigned(15 downto 0);
+    signal pwm_counter      :   unsigned(7 downto 0);
 
 
 begin
-
-    --****CONFIGURATION INTERFACE****
-    -----------------------------------------------------------------------------------------------
-    CONFIGURATION_INTERFACE : process(clk,rst)
-    begin
-        if(rst = '1') then
-            pwm_word <= to_unsigned(0,pwm_word'length);
-        elsif(rising_edge(clk)) then
-            if(config_valid = '1') then
-                pwm_word <= unsigned(config_word);
-            end if;
-        end if;
-    end process;
-    -----------------------------------------------------------------------------------------------
-
-
 
     --****SIGNAL GENERATOR****
     -----------------------------------------------------------------------------------------------
@@ -87,7 +78,7 @@ begin
         if(rst = '1') then
             clk_counter <= to_unsigned(0,clk_counter'length);
         elsif(rising_edge(clk)) then
-            if(config_valid = '1' or pwm_enb = '0') then
+            if(pwm_stb = '1') then
                 clk_counter <= to_unsigned(0,clk_counter'length);
             elsif(clk_counter = to_unsigned(PWM_PERIOD,clk_counter'length)) then
                 clk_counter <= to_unsigned(0,clk_counter'length);
@@ -96,17 +87,17 @@ begin
             end if;
         end if;
     end process;
-    
 
+    
     PWM_FRACTION_COUNTER : process(clk,rst)
     begin
         if(rst = '1') then
             pwm_counter <= to_unsigned(1,pwm_counter'length);
-            pwm_out     <= '0';
+            pwm_out.dat <= '0';
 
         elsif(rising_edge(clk)) then
             --Counter divides the signal into 255 segments to assert as high or low
-            if(config_valid = '1' or pwm_enb = '0') then
+            if(pwm_stb = '1') then
                 pwm_counter <= to_unsigned(1,pwm_counter'length);
             elsif(pwm_counter = 255 and clk_counter = PWM_PERIOD) then
                 pwm_counter <= to_unsigned(1,pwm_counter'length);
@@ -115,13 +106,38 @@ begin
             end if;
 
             --Control pwm active ratio
-            if(pwm_counter > pwm_word) then
-                pwm_out <= '0';
+            if(pwm_counter > unsigned(pwm_word(7 downto 0))) then
+                pwm_out.dat <= '0';
             else
-                pwm_out <= '1';
+                pwm_out.dat <= '1';
             end if;
         end if;
+
     end process;
+
+    --Configura IO to output
+    pwm_out.enb <= '1';
+    -----------------------------------------------------------------------------------------------
+
+
+
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    MEMORY : entity work.REGISTER_UNIT
+    generic map(
+        ADDRESS     => ADDRESS,
+        DEF_VALUE   => reg_default
+    )
+    port map(
+        clk         => clk,
+        rst         => rst,
+        sys_bus_i   => sys_bus_i,
+        sys_bus_o   => sys_bus_o,
+        data_in     => pwm_word,
+        data_out    => pwm_word,
+        read_stb    => open,
+        write_stb   => pwm_stb
+    );
     -----------------------------------------------------------------------------------------------
 
 
