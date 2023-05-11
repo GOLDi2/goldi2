@@ -1,0 +1,45 @@
+
+###################################################################################################
+# General constraints
+###################################################################################################
+BLOCK ASYNCPATHS ;
+BLOCK RESETPATHS ;
+FREQUENCY 54.00000 MHz ;
+
+
+
+###################################################################################################
+# Pin placement contstraints
+###################################################################################################
+#External clock and reset
+
+LOCATE COMP "ClockFPGA" SITE "128" ;
+LOCATE COMP "FPGA_nReset" SITE "126" ;
+
+#SPI communication with RaspberryPie
+LOCATE COMP "SPI0_SCLK" SITE "138" ;
+LOCATE COMP "SPI0_nCE0" SITE "127" ;
+LOCATE COMP "SPI0_MOSI" SITE "133" ;
+LOCATE COMP "SPI0_MISO" SITE "139" ;
+
+# FPGA IO Pins
+#LOCATE COMP "IO_DATA[%i]" SITE "" ;
+
+
+
+
+###################################################################################################
+# Pin configuration constraints
+###################################################################################################
+#External clock and reset
+IOBUF PORT "ClockFPGA" IO_TYPE=LVCMOS33 ;
+IOBUF PORT "FPGA_nReset" IO_TYPE=LVCMOS33 ;
+
+#SPI communication with RaspberryPie
+IOBUF PORT "SPI0_SCLK" IO_TYPE=LVCMOS33 PULLMODE=UP;
+IOBUF PORT "SPI0_nCE0" IO_TYPE=LVCMOS33 PULLMODE=UP ;
+IOBUF PORT "SPI0_MOSI" IO_TYPE=LVCMOS33 PULLMODE=DOWN ;
+IOBUF PORT "SPI0_MISO" IO_TYPE=LVCMOS33 PULLMODE=DOWN ;
+
+# FPGA IO Pins
+#IOBUF PORT "IO_DATA[%i]" IO_TYPE=LVCMOS33 DRIVE=8 PULLMODE=DOWN ;
