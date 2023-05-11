@@ -68,6 +68,84 @@ end entity REGISTER_TABLE;
 
 
 
+--! Experimental architecure used to reduce multiplexing
+architecture EXPERIMENTAL of REGISTER_TABLE is
+  
+    --****INTERNAL SIGNALS****
+    --Address constants
+    constant min_address    :   signed(BUS_ADDRESS_WIDTH downto 0) 
+                                := to_signed(BASE_ADDRESS,BUS_ADDRESS_WIDTH+1);
+    constant max_address    :   signed(BUS_ADDRESS_WIDTH downto 0)
+                                := to_signed(BASE_ADDRESS+NUMBER_REGISTERS,BUS_ADDRESS_WIDTH+1);
+
+
+begin
+
+    READ_OPERATION : process(clk,rst)
+        variable reg_index  :   signed(BUS_ADDRESS_WIDTH downto 0);
+        variable adr_buff   :   std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+    begin
+        if(rst = '1') then
+            sys_bus_o <= gnd_sbus_o;
+            read_stb  <= (others => '0');
+        
+        elsif(rising_edge(clk)) then
+            --Ground read strobe to avoid multiple stb when continous reading
+            read_stb  <= (others => '0');
+            --Decode address 
+            adr_buff  := "0" & sys_bus_i.adr;
+            reg_index := signed(adr_buff) - min_address;
+
+            --Recover value form data table if address belongs to table
+            if((min_address <= signed(adr_buff)) and (signed(adr_buff) < max_address) and
+               (sys_bus_i.we = '0'))                                                  then
+                
+                sys_bus_o.dat <= data_in(to_integer(reg_index));
+                sys_bus_o.val <= '1';
+                read_stb(to_integer(reg_index)) <= '1';
+            
+            else
+                sys_bus_o <= gnd_sbus_o;
+            end if;
+
+        end if;
+    end process;
+
+
+
+    WRITE_OPERATION : process(clk,rst)
+        variable reg_index  :   signed(BUS_ADDRESS_WIDTH downto 0);
+        variable adr_buff   :   std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+    begin
+        if(rst = '1') then
+            data_out  <= REG_DEFAULT_VALUES;
+            write_stb <= (others => '1');
+
+        elsif(rising_edge(clk)) then
+            --Ground read strobe to avoid multiple stb when continous reading
+            write_stb  <= (others => '0');
+            --Decode address 
+            adr_buff  := "0" & sys_bus_i.adr;
+            reg_index := signed(adr_buff) - min_address;
+
+            --Recover value form data table if address belongs to table
+            if((min_address <= signed(adr_buff)) and (signed(adr_buff) < max_address) and
+               (sys_bus_i.we = '1'))                                                  then
+                
+                data_out(to_integer(reg_index))  <= sys_bus_i.dat;
+                write_stb(to_integer(reg_index)) <= '1';
+            else
+                write_stb <= (others => '0');
+            end if;
+
+        end if;
+    end process;
+
+
+end EXPERIMENTAL;
+
+
+
 
 --! General architecture
 architecture RTL of REGISTER_TABLE is

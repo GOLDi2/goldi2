@@ -104,7 +104,7 @@ begin
 
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
-    MEMORY : entity work.REGISTER_TABLE
+    MEMORY : entity work.REGISTER_TABLE(EXPERIMENTAL)
 	generic map(
 		BASE_ADDRESS		=> ADDRESS,
 		NUMBER_REGISTERS	=> GPIO_NUMBER,
