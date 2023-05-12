@@ -383,8 +383,8 @@ begin
     --Y motor protection
     --H-Bridge enable signal blocked to avoid damage
     mask(24) <= '0' when((limit_y_neg  = '1' and limit_y_pos      = '1')            or
-                         (limit_y_neg  = '1' and motor_y_out_2    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
-                         (limit_y_pos  = '1' and motor_y_out_1    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
+                         (limit_y_neg  = '1' and motor_y_out_1    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
+                         (limit_y_pos  = '1' and motor_y_out_2    = '1')            or  --Temporary redundant conditions to avoid errors when initialized in limit
                          (y_limits     = '1'                                        and 
                           y_direction_buff = (motor_y_out_2 & motor_y_out_1)))      else
                 '1';
