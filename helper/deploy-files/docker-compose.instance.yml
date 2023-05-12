@@ -25,7 +25,7 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
-      ALLOWLIST: auth:authservice,device:deviceservice,experiment:experimentservice,federation:federationservice,update:updateservice
+      ALLOWLIST: auth:local:authservice,device:local:deviceservice,experiment:local:experimentservice,federation:local:federationservice,update:local:updateservice
     volumes:
       - auth_db:/app/db
     networks:
