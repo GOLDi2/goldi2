@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische UniversitÃƒÂ¤t Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -134,15 +134,15 @@ begin
     clk <= ClockFPGA;
     
     --Internal clock for testing ["53.2"/"44.33"]
-    --INTERNAL_CLOCK : component machxo2.components.OSCH
-     --generic map(
-         --NOM_FREQ => "53.2"
-     --)
-     --port map(
-         --STDBY    => '0',
-         --OSC      => clk,
-         --SEDSTDBY => open
-     --);
+    -- INTERNAL_CLOCK : component machxo2.components.OSCH
+    -- generic map(
+    --     NOM_FREQ => "53.2"
+    -- )
+    -- port map(
+    --     STDBY    => '0',
+    --     OSC      => clk,
+    --     SEDSTDBY => open
+    -- );
     -----------------------------------------------------------------------------------------------
 
 
@@ -160,7 +160,7 @@ begin
     --Reset routing for use in the models
     rst <= FPGA_nReset_sync;    --Incorrect port name for signal FPGA_nReset -> Signal active high
     --Reset routing for use in the test Breakoutboard
-    -- rst <= not FPGA_nReset_sync;
+    --rst <= not FPGA_nReset_sync;
 
 
     --SPI communication
@@ -247,11 +247,13 @@ begin
     begin
         if(rising_edge(clk)) then
             if(selected_bus = (selected_bus'range => '0')) then
-                if((unsigned(master_bus_o.adr) >= to_unsigned(1,master_bus_o.adr'length))   and
-				   (unsigned(master_bus_o.adr) <= to_unsigned(83,master_bus_o.adr'length))) then
-					master_bus_i.dat <= sys_bus_o(to_integer(unsigned(master_bus_o.adr))).dat;
+                if(unsigned(master_bus_o.adr) = to_unsigned(1,master_bus_o.adr'length)) 			then
+					master_bus_i <= sys_bus_o(0);
+				elsif((unsigned(master_bus_o.adr) >= to_unsigned(2,master_bus_o.adr'length))   	and
+				      (unsigned(master_bus_o.adr) <= to_unsigned(65,master_bus_o.adr'length)))	then
+					master_bus_i <= sys_bus_o(1);
 				else
-					master_bus_i <= gnd_mbus_i;
+					master_bus_i <= reduceBusVector(sys_bus_o(19 downto 2));
 				end if;
 			else
                 master_bus_i <= reduceBusVector(cb_bus_o);
