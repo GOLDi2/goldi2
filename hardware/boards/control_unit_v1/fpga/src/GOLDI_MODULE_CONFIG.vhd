@@ -46,11 +46,11 @@ package GOLDI_MODULE_CONFIG is
 	--****MEMORY****
 	-----------------------------------------------------------------------------------------------
 	--Module Base Adderesses; Length based on a system_data_width = 8
-	constant CTRL_REG_ADDRESS		:	integer := 1;		--Table length: 1
+	constant CTRL_REG_ADDRESS		:	integer := 1;		 --Table length: 1
     constant GPIO_BASE_ADDRESS      :   integer := 2;       --Table length: 64
-    constant PWM_BASE_ADDRESS       :   integer := 65;      --Table length: 10
-    constant PR_LED_ADDRESS         :   integer := 75;      --Table length: 1
-    constant PG_LED_ADDRESS         :   integer := 76;      --Table length: 1
+    constant PWM_BASE_ADDRESS       :   integer := 66;      --Table length: 10
+    constant PR_LED_ADDRESS         :   integer := 82;      --Table length: 1
+    constant PG_LED_ADDRESS         :   integer := 83;      --Table length: 1
 	-----------------------------------------------------------------------------------------------
 
 
