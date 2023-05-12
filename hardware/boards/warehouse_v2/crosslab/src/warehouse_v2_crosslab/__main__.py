@@ -20,14 +20,30 @@ from crosslab.soa_services.electrical.signal_interfaces.gpio import (
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
 
+
 sensor_names = [
-    "LimitXLeft",
-    "LimitXRight",
-    "LimitYBack",
-    "LimitYFront",
-    "LimitZBottom",
-    "LimitZTop",
-    "Proximity",
+    "inductive",
+    "z_top",
+    "z_bottom",
+    "y_inside",
+    "y_outside",
+    "x_right",
+    "x_left",
+    "x1",
+    "x2",
+    "x3",
+    "x4",
+    "x5",
+    "x6",
+    "x7",
+    "x8",
+    "x9",
+    "x10",
+    "z1",
+    "z2",
+    "z3",
+    "z4",
+    "z5",
 ]
 
 actuators_names = [
@@ -37,7 +53,6 @@ actuators_names = [
     "YMotorFront",
     "ZMotorBottom",
     "ZMotorTop",
-    "Magnet",
 ]
 
 
@@ -89,27 +104,72 @@ def newSensorInterface(interface):
             interface.changeDriver("strongH" if value else "strongL")
 
         value = False
-        if name == "LimitXLeft":
-            hal.LimitXLeft.on("change", setBool)
-            value = hal.LimitXLeft.value()
-        elif name == "LimitXRight":
-            hal.LimitXRight.on("change", setBool)
-            value = hal.LimitXRight.value()
-        elif name == "LimitYBack":
-            hal.LimitYBack.on("change", setBool)
-            value = hal.LimitYBack.value()
-        elif name == "LimitYFront":
-            hal.LimitYFront.on("change", setBool)
-            value = hal.LimitYFront.value()
-        elif name == "LimitZBottom":
-            hal.LimitZBottom.on("change", setBool)
-            value = hal.LimitZBottom.value()
-        elif name == "LimitZTop":
-            hal.LimitZTop.on("change", setBool)
-            value = hal.LimitZTop.value()
-        elif name == "Proximity":
-            hal.Proximity.on("change", setBool)
-            value = hal.Proximity.value()
+        if name == "inductive":
+            hal.inductive.on("change", setBool)
+            value = hal.inductive.value()
+        elif name == "z_top":
+            hal.z_top.on("change", setBool)
+            value = hal.z_top.value()
+        elif name == "z_bottom":
+            hal.z_bottom.on("change", setBool)
+            value = hal.z_bottom.value()
+        elif name == "y_inside":
+            hal.y_inside.on("change", setBool)
+            value = hal.y_inside.value()
+        elif name == "y_outside":
+            hal.y_outside.on("change", setBool)
+            value = hal.y_outside.value()
+        elif name == "x_right":
+            hal.x_right.on("change", setBool)
+            value = hal.x_right.value()
+        elif name == "x_left":
+            hal.x_left.on("change", setBool)
+            value = hal.x_left.value()
+        elif name == "x1":
+            hal.x1.on("change", setBool)
+            value = hal.x1.value()
+        elif name == "x2":
+            hal.x2.on("change", setBool)
+            value = hal.x2.value()
+        elif name == "x3":
+            hal.x3.on("change", setBool)
+            value = hal.x3.value()
+        elif name == "x4":
+            hal.x4.on("change", setBool)
+            value = hal.x4.value()
+        elif name == "x5":
+            hal.x5.on("change", setBool)
+            value = hal.x5.value()
+        elif name == "x6":
+            hal.x6.on("change", setBool)
+            value = hal.x6.value()
+        elif name == "x7":
+            hal.x7.on("change", setBool)
+            value = hal.x7.value()
+        elif name == "x8":
+            hal.x8.on("change", setBool)
+            value = hal.x8.value()
+        elif name == "x9":
+            hal.x9.on("change", setBool)
+            value = hal.x9.value()
+        elif name == "x10":
+            hal.x10.on("change", setBool)
+            value = hal.x10.value()
+        elif name == "z1":
+            hal.z1.on("change", setBool)
+            value = hal.z1.value()
+        elif name == "z2":
+            hal.z2.on("change", setBool)
+            value = hal.z2.value()
+        elif name == "z3":
+            hal.z3.on("change", setBool)
+            value = hal.z3.value()
+        elif name == "z4":
+            hal.z4.on("change", setBool)
+            value = hal.z4.value()
+        elif name == "z5":
+            hal.z5.on("change", setBool)
+            value = hal.z5.value()
 
         interface.changeDriver("strongH" if value else "strongL")
 

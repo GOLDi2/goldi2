@@ -13,7 +13,7 @@ class Motor(AsyncIOEventEmitter):
         self._speed_address = speed_address
 
     def set(self, value: int):
-        if value < -256 or value > 256:
+        if value < -255 or value > 255:
             raise ValueError("value must be between -256 and 256")
         if value > 0:
             self._registers[self._direction_address] = 0b01

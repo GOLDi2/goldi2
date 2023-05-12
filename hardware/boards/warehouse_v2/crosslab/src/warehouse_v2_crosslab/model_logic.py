@@ -21,7 +21,6 @@ def evaluateActuators(
     yMotorFrontInterface = interfaces.get("YMotorFront", None)
     zMotorBottomInterface = interfaces.get("ZMotorBottom", None)
     zMotorTopInterface = interfaces.get("ZMotorTop", None)
-    magnetInterface = interfaces.get("Magnet", None)
 
     xMotorLeft = (
         xMotorLeftInterface.signalState
@@ -51,7 +50,6 @@ def evaluateActuators(
     zMotorTop = (
         zMotorTopInterface.signalState if zMotorTopInterface is not None else "strongL"
     )
-    magnet = magnetInterface.signalState if magnetInterface is not None else "strongL"
 
     if isHigh(xMotorLeft) and isHigh(xMotorRight):
         userError("XMotorLeft and XMotorRight are both high")
@@ -83,7 +81,3 @@ def evaluateActuators(
     else:
         hal.ZMotor.set(0)
 
-    if isHigh(magnet):
-        hal.Magnet.set(True)
-    else:
-        hal.Magnet.set(False)
