@@ -111,14 +111,18 @@ begin
     generic map(
         INVERT          => ENC_X_INVERT,
         NUMBER_SENSORS  => 10,
+        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_X_SENSORS
     )
     port map(
         clk             => clk,
         rst             => virtual_x_rst,
+        enb             => '1',
         enc_channel_a   => enc_channel_x_a.dat,
         enc_channel_b   => enc_channel_x_b.dat,
-        sensor_data_out => sensor_buff(17 downto 8)
+        sensor_data_out => sensor_buff(17 downto 8),
+        sensor_flag_neg => open,
+        sensor_flag_pos => open
     );
     -----------------------------------------------------------------------------------------------
 
@@ -133,14 +137,18 @@ begin
     generic map(
         INVERT          => ENC_Z_INVERT,
         NUMBER_SENSORS  => 5,
+        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_Z_SENSORS
     )
     port map(
         clk             => clk,
         rst             => virtual_z_rst,
+        enb             => '1',
         enc_channel_a   => enc_channel_z_a.dat,
         enc_channel_b   => enc_channel_z_b.dat,
-        sensor_data_out => sensor_buff(22 downto 18)
+        sensor_data_out => sensor_buff(22 downto 18),
+        sensor_flag_neg => open,
+        sensor_flag_pos => open
     );
     -----------------------------------------------------------------------------------------------
 
