@@ -69,32 +69,34 @@ package GOLDI_MODULE_CONFIG is
 
     --****SYSTEM PROTECTION****
     -----------------------------------------------------------------------------------------------
-    --Step motor active detection time 
-    constant ERROR_STEP_ON_FACTOR   :   natural := 10000;
-    
+    --Border margin for virtual limits
+    constant X_BORDER_MARGIN        :   integer := 100;
+    constant Z_BORDER_MARGIN        :   integer := 100;
+
     --Movement limits in horizontal axis inside a storage box
+    --(sensor_possition, valid range in pos/neg direction)
     --X Axis (10 sensors):
-    constant X_MOVEMENT_LIMITS       :   sensor_limit_array(9 downto 0) := (
-        0 => (  600,  575),
-        1 => ( 1805, 1780),
-        2 => ( 3007, 2982),
-        3 => ( 4195, 4170),
-        4 => ( 5375, 5350),
-        5 => ( 6575, 6550),
-        6 => ( 7875, 7850),
-        7 => ( 8075, 8050),
-        8 => (10225,10200),
-        9 => (11375,11350)
+    constant X_PROTECTION_LIMITS    :   sensor_limit_array(9 downto 0) := (
+        0 => (1000,200),
+        1 => (1000,200),
+        2 => (1000,200),
+        3 => (1000,200),
+        4 => (1000,200),
+        5 => (1000,200),
+        6 => (1000,200),
+        7 => (1000,200),
+        8 => (1000,200),
+        9 => (1000,200)
     );
 
     --Movement limits in vertical axis inside a storage box
     --Z Axis (6 sensors):
-    constant Z_MOVEMENT_LIMITS       :   sensor_limit_array(4 downto 0) := (
-        0 => ( 2200,   10),
-        1 => (12550, 6400),
-        2 => (23100,16630),
-        3 => (33675,27130),
-        4 => (45145,37250)
+    constant Z_PROTECTION_LIMITS       :   sensor_limit_array(4 downto 0) := (
+        0 => (1000,200),
+        1 => (1000,200),
+        2 => (1000,200),
+        3 => (1000,200),
+        4 => (1000,200)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -105,25 +107,25 @@ package GOLDI_MODULE_CONFIG is
     --Limits for virtual sensors
     --X Axis (10 sensors):
     constant X_SENSOR_LIMITS        :   sensor_limit_array(9 downto 0) := (
-        0 => (  600, 575),
-        1 => ( 1805, 1780),
-        2 => ( 3007, 2982),
-        3 => ( 4195, 4170),
-        4 => ( 5375, 5350),
-        5 => ( 6575, 6550),
-        6 => ( 7875, 7850),
-        7 => ( 8075, 8050),
-        8 => (10225,10200),
-        9 => (11375,11350)
+        0 => (1000,200),
+        1 => (1000,200),
+        2 => (1000,200),
+        3 => (1000,200),
+        4 => (1000,200),
+        5 => (1000,200),
+        6 => (1000,200),
+        7 => (1000,200),
+        8 => (1000,200),
+        9 => (1000,200)
     );
 
     --Z Axis (6 sensors):
     constant Z_SENSOR_LIMITS        :   sensor_limit_array(4 downto 0) := (
-        0 => (100,10),
-        1 => (200,101),
-        2 => (300,201),
-        3 => (400,301),
-        4 => (500,401)
+        0 => (1000,200),
+        1 => (1000,200),
+        2 => (1000,200),
+        3 => (1000,200),
+        4 => (1000,200)
     );
     -----------------------------------------------------------------------------------------------
 
