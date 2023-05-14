@@ -35,19 +35,23 @@ use work.GOLDI_DATA_TYPES.all;
 --! **Latency: 2cyc**
 entity VIRTUAL_SENSOR_ARRAY is
     generic(
-        INVERT          :   boolean := false;
-        NUMBER_SENSORS  :   natural := 3;
-        SENSOR_LIMITS   :   sensor_limit_array := ((0,0),(0,0),(0,0))
+        INVERT              :   boolean := false;
+        NUMBER_SENSORS      :   integer := 3;
+        BORDER_MARGIN       :   integer := 5;
+        SENSOR_LIMITS       :   sensor_limit_array := ((100,20),(200,20),(300,20))
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk                 : in    std_logic;
+        rst                 : in    std_logic;
+        enb                 : in    std_logic;
         --Incremental encoder interface
-        enc_channel_a   : in    std_logic;
-        enc_channel_b   : in    std_logic;
+        enc_channel_a       : in    std_logic;
+        enc_channel_b       : in    std_logic;
         --Sensor outputs
-        sensor_data_out : out   std_logic_vector(NUMBER_SENSORS-1 downto 0)
+        sensor_data_out     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+        sensor_flag_neg     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+        sensor_flag_pos     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0)
     );
 end entity VIRTUAL_SENSOR_ARRAY;
 
@@ -60,6 +64,8 @@ architecture RTL of VIRTUAL_SENSOR_ARRAY is
     --****INTERNAL SIGNLAS****
     --Data buffers
     signal sensor_data_buff :   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+    signal flag_neg_buff    :   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+    signal flag_pos_buff    :   std_logic_vector(NUMBER_SENSORS-1 downto 0);
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     --Counter
@@ -119,11 +125,19 @@ begin
     --****SENSORS****
     -----------------------------------------------------------------------------------------------
     SENSOR_ARRAY : for i in NUMBER_SENSORS-1 downto 0 generate
-        sensor_data_buff(i) <=  '1' when(enc_counter >= SENSOR_LIMITS(i)(0) and 
-                                         enc_counter <= SENSOR_LIMITS(i)(1)) else
+        sensor_data_buff(i) <=  '1' when(enc_counter >= (SENSOR_LIMITS(i)(1) - SENSOR_LIMITS(i)(0))     and 
+                                         enc_counter <= (SENSOR_LIMITS(i)(1) + SENSOR_LIMITS(i)(0)))    else
+                                '0';
+        flag_neg_buff(i)    <=  '1' when(enc_counter < (SENSOR_LIMITS(i)(1) - SENSOR_LIMITS(i)(0) + BORDER_MARGIN)) else
+                                '0';
+        flag_pos_buff(i)    <=  '1' when(enc_counter > (SENSOR_LIMITS(i)(1) + SENSOR_LIMITS(i)(0) - BORDER_MARGIN)) else
                                 '0';
     end generate; 
-    sensor_data_out <= sensor_data_buff;
+
+    --**Enable output
+    sensor_data_out     <= sensor_data_buff when(enb = '1') else (others => '0');
+    sensor_flag_neg     <= flag_neg_buff    when(enb = '1') else (others => '0');
+    sensor_flag_pos     <= flag_pos_buff    when(enb = '1') else (others => '0');
     -----------------------------------------------------------------------------------------------
 
 
