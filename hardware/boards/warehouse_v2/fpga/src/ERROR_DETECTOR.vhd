@@ -137,14 +137,18 @@ begin
     generic map(
         INVERT          => ENC_X_INVERT,
         NUMBER_SENSORS  => 10,
+        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_X_SENSORS
     )
     port map(
         clk             => clk,
         rst             => rst_virtual_x,
+        enb             => '1',
         enc_channel_a   => sys_io_i(9).dat,     --Encoder x channel a
         enc_channel_b   => sys_io_i(10).dat,    --Encoder x channel b
-        sensor_data_out => x_sensor_array
+        sensor_data_out => x_sensor_array,
+        sensor_flag_neg => open,
+        sensor_flag_pos => open
     );
     
 
@@ -152,17 +156,21 @@ begin
     generic map(
         INVERT          => ENC_Z_INVERT,
         NUMBER_SENSORS  => 5,
+        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_Z_SENSORS
     )
     port map(
         clk             => clk,
         rst             => rst_virtual_z,
+        enb             => '1',
         enc_channel_a   => sys_io_i(12).dat,    --Encoder z channel a
         enc_channel_b   => sys_io_i(13).dat,    --Encoder z channel b
-        sensor_data_out => z_sensor_array
+        sensor_data_out => z_sensor_array,
+        sensor_flag_neg => open,
+        sensor_flag_pos => open
     );
 
-     --Reduce limit vectors to a limit flag that indicates if the crane is out of bounds
+    --Reduce limit vectors to a limit flag that indicates if the crane is out of bounds
     x_virtual_limit <= '1' when((x_sensor_array'range => '0') = x_sensor_array) else '0';
     z_virtual_limit <= '1' when((z_sensor_array'range => '0') = z_sensor_array) else '0';
     -----------------------------------------------------------------------------------------------

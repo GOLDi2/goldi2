@@ -26,8 +26,8 @@ LOCATE COMP "IO_DATA[1]"  SITE "122" ;                  # GPIO1
 
 LOCATE COMP "IO_DATA[2]"  SITE "84" ;                   # Stepper0_LSDir0
 LOCATE COMP "IO_DATA[3]"  SITE "85" ;                   # Stepper0_LSDir1
-LOCATE COMP "IO_DATA[4]"  SITE "17" ;                   # HBridge0B_LS
-LOCATE COMP "IO_DATA[5]"  SITE "15" ;                   # HBridge0A_LS
+LOCATE COMP "IO_DATA[4]"  SITE "15" ;                   # HBridge0A_LS
+LOCATE COMP "IO_DATA[5]"  SITE "17" ;                   # HBridge0B_LS
 LOCATE COMP "IO_DATA[6]"  SITE "92" ;                   # Stepper1_LSDir1
 LOCATE COMP "IO_DATA[7]"  SITE "91" ;                   # Stepper1_LSDIR0
 LOCATE COMP "IO_DATA[8]"  SITE "57" ;                   # Input7

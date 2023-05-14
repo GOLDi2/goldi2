@@ -78,10 +78,10 @@ architecture RTL of TOP_LEVEL is
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(13 downto 0);
     --Control register
-    constant control_default    :   data_word := x"A0";
-    signal control_data         :   data_word;   
-       alias bus_select         :   std_logic is control_data(0);
-       alias enc_reset          :   std_logic is control_data(1);
+    constant ctrl_default       :   data_word := x"A0";
+    signal ctrl_data            :   data_word;   
+       alias bus_select         :   std_logic is ctrl_data(0);
+       alias enc_reset          :   std_logic is ctrl_data(1);
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -175,15 +175,15 @@ begin
     CONTROL_REGISTER : entity work.REGISTER_UNIT
     generic map(
         ADDRESS     => CTRL_REGISTER_ADDRESS,
-        DEF_VALUE   => control_default
+        DEF_VALUE   => ctrl_default
     )
     port map(
         clk         => clk,
         rst         => rst,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o(0),
-        data_in     => control_data,
-        data_out    => control_data,
+        data_in     => ctrl_data,
+        data_out    => ctrl_data,
         read_stb    => open,
         write_stb   => open
     );
@@ -262,8 +262,10 @@ begin
     generic map(
         ENC_X_INVERT    => X_ENCODER_INVERT,
         ENC_Z_INVERT    => Z_ENCODER_INVERT,
-        LIMIT_X_SENSORS => X_MOVEMENT_LIMITS,
-        LIMIT_Z_SENSORS => Z_MOVEMENT_LIMITS
+        X_BORDER_MARGIN => X_BORDER_MARGIN,
+        Z_BORDER_MARGIN => Z_BORDER_MARGIN,
+        LIMIT_X_SENSORS => X_PROTECTION_LIMITS,
+        LIMIT_Z_SENSORS => Z_PROTECTION_LIMITS
     )
     port map(
         clk             => clk,
@@ -279,8 +281,8 @@ begin
         ADDRESS         => ERROR_LIST_ADDRESS,
         ENC_X_INVERT    => X_ENCODER_INVERT,
         ENC_Z_INVERT    => Z_ENCODER_INVERT,
-        LIMIT_X_SENSORS => X_MOVEMENT_LIMITS,
-        LIMIT_Z_SENSORS => Z_MOVEMENT_LIMITS
+        LIMIT_X_SENSORS => X_PROTECTION_LIMITS,
+        LIMIT_Z_SENSORS => Z_PROTECTION_LIMITS
     )
     port map(
         clk             => clk,
