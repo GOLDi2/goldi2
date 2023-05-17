@@ -16,8 +16,10 @@ class MockSpiDev:
 
     def xfer2(self, data):
         self.transactions.append(data)
-        address = data[0]
-        return bytes([0, *range(address, address + len(data) - 1)])
+        address = data[0] * 255 + data[1]
+        return bytes(
+            [0, 0, *[x % 256 for x in range(address, address + len(data) - 2)]]
+        )
 
 
 def test_spi_registers(monkeypatch):
@@ -71,4 +73,4 @@ def test_spi_registers(monkeypatch):
     registers.communicate()
 
     assert len(MockSpiDev.transactions) == 13
-    assert MockSpiDev.transactions[-6] == [0x80 + 0x10, 0x20]
+    assert MockSpiDev.transactions[-6] == [0x80, 0x10, 0x20]
