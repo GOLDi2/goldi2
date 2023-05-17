@@ -15,8 +15,8 @@ from crosslab.soa_services.electrical.signal_interfaces.gpio import (
     ConstractableGPIOInterface,
 )
 
-#import logging
-#logging.basicConfig(level='DEBUG')
+# import logging
+# logging.basicConfig(level='DEBUG')
 
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
@@ -63,7 +63,9 @@ def newSensorInterface(interface):
             hal.gpio[interfaceIdx].setOutput(True)
             interface.on(
                 "signalChange",
-                lambda event: hal.gpio[interfaceIdx].set(event.state in ["strongH", "weakH"]),
+                lambda event: hal.gpio[interfaceIdx].set(
+                    event.state in ["strongH", "weakH"]
+                ),
             )
 
         if isOutput:
