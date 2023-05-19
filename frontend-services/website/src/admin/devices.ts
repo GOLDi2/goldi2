@@ -54,6 +54,12 @@ export function device_router(language: string, renderPage: renderPageType, _log
         res.redirect(303, '/' + language + '/admin/devices');
     }
 
+    async function deviceToken(req: Request, res: Response, _next: NextFunction) {
+        const url =req.query.url as string;
+        const token = await req.apiClient.createDeviceAuthenticationToken(url)
+        return renderPage('admin/devices/token', language, res, req.user, { token, url });
+    }
+
     const router = Router();
     router.get('/', asyncHandler(devices));
     router.get('/create', asyncHandler(createDevice));
@@ -61,6 +67,7 @@ export function device_router(language: string, renderPage: renderPageType, _log
     router.get('/delete', asyncHandler(deviceDelete));
     router.get('/details', asyncHandler(deviceDetails));
     router.post('/details', asyncHandler(deviceDetails));
+    router.post('/token', asyncHandler(deviceToken));
 
     return router;
 }

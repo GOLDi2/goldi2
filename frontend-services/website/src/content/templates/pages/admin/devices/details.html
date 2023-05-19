@@ -31,6 +31,10 @@
                 <input class="primary-button" type="submit" value="Update"/>
             {% endif %}
         </form>
+        <!-- {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/token?url="+device.url, icon="add") %}Create Device Token{% endcall %}{% endcall %} -->
+        <form class="space-y-2" method="POST" action="/admin/devices/token?url={{ device.url }}">
+            <input class="primary-button" type="submit" name="type" value="Create Device Token"/>
+        </form>
     </div>
     {% endcall %}
     {% endcall %}
