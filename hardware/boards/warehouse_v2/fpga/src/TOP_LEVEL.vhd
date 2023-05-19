@@ -236,6 +236,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
+        rst_virtual_x   => external_io_i(2).dat,
+        rst_virtual_z   => external_io_i(6).dat,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(1),
         lim_x_neg       => external_io_i(2),
@@ -262,7 +264,6 @@ begin
     generic map(
         ENC_X_INVERT    => X_ENCODER_INVERT,
         ENC_Z_INVERT    => Z_ENCODER_INVERT,
-        X_BORDER_MARGIN => X_BORDER_MARGIN,
         Z_BORDER_MARGIN => Z_BORDER_MARGIN,
         LIMIT_X_SENSORS => X_PROTECTION_LIMITS,
         LIMIT_Z_SENSORS => Z_PROTECTION_LIMITS
@@ -270,6 +271,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
+        rst_virtual_x   => external_io_i(2).dat,
+        rst_virtual_z   => external_io_i(6).dat,
         sys_io_i        => external_io_i,
         sys_io_o        => external_io_o,
         safe_io_o       => external_io_o_safe
@@ -287,6 +290,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
+        rst_virtual_x   => external_io_i(2).dat,
+        rst_virtual_z   => external_io_i(6).dat,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(2),
         sys_io_i        => external_io_i,
@@ -314,7 +319,7 @@ begin
         channel_i   => external_io_i(11)
     );
     --User accessible rst to calibrate encoder internal accumulator
-    x_encoder_rst <= rst or enc_reset;
+    x_encoder_rst <= rst or enc_reset or external_io_i(2).dat;
     --Configure io to input mode
     external_io_o(11 downto 9) <= (others => gnd_io_o);
 
@@ -336,7 +341,7 @@ begin
         channel_i   => external_io_i(14)
     );
     --User accessible rst to calibrate encoder internal accumulator
-    z_encoder_rst <= rst or enc_reset;
+    z_encoder_rst <= rst or enc_reset or external_io_i(6).dat;
     --Configure io to input mode
     external_io_o(14 downto 12) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------

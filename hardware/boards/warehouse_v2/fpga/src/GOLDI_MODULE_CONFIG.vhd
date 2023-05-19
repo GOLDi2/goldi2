@@ -70,33 +70,33 @@ package GOLDI_MODULE_CONFIG is
     --****SYSTEM PROTECTION****
     -----------------------------------------------------------------------------------------------
     --Border margin for virtual limits
-    constant X_BORDER_MARGIN        :   integer := 100;
-    constant Z_BORDER_MARGIN        :   integer := 100;
+    constant X_BORDER_MARGIN        :   integer := 0;
+    constant Z_BORDER_MARGIN        :   integer := 10;
 
     --Movement limits in horizontal axis inside a storage box
     --(sensor_possition, valid range in pos/neg direction)
     --X Axis (10 sensors):
     constant X_PROTECTION_LIMITS    :   sensor_limit_array(9 downto 0) := (
-        0 => (1000,200),
-        1 => (1000,200),
-        2 => (1000,200),
-        3 => (1000,200),
-        4 => (1000,200),
-        5 => (1000,200),
-        6 => (1000,200),
-        7 => (1000,200),
-        8 => (1000,200),
-        9 => (1000,200)
-    );
+        0 => (  607,8),
+        1 => ( 1807,8),
+        2 => ( 3007,8),
+        3 => ( 4207,8),
+        4 => ( 5407,8),
+        5 => ( 6607,8),
+        6 => ( 7807,8),
+        7 => ( 9007,8),
+        8 => (10207,8),
+        9 => (11407,8)
+    ); 
 
     --Movement limits in vertical axis inside a storage box
     --Z Axis (6 sensors):
-    constant Z_PROTECTION_LIMITS       :   sensor_limit_array(4 downto 0) := (
-        0 => (1000,200),
-        1 => (1000,200),
-        2 => (1000,200),
-        3 => (1000,200),
-        4 => (1000,200)
+ constant Z_PROTECTION_LIMITS       :   sensor_limit_array(4 downto 0) := (
+        0 => (  894,1490),
+        1 => (11324,1490),
+        2 => (21754,1490),
+        3 => (32184,1490),
+		4 => (42614,1490)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -107,25 +107,25 @@ package GOLDI_MODULE_CONFIG is
     --Limits for virtual sensors
     --X Axis (10 sensors):
     constant X_SENSOR_LIMITS        :   sensor_limit_array(9 downto 0) := (
-        0 => (1000,200),
-        1 => (1000,200),
-        2 => (1000,200),
-        3 => (1000,200),
-        4 => (1000,200),
-        5 => (1000,200),
-        6 => (1000,200),
-        7 => (1000,200),
-        8 => (1000,200),
-        9 => (1000,200)
+        0 => (  607,8),
+        1 => ( 1807,8),
+        2 => ( 3007,8),
+        3 => ( 4207,8),
+        4 => ( 5407,8),
+        5 => ( 6607,8),
+        6 => ( 7807,8),
+        7 => ( 9007,8),
+        8 => (10207,8),
+        9 => (11407,8)
     );
 
     --Z Axis (6 sensors):
     constant Z_SENSOR_LIMITS        :   sensor_limit_array(4 downto 0) := (
-        0 => (1000,200),
-        1 => (1000,200),
-        2 => (1000,200),
-        3 => (1000,200),
-        4 => (1000,200)
+        0 => (  894,1490),
+        1 => (11324,1490),
+        2 => (21754,1490),
+        3 => (32184,1490),
+		4 => (42614,1490)
     );
     -----------------------------------------------------------------------------------------------
 

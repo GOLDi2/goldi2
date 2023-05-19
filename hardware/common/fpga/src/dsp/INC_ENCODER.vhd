@@ -87,7 +87,7 @@ architecture RTL of INC_ENCODER is
     signal reg_data_in      :   data_word_vector(memory_length-1 downto 0);
     signal reg_data_buff    :   std_logic_vector(15 downto 0);
     --Arithmetic
-    signal enc_counter      :   integer range -(2**15) to 2**15 := 0;
+    signal enc_counter      :   integer;
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     signal enc_block        :   std_logic;
@@ -171,7 +171,7 @@ begin
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     --Typecast data
-    reg_data_buff <= std_logic_vector(to_signed(enc_counter,16));
+    reg_data_buff <= std_logic_vector(to_unsigned(enc_counter,16));
     reg_data_in   <= setMemory(reg_data_buff);
     
     MEMROY : entity work.REGISTER_TABLE

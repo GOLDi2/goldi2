@@ -50,6 +50,8 @@ entity SENSOR_ARRAY is
         --General
         clk             : in    std_logic;
         rst             : in    std_logic;
+        rst_virtual_x   : in    std_logic;
+        rst_virtual_z   : in    std_logic;
         --BUS slave interface
         sys_bus_i       : in    sbus_in;
         sys_bus_o       : out   sbus_out;
@@ -82,8 +84,6 @@ architecture RTL of SENSOR_ARRAY is
     signal reg_data         :   data_word_vector(memory_length-1 downto 0); 
     --Sensor buffer
     signal sensor_buff      :   std_logic_vector(22 downto 0);
-    signal virtual_x_rst    :   std_logic;
-    signal virtual_z_rst    :   std_logic;
 
 
 begin
@@ -104,25 +104,18 @@ begin
 
     --****VIRTUAL SENSORS X AXIS****
     -----------------------------------------------------------------------------------------------
-    --Reset sensor array with normal reset and when sensor lim_x_neg is triggered
-    virtual_x_rst <= rst or lim_x_neg.dat;
-
     X_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
         INVERT          => ENC_X_INVERT,
         NUMBER_SENSORS  => 10,
-        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_X_SENSORS
     )
     port map(
         clk             => clk,
-        rst             => virtual_x_rst,
-        enb             => '1',
+        rst             => rst_virtual_x,
         enc_channel_a   => enc_channel_x_a.dat,
         enc_channel_b   => enc_channel_x_b.dat,
-        sensor_data_out => sensor_buff(17 downto 8),
-        sensor_flag_neg => open,
-        sensor_flag_pos => open
+        sensor_data_out => sensor_buff(17 downto 8)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -130,25 +123,18 @@ begin
 
     --****VIRTUAL SENSORS Z AXIS****
     -----------------------------------------------------------------------------------------------
-    --Reset sensor array with normal reset and when sensor lim_z_neg is triggered
-    virtual_z_rst <= rst or lim_z_neg.dat;
-    
     Z_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
         INVERT          => ENC_Z_INVERT,
         NUMBER_SENSORS  => 5,
-        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_Z_SENSORS
     )
     port map(
         clk             => clk,
-        rst             => virtual_z_rst,
-        enb             => '1',
+        rst             => rst_virtual_z,
         enc_channel_a   => enc_channel_z_a.dat,
         enc_channel_b   => enc_channel_z_b.dat,
-        sensor_data_out => sensor_buff(22 downto 18),
-        sensor_flag_neg => open,
-        sensor_flag_pos => open
+        sensor_data_out => sensor_buff(22 downto 18)
     );
     -----------------------------------------------------------------------------------------------
 

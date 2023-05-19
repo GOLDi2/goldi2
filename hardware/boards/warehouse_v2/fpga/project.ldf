@@ -45,6 +45,9 @@
         <Source name="src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
+        <Source name="src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
         <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
