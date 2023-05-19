@@ -3,8 +3,8 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		Simulated position sensors for incremental encoders 
--- Module Name:		VIRTUAL_SENSOR_ARRAY
+-- Design Name:		Simulated position limit sensors for incremental encoders 
+-- Module Name:		VIRTUAL_LIMIT_ARRAY
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
@@ -33,10 +33,11 @@ use work.GOLDI_DATA_TYPES.all;
 --! @details
 --!
 --! **Latency: 2cyc**
-entity VIRTUAL_SENSOR_ARRAY is
+entity VIRTUAL_LIMIT_ARRAY is
     generic(
         INVERT              :   boolean := false;
         NUMBER_SENSORS      :   integer := 3;
+        BORDER_MARGIN       :   integer := 5;
         SENSOR_LIMITS       :   sensor_limit_array := ((100,20),(200,20),(300,20))
     );
     port(
@@ -47,15 +48,17 @@ entity VIRTUAL_SENSOR_ARRAY is
         enc_channel_a       : in    std_logic;
         enc_channel_b       : in    std_logic;
         --Sensor outputs
-        sensor_data_out     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0)
+        sensor_data_out     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+        sensor_flag_neg     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0);
+        sensor_flag_pos     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0)
     );
-end entity VIRTUAL_SENSOR_ARRAY;
+end entity VIRTUAL_LIMIT_ARRAY;
 
 
 
 
 --! General architecture
-architecture RTL of VIRTUAL_SENSOR_ARRAY is
+architecture RTL of VIRTUAL_LIMIT_ARRAY is
 
     --****INTERNAL SIGNLAS****
     --Data buffers
@@ -120,6 +123,10 @@ begin
     SENSOR_ARRAY : for i in 0 to NUMBER_SENSORS-1 generate
         sensor_data_out(i)  <=  '1' when(enc_counter >= (SENSOR_LIMITS(i)(1) - SENSOR_LIMITS(i)(0))     and 
                                          enc_counter <= (SENSOR_LIMITS(i)(1) + SENSOR_LIMITS(i)(0)))    else
+                                '0';
+        sensor_flag_neg(i)  <=  '1' when(enc_counter < (SENSOR_LIMITS(i)(1) - SENSOR_LIMITS(i)(0) + BORDER_MARGIN)) else
+                                '0';
+        sensor_flag_pos(i)  <=  '1' when(enc_counter > (SENSOR_LIMITS(i)(1) + SENSOR_LIMITS(i)(0) - BORDER_MARGIN)) else
                                 '0';
     end generate; 
     -----------------------------------------------------------------------------------------------

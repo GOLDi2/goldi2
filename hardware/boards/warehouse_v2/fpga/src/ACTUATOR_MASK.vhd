@@ -43,7 +43,6 @@ entity ACTUATOR_MASK is
     generic(
         ENC_X_INVERT    :   boolean := false;                                       --! Select positive x direction [false -> CCW | true -> CC]
         ENC_Z_INVERT    :   boolean := false;                                       --! Select positive z direction [false -> CCW | true -> CC]
-        X_BORDER_MARGIN :   integer := 10;   
         Z_BORDER_MARGIN :   integer := 10;
         LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (0,0));    --! Virtual sensor limits 
         LIMIT_Z_SENSORS :   sensor_limit_array(4 downto 0) := (others => (0,0))     --! Virtual sensor limits
@@ -52,6 +51,8 @@ entity ACTUATOR_MASK is
         --General
         clk             : in    std_logic;                                          --! System clock
         rst             : in    std_logic;                                          --! Synchronous reset
+        rst_virtual_x   : in    std_logic;
+        rst_virtual_z   : in    std_logic;
         --System data
         sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! IO data inputs (sensor data)
         sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! IO data outputs (actuator data)
@@ -63,7 +64,7 @@ end entity ACTUATOR_MASK;
 
 
 
---! General architecture
+--! 
 architecture RTL of ACTUATOR_MASK is
 
     --****INTERNAL SIGNALS****
@@ -85,13 +86,12 @@ architecture RTL of ACTUATOR_MASK is
         alias limit_z_pos       :   std_logic is stable_sensors(5);
     --Virtual sensor signals
     signal x_vsensors           :   std_logic_vector(9 downto 0);
-    signal x_vflag_left         :   std_logic_vector(9 downto 0);
-    signal x_vflag_right        :   std_logic_vector(9 downto 0);
+    signal x_virtual_limit      :   std_logic;
     signal z_vsensors           :   std_logic_vector(4 downto 0);
+	signal z_virtual_limit		:	std_logic;
     signal z_vflag_bottom       :   std_logic_vector(4 downto 0);
     signal z_vflag_top          :   std_logic_vector(4 downto 0);
-    signal rst_virtual_x        :   std_logic;
-    signal rst_virtual_z        :   std_logic;
+
     --Actuator mask
     signal mask                 :   std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
 
@@ -118,32 +118,23 @@ begin
     -----------------------------------------------------------------------------------------------
 
 
-
     --****VIRTUAL BOX LIMITS****
     -----------------------------------------------------------------------------------------------    
-    --Reset sensor arrays with normal reset and when sensor limit_x_neg/limit_z_neg are triggered
-    rst_virtual_x <= rst or limit_x_neg;
-    rst_virtual_z <= rst or limit_z_neg;
-    
     X_VIRTUAL_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
         INVERT              => ENC_X_INVERT,
         NUMBER_SENSORS      => 10,
-        BORDER_MARGIN       => X_BORDER_MARGIN,
         SENSOR_LIMITS       => LIMIT_X_SENSORS
     )
     port map(
         clk                 => clk,
         rst                 => rst_virtual_x,
-        enb                 => '1',
         enc_channel_a       => sys_io_i(9).dat,
         enc_channel_b       => sys_io_i(10).dat,
-        sensor_data_out     => x_vsensors,
-        sensor_flag_neg     => x_vflag_left,
-        sensor_flag_pos     => x_vflag_right
+        sensor_data_out     => x_vsensors
     );
 
-    Z_VIRTUAL_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
+    Z_VIRTUAL_SENSORS : entity work.VIRTUAL_LIMIT_ARRAY
     generic map(
         INVERT              => ENC_Z_INVERT,
         NUMBER_SENSORS      => 5,
@@ -153,15 +144,16 @@ begin
     port map(
         clk                 => clk,
         rst                 => rst_virtual_z,
-        enb                 => '1',
         enc_channel_a       => sys_io_i(12).dat,
         enc_channel_b       => sys_io_i(13).dat,
         sensor_data_out     => z_vsensors,
         sensor_flag_neg     => z_vflag_bottom,
         sensor_flag_pos     => z_vflag_top
     );
-    -----------------------------------------------------------------------------------------------
 
+    x_virtual_limit <= '1' when(x_vsensors /= (x_vsensors'range => '0')) else '0';
+	z_virtual_limit <= '1' when(z_vsensors /= (z_vsensors'range => '0')) else '0';
+    -----------------------------------------------------------------------------------------------
 
 
     --****MASK GENERATION****
@@ -171,41 +163,9 @@ begin
     --X motor protection
     --TMC2660 step signal blocked to avoid damage
     mask(18) <= '0' when((limit_x_neg = '1' and limit_x_pos = '1')      or
-                         (limit_x_neg = '1' and motor_x_dir = '0')      or
-                         (limit_x_pos = '1' and motor_x_dir = '1')      or
-                        --X Axis virtual box limits 
-                        --Outside of virtual boxes
-                         (limit_y_neg = '0' and x_vsensors = (x_vsensors'range => '0'))                               or
-                        --Box 1
-                         (limit_y_neg = '0' and x_vsensors(0) = '1' and x_vflag_left(0)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(0) = '1' and x_vflag_right(0) = '1' and motor_x_dir = '1') or
-                        --Box 2
-                         (limit_y_neg = '0' and x_vsensors(1) = '1' and x_vflag_left(1)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(1) = '1' and x_vflag_right(1) = '1' and motor_x_dir = '1') or
-                        --Box 3
-                         (limit_y_neg = '0' and x_vsensors(2) = '1' and x_vflag_left(2)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(2) = '1' and x_vflag_right(2) = '1' and motor_x_dir = '1') or
-                        --Box 4
-                         (limit_y_neg = '0' and x_vsensors(3) = '1' and x_vflag_left(3)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(3) = '1' and x_vflag_right(3) = '1' and motor_x_dir = '1') or
-                        --Box 5
-                         (limit_y_neg = '0' and x_vsensors(4) = '1' and x_vflag_left(4)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(4) = '1' and x_vflag_right(4) = '1' and motor_x_dir = '1') or
-                        --Box 6
-                         (limit_y_neg = '0' and x_vsensors(5) = '1' and x_vflag_left(5)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(5) = '1' and x_vflag_right(5) = '1' and motor_x_dir = '1') or 
-                        --Box 7
-                         (limit_y_neg = '0' and x_vsensors(6) = '1' and x_vflag_left(6)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(6) = '1' and x_vflag_right(6) = '1' and motor_x_dir = '1') or
-                        --Box 8
-                         (limit_y_neg = '0' and x_vsensors(7) = '1' and x_vflag_left(7)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(7) = '1' and x_vflag_right(7) = '1' and motor_x_dir = '1') or
-                        --Box 9
-                         (limit_y_neg = '0' and x_vsensors(8) = '1' and x_vflag_left(8)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(8) = '1' and x_vflag_right(8) = '1' and motor_x_dir = '1') or
-                        --Box 10
-                         (limit_y_neg = '0' and x_vsensors(9) = '1' and x_vflag_left(9)  = '1' and motor_x_dir = '0') or
-                         (limit_y_neg = '0' and x_vsensors(9) = '1' and x_vflag_right(9) = '1' and motor_x_dir = '1'))else
+                          (limit_x_neg = '1' and motor_x_dir = '0')      or
+                          (limit_x_pos = '1' and motor_x_dir = '1')      or
+                          (limit_y_neg = '0'))                            else
                 '1';
     
     mask(23 downto 19) <= (others => '1');
@@ -213,20 +173,22 @@ begin
     --Y motor protection
     --H-Bridge enable signal blocked to avoid damage
     mask(24) <= '0' when((limit_y_neg = '1' and limit_y_pos   = '1')    or
-                         (limit_y_neg = '1' and motor_y_out_2 = '1')    or
-                         (limit_y_pos = '1' and motor_y_out_1 = '1'))   else
+                          (limit_y_neg = '1' and motor_y_out_2 = '1')    or
+                          (limit_y_pos = '1' and motor_y_out_1 = '1')    or
+                          (x_virtual_limit = '0')                         or
+						  (z_virtual_limit = '0'))						   else
                 '1';
 
     mask(29 downto 25) <= (others => '1');
 
     --Z motor protection
     --TMC2660 step signal blocked to avoid damage
-    mask(30) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1')      or
+    mask(30) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1')     or
                          (limit_z_neg = '1' and motor_z_dir = '0')      or
                          (limit_z_pos = '1' and motor_z_dir = '1')      or
                         --Z Axis virtual box limits 
                         --Outside of virtual boxes
-                         (limit_y_neg = '0' and z_vsensors = (z_vsensors'range => '0'))                                 or
+                         (limit_y_neg = '0' and z_vsensors = (z_vsensors'range => '0'))                                  or
                         --Box 1
                          (limit_y_neg = '0' and z_vsensors(0) = '1' and z_vflag_bottom(0)  = '1' and motor_z_dir = '0') or
                          (limit_y_neg = '0' and z_vsensors(0) = '1' and z_vflag_top(0)     = '1' and motor_z_dir = '1') or 
@@ -256,6 +218,5 @@ begin
         safe_io_o(i).dat <= sys_io_o(i).dat and mask(i);
     end generate;
     -----------------------------------------------------------------------------------------------
-
 
 end RTL;

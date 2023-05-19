@@ -53,6 +53,8 @@ entity ERROR_DETECTOR is
         --General
         clk             : in    std_logic;
         rst             : in    std_logic;
+        rst_virtual_x   : in    std_logic;
+        rst_virtual_z   : in    std_logic;
         --Communication
         sys_bus_i       : in    sbus_in;
         sys_bus_o       : out   sbus_out;
@@ -93,8 +95,6 @@ architecture RTL of ERROR_DETECTOR is
         alias limit_z_neg       :   std_logic is stable_sensors(4);
         alias limit_z_pos       :   std_logic is stable_sensors(5);
     --Virtual sensor limits
-    signal rst_virtual_x        :   std_logic;
-    signal rst_virtual_z        :   std_logic;
     signal x_sensor_array       :   std_logic_vector(9 downto 0);
     signal z_sensor_array       :   std_logic_vector(4 downto 0);
     signal x_virtual_limit      :   std_logic;
@@ -128,27 +128,18 @@ begin
 
     --****VIRTUAL SENSOR ARRAYS****
     -----------------------------------------------------------------------------------------------
-    --Reset sensor arrays with normal reset and when sensor limit_x_neg/limit_z_neg are triggered
-    rst_virtual_x <= rst or limit_x_neg;
-    rst_virtual_z <= rst or limit_z_neg;
-
-
     X_SENSORS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
         INVERT          => ENC_X_INVERT,
         NUMBER_SENSORS  => 10,
-        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_X_SENSORS
     )
     port map(
         clk             => clk,
         rst             => rst_virtual_x,
-        enb             => '1',
         enc_channel_a   => sys_io_i(9).dat,     --Encoder x channel a
         enc_channel_b   => sys_io_i(10).dat,    --Encoder x channel b
-        sensor_data_out => x_sensor_array,
-        sensor_flag_neg => open,
-        sensor_flag_pos => open
+        sensor_data_out => x_sensor_array
     );
     
 
@@ -156,18 +147,14 @@ begin
     generic map(
         INVERT          => ENC_Z_INVERT,
         NUMBER_SENSORS  => 5,
-        BORDER_MARGIN   => 0,
         SENSOR_LIMITS   => LIMIT_Z_SENSORS
     )
     port map(
         clk             => clk,
         rst             => rst_virtual_z,
-        enb             => '1',
         enc_channel_a   => sys_io_i(12).dat,    --Encoder z channel a
         enc_channel_b   => sys_io_i(13).dat,    --Encoder z channel b
-        sensor_data_out => z_sensor_array,
-        sensor_flag_neg => open,
-        sensor_flag_pos => open
+        sensor_data_out => z_sensor_array
     );
 
     --Reduce limit vectors to a limit flag that indicates if the crane is out of bounds
@@ -267,17 +254,13 @@ begin
 
 
     --Crane position error
-    --Error code 9 - Out of bounds virtual box x axis negative direction
-    error_list(9)   <=  '1' when(limit_y_neg        = '0'   and
-                                 motor_x_dir        = '0'   and
-                                 x_stepper_active   = '1'   and
+    --Error code 9 - Out of bounds virutual box in horizontal axis
+    error_list(9)   <=  '1' when(motor_y_enb        = '1'   and
                                  x_virtual_limit    = '1')  else
                         '0';
-    -- --Error code 10 - Out of bounds virtual box x axis positive direction
-    error_list(10)  <=  '1' when(limit_y_neg        = '0'   and
-                                 motor_x_dir        = '1'   and
-                                 x_stepper_active   = '1'   and
-                                 x_virtual_limit    = '1')  else
+    --Error code 10 - Out of bounds virtual box in vertical axis
+    error_list(10)  <=  '1' when(motor_y_enb        = '0'   and
+                                 z_virtual_limit    = '1')  else
                         '0';
     -- --Error code 11 - Out of bounds virtual box z axis negative direction
     error_list(11)  <=  '1' when(limit_y_neg        = '0'   and
