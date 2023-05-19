@@ -4,6 +4,7 @@
 {% block content %}
     {% call topbar.container() %}
     {% call topbar.topbar() %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=group", icon="add") %}Add Group{% endcall %}{% endcall %}
     {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create", icon="add") %}Add Device{% endcall %}{% endcall %}
     {% endcall %}
     {% call topbar.content() %}
@@ -24,27 +25,47 @@
         <div class="w-52"></div>
     </div>
     {% for device in devices %}
-        <div class="flex hover:bg-primary-100">
-            <div class="text-sm text-center w-32">{{ device.type }}</div>
-            {% if deviceDetailsMap[device.url].connected %}
-                <span class="material-symbols-rounded align-middle">link</span>
-            {% else %}
-                <span class="material-symbols-rounded align-middle">link_off</span>
+        <div class="flex flex-col hover:bg-primary-100">
+            <div class="flex flex-row">
+                <div class="text-sm text-center w-32">{{ device.type }}</div>
+                {% if deviceDetailsMap[device.url].connected %}
+                    <span class="material-symbols-rounded align-middle">link</span>
+                {% else %}
+                    <span class="material-symbols-rounded align-middle">link_off</span>
+                {% endif %}
+                <div class="text-ellipsis w-52 ml-4">
+                    {{ device.name }}
+                </div>
+                <details class="text-ellipsis w-96">
+                    <summary>Description</summary>
+                    <p>{{ device.description }}</p>
+                </details>
+                <div class="text-ellipsis w-52">
+                    {{ userMap[device.owner].username }}
+                </div>
+                <div class="w-52">
+                    <a href="devices/details?url={{ device.url }}" class="material-symbols-rounded">edit</a>
+                    <a href="devices/delete?url={{ device.url }}" class="material-symbols-rounded">delete</a>
+                </div>
+            </div>
+            {% if deviceDetailsMap[device.url].devices %}
+                {% for device in deviceDetailsMap[device.url].devices %}
+                    <div class="flex flex-row">
+                        <div class="text-sm text-center w-32 ml-6">{{ device.type }}</div>
+                        <div class="text-ellipsis w-52 ml-4">
+                            {{ device.name }}
+                        </div>
+                        <details class="text-ellipsis w-96">
+                            <summary>Description</summary>
+                            <p>{{ device.description }}</p>
+                        </details>
+                        <div class="text-ellipsis w-52">
+                            {{ userMap[device.owner].username }}
+                        </div>
+                        <div class="w-52"></div>
+                    </div>
+                {% endfor %}
             {% endif %}
-            <div class="text-ellipsis w-52 ml-4">
-                {{ device.name }}
-            </div>
-            <details class="text-ellipsis w-96">
-                <summary>Description</summary>
-                <p>{{ device.description }}</p>
-            </details>
-            <div class="text-ellipsis w-52">
-                {{ userMap[device.owner].username }}
-            </div>
-            <div class="w-52">
-                <a href="devices/edit?url={{ device.url }}" class="material-symbols-rounded">edit</a>
-                <a href="devices/delete?url={{ device.url }}" class="material-symbols-rounded">delete</a>
-            </div>
         </div>
     {% endfor %}
     {% endcall %}

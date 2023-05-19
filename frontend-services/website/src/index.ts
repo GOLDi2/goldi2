@@ -12,7 +12,7 @@ import expressWinston from 'express-winston';
 import winston from 'winston';
 import cookieParser from 'cookie-parser'
 import asyncHandler from 'express-async-handler';
-import { handle_admin } from "./admin";
+import { admin_router } from "./admin";
 
 declare module 'express-serve-static-core' {
     interface Request {
@@ -22,7 +22,7 @@ declare module 'express-serve-static-core' {
 }
 
 
-const content_path = config.NODE_ENV === 'development' ? 'src/content' : path.dirname(__filename)+'/content';
+const content_path = config.NODE_ENV === 'development' ? 'src/content' : path.dirname(__filename) + '/content';
 const nunjucks_configuration = {
     autoescape: true,
     noCache: config.NODE_ENV === 'development'
@@ -71,7 +71,7 @@ app.use(expressWinston.logger({
 
 async function handle_login(req: Request, res: Response, next: NextFunction) {
     let loggedIn = false
-    for (const method of ['tui','local'] as const) {
+    for (const method of ['tui', 'local'] as const) {
         try {
             await req.apiClient.login(req.body.username, req.body.password, { method });
             res.cookie('token', req.apiClient.accessToken, { secure: true, httpOnly: true, sameSite: 'strict' })
@@ -84,12 +84,12 @@ async function handle_login(req: Request, res: Response, next: NextFunction) {
     if (loggedIn) {
         try {
             req.user = await req.apiClient.getIdentity()
-            if (req.query.redirect ){
+            if (req.query.redirect) {
                 res.redirect(303, req.query.redirect as string);
-            }else{
+            } else {
                 res.redirect(303, 'index.html' as string);
             }
-        } catch(e) {
+        } catch (e) {
             logger.warn(e)
             res.clearCookie('token')
             next()
@@ -103,9 +103,9 @@ async function handle_login(req: Request, res: Response, next: NextFunction) {
 
 async function handle_logout(req: Request, res: Response, next: NextFunction) {
     res.clearCookie('token')
-    if (req.query.redirect ){
+    if (req.query.redirect) {
         res.redirect(303, req.query.redirect as string);
-    }else{
+    } else {
         next();
     }
 }
@@ -114,13 +114,13 @@ app.use('/', asyncHandler(async (req: Request, res, next) => {
     req.apiClient = new APIClient(config.API_URL)
     req.user = undefined
     if (req.cookies.token) {
-        try{
+        try {
             req.apiClient.accessToken = req.cookies.token
             req.user = {
                 ...await req.apiClient.getIdentity(),
                 token: req.cookies.token
             }
-        } catch(e){
+        } catch (e) {
             logger.info(e)
             res.clearCookie('token')
         }
@@ -131,7 +131,7 @@ app.use('/', asyncHandler(async (req: Request, res, next) => {
 for (const language of languages) {
     app.post('/' + language + '/login.html', asyncHandler(handle_login));
     app.get('/' + language + '/logout.html', asyncHandler(handle_logout));
-    app.use('/' + language + '/admin/', asyncHandler(handle_admin(language, renderPage, logger)))
+    app.use('/' + language + '/admin/', admin_router(language, renderPage, logger))
     app.get('/' + language + '/', asyncHandler(async (req, res) => { await renderPage('index', language, res, req.user); }));
     app.use('/' + language + '/', asyncHandler(async (req, res) => { await renderPage(req.path, language, res, req.user); }));
 }
