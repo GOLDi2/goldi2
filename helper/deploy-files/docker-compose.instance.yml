@@ -25,7 +25,8 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
-      ALLOWLIST: auth:local:authservice,device:local:deviceservice,experiment:local:experimentservice,federation:local:federationservice,update:local:updateservice
+      API_TOKEN: $AUTH_API_KEY
+      ALLOWLIST: $AUTH_API_KEY:local:authservice,$DEVICE_API_KEY:local:deviceservice,$EXPERIMENT_API_KEY:local:experimentservice,$FEDERATION_API_KEY:local:federationservice,$UPDATE_API_KEY:local:updateservice
     volumes:
       - auth_db:/app/db
     networks:
@@ -38,6 +39,7 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      API_TOKEN: $DEVICE_API_KEY
     volumes:
       - device_db:/app/db
     networks:
@@ -50,6 +52,7 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      API_TOKEN: $EXPERIMENT_API_KEY
     volumes:
       - experiment_db:/app/db
     networks:
@@ -62,6 +65,7 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      API_TOKEN: $FEDERATION_API_KEY
     volumes:
       - federation_db:/app/db
     networks:
@@ -74,6 +78,7 @@ services:
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      API_TOKEN: $UPDATE_API_KEY
     volumes:
       - update_db:/app/db
     networks:
