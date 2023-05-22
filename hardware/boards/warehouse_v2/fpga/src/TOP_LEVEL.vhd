@@ -80,8 +80,8 @@ architecture RTL of TOP_LEVEL is
     --Control register
     constant ctrl_default       :   data_word := x"A0";
     signal ctrl_data            :   data_word;   
-       alias bus_select         :   std_logic is ctrl_data(0);
-       alias enc_reset          :   std_logic is ctrl_data(1);
+       alias enc_ref_x          :   std_logic is ctrl_data(0);
+       alias enc_ref_z          :   std_logic is ctrl_data(1);
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -218,6 +218,12 @@ begin
         port_in_sync    => external_io_i,
         io_vector       => IO_DATA
     );
+	
+	--Encoder system resets
+	--User accessible rst to calibrate encoder internal accumulator
+    x_encoder_rst <= rst or enc_ref_x or (external_io_i(2).dat and external_io_i(6).dat);
+	 --User accessible rst to calibrate encoder internal accumulator
+    z_encoder_rst <= rst or enc_ref_z or (external_io_i(2).dat and external_io_i(6).dat);
     -----------------------------------------------------------------------------------------------
 
 
@@ -236,8 +242,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        rst_virtual_x   => external_io_i(2).dat,
-        rst_virtual_z   => external_io_i(6).dat,
+        rst_virtual_x   => enc_ref_x,
+        rst_virtual_z   => enc_ref_z,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(1),
         lim_x_neg       => external_io_i(2),
@@ -271,8 +277,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        rst_virtual_x   => external_io_i(2).dat,
-        rst_virtual_z   => external_io_i(6).dat,
+        rst_virtual_x   => enc_ref_x,
+        rst_virtual_z   => enc_ref_z,
         sys_io_i        => external_io_i,
         sys_io_o        => external_io_o,
         safe_io_o       => external_io_o_safe
@@ -290,8 +296,8 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
-        rst_virtual_x   => external_io_i(2).dat,
-        rst_virtual_z   => external_io_i(6).dat,
+        rst_virtual_x   => enc_ref_x,
+        rst_virtual_z   => enc_ref_z,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(2),
         sys_io_i        => external_io_i,
@@ -318,8 +324,6 @@ begin
         channel_b   => external_io_i(10),
         channel_i   => external_io_i(11)
     );
-    --User accessible rst to calibrate encoder internal accumulator
-    x_encoder_rst <= rst or enc_reset or external_io_i(2).dat;
     --Configure io to input mode
     external_io_o(11 downto 9) <= (others => gnd_io_o);
 
@@ -340,8 +344,6 @@ begin
         channel_b   => external_io_i(13),
         channel_i   => external_io_i(14)
     );
-    --User accessible rst to calibrate encoder internal accumulator
-    z_encoder_rst <= rst or enc_reset or external_io_i(6).dat;
     --Configure io to input mode
     external_io_o(14 downto 12) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
