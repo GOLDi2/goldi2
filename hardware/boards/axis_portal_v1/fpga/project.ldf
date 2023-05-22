@@ -24,9 +24,6 @@
         <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/GOLDI_CROSSBAR_DEFAULT.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -39,13 +36,13 @@
         <Source name="src/common/dsp/INC_ENCODER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/io_management/IO_CROSSBAR.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/actuation/LED_DRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/comms/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">

@@ -38,7 +38,7 @@ package GOLDI_MODULE_CONFIG is
     --Number of physical FPGA pins that are available for IO functions
     constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;
     --Number of IO pins needed for the system modules
-    constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
+    --constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
     -----------------------------------------------------------------------------------------------
  
     
