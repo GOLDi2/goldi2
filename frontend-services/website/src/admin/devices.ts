@@ -34,6 +34,9 @@ export function device_router(language: string, renderPage: renderPageType, _log
             if (req.body.type === 'group') {
                 req.body.devices = req.body.devices?.map((device: string) => ({ url: device })) ?? []
             }
+            if (req.body.type === 'device') {
+                req.body.services = JSON.parse(req.body.services)
+            }
             await req.apiClient.updateDevice(req.query.url as string, req.body)
         }
         const device = await req.apiClient.getDevice(req.query.url as string);
@@ -44,8 +47,7 @@ export function device_router(language: string, renderPage: renderPageType, _log
             const excludedDevices = devices.filter((d) => !device.devices.find((dd) => dd.url === d.url))
 
             params = { includedDevices, excludedDevices }
-
-        }
+        }   
         return renderPage('admin/devices/details', language, res, req.user, { device, type: device.type, ...params });
     }
 

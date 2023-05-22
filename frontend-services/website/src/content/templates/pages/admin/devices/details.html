@@ -11,6 +11,9 @@
             <input type="text" name="name" placeholder="Name" value="{{ device.name }}"/>
             <input type="text" name="description" placeholder="Description" value="{{ device.description }}"/>
             <input type="hidden" name="type" value="{{type}}"/>
+            {% if type=="edge instantiable" %}
+                <input type="text" name="codeUrl" placeholder="Code Url" value="{{ device.codeUrl }}"/>
+            {% endif %}
             {% if type=="group" %}
                 {% for device in includedDevices %}
                     <input id="{{ device.url }}" type="checkbox" name="devices[]" value="{{ device.url }}" checked/>
@@ -24,6 +27,9 @@
                     <input id="{{ device.url }}" type="checkbox" name="devices[]" value="{{ device.url }}"/>
                     <label for="{{ device.url }}">{{ device.name }}</label><br/>
                 {% endfor %}
+            {% endif %}
+            {% if type=="device" %}
+                <textarea name="services" class="w-full h-40 border-2">{{ device.services | dump(2) }}</textarea><br/>
             {% endif %}
             {% if create %}
                 <input class="primary-button" type="submit" value="Create"/>
