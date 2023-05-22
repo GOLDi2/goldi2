@@ -90,4 +90,5 @@ RUN apt-get update \
 RUN mv /entrypoint.sh /crosslab-entrypoint.sh
 COPY container-scripts/entrypoint.sh /
 
+# licence update (change build hash)
 COPY licenses/lattice.dat /usr/local/diamond/3.12/license/license.dat
