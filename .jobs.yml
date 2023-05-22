@@ -67,9 +67,29 @@ hardware/boards/axis_portal_v1/crosslab:
     dependencies:
       - hardware/boards/axis_portal_v1/crosslab:build
 
-#hardware/boards/axis_portal_v2/fpga:
-#  - script: build
+hardware/boards/warehouse_v2/fpga:
+  - script: build
 #  - script: test
+
+hardware/boards/warehouse_v2/crosslab:
+  - script: build
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: lint
+    dependencies:
+      - hardware/boards/warehouse_v2/crosslab:build
+
+hardware/boards/mole/fpga:
+  - script: build
+#  - script: test
+
+hardware/boards/mole/crosslab:
+  - script: build
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: lint
+    dependencies:
+      - hardware/boards/mole/crosslab:build
 
 hardware/os:
   - script: build_sstate_ipk
@@ -83,11 +103,19 @@ hardware/os:
       - hardware/boards/axis_portal_v1/crosslab:build
     tags:
       - daily
-#  - script: build_warehouse
-#    dependencies:
-#      - hardware/common/config-interface:build
-#      - hardware/common/spi-driver:build
-#      #- hardware/boards/warehouse/fpga:build
-#      #- hardware/boards/warehouse/crosslab:build
-#    tags:
-#      - daily
+  - script: build_warehouse_v2
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/warehouse_v2/fpga:build
+      - hardware/boards/warehouse_v2/crosslab:build
+    tags:
+      - daily
+  - script: build_mole
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/mole/fpga:build
+      - hardware/boards/mole/crosslab:build
+    tags:
+      - daily

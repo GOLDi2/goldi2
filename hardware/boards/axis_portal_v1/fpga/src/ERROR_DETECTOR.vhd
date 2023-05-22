@@ -302,13 +302,14 @@ begin
         REG_DEFAULT_VALUES	=> reg_default
     )
     port map(
-        clk				=> clk,
-        rst				=> rst,
-        sys_bus_i		=> sys_bus_i,
-        sys_bus_o		=> sys_bus_o,
-        reg_data_in		=> reg_buff,
-        reg_data_out	=> open,
-        reg_data_stb	=> open
+        clk				    => clk,
+        rst				    => rst,
+        sys_bus_i		    => sys_bus_i,
+        sys_bus_o		    => sys_bus_o,
+        data_in		        => reg_buff,
+        data_out	        => open,
+        read_stb	        => open,
+        write_stb           => open
     );
     -----------------------------------------------------------------------------------------------
 

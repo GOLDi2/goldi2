@@ -7,10 +7,10 @@ cd $SCRIPT_DIR/..
 passwordBackup=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} cat /boot/password 2>/dev/null)
 vpnBackup=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} cat /boot/vpn-config 2>/dev/null)
 
-# if dist goldi-dev-image.wic does not exist
-bzip2 -dk dist/goldi-dev-image.wic.bz2
+# if dist ${VARIANT}-dev-goldi1.wic does not exist
+bzip2 -dk dist/${VARIANT}-dev-goldi1.wic.bz2
 
-sudo losetup -P /dev/loop1 dist/goldi-dev-image.wic
+sudo losetup -P /dev/loop1 dist/${VARIANT}-dev-goldi1.wic
 # dd first partion to 
 sleep 5
 sudo dd if=/dev/loop1p1 status=progress | sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "dd of=/dev/mmcblk0p1"
@@ -25,4 +25,4 @@ fi
 
 # remove loop device
 sudo losetup -d /dev/loop1
-rm dist/goldi-dev-image.wic
+rm dist/${VARIANT}-dev-goldi1.wic

@@ -16,6 +16,10 @@
         "axis_portal_v1/fpga/build": true,
         "axis_portal_v2/.vscode": true,
         "axis_portal_v2/fpga/build": true,
+        "mole/.vscode": true,
+        "mole/fpga/build": true,
+        "test_board/.vscode": true,
+        "warehouse_v2/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {
@@ -34,6 +38,7 @@
         "**/venv": true,
         "axis_portal_v1/fpga/build": true,
         "axis_portal_v2/fpga/build": true,
+        "mole/fpga/build": true,
         //end generated
     }
 }

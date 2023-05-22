@@ -17,6 +17,10 @@
         "boards/axis_portal_v1/fpga/build": true,
         "boards/axis_portal_v2/.vscode": true,
         "boards/axis_portal_v2/fpga/build": true,
+        "boards/mole/.vscode": true,
+        "boards/mole/fpga/build": true,
+        "boards/test_board/.vscode": true,
+        "boards/warehouse_v2/.vscode": true,
         "common/.vscode": true,
         //end generated
     },
@@ -36,6 +40,7 @@
         "**/venv": true,
         "boards/axis_portal_v1/fpga/build": true,
         "boards/axis_portal_v2/fpga/build": true,
+        "boards/mole/fpga/build": true,
         "os/meta-openembedded": true,
         "os/meta-raspberrypi": true,
         "os/meta-rauc": true,

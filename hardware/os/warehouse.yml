@@ -1,7 +1,0 @@
-header:
-  version: 8
-  includes:
-   - ./kas.yml
-local_conf_header:
-  io-board: |
-    MACHINE_VARIANT = "warehouse"
