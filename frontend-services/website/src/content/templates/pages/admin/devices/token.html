@@ -1,0 +1,26 @@
+{% extends "admin_layout.html" %}
+{% import "components/topbar.html" as topbar %}
+{% import "components/elements.html" as elements %}
+{% block content %}
+    {% call topbar.container() %}
+    {% call topbar.topbar() %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/token?url="+device.url, icon="add") %}Create Device Token{% endcall %}{% endcall %}
+    {% endcall %}
+    {% call topbar.content() %}
+    <script>
+        function clipboard(id) {
+            var copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        }
+    </script>
+    <div class="w-96 mx-auto">
+        <input type="text" value="{{ url }}" id="url" readonly>
+        <button onclick="clipboard('url')">Copy Url</button>
+        <input type="text" value="{{ token }}" id="token" readonly>
+        <button onclick="clipboard('token')">Copy Token</button>
+    </div>
+    {% endcall %}
+    {% endcall %}
+{% endblock %}

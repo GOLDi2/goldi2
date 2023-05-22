@@ -26,10 +26,7 @@
 
 <body class="flex flex-col min-h-screen">
     {% include "includes/header.html" %}
-
-    {% block main %}{% endblock %}
-
-    <div class="flex-grow"></div>
+    {% block main %}<div class="flex-grow"></div>{% endblock %}
 
     {% include "includes/footer.html" %}
 </body>

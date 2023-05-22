@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% import "components/sidebar.html" as sidebar %}
+
+{% block main %}
+    {% call sidebar.container() %}
+        {% call sidebar.sidebar(title="ADMIN") %}
+            {% call sidebar.element(language, href="/admin/devices") %}devices{% endcall %}
+            {% call sidebar.element(language, href="/admin/users") %}users{% endcall %}
+        {% endcall %}
+        {% call sidebar.content() %}
+            {% block content %}{% endblock %}
+        {% endcall %}
+    {% endcall %}
+{% endblock %}

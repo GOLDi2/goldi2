@@ -1,0 +1,31 @@
+{% extends "admin_layout.html" %}
+{% import "components/topbar.html" as topbar %}
+{% import "components/elements.html" as elements %}
+{% block content %}
+    {% call topbar.container() %}
+    {% call topbar.topbar() %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/users/create", icon="add") %}Add User{% endcall %}{% endcall %}
+    {% endcall %}
+    {% call topbar.content() %}
+    <div class="flex ml-4">
+        <div class="text-ellipsis w-52">
+            Username
+        </div>
+        <div class="w-52"></div>
+    </div>
+    {% for user in users %}
+        <div class="flex flex-col hover:bg-primary-100 ml-4">
+            <div class="flex flex-row">
+                <div class="text-ellipsis w-52">
+                    {{ user.username }}
+                </div>
+                <div class="w-52">
+                    <a href="users/details?url={{ user.url }}" class="material-symbols-rounded">edit</a>
+                    <a href="users/delete?url={{ user.url }}" class="material-symbols-rounded">delete</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% endcall %}
+    {% endcall %}
+{% endblock %}

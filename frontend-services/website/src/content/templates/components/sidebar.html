@@ -1,0 +1,28 @@
+{% import "components/elements.html" as elements %}
+{% macro container() %}
+    <div class="flex w-full flex-grow">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+{% macro sidebar(title) %}
+    <div class="min-w-[18rem] w-72 bg-primary-50 shadow-l">
+        <div class="w-72 fixed">
+            <div class="bg-primary-600 text-white text-4xl text-center h-12">
+                {{ title }}
+            </div>
+            {{ elements.hline() }}
+            {{ caller() }}
+        </div>
+    </div>
+{% endmacro %}
+{% macro element(language, href) %}
+    {% set href="/"+language+href %}
+    <a class="block border-primary-900 border-b py-3 mx-3 hover:bg-primary-100" href={{ href }}>
+        {{ caller() }}
+    </a>
+{% endmacro %}
+{% macro content() %}
+    <div class="flex flex-col flex-grow">
+        {{ caller() }}
+    </div>
+{% endmacro %}
