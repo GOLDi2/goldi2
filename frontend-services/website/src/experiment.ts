@@ -9,9 +9,9 @@ export function experiment_router(language: string, renderPage: renderPageType, 
     async function experiment(req: Request, res: Response, _next: NextFunction) {
         let experiment: ExperimentServiceTypes.Experiment = {}
         if (req.method === 'GET') {
-            try{
-            experiment = await buildSimpleExperiment(req)
-            }catch(e){
+            try {
+                experiment = await buildSimpleExperiment(req)
+            } catch (e) {
                 //ignore
             }
         }
@@ -21,7 +21,9 @@ export function experiment_router(language: string, renderPage: renderPageType, 
             experiment.status = 'running'
             console.log(JSON.stringify(experiment, null, 2))
             const response = await req.apiClient.createExperiment(experiment)
-            experiment = response
+            if (response.status === 'setup' && response.url) {
+                return experimentSetup(req, res, _next, response)
+            }
         }
 
 
@@ -34,13 +36,40 @@ export function experiment_router(language: string, renderPage: renderPageType, 
         return renderPage('experiment', language, res, req.user, { experiment, pspus });
     }
 
+    async function experimentSetup(req: Request, res: Response, _next: NextFunction, experiment: ExperimentServiceTypes.Experiment) {
+        if (experiment.status !== 'setup') {
+            throw new Error('Experiment is not in setup phase')
+        }
+        const instances: { codeUrl: string, instanceUrl: string, deviceToken: string }[] = []
+        for (const device of experiment.devices ?? []) {
+            if (device.device) {
+                const setupProps = device.additionalProperties as { instanceUrl?: string, deviceToken?: string }
+                const deviceDetails = await req.apiClient.getDevice(device.device)
+                console.log({ deviceDetails, setupProps })
+                if (deviceDetails.type === 'edge instantiable' && setupProps.instanceUrl && setupProps.deviceToken && deviceDetails.codeUrl) {
+                    device.device=setupProps.instanceUrl
+                    instances.push({ codeUrl: deviceDetails.codeUrl, instanceUrl: setupProps.instanceUrl, deviceToken: setupProps.deviceToken })
+                }
+            }
+        }
+        await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
+        return renderPage('experiment-setup', language, res, req.user, { experiment, instances });
+    }
+
+    async function runExperiment(req: Request, res: Response, _next: NextFunction) {
+        const resp=await req.apiClient.updateExperiment(req.query.url as string, { status: 'running' })
+        res.send(resp)
+        //res.redirect(303, '/' + language + '/index.html');
+    }
+
     const router = Router();
-    router.get('/', asyncHandler(experiment));
-    router.post('/', asyncHandler(experiment));
+    router.get('/experiment', asyncHandler(experiment));
+    router.post('/experiment', asyncHandler(experiment));
+    router.get('/run-experiment', asyncHandler(runExperiment));
     return router;
 }
 
-const ecpServiceDescription:DeviceServiceTypes.ServiceDescription[] = [{'serviceType': 'http://api.goldi-labs.de/serviceTypes/electrical', 'serviceId': 'electrical', 'serviceDirection': 'prosumer', 'interfaces': [{'interfaceType': 'gpio', 'availableSignals': {'gpio': ['_ANY_']}}]}, {'serviceId': 'webcam', 'serviceType': 'http://api.goldi-labs.de/serviceTypes/webcam', 'serviceDirection': 'consumer'}]
+const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [{ 'serviceType': 'http://api.goldi-labs.de/serviceTypes/electrical', 'serviceId': 'electrical', 'serviceDirection': 'prosumer', 'interfaces': [{ 'interfaceType': 'gpio', 'availableSignals': { 'gpio': ['_ANY_'] } }] }, { 'serviceId': 'webcam', 'serviceType': 'http://api.goldi-labs.de/serviceTypes/webcam', 'serviceDirection': 'consumer' }]
 
 async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment> {
     const pspu = req.query.pspu as string
@@ -53,41 +82,41 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
         { device: ecp, role: 'ecp' },
     ].filter(({ device: url }) => url !== undefined && url !== '')
 
-    const roles: ExperimentServiceTypes.Role[] = devices.map(d=>({name: d.role}))
+    const roles: ExperimentServiceTypes.Role[] = devices.map(d => ({ name: d.role }))
 
-    const roleServices=await Promise.all(devices.map(({device: url, role} )=>
-        req.apiClient.getDevice(url).then((device)=>({
+    const roleServices = await Promise.all(devices.map(({ device: url, role }) =>
+        req.apiClient.getDevice(url).then((device) => ({
             role,
-            services: role==="ecp" ? ecpServiceDescription : (device as DeviceServiceTypes.ConcreteDevice).services!
+            services: role === "ecp" ? ecpServiceDescription : (device as DeviceServiceTypes.ConcreteDevice).services!
         }))
     ))
 
     const serviceConfigurations: ExperimentServiceTypes.ServiceConfiguration[] = []
     const serviceTypes = new Set<string>()
-    roleServices.flatMap(({services})=>services.map(({serviceType})=>serviceType!)).forEach((t)=>serviceTypes.add(t))
+    roleServices.flatMap(({ services }) => services.map(({ serviceType }) => serviceType!)).forEach((t) => serviceTypes.add(t))
     for (const serviceType of serviceTypes) {
-        let participants: (ExperimentServiceTypes.Participant &{description: any})[] = []
-        for (const {role, services} of roleServices) {
-            for (const service of services.filter((s)=>s.serviceType===serviceType)){
-                participants.push({role, serviceId: service.serviceId, description: service})
+        let participants: (ExperimentServiceTypes.Participant & { description: any })[] = []
+        for (const { role, services } of roleServices) {
+            for (const service of services.filter((s) => s.serviceType === serviceType)) {
+                participants.push({ role, serviceId: service.serviceId, description: service })
             }
         }
-        if (participants.length >=1) {
+        if (participants.length >= 1) {
             if (serviceType === 'http://api.goldi-labs.de/serviceTypes/electrical') {
-                const interfaces = participants.flatMap((p)=>{
+                const interfaces = participants.flatMap((p) => {
                     if (p.description.interfaces)
-                        return p.description.interfaces.map((i: any)=>({role: p.role, interface: i}))
+                        return p.description.interfaces.map((i: any) => ({ role: p.role, interface: i }))
                     else
                         return []
-                    })
-                const gpioInterfaces = interfaces.filter((i)=>i.interface.interfaceType==='gpio')
-                const buses = gpioInterfaces.flatMap(i=>{
-                    if (i.role==='ecp') return []
-                    return i.interface.availableSignals.gpio.filter((s: string)=>s.length>4).map((s: string)=>[s])
+                })
+                const gpioInterfaces = interfaces.filter((i) => i.interface.interfaceType === 'gpio')
+                const buses = gpioInterfaces.flatMap(i => {
+                    if (i.role === 'ecp') return []
+                    return i.interface.availableSignals.gpio.filter((s: string) => s.length > 4).map((s: string) => [s])
                 })
                 for (const i of gpioInterfaces) {
-                    if (i.role==='ecp') continue
-                    const freeSignals = i.interface.availableSignals.gpio.filter((s: string)=>s.length<=4)
+                    if (i.role === 'ecp') continue
+                    const freeSignals = i.interface.availableSignals.gpio.filter((s: string) => s.length <= 4)
                     for (const bus of buses) {
                         const signal = freeSignals.shift()
                         if (signal) {
@@ -95,46 +124,46 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                         }
                     }
                 }
-                let id=0
+                let id = 0
                 for (const participant of participants) {
-                    if (participant.role==='ecp'){
-                        participant.config={
-                            interfaces: buses.map((bus)=>({
+                    if (participant.role === 'ecp') {
+                        participant.config = {
+                            interfaces: buses.map((bus) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
-                                signals: {gpio: bus.join(' / ')},
+                                signals: { gpio: bus.join(' / ') },
                                 busId: bus[0],
                                 direction: 'inout',
                                 driver: participant.role
                             })),
                         }
-                    }else{
-                        const interfaces = [participant].flatMap((p)=>{
+                    } else {
+                        const interfaces = [participant].flatMap((p) => {
                             if (p.description.interfaces)
-                                return p.description.interfaces.map((i: any)=>({role: p.role, interface: i}))
+                                return p.description.interfaces.map((i: any) => ({ role: p.role, interface: i }))
                             else
                                 return []
-                            })
-                        const gpioInterfaces = interfaces.filter((i)=>i.interface.interfaceType==='gpio')
-                        const signals = gpioInterfaces.flatMap((i)=>i.interface.availableSignals.gpio)
-                        const mappedSignals = signals.filter((s)=>buses.find((b)=>b.includes(s)))
-                        participant.config={
-                            interfaces: mappedSignals.map((signal)=>({
+                        })
+                        const gpioInterfaces = interfaces.filter((i) => i.interface.interfaceType === 'gpio')
+                        const signals = gpioInterfaces.flatMap((i) => i.interface.availableSignals.gpio)
+                        const mappedSignals = signals.filter((s) => buses.find((b) => b.includes(s)))
+                        participant.config = {
+                            interfaces: mappedSignals.map((signal) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
-                                signals: {gpio: signal},
-                                busId: buses.find((b)=>b.includes(signal))![0],
+                                signals: { gpio: signal },
+                                busId: buses.find((b) => b.includes(signal))![0],
                                 direction: 'inout',
                                 driver: participant.role
                             })),
                         }
                     }
                 }
-            }else{
-                participants=participants.map((p)=>({...p, config: {}}))
+            } else {
+                participants = participants.map((p) => ({ ...p, config: {} }))
             }
-            participants=participants.map((p)=>({...p, description: undefined}))
-            serviceConfigurations.push({serviceType, configuration: {}, participants})
+            participants = participants.map((p) => ({ ...p, description: undefined }))
+            serviceConfigurations.push({ serviceType, configuration: {}, participants })
         }
     }
 

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div>
+    {% for instance in instances %}
+        <a href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="popup">{{ instance.codeUrl }}</a>
+    {% endfor %}
+    <a href="/{{ language }}/run-experiment?url={{ experiment.url }}">Run experiment</a>
+    <textarea class="w-full"> {{ experiment | dump(2) }} </textarea>
+</div>
+<div class="flex-grow"></div>
+{% endblock %}

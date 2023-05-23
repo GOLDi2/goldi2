@@ -133,7 +133,7 @@ for (const language of languages) {
     app.post('/' + language + '/login.html', asyncHandler(handle_login));
     app.get('/' + language + '/logout.html', asyncHandler(handle_logout));
     app.use('/' + language + '/admin/', admin_router(language, renderPage, logger))
-    app.use('/' + language + '/experiment/', experiment_router(language, renderPage, logger))
+    app.use('/' + language + '/', experiment_router(language, renderPage, logger))
     app.get('/' + language + '/', asyncHandler(async (req, res) => { await renderPage('index', language, res, req.user); }));
     app.use('/' + language + '/', asyncHandler(async (req, res) => { await renderPage(req.path, language, res, req.user); }));
 }

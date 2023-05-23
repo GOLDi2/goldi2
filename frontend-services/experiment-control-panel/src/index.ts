@@ -31,15 +31,24 @@ export class App extends LitElement {
     super.connectedCallback();
     adoptStyles(this.shadowRoot, [stylesheet]);
 
-    window.addEventListener("message", (event) => {
-      if(event.data.token){
-        device_url = event.data.device_url;
-        this.start(event.data.token)
-      }
-    });
-    // Send a message to the parent window
-    window.parent.postMessage("ecp-loaded", "*");
-    window.opener.postMessage("ecp-loaded", "*")
+    // check if instanceUrl and deviceToken are in query params
+    const urlParams = new URLSearchParams(window.location.search);
+    const instanceUrl = urlParams.get("instanceUrl");
+    const deviceToken = urlParams.get("deviceToken");
+    if (instanceUrl && deviceToken) {
+      device_url = instanceUrl;
+      this.start(deviceToken);
+    }else{
+      window.addEventListener("message", (event) => {
+        if(event.data.token){
+          device_url = event.data.device_url;
+          this.start(event.data.token)
+        }
+      });
+      // Send a message to the parent window
+      window.parent.postMessage("ecp-loaded", "*");
+      window.opener.postMessage("ecp-loaded", "*");
+    }
   }
 
   async start(accesstoken: string) {
