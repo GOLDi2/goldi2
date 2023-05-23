@@ -230,6 +230,22 @@ async def main_async():
 
     hal = HAL()
 
+    # Init Model:
+    hal.XMotor.set(-50)
+    hal.ZMotor.set(-50)
+    while not hal.x_right.value():
+        await asyncio.sleep(0.1)
+    while not hal.z_top.value():
+        await asyncio.sleep(0.1)
+    hal.XMotor.set(50)
+    hal.ZMotor.set(50)
+    while not hal.x_left.value():
+        await asyncio.sleep(0.1)
+    while not hal.z_bottom.value():
+        await asyncio.sleep(0.1)
+    hal.XMotor.set(0)
+    hal.ZMotor.set(0)
+
     deviceHandler = DeviceHandler()
 
     sensor_service = ElectricalConnectionService("sensors")

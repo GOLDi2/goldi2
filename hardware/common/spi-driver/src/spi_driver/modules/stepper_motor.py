@@ -33,6 +33,6 @@ class StepperMotor(AsyncIOEventEmitter):
             # stop --------------------------------------,     ||
             #                                            |     ||
             self._registers[self._direction_address] = 0b10000000
-        value = abs(value) * 10
+        value = abs(value) * 150
         self._registers[self._speed_address] = value & 0xFF
         self._registers[self._speed_address + 1] = (value >> 8) & 0xFF

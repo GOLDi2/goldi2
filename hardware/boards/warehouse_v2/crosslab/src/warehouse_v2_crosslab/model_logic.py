@@ -75,9 +75,9 @@ def evaluateActuators(
         userError("ZMotorBottom and ZMotorTop are both high")
         hal.ZMotor.set(0)
     elif isHigh(zMotorBottom):
-        hal.ZMotor.set(-255)
+        hal.ZMotor.set(-100)
     elif isHigh(zMotorTop):
-        hal.ZMotor.set(255)
+        hal.ZMotor.set(100)
     else:
         hal.ZMotor.set(0)
 

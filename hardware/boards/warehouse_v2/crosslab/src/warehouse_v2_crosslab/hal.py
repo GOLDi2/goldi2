@@ -32,8 +32,7 @@ class HAL:
         self.XEncoder = Numeric(registers, 9, 16, "little")
         self.ZEncoder = Numeric(registers, 11, 16, "little")
         self.XMotor = StepperMotor(registers, 13, 14)
-        self.YMotor = Motor(registers, 15, 16)
-        self.ZMotor = StepperMotor(registers, 17, 18)
-        self.Magnet = Bit(registers, 19, 0)
+        self.YMotor = Motor(registers, 19, 20)
+        self.ZMotor = StepperMotor(registers, 21, 22)
 
         asyncio.create_task(registers.communicate_coroutine())
