@@ -168,13 +168,14 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                                 return s
                             }
                         }))
-                        const mappedSignals = signals.filter((s) => buses.find((b) => b.includes(s)))
+                        const mappedSignals = signals.filter((s) => buses.find((b) => b.map(rDI).includes(rDI(s))))
+                        console.log({ signals, mappedSignals, buses})
                         participant.config = {
                             interfaces: mappedSignals.map((signal) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
                                 signals: { gpio: rDI(signal) },
-                                busId: rDI(buses.find((b) => b.includes(signal))![0]),
+                                busId: rDI(buses.find((b) => b.map(rDI).includes(rDI(signal)))![0]),
                                 direction: signal.startsWith('#') ? 'out' : 'in',
                                 driver: participant.role
                             })),
