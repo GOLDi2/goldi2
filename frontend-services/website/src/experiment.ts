@@ -32,8 +32,16 @@ export function experiment_router(language: string, renderPage: renderPageType, 
             throw new Error('Device is not a group')
         }
 
+        const bpuGroup = await req.apiClient.getDevice('https://api.goldi-labs.de/devices/ab6c9737-a022-448d-b8a6-e0a6c46919fd')
+        if (bpuGroup.type !== 'group') {
+            throw new Error('Device is not a group')
+        }
+
+        console.log({ pspuGroup, bpus: bpuGroup })
+
         const pspus = await Promise.all(pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
-        return renderPage('experiment', language, res, req.user, { experiment, pspus });
+        const bpus = await Promise.all(bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
+        return renderPage('experiment', language, res, req.user, { experiment, pspus, bpus });
     }
 
     async function experimentSetup(req: Request, res: Response, _next: NextFunction, experiment: ExperimentServiceTypes.Experiment) {
@@ -47,7 +55,7 @@ export function experiment_router(language: string, renderPage: renderPageType, 
                 const deviceDetails = await req.apiClient.getDevice(device.device)
                 console.log({ deviceDetails, setupProps })
                 if (deviceDetails.type === 'edge instantiable' && setupProps.instanceUrl && setupProps.deviceToken && deviceDetails.codeUrl) {
-                    device.device=setupProps.instanceUrl
+                    device.device = setupProps.instanceUrl
                     instances.push({ codeUrl: deviceDetails.codeUrl, instanceUrl: setupProps.instanceUrl, deviceToken: setupProps.deviceToken })
                 }
             }
@@ -57,7 +65,7 @@ export function experiment_router(language: string, renderPage: renderPageType, 
     }
 
     async function runExperiment(req: Request, res: Response, _next: NextFunction) {
-        const resp=await req.apiClient.updateExperiment(req.query.url as string, { status: 'running' })
+        const resp = await req.apiClient.updateExperiment(req.query.url as string, { status: 'running' })
         res.send(resp)
         //res.redirect(303, '/' + language + '/index.html');
     }
