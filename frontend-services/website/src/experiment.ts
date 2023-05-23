@@ -111,6 +111,7 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
         }
         if (participants.length >= 1) {
             if (serviceType === 'http://api.goldi-labs.de/serviceTypes/electrical') {
+                const rDI = (s: string) => { try { return s.replace('#', '') } catch (e) { return s } } // remove _DRIVEN_ from signal name
                 const interfaces = participants.flatMap((p) => {
                     if (p.description.interfaces)
                         return p.description.interfaces.map((i: any) => ({ role: p.role, interface: i }))
@@ -119,8 +120,13 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                 })
                 const gpioInterfaces = interfaces.filter((i) => i.interface.interfaceType === 'gpio')
                 const buses = gpioInterfaces.flatMap(i => {
+                    const isDriven = ['inout', 'out'].includes(i.interface.direction)
                     if (i.role === 'ecp') return []
-                    return i.interface.availableSignals.gpio.filter((s: string) => s.length > 4).map((s: string) => [s])
+                    if (isDriven) {
+                        return i.interface.availableSignals.gpio.filter((s: string) => s.length > 4).map((s: string) => ['#' + s])
+                    } else {
+                        return i.interface.availableSignals.gpio.filter((s: string) => s.length > 4).map((s: string) => [s])
+                    }
                 })
                 for (const i of gpioInterfaces) {
                     if (i.role === 'ecp') continue
@@ -139,9 +145,9 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                             interfaces: buses.map((bus) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
-                                signals: { gpio: bus.join(' / ') },
-                                busId: bus[0],
-                                direction: 'inout',
+                                signals: { gpio: bus.map(rDI).join(' / ') },
+                                busId: rDI(bus[0]),
+                                direction: bus.some((s: string) => s.startsWith('#')) ? 'in' : 'inout',
                                 driver: participant.role
                             })),
                         }
@@ -152,16 +158,24 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                             else
                                 return []
                         })
+
                         const gpioInterfaces = interfaces.filter((i) => i.interface.interfaceType === 'gpio')
-                        const signals = gpioInterfaces.flatMap((i) => i.interface.availableSignals.gpio)
+                        const signals = gpioInterfaces.flatMap((i) => i.interface.availableSignals.gpio.map((s: string) => {
+                            const isDriven = ['inout', 'out'].includes(i.interface.direction)
+                            if (isDriven) {
+                                return '#' + s
+                            }else{
+                                return s
+                            }
+                        }))
                         const mappedSignals = signals.filter((s) => buses.find((b) => b.includes(s)))
                         participant.config = {
                             interfaces: mappedSignals.map((signal) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
-                                signals: { gpio: signal },
-                                busId: buses.find((b) => b.includes(signal))![0],
-                                direction: 'inout',
+                                signals: { gpio: rDI(signal) },
+                                busId: rDI(buses.find((b) => b.includes(signal))![0]),
+                                direction: signal.startsWith('#') ? 'out' : 'in',
                                 driver: participant.role
                             })),
                         }

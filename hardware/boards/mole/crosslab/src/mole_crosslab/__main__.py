@@ -138,7 +138,7 @@ async def main_async():
     deviceHandler = DeviceHandler()
 
     signal_service = ElectricalConnectionService("signals")
-    signal_gpio_interface = ConstractableGPIOInterface(signal_names)
+    signal_gpio_interface = ConstractableGPIOInterface(signal_names, "inout")
     signal_service.addInterface(signal_gpio_interface)
     signal_service.on("newInterface", newSensorInterface)
     deviceHandler.add_service(signal_service)

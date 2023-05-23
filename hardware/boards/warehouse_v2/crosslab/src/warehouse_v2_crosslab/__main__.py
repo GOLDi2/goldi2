@@ -249,13 +249,13 @@ async def main_async():
     deviceHandler = DeviceHandler()
 
     sensor_service = ElectricalConnectionService("sensors")
-    sensor_interface = ConstractableGPIOInterface(sensor_names)
+    sensor_interface = ConstractableGPIOInterface(sensor_names, "out")
     sensor_service.addInterface(sensor_interface)
     sensor_service.on("newInterface", newSensorInterface)
     deviceHandler.add_service(sensor_service)
 
     actuators_service = ElectricalConnectionService("actuators")
-    actuators_interface = ConstractableGPIOInterface(actuators_names)
+    actuators_interface = ConstractableGPIOInterface(actuators_names, "in")
     actuators_service.addInterface(actuators_interface)
     actuators_service.on("newInterface", newActuatorInterface)
     deviceHandler.add_service(actuators_service)
