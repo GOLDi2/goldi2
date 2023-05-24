@@ -52,6 +52,7 @@ services:
 # Coturn ##########################################################################################
   coturn:
     image: coturn/coturn
+    command: "--user=$COTURN_USERNAME:$COTURN_PASSWORD --lt-cred-mech --fingerprint --external-ip=$COTURN_IP --realm=$DOMAIN --log-file=stdout"
     network_mode: "host"
 
 # Logging #########################################################################################
