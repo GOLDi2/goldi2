@@ -277,7 +277,7 @@ begin
     sensor_data_vector(1) <= system_io_i(3).dat;
     sensor_data_vector(2) <= system_io_i(4).dat;
     sensor_data_vector(3) <= system_io_i(5).dat;
-    sensor_data_vector(4) <= system_io_i(6).dat;
+    sensor_data_vector(4) <= not system_io_i(6).dat;
     sensor_data_vector(5) <= system_io_i(7).dat;
     sensor_data_vector(6) <= system_io_i(8).dat;    
     sensor_data_vector(7) <= '0';

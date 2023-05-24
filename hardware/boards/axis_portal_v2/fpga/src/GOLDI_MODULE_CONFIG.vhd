@@ -92,7 +92,7 @@ package GOLDI_MODULE_CONFIG is
     constant X_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
-    constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
+    constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -133,7 +133,7 @@ package GOLDI_MODULE_CONFIG is
         --[14:8]    StallGuard2 threshold value
         --[7:5]     Reserved -> '0'
         --[4:0]     Current scale  
-        3 => x"0C040F",   --x"C040F"
+        3 => x"0C040F",   --x"C041E"
         
         --**Driver Control Register (DRVCONF)**
         --[19:17]   Address = 111
@@ -147,8 +147,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070", --x"E0070"
-        5 => x"000004"
+        4 => x"0E0070" --x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 
@@ -161,7 +160,7 @@ package GOLDI_MODULE_CONFIG is
     constant Y_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
-    constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
+    constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -216,8 +215,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070",--x"E0070"
-        5 => x"000004"
+        4 => x"0E0070" --x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 

@@ -139,7 +139,7 @@ begin
     --Error code 1 - Limit sensors max back and max front active
     error_list(1)  <= '1' when(limit_y_neg = '1' and limit_y_pos = '1') else '0';
     --Error code 2 - Limit sensors max bottom and max top active
-    error_list(2)  <= '1' when(limit_z_neg = '1' and limit_z_pos = '1') else '0';
+    error_list(2)  <= '1' when(limit_z_neg = '0' and limit_z_pos = '1') else '0';
 
 
     --Crane position errors:
@@ -159,11 +159,11 @@ begin
     --Error code 9 - Limit right triggered and X Motor actuated right
     error_list(8)  <= '1' when(limit_x_pos = '1' and motor_x_dir = '1' and x_stepper_active = '1') else '0';
     --Error code 10 - Limit back triggered and Y Motor actuated back
-    error_list(9) <= '1' when(limit_y_neg = '1' and motor_y_dir = '0' and y_stepper_active = '1') else '0';
+    error_list(9) <= '1' when(limit_y_neg = '1' and motor_y_dir = '1' and y_stepper_active = '1') else '0';
     --Error code 11 - Limit front triggered and Y Motor actuated front
-    error_list(10) <= '1' when(limit_y_pos = '1' and motor_y_dir = '1' and y_stepper_active = '1') else '0';
+    error_list(10) <= '1' when(limit_y_pos = '1' and motor_y_dir = '0' and y_stepper_active = '1') else '0';
     --Error code 12 - Limit bottom triggered and Z DC Motor actuated bottom
-    error_list(11) <= '1' when(limit_z_neg = '1' and motor_z_out_2 = '1' and z_motor_active = '1') else '0';
+    error_list(11) <= '1' when(limit_z_neg = '0' and motor_z_out_2 = '1' and z_motor_active = '1') else '0';
     --Error code 13 - Limit top triggered and Z DC Motor actuated top
     error_list(12) <= '1' when(limit_z_pos = '1' and motor_z_out_1 = '1' and z_motor_active = '1') else '0';
     -----------------------------------------------------------------------------------------------

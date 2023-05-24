@@ -31,9 +31,9 @@ LOCATE COMP "IO_DATA[2]"  SITE "84"  ;              # XAxis_LSLeft
 LOCATE COMP "IO_DATA[3]"  SITE "85"  ;              # XAxis_LSRight
 LOCATE COMP "IO_DATA[4]"  SITE "92"  ;              # YAxis_LSBack
 LOCATE COMP "IO_DATA[5]"  SITE "91"  ;              # YAxis_LSFront
-LOCATE COMP "IO_DATA[6]"  SITE "114" ;              # ZAxis_LSDown
-LOCATE COMP "IO_DATA[7]"  SITE "113" ;              # ZAxis_LSUp
-LOCATE COMP "IO_DATA[8]"  SITE "22"  ;              # Sensor_Proximity
+LOCATE COMP "IO_DATA[6]"  SITE "17" ;              # ZAxis_LSDown
+LOCATE COMP "IO_DATA[7]"  SITE "15" ;              # ZAxis_LSUp
+LOCATE COMP "IO_DATA[8]"  SITE "54"  ;              # Sensor_Proximity
 
 LOCATE COMP "IO_DATA[9]"  SITE "87"  ;              # XAxis_EncA
 LOCATE COMP "IO_DATA[10]" SITE "89"  ;              # XAxis_EncB
@@ -60,13 +60,13 @@ LOCATE COMP "IO_DATA[28]" SITE "99"  ;              # YAxis_nCS
 LOCATE COMP "IO_DATA[29]" SITE "97"  ;              # YAxis_MOSI
 LOCATE COMP "IO_DATA[30]" SITE "96"  ;              # YAxis_MISO
 
-LOCATE COMP "IO_DATA[31]" SITE "107" ;              # ZAxis_DCEnable
-LOCATE COMP "IO_DATA[32]" SITE "109" ;              # ZAxis_DCAPWM
-LOCATE COMP "IO_DATA[33]" SITE "110" ;              # ZAxis_DCBPWM
+LOCATE COMP "IO_DATA[31]" SITE "1" ;                # ZAxis_DCEnable
+LOCATE COMP "IO_DATA[32]" SITE "2" ;                # ZAxis_DCAPWM
+LOCATE COMP "IO_DATA[33]" SITE "6" ;                # ZAxis_DCBPWM
 
-LOCATE COMP "IO_DATA[34]" SITE "111" ;              # ZAxis_MagnetEnable
-LOCATE COMP "IO_DATA[35]" SITE "106" ;              # ZAxis_MagnetAPWM
-LOCATE COMP "IO_DATA[36]" SITE "112" ;              # ZAxis_MagnetBPWM
+LOCATE COMP "IO_DATA[34]" SITE "14" ;               # ZAxis_MagnetEnable
+LOCATE COMP "IO_DATA[35]" SITE "13" ;               # ZAxis_MagnetAPWM
+LOCATE COMP "IO_DATA[36]" SITE "9"  ;               # ZAxis_MagnetBPWM
 
 LOCATE COMP "IO_DATA[37]" SITE "141" ;              # LEDPowerR
 LOCATE COMP "IO_DATA[38]" SITE "140" ;              # LEDPowerG

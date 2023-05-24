@@ -99,9 +99,9 @@ begin
     act_mask(30 downto 26) <= (others => '1');
 
     --Mask Bit for H-Bridge enable channel
-    act_mask(31) <= '0' when((limit_z_neg = '1' and limit_z_pos   = '1')  or
-                             (limit_z_neg = '1' and motor_z_out_2 = '1')  or
-                             (limit_z_pos = '1' and motor_z_out_1 = '1')) else
+    act_mask(31) <= '0' when((limit_z_neg = '0' and limit_z_pos   = '1')  or
+                             (limit_z_neg = '0' and motor_z_out_1 = '1')  or
+                             (limit_z_pos = '1' and motor_z_out_2 = '1')) else
                     '1';
 
     act_mask(PHYSICAL_PIN_NUMBER-1 downto 32) <= (others => '1');
