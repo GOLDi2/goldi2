@@ -54,14 +54,14 @@ button_register: 'Benutzerkonto einrichten'
             {% endfor %}
         </select>
         <br><br>
-        <input type="submit" value="Submit">
+        <input class="primary-button" type="submit" value="Generate Experiment Description">
     </form>
 </div>
 <form method="POST" class="w-2/3 mx-auto">
 <textarea name="experiment" class="w-full h-96 border-2">
     {{ experiment | dump(2) }}
 </textarea><br>
-<input type="submit" value="Start">
+<input class="primary-button" type="submit" value="Start Experiment">
 </form>
 
 {% else %}
