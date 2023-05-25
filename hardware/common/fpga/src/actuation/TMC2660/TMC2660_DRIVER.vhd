@@ -155,9 +155,9 @@ begin
     -----------------------------------------------------------------------------------------------
     --Multiplex configuration data and spi communication data
     config_o_tready <= spi_o_tready    when(config_o_tvalid = '1') else '0';
-    -- stream_o_tready <= spi_o_tready    when(config_o_tvalid = '0') else '0';
-    spi_o_tvalid    <= config_o_tvalid; -- when(config_o_tvalid = '1') else stream_o_tvalid;
-    spi_o_tdata     <= config_o_tdata; -- when(config_o_tvalid = '1') else stream_o_tdata;
+    stream_o_tready <= spi_o_tready    when(config_o_tvalid = '0') else '0';
+    spi_o_tvalid    <= config_o_tvalid when(config_o_tvalid = '1') else stream_o_tvalid;
+    spi_o_tdata     <= config_o_tdata  when(config_o_tvalid = '1') else stream_o_tdata;
     
     
     CONFIGURATION_QUEUE : entity work.TMC2660_CONFIG_FIFO
@@ -173,21 +173,21 @@ begin
     );
 
 
-    -- STREAM_QUEUE : entity work.STREAM_FIFO
-    -- generic map(
-    --     FIFO_WIDTH      => 24,
-    --     FIFO_DEPTH      => 5
-    -- )
-    -- port map(
-    --     clk             => clk,
-    --     rst             => config_o_tvalid,
-    --     s_write_tready  => open,
-    --     s_write_tvalid  => reg_write_stb(3),
-    --     s_write_tdata   => reg_spi_data,
-    --     m_read_tready   => stream_o_tready,
-    --     m_read_tvalid   => stream_o_tvalid,
-    --     m_read_tdata    => stream_o_tdata       
-    -- );
+    STREAM_QUEUE : entity work.STREAM_FIFO
+    generic map(
+        FIFO_WIDTH      => 24,
+        FIFO_DEPTH      => 5
+    )
+    port map(
+        clk             => clk,
+        rst             => config_o_tvalid,
+        s_write_tready  => open,
+        s_write_tvalid  => reg_write_stb(3),
+        s_write_tdata   => reg_spi_data,
+        m_read_tready   => stream_o_tready,
+        m_read_tvalid   => stream_o_tvalid,
+        m_read_tdata    => stream_o_tdata       
+    );
 
 
     SPI_COMMS : entity work.TMC2660_SPI
@@ -224,9 +224,9 @@ begin
         pStep                   => tmc2660_step.dat,
         pDoStartMovement        => sStartMovement,
         pDoStopMovement         => sStopMovement,
-        pStartFrequency         => X"0050",
+        pStartFrequency         => X"0001",
         pMovementFrequency      => reg_speed,
-        pAcceleration           => std_logic_vector(to_unsigned(10, 16)), 
+        pAcceleration           => std_logic_vector(to_unsigned(250, 16)), 
         pBusyMoving             => open
     );
 

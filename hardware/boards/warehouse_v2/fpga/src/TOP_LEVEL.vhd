@@ -78,10 +78,13 @@ architecture RTL of TOP_LEVEL is
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(13 downto 0);
     --Control register
-    constant ctrl_default       :   data_word := x"A0";
+    constant ctrl_default       :   data_word := x"C0";
     signal ctrl_data            :   data_word;   
        alias enc_ref_x          :   std_logic is ctrl_data(0);
        alias enc_ref_z          :   std_logic is ctrl_data(1);
+       alias hold_x_motor       :   std_logic is ctrl_data(2);
+       alias hold_z_motor       :   std_logic is ctrl_data(3);
+	   alias hold_y_motor		:	std_logic is ctrl_data(4);
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -221,9 +224,9 @@ begin
 	
 	--Encoder system resets
 	--User accessible rst to calibrate encoder internal accumulator
-    x_encoder_rst <= rst or enc_ref_x or (external_io_i(2).dat and external_io_i(6).dat);
+    x_encoder_rst <= rst or enc_ref_x; --or (external_io_i(2).dat and external_io_i(6).dat);
 	 --User accessible rst to calibrate encoder internal accumulator
-    z_encoder_rst <= rst or enc_ref_z or (external_io_i(2).dat and external_io_i(6).dat);
+    z_encoder_rst <= rst or enc_ref_z; --or (external_io_i(2).dat and external_io_i(6).dat);
     -----------------------------------------------------------------------------------------------
 
 
@@ -279,6 +282,9 @@ begin
         rst             => rst,
         rst_virtual_x   => enc_ref_x,
         rst_virtual_z   => enc_ref_z,
+        hold_x_motor    => hold_x_motor,
+		hold_y_motor	=> hold_y_motor,
+        hold_z_motor    => hold_z_motor,
         sys_io_i        => external_io_i,
         sys_io_o        => external_io_o,
         safe_io_o       => external_io_o_safe

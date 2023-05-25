@@ -96,7 +96,7 @@ begin
     sensor_buff(3) <= lim_y_pos.dat;
     sensor_buff(4) <= lim_z_neg.dat;
     sensor_buff(5) <= lim_z_pos.dat;
-    sensor_buff(6) <= inductive.dat;
+    sensor_buff(6) <= not inductive.dat;
     sensor_buff(7) <= '0';
     -----------------------------------------------------------------------------------------------
 

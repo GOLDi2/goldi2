@@ -77,16 +77,16 @@ package GOLDI_MODULE_CONFIG is
     --(sensor_possition, valid range in pos/neg direction)
     --X Axis (10 sensors):
     constant X_PROTECTION_LIMITS    :   sensor_limit_array(9 downto 0) := (
-        0 => (  607,8),
-        1 => ( 1807,8),
-        2 => ( 3007,8),
-        3 => ( 4207,8),
-        4 => ( 5407,8),
-        5 => ( 6607,8),
-        6 => ( 7807,8),
-        7 => ( 9007,8),
-        8 => (10207,8),
-        9 => (11407,8)
+        0 => (  607,4),
+        1 => ( 1807,4),
+        2 => ( 3007,4),
+        3 => ( 4207,4),
+        4 => ( 5407,4),
+        5 => ( 6607,4),
+        6 => ( 7807,4),
+        7 => ( 9007,4),
+        8 => (10207,4),
+        9 => (11407,4)
     ); 
 
     --Movement limits in vertical axis inside a storage box
@@ -107,16 +107,16 @@ package GOLDI_MODULE_CONFIG is
     --Limits for virtual sensors
     --X Axis (10 sensors):
     constant X_SENSOR_LIMITS        :   sensor_limit_array(9 downto 0) := (
-        0 => (  607,8),
-        1 => ( 1807,8),
-        2 => ( 3007,8),
-        3 => ( 4207,8),
-        4 => ( 5407,8),
-        5 => ( 6607,8),
-        6 => ( 7807,8),
-        7 => ( 9007,8),
-        8 => (10207,8),
-        9 => (11407,8)
+        0 => (  607,3),
+        1 => ( 1807,3),
+        2 => ( 3007,3),
+        3 => ( 4207,3),
+        4 => ( 5407,3),
+        5 => ( 6607,3),
+        6 => ( 7807,3),
+        7 => ( 9007,3),
+        8 => (10207,3),
+        9 => (11407,3)
     );
 
     --Z Axis (6 sensors):
@@ -159,6 +159,7 @@ package GOLDI_MODULE_CONFIG is
         --[7:4]     Reserved -> '0'
         --[3:0]     Microstep resolution for STEP/DIR mode
         0 => x"000004",   --x"00004"
+		1 => x"000004",
 
         --**Chopper Control Register (CHOPCONF)**
         --[19:17]   Address = 100
@@ -169,7 +170,7 @@ package GOLDI_MODULE_CONFIG is
         --[10:7]    Hysteresis end value (low)
         --[6:4]     Hysteresis start value 
         --[3:0]     Off time MOSFET disable  
-        1 => x"094557",   --x"94557"
+        2 => x"094557",   --x"94557"
       
         --**Coolstep Control Register (SMARTEN)**
         --[19:17]   Address = 101
@@ -182,7 +183,7 @@ package GOLDI_MODULE_CONFIG is
         --[6:5]     Current increment size
         --[4]       Reserved -> '0'
         --[3:0]     Lower coolStep threshold SEMIN
-        2 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+        3 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
 
         --**StallGuard2 Control Register (SGCSCONF)**
         --[19:17]   Address = 110
@@ -191,7 +192,7 @@ package GOLDI_MODULE_CONFIG is
         --[14:8]    StallGuard2 threshold value
         --[7:5]     Reserved -> '0'
         --[4:0]     Current scale  
-        3 => x"0C040F",   --x"C040F"
+        4 => x"0C040F",   --x"C040F"
         
         --**Driver Control Register (DRVCONF)**
         --[19:17]   Address = 111
@@ -205,8 +206,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070", --x"E0070"
-        5 => x"000004"
+        5 => x"0E0070" 	--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 
@@ -236,6 +236,7 @@ package GOLDI_MODULE_CONFIG is
         --[7:4]     Reserved -> '0'
         --[3:0]     Microstep resolution for STEP/DIR mode
         0 => x"000004",   --x"00004"
+		1 => x"000004",
 
         --**Chopper Control Register (CHOPCONF)**
         --[19:17]   Address = 100
@@ -246,7 +247,7 @@ package GOLDI_MODULE_CONFIG is
         --[10:7]    Hysteresis end value (low)
         --[6:4]     Hysteresis start value 
         --[3:0]     Off time MOSFET disable  
-        1 => x"094557",   --x"94557"
+        2 => x"094557",   --x"94557"
       
         --**Coolstep Control Register (SMARTEN)**
         --[19:17]   Address = 101
@@ -259,7 +260,7 @@ package GOLDI_MODULE_CONFIG is
         --[6:5]     Current increment size
         --[4]       Reserved -> '0'
         --[3:0]     Lower coolStep threshold SEMIN
-        2 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+        3 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
 
         --**StallGuard2 Control Register (SGCSCONF)**
         --[19:17]   Address = 110
@@ -268,7 +269,7 @@ package GOLDI_MODULE_CONFIG is
         --[14:8]    StallGuard2 threshold value
         --[7:5]     Reserved -> '0'
         --[4:0]     Current scale  
-        3 => x"0C040F",   --x"C040F"
+        4 => x"0C040F",   --x"C040F"
         
         --**Driver Control Register (DRVCONF)**
         --[19:17]   Address = 111
@@ -282,8 +283,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070",--x"E0070"
-        5 => x"000004"
+        5 => x"0E0070" 	--x"E0070"
     );
     -----------------------------------------------------------------------------------------------
 

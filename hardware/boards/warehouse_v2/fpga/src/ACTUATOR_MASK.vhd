@@ -54,6 +54,9 @@ entity ACTUATOR_MASK is
         rst_virtual_x   : in    std_logic;
         rst_virtual_z   : in    std_logic;
         --System data
+        hold_x_motor    : in    std_logic;
+		hold_y_motor	: in	std_logic;											--! Overwrite mask for y motor
+        hold_z_motor    : in    std_logic;
         sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! IO data inputs (sensor data)
         sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! IO data outputs (actuator data)
         --Masked data
@@ -162,33 +165,35 @@ begin
 
     --X motor protection
     --TMC2660 step signal blocked to avoid damage
-    mask(18) <= '0' when((limit_x_neg = '1' and limit_x_pos = '1')      or
-                          (limit_x_neg = '1' and motor_x_dir = '0')      or
-                          (limit_x_pos = '1' and motor_x_dir = '1')      or
-                          (limit_y_neg = '0'))                            else
+    mask(18) <= '0' when((limit_x_neg  = '1' and limit_x_pos     = '1')      or
+                         (limit_x_neg  = '1' and motor_x_dir     = '0')      or
+                         (limit_x_pos  = '1' and motor_x_dir     = '1')      or
+                         (hold_x_motor = '1' and x_virtual_limit = '1')      or
+                         (limit_y_neg = '0'))                                else
                 '1';
     
     mask(23 downto 19) <= (others => '1');
     
     --Y motor protection
     --H-Bridge enable signal blocked to avoid damage
-    mask(24) <= '0' when((limit_y_neg = '1' and limit_y_pos   = '1')    or
-                          (limit_y_neg = '1' and motor_y_out_2 = '1')    or
-                          (limit_y_pos = '1' and motor_y_out_1 = '1')    or
-                          (x_virtual_limit = '0')                         or
-						  (z_virtual_limit = '0'))						   else
+    mask(24) <= '0' when((limit_y_neg = '1' and limit_y_pos   = '1')        	or
+                          (limit_y_neg = '1' and motor_y_out_2 = '1')       	or
+                          (limit_y_pos = '1' and motor_y_out_1 = '1')       	or
+                          (hold_y_motor = '0' and x_virtual_limit = '0')      	or
+						  (hold_y_motor = '0' and z_virtual_limit = '0'))     else
                 '1';
 
     mask(29 downto 25) <= (others => '1');
 
     --Z motor protection
     --TMC2660 step signal blocked to avoid damage
-    mask(30) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1')     or
+    mask(30) <= '0' when((limit_z_neg = '1' and limit_z_pos = '1')      or
                          (limit_z_neg = '1' and motor_z_dir = '0')      or
                          (limit_z_pos = '1' and motor_z_dir = '1')      or
                         --Z Axis virtual box limits 
+                         (hold_z_motor = '1' and z_virtual_limit = '1')  or
                         --Outside of virtual boxes
-                         (limit_y_neg = '0' and z_vsensors = (z_vsensors'range => '0'))                                  or
+                         (limit_y_neg = '0' and z_vsensors = (z_vsensors'range => '0'))                                 or
                         --Box 1
                          (limit_y_neg = '0' and z_vsensors(0) = '1' and z_vflag_bottom(0)  = '1' and motor_z_dir = '0') or
                          (limit_y_neg = '0' and z_vsensors(0) = '1' and z_vflag_top(0)     = '1' and motor_z_dir = '1') or 
