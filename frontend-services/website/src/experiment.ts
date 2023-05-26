@@ -77,7 +77,26 @@ export function experiment_router(language: string, renderPage: renderPageType, 
     return router;
 }
 
-const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [{ 'serviceType': 'http://api.goldi-labs.de/serviceTypes/electrical', 'serviceId': 'electrical', 'serviceDirection': 'prosumer', 'interfaces': [{ 'interfaceType': 'gpio', 'availableSignals': { 'gpio': ['_ANY_'] } }] }, { 'serviceId': 'webcam', 'serviceType': 'http://api.goldi-labs.de/serviceTypes/webcam', 'serviceDirection': 'consumer' }]
+const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
+    {
+        'serviceType': 'http://api.goldi-labs.de/serviceTypes/electrical',
+        'serviceId': 'electrical',
+        'serviceDirection': 'prosumer',
+        'interfaces': [
+            { 'interfaceType': 'gpio', 'availableSignals': { 'gpio': ['_ANY_'] } }
+        ]
+    },
+    {
+        'serviceId': 'webcam',
+        'serviceType': 'http://api.goldi-labs.de/serviceTypes/webcam',
+        'serviceDirection': 'consumer'
+    },
+    {
+        'serviceId': 'file',
+        'serviceType': 'https://api.goldi-labs.de/serviceTypes/file',
+        'serviceDirection': 'producer',
+    }
+]
 
 async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment> {
     const pspu = req.query.pspu as string
@@ -102,6 +121,7 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
     const serviceConfigurations: ExperimentServiceTypes.ServiceConfiguration[] = []
     const serviceTypes = new Set<string>()
     roleServices.flatMap(({ services }) => services.map(({ serviceType }) => serviceType!)).forEach((t) => serviceTypes.add(t))
+    console.log({ serviceTypes })
     for (const serviceType of serviceTypes) {
         let participants: (ExperimentServiceTypes.Participant & { description: any })[] = []
         for (const { role, services } of roleServices) {
@@ -109,7 +129,7 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                 participants.push({ role, serviceId: service.serviceId, description: service })
             }
         }
-        if (participants.length >= 1) {
+        if (participants.length >= 2) {
             if (serviceType === 'http://api.goldi-labs.de/serviceTypes/electrical') {
                 const rDI = (s: string) => { try { return s.replace('#', '') } catch (e) { return s } } // remove _DRIVEN_ from signal name
                 const interfaces = participants.flatMap((p) => {

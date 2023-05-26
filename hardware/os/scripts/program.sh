@@ -27,7 +27,7 @@ device=$(realpath $(echo "$devices" | sort -n | head -n1))
 
 echo "Found device $device"
 
-sudo bmaptool copy ./dist/old-goldi-dev-image.wic.bz2 $device
+sudo bmaptool copy ./dist/${VARIANT}-dev-goldi1.wic.bz2 $device
 
 mkdir tmp
 sudo mount ${device}1 ./tmp
