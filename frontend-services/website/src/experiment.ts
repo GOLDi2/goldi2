@@ -150,11 +150,17 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                 })
                 for (const i of gpioInterfaces) {
                     if (i.role === 'ecp') continue
+                    const isDriven = ['inout', 'out'].includes(i.interface.direction)
                     const freeSignals = i.interface.availableSignals.gpio.filter((s: string) => s.length <= 4)
                     for (const bus of buses) {
                         const signal = freeSignals.shift()
+                        const isBusDriven = bus.some((s: string) => s.startsWith('#'))
                         if (signal) {
-                            bus.push(signal)
+                            if (isDriven && !isBusDriven) {
+                                bus.push('#'+signal)
+                            }else{
+                                bus.push(signal)
+                            }
                         }
                     }
                 }
@@ -184,14 +190,16 @@ async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTyp
                             const isDriven = ['inout', 'out'].includes(i.interface.direction)
                             if (isDriven) {
                                 return '#' + s
-                            }else{
+                            } else {
                                 return s
                             }
                         }))
                         const mappedSignals = signals.filter((s) => buses.find((b) => b.map(rDI).includes(rDI(s))))
-                        console.log({ signals, mappedSignals, buses})
+                        // check if signals are driven in bus:
+                        const mappedBusSignals = mappedSignals.map((s) => buses.find((b) => b.map(rDI).includes(rDI(s))).find((bs: string) => rDI(bs) === rDI(s)))
+                        console.log({ signals, mappedBusSignals, buses })
                         participant.config = {
-                            interfaces: mappedSignals.map((signal) => ({
+                            interfaces: mappedBusSignals.map((signal) => ({
                                 interfaceId: (++id).toString(),
                                 interfaceType: 'gpio',
                                 signals: { gpio: rDI(signal) },

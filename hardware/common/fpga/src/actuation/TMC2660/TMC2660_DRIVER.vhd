@@ -224,9 +224,9 @@ begin
         pStep                   => tmc2660_step.dat,
         pDoStartMovement        => sStartMovement,
         pDoStopMovement         => sStopMovement,
-        pStartFrequency         => X"0001",
+        pStartFrequency         => X"0500",
         pMovementFrequency      => reg_speed,
-        pAcceleration           => std_logic_vector(to_unsigned(250, 16)), 
+        pAcceleration           => std_logic_vector(to_unsigned(10, 16)), 
         pBusyMoving             => open
     );
 
