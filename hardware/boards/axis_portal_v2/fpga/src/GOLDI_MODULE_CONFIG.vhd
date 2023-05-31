@@ -93,6 +93,8 @@ package GOLDI_MODULE_CONFIG is
 
     --Initial configuration of the TMC2660 Stepper driver
     constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
+
+
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -162,6 +164,7 @@ package GOLDI_MODULE_CONFIG is
     --Initial configuration of the TMC2660 Stepper driver
     constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
         0 => x"000000",
+
         --**Driver Control Register STEP/DIR mode (DRVCTRL)**
         --[19:18]   Address = 00
         --[17:10]   Reserved -> '0'
@@ -238,11 +241,16 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     --Electromagnet time constant in clk cycles. Used as a wait time to avoid an imediate voltage 
     --drop on the unprotected H-Bridge inputs when the depolarization pulse in generated.
-    constant EMAG_TAO           :   natural := 12000;
+    constant EMAG_TAO               :   natural := 5000;
 
     --Depolarization pulse duration in clk cycles. Used to reduce remanent polarization when the
     --magnet is powered off. To disable function use a value of 0
-    constant EMAG_DEMAG_FACTOR  :   natural := 50000;
+    constant EMAG_DEMAG_FACTOR      :   natural := 50000;
+
+    --Pulse reduction constant. Demagnetization pulse reduced from the starting value in the 
+    --register (reg_data*1000) by the given factor. Signal returns to idel when the pulse
+    --width is smaller than the reduction factor
+    constant EMAG_PULSE_REDUCTION   :   integer := 5000;
     -----------------------------------------------------------------------------------------------
 
 

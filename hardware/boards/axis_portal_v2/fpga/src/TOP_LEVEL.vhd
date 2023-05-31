@@ -125,7 +125,7 @@ begin
         io_sync => FPGA_nReset_sync
     );
     rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
-
+    -- rst <= not FPGA_nReset_sync; --Test reset
 
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER
@@ -435,6 +435,22 @@ begin
         em_out_1    => system_io_o(35),
         em_out_2	=> system_io_o(36)
     );
+
+    -- CLAW_MAGNET : entity work.EMAGNET_DRIVER_2
+    -- generic map(
+    --     ADDRESS         => EMAG_ADDRESS,
+    --     MAGNET_TAO      => EMAG_TAO,
+    --     PULSE_REDUCTION => EMAG_PULSE_REDUCTION
+    -- )
+    -- port map(
+    --     clk             => clk,
+    --     rst             => rst,
+    --     sys_bus_i       => sys_bus_i,
+    --     sys_bus_o       => sys_bus_o(9),
+    --     emag_enb        => system_io_o(34),
+    --     emag_out_1      => system_io_o(35),
+    --     emag_out_2      => system_io_o(36)
+    -- );
     -----------------------------------------------------------------------------------------------
 
 
