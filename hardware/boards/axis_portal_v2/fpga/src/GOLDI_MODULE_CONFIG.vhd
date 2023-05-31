@@ -128,12 +128,12 @@ package GOLDI_MODULE_CONFIG is
 
         --**StallGuard2 Control Register (SGCSCONF)**
         --[19:17]   Address = 110
-        --[16]      StallGuard2 filter enable
+        --[16]      StallGuard2 filter enable -> '1'
         --[15]      Reserved -> '0'
         --[14:8]    StallGuard2 threshold value
         --[7:5]     Reserved -> '0'
         --[4:0]     Current scale  
-        3 => x"0C040F",   --x"C041E"
+        3 => x"0D0A0F",   --x"C041E"
         
         --**Driver Control Register (DRVCONF)**
         --[19:17]   Address = 111
@@ -147,7 +147,7 @@ package GOLDI_MODULE_CONFIG is
         --[6]       Sense resistor voltage-based current scaling
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
-        4 => x"0E0070" --x"E0070"
+        4 => x"0E0060" --x"E0060"
     );
     -----------------------------------------------------------------------------------------------
 

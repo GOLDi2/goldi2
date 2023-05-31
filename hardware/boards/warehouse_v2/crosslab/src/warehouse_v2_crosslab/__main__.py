@@ -29,21 +29,26 @@ sensor_names = [
     "y_outside",
     "x_right",
     "x_left",
-    "x1",
-    "x2",
-    "x3",
-    "x4",
-    "x5",
-    "x6",
-    "x7",
-    "x8",
-    "x9",
-    "x10",
-    "z1",
-    "z2",
-    "z3",
-    "z4",
-    "z5",
+    "shelf_x_1",
+    "shelf_x_2",
+    "shelf_x_3",
+    "shelf_x_4",
+    "shelf_x_5",
+    "shelf_x_6",
+    "shelf_x_7",
+    "shelf_x_8",
+    "shelf_x_9",
+    "shelf_x_10",
+    "shelf_z_1_below",
+    "shelf_z_1_above",
+    "shelf_z_2_below",
+    "shelf_z_2_above",
+    "shelf_z_3_below",
+    "shelf_z_3_above",
+    "shelf_z_4_below",
+    "shelf_z_4_above",
+    "shelf_z_5_below",
+    "shelf_z_5_above",
 ]
 
 actuators_names = [
@@ -53,6 +58,7 @@ actuators_names = [
     "YMotorFront",
     "ZMotorBottom",
     "ZMotorTop",
+    "SlowDrive",
 ]
 
 
@@ -78,11 +84,57 @@ def newActuatorInterface(interface):
             panic("Actuator interface must be input only")
 
         interfaces[name] = interface
-
+        
         interface.on(
             "signalChange",
             lambda event: evaluateActuators(interfaces, hal, panic, userError),
         )
+
+def virtualXSensor(value: int, position: int):
+    if value > 607 - 300 and value < 607 + 300 and position==0:
+        return True
+    if value > 1807 - 300 and value < 1807 + 300 and position==1:
+        return True
+    if value > 3007 - 300 and value < 3007 + 300 and position==2:
+        return True
+    if value > 4207 - 300 and value < 4207 + 300 and position==3:
+        return True
+    if value > 5407 - 300 and value < 5407 + 300 and position==4:
+        return True
+    if value > 6607 - 300 and value < 6607 + 300 and position==5:
+        return True
+    if value > 7807 - 300 and value < 7807 + 300 and position==6:
+        return True
+    if value > 9007 - 300 and value < 9007 + 300 and position==7:
+        return True
+    if value > 10207 - 300 and value < 10207 + 300 and position==8:
+        return True
+    if value > 11407 - 300 and value < 11407 + 300 and position==9:
+        return True
+    return False
+
+def virtualZSensor(value: int, position: int):
+    if value > 894 - 5000 and value < 894 - 50 and position==0:
+        return True
+    if value > 894 + 50 and value < 894 + 5000 and position==1:
+        return True
+    if value > 11324 - 5000 and value < 11324 - 50 and position==2:
+        return True
+    if value > 11324 + 50 and value < 11324 + 5000 and position==3:
+        return True
+    if value > 21754 - 5000 and value < 21754 - 50 and position==4:
+        return True
+    if value > 21754 + 50 and value < 21754 + 5000 and position==5:
+        return True
+    if value > 32184 - 5000 and value < 32184 - 50 and position==6:
+        return True
+    if value > 32184 + 50 and value < 32184 + 5000 and position==7:
+        return True
+    if value > 42614 - 5000 and value < 42614 - 50  and position==8:
+        return True
+    if value > 42614 + 50 and value < 42614 + 5000  and position==9:
+        return True
+    return False
 
 
 def newSensorInterface(interface):
@@ -125,51 +177,66 @@ def newSensorInterface(interface):
         elif name == "x_left":
             hal.x_left.on("change", setBool)
             value = hal.x_left.value()
-        elif name == "x1":
-            hal.x1.on("change", setBool)
-            value = hal.x1.value()
-        elif name == "x2":
-            hal.x2.on("change", setBool)
-            value = hal.x2.value()
-        elif name == "x3":
-            hal.x3.on("change", setBool)
-            value = hal.x3.value()
-        elif name == "x4":
-            hal.x4.on("change", setBool)
-            value = hal.x4.value()
-        elif name == "x5":
-            hal.x5.on("change", setBool)
-            value = hal.x5.value()
-        elif name == "x6":
-            hal.x6.on("change", setBool)
-            value = hal.x6.value()
-        elif name == "x7":
-            hal.x7.on("change", setBool)
-            value = hal.x7.value()
-        elif name == "x8":
-            hal.x8.on("change", setBool)
-            value = hal.x8.value()
-        elif name == "x9":
-            hal.x9.on("change", setBool)
-            value = hal.x9.value()
-        elif name == "x10":
-            hal.x10.on("change", setBool)
-            value = hal.x10.value()
-        elif name == "z1":
-            hal.z1.on("change", setBool)
-            value = hal.z1.value()
-        elif name == "z2":
-            hal.z2.on("change", setBool)
-            value = hal.z2.value()
-        elif name == "z3":
-            hal.z3.on("change", setBool)
-            value = hal.z3.value()
-        elif name == "z4":
-            hal.z4.on("change", setBool)
-            value = hal.z4.value()
-        elif name == "z5":
-            hal.z5.on("change", setBool)
-            value = hal.z5.value()
+        elif name == "shelf_x_1":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 0)))
+            value = virtualXSensor(hal.XEncoder.value(), 0)
+        elif name == "shelf_x_2":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 1)))
+            value = virtualXSensor(hal.XEncoder.value(), 1)
+        elif name == "shelf_x_3":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 2)))
+            value = virtualXSensor(hal.XEncoder.value(), 2)
+        elif name == "shelf_x_4":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 3)))
+            value = virtualXSensor(hal.XEncoder.value(), 3)
+        elif name == "shelf_x_5":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 4)))
+            value = virtualXSensor(hal.XEncoder.value(), 4)
+        elif name == "shelf_x_6":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 5)))
+            value = virtualXSensor(hal.XEncoder.value(), 5)
+        elif name == "shelf_x_7":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 6)))
+            value = virtualXSensor(hal.XEncoder.value(), 6)
+        elif name == "shelf_x_8":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 7)))
+            value = virtualXSensor(hal.XEncoder.value(), 7)
+        elif name == "shelf_x_9":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 8)))
+            value = virtualXSensor(hal.XEncoder.value(), 8)
+        elif name == "shelf_x_10":
+            hal.XEncoder.on("change", lambda value: setBool(virtualXSensor(value, 9)))
+            value = virtualXSensor(hal.XEncoder.value(), 9)
+        elif name == "shelf_z_1_below":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 0)))
+            value = virtualZSensor(hal.XEncoder.value(), 0)
+        elif name == "shelf_z_1_above":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 1)))
+            value = virtualZSensor(hal.XEncoder.value(), 1)
+        elif name == "shelf_z_2_below":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 2)))
+            value = virtualZSensor(hal.XEncoder.value(), 2)
+        elif name == "shelf_z_2_above":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 3)))
+            value = virtualZSensor(hal.XEncoder.value(), 3)
+        elif name == "shelf_z_3_below":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 4)))
+            value = virtualZSensor(hal.XEncoder.value(), 4)
+        elif name == "shelf_z_3_above":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 5)))
+            value = virtualZSensor(hal.XEncoder.value(), 5)
+        elif name == "shelf_z_4_below":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 6)))
+            value = virtualZSensor(hal.XEncoder.value(), 6)
+        elif name == "shelf_z_4_above":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 7)))
+            value = virtualZSensor(hal.XEncoder.value(), 7)
+        elif name == "shelf_z_5_below":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 8)))
+            value = virtualZSensor(hal.XEncoder.value(), 8)
+        elif name == "shelf_z_5_above":
+            hal.ZEncoder.on("change", lambda value: setBool(virtualZSensor(value, 9)))
+            value = virtualZSensor(hal.XEncoder.value(), 9)
 
         interface.changeDriver("strongH" if value else "strongL")
 
@@ -230,21 +297,8 @@ async def main_async():
 
     hal = HAL()
 
-    # Init Model:
-    hal.XMotor.set(-50)
-    hal.ZMotor.set(-50)
-    while not hal.x_right.value():
-        await asyncio.sleep(0.1)
-    while not hal.z_top.value():
-        await asyncio.sleep(0.1)
-    hal.XMotor.set(50)
-    hal.ZMotor.set(50)
-    while not hal.x_left.value():
-        await asyncio.sleep(0.1)
-    while not hal.z_bottom.value():
-        await asyncio.sleep(0.1)
-    hal.XMotor.set(0)
-    hal.ZMotor.set(0)
+    await hal.init_sequence()
+
 
     deviceHandler = DeviceHandler()
 

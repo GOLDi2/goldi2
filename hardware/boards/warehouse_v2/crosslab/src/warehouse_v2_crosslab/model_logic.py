@@ -1,4 +1,4 @@
-from typing import Callable, Dict
+from typing import Callable, Dict, Literal
 from warehouse_v2_crosslab.hal import HAL
 
 from crosslab.soa_services.electrical.signal_interfaces.gpio import GPIOInterface
@@ -21,6 +21,7 @@ def evaluateActuators(
     yMotorFrontInterface = interfaces.get("YMotorFront", None)
     zMotorBottomInterface = interfaces.get("ZMotorBottom", None)
     zMotorTopInterface = interfaces.get("ZMotorTop", None)
+    slowInterface = interfaces.get("SlowDrive", None)
 
     xMotorLeft = (
         xMotorLeftInterface.signalState
@@ -51,13 +52,15 @@ def evaluateActuators(
         zMotorTopInterface.signalState if zMotorTopInterface is not None else "strongL"
     )
 
+    slow = slowInterface.signalState if slowInterface is not None else "strongL"
+
     if isHigh(xMotorLeft) and isHigh(xMotorRight):
         userError("XMotorLeft and XMotorRight are both high")
         hal.XMotor.set(0)
     elif isHigh(xMotorLeft):
-        hal.XMotor.set(-255)
+        hal.XMotor.set(100 if isHigh(slow) else 255)
     elif isHigh(xMotorRight):
-        hal.XMotor.set(255)
+        hal.XMotor.set(-100 if isHigh(slow) else -255)
     else:
         hal.XMotor.set(0)
 
@@ -75,9 +78,9 @@ def evaluateActuators(
         userError("ZMotorBottom and ZMotorTop are both high")
         hal.ZMotor.set(0)
     elif isHigh(zMotorBottom):
-        hal.ZMotor.set(-100)
+        hal.ZMotor.set(50 if isHigh(slow) else 100)
     elif isHigh(zMotorTop):
-        hal.ZMotor.set(100)
+        hal.ZMotor.set(-50 if isHigh(slow) else -100)
     else:
         hal.ZMotor.set(0)
 
