@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
@@ -40,5 +40,6 @@ package GOLDI_DATA_TYPES is
     type sensor_limit is array(1 downto 0) of integer;
     type sensor_limit_array is array(natural range <>) of sensor_limit;
     -----------------------------------------------------------------------------------------------
+
 
 end package GOLDI_DATA_TYPES;

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -67,7 +67,9 @@ end package GOLDI_IO_STANDARD;
 
 package body GOLDI_IO_STANDARD is
 
-
+	--! @brief Convert IO vector to std_logic_vector
+	--! @details
+	--! Convert a IO in vector to an std_logic vector to recover the data 
 	function getIOInData(io : io_i_vector) return std_logic_vector is
 		variable data	:	std_logic_vector(io'range);
 	begin
@@ -79,7 +81,9 @@ package body GOLDI_IO_STANDARD is
 	end getIOInData;
 
 
-	
+	--! @brief Convert IO vector to std_logic_vector
+	--! @details
+	--! Convert a IO out vector to an std_logic vector to recover the data
 	function getIOOutData(io : io_o_vector) return std_logic_vector is
 		variable data	:	std_logic_vector(io'range);
 	begin

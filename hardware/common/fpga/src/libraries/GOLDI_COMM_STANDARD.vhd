@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -19,7 +19,7 @@
 -- Additional Comments: Release for Axis Portal V1 (AP1)
 --
 -- Revision V2.00.00 - Defualt module version for release 2.00.00
--- Additional Comments: Release of Highbay-Warehouse. Correction of
+-- Additional Comments: Release of Warehouse_V2. Correction of
 --                      slice ranges
 -------------------------------------------------------------------------------
 --! Use standard library
