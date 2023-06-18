@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -29,6 +29,7 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 
+
 --! @brief Tri-state synchronizer buffer
 --! @details
 --! Buffer transforms the inout signals of a FPGA into the io_o/io_i standard
@@ -50,6 +51,7 @@ entity TRIS_BUFFER is
         io              : inout std_logic       --! FPGA Pin
     );
 end entity TRIS_BUFFER;
+
 
 
 
