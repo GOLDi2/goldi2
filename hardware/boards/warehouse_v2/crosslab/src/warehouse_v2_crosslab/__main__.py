@@ -84,55 +84,57 @@ def newActuatorInterface(interface):
             panic("Actuator interface must be input only")
 
         interfaces[name] = interface
-        
+
         interface.on(
             "signalChange",
             lambda event: evaluateActuators(interfaces, hal, panic, userError),
         )
 
+
 def virtualXSensor(value: int, position: int):
-    if value > 607 - 300 and value < 607 + 300 and position==0:
+    if value > 607 - 300 and value < 607 + 300 and position == 0:
         return True
-    if value > 1807 - 300 and value < 1807 + 300 and position==1:
+    if value > 1807 - 300 and value < 1807 + 300 and position == 1:
         return True
-    if value > 3007 - 300 and value < 3007 + 300 and position==2:
+    if value > 3007 - 300 and value < 3007 + 300 and position == 2:
         return True
-    if value > 4207 - 300 and value < 4207 + 300 and position==3:
+    if value > 4207 - 300 and value < 4207 + 300 and position == 3:
         return True
-    if value > 5407 - 300 and value < 5407 + 300 and position==4:
+    if value > 5407 - 300 and value < 5407 + 300 and position == 4:
         return True
-    if value > 6607 - 300 and value < 6607 + 300 and position==5:
+    if value > 6607 - 300 and value < 6607 + 300 and position == 5:
         return True
-    if value > 7807 - 300 and value < 7807 + 300 and position==6:
+    if value > 7807 - 300 and value < 7807 + 300 and position == 6:
         return True
-    if value > 9007 - 300 and value < 9007 + 300 and position==7:
+    if value > 9007 - 300 and value < 9007 + 300 and position == 7:
         return True
-    if value > 10207 - 300 and value < 10207 + 300 and position==8:
+    if value > 10207 - 300 and value < 10207 + 300 and position == 8:
         return True
-    if value > 11407 - 300 and value < 11407 + 300 and position==9:
+    if value > 11407 - 300 and value < 11407 + 300 and position == 9:
         return True
     return False
 
+
 def virtualZSensor(value: int, position: int):
-    if value > 894 - 5000 and value < 894 - 50 and position==0:
+    if value > 894 - 5000 and value < 894 - 50 and position == 0:
         return True
-    if value > 894 + 50 and value < 894 + 5000 and position==1:
+    if value > 894 + 50 and value < 894 + 5000 and position == 1:
         return True
-    if value > 11324 - 5000 and value < 11324 - 50 and position==2:
+    if value > 11324 - 5000 and value < 11324 - 50 and position == 2:
         return True
-    if value > 11324 + 50 and value < 11324 + 5000 and position==3:
+    if value > 11324 + 50 and value < 11324 + 5000 and position == 3:
         return True
-    if value > 21754 - 5000 and value < 21754 - 50 and position==4:
+    if value > 21754 - 5000 and value < 21754 - 50 and position == 4:
         return True
-    if value > 21754 + 50 and value < 21754 + 5000 and position==5:
+    if value > 21754 + 50 and value < 21754 + 5000 and position == 5:
         return True
-    if value > 32184 - 5000 and value < 32184 - 50 and position==6:
+    if value > 32184 - 5000 and value < 32184 - 50 and position == 6:
         return True
-    if value > 32184 + 50 and value < 32184 + 5000 and position==7:
+    if value > 32184 + 50 and value < 32184 + 5000 and position == 7:
         return True
-    if value > 42614 - 5000 and value < 42614 - 50  and position==8:
+    if value > 42614 - 5000 and value < 42614 - 50 and position == 8:
         return True
-    if value > 42614 + 50 and value < 42614 + 5000  and position==9:
+    if value > 42614 + 50 and value < 42614 + 5000 and position == 9:
         return True
     return False
 
@@ -298,7 +300,6 @@ async def main_async():
     hal = HAL()
 
     await hal.init_sequence()
-
 
     deviceHandler = DeviceHandler()
 

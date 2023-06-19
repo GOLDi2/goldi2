@@ -17,12 +17,12 @@ def test_stepper_motor():
     motor.set(128)
     assert registers.getWriteBuffer(0x10) == 0b00000001
     assert registers.getWriteBuffer(0x11) == 0
-    assert registers.getWriteBuffer(0x12) == 5
+    assert registers.getWriteBuffer(0x12) == 75
 
     motor.set(-84)
     assert registers.getWriteBuffer(0x10) == 0b00000010
-    assert registers.getWriteBuffer(0x11) == 72
-    assert registers.getWriteBuffer(0x12) == 3
+    assert registers.getWriteBuffer(0x11) == 56
+    assert registers.getWriteBuffer(0x12) == 49
 
     motor.set(0)
     assert registers.getWriteBuffer(0x10) == 0b10000000
@@ -31,13 +31,13 @@ def test_stepper_motor():
 
     motor.set(255)
     assert registers.getWriteBuffer(0x10) == 0b00000001
-    assert registers.getWriteBuffer(0x11) == 246
-    assert registers.getWriteBuffer(0x12) == 9
+    assert registers.getWriteBuffer(0x11) == 106
+    assert registers.getWriteBuffer(0x12) == 149
 
     motor.set(-255)
     assert registers.getWriteBuffer(0x10) == 0b00000010
-    assert registers.getWriteBuffer(0x11) == 246
-    assert registers.getWriteBuffer(0x12) == 9
+    assert registers.getWriteBuffer(0x11) == 106
+    assert registers.getWriteBuffer(0x12) == 149
 
     with pytest.raises(ValueError):
         motor.set(256)

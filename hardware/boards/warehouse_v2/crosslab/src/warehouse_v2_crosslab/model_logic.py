@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Literal
+from typing import Callable, Dict
 from warehouse_v2_crosslab.hal import HAL
 
 from crosslab.soa_services.electrical.signal_interfaces.gpio import GPIOInterface
@@ -83,4 +83,3 @@ def evaluateActuators(
         hal.ZMotor.set(-50 if isHigh(slow) else -100)
     else:
         hal.ZMotor.set(0)
-

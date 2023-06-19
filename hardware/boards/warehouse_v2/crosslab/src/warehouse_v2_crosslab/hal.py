@@ -24,9 +24,21 @@ zPositions = [
     42614,
 ]
 
+
 class CorrectedMotor:
-    state: Literal["stopped", "forward", "backward", "correctingForward", "correctingBackward"]
-    def __init__(self, motor: Motor, encoder: Numeric, holdBit: Bit, validPostions: List[int], allowedDeviation: int=100, correctingSpeed: int=100) -> None:
+    state: Literal[
+        "stopped", "forward", "backward", "correctingForward", "correctingBackward"
+    ]
+
+    def __init__(
+        self,
+        motor: Motor,
+        encoder: Numeric,
+        holdBit: Bit,
+        validPostions: List[int],
+        allowedDeviation: int = 100,
+        correctingSpeed: int = 100,
+    ) -> None:
         self.motor = motor
         self.encoder = encoder
         self.holdBit = holdBit
@@ -41,9 +53,9 @@ class CorrectedMotor:
     async def correctingTask(self):
         self.holdBit.set(True)
         await asyncio.sleep(0.05)
-        if self.state=="correctingBackward":
+        if self.state == "correctingBackward":
             self.motor.set(self.correctingSpeed)
-        elif self.state=="correctingForward":
+        elif self.state == "correctingForward":
             self.motor.set(-self.correctingSpeed)
 
         while self.encoderChanged:
@@ -52,12 +64,22 @@ class CorrectedMotor:
         self.motor.set(0)
         self.holdBit.set(False)
 
-    def nearestValidPosition(self, dir: Literal["forward", "backward", "both"]="both"):
+    def nearestValidPosition(
+        self, dir: Literal["forward", "backward", "both"] = "both"
+    ):
         currentPos = self.encoder.value()
         if dir == "forward":
-           _validPostions = [validPosition for validPosition in self.validPostions if validPosition >= currentPos]
+            _validPostions = [
+                validPosition
+                for validPosition in self.validPostions
+                if validPosition >= currentPos
+            ]
         elif dir == "backward":
-            _validPostions = [validPosition for validPosition in self.validPostions if validPosition <= currentPos]
+            _validPostions = [
+                validPosition
+                for validPosition in self.validPostions
+                if validPosition <= currentPos
+            ]
         else:
             _validPostions = self.validPostions.copy()
 
@@ -84,7 +106,10 @@ class CorrectedMotor:
         else:
             forwardPosition, forwardDeviation = self.nearestValidPosition("forward")
             backwardPostion, backwardDeviation = self.nearestValidPosition("backward")
-            if forwardDeviation <= self.allowedDeviation or backwardDeviation <= self.allowedDeviation:
+            if (
+                forwardDeviation <= self.allowedDeviation
+                or backwardDeviation <= self.allowedDeviation
+            ):
                 if forwardDeviation <= backwardDeviation:
                     self.state = "correctingForward"
                     asyncio.create_task(self.correctingTask())
@@ -129,18 +154,22 @@ class HAL:
         self.XEncoder = Numeric(registers, 9, 16, "little")
         self.ZEncoder = Numeric(registers, 11, 16, "little")
         self.uncorrectedXMotor = StepperMotor(registers, 13, 14)
-        self.XMotor = CorrectedMotor(self.uncorrectedXMotor, self.XEncoder, self.hold_x, xPositions, 300,50)
+        self.XMotor = CorrectedMotor(
+            self.uncorrectedXMotor, self.XEncoder, self.hold_x, xPositions, 300, 50
+        )
         self.YMotor = Motor(registers, 19, 20)
         self.uncorrectedZMotor = StepperMotor(registers, 21, 22)
-        self.ZMotor = CorrectedMotor(self.uncorrectedZMotor, self.ZEncoder, self.hold_z, zPositions, 5000, 20)
+        self.ZMotor = CorrectedMotor(
+            self.uncorrectedZMotor, self.ZEncoder, self.hold_z, zPositions, 5000, 20
+        )
 
-        registers.spi.xfer2([0x80, 18, 0x09, 0x45, 0x57]) # Init XMotor
+        registers.spi.xfer2([0x80, 18, 0x09, 0x45, 0x57])  # Init XMotor
         registers.spi.xfer2([0x80, 18, 0x0A, 0x00, 0x00])
         registers.spi.xfer2([0x80, 18, 0x0D, 0x0A, 0x0F])
         registers.spi.xfer2([0x80, 18, 0x0E, 0x00, 0x60])
         registers.spi.xfer2([0x80, 18, 0x00, 0x00, 0x04])
-        
-        registers.spi.xfer2([0x80, 26, 0x09, 0x45, 0x57]) # Init ZMotor
+
+        registers.spi.xfer2([0x80, 26, 0x09, 0x45, 0x57])  # Init ZMotor
         registers.spi.xfer2([0x80, 26, 0x0A, 0x00, 0x00])
         registers.spi.xfer2([0x80, 26, 0x0D, 0x0A, 0x0F])
         registers.spi.xfer2([0x80, 26, 0x0E, 0x00, 0x60])

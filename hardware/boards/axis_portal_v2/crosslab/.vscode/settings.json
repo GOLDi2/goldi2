@@ -31,5 +31,9 @@
         "**/node_modules": true,
         "**/venv": true,
         //end generated
-    }
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none"
 }
