@@ -1,0 +1,47 @@
+{% extends "admin_layout.html" %}
+{% import "components/topbar.html" as topbar %}
+{% import "components/elements.html" as elements %}
+{% block content %}
+    {% call topbar.container() %}
+    {% call topbar.topbar() %}
+    {% endcall %}
+    {% call topbar.content() %}
+    <div class="w-96 mx-auto">
+        <form class="space-y-2" method="POST">
+            <input type="text" name="name" placeholder="Name" value="{{ device.name }}"/>
+            <input type="text" name="description" placeholder="Description" value="{{ device.description }}"/>
+            <input type="hidden" name="type" value="{{type}}"/>
+            {% if type=="edge instantiable" %}
+                <input type="text" name="codeUrl" placeholder="Code Url" value="{{ device.codeUrl }}"/>
+            {% endif %}
+            {% if type=="group" %}
+                {% for device in includedDevices %}
+                    <input id="{{ device.url }}" type="checkbox" name="devices[]" value="{{ device.url }}" checked/>
+                    <label for="{{ device.url }}">{{ device.name }}</label><br/>
+                {% endfor %}
+                {% for device in excludedDevices %}
+                    <input id="{{ device.url }}" type="checkbox" name="devices[]" value="{{ device.url }}"/>
+                    <label for="{{ device.url }}">{{ device.name }}</label><br/>
+                {% endfor %}
+                {% for device in devices %}
+                    <input id="{{ device.url }}" type="checkbox" name="devices[]" value="{{ device.url }}"/>
+                    <label for="{{ device.url }}">{{ device.name }}</label><br/>
+                {% endfor %}
+            {% endif %}
+            {% if type=="device" %}
+                <textarea name="services" class="w-full h-40 border-2">{{ device.services | dump(2) }}</textarea><br/>
+            {% endif %}
+            {% if create %}
+                <input class="primary-button" type="submit" value="Create"/>
+            {% else %}
+                <input class="primary-button" type="submit" value="Update"/>
+            {% endif %}
+        </form>
+        <!-- {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/token?url="+device.url, icon="add") %}Create Device Token{% endcall %}{% endcall %} -->
+        <form class="space-y-2" method="POST" action="/admin/devices/token?url={{ device.url }}">
+            <input class="primary-button" type="submit" name="type" value="Create Device Token"/>
+        </form>
+    </div>
+    {% endcall %}
+    {% endcall %}
+{% endblock %}

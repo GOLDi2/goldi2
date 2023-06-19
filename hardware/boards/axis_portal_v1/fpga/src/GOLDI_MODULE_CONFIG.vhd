@@ -18,32 +18,27 @@
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
+--! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+--! Use custom package
+library work;
+use work.GOLDI_COMM_STANDARD.all;
+use work.GOLDI_IO_STANDARD.all;
 
 
 
 
 package GOLDI_MODULE_CONFIG is
     
-    --****SYSTEM CONSTANTS****
+    --****BOARD PINS****
     -----------------------------------------------------------------------------------------------
-    --System size
-    --Address width sets the protocol for SPI communication and the number of possible registers
-    --SPI communication protocol takes first bit of the configuration byte's for write enable
-    --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
-    constant BUS_ADDRESS_WIDTH	:	natural range 7 to 63 := 7;
-    
-    --Main parameter of the system. Sets the width of data words 
-    constant SYSTEM_DATA_WIDTH	:	natural range 8 to 64 := 8;
-    
-
     --Model pins
     --Number of physical FPGA pins that are available for IO functions
     constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;
     --Number of IO pins needed for the system modules
-    constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
+    --constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
     -----------------------------------------------------------------------------------------------
  
     
@@ -79,10 +74,11 @@ package GOLDI_MODULE_CONFIG is
 	
     --****INCREMENTAL ENCODERS****
     ----------------------------------------------------------------------------------------------
-    --Activates the use of Channel_I for reference
+    --Activate the use of Channel_I for reference after reset
     constant X_ENCODER_RST_TYPE :   boolean := false;
-    constant X_ENCODER_INVERT   :   boolean := false;
     constant Y_ENCODER_RST_TYPE :   boolean := false;
+    --Select positive direction [false -> CCW | true -> CC]
+    constant X_ENCODER_INVERT   :   boolean := false;
     constant Y_ENCODER_INVERT   :   boolean := true;
     -----------------------------------------------------------------------------------------------
 
@@ -91,6 +87,11 @@ package GOLDI_MODULE_CONFIG is
     --****ACTUATORS****
     -----------------------------------------------------------------------------------------------
     --Frequency of PWM signal
+    --Frequency factor calculated by [F = (f_clk/f_pwm*255)] with
+    -- F     - frequency factor
+    -- f_clk - system clock
+    -- f_pwm - desired frequency of pwm signals
+
     constant X_MOTOR_FREQUENCY  :   natural := 27;
     constant Y_MOTOR_FREQUENCY  :   natural := 27;
     constant Z_MOTOR_FREQUENCY  :   natural := 27;
@@ -100,16 +101,25 @@ package GOLDI_MODULE_CONFIG is
 
     --****LED****
     -----------------------------------------------------------------------------------------------
-    --Module constants
+    --Frequency: Blinking frequency factor for LEDs. Blink pattern last for 2*frequency 
+    --           and on/off ratio is a divided into two configureable frequency/16 segments
+    --
+    --Invert:    Invert on/off behaviour
+    
+    --Power LED Red
     constant PR_LED_FREQUENCY   :   natural := 50000000;
-    constant PG_LED_FREQUENCY   :   natural := 50000000;
-    constant ER_LED_FREQUENCY   :   natural := 50000000;
-    constant EW_LED_FREQUENCY   :   natural := 50000000;
-    constant EG_LED_FREQUENCY   :   natural := 50000000;
     constant PR_LED_INVERTED    :   boolean := false;
-    constant PG_LED_INVERTED    :   boolean := false; 
+    --Power LED Green
+    constant PG_LED_FREQUENCY   :   natural := 50000000;
+    constant PG_LED_INVERTED    :   boolean := false;
+    --Environment LED Red
+    constant ER_LED_FREQUENCY   :   natural := 50000000;
     constant ER_LED_INVERTED    :   boolean := false;
+    --Environment LED White
+    constant EW_LED_FREQUENCY   :   natural := 50000000;
     constant EW_LED_INVERTED    :   boolean := false;
+    --Environment LED Green
+    constant EG_LED_FREQUENCY   :   natural := 50000000;
     constant EG_LED_INVERTED    :   boolean := false;
     -----------------------------------------------------------------------------------------------
     

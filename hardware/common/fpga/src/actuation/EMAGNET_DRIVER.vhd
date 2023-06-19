@@ -73,12 +73,10 @@ end entity EMAGNET_DRIVER;
 architecture RTL of EMAGNET_DRIVER is
 	
 	--I****INTERNAL SIGNALS****
-	--Constants
-	--Use of larger constant due to problems with generics
-	constant reg_default	:	data_word_vector(getMemoryLength(3)-1 downto 0) := (others => (others => '0'));  
-	--Registers
-	signal reg_data			:	data_word_vector(0 downto 0);
-		alias emag_enb		:	std_logic is reg_data(0)(0);
+	--Memory
+	constant reg_default	:	data_word := (others => '0');  
+	signal reg_data			:	data_word;
+		alias emag_enb		:	std_logic is reg_data(0);
 	--State machine
 	type STATE is (IDLE,POW_ON,POW_HOLD,POW_OFF);
 	signal PS				:	STATE := IDLE;
@@ -86,7 +84,8 @@ architecture RTL of EMAGNET_DRIVER is
 	
 begin
 	
-
+	--****MAGNET CONTROL****
+	-----------------------------------------------------------------------------------------------
 	STATE_MACHINE : process(clk)
 		variable counter : natural;
 
@@ -171,25 +170,30 @@ begin
 			
 		end case;
 	end process;
-	
+	-----------------------------------------------------------------------------------------------
+
+
 	
 
-	--Module memory
-	MEMORY : entity work.REGISTER_TABLE
+	--****MEMORY****
+	-----------------------------------------------------------------------------------------------
+	MEMORY : entity work.REGISTER_UNIT
 	generic map(
-		BASE_ADDRESS		=> ADDRESS,
-		NUMBER_REGISTERS	=> 1,
-		REG_DEFAULT_VALUES	=> reg_default
+		ADDRESS		=> ADDRESS,
+		DEF_VALUE	=> reg_default
 	)
 	port map(
-		clk				=> clk,
-		rst				=> rst,
-		sys_bus_i		=> sys_bus_i,
-		sys_bus_o		=> sys_bus_o,
-		reg_data_in		=> reg_data,
-		reg_data_out	=> reg_data,
-		reg_data_stb	=> open
+		clk			=> clk,
+		rst			=> rst,
+		sys_bus_i	=> sys_bus_i,
+		sys_bus_o	=> sys_bus_o,
+		data_in		=> reg_data,
+		data_out	=> reg_data,
+		read_stb	=> open,
+		write_stb 	=> open
 	);
+	-----------------------------------------------------------------------------------------------
+
 
 end architecture RTL;
 	

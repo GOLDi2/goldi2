@@ -1,0 +1,41 @@
+{% extends "admin_layout.html" %}
+{% import "components/topbar.html" as topbar %}
+{% import "components/elements.html" as elements %}
+{% block content %}
+    {% call topbar.container() %}
+    {% call topbar.topbar() %}
+    {% endcall %}
+    {% call topbar.content() %}
+    <div class="w-96 mx-auto">
+        <form class="space-y-2" method="POST">
+            {% if create %}
+                <input type="text" name="username" value="" placeholder="Username" />
+            {% else %}
+                <input type="hidden" name="username" value="{{ user.username }}" />
+                <span> Username: {{ user.username }}</span><br/>
+            {% endif %}
+            {% if user.username.startsWith('local:') or create %}
+                <input type="text" name="password" placeholder="Password" />
+            {% endif %}
+            {% for role in includedRoles %}
+                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}" checked/>
+                <label for="{{ role.id }}">{{ role.name }}</label><br/>
+            {% endfor %}
+            {% for role in excludedRoles %}
+                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}"/>
+                <label for="{{ role.id }}">{{ role.name }}</label><br/>
+            {% endfor %}
+            {% for role in roles %}
+                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}"/>
+                <label for="{{ role.id }}">{{ role.name }}</label><br/>
+            {% endfor %}
+            {% if create %}
+                <input class="primary-button" type="submit" value="Create"/>
+            {% else %}
+                <input class="primary-button" type="submit" value="Update"/>
+            {% endif %}
+        </form>
+    </div>
+    {% endcall %}
+    {% endcall %}
+{% endblock %}

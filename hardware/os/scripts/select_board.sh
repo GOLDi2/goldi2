@@ -23,11 +23,11 @@ else
     done
     read -p "Select board (0-$((index-1))): " INDEX
 
-    if ping -c1 -w1 169.254.79.79 >/dev/null 2>&1; then
-        export IP=169.254.79.79
-    else
+    #if ping -c1 -w1 169.254.79.79 >/dev/null 2>&1; then
+    #    export IP=169.254.79.79
+    #else
         export IP=$(cat boards.yml | yq -r '.boards['$INDEX'].ip')
-    fi
+    #fi
 fi
 
 export PASSWORD=$(cat boards.yml | yq -r '.boards['$INDEX'].password')
@@ -61,7 +61,9 @@ if sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/d
 fi
 
 export VPN_CONFIG=$(cat boards.yml | yq -r '.boards['$INDEX'].vpnConfig.private')
+export VARIANT=$(cat boards.yml | yq -r '.boards['$INDEX'].variant')
 
 echo "Set IP to $IP"
 echo "Set PASSWORD to $PASSWORD"
 echo "Set VPN_CONFIG to $VPN_CONFIG"
+echo "Set VARIANT to $VARIANT"

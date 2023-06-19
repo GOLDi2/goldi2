@@ -20,6 +20,9 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V1.01.00 - Memory unit change
+-- Additional Comments: New memory modules introduced
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -27,7 +30,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -73,15 +75,13 @@ end entity LED_DRIVER;
 architecture RTL of LED_DRIVER is
 
     --****INTERNAL SIGNALS****
-    --Constants
-    --Use of larger constant due to problems with generics
-    constant reg_default	:	data_word_vector(getMemoryLength(8)-1 downto 0) := (others => (others => '0'));		
-    --Register
-    signal reg_data             :   data_word_vector(0 downto 0);
-        alias led_enb           :   std_logic is reg_data(0)(7);
-        alias led_blink_enb     :   std_logic is reg_data(0)(6);
-        alias led_on_delay      :   std_logic_vector(2 downto 0) is reg_data(0)(5 downto 3);
-        alias led_off_delay     :   std_logic_vector(2 downto 0) is reg_data(0)(2 downto 0);
+    --Memory
+    constant reg_default	    :	data_word := (others => '0');		
+    signal reg_data             :   data_word;
+        alias led_enb           :   std_logic is reg_data(7);
+        alias led_blink_enb     :   std_logic is reg_data(6);
+        alias led_on_delay      :   std_logic_vector(2 downto 0) is reg_data(5 downto 3);
+        alias led_off_delay     :   std_logic_vector(2 downto 0) is reg_data(2 downto 0);
     --Internal 
     constant counter_high       :   natural := CLK_FREQUENCY/16;
     signal counter              :   natural range 0 to counter_high;
@@ -161,20 +161,20 @@ begin
 
 
 
-    MEMORY : entity work.REGISTER_TABLE
+    MEMORY : entity work.REGISTER_UNIT
     generic map(
-        BASE_ADDRESS		=> ADDRESS,
-        NUMBER_REGISTERS    => getMemoryLength(8),
-        REG_DEFAULT_VALUES	=> reg_default
+        ADDRESS		=> ADDRESS,
+        DEF_VALUE	=> reg_default
     )
     port map(
-        clk				=> clk,
-        rst				=> rst,
-        sys_bus_i	    => sys_bus_i,
-        sys_bus_o		=> sys_bus_o,
-        reg_data_in		=> reg_data,
-        reg_data_out	=> reg_data,
-        reg_data_stb	=> open
+        clk			=> clk,
+        rst			=> rst,
+        sys_bus_i	=> sys_bus_i,
+        sys_bus_o	=> sys_bus_o,
+        data_in		=> reg_data,
+        data_out	=> reg_data,
+        read_stb	=> open,
+        write_stb   => open
     );
 
 

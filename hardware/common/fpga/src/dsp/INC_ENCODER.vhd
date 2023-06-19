@@ -58,7 +58,7 @@ entity INC_ENCODER is
 	generic(
 		ADDRESS		:	natural := 1;			--! Module base address
 		INDEX_RST	:	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
-        INVERT      :   boolean := false        --! Select positive direction [false - CCW | true - CC]
+        INVERT      :   boolean := false        --! Select positive direction [false -> CCW | true -> CC]
     );
 	port(
 		--General
@@ -83,10 +83,11 @@ architecture RTL of INC_ENCODER is
     --****INTERNAL SIGNALS****
     --Memory
     constant memory_length  :   natural := getMemoryLength(16);
-    constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '1'));
+    constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
     signal reg_data_in      :   data_word_vector(memory_length-1 downto 0);
+    signal reg_data_buff    :   std_logic_vector(15 downto 0);
     --Arithmetic
-    signal enc_counter      :   integer range 0 to 2**16 := 0;
+    signal enc_counter      :   integer;
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     signal enc_block        :   std_logic;
@@ -102,7 +103,7 @@ begin
             --Reset encoder and block until index channel detection
             if(rst = '1' or enc_block /= '0') then
                 enc_counter  <= 0;
-
+    
             else
                 --Buffer signals to detect rising and falling
                 enc_signal_a <= enc_signal_a(0) & channel_a.dat;
@@ -148,11 +149,11 @@ begin
     RST_MODE_SELECTION : process(clk)
     begin
         if(rising_edge(clk)) then
-            if((rst = '1') and (INDEX_RST = true)) then
-                enc_block <= '1';
-            
-            elsif((rst = '1') and (INDEX_RST = false)) then
+            if((INDEX_RST = false)) then
                 enc_block <= '0';
+            
+            elsif(rst = '1') then
+                enc_block <= '1';
             
             elsif(channel_i.dat = '1') then
                 --Unblock incremental encoder after reference channel index
@@ -170,7 +171,8 @@ begin
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     --Typecast data
-    reg_data_in <= setMemory(std_logic_vector(to_unsigned(enc_counter, 16)));
+    reg_data_buff <= std_logic_vector(to_unsigned(enc_counter,16));
+    reg_data_in   <= setMemory(reg_data_buff);
     
     MEMROY : entity work.REGISTER_TABLE
     generic map(
@@ -183,9 +185,10 @@ begin
         rst                 => rst,
         sys_bus_i           => sys_bus_i,
         sys_bus_o           => sys_bus_o,
-        reg_data_in         => reg_data_in,
-        reg_data_out        => open,
-        reg_data_stb        => open
+        data_in             => reg_data_in,
+        data_out            => open,
+        read_stb            => open,
+        write_stb           => open
     );
     -----------------------------------------------------------------------------------------------
 

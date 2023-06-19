@@ -1,185 +1,170 @@
 {% set
 text = {
-start: 'Start',
-short_description: 'That is a small description of the remote lab. This is just a placholder.',
+    start: 'Start',
+    short_description: 'Online and remote experiments from the technical and scientific field for you on the web',
 
-description_headline: 'What is GOLDi LABS?',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+    description_headline: 'What is GOLDi LABS?',
+    description: 'Grid of Online Laboratories Ilmenau (GOLDi) makes it possible to conduct experiments that can normally only be performed in a laboratory.
+    The platform offers a variety of experiments provided by different universities and colleges.
+    The experiments can be controlled via the Internet, results are displayed in real time and can be analyzed.',
 
-teaser:[
-{
-headline: 'Für Studierende',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
-},
-{
-headline: 'Für Lehrende',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
-},
-{
-headline: 'Für Studierende',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-image: '/img/Laptop.png'
-}
-],
+    teaser:[
+        {
+            headline: 'For Students',
+            description: 'GOLDi Labs allows students to use and compare different technologies to control real systems.',
+            image: '/img/Student.svg'
+        },
+        {
+            headline: 'For Teachers',
+            description: 'GOLDi Labs enables demonstration of the design process during lecture and more flexible design of new lab offerings.',
+            image: '/img/Teacher.svg'
+        },
+        {
+            headline: 'For Interested',
+            description: 'GOLDi Labs also offers everyone interested in technology and science the opportunity to conduct their own experiments.',
+            image: '/img/Laptop.svg'
+        }
+    ],
 
-functional_headline: 'How does GOLDi LABS work?',
-functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa
-nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi
-expedita!',
+    functional_headline: 'How does GOLDi LABS work?',
+    functional_description: 'Physical systems and control devices are connected via the Internet and can be coupled arbitrarily to compose experiments.
+    This flexible architecture allows easy expansion of the available physical systems and control units,
+    without having to make hardware changes to the overall architecture.',
 
-action_headline: 'Now it is your turn.',
-action_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-}
-%}
-
+    action_headline: 'Now it is your turn.',
+    action_description: 'Register now and start your first experiment',
+    action_start: 'Let\'s go'
+} %}
 {% if language=='de' %}
-{% set
+    {% set
 text = {
-start: 'Starten',
-short_description: 'Das ist ein kleiner Text, wo in 2 Sätzen erklärt wird, worum es hier geht. Der Text wird noch
-ausgearbeitet.',
+    start: 'Starten',
+    short_description: 'Online- und Remoteexperimente aus dem technischen und naturwissenschaftlichen Bereich für Dich im Netz',
 
-description_headline: 'Was ist GOLDi LABS?',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+    description_headline: 'Was ist GOLDi LABS?',
+    description: 'Grid of Online Laboratories Ilmenau (GOLDi) ermöglicht es, Experimente durchzuführen, die normalerweise nur in einem Labor durchgeführt werden können.
+    Die Plattform bietet eine Vielzahl von Experimenten, die von verschiedenen Universitäten und Hochschulen bereitgestellt werden.
+    Die Experimente können über das Internet gesteuert werden, Ergebnisse werden in Echtzeit angezeigt und können analysiert werden.
+    ',
 
-teaser:[
-{
-headline: 'Für Studierende',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-image: '/img/Student.svg'
-},
-{
-headline: 'Für Lehrende',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-image: '/img/Teacher.svg'
-},
-{
-headline: 'Für Interessierte',
-description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia
-possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
-image: '/img/Laptop.svg'
-}
-],
+    teaser:[
+        {
+            headline: 'Für Studierende',
+            description: 'GOLDi Labs ermöglicht es, Studierenden verschiedene Technologien zur Steuerung realer Systeme zu nutzen und gegenüber zu stellen. ',
+            image: '/img/Student.svg'
+        },
+        {
+            headline: 'Für Lehrende',
+            description: 'GOLDi Labs ermöglicht die Demonstrations des Entwurfsprozesses während der Vorlesung und die flexiblere Gestaltung von neuen Laborangeboten.',
+            image: '/img/Teacher.svg'
+        },
+        {
+            headline: 'Für Interessierte',
+            description: 'Auch für Alle, die sich für Technik und Naturwissenschaften interessieren, bietet GOLDi Labs die Möglichkeit, selbst Experimente durchzuführen.',
+            image: '/img/Laptop.svg'
+        }
+    ],
 
-functional_headline: 'Wie funktioniert GOLDi LABS?',
-functional_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa
-nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi
-expedita!',
+    functional_headline: 'Wie funktioniert GOLDi LABS?',
+    functional_description: 'Physikalische Systeme und Steuergeräte sind über das Internet verbunden und können beliebig zu Experimenten zusammengestellt werden.
+    Diese flexible Architektur ermöglicht eine einfache Erweiterung der verfügbaren physikalischen Systeme und Steuereinheiten,
+    ohne dass Hardwareänderungen an der Gesamtarchitektur vorgenommen werden müssen.',
 
-action_headline: 'Jetzt bist du dran!',
-action_description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-}
-%}
+    action_headline: 'Jetzt bist du dran!',
+    action_description: 'Registriere dich jetzt und starte dein erstes Experiment',
+    action_start: 'Los gehts'
+} %}
 {% endif %}
-
 {% extends "layout.html" %}
 {% block main %}
-
-<!-- Startbild neu -->
-<div class="hidden lg:block w-full h-screen mb-[-3.5rem] pb-14">
-    <div class="flex flex-row h-full bg-cover items-center bg-primary-700">
-        <div class="flex flex-col w-max text-left font-body pl-10">
-            <div class="text-center">
-                <span class="text-primary-50 text-6xl 2xl:text-7xl">GOLDi LABS</span>
-                <div class="h-line my-5"></div>
-                <span class="text-primary-300 text-3xl 2xl:text-4xl">Real labs at your home</span>
+    <!-- Startbild neu -->
+    <div class="hidden lg:block w-full h-screen mb-[-3.5rem] pb-14">
+        <div class="flex flex-row h-full bg-cover items-center bg-primary-700">
+            <div class="flex flex-col w-max text-left font-body pl-10">
+                <div class="text-center">
+                    <span class="text-primary-50 text-6xl 2xl:text-7xl">GOLDi LABS</span>
+                    <div class="h-line my-5"></div>
+                    <span class="text-primary-300 text-3xl 2xl:text-4xl">Real labs at your home</span>
+                </div>
+                <div class="w-80 mr-auto text-primary-50 my-5">
+                    {{ text.short_description }}
+                </div>
+                <div>
+                    <button class="secondary-button">
+                        {{ text.start }}
+                    </button>
+                </div>
             </div>
-            <div class="w-80 mr-auto text-primary-50 my-5">
-                {{text.short_description}}
+            <div class="h-full bg-[url('/img/landing.jpg')] bg-cover flex-grow"></div>
+        </div>
+    </div>
+    <div class="block lg:hidden w-full h-screen mb-[-3.5rem] pb-14">
+        <div class="flex flex-col h-full bg-cover items-center bg-primary-700">
+            <div class="flex flex-col w-max text-center font-body -mb-10 z-10 pt-10">
+                <div class="text-center">
+                    <span class="text-primary-50 text-6xl 2xl:text-7xl">GOLDi LABS</span>
+                    <div class="h-line my-5"></div>
+                    <span class="text-primary-300 text-3xl 2xl:text-4xl">Real labs at your home</span>
+                </div>
+                <div class="w-80 mr-auto text-primary-50 my-5">
+                    {{ text.short_description }}
+                </div>
+                <div>
+                    <button class="secondary-button">
+                        {{ text.start }}
+                    </button>
+                </div>
             </div>
-            <div>
+            <div class="w-full bg-[url('/img/landing_s.jpg')]  bg-cover flex-grow bg-top"></div>
+        </div>
+    </div>
+    <!-- Was ist GOLDi LABS? -->
+    <div class="max-w-7xl w-full mx-auto py-16 font-body">
+        <div class="mx-auto flex flex-wrap-reverse justify-center gap-10">
+            <div class="max-w-lg px-10">
+                <img class="w-full" src="/img/landing2.png" alt="Logo"></div>
+                <div class="max-w-md px-10 space-y-10">
+                    <div class="text-4xl font-bold text-primary-700">{{ text.description_headline }}</div>
+                    <div>{{ text.description }}</div>
+                    <div class="h-line"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Für... -->
+        <div class="w-full bg-primary-200 mt-14 px-10">
+            <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
+                {% for item in text.teaser %}
+                    <div class="bg-primary-50 rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
+                        <img class="h-20 mx-auto" src="{{ item.image }}"/>
+                        <div class="text-3xl pb-2 font-bold mx-auto">{{ item.headline }}</div>
+                        <div>{{ item.description }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Wie funktioniert GOLDi LABS?-->
+        <div class="w-full bg-[url('/img/landing3.jpg')] bg-cover">
+            <div class="max-w-6xl p-20 mx-auto">
+                <div class="max-w-md space-y-5 mx-auto lg:mx-0 font-body">
+                    <div class="h-line"></div>
+                    <div class="text-3xl font-bold text-primary-50">{{ text.functional_headline }}</div>
+                    <div class="text-primary-50">
+                        {{ text.functional_description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Jetzt bist du dran! -->
+        <div class="p-11">
+            <div class="w-80 space-y-3 mx-auto text-center font-body">
+                <div class="text-3xl font-bold pb-2">{{ text.action_headline }}</div>
+                <div class="pb-5">
+                    {{ text.action_description }}
+                </div>
                 <button class="secondary-button">
-                    {{text.start}}
+                    {{ text.action_start }}
                 </button>
             </div>
         </div>
-        <div class="h-full bg-[url('/img/landing.jpg')] bg-cover flex-grow">
-        </div>
-    </div>
-</div>
-
-<div class="block lg:hidden w-full h-screen mb-[-3.5rem] pb-14">
-    <div class="flex flex-col h-full bg-cover items-center bg-primary-700">
-        <div class="flex flex-col w-max text-center font-body -mb-10 z-10 pt-10">
-            <div class="text-center">
-                <span class="text-primary-50 text-6xl 2xl:text-7xl">GOLDi LABS</span>
-                <div class="h-line my-5"></div>
-                <span class="text-primary-300 text-3xl 2xl:text-4xl">Real labs at your home</span>
-            </div>
-            <div class="w-80 mr-auto text-primary-50 my-5">
-                {{text.short_description}}
-            </div>
-            <div>
-                <button class="secondary-button">
-                    {{text.start}}
-                </button>
-            </div>
-        </div>
-        <div class="w-full bg-[url('/img/landing_s.jpg')]  bg-cover flex-grow bg-top">
-        </div>
-    </div>
-</div>
-
-<!-- Was ist GOLDi LABS? -->
-<div class="max-w-6xl w-full mx-auto py-16 font-body">
-    <div class="mx-auto flex flex-wrap-reverse justify-center gap-10">
-        <div class="max-w-lg px-10">
-            <img class="w-full" src="/img/landing2.png" alt="Logo">
-        </div>
-        <div class="max-w-md px-10 space-y-10">
-            <div class="text-4xl font-bold text-primary-700">{{text.description_headline}}</div>
-            <div>{{text.description}}</div>
-            <div class="h-line"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Für... -->
-<div class="w-full bg-primary-200 mt-14 px-10">
-    <div
-        class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
-        {% for item in text.teaser %}
-        <div class="bg-primary-50 rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
-            <img class="h-20 mx-auto" src="{{item.image}}" />
-            <div class="text-3xl pb-2 font-bold mx-auto">{{item.headline}}</div>
-            <div>{{item.description}}</div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Wie funktioniert GOLDi LABS?-->
-<div class="w-full bg-[url('/img/landing3.jpg')] bg-cover">
-    <div class="max-w-6xl p-20 mx-auto">
-        <div class="max-w-md space-y-5 mx-auto lg:mx-0 font-body">
-            <div class="h-line"></div>
-            <div class="text-3xl font-bold text-primary-50">{{text.functional_headline}}</div>
-            <div class="text-primary-50">
-                {{text.functional_description}}
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Jetzt bist du dran! -->
-<div class="p-11">
-    <div class="w-80 space-y-3 mx-auto text-center font-body">
-        <div class="text-3xl font-bold pb-2">{{text.action_headline}}</div>
-        <div class="pb-5">
-            {{text.action_description}}
-        </div>
-        <button class="secondary-button">
-            {{text.start}}
-        </button>
-    </div>
-</div>
-
-{% endblock %}
+        <div class="flex-grow"></div>
+    {% endblock %}

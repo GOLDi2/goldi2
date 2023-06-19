@@ -1,0 +1,17 @@
+{% macro hline() %}
+    <div class="w-full h-0.5 bg-secondary"></div>
+{% endmacro %}
+{% macro button(language, href, icon, secondary) %}
+    {% if secondary %}
+        <a class="block secondary-button" href="/{{language+href}}">
+            <span class="block bg-secondary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-secondary-800 duration-300">{{ icon }}</span>
+            <span class="align-middle material-symbols-rounded">{{ icon }}</span>
+            <span class="align-middle">{{ caller() }}<span>
+        </a>
+    {% else %}
+        <a class="block bg-primary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-primary-700 duration-300" href="/{{language+href}}">
+            <span class="align-middle material-symbols-rounded">{{ icon }}</span>
+            <span class="align-middle">{{ caller() }}<span>
+        </a>
+    {% endif %}
+{% endmacro %}

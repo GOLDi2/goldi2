@@ -26,9 +26,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+
 
 
 
@@ -36,7 +36,7 @@ package GOLDI_CROSSBAR_DEFAULT is
 
     --****Crossbar Data Structures****
 	-----------------------------------------------------------------------------------------------
-	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+	type cb_left_port_ram  is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
 	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
 	-----------------------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ package GOLDI_CROSSBAR_DEFAULT is
     
     --Layout of right side port of crossbar. Assignment of multiple 
     --right side port lines to the same left side port line will provoque an operation error.
-    constant DEFAULT_CROSSBAR_LAYOUT :   cb_right_port_ram(4 downto 0) :=
+    constant DEFAULT_CROSSBAR_LAYOUT :   cb_right_port_ram(3 downto 0) :=
     (
         0 => x"00",
         1 => x"01",

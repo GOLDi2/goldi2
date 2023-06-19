@@ -19,6 +19,10 @@
         "hardware/boards/axis_portal_v1/fpga/build": true,
         "hardware/boards/axis_portal_v2/.vscode": true,
         "hardware/boards/axis_portal_v2/fpga/build": true,
+        "hardware/boards/mole/.vscode": true,
+        "hardware/boards/mole/fpga/build": true,
+        "hardware/boards/test_board/.vscode": true,
+        "hardware/boards/warehouse_v2/.vscode": true,
         "hardware/common/.vscode": true,
         "helper/.vscode": true,
         //end generated
@@ -39,6 +43,7 @@
         //begin generated
         "hardware/boards/axis_portal_v1/fpga/build": true,
         "hardware/boards/axis_portal_v2/fpga/build": true,
+        "hardware/boards/mole/fpga/build": true,
         "hardware/os/meta-openembedded": true,
         "hardware/os/meta-raspberrypi": true,
         "hardware/os/meta-rauc": true,

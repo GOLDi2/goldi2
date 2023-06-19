@@ -27,7 +27,6 @@ use IEEE.numeric_std.all;
 --! Use assert library for simulation
 use std.standard.all;
 --! Use custom communication library
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 
 

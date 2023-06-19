@@ -2,10 +2,10 @@
 -- Company:			Technische Universität Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/04/2023
--- Design Name:		Default Crossbar Configuration for axis_porta_v2 Model
+-- Create Date:		15/04/2023
+-- Design Name:		Default Crossbar Configuration for axis_porta_v1 Model
 -- Module Name:		GOLDI_CROSSBAR_DEFAULT
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
@@ -14,17 +14,17 @@
 --                  -> GOLDI_IO_STANDARD.vhd
 --
 -- Revisions:
--- Revision V0.01.04 - File Created
+-- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraires
+--! Use custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
@@ -40,10 +40,10 @@ package GOLDI_CROSSBAR_DEFAULT is
 	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
 	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
 	-----------------------------------------------------------------------------------------------
+    
 
-
-
-    --****Crossbar Constants****
+    
+    --****Constants***
     -----------------------------------------------------------------------------------------------
     --Block dynamic changes to crossbar in design.
     --The default layout will be used as the routing map
@@ -93,9 +93,7 @@ package GOLDI_CROSSBAR_DEFAULT is
         37 => x"25",
         38 => x"26",
         39 => x"27",
-        40 => x"28",
-		41 => x"29",
-		42 => x"30"
+        40 => x"28"
     );
     -----------------------------------------------------------------------------------------------
 

@@ -16,19 +16,16 @@ class Bit(AsyncIOEventEmitter):
         self._registers.add_register(self._address, self._on_change)
 
     def _on_change(self, registers: SpiRegisters):
-        value = registers[self._address] & (1 << self._bit) != 0
+        value = registers.getBit(self._address, self._bit)
         if self._value != value:
             self._value = value
             self.emit("change", self._value)
 
     def set(self, value: bool):
-        if value:
-            self._registers[self._address] |= 1 << self._bit
-        else:
-            self._registers[self._address] &= ~(1 << self._bit)
+        self._registers.setBit(self._address, self._bit, value)
         if self._value != value:
             self._value = value
             self.emit("change", self._value)
 
     def value(self) -> bool:
-        return self._registers[self._address] & (1 << self._bit) != 0
+        return self._registers.getBit(self._address, self._bit)

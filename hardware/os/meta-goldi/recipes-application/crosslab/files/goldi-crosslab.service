@@ -1,6 +1,6 @@
 [Unit]
 Description=GOLDi2 Crosslab Client
-After=network.target
+After=network.target load-fpga-firmware.service
 
 [Service]
 Restart=on-failure

@@ -1,259 +1,229 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universiteat Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
--- Create Date:		01/04/2023
--- Design Name:		Top Level - 3_axis_portal_v2
+-- Create Date:		25/05/2023
+-- Design Name:		Top Level - Axis Portal V2
 -- Module Name:		TOP_LEVEL
--- Project Name:	GOLDi_FPGA_CORE
+-- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
--- Dependencies: 	none
+-- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
+--                  -> GOLDI_COMM_STANDARD.vhd
+--                  -> GOLDI_IO_STANDARD.vhd
+--                  -> GOLDI_IO_CROSSBAR_DEFAULT.vhd
 --
 -- Revisions:
--- Revision V0.01.03 - File Created
+-- Revision V2.00.00 - File Created
 -- Additional Comments: First commitment
 --
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -
+-- Revision V3.00.00 - Default module version for release 1.00.00
+-- Additional Comments: Release for Axis Portal V2 (AP2)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraries
-use work.GOLDI_MODULE_CONFIG.all;
+--! Use custom packages
+library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
-use work.GOLDI_CROSSBAR_DEFAULT.all;
+use work.GOLDI_MODULE_CONFIG.all;
+--! MachX02 library
+library machxo2;
+use machxo2.all;
 
 
 
-
---! @brief Actuator drivers and protection system the for GOLDI 3 Axis Portal (V2)
+--! @brief Top Level of FPGA system for GOLDI Axis Portal V2
 --! @details
---! The module contains the drivers for the sensors and actuators of the 
---! GOLDI 3 Axis Portal (V2) system. The module constist of set of configuration
---! registers accessed through a SPI port. Actuator signal are generated 
---! based on the register parameters and then fed into protection module
---! that ensures the physical system isn't damaged. The error detector 
---! unit produces a list of errors for the user to analyse.
+--! The top module contains the drivers for the sensors and actuators 
+--! of the GOLDI Axis Portal V2 system.
 --!
---! @ref https://www.goldi-labs.net/index.php?Site=21
+--! <https://www.goldi-labs.net/>
 entity TOP_LEVEL is
     port(
         --General
-        ClockFPGA       : in    std_logic;
-        FPGA_nReset     : in    std_logic;
+        ClockFPGA   : in    std_logic;                                        --! External system clock
+        FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
-        --Serial
-        TXD0            : in    std_logic;
-        RXD0            : out   std_logic;
         --SPI
-        SPI0_SCLK       : in    std_logic;
-        SPI0_MOSI       : in    std_logic;
-        SPI0_MISO       : out   std_logic;
-        SPI0_nCE0       : in    std_logic;
-        SPI0_nCE1       : in    std_logic;
-        SPI1_SCLK       : in    std_logic;
-        SPI1_MOSI       : in    std_logic;
-        SPI1_MISO       : out   std_logic;
-        SPI1_nCE0       : in    std_logic;
-        SPI1_nCE1       : in    std_logic;
+        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock (max: system_clk/4)
+        SPI0_MOSI   : in    std_logic;                                          --! SPI - Master out / Slave in
+        SPI0_MISO   : out   std_logic;                                          --! SPI - Master in / Slave out
+        SPI0_nCE0   : in    std_logic;                                          --! SPI - Active low chip enable
         --GPIO
-        IO_DATA         : inout std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+        IO_DATA     : inout std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0)    --! FPGA IO pins
     );
 end entity TOP_LEVEL;
 
 
 
 
---! General architecture
 architecture RTL of TOP_LEVEL is
-
-    --Intermediate signals
-    signal FPGA_Reset           :   std_logic;
-    signal Reset                :   std_logic;
-    signal clk_16_MHz           :   std_logic;
+    
+--****INTRENAL SIGNALS****
+    --General
+    signal clk                  :   std_logic;
+    signal rst                  :   std_logic;
+    signal FPGA_nReset_sync     :   std_logic;
     --Communication
     signal spi0_sclk_sync       :   std_logic;
     signal spi0_mosi_sync       :   std_logic;
-    signal spi0_ce0             :   std_logic;
-    signal spi0_ce1             :   std_logic;
     signal spi0_nce0_sync       :   std_logic;
-    signal spi0_nce1_sync       :   std_logic;
-    signal spi0_ce              :   std_logic;
-    --System internal communication
-    signal master_bus_i         :   mbus_in;
+    signal spi0_ce0             :   std_logic;
+    --System Internal communications
     signal master_bus_o         :   mbus_out;
+    signal master_bus_i   	    :   mbus_in;
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(14 downto 0);
-    signal cb_bus_i             :   sbus_in;
-    signal cb_bus_o             :   sbus_o_vector(1 downto 0);
     --System memory
-    signal config_reg_data      :   data_word_vector(0 downto 0);
-        alias selected_bus      :   std_logic is config_reg_data(0)(0);
+    constant ctrl_default       :   data_word :=  x"20";
+    signal ctrl_data            :   data_word;
+        alias encoder_ref       :   std_logic is ctrl_data(0);
     --External data interface
-    signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal external_io_i_async  :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal external_io_o_sync   :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal internal_io_i        :   io_i_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
-    signal internal_io_o        :   io_o_vector(VIRTUAL_PIN_NUMBER-1 downto 0);
+    signal system_io_i          :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal system_io_o          :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal system_io_o_safe     :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     --Sensor data
-    signal sensor_data_vector   :   std_logic_vector(5 downto 0);
-    --Actuator flags
-    signal actuator_flags       :   std_logic_vector(6 downto 0);
+    signal sensor_data_vector   :   data_word;
+    --Incremental Encoder 
+    signal x_encoder_ref        :   std_logic;
+    signal y_encoder_ref        :   std_logic;
 
 
 begin
-
-    --****TIMING****
+	
+   --****CLOCKING****
     -----------------------------------------------------------------------------------------------
-    CLOCK_16_MHZ : entity work.PLL_16MHz
-    port map (
-        CLKI    => ClockFPGA,
-        CLKOP   => clk_16_MHz
-    );
+    --External 48 MHz clock
+    clk <= ClockFPGA;
+    
+    --Test 53.2 MHz clock
+    -- INTERNAL_CLOCK : component machxo2.components.OSCH
+    -- generic map(
+    --     NOM_FREQ => "53.2"
+    -- )
+    -- port map(
+    --     STDBY    => '0',
+    --     OSC      => clk,
+    --     SEDSTDBY => open
+    -- );
     -----------------------------------------------------------------------------------------------
 
 
 
-    --****RASPBERRYPIE SPI INTERFACE****
+    --****MICROCONTROLLER INTERFACE****
     -----------------------------------------------------------------------------------------------
-    --Reset: Convertion to active high reset for system
-    FPGA_Reset <= not FPGA_nReset;
+    --Synchronization of Reset input
     RESET_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => ClockFPGA,
+        clk     => clk,
         rst     => '0',
-        io_i    => FPGA_Reset,
-        io_sync => Reset
+        io_i    => FPGA_nReset,
+        io_sync => FPGA_nReset_sync
     );
+    rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
+    -- rst <= not FPGA_nReset_sync; --Test reset
 
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => ClockFPGA,
-        rst     => Reset,
+        clk     => clk,
+        rst     => rst,
         io_i    => SPI0_SCLK,
         io_sync => spi0_sclk_sync
     );
 
     MOSI_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => ClockFPGA,
-        rst     => Reset,
+        clk     => clk,
+        rst     => rst,
         io_i    => SPI0_MOSI,
         io_sync => spi0_mosi_sync
     );
-    
+
     NCE0_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => ClockFPGA,
-        rst     => Reset,
+        clk     => clk,
+        rst     => rst,
         io_i    => SPI0_nCE0,
         io_sync => spi0_nce0_sync
     );
-    spi0_ce <= not spi0_nce0_sync;
+    
+    --Negate nce for use in comm modules
+    spi0_ce0 <= not spi0_nce0_sync;
 
 
-    NCE1_SYNC : entity work.SYNCHRONIZER
-    port map(
-        clk     => ClockFPGA,
-        rst     => Reset,
-        io_i    => SPI0_nCE1,
-        io_sync => spi0_nce1_sync
-    );
-    spi0_ce1 <= not spi0_nce1_sync;
-
-
-    spi0_ce <= spi0_ce0 or spi0_ce1;
+    --SPI comm modules
     SPI_BUS_COMMUNICATION : entity work.SPI_TO_BUS
     port map(
-        clk				=> ClockFPGA,
-        rst				=> Reset,
-        ce				=> spi0_ce,
-        sclk		    => spi0_sclk_sync,
-        mosi			=> spi0_mosi_sync,
-        miso			=> SPI0_MISO,
-        master_bus_o	=> master_bus_o,
-        master_bus_i	=> master_bus_i
+        clk             => clk,
+        rst             => rst,
+        ce              => spi0_ce0,
+        sclk            => spi0_sclk_sync,
+        mosi            => spi0_mosi_sync,
+        miso            => SPI0_MISO,
+        master_bus_o    => master_bus_o,
+        master_bus_i    => master_bus_i
     );
     -----------------------------------------------------------------------------------------------
 
 
 
-    --****INTERAL COMMUNICATION MANAGEMENT****
+    --****INTERNAL COMMUNICATION MANAGEMENT****
     -----------------------------------------------------------------------------------------------
-    --Register to select the main communication bus or the io crossbar structure module
-    SYSTEM_CONFIG_REG : entity work.REGISTER_TABLE
+    --Register for configuration applications
+    SYSTEM_CONFIG_REG : entity work.REGISTER_UNIT
     generic map(
-        BASE_ADDRESS		=> CONFIG_REG_ADDRESS,
-        NUMBER_REGISTERS	=> 1,
-        REG_DEFAULT_VALUES	=> assignMemory(REG_CONFIG_DEFAULT) 
+        ADDRESS         => CTRL_REG_ADDRESS,
+        DEF_VALUE       => ctrl_default
     )
     port map(
-        clk				=> ClockFPGA,
-        rst				=> Reset,
-        sys_bus_i		=> master_bus_o,
-        sys_bus_o		=> sys_bus_o(0),
-        reg_data_in		=> config_reg_data,
-        reg_data_out	=> config_reg_data,
-        reg_data_stb    => open
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => master_bus_o,
+        sys_bus_o       => sys_bus_o(0),
+        data_in         => ctrl_data,
+        data_out        => ctrl_data,
+        read_stb        => open,
+        write_stb       => open
     );
-    --Mirror output bus to make register accessible in both modes of operation
-    cb_bus_o(0) <= sys_bus_o(0);     
 
 
-    --Selection of correct bus based on current configuration
-    sys_bus_i 	 <= master_bus_o when(selected_bus = '0') else gnd_sbus_i;
-	cb_bus_i  	 <= master_bus_o when(selected_bus = '1') else gnd_sbus_i;
-	master_bus_i <= reduceBusVector(sys_bus_o) when(selected_bus = '0') else
-					reduceBusVector(cb_bus_o)  when(selected_bus = '1') else
-					gnd_mbus_i;
+    --Multiplexing of BUS 
+    sys_bus_i <= master_bus_o;
+
+    BUS_MUX : process(clk)
+    begin
+        if(rising_edge(clk)) then
+            master_bus_i <= reduceBusVector(sys_bus_o);
+        end if;
+    end process;
     -----------------------------------------------------------------------------------------------
-
-
+    
+    
+    
 
     --****IO DATA MANAGEMENT****
     -----------------------------------------------------------------------------------------------
-    --Routing IO formatted data to and from FPGA Pins ([io_i,io_o] <-> inout std_logic)
+    --Routing IO formatted data between FPGA Pins ([io_i,io_o] <-> inout std_logic)
     FPGA_PIN_INTERFACE : entity work.TRIS_BUFFER_ARRAY
     generic map(
         BUFF_NUMBER     => PHYSICAL_PIN_NUMBER
     )
     port map(
-        clk             => ClockFPGA,
-        rst             => Reset,
-        port_out        => external_io_o_sync,
-        port_in_async   => external_io_i_async,
-        port_in_sync    => external_io_i,
+        clk             => clk,
+        rst             => rst,
+        port_out        => system_io_o_safe,
+        port_in_async   => open,
+        port_in_sync    => system_io_i,
         io_vector       => IO_DATA
-    );
-
-    --Route IO formatted data from pins to system modules
-    IO_ROUTING : entity work.IO_CROSSBAR
-    generic map(
-        LEFT_PORT_LENGTH    => VIRTUAL_PIN_NUMBER,
-        RIGHT_PORT_LENGTH   => PHYSICAL_PIN_NUMBER,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
-    )
-    port map(
-        clk                 => ClockFPGA,
-        rst                 => Reset,
-        cb_bus_i            => cb_bus_i,
-        cb_bus_o            => cb_bus_o(1),
-        left_io_i_vector    => internal_io_i,
-        left_io_o_vector    => internal_io_o,
-        right_io_i_vector   => external_io_i,
-        right_io_o_vector   => external_io_o
     );
     -----------------------------------------------------------------------------------------------
 
-
+    
 
     --****SYSTEM PROTECTION****
     -----------------------------------------------------------------------------------------------
@@ -261,24 +231,24 @@ begin
     --output data.
     ERROR_LIST : entity work.ERROR_DETECTOR 
     generic map(
-        ADDRESS             => ERROR_LIST_ADDRESS
+        ADDRESS         => ERROR_LIST_ADDRESS
     )
     port map(
-        clk                 => ClockFPGA,
-        rst                 => Reset,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o(2),
-        sys_io_i            => external_io_i_async,
-        actuator_driver_i   => actuator_flags   
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(1),
+        sys_io_i        => system_io_i,
+        sys_io_o        => system_io_o   
     );
 
+
     --Masking of actuation data to prevent damage to the physical system
-    SYTEM_PROTECTION : entity work.ACTUATOR_MASK
+    SYSTEM_PROTECTION : entity work.ACTUATOR_MASK
     port map(
-        sys_io_i            => external_io_i_async,
-        sys_io_o            => external_io_o,
-        actuator_driver_i   => actuator_flags,
-        safe_io_out         => external_io_o_sync
+        sys_io_i    => system_io_i,
+        sys_io_o    => system_io_o,
+        safe_io_out => system_io_o_safe
     );
     -----------------------------------------------------------------------------------------------
 
@@ -286,138 +256,151 @@ begin
 
     --****SENSOR DATA MANAGEMENT****
     -----------------------------------------------------------------------------------------------
-    SENSOR_REGISTER : entity work.REGISTER_TABLE
+    SENSOR_REGISTER : entity work.REGISTER_UNIT
     generic map(
-        BASE_ADDRESS		=> SENSOR_REG_ADDRESS,
-        NUMBER_REGISTERS	=> getMemoryLength(7),
-        REG_DEFAULT_VALUES	=> assignMemory(SENSORS_DEFAULT) 
+        ADDRESS		=> SENSOR_REG_ADDRESS,
+        DEF_VALUE	=> (others => '0') 
     )
     port map(
-        clk				=> ClockFPGA,
-        rst			    => Reset,
-        sys_bus_i		=> sys_bus_i,
-        sys_bus_o		=> sys_bus_o(1),
-        reg_data_in		=> assignMemory(sensor_data_vector),
-        reg_data_out	=> open,
-        reg_data_stb	=> open
+        clk				    => clk,
+        rst			        => rst,
+        sys_bus_i		    => sys_bus_i,
+        sys_bus_o		    => sys_bus_o(2),
+        data_in		        => sensor_data_vector,
+        data_out	        => open,
+        read_stb	        => open,
+        write_stb           => open
     );
 
     --Recover memory data form io_vector
-    sensor_data_vector <= getIOInData(internal_io_i)(8 downto 2);
-    internal_io_o(8 downto 2) <= (others => gnd_io_o);
+    sensor_data_vector(0) <= system_io_i(2).dat;
+    sensor_data_vector(1) <= system_io_i(3).dat;
+    sensor_data_vector(2) <= system_io_i(4).dat;
+    sensor_data_vector(3) <= system_io_i(5).dat;
+    sensor_data_vector(4) <= not system_io_i(6).dat;
+    sensor_data_vector(5) <= system_io_i(7).dat;
+    sensor_data_vector(6) <= system_io_i(8).dat;    
+    sensor_data_vector(7) <= '0';
+	--Configure to input mode
+	system_io_o(8 downto 2) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
-
+	
 
 
     --****INCREMENTAL ENCODERS****
     -----------------------------------------------------------------------------------------------
     X_ENCODER : entity work.INC_ENCODER
     generic map(
-        ADDRESS		=> X_ENCODER_ADDRESS,
-        INDEX_RST	=> X_ENCODER_RST_TYPE
+        ADDRESS     => X_ENCODER_ADDRESS,
+        INDEX_RST   => X_ENCODER_RST_TYPE,
+        INVERT      => X_ENCODER_INVERT
     )
     port map(
-        clk			=> ClockFPGA,
-        rst			=> Reset,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(8),
-        channel_a	=> internal_io_i(9),
-        channel_b   => internal_io_i(10),
-        channel_i	=> internal_io_i(11)
+        clk         => clk,
+        rst         => x_encoder_ref,
+        sys_bus_i   => sys_bus_i,
+        sys_bus_o   => sys_bus_o(4),
+        channel_a   => system_io_i(9),
+        channel_b   => system_io_i(10),
+        channel_i   => gnd_io_i
     );
+    --User accessible rst to zero encoder acumulator
+    x_encoder_ref <= rst or encoder_ref;
     --Ground io_o to ensure input configuration
-    internal_io_o(11 downto 9) <= (others => gnd_io_o);
+    system_io_o(10 downto 9) <= (others => gnd_io_o);
 
 
     Y_ENCODER : entity work.INC_ENCODER
     generic map(
-        ADDRESS		=> Y_ENCODER_ADDRESS,
-        INDEX_RST	=> Y_ENCODER_RST_TYPE
+        ADDRESS     => Y_ENCODER_ADDRESS,
+        INDEX_RST   => Y_ENCODER_RST_TYPE,
+        INVERT      => Y_ENCODER_INVERT
     )
     port map(
-        clk			=> ClockFPGA,
-        rst			=> Reset,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(9),
-        channel_a	=> internal_io_i(12),
-        channel_b   => internal_io_i(13),
-        channel_i	=> gnd_io_i
+        clk         => clk,
+        rst         => y_encoder_ref,
+        sys_bus_i   => sys_bus_i,
+        sys_bus_o   => sys_bus_o(5),
+        channel_a   => system_io_i(11),
+        channel_b   => system_io_i(12),
+        channel_i   => gnd_io_i
     );
+    --User accesible rst to zero encoder acumulator
+    y_encoder_ref <= rst or encoder_ref;
     --Ground io_o to ensure input configuration
-    internal_io_o(13 downto 12) <= (others => gnd_io_o);
+    system_io_o(12 downto 11) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
 
-
+    
 
     --****MAIN ACTUATORS****
     -----------------------------------------------------------------------------------------------
-    GPIO_MANAGEMENT : GPIO_DRIVER_ARRAY
+    GPIO_MANAGEMENT : entity work.GPIO_DRIVER_ARRAY
     generic map(
         ADDRESS         => GPIO_DRIVER_ADDRESS,
         GPIO_NUMBER     => 2
     )
     port map(
-        clk             => ClockFPGA,
-        rst             => Reset,
+        clk             => clk,
+        rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(3),
-        gpio_i_vector   => internal_io_i(1 downto 0),
-        gpio_o_vector   => internal_io_o(1 downto 0)
+        gpio_i_vector   => system_io_i(1 downto 0),
+        gpio_o_vector   => system_io_o(1 downto 0)
     );
 
 
-
-    X_AXIS_MOTOR : entity work.TMC2660
-    generic map(    
-        ADDRESS             => X_MOTOR_ADDRESS
+    X_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    generic map(
+        ADDRESS         => X_MOTOR_ADDRESS,
+        SCLK_FACTOR     => X_MOTOR_SCLK_FACTOR,
+        TMC2660_CONFIG  => X_MOTOR_CONFIGURATION
     )
     port map(
-        clk                 => ClockFPGA,
-        rst                 => Reset,
-        clk_16_MHz          => clk_16_MHz,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o(4),
-        sdi_neg_valid       => actuator_flags(0),
-        sdi_pos_valid       => actuator_flags(1),
-        tmc2660_clk         => internal_io_o(14),
-        tmc2660_enn         => internal_io_o(15),
-        tmc2660_sg          => internal_io_i(16),
-        tmc2660_spi_sclk    => internal_io_o(17),
-        tmc2660_spi_ncs     => internal_io_o(18),
-        tmc2660_spi_mosi    => internal_io_o(19),
-        tmc2660_spi_miso    => internal_io_i(20),
-        tmc2660_dir         => internal_io_o(21),
-        tmc2660_step        => internal_io_o(22)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(6),
+        tmc2660_clk     => system_io_o(13),
+        tmc2660_enn     => system_io_o(14),
+        tmc2660_sg      => system_io_i(15),
+        tmc2660_dir     => system_io_o(17),
+        tmc2660_step    => system_io_o(16),
+        tmc2660_sclk    => system_io_o(18),
+        tmc2660_ncs     => system_io_o(19),
+        tmc2660_mosi    => system_io_o(20),
+        tmc2660_miso    => system_io_i(21)
     );
-    internal_io_o(16) <= gnd_io_o;
-    internal_io_o(20) <= gnd_io_o;
+    --Configure io to input mode
+    system_io_o(15) <= gnd_io_o;
+    system_io_o(21) <= gnd_io_o;
 
 
 
-    Y_AXIS_MOTOR : entity work.TMC2660
-    generic map(    
-        ADDRESS             => Y_MOTOR_ADDRESS
+    Y_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    generic map(
+        ADDRESS         => Y_MOTOR_ADDRESS,
+        SCLK_FACTOR     => Y_MOTOR_SCLK_FACTOR,
+        TMC2660_CONFIG  => Y_MOTOR_CONFIGURATION
     )
     port map(
-        clk                 => ClockFPGA,
-        rst                 => Reset,
-        clk_16_MHz          => clk_16_MHz,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o(5),
-        sdi_neg_valid       => actuator_flags(2),
-        sdi_pos_valid       => actuator_flags(3),
-        tmc2660_clk         => internal_io_o(23),
-        tmc2660_enn         => internal_io_o(24),
-        tmc2660_sg          => internal_io_i(25),
-        tmc2660_spi_sclk    => internal_io_o(26),
-        tmc2660_spi_ncs     => internal_io_o(27),
-        tmc2660_spi_mosi    => internal_io_o(28),
-        tmc2660_spi_miso    => internal_io_i(29),
-        tmc2660_dir         => internal_io_o(30),
-        tmc2660_step        => internal_io_o(31)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(7),
+        tmc2660_clk     => system_io_o(22),
+        tmc2660_enn     => system_io_o(23),
+        tmc2660_sg      => system_io_i(24),
+        tmc2660_dir     => system_io_o(26),
+        tmc2660_step    => system_io_o(25),
+        tmc2660_sclk    => system_io_o(27),
+        tmc2660_ncs     => system_io_o(28),
+        tmc2660_mosi    => system_io_o(29),
+        tmc2660_miso    => system_io_i(30)
     );
-    internal_io_o(25) <= gnd_io_o;
-    internal_io_o(29) <= gnd_io_o;
+    --Configure io to input mode
+    system_io_o(24) <= gnd_io_o;
+    system_io_o(30) <= gnd_io_o;
 
 
 
@@ -427,35 +410,47 @@ begin
         CLK_FACTOR	=> Z_MOTOR_FREQUENCY
     )
     port map(
-        clk			=> ClockFPGA,
-        rst			=> Reset,
+        clk			=> clk,
+        rst			=> rst,
         sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(6),
-        DC_enb		=> internal_io_o(32),
-        DC_out_1	=> internal_io_o(33),
-        DC_out_2	=> internal_io_o(34)
+        sys_bus_o	=> sys_bus_o(8),
+        DC_enb		=> system_io_o(31),
+        DC_out_1	=> system_io_o(32),
+        DC_out_2	=> system_io_o(33)
     );
-    actuator_flags(4) <= internal_io_o(32).dat;
-    actuator_flags(5) <= internal_io_o(33).dat;
-    actuator_flags(6) <= internal_io_o(34).dat;
-
 
 
     CLAW_MAGNET : entity work.EMAGNET_DRIVER
     generic map(
         ADDRESS		=> EMAG_ADDRESS,
         MAGNET_TAO	=> EMAG_TAO,
-        DEMAG_TIME	=> EMAG_DEMAG_TIME
+        DEMAG_TIME	=> EMAG_DEMAG_FACTOR
     )
     port map(
-        clk			=> ClockFPGA,
-        rst			=> Reset,
+        clk			=> clk,
+        rst			=> rst,
         sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(7),
-        em_enb		=> internal_io_o(35),
-        em_out_1    => internal_io_o(36),
-        em_out_2	=> internal_io_o(37)
+        sys_bus_o	=> sys_bus_o(9),
+        em_enb		=> system_io_o(34),
+        em_out_1    => system_io_o(35),
+        em_out_2	=> system_io_o(36)
     );
+
+    -- CLAW_MAGNET : entity work.EMAGNET_DRIVER_2
+    -- generic map(
+    --     ADDRESS         => EMAG_ADDRESS,
+    --     MAGNET_TAO      => EMAG_TAO,
+    --     PULSE_REDUCTION => EMAG_PULSE_REDUCTION
+    -- )
+    -- port map(
+    --     clk             => clk,
+    --     rst             => rst,
+    --     sys_bus_i       => sys_bus_i,
+    --     sys_bus_o       => sys_bus_o(9),
+    --     emag_enb        => system_io_o(34),
+    --     emag_out_1      => system_io_o(35),
+    --     emag_out_2      => system_io_o(36)
+    -- );
     -----------------------------------------------------------------------------------------------
 
 
@@ -469,12 +464,13 @@ begin
         INVERTED        => PR_LED_INVERTED
     )
     port map(
-        clk         => ClockFPGA,
-        rst         => Reset,
-        sys_bus_i   => sys_bus_i,
-        sys_bus_o   => sys_bus_o(10),
-        led_output  => internal_io_o(38)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(10),
+        led_output      => system_io_o(37)
     );
+
 
     POWER_GREEN : entity work.LED_DRIVER
     generic map(
@@ -483,12 +479,13 @@ begin
         INVERTED        => PG_LED_INVERTED
     )
     port map(
-        clk         => ClockFPGA,
-        rst         => Reset,
-        sys_bus_i   => sys_bus_i,
-        sys_bus_o   => sys_bus_o(11),
-        led_output  => internal_io_o(39)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(11),
+        led_output      => system_io_o(38)
     );
+
 
     ENVIRONMENT_RED : entity work.LED_DRIVER
     generic map(
@@ -497,12 +494,13 @@ begin
         INVERTED        => ER_LED_INVERTED
     )
     port map(
-        clk         => ClockFPGA,
-        rst         => Reset,
-        sys_bus_i   => sys_bus_i,
-        sys_bus_o   => sys_bus_o(12),
-        led_output  => internal_io_o(40)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(12),
+        led_output      => system_io_o(39)
     );
+
 
     ENVIRONMENT_WHITE : entity work.LED_DRIVER
     generic map(
@@ -511,12 +509,13 @@ begin
         INVERTED        => EW_LED_INVERTED
     )
     port map(
-        clk         => ClockFPGA,
-        rst         => Reset,
-        sys_bus_i   => sys_bus_i,
-        sys_bus_o   => sys_bus_o(13),
-        led_output  => internal_io_o(41)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(13),
+        led_output      => system_io_o(40)
     );
+
 
     ENVIRONMENT_GREEN : entity work.LED_DRIVER
     generic map(
@@ -525,14 +524,13 @@ begin
         INVERTED        => EG_LED_INVERTED
     )
     port map(
-        clk         => ClockFPGA,
-        rst         => Reset,
-        sys_bus_i   => sys_bus_i,
-        sys_bus_o   => sys_bus_o(14),
-        led_output  => internal_io_o(42)
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o(14),
+        led_output      => system_io_o(41)
     );
-    -----------------------------------------------------------------------------------------------
-
-end RTL;
+    -----------------------------------------------------------------------------------------------  
 
 
+end architecture RTL;

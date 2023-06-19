@@ -27,7 +27,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom packages
 library work;
-use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -168,9 +167,10 @@ begin
 		rst					=> rst,
 		sys_bus_i			=> sys_bus_i,
 		sys_bus_o			=> sys_bus_o,
-		reg_data_in			=> reg_data,
-		reg_data_out		=> reg_data,
-		reg_data_stb		=> reg_data_stb
+		data_in				=> reg_data,
+		data_out			=> reg_data,
+		read_stb			=> open,
+		write_stb			=> reg_data_stb
 	);
 	-----------------------------------------------------------------------------------------------
 

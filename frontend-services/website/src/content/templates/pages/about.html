@@ -1,3 +1,4 @@
+{% import "components/elements.html" as elements %}
 {% set
     text = {
         heading: 'ABOUT US',
@@ -25,66 +26,65 @@
                 image: '/img/Teacher.svg'
             }
         ]
-    }
- %}
-
+    } %}
 {% if language=='de' %}
-{% set
+    {% set
     text = {
         heading: 'ÜBER UNS',
-        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!',
+        description: 'Das GOLDi-Projekt Team besteht aus Mitarbeitern und studentischen Assistenten der Technischen Universität Ilmenau.
+        Jeder hat dabei sein eigenes Spezialgebiet und ist für einen Teil der GOLDi Entwicklung zuständig.
+        Bei Problemen oder Fragen können Sie gerne die Projektleitung oder die zuständigen Mitarbeiter direkt kontaktieren.',
     
         panel:[
             {
-                name: 'Dr.-Ing. Prof. h. c. Karsten Henke',
-                description: 'Lorem Ipsum dolor sit amet',
+                name: 'Karsten Henke',
+                description: 'karsten.henke@tu-ilmenau.de',
                 image: '/img/Teacher.svg'
             },
             {
                 name: 'Johannes Nau',
-                description: 'Lorem ipsum dolor sit amet',
+                description: 'johannes.nau@tu-ilmenau.de',
+                image: '/img/about_us/nau.png'
+            },
+            {
+                name: 'Pierre Helbing',
+                description: 'pierre.helbing@tu-ilmenau.de',
                 image: '/img/Teacher.svg'
             },
             {
-                name: 'Max Mustermann',
-                description: 'Lorem ipsum dolor sit amet',
-                image: '/img/Teacher.svg'
-            },
-            {
-                name: 'Max Mustermann',
-                description: 'Lorem ipsum dolor sit amet',
+                name: 'Detlef Streitferdt',
+                description: 'detlef.streitferdt@tu-ilmenau.de',
                 image: '/img/Teacher.svg'
             }
         ]
-    }
- %}
+    } %}
 {% endif %}
-
 {% extends "layout.html" %}
 {% block main %}
-
-<!-- About Us Überschrift und kurze Vorstellung -->
-<div class="max-w-6xl w-full mx-auto pt-16 font-body mb-10">
-    <div class="mx-auto flex justify-center">
-        <div class="max-w-xl px-10 space-y-5 text-center">
-            <div class="text-7xl font-bold text-primary-700">{{text.heading}}</div>
-            <div>{{text.description}}</div>
+    <!-- About Us Überschrift und kurze Vorstellung -->
+    <div class="max-w-6xl w-full mx-auto pt-16 font-body mb-10">
+        <div class="mx-auto flex justify-center">
+            <div class="max-w-xl px-10 space-y-5 text-center">
+                <div class="text-7xl font-bold text-primary-700">{{ text.heading }}</div>
+                <div>{{ text.description }}</div>
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Vorstellung des Teams -->
-<div class="w-full bg-primary-200 mt-14 px-10">
-    <div class=" flex relative -top-10 justify-between mx-auto flex-col lg:flex-row max-w-md lg:max-w-6xl gap-10 font-body">
-        {% for item in text.panel %}
-        <div class="bg-primary-50 rounded-3xl p-5 lg:w-80 w-full shadow-xl text-center">
-            <img class="h-20 mx-auto" src="{{item.image}}"/>
-            <div class="text-2xl pb-2 font-bold mx-auto">{{item.name}}</div>
-            <div>{{item.description}}</div>
+    <!-- Vorstellung des Teams -->
+    <div class="w-full bg-primary-200 mt-14 px-20">
+        <div class=" flex -mt-20 justify-between flex-col lg:flex-row gap-10 font-body">
+            {% for item in text.panel %}
+                <div>
+                    <img class="block w-full lg:w-80 px-5 mx-auto " src="{{ item.image }}"/>
+                    <div class="bg-primary-50 rounded-3xl lg:w-80 w-full shadow-xl text-center p-5">
+                        <div>
+                            <div class="text-2xl pb-2 font-bold mx-auto">{{ item.name }}</div>
+                            <div>{{ item.description }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-
-
+    <div class="flex-grow"></div>
 {% endblock %}

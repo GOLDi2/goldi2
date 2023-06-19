@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="max-w-6xl w-full mx-auto pt-16 font-body flex-grow">
+    <div class="flex flex-column">
+        <div class="p-10">
+            <span class="text-6xl">1.</span>
+        </div>
+        <div class="p-10">
+            Start all devices that were instatiated for you, by clickling the following links:<br>
+        {% for instance in instances %}
+            <a class="primary-button" href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="popup">{{ instance.codeUrl }}</a><br>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="flex flex-column">
+        <div class="p-10">
+            <span class="text-6xl">2.</span>
+        </div>
+        <div class="p-10">
+            Run the experiment by clicking the following link:<br>
+            <a class="primary-button" href="/{{ language }}/run-experiment?url={{ experiment.url }}">Run experiment</a>
+        </div>
+    </div>
+    
+    Eperiment Status:
+    <div class="w-full flex-grow flex" style="white-space: pre-wrap;"> {{ experiment | dump(2 )}}</div>
+</div>
+{% endblock %}

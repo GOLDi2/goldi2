@@ -16,9 +16,9 @@ class SpiRegisters:
         self.spi.open(0, 0)
         self.spi.max_speed_hz = 5000000
 
-        self._register_on_change_callbacks = [[] for _ in range(128)]
-        self._read_buffer = bytearray(128)
-        self._write_buffer = bytearray(128)
+        self._register_on_change_callbacks = [[] for _ in range(32768)]
+        self._read_buffer = bytearray(32768)
+        self._write_buffer = bytearray(32768)
         self._register_read_addresses = set()
         self._register_write_addresses = set()
 
@@ -55,12 +55,18 @@ class SpiRegisters:
 
     def communicate(self):
         for address in self._register_write_addresses:
-            self.spi.xfer2([128 + address, self._write_buffer[address]])
+            higherAddress = (address >> 8) & 0xFF
+            lowerAddress = address & 0xFF
+            self.spi.xfer2(
+                [128 + higherAddress, lowerAddress, self._write_buffer[address]]
+            )
         self._register_write_addresses.clear()
 
         new_registers = bytearray(self._read_buffer)
         for address in self._register_read_addresses:
-            new_registers[address] = self.spi.xfer2([address, 0])[1]
+            higherAddress = (address >> 8) & 0xFF
+            lowerAddress = address & 0xFF
+            new_registers[address] = self.spi.xfer2([higherAddress, lowerAddress, 0])[2]
 
         # check for changes between new_registers and self._registers_buffer
         changes = [a != b for a, b in zip(new_registers, self._read_buffer)]
