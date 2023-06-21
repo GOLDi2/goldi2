@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		01/01/2023
@@ -35,7 +35,7 @@ end entity SP_CONVERTER_TB;
 --! Simulation architecture
 architecture TB of SP_CONVERTER_TB is
 	
-	--Component
+	--****DUT***
 	component SP_CONVERTER
 		generic(
 			WORD_LENGTH		:	natural := 8
@@ -54,14 +54,14 @@ architecture TB of SP_CONVERTER_TB is
 	end component;
 	
 	
-	--Signals
+	--****INTERNAL SIGNALS****
 	--Simulation timing 
 	constant clk_period		:	time := 10 ns;
 	constant sclk_period	:	time := 40 ns;
 	signal clock			:	std_logic := '0';
-	signal reset			:	std_logic;
+	signal reset			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
-	--DUT i/o
+	--DUT IOs
 	signal ce				:	std_logic;
 	signal sclk				:	std_logic;
 	signal mosi				:	std_logic;
@@ -73,8 +73,11 @@ architecture TB of SP_CONVERTER_TB is
 	signal miso_buff		:	std_logic_vector(7 downto 0) := (others => '0');
 	signal mosi_buff		:	std_logic_vector(7 downto 0) := (others => '0');
 	
+
 begin
 
+	--****COMPONENT****
+	-----------------------------------------------------------------------------------------------
 	DUT : SP_CONVERTER
 	port map(
 		clk				=> clock,
@@ -87,13 +90,20 @@ begin
 		dat_i			=> dat_i,
 		dat_o			=> dat_o
 	);
+	-----------------------------------------------------------------------------------------------
 	
-	
-	--Timing
+
+
+	--****SIMULATION TIMING****
+	-----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 0 ns, '0' after 15 ns;
+	reset <= '1' after 5 ns, '0' after 15 ns;
+	-----------------------------------------------------------------------------------------------
 	
 	
+
+	--****TEST****
+	-----------------------------------------------------------------------------------------------
 	TEST : process
 		--Timing
 		variable init_hold		:	time := 5*clk_period/2; 
@@ -105,15 +115,20 @@ begin
 		
 		
 		--Test reset conditions
-		assert(miso = '0') 		 report "line(108): Test reset - expecting miso = '0'" severity error;
-		assert(word_valid = '0') report "line(109): Test reset - expecting word_valid = '0'" severity error;	
-		assert(dat_o = x"00")	 report "line(110): Test reset - expecting dat_o = x00" severity error;
-		
+		wait for assert_hold;
+		assert(miso = '0') 		 
+			report "ID01: Test reset - expecting miso = '0'" severity error;
+		assert(word_valid = '0') 
+			report "ID02: Test reset - expecting word_valid = '0'" severity error;	
+		assert(dat_o = x"00")
+			report "ID03: Test reset - expecting dat_o = x00" severity error;
+		wait for post_hold;
+
 		
 		wait for 5*clk_period;
 		
 		
-		--Test data conversion
+		--**Test data conversion**
 		ce   <= '1';
 		sclk <= '0';
 		for i in 0 to 255 loop
@@ -133,13 +148,13 @@ begin
 			
 			wait for assert_hold;
 			assert(miso_buff = std_logic_vector(to_unsigned(i,8)))
-				report "line(136): Test conversion - expecting miso_buff = " & integer'image(i)
+				report "ID04: Test conversion - expecting miso_buff = " & integer'image(i)
 				severity error;
 			assert(dat_o = std_logic_vector(to_unsigned(i,8)))
-				report "line(139): Test conversion - expecting dat_o = " & integer'image(i)
+				report "ID05: Test conversion - expecting dat_o = " & integer'image(i)
 				severity error;
 			assert(word_valid = '1')
-				report "line(142): Test conversion - expecting word_valid = '1'" severity error;
+				report "ID06: Test conversion - expecting word_valid = '1'" severity error;
 			wait for post_hold;
 		
 		end loop;

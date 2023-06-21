@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -10,7 +10,6 @@
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
 -- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
