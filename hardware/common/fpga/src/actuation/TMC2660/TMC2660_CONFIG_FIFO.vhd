@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
@@ -9,7 +9,7 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	none
+-- Dependencies:	-> GOLDI_DATA_TYPES.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
