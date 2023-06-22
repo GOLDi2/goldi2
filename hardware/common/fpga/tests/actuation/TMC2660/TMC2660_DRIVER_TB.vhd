@@ -51,15 +51,13 @@ architecture TB of TMC2660_DRIVER_TB is
     component TMC2660_DRIVER
         generic(
             ADDRESS         :   natural := 1;
-            SD_FACTOR       :   natural := 100;
             SCLK_FACTOR     :   natural := 8;
-            TMC2660_CONFIG  :   tmc2660_rom := (x"F00FF",x"F00FF")
+            TMC2660_CONFIG  :   tmc2660_rom := (x"FF00FF",x"FF00FF")
         );
         port(
             --General
             clk             : in    std_logic;
             rst             : in    std_logic;
-            clk_16MHz       : in    std_logic;
             --BUS slave interface
             sys_bus_i       : in    sbus_in;
             sys_bus_o       : out   sbus_out;
@@ -104,14 +102,12 @@ begin
     DUT : entity work.TMC2660_DRIVER
     generic map(
         ADDRESS         => 1,
-        SD_FACTOR       => 10,
         SCLK_FACTOR     => 10,
-        TMC2660_CONFIG  => (x"F00FF",x"F00FF")
+        TMC2660_CONFIG  => (x"FF00FF",x"FF00FF")
     )
     port map(
         clk             => clock,
         rst             => reset,
-        clk_16MHz       => '0',
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
         tmc2660_clk     => tmc2660_clk,
@@ -142,18 +138,19 @@ begin
         variable init_hold  :   time := 5*clk_period/2;
     begin
         --Preset signals
-        sys_bus_i <= gnd_sbus_i;
+        tmc2660_sg <= gnd_io_i;
+        sys_bus_i  <= gnd_sbus_i;
         wait for init_hold;
 
         wait for 7 us;
 
 
         --Test stream data
-        sys_bus_i <= writeBus(x"03",x"FF");
+        sys_bus_i <= writeBus(3,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(x"04",x"00");
+        sys_bus_i <= writeBus(4,0);
         wait for clk_period;
-        sys_bus_i <= writeBus(x"05",x"08");
+        sys_bus_i <= writeBus(5,8);
         wait for clk_period;
         sys_bus_i <= gnd_sbus_i;
 
