@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -17,8 +17,8 @@
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commitment
 --
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
+-- Revision V3.00.00 - Default module version for release 2.00.00
+-- Additional Comments: Release for Axis Portal V2 (AP2)
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;

@@ -14,8 +14,11 @@
   - [5]: IO management modules
   - [6]: Memory modules
 - (2) Axis Portal V1
+  -[0]: Testbenches and simulations 
   -[1]: General corrections to the AP1
 - (3) Axis Portal V2
+- -[0]: Testbenches and simulations
+- -[1]: General corrections to the AP2
 - (4) Microcontroller
 - (5) IO board
 - (6) Warehouse_2
