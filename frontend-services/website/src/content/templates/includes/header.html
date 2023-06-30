@@ -23,18 +23,19 @@ navbar_left = [
             {name: 'Instruction', href: '/about'},
             {name: 'Start now', href: '/experiment'},
             {name: 'Reservation', href: '/about'}
-    ]},
-    {name: 'Tools', children: [
-            {name: 'BEAST', href: '/about'},
-            {name: 'GIFT', href: '/about'},
-            {name: 'SANE (Beta JS-Application)', href: '/about'},
-            {name: 'SANE (JAVA-Applet Download)', href: '/about'},
-            {name: 'WIDE (Standalone)', href: '/about'},
-            {name: 'Admin', href: '/admin/index'}
     ]}
-] %}       
+] %}  
+
 {% set
           navbar_right = [
+                 {name: 'Tools', children: [
+                 {name: 'BEAST', href: '/about'},
+                 {name: 'GIFT', href: '/about'},
+                 {name: 'SANE (Beta JS-Application)', href: '/about'},
+                 {name: 'SANE (JAVA-Applet Download)', href: '/about'},
+                 {name: 'WIDE (Standalone)', href: '/about'},
+                 {name: 'Admin', href: '/admin/404'}
+              ]},
               {divider: true},
               {name: 'Login', href: '/login.html'},
               {name: 'Register', href: '/about'},
@@ -46,6 +47,14 @@ navbar_left = [
 {% if isLoggedIn %}
        {% set
           navbar_right = [
+                 {name: 'Tools', children: [
+                 {name: 'BEAST', href: '/about'},
+                 {name: 'GIFT', href: '/about'},
+                 {name: 'SANE (Beta JS-Application)', href: '/about'},
+                 {name: 'SANE (JAVA-Applet Download)', href: '/about'},
+                 {name: 'WIDE (Standalone)', href: '/about'},
+                 {name: 'Admin', href: '/admin/index'}
+              ]},
              {divider: true},
              {name: 'Logout', href: '/logout.html'},
              {icon: 'language', children: [
@@ -80,19 +89,21 @@ navbar_left = [
             {name: 'Instruction', href: '/about'},
             {name: 'Start now', href: '/about'},
             {name: 'Reservation', href: '/about'}
-        ]},
-        {name: 'Tools', children: [
-            {name: 'BEAST', href: '/about'},
-            {name: 'GIFT', href: '/about'},
-            {name: 'SANE (Beta JS-Application)', href: '/about'},
-            {name: 'SANE (JAVA-Applet Download)', href: '/about'},
-            {name: 'WIDE (Standalone)', href: '/about'},
-            {name: 'Admin', href: '/admin.html'}
         ]}
     ] %}
+        
+    
     {% if isLoggedIn %}
        {% set
           navbar_right = [
+             {name: 'Tools', children: [
+             {name: 'BEAST', href: '/about'},
+             {name: 'GIFT', href: '/about'},
+             {name: 'SANE (Beta JS-Application)', href: '/about'},
+             {name: 'SANE (JAVA-Applet Download)', href: '/about'},
+             {name: 'WIDE (Standalone)', href: '/about'},
+             {name: 'Admin', href: '/admin/index'}
+          ]},
              {divider: true},
              {name: 'Logout', href: '/logout.html'},
              {icon: 'language', children: [
@@ -103,6 +114,14 @@ navbar_left = [
     {% else %}
        {% set
           navbar_right = [
+             {name: 'Tools', children: [
+             {name: 'BEAST', href: '/about'},
+             {name: 'GIFT', href: '/about'},
+             {name: 'SANE (Beta JS-Application)', href: '/about'},
+             {name: 'SANE (JAVA-Applet Download)', href: '/about'},
+             {name: 'WIDE (Standalone)', href: '/about'},
+             {name: 'Admin', href: '/admin/404'}
+          ]},
               {divider: true},
               {name: 'Login', href: '/login.html'},
               {name: 'Registrieren', href: '/register.html'},
