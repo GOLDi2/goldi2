@@ -106,6 +106,7 @@ async function handle_logout(req: Request, res: Response, next: NextFunction) {
     res.clearCookie('token')
     if (req.query.redirect) {
         res.redirect(303, req.query.redirect as string);
+        req.query
     } else {
         next();
     }
