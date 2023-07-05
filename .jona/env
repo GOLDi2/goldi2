@@ -1,0 +1,2 @@
+
+ export IDE_OPEN_FIND_CMD='fd -t f -H'
