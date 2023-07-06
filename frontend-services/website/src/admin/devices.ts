@@ -24,8 +24,12 @@ export function device_router(language: string, renderPage: renderPageType, _log
 	        delete req.body.services
 	    }
             console.log(req.body)
-            const device = await req.apiClient.createDevice(req.body)
+            try{
+                const device = await req.apiClient.createDevice(req.body)
             res.redirect(303, '/' + language + '/admin/devices/details?url=' + encodeURIComponent(device.url))
+            } catch (e){
+                console.log(e)
+            }
             return;
         }
         const devices = type === 'group' ? (await req.apiClient.listDevices()) : undefined
