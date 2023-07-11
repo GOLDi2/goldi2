@@ -102,12 +102,12 @@ async function handle_login(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-async function handle_logout(req: Request, res: Response, next: NextFunction) {
+async function handle_logout(req: Request, res: Response, _next: NextFunction) {
     res.clearCookie('token')
     if (req.query.redirect) {
         res.redirect(303, req.query.redirect as string);
     } else {
-        next();
+        res.redirect(303, "/index.html" as string);
     }
 }
 

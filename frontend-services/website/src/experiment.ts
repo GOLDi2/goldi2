@@ -7,6 +7,12 @@ import { DeviceServiceTypes, ExperimentServiceTypes } from "@cross-lab-project/a
 
 export function experiment_router(language: string, renderPage: renderPageType, _logger: winston.Logger) {
     async function experiment(req: Request, res: Response, _next: NextFunction) {
+
+        // TODO: maybe check somewhere else and return a specific page experiment_401.html
+        if (!req.user) {
+            return renderPage('experiment', language, res, req.user);
+        }
+
         let experiment: ExperimentServiceTypes.Experiment = {}
         if (req.method === 'GET') {
             try {

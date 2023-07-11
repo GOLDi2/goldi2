@@ -3,86 +3,92 @@
 navbar = [
     {name: 'Documentation', horizontal: true, children: [
         {name: 'Controller', children: [
-            {name: 'Manual Control', href: '/about'},
-            {name: 'Digital Demo-Board', href: '/about'},
-            {name: 'PSOC', href: '/about'},
-            {name: 'PLD', href: '/about'},
-            {name: 'Automaton Graph', href: '/about'}
+            {name: 'Manual Control', href: '/'+language+'/about'},
+            {name: 'Digital Demo-Board', href: '/'+language+'/about'},
+            {name: 'PSOC', href: '/'+language+'/about'},
+            {name: 'PLD', href: '/'+language+'/about'},
+            {name: 'Automaton Graph', href: '/'+language+'/about'}
         ]},
         {name: 'Physische Systeme', children: [
-            {name: '3-Achs-Portal', href: '/about'},
-            {name: 'Aufzug A (3 Etagen)', href: '/about'},
-            {name: 'Aufzug B (4 Etagen)', href: '/about'},
-            {name: 'Aufzug C (4 Etagen)', href: '/about'},
-            {name: 'Bearbeitungseinheit', href: '/about'},
-            {name: 'Hochregallager', href: '/about'},
-            {name: 'Füllstandregelung', href: '/about'}
+            {name: '3-Achs-Portal', href: '/'+language+'/about'},
+            {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
+            {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
+            {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
+            {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
+            {name: 'Hochregallager', href: '/'+language+'/about'},
+            {name: 'Füllstandregelung', href: '/'+language+'/about'}
         ]}
     ]},
     {name: 'Experiment', children: [
-        {name: 'Instruction', href: '/about'},
-        {name: 'Start now', href: '/experiment'},
-        {name: 'Reservation', href: '/about'}
+        {name: 'Instruction', href: '/'+language+'/about'},
+        {name: 'Start now', href: '/'+language+'/experiment'},
+        {name: 'Reservation', href: '/'+language+'/about'}
     ]},
     {name: 'Tools', children: [
-        {name: 'BEAST', href: '/about'},
-        {name: 'GIFT', href: '/about'},
-        {name: 'SANE (Beta JS-Application)', href: '/about'},
-        {name: 'SANE (JAVA-Applet Download)', href: '/about'},
-        {name: 'WIDE (Standalone)', href: '/about'},
-        {name: 'Admin', href: '/admin/index'}
+        {name: 'BEAST', href: '/'+language+'/about'},
+        {name: 'GIFT', href: '/'+language+'/about'},
+        {name: 'SANE (Beta JS-Application)', href: '/'+language+'/about'},
+        {name: 'SANE (JAVA-Applet Download)', href: '/'+language+'/about'},
+        {name: 'WIDE (Standalone)', href: '/'+language+'/about'},
+        {name: 'Admin', href: '/'+language+'/admin/index', loggedIn: true}
     ]},
     {divider: true},
-    {name: 'Login', href: '/login.html'},
-    {name: 'Register', href: '/about'},
+    {name: 'Login', href: '/'+language+'/login.html', loggedIn: false},
+    {name: 'Register', href: '/'+language+'/about', loggedIn: false},
+    {name: 'Logout', href: '/'+language+'/logout.html', loggedIn: true},
     {icon: 'language', children: [
         {name: 'Deutsch', href: '/de/'+page},
         {name: 'English', href: '/en/'+page}
     ]}
 ] %}
+
 {% if language == 'de' %}
     {% set
     navbar = [
         {name: 'Documentation', horizontal: true, children: [
             {name: 'Controller', children: [
-                {name: 'Manual Control', href: '/about'},
-                {name: 'Digital Demo-Board', href: '/about'},
-                {name: 'PSOC', href: '/about'},
-                {name: 'PLD', href: '/about'},
-                {name: 'Automaton Graph', href: '/about'}
+                {name: 'Manual Control', href: '/'+language+'/about'},
+                {name: 'Digital Demo-Board', href: '/'+language+'/about'},
+                {name: 'PSOC', href: '/'+language+'/about'},
+                {name: 'PLD', href: '/'+language+'/about'},
+                {name: 'Automaton Graph', href: '/'+language+'/about'}
             ]},
             {name: 'Physische Systeme', children: [
-                {name: '3-Achs-Portal', href: '/about'},
-                {name: 'Aufzug A (3 Etagen)', href: '/about'},
-                {name: 'Aufzug B (4 Etagen)', href: '/about'},
-                {name: 'Aufzug C (4 Etagen)', href: '/about'},
-                {name: 'Bearbeitungseinheit', href: '/about'},
-                {name: 'Hochregallager', href: '/about'},
-                {name: 'Füllstandregelung', href: '/about'}
+                {name: '3-Achs-Portal', href: '/'+language+'/about'},
+                {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
+                {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
+                {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
+                {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
+                {name: 'Hochregallager', href: '/'+language+'/about'},
+                {name: 'Füllstandregelung', href: '/'+language+'/about'}
             ]}
         ]},
         {name: 'Experiment', children: [
-            {name: 'Instruction', href: '/about'},
-            {name: 'Start now', href: '/experiment'},
-            {name: 'Reservation', href: '/about'}
+            {name: 'Instruction', href: '/'+language+'/about'},
+            {name: 'Start now', href: '/'+language+'/experiment'},
+            {name: 'Reservation', href: '/'+language+'/about'}
         ]},
         {name: 'Tools', children: [
-            {name: 'BEAST', href: '/about'},
-            {name: 'GIFT', href: '/about'},
-            {name: 'SANE (Beta JS-Application)', href: '/about'},
-            {name: 'SANE (JAVA-Applet Download)', href: '/about'},
-            {name: 'WIDE (Standalone)', href: '/about'},
-            {name: 'Admin', href: '/admin/index'}
+             {name: 'BEAST', href: '/'+language+'/about'},
+             {name: 'GIFT', href: '/'+language+'/about'},
+             {name: 'SANE (Beta JS-Application)', href: '/'+language+'/about'},
+             {name: 'SANE (JAVA-Applet Download)', href: '/'+language+'/about'},
+             {name: 'WIDE (Standalone)', href: '/'+language+'/about'},
+             {name: 'Admin', href: '/'+language+'/admin/index', loggedIn: true}
         ]},
         {divider: true},
-        {name: 'Login', href: '/login.html'},
-        {name: 'Registrieren', href: '/register.html'},
+        {name: 'Login', href: '/'+language+'/login.html?redirect='+page, loggedIn: false},
+        {name: 'Registrieren', href: '/'+language+'/register.html', loggedIn: false},
+        {name: 'Logout', href: '/'+language+'/logout.html?redirect='+page, loggedIn: true},
         {icon: 'language', children: [
             {name: 'Deutsch', href: '/de/'+page},
             {name: 'English', href: '/en/'+page}
         ]}
     ] %}
 {% endif %}
+
+
+
 {%- macro renderItemText(item) -%}
     <div class="px-5">
         {% if item.href %}
@@ -108,7 +114,9 @@ navbar = [
             <div class="absolute w-max -z-10 -mt-10 font-normal">
                 <div class="bg-primary-900 rounded-xl flex {% if item.horizontal %}flex-row{% else %}flex-col{% endif %} pt-20">
                     {%- for item in item.children %}
-                        {{ renderItem(item) }}
+                        {%- if not item.loggedIn is defined or item.loggedIn == isLoggedIn -%}
+                            {{ renderItem(item) }}
+                        {%- endif -%}
                     {%- endfor %}
                     <span class="h-2"/>
                 </div>
@@ -130,8 +138,10 @@ navbar = [
             </a>
             <!--Navbar items -->
             <nav class="flex items-center px-10 text-primary-50 z-0">
-                {%- for item in navbar %}
-                    {{ renderItem(item) }}
+                {%- for item in navbar  %}
+                    {%- if not item.loggedIn is defined or item.loggedIn == isLoggedIn -%}
+                        {{ renderItem(item) }}
+                    {%- endif -%}
                 {%- endfor %}
             </nav>
         </div>
