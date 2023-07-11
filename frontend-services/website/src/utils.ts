@@ -36,13 +36,14 @@ export function renderPageInit(content_path: string, default_language: string): 
 
     return async function renderPage(page: string, language: string, res: Response, user?: AuthenticationServiceTypes.User<'response'>, properties?: any) {
         const isLoggedIn = user !== undefined
-        const _page=page.slice(1)
+        // if page starts with / remove it
+        if (page.startsWith('/')) page = page.slice(1);
         try {
             const page_template = await page_resolution(page, language);
-            res.render(page_template, { language, page:_page, isLoggedIn, user, ...properties });
+            res.render(page_template, { language, page, isLoggedIn, user, ...properties });
         } catch (e) {
             const page_template = await page_resolution("404", language);
-            res.render(page_template, { language, page:_page, isLoggedIn, user });
+            res.render(page_template, { language, page, isLoggedIn, user });
         }
     }
 }
