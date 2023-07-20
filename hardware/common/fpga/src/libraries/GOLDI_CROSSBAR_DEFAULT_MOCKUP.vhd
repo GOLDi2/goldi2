@@ -29,7 +29,7 @@ use work.GOLDI_COMM_STANDARD.all;
 
 
 
-package GOLDI_CROSSBAR_DEFAULT is
+package GOLDI_CROSSBAR_DEFAULT_MOCKUP is
 
     --****CROSBAR DATA STURCTURES****
 	-----------------------------------------------------------------------------------------------
@@ -64,4 +64,4 @@ package GOLDI_CROSSBAR_DEFAULT is
     -----------------------------------------------------------------------------------------------
 
 
-end package GOLDI_CROSSBAR_DEFAULT;
+end package GOLDI_CROSSBAR_DEFAULT_MOCKUP;
