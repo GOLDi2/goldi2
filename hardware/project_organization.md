@@ -23,6 +23,7 @@
 - (5) IO board
 - (6) Warehouse_2
   - [0]: Board construction
+  - [1]: Testbenches and simulations
 - (7) Control Unit Mobile {control_unit_v1}
   - [0]: Board construction 
 
