@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		High-bay warehouse sensor array
+-- Design Name:		Warehouse sensor array
 -- Module Name:		SENSOR_ARRAY
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
