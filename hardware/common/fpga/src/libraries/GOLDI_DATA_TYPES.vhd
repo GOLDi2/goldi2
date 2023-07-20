@@ -31,6 +31,7 @@ package GOLDI_DATA_TYPES is
     --****TMC2660 ROM MEMORY - SLICE USE****
 	-----------------------------------------------------------------------------------------------
     type tmc2660_rom is array(natural range <>) of std_logic_vector(23 downto 0);
+    type array_16_bit is array(natural range <>) of std_logic_vector(15 downto 0);
 	-----------------------------------------------------------------------------------------------
 
 
