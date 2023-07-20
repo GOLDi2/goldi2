@@ -10,7 +10,6 @@ mkdir -p .ghdl
 cd .ghdl
 
 ghdl -i --std=08 $(fd -L .vhd ../src)
-ghdl -i --std=08 $(fd -L .vhd ../mockup)
 ghdl -i --std=08 $(fd -L .vhd ../tests)
 ghdl -i --work=machxo2 --std=08 $GIT_ROOT/hardware/common/lattice-library/machxo2.vhd
 ghdl -i --work=machxo2 --std=08 $(fd -L impl.vhd $GIT_ROOT/hardware/common/lattice-library)
