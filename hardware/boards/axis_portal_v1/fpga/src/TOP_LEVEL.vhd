@@ -101,18 +101,18 @@ begin
    --****CLOCKING****
     -----------------------------------------------------------------------------------------------
     --External 48 MHz clock
-    --clk <= ClockFPGA;
+    clk <= ClockFPGA;
     
     --Test 53.2 MHz clock
-    INTERNAL_CLOCK : component machxo2.components.OSCH
-    generic map(
-        NOM_FREQ => "53.2"
-    )
-    port map(
-        STDBY    => '0',
-        OSC      => clk,
-        SEDSTDBY => open
-    );
+    -- INTERNAL_CLOCK : component machxo2.components.OSCH
+    -- generic map(
+    --     NOM_FREQ => "53.2"
+    -- )
+    -- port map(
+    --     STDBY    => '0',
+    --     OSC      => clk,
+    --     SEDSTDBY => open
+    -- );
     -----------------------------------------------------------------------------------------------
 
 

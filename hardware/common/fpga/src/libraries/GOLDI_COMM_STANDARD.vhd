@@ -127,6 +127,24 @@ package GOLDI_COMM_STANDARD is
     -----------------------------------------------------------------------------------------------
 
 
+
+    --****POCEDURES****
+    -----------------------------------------------------------------------------------------------
+    --SPI transfered word length. Used in simulations.
+    constant SPI_DATA_WIDTH     :   natural := BUS_ADDRESS_WIDTH + SYSTEM_DATA_WIDTH +1;
+
+    --Simulation procedures
+    procedure p_spiTransaction(
+        constant c_sclk_period  : in    time;
+        signal i_mosi_data      : in    std_logic_vector(SPI_DATA_WIDTH-1 downto 0);
+        signal o_miso_data      : out   std_logic_vector(SPI_DATA_WIDTH-1 downto 0);
+        signal o_spi_nce        : out   std_logic;
+        signal o_spi_sclk       : out   std_logic;
+        signal o_spi_mosi       : out   std_logic;
+        signal i_spi_miso       : in    std_logic 
+    );
+    -----------------------------------------------------------------------------------------------
+
 end package GOLDI_COMM_STANDARD;
 
 
@@ -342,6 +360,39 @@ package body GOLDI_COMM_STANDARD is
         return sys_bus;
     end function;    
     -----------------------------------------------------------------------------------------------  
+ 
+
+
+    
+    --****SIMULATION PROCEDURES****
+    -----------------------------------------------------------------------------------------------
+    procedure p_spiTransaction(
+        constant c_sclk_period  : in    time;
+        signal i_mosi_data      : in    std_logic_vector(SPI_DATA_WIDTH-1 downto 0);
+        signal o_miso_data      : out   std_logic_vector(SPI_DATA_WIDTH-1 downto 0);
+        signal o_spi_nce        : out   std_logic;
+        signal o_spi_sclk       : out   std_logic;
+        signal o_spi_mosi       : out   std_logic;
+        signal i_spi_miso       : in    std_logic 
+    ) is
+    begin
+        --SPI operation
+        o_spi_nce <= '0';
+        for i in 0 to SPI_DATA_WIDTH-1 loop
+            wait for c_sclk_period/2;
+            o_spi_mosi <= i_mosi_data((SPI_DATA_WIDTH-1)-i);
+            o_spi_sclk <= '0';
+            wait for c_sclk_period/2;
+            o_miso_data((SPI_DATA_WIDTH-1)-i) <= i_spi_miso;
+            o_spi_sclk <= '1';
+        end loop;
+        wait for c_sclk_period/2;
+        o_spi_nce <= '1';
+
+        wait for c_sclk_period;            
+
+    end procedure;
+    -----------------------------------------------------------------------------------------------
  
  
 end package body GOLDI_COMM_STANDARD;
