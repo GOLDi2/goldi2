@@ -9,6 +9,9 @@
     {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create", icon="add") %}Add Device{% endcall %}{% endcall %}
     {% endcall %}
     {% call topbar.content() %}
+
+
+       
     <div class="flex">
         <div class="text-center w-32">
             type
@@ -17,14 +20,17 @@
         <div class="text-ellipsis w-52 ml-4">
             Name
         </div>
-        <div class="text-ellipsis w-96">
+        <div class="text-ellipsis w-60">
             Description
         </div>
         <div class="text-ellipsis w-52">
             Username
         </div>
-        <div class="w-52"></div>
+        <div class="w-52">
+        </div>
     </div>
+<hr class="w-30 h-px my-2 bg-black border-0">
+    
     {% for device in devices %}
         <div class="flex flex-col hover:bg-primary-100">
             <div class="flex flex-row">
@@ -37,7 +43,7 @@
                 <div class="text-ellipsis w-52 ml-4">
                     {{ device.name }}
                 </div>
-                <details class="text-ellipsis w-96">
+                <details class="text-ellipsis w-60">
                     <summary>Description</summary>
                     <p>{{ device.description }}</p>
                 </details>
@@ -71,4 +77,5 @@
     {% endfor %}
     {% endcall %}
     {% endcall %}
+
 {% endblock %}
