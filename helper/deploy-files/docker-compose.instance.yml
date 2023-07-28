@@ -1,8 +1,25 @@
 ---
-version: '3.3'
+version: '2.1'
 services:
 
 # API #############################################################################################
+  db:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    networks:
+      global_default:
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./data:/var/lib/mysql"
+    environment:
+      MARIADB_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--su=mysql", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure
   gateway:
     image: gateway-service
     environment:
@@ -22,67 +39,112 @@ services:
     hostname: auth.$DOMAIN
     image: auth-service
     environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: $AUTH_DB_USERNAME
+      DB_PASSWORD: $AUTH_DB_PASSWORD
+      DB_NAME: $AUTH_DB_NAME
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      JWKS_URL: https://api.$DOMAIN/.well-known/jwks.json
       API_TOKEN: $AUTH_API_KEY
       ALLOWLIST: $AUTH_API_KEY:local:authservice,$DEVICE_API_KEY:local:deviceservice,$EXPERIMENT_API_KEY:local:experimentservice,$FEDERATION_API_KEY:local:federationservice,$UPDATE_API_KEY:local:updateservice
     volumes:
       - auth_db:/app/db
     networks:
       global_default:
+    depends_on:
+      db:
+        condition: service_healthy
     restart: on-failure
   device:
     hostname: device.$DOMAIN
     image: device-service
     environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: $DEVICE_DB_USERNAME
+      DB_PASSWORD: $DEVICE_DB_PASSWORD
+      DB_NAME: $DEVICE_DB_NAME
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      JWKS_URL: https://api.$DOMAIN/.well-known/jwks.json
       API_TOKEN: $DEVICE_API_KEY
     volumes:
       - device_db:/app/db
     networks:
       global_default:
+    depends_on:
+      db:
+        condition: service_healthy
     restart: on-failure
   experiment:
     hostname: experiment.$DOMAIN
     image: experiment-service
     environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: $EXPERIMENT_DB_USERNAME
+      DB_PASSWORD: $EXPERIMENT_DB_PASSWORD
+      DB_NAME: $EXPERIMENT_DB_NAME
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      JWKS_URL: https://api.$DOMAIN/.well-known/jwks.json
       API_TOKEN: $EXPERIMENT_API_KEY
     volumes:
       - experiment_db:/app/db
     networks:
       global_default:
+    depends_on:
+      db:
+        condition: service_healthy
     restart: on-failure
   federation:
     hostname: federation.$DOMAIN
     image: federation-service
     environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: $FEDERATION_DB_USERNAME
+      DB_PASSWORD: $FEDERATION_DB_PASSWORD
+      DB_NAME: $FEDERATION_DB_NAME
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      JWKS_URL: https://api.$DOMAIN/.well-known/jwks.json
       API_TOKEN: $FEDERATION_API_KEY
     volumes:
       - federation_db:/app/db
     networks:
       global_default:
+    depends_on:
+      db:
+        condition: service_healthy
     restart: on-failure
   update:
     hostname: update.$DOMAIN
     image: update-service
     environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: $UPDATE_DB_USERNAME
+      DB_PASSWORD: $UPDATE_DB_PASSWORD
+      DB_NAME: $UPDATE_DB_NAME
       SECURITY_ISSUER: https://$DOMAIN
       SECURITY_AUDIENCE: https://$DOMAIN
       BASE_URL: https://api.$DOMAIN
+      JWKS_URL: https://api.$DOMAIN/.well-known/jwks.json
       API_TOKEN: $UPDATE_API_KEY
     volumes:
       - update_db:/app/db
     networks:
       global_default:
+    depends_on:
+      db:
+        condition: service_healthy
     restart: on-failure
 
 # Frontend ########################################################################################
