@@ -57,6 +57,8 @@ hardware/common/spi-driver:
 
 hardware/boards/axis_portal_v1/fpga:
   - script: build
+    dependencies:
+      - hardware/common/fpga:test
   - script: test
 
 hardware/boards/axis_portal_v1/crosslab:
@@ -69,6 +71,8 @@ hardware/boards/axis_portal_v1/crosslab:
 
 hardware/boards/warehouse_v2/fpga:
   - script: build
+    dependencies:
+      - hardware/common/fpga:test
   - script: test
 
 hardware/boards/warehouse_v2/crosslab:
@@ -81,6 +85,8 @@ hardware/boards/warehouse_v2/crosslab:
 
 hardware/boards/axis_portal_v2/fpga:
   - script: build
+    dependencies:
+      - hardware/common/fpga:test
   - script: test
 
 hardware/boards/axis_portal_v2/crosslab:
