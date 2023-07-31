@@ -3,10 +3,8 @@ version: '2.1'
 services:
 
 # API #############################################################################################
-  db:
+  $DB_HOST:
     image: mariadb
-    ports:
-      - "3306:3306"
     networks:
       global_default:
     volumes:
@@ -35,11 +33,17 @@ services:
     networks:
       global_default:
     restart: on-failure
+    depends_on:
+      - auth
+      - device
+      - experiment
+      - federation
+      - update
   auth:
     hostname: auth.$DOMAIN
     image: auth-service
     environment:
-      DB_HOST: db
+      DB_HOST: $DB_HOST
       DB_PORT: 3306
       DB_USERNAME: $AUTH_DB_USERNAME
       DB_PASSWORD: $AUTH_DB_PASSWORD
@@ -55,14 +59,14 @@ services:
     networks:
       global_default:
     depends_on:
-      db:
+      $DB_HOST:
         condition: service_healthy
     restart: on-failure
   device:
     hostname: device.$DOMAIN
     image: device-service
     environment:
-      DB_HOST: db
+      DB_HOST: $DB_HOST
       DB_PORT: 3306
       DB_USERNAME: $DEVICE_DB_USERNAME
       DB_PASSWORD: $DEVICE_DB_PASSWORD
@@ -77,14 +81,14 @@ services:
     networks:
       global_default:
     depends_on:
-      db:
+      $DB_HOST:
         condition: service_healthy
     restart: on-failure
   experiment:
     hostname: experiment.$DOMAIN
     image: experiment-service
     environment:
-      DB_HOST: db
+      DB_HOST: $DB_HOST
       DB_PORT: 3306
       DB_USERNAME: $EXPERIMENT_DB_USERNAME
       DB_PASSWORD: $EXPERIMENT_DB_PASSWORD
@@ -99,14 +103,14 @@ services:
     networks:
       global_default:
     depends_on:
-      db:
+      $DB_HOST:
         condition: service_healthy
     restart: on-failure
   federation:
     hostname: federation.$DOMAIN
     image: federation-service
     environment:
-      DB_HOST: db
+      DB_HOST: $DB_HOST
       DB_PORT: 3306
       DB_USERNAME: $FEDERATION_DB_USERNAME
       DB_PASSWORD: $FEDERATION_DB_PASSWORD
@@ -121,14 +125,14 @@ services:
     networks:
       global_default:
     depends_on:
-      db:
+      $DB_HOST:
         condition: service_healthy
     restart: on-failure
   update:
     hostname: update.$DOMAIN
     image: update-service
     environment:
-      DB_HOST: db
+      DB_HOST: $DB_HOST
       DB_PORT: 3306
       DB_USERNAME: $UPDATE_DB_USERNAME
       DB_PASSWORD: $UPDATE_DB_PASSWORD
@@ -143,7 +147,7 @@ services:
     networks:
       global_default:
     depends_on:
-      db:
+      $DB_HOST:
         condition: service_healthy
     restart: on-failure
 
