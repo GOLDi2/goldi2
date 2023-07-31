@@ -13,7 +13,7 @@ export function experiment_router(language: string, renderPage: renderPageType, 
             return renderPage('experiment', language, res, req.user);
         }
 
-        let experiment: ExperimentServiceTypes.Experiment = {}
+        let experiment: ExperimentServiceTypes.Experiment<"request"> = {}
         if (req.method === 'GET') {
             try {
                 experiment = await buildSimpleExperiment(req)
@@ -104,7 +104,7 @@ const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
     }
 ]
 
-async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment> {
+async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment<"request">> {
     const pspu = req.query.pspu as string
     const bpu = req.query.bpu as string
     const ecp = 'https://api.goldi-labs.de/devices/cc1de37e-1a6a-4470-affd-12eb41a3231e'
