@@ -57,7 +57,7 @@ export class App extends LitElement {
   }
 
   @state()
-  exp: ExperimentServiceTypes.Experiment = undefined
+  exp: ExperimentServiceTypes.Experiment<"request"> = undefined
 
   render() {
     return html`

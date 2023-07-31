@@ -92,7 +92,7 @@ else
 
   echo "Loading Config Tool"
   echo "$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: '$( load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: '$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
   echo "Loading Experiment Control Panel"
   echo "$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
@@ -101,5 +101,6 @@ else
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend/image: '$(load_docker_image "frontend-services/website/dist/docker-image.tar")'/g')
 
   echo "$COMPOSE" | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
+  cat helper/deploy-files/init.sql | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/init.sql"
   ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
 fi
