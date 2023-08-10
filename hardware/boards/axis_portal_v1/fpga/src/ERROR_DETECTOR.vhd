@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -12,6 +12,7 @@
 -- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
 --                  -> GOLDI_COMM_STANDARD.vhd
+--                  -> EDGE_DETECTOR.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created

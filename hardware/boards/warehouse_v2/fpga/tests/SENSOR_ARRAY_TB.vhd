@@ -1,9 +1,9 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-----------------------------------------------------------------------------
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		High-bay warehouse sensor array testbench
+-- Design Name:		Warehouse sensor array testbench
 -- Module Name:		SENSOR_ARRAY_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -54,12 +54,14 @@ architecture TB of SENSOR_ARRAY_TB is
             ADDRESS         :   natural := 1;
             ENC_X_INVERT    :   boolean := false;
             ENC_Z_INVERT    :   boolean := false;
-            LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (1,10));
-            LIMIT_Z_SENSORS :   sensor_limit_array(5 downto 0) := (others => (1,10))
+            LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (10,5));
+            LIMIT_Z_SENSORS :   sensor_limit_array(4 downto 0) := (others => (10,5))
         );
         port(
             clk             : in    std_logic;
             rst             : in    std_logic;
+            rst_virtual_x   : in    std_logic;
+            rst_virtual_z   : in    std_logic;
             sys_bus_i       : in    sbus_in;
             sys_bus_o       : out   sbus_out;
             lim_x_neg       : in    io_i;
@@ -98,6 +100,8 @@ begin
     port map(
         clk             => clock,
         rst             => reset,
+        rst_virtual_x   => reset,
+        rst_virtual_z   => reset,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
         lim_x_neg       => limits(0),
@@ -140,21 +144,21 @@ begin
         
         --**Test Idle**¨
         --Test limit sensors
-        sys_bus_i <= readBus(1,0);
+        sys_bus_i <= readBus(1);
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"00") 
-            report"line(146): Test idle - expecting limits = x00" severity error;
+        assert(sys_bus_o.dat = x"40") 
+            report"ID01: Test idle - expecting limits = x00" severity error;
         wait for post_hold;
         --Test virtual sensors
-        sys_bus_i <= readBus(2,0);
+        sys_bus_i <= readBus(2);
         wait for assert_hold;
         assert(sys_bus_o.dat = x"00") 
-            report"line(152): Test idle - expecting virtual_1 = x00" severity error;
+            report"ID02: Test idle - expecting virtual_1 = x00" severity error;
         wait for post_hold;
-        sys_bus_i <= readBus(3,0);
+        sys_bus_i <= readBus(3);
         wait for assert_hold;
         assert(sys_bus_o.dat = x"00") 
-            report"line(157): Test idle - expecting virtual_2 = x00" severity error;
+            report"ID03: Test idle - expecting virtual_2 = x00" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
 
@@ -167,10 +171,10 @@ begin
         limits(3) <= (dat => '1');
         limits(5) <= (dat => '1');
         wait for clk_period;
-        sys_bus_i <= readBus(1,0);
+        sys_bus_i <= readBus(1);
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"2A") 
-            report"line(173): Test idle - expecting limits = x2A" severity error;
+        assert(sys_bus_o.dat = x"6A") 
+            report"ID04: Test idle - expecting limits = x2A" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
 
@@ -192,15 +196,15 @@ begin
             encoder(1).dat <= not encoder(1).dat;
         end loop;
         --Test virtual sensors
-        sys_bus_i <= readBus(2,0);
+        sys_bus_i <= readBus(2);
         wait for assert_hold;
         assert(sys_bus_o.dat = x"FF") 
-            report"line(198): Test virtual - expecting virtual_1 = xFF" severity error;
+            report"ID05: Test virtual - expecting virtual_1 = xFF" severity error;
         wait for post_hold;
-        sys_bus_i <= readBus(3,0);
+        sys_bus_i <= readBus(3);
         wait for assert_hold;
         assert(sys_bus_o.dat = x"03") 
-            report"line(203): Test virtual - expecting virtual_2 = x03" severity error;
+            report"ID06: Test virtual - expecting virtual_2 = x03" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
 
@@ -221,10 +225,10 @@ begin
             encoder(3).dat <= not encoder(3).dat;
         end loop;
         --Test virtual sensors
-        sys_bus_i <= readBus(3,0);
+        sys_bus_i <= readBus(3);
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"FF") 
-            report"line(227): Test virtual - expecting virtual_2 = xFF" severity error;
+        assert(sys_bus_o.dat = x"7F") 
+            report"ID07: Test virtual - expecting virtual_2 = x7F" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
 

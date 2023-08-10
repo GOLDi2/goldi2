@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		01/01/2023
@@ -10,13 +10,17 @@
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
 -- Dependencies:	-> REGISTER_TABLE.vhd
---					-> GOLDI_DATA_TYPES.vhd
+--					-> REGISTER_UNIT.vhd
+--					-> GOLDI_COMM_STANDARD.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
+-- Additional Comments: -
+--
+-- Revision V3.00.02 - Minor corrections to the testbench
 -- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
@@ -66,7 +70,7 @@ architecture TB of REGISTER_TABLE_TB is
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
-	--DUT i/o
+	--DUT IOs
 	constant reg_default	:	data_word_vector(2 downto 0) := (x"FF",x"F0",x"0F");
 	signal sys_bus_i		:	sbus_in;
 	signal sys_bus_o		:	sbus_out;
@@ -83,6 +87,8 @@ begin
 	-----------------------------------------------------------------------------------------------
 	DUT : REGISTER_TABLE
 	generic map(
+		BASE_ADDRESS		=> 1,
+		NUMBER_REGISTERS	=> 3,
 		REG_DEFAULT_VALUES	=> reg_default
 	)
 	port map(
@@ -124,15 +130,15 @@ begin
 		--**Test reset conditions**
 		wait for assert_hold;
 		assert(data_out(0) = x"0F") 
-			report "line(127): Test reset - expecting data_out(0) = x0F" severity error;
+			report "line(133): Test reset - expecting data_out(0) = x0F" severity error;
 		assert(data_out(1) = x"F0") 
-			report "line(129): Test reset - expecting data_out(1) = xF0" severity error;
+			report "line(135): Test reset - expecting data_out(1) = xF0" severity error;
 		assert(data_out(2) = x"FF") 
-			report "line(131): Test reset - expecting data_out(2) = xFF" severity error;
+			report "line(137): Test reset - expecting data_out(2) = xFF" severity error;
 		assert(read_stb = "000")
-			report "line(133): Test reset - expecting read_stb = 000" severity error;
+			report "line(139): Test reset - expecting read_stb = 000" severity error;
 		assert(write_stb = "000")
-			report "line(135): Test reset - expecting write_stb = 000" severity error;
+			report "line(141): Test reset - expecting write_stb = 000" severity error;
 		wait for post_hold;
 		
 		
@@ -146,28 +152,33 @@ begin
 			sys_bus_i <= readBus(i);
 			wait for assert_hold;
 			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,8))) 
-				report "line(149): Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
+				report "line(155): Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
 				severity error;
 			assert(sys_bus_o.val = '1')
-				report "line(152): Test bus read - expecting sys_bus_o.val = '1'" severity error;
-			wait for post_hold;
-			assert(read_stb(i-1) = '1')
-				report "line(155): Test bus read - expecting read_stb(" & integer'image(i-1) &") = '1'"
+				report "line(158): Test bus read - expecting sys_bus_o.val = '1'" 
 				severity error;
+			assert(read_stb(i-1) = '1')
+				report "line(161): Test bus read - expecting read_stb(" & integer'image(i) & ") = '1'"
+				severity error;
+			wait for post_hold;
 		end loop;
 
 		
 		wait for 5*clk_period;
 		
 		
-		--Test write operation
+		--**Test write bus**
 		for i in 1 to 3 loop
 			sys_bus_i <= writeBus(i,10);
 			wait for assert_hold;
 			assert(sys_bus_o.dat = x"00") 
-				report "line(168): Test bus write - expecting sys_bus_o.dat = x00" severity error;
+				report "line(175): Test bus write - expecting sys_bus_o.dat = x00" 
+				severity error;
 			assert(data_out(i-1) = x"0A") 
-				report "line(170): Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
+				report "line(178): Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
+				severity error;
+			assert(write_stb(i-1) = '1')
+				report "line(181): Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
 		end loop;		
@@ -183,4 +194,3 @@ begin
 
 	
 end TB;
-

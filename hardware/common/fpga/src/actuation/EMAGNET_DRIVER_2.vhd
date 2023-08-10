@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		26/05/2023
@@ -17,7 +17,7 @@
 -- Revision V3.00.01 - File Created
 -- Additional Comments: First commitment
 --
--- Revision V3.01.00 - First release
+-- Revision V3.00.01 - First release
 -- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library

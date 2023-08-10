@@ -39,7 +39,7 @@ end entity DC_MOTOR_DRIVER_TB;
 --! Simulation architecture
 architecture TB of DC_MOTOR_DRIVER_TB is
 
-	--CUT
+	--****DUT****
 	component DC_MOTOR_DRIVER
 		generic(
 			ADDRESS			:	natural := 1;
@@ -57,13 +57,13 @@ architecture TB of DC_MOTOR_DRIVER_TB is
 	end component;
 	
 	
-	--Intermeidate signals
+	--****INTERNAL SIGNALS****
 	--Simulation timing
 	constant clk_period		:	time := 10 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
-	--DUT i/o
+	--DUT IOs
 	constant clk_factor 	:	natural := 10;
 	signal sys_bus_i		:	sbus_in;
 	signal sys_bus_o		:	sbus_out;
@@ -74,6 +74,8 @@ architecture TB of DC_MOTOR_DRIVER_TB is
 	
 begin
 
+	--****COMPONENT****
+	-----------------------------------------------------------------------------------------------
 	DUT : DC_MOTOR_DRIVER
 	generic map(
 		ADDRESS 	=> 1,
@@ -88,13 +90,20 @@ begin
 		DC_out_1	=> DC_out_1,
 		DC_out_2	=> DC_out_2
 	);
+	-----------------------------------------------------------------------------------------------
 	
-	
-	--Timing
+
+
+	--****SIMULATION TIMING****
+	-----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
 	reset <= '1' after 5 ns, '0' after 15 ns;
+	-----------------------------------------------------------------------------------------------
 	
 	
+
+	--****TEST****
+	-----------------------------------------------------------------------------------------------
 	TEST : process
 		--Timing
 		variable init_hold			:	time :=	5*clk_period/2;
@@ -106,34 +115,38 @@ begin
 		wait for init_hold;
 		
 
-		--Test reset values
+		--**Test reset values**
+		wait for assert_hold;
 		assert(DC_enb.dat = '0')
-			report "line(106): Test reset - expecting DC_enb.dat = '0'" severity error;
+			report "ID01: Test reset - expecting DC_enb = '0'" severity error;
 		assert(DC_out_1.dat = '0')
-			report "line(108): Test reset - expecting DC_out_1.dat = '0'" severity error;
+			report "ID02: Test reset - expecting DC_out_1 = '0'" severity error;
 		assert(DC_out_2.dat = '0')
-			report "line(110): Test reset - expecting DC_out_2.dat = '0'" severity error;
+			report "ID03: Test reset - expecting DC_out_2 = '0'" severity error;
+		wait for post_hold;
+
+		
 		wait for 5*clk_period;
 		
 		
-		--Test pwm=0
-		sys_bus_i.we  <= '1';
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(2,7));
-		sys_bus_i.dat <= x"00";
+		--**Test PWM=0 and positive direction**
+		sys_bus_i <= writeBus(2,0);
 		wait for clk_period;
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"01";
+		sys_bus_i <= writeBus(1,2);
 		wait for clk_period;
 		sys_bus_i <= gnd_sbus_i;
 		
 		wait for assert_hold;
 		for i in 1 to 255 loop
 			assert(DC_enb.dat = '0')
-				report "line(132): Test PWM=0 - expecting DC_enb.dat = '0'" severity error;
+				report "ID04: Test PWM=0 - expecting DC_enb = '0' [" & integer'image(i) & "]"
+				severity error;
 			assert(DC_out_1.dat = '1')
-				report "line(134): Test PWM=0 - expecting DC_out_1.dat = '1'" severity error;
+				report "ID05: Test PWM=0 - expecting DC_out_1 = '1' [" & integer'image(i) & "]"
+				severity error;
 			assert(DC_out_2.dat = '0')
-				report "line(136): Test PWM=0 - expecting DC_out_2.dat = '0'" severity error;
+				report "ID06: Test PWM=0 - expecting DC_out_2 = '0' [" & integer'image(i) & "]"
+				severity error;
 			wait for clk_factor*clk_period;
 		end loop;
 		wait for post_hold;
@@ -142,59 +155,62 @@ begin
 		wait for 5*clk_period;
 		
 		
-		--Test pwm=FF
-		sys_bus_i.we  <= '1';
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(2,7));
-		sys_bus_i.dat <= x"FF";
+		--**Test pwm=FF and negative direction**
+		sys_bus_i <= writeBus(2,255);
 		wait for clk_period;
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"02";
+		sys_bus_i <= writeBus(1,1);
 		wait for clk_period;
 		sys_bus_i <= gnd_sbus_i;
-
 
 		wait for assert_hold;
 		for i in 1 to 255 loop
 			assert(DC_enb.dat = '1')
-				report "line(159): Test PWM=FF - expecting DC_enb.dat = '1'" severity error;
+				report "ID07: Test PWM=FF - expecting DC_enb = '1' [" & integer'image(i) & "]"
+				severity error;
 			assert(DC_out_1.dat = '0')
-				report "line(161): Test PWM=FF - expecting DC_out_1.dat = '0'" severity error;
+				report "ID08: Test PWM=FF - expecting DC_out_1 = '0' [" & integer'image(i) & "]"
+				severity error;
 			assert(DC_out_2.dat = '1')
-				report "line(163): Test PWM=FF - expecting DC_out_2.dat = '1'" severity error;
+				report "ID09: Test PWM=FF - expecting DC_out_2 = '1' [" & integer'image(i) & "]"
+				severity error;
 			wait for clk_factor*clk_period;
 		end loop;
+		wait for post_hold;
 
 		
 		wait for 5*clk_period;
 		
 		
-		--Test pwm=0F
-		sys_bus_i.we  <= '1';
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(2,7));
-		sys_bus_i.dat <= x"0F";
+		--**Test pwm=0F and positive direction**
+		sys_bus_i <= writeBus(2,15);
 		wait for clk_period;
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"02";
+		sys_bus_i <= writeBus(1,2);
 		wait for clk_period;
-		sys_bus_i 	  <= gnd_sbus_i;
+		sys_bus_i <= gnd_sbus_i;
 
 		wait for assert_hold;
 		for i in 1 to 255 loop
 			if(i<=15) then
 				assert(DC_enb.dat = '1')
-					report "line(183): Test PWM=0F - expecting DC_enb.dat = '1'" & integer'image(i) severity error;
-				assert(DC_out_1.dat = '0')
-					report "line(185): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
-				assert(DC_out_2.dat = '1')
-					report "line(187): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
+					report "ID10: Test PWM=0F - expecting DC_enb = '1' [" & integer'image(i) & "]"
+					severity error;
+				assert(DC_out_1.dat = '1')
+					report "ID11: Test PWM=0F - expecting DC_out_1 = '1' [" & integer'image(i) & "]"
+					severity error;
+				assert(DC_out_2.dat = '0')
+					report "ID12: Test PWM=0F - expecting DC_out_2 = '0' [" & integer'image(i) & "]"
+					severity error;
 				wait for clk_factor*clk_period;
 			else
 				assert(DC_enb.dat = '0')
-					report "line(191): Test PWM=0F - expecting DC_enb.dat = '0'" & integer'image(i) severity error;
-				assert(DC_out_1.dat = '0')
-					report "line(193): Test PWM=0F - expecting DC_out_1.dat = '0'" severity error;
-				assert(DC_out_2.dat = '1')
-					report "line(195): Test PWM=0F - expecting DC_out_2.dat = '1'" severity error;
+					report "ID13: Test PWM=0F - expecting DC_enb = '0' [" & integer'image(i) & "]"
+					severity error;
+				assert(DC_out_1.dat = '1')
+					report "ID14: Test PWM=0F - expecting DC_out_1 = '1' [" & integer'image(i) & "]"
+					severity error;
+				assert(DC_out_2.dat = '0')
+					report "ID15: Test PWM=0F - expecting DC_out_2 = '0' [" & integer'image(i) & "]"
+					severity error;
 				wait for clk_factor*clk_period;
 			end if;			
 		end loop;
@@ -204,20 +220,24 @@ begin
 		wait for 5*clk_period;
 		
 		
-		--Test error case [both pos and neg enabled]
-		sys_bus_i.we  <= '1';
-		sys_bus_i.adr <= std_logic_vector(to_unsigned(1,7));
-		sys_bus_i.dat <= x"03";
+		--**Test error case [both pos and neg enabled]**
+		sys_bus_i <= writeBus(1,3);
 		wait for clk_period;
 		sys_bus_i <= gnd_sbus_i;
 		
 		wait for assert_hold;
-		assert(DC_enb.dat = '0')
-			report "line(216): Test error case - expecting DC_enb.dat = '0'" severity error;
-		assert(DC_out_1.dat = '0')
-			report "line(218): Test error case - expecting DC_out_1.dat = '1'" severity error;
-		assert(DC_out_2.dat = '0')
-			report "line(220): Test error case - expecting DC_out_2.dat = '1'" severity error;
+		for i in 1 to 255 loop
+			assert(DC_enb.dat = '0')
+				report "ID16: Test error case - expecting DC_enb = '0' [" & integer'image(i) & "]" 
+				severity error;
+			assert(DC_out_1.dat = '1')
+				report "ID17: Test error case - expecting DC_out_1 = '1' [" & integer'image(i) & "]" 
+				severity error;
+			assert(DC_out_2.dat = '1')
+				report "ID18: Test error case - expecting DC_out_2 = '1' [" & integer'image(i) & "]" 
+				severity error;
+			wait for clk_factor*clk_period;
+		end loop;
 		wait for post_hold;
 		
 		

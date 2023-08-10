@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische UniversitÃƒÂ¤t Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -12,7 +12,6 @@
 -- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --                  -> GOLDI_COMM_STANDARD.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_IO_CROSSBAR_DEFAULT.vhd
 --
 -- Revisions:
 -- Revision V0.00.00 - File Created
@@ -102,18 +101,18 @@ begin
    --****CLOCKING****
     -----------------------------------------------------------------------------------------------
     --External 48 MHz clock
-    --clk <= ClockFPGA;
+    clk <= ClockFPGA;
     
     --Test 53.2 MHz clock
-    INTERNAL_CLOCK : component machxo2.components.OSCH
-    generic map(
-        NOM_FREQ => "53.2"
-    )
-    port map(
-        STDBY    => '0',
-        OSC      => clk,
-        SEDSTDBY => open
-    );
+    -- INTERNAL_CLOCK : component machxo2.components.OSCH
+    -- generic map(
+    --     NOM_FREQ => "53.2"
+    -- )
+    -- port map(
+    --     STDBY    => '0',
+    --     OSC      => clk,
+    --     SEDSTDBY => open
+    -- );
     -----------------------------------------------------------------------------------------------
 
 

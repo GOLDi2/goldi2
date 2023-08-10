@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -28,6 +28,8 @@ library work;
 use work.GOLDI_IO_STANDARD.all;
 
 
+
+
 --! @brief Array of Tri-state buffers
 --! @details
 --! Array of Tri-state buffers for a simplified instantiation
@@ -48,6 +50,7 @@ entity TRIS_BUFFER_ARRAY is
         io_vector       : inout std_logic_vector(BUFF_NUMBER-1 downto 0)    --! FPGA Pins
     );
 end entity TRIS_BUFFER_ARRAY;
+
 
 
 

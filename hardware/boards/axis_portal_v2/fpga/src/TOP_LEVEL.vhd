@@ -12,13 +12,12 @@
 -- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --                  -> GOLDI_COMM_STANDARD.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_IO_CROSSBAR_DEFAULT.vhd
 --
 -- Revisions:
 -- Revision V2.00.00 - File Created
 -- Additional Comments: First commitment
 --
--- Revision V3.00.00 - Default module version for release 1.00.00
+-- Revision V3.00.00 - Default module version for release 2.00.00
 -- Additional Comments: Release for Axis Portal V2 (AP2)
 -------------------------------------------------------------------------------
 --! Use standard library
@@ -45,7 +44,7 @@ use machxo2.all;
 entity TOP_LEVEL is
     port(
         --General
-        ClockFPGA   : in    std_logic;                                        --! External system clock
+        ClockFPGA   : in    std_logic;                                          --! External system clock
         FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
         --SPI
@@ -63,7 +62,7 @@ end entity TOP_LEVEL;
 
 architecture RTL of TOP_LEVEL is
     
---****INTRENAL SIGNALS****
+    --****INTRENAL SIGNALS****
     --General
     signal clk                  :   std_logic;
     signal rst                  :   std_logic;

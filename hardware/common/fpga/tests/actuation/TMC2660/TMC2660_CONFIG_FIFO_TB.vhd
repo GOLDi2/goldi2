@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
@@ -9,25 +9,29 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	none
+-- Dependencies:	-> GODLI_DATA_TYPES.vhd
+--                  -> TMC2660_CONFIG_FIFO.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
 -- Additional Comments: First commitment
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: -  
+-- Additional Comments: - 
+--
+-- Revision V3.00.01 - Standarization of testbenches
+-- Additional Comments: Modification to message format and test cases
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
-library work;
-use work.GOLDI_DATA_TYPES.all;
 --! Use assert library for simulation
 library std;
 use std.standard.all;
+--! Use custom packages
+library work;
+use work.GOLDI_DATA_TYPES.all;
 
 
 
@@ -52,7 +56,7 @@ architecture TB of TMC2660_CONFIG_FIFO_TB is
             rst             : in    std_logic;
             m_read_tready   : in    std_logic;
             m_read_tvalid   : out   std_logic;
-            m_read_tdata    : out   std_logic_vector(19 downto 0)       
+            m_read_tdata    : out   std_logic_vector(23 downto 0)       
         );
     end component;
 
@@ -63,20 +67,20 @@ architecture TB of TMC2660_CONFIG_FIFO_TB is
     signal clock            :   std_logic := '0';
     signal reset            :   std_logic := '0';
     signal run_sim          :   std_logic := '1';
-    --DUT IO
+    --DUT IOs
     constant rom            :   tmc2660_rom(7 downto 0) :=(
-        0 => x"00001",
-        1 => x"00002",
-        2 => x"00003",
-        3 => x"00004",
-        4 => x"00005",
-        5 => x"00006",
-        6 => x"00007",
-        7 => x"00008"
+        0 => x"000001",
+        1 => x"000002",
+        2 => x"000003",
+        3 => x"000004",
+        4 => x"000005",
+        5 => x"000006",
+        6 => x"000007",
+        7 => x"000008"
     );
     signal m_read_tready    :   std_logic;
     signal m_read_tvalid    :   std_logic;
-    signal m_read_tdata     :   std_logic_vector(19 downto 0);
+    signal m_read_tdata     :   std_logic_vector(23 downto 0);
 
 
 begin
@@ -116,15 +120,22 @@ begin
         wait for init_hold;
 
 
-   
+        --**Test reset state**
+        wait for clk_period/2;
+        assert(m_read_tvalid = '1')
+            report "ID01: Test reset - expecting read_valid = '1'" severity error;
+        wait for clk_period/2;
+
+
         --**Test normal operation**
         for i in 1 to 8 loop
             m_read_tready <= '1';
             wait for clk_period/2;
             assert(m_read_tvalid = '1')
-                report "line(125): Test operation - expecting read_valid = '1'" severity error;
-            assert(m_read_tdata = std_logic_vector(to_unsigned(i,20)))
-                report "line(127): Test operation - expecting read_data = " & integer'image(i)
+                report "ID02: Test operation - expecting read_valid = '1'" 
+                severity error;
+            assert(m_read_tdata = std_logic_vector(to_unsigned(i,24)))
+                report "ID03: Test operation - expecting read_data = " & integer'image(i)
                 severity error;
             wait for clk_period/2;
             m_read_tready <= '0';
@@ -134,11 +145,10 @@ begin
 
         wait for clk_period/2;
         assert(m_read_tvalid = '0')
-            report "line(135): Test operation - expecting read_valid = '0'" severity error;
-        assert(m_read_tdata = x"00008")
-            report "line(137): Test operation - expecting read_data = 8" severity error;
+            report "ID04: Test operation - expecting read_valid = '0'" severity error;
+        assert(m_read_tdata = std_logic_vector(to_unsigned(8,24)))
+            report "ID05: Test operation - expecting read_data = 8" severity error;
         wait for clk_period/2;
-
 
 
         --End simulation

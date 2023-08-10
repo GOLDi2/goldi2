@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -114,10 +114,11 @@ begin
 
             --Reset conditions for modle
             if(rst = '1') then
-                rst_buff    <= '1';
-                word_i_buff <= (others => '0');
-                tx_valid    <= '0';
-                spi_ps      <= IDLE;
+                m_word_o_tdata  <= (others => '0');
+                word_i_buff     <= (others => '0');
+                rst_buff        <= '1';
+                tx_valid        <= '0';
+                spi_ps          <= IDLE;
             else
                 rst_buff    <= '0';
             end if;

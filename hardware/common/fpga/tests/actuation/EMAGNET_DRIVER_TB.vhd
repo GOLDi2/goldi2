@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/12/2022
@@ -40,7 +40,7 @@ end entity EMAGNET_DRIVER_TB;
 --! Simulation architecture
 architecture TB of EMAGNET_DRIVER_TB is
 
-    --CUT
+    --****DUT****
     component EMAGNET_DRIVER
         generic(
             ADDRESS		:	natural := 1;
@@ -59,10 +59,10 @@ architecture TB of EMAGNET_DRIVER_TB is
     end component;
 
 
-    --Intermediate Signals
+    --****INTERNAL SIGNALS****
     --Simulation timing
     constant clk_period		:	time := 10 ns;
-	signal reset			:	std_logic;
+	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
 	--DUT i/o
@@ -75,7 +75,14 @@ architecture TB of EMAGNET_DRIVER_TB is
 
 begin
 
+    --****COMPONENT****
+    -----------------------------------------------------------------------------------------------
     DUT : EMAGNET_DRIVER
+    generic map(
+        ADDRESS     => 1,
+        MAGNET_TAO  => 10,
+        DEMAG_TIME  => 5
+    )
     port map(
         clk			=> clock,
         rst			=> reset,
@@ -85,106 +92,111 @@ begin
         em_out_1	=> em_out_1,
         em_out_2	=> em_out_2
     );
+    -----------------------------------------------------------------------------------------------
 
 
-    --Timing
+
+    --****SIMULATION TIMING****
+    -----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
+    reset <= '1' after 5 ns, '0' after 15 ns;
+    -----------------------------------------------------------------------------------------------
 
 
+
+    --****TEST****
+    -----------------------------------------------------------------------------------------------
     TEST : process
-        variable init_hold      :   time := 5*clk_period/2;
+        variable init_hold      :   time := 3*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
         variable post_hold      :   time := clk_period/2;
     begin
-        --Initial setup
-        sys_bus_i.we  <= '0';
-        sys_bus_i.adr <= "0000000";
-        sys_bus_i.dat <= x"00";
+        --Preset bus
+        sys_bus_i <= gnd_sbus_i;
         wait for init_hold;
 
 
-        --Test reset
-        reset <= '1';
-        wait for clk_period;
-        reset <= '0';
-
-        wait for assert_hold;
+        --**Test reset**
+        wait for clk_period/2;
         assert(em_enb.dat = '0') 
-            report "line(113): Reset test - expecting em_enb.dat = '0'" severity error;
+            report "ID01: Reset test - expecting em_enb = '0'" severity error;
         assert(em_out_1.dat = '0')
-            report "line(115): Reset test - expecting em_out_1.dat = '0'" severity error;
+            report "ID02: Reset test - expecting em_out_1 = '0'" severity error;
         assert(em_out_2.dat = '0')
-            report "line(117): Reset test - expecting em_out_2.dat = '0'" severity error;
+            report "ID03: Reset test - expecting em_out_2 = '0'" severity error;
         
         wait for 10*clk_period;
+
         assert(em_enb.dat = '1')
-            report "line(121): Reset test - expecting em_enb.dat = '1'" severity error;
+            report "ID04: Reset test - expecting em_enb = '1'" severity error;
         assert(em_out_1.dat = '0')
-            report "line(123): Reset test - expecting em_out_1.dat = '0'" severity error;
+            report "ID05: Reset test - expecting em_out_1 = '0'" severity error;
         assert(em_out_2.dat = '1')
-            report "line(125): Reset test - expecting em_out_2.dat = '1'" severity error;
+            report "ID06: Reset test - expecting em_out_2 = '1'" severity error;
 
         wait for 5*clk_period;
+
         assert(em_enb.dat = '0') 
-            report "line(129): Reset test - expecting em_enb.dat = '0'" severity error;
+            report "ID07: Reset test - expecting em_enb = '0'" severity error;
         assert(em_out_1.dat = '0')
-            report "line(131): Reset test - expecting em_out_1.dat = '0'" severity error;
+            report "ID08: Reset test - expecting em_out_1 = '0'" severity error;
         assert(em_out_2.dat = '0')
-            report "line(133): Reset test - expecting em_out_2.dat = '0'" severity error;
-        wait for post_hold;
+            report "ID09: Reset test - expecting em_out_2 = '0'" severity error;
+        wait for clk_period/2;
 
 
+        wait for 5*clk_period;
 
-        --Test magnet power on
-        sys_bus_i.we <= '1';
-        sys_bus_i.adr <= "0000001";
-        sys_bus_i.dat <= x"01";
+
+        --**Test magnet power on**
+        sys_bus_i <= writeBus(1,1);
         wait for clk_period;
-        sys_bus_i.we <= '0';
-
+        sys_bus_i <= gnd_sbus_i;
 
         wait for assert_hold;
         assert(em_enb.dat = '1') 
-            report "line(148): Power on test - expecting em_enb.dat = '1'" severity error;
+            report "ID10: Power on test - expecting em_enb = '1'" severity error;
         assert(em_out_1.dat = '1')
-            report "line(150): Power on test - expecting em_out_1.dat = '1'" severity error;
+            report "ID11: Power on test - expecting em_out_1 = '1'" severity error;
         assert(em_out_2.dat = '0')
-            report "line(152): Power on test - expecting em_out_2.dat = '0'" severity error;
+            report "ID12: Power on test - expecting em_out_2 = '0'" severity error;
         wait for post_hold;
 
 
+        wait for 5*clk_period;
 
-        --Test magnet power off
-        sys_bus_i.we  <= '1';
-        sys_bus_i.dat <= x"00";
+
+        --**Test magnet power off**
+        sys_bus_i <= writeBus(1,0);
         wait for clk_period;
-        sys_bus_i.we  <= '0';
+        sys_bus_i <= gnd_sbus_i;
 
         wait for assert_hold;
         assert(em_enb.dat = '0') 
-            report "line(165): Power off test - expecting em_enb.dat = '0'" severity error;
+            report "ID13: Power off test - expecting em_enb = '0'" severity error;
         assert(em_out_1.dat = '0')
-            report "line(167): Power off test - expecting em_out_1.dat = '0'" severity error;
+            report "ID14: Power off test - expecting em_out_1 = '0'" severity error;
         assert(em_out_2.dat = '0')
-            report "line(169): Power off test - expecting em_out_2.dat = '0'" severity error;
+            report "ID15: Power off test - expecting em_out_2 = '0'" severity error;
         
         wait for 10*clk_period;
+
         assert(em_enb.dat = '1')
-            report "line(173): Power off test - expecting em_enb.dat = '1'" severity error;
+            report "ID16: Power off test - expecting em_enb = '1'" severity error;
         assert(em_out_1.dat = '0')
-            report "line(175): Power off test - expecting em_out_1.dat = '0'" severity error;
+            report "ID17: Power off test - expecting em_out_1 = '0'" severity error;
         assert(em_out_2.dat = '1')
-            report "line(177): Power off test - expecting em_out_2.dat = '1'" severity error;
+            report "ID18: Power off test - expecting em_out_2 = '1'" severity error;
 
         wait for 5*clk_period;
-        assert(em_enb.dat = '0') 
-            report "line(181): Power off test - expecting em_enb.dat = '0'" severity error;
-        assert(em_out_1.dat = '0')
-            report "line(183): Power off test - expecting em_out_1.dat = '0'" severity error;
-        assert(em_out_2.dat = '0')
-            report "line(185): Power off test - expecting em_out_2.dat = '0'" severity error;
-        wait for post_hold;
 
+        assert(em_enb.dat = '0') 
+            report "ID19: Power off test - expecting em_enb = '0'" severity error;
+        assert(em_out_1.dat = '0')
+            report "ID20: Power off test - expecting em_out_1 = '0'" severity error;
+        assert(em_out_2.dat = '0')
+            report "ID21: Power off test - expecting em_out_2 = '0'" severity error;
+        wait for post_hold;
 
 
         --End simulation
@@ -193,5 +205,7 @@ begin
         wait;
 
     end process;
+    -----------------------------------------------------------------------------------------------
+
 
 end TB;

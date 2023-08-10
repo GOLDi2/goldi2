@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		10/05/2023
@@ -80,11 +80,11 @@ architecture RTL of TOP_LEVEL is
     --Control register
     constant ctrl_default       :   data_word := x"C0";
     signal ctrl_data            :   data_word;   
-       alias enc_ref_x          :   std_logic is ctrl_data(0);
-       alias enc_ref_z          :   std_logic is ctrl_data(1);
-       alias hold_x_motor       :   std_logic is ctrl_data(2);
-       alias hold_z_motor       :   std_logic is ctrl_data(3);
-	   alias hold_y_motor		:	std_logic is ctrl_data(4);
+        alias enc_ref_x         :   std_logic is ctrl_data(0);
+        alias enc_ref_z         :   std_logic is ctrl_data(1);
+        alias hold_x_motor      :   std_logic is ctrl_data(2);
+	    alias hold_z_motor		:	std_logic is ctrl_data(3);
+        alias unblock_y_axis    :   std_logic is ctrl_data(4);  
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -271,20 +271,19 @@ begin
     -----------------------------------------------------------------------------------------------
     PROTECTION_MASK : entity work.ACTUATOR_MASK
     generic map(
-        ENC_X_INVERT    => X_ENCODER_INVERT,
-        ENC_Z_INVERT    => Z_ENCODER_INVERT,
-        Z_BORDER_MARGIN => Z_BORDER_MARGIN,
-        LIMIT_X_SENSORS => X_PROTECTION_LIMITS,
-        LIMIT_Z_SENSORS => Z_PROTECTION_LIMITS
+        g_enc_x_invert  => X_ENCODER_INVERT,
+        g_enc_z_invert  => Z_ENCODER_INVERT,
+        g_x_box_margins => X_PROTECTION_LIMITS,
+        g_z_box_margins => Z_PROTECTION_LIMITS
     )
     port map(
         clk             => clk,
         rst             => rst,
-        rst_virtual_x   => enc_ref_x,
-        rst_virtual_z   => enc_ref_z,
-        hold_x_motor    => hold_x_motor,
-		hold_y_motor	=> hold_y_motor,
-        hold_z_motor    => hold_z_motor,
+        rst_x_encoder   => enc_ref_x,
+        rst_z_encoder   => enc_ref_z,
+        block_x_margin  => hold_x_motor,
+        block_z_margin  => hold_z_motor,
+        unblock_y_axis  => unblock_y_axis,
         sys_io_i        => external_io_i,
         sys_io_o        => external_io_o,
         safe_io_o       => external_io_o_safe
@@ -293,17 +292,17 @@ begin
 
     ERROR_LIST : entity work.ERROR_DETECTOR
     generic map(
-        ADDRESS         => ERROR_LIST_ADDRESS,
-        ENC_X_INVERT    => X_ENCODER_INVERT,
-        ENC_Z_INVERT    => Z_ENCODER_INVERT,
-        LIMIT_X_SENSORS => X_PROTECTION_LIMITS,
-        LIMIT_Z_SENSORS => Z_PROTECTION_LIMITS
+        g_address       => ERROR_LIST_ADDRESS,
+        g_enc_x_invert  => X_ENCODER_INVERT,
+        g_enc_z_invert  => Z_ENCODER_INVERT,
+        g_x_box_margins => X_SENSOR_LIMITS,
+        g_z_box_margins => Z_SENSOR_LIMITS
     )
     port map(
         clk             => clk,
         rst             => rst,
-        rst_virtual_x   => enc_ref_x,
-        rst_virtual_z   => enc_ref_z,
+        rst_x_encoder   => enc_ref_x,
+        rst_z_encoder   => enc_ref_z,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(2),
         sys_io_i        => external_io_i,

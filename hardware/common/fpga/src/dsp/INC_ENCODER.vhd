@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -9,8 +9,7 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> GOLDI_MODULE_CONFIG.vhd
---					-> GOLDI_COMM_STANDARD.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
 --					-> GOLDI_IO_STANDARD.vhd
 --					-> REGISTER_TABLE.vhd
 --
@@ -87,7 +86,7 @@ architecture RTL of INC_ENCODER is
     signal reg_data_in      :   data_word_vector(memory_length-1 downto 0);
     signal reg_data_buff    :   std_logic_vector(15 downto 0);
     --Arithmetic
-    signal enc_counter      :   integer;
+    signal enc_counter      :   integer := 0;
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     signal enc_block        :   std_logic;
@@ -101,9 +100,13 @@ begin
     begin
         if(rising_edge(clk)) then
             --Reset encoder and block until index channel detection
-            if(rst = '1' or enc_block /= '0') then
+            
+            if(rst = '1') then
                 enc_counter  <= 0;
-    
+                enc_signal_a <= (others => channel_a.dat);
+                enc_signal_b <= channel_b.dat;
+            elsif(enc_block /= '0') then
+                enc_counter <= 0;
             else
                 --Buffer signals to detect rising and falling
                 enc_signal_a <= enc_signal_a(0) & channel_a.dat;
