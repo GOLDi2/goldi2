@@ -9,9 +9,9 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies:	-> REGISTER_TABLE.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+--					-> REGISTER_TABLE.vhd
 --					-> REGISTER_UNIT.vhd
---					-> GOLDI_COMM_STANDARD.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
@@ -22,15 +22,24 @@
 --
 -- Revision V3.00.02 - Minor corrections to the testbench
 -- Additional Comments: -
+--
+-- Revision V3.01.00 - General improvements to simulation control
+-- Additional Comments: Use of env library to stop simulation and
+--						generalization of vector sizes to account for
+--						changes in the GOLDI_COMM_STANDARD library
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for synthesis
+--! Use standard library for simulation control and assertions
+library std;
 use std.standard.all;
---! Use custom library
+use std.env.all;
+--! Use custom packages
+library work;
 use work.GOLDI_COMM_STANDARD.all;
+
 
 
 
@@ -71,14 +80,21 @@ architecture TB of REGISTER_TABLE_TB is
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
 	--DUT IOs
-	constant reg_default	:	data_word_vector(2 downto 0) := (x"FF",x"F0",x"0F");
-	signal sys_bus_i		:	sbus_in;
-	signal sys_bus_o		:	sbus_out;
-	signal data_buff		:	std_logic_vector(19 downto 0) := x"30201";
+	constant reg_default	:	data_word_vector(2 downto 0) := (
+		std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH)),
+		std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH)),
+		std_logic_vector(to_unsigned(15,SYSTEM_DATA_WIDTH)));
+	signal sys_bus_i		:	sbus_in  := gnd_sbus_i;
+	signal sys_bus_o		:	sbus_out := gnd_sbus_o;
 	signal data_in			:	data_word_vector(2 downto 0) := (others => (others => '0'));
-	signal data_out			:	data_word_vector(2 downto 0);
-	signal read_stb			:	std_logic_vector(2 downto 0);
-	signal write_stb		:	std_logic_vector(2 downto 0);
+	signal data_out			:	data_word_vector(2 downto 0) := (others => (others => '0'));
+	signal read_stb			:	std_logic_vector(2 downto 0) := (others => '0');
+	signal write_stb		:	std_logic_vector(2 downto 0) := (others => '0');
+	--Testbench
+	signal data_buff		:	std_logic_vector(3*SYSTEM_DATA_WIDTH-1 downto 0) :=
+		std_logic_vector(to_unsigned(3,SYSTEM_DATA_WIDTH)) &
+		std_logic_vector(to_unsigned(2,SYSTEM_DATA_WIDTH)) &
+		std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
 
 
 begin
@@ -121,24 +137,22 @@ begin
 		variable assert_hold		:	time := 3*clk_period/2;
 		variable post_hold			:	time := clk_period/2;
 	begin
-		--Preset bus
-		sys_bus_i <= gnd_sbus_i;
-		--Wait for initial setup
+		--**Initial setup**
 		wait for init_hold;
 		
 		
 		--**Test reset conditions**
 		wait for assert_hold;
-		assert(data_out(0) = x"0F") 
-			report "line(133): Test reset - expecting data_out(0) = x0F" severity error;
-		assert(data_out(1) = x"F0") 
-			report "line(135): Test reset - expecting data_out(1) = xF0" severity error;
-		assert(data_out(2) = x"FF") 
-			report "line(137): Test reset - expecting data_out(2) = xFF" severity error;
-		assert(read_stb = "000")
-			report "line(139): Test reset - expecting read_stb = 000" severity error;
-		assert(write_stb = "000")
-			report "line(141): Test reset - expecting write_stb = 000" severity error;
+		assert(data_out(0) = std_logic_vector(to_unsigned(15,SYSTEM_DATA_WIDTH))) 
+			report "ID01: Test reset - expecting data_out(0) = x0F" severity error;
+		assert(data_out(1) = std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH))) 
+			report "ID02: Test reset - expecting data_out(1) = xF0" severity error;
+		assert(data_out(2) = std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH))) 
+			report "ID03: Test reset - expecting data_out(2) = xFF" severity error;
+		assert(read_stb = (read_stb'range => '0'))
+			report "ID04: Test reset - expecting read_stb = 000" severity error;
+		assert(write_stb = (write_stb'range => '0'))
+			report "ID05: Test reset - expecting write_stb = 000" severity error;
 		wait for post_hold;
 		
 		
@@ -151,14 +165,14 @@ begin
 		for i in 1 to 3 loop
 			sys_bus_i <= readBus(i);
 			wait for assert_hold;
-			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,8))) 
-				report "line(155): Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
+			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,SYSTEM_DATA_WIDTH))) 
+				report "ID06: Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
 				severity error;
 			assert(sys_bus_o.val = '1')
-				report "line(158): Test bus read - expecting sys_bus_o.val = '1'" 
+				report "ID07: Test bus read - expecting sys_bus_o.val = '1'" 
 				severity error;
 			assert(read_stb(i-1) = '1')
-				report "line(161): Test bus read - expecting read_stb(" & integer'image(i) & ") = '1'"
+				report "ID08: Test bus read - expecting read_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
 		end loop;
@@ -171,14 +185,14 @@ begin
 		for i in 1 to 3 loop
 			sys_bus_i <= writeBus(i,10);
 			wait for assert_hold;
-			assert(sys_bus_o.dat = x"00") 
-				report "line(175): Test bus write - expecting sys_bus_o.dat = x00" 
+			assert(sys_bus_o.dat = (sys_bus_o.dat'range => '0')) 
+				report "ID09: Test bus write - expecting sys_bus_o.dat = x00" 
 				severity error;
-			assert(data_out(i-1) = x"0A") 
-				report "line(178): Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
+			assert(data_out(i-1) = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH))) 
+				report "ID10: Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
 				severity error;
 			assert(write_stb(i-1) = '1')
-				report "line(181): Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
+				report "ID11: Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
 		end loop;		
@@ -186,8 +200,12 @@ begin
 		
 		--End simulation
 		wait for 50 ns;
-		run_sim <= '0';
-		wait;
+        report "REGISTER_TABLE_TB - testbench successful";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        --run_sim <= '0';
+        --wait;
 		
 	end process;
 	-----------------------------------------------------------------------------------------------

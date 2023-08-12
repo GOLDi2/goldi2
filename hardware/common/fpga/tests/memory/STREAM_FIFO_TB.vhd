@@ -13,15 +13,21 @@
 --
 -- Revisions:
 -- Revision V3.00.02 - File Created
--- Additional Comments: First commitment  
+-- Additional Comments: First commitment
+--
+-- Revision V3.01.00 - General improvements to simulation control
+-- Additional Comments: Use of env library to stop simulation and
+--						generalization of vector sizes to account for
+--						changes in the GOLDI_COMM_STANDARD library
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 
 
 
@@ -45,12 +51,12 @@ architecture TB of STREAM_FIFO_TB is
         port(
             clk             : in    std_logic;
             rst             : in    std_logic;
-            s_write_tready  : out   std_logic;
-            s_write_tvalid  : in    std_logic;
-            s_write_tdata   : in    std_logic_vector(FIFO_WIDTH-1 downto 0);        
-            m_read_tready   : in    std_logic;
-            m_read_tvalid   : out   std_logic;
-            m_read_tdata    : out   std_logic_vector(FIFO_WIDTH-1 downto 0)        
+            p_write_tready  : out   std_logic;
+            p_write_tvalid  : in    std_logic;
+            p_write_tdata   : in    std_logic_vector(FIFO_WIDTH-1 downto 0);        
+            p_read_tready   : in    std_logic;
+            p_read_tvalid   : out   std_logic;
+            p_read_tdata    : out   std_logic_vector(FIFO_WIDTH-1 downto 0)        
         );
     end component;   
 
@@ -62,12 +68,12 @@ architecture TB of STREAM_FIFO_TB is
     signal reset            :   std_logic := '0';
     signal run_sim          :   std_logic := '1';
     --DUT IOs
-    signal s_write_tready   :   std_logic;
-    signal s_write_tvalid   :   std_logic;
-    signal s_write_tdata    :   std_logic_vector(7 downto 0);
-    signal m_read_tready    :   std_logic;
-    signal m_read_tvalid    :   std_logic;
-    signal m_read_tdata     :   std_logic_vector(7 downto 0); 
+    signal p_write_tready   :   std_logic := '0';
+    signal p_write_tvalid   :   std_logic := '0';
+    signal p_write_tdata    :   std_logic_vector(7 downto 0) := (others => '0');
+    signal p_read_tready    :   std_logic := '0';
+    signal p_read_tvalid    :   std_logic := '0';
+    signal p_read_tdata     :   std_logic_vector(7 downto 0) := (others => '0'); 
 
 
 begin
@@ -82,12 +88,12 @@ begin
     port map(
         clk             => clock,
         rst             => reset,
-        s_write_tready  => s_write_tready,
-        s_write_tvalid  => s_write_tvalid,
-        s_write_tdata   => s_write_tdata,        
-        m_read_tready   => m_read_tready,
-        m_read_tvalid   => m_read_tvalid,
-        m_read_tdata    => m_read_tdata        
+        p_write_tready  => p_write_tready,
+        p_write_tvalid  => p_write_tvalid,
+        p_write_tdata   => p_write_tdata,        
+        p_read_tready   => p_read_tready,
+        p_read_tvalid   => p_read_tvalid,
+        p_read_tdata    => p_read_tdata        
     );
     -----------------------------------------------------------------------------------------------
 
@@ -108,67 +114,72 @@ begin
         variable init_hold  :   time := 5*clk_period/2;
     begin
         --Preset module
-        s_write_tdata   <= (others => '0');
-        s_write_tvalid  <= '0';
-        m_read_tready   <= '0';
         wait for init_hold;
 
 
         --**Test idle conditions**
-        assert(s_write_tready = '1')
-            report "line(119): Test reset - expecting s_write_tready = '1'" severity error;
-        assert(m_read_tvalid = '0')
-            report "line(121): Test reset - expecting m_read_tvalid = '0'" severity error;
-        assert(m_read_tdata = x"00")
-            report "line(123): Test reset - expecting m_read_tdata = x00" severity error;
+        assert(p_write_tready = '1')
+            report "ID01: Test reset - expecting p_write_tready = '1'" severity error;
+        assert(p_read_tvalid = '0')
+            report "ID02: Test reset - expecting p_read_tvalid = '0'" severity error;
+        assert(p_read_tdata = x"00")
+            report "ID03: Test reset - expecting p_read_tdata = x00" severity error;
+        
+        
         wait for 5*clk_period;
 
 
         --**Test write operation**
         --Expecting ready signal asserted until 4th element
         for i in 1 to 4 loop
-            assert(s_write_tready = '1')
-                report "line(131): Test write - expecting tready = '1' for (" & integer'image(i) & ")"
+            assert(p_write_tready = '1')
+                report "ID04: Test write - expecting tready = '1' for (" & integer'image(i) & ")"
                 severity error;
             
-            s_write_tdata   <= std_logic_vector(to_unsigned(i,8));
-            s_write_tvalid  <= '1';
+            p_write_tdata   <= std_logic_vector(to_unsigned(i,8));
+            p_write_tvalid  <= '1';
             wait for clk_period;
         end loop;
-        s_write_tvalid <= '0';
+        p_write_tvalid <= '0';
 
         wait for clk_period/2;
-        assert(s_write_tready = '0')
-            report "line(142): Test write - expecting tready = '0'" severity error;
+        assert(p_write_tready = '0')
+            report "ID05: Test write - expecting tready = '0'" severity error;
         wait for clk_period/2;
+        
+        
         wait for 5*clk_period;
 
 
         --**Test read operation**
         for i in 1 to 4 loop
-            m_read_tready <= '1';
+            p_read_tready <= '1';
 
             wait for clk_period/2;
-            assert(m_read_tdata = std_logic_vector(to_unsigned(i,8)))
-                report "line(153): Test read - expecting tdata = " & integer'image(i)
+            assert(p_read_tdata = std_logic_vector(to_unsigned(i,8)))
+                report "ID06: Test read - expecting tdata = " & integer'image(i)
                 severity error;
-            assert(m_read_tvalid = '1')
-                report "line(156): Test read - expecting tvalid = '1'" 
+            assert(p_read_tvalid = '1')
+                report "ID07: Test read - expecting tvalid = '1'" 
                 severity error;
             wait for clk_period/2;
         end loop;
-        m_read_tready <= '0';
+        p_read_tready <= '0';
 
         wait for clk_period/2;
-        assert(m_read_tvalid = '0')
-            report "line(164): Test read - expecting tvalid = '0'" severity error;
+        assert(p_read_tvalid = '0')
+            report "ID08: Test read - expecting tvalid = '0'" severity error;
         wait for clk_period/2;
 
         
         --**End simulation**
-        wait for 5*clk_period;
-        run_sim <= '0';
-        wait;
+        wait for 50 ns;
+        report "STREAM_FIFO_TB - testbench successful";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        --run_sim <= '0';
+        --wait;
     
     end process;
     -----------------------------------------------------------------------------------------------
