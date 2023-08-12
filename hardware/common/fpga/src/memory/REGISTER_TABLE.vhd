@@ -22,6 +22,11 @@
 -- Additional Comments: Introduction of REGISTER_UNIT to solve problems
 --                      with register indexing and introduction of read_stb
 --                      signal for use in fifo structures
+--
+-- Revision V3.01.00 - Modification to the default generic parameters
+-- Additional Comments: Introduction of reg_table_default as parameter
+--                      to prevent synthesis errors when changes to the 
+--                      SYSTEM_DATA_WIDTH parameter are applied
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -34,36 +39,62 @@ use work.GOLDI_COMM_STANDARD.all;
 
 
 
---! @brief Configurable table of registers
+--! @brief Custom dual port data register set
 --! @details
---! Table of registers with configurable base address, length and 
---! initialization values. BUS interface reads the internal port input
---! data and writes to the internal output data registers while
---! also flaging the internal system of the changes through the stb signals.
---! The module uses assertions for verification of proper parameters configured
---! in the GOLDI_MODULE_CONFIG package during synthesis.
+--! The REGISTER_TABLE module is a dual port memory unit capable of storing
+--! multiple data words with a width defined by the SYSTEM_DATA_WIDTH parameter
+--! in the GOLDI_COMM_STANDARD package.
 --!
---! **Latency: 1**
+--! The module allows the data interchange between the individual submodules 
+--! building the GOLDi Model and the custom SPI master interface (SPI_TO_BUS).
+--! The register counts with two independent ports: the custom BUS port and the
+--! internal data port.
+--!
+--! The custom BUS interface is an addressable port that can access one of the
+--! a single data word at a time and perform exclusive write or read operations. 
+--! The data word accessed is defined by the address value presented in the input
+--! BUS signals. A read operation returns the data present in the "data_in" input
+--! corresponding to the data word address; and a write operation overwrites the 
+--! data present on the "data_out" output of the address. The custom BUS structure
+--! and its corresponding signals are defined in the GOLDI_COMM_STANDARD package.
+--!
+--! The internal data port can modify multiple "registers" at any moment and can
+--! perform simultaneous read and write operations. Additionaly the "read_stb" and
+--! "write_stb" flags indicate write and read operations performed by the BUS port
+--! on the corresponding "register" allowing for data flow control.
+--!
+--! The base address of the register table, the table length and the default values
+--! of the registers can be configured using generic parameters.
+--!
+--! Two architectures have been designed for the REGISTER_TABLE. The RTL architecture
+--! uses a cascading principle and instantiates multiple REGISTER_UNITs to generate the
+--! table. The valid signal of the BUS output signals is used to asynchronously multiplex
+--! the output data. The EXPERIMENTAL architecture uses instead data word arrays to 
+--! store the data. A decoder converts the address signal into the array index and allows
+--! the data to be accessed. This reduces the complexity of the output data multiplexing.
+--!
+--! **Latency: 1cyc**
 entity REGISTER_TABLE is
 	generic(
-		BASE_ADDRESS		:	integer := 1;                                       --! Base address of module
+		BASE_ADDRESS		:	integer := 1;                                       --! Register table lowest address
 		NUMBER_REGISTERS	:	integer := 3;                                       --! Length of register table
-		REG_DEFAULT_VALUES	:	data_word_vector := (x"0F",x"F0",x"FF")             --! Reset default values for registers
+		REG_DEFAULT_VALUES	:	data_word_vector := reg_table_default               --! Reset default values for registers
 	);
 	port(
 		--General
 		clk				    : in	std_logic;                                      --! System clock
-		rst				    : in	std_logic;                                      --! Synchronous reset
+		rst				    : in	std_logic;                                      --! Asynchronous reset
 		--Communication
-		sys_bus_i		    : in	sbus_in;                                        --! BUS input signals [we,adr,dat]
-		sys_bus_o		    : out	sbus_out;                                       --! BUS output signals [dat,val]
+		sys_bus_i		    : in	sbus_in;                                        --! BUS port input signals [we,adr,dat]
+		sys_bus_o		    : out	sbus_out;                                       --! BUS port output signals [dat,valid]
 		--Internal port
-		data_in		        : in	data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Register read data
-		data_out	        : out   data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Register write data
-		read_stb	        : out	std_logic_vector(NUMBER_REGISTERS-1 downto 0);  --! Strobe signal - bus read performed
-        write_stb           : out   std_logic_vector(NUMBER_REGISTERS-1 downto 0)   --! Strobe signal - bus write performed
+		data_in		        : in	data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Data port write data vector - BUS port read data vector
+		data_out	        : out   data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Data port read data vector - BUS port write data vector
+		read_stb	        : out	std_logic_vector(NUMBER_REGISTERS-1 downto 0);  --! Read strobe signal indicates a read operation by the BUS port 
+        write_stb           : out   std_logic_vector(NUMBER_REGISTERS-1 downto 0)   --! Write strobe signal indicates a write operation by the BUS port 
     );
 end entity REGISTER_TABLE;
+
 
 
 

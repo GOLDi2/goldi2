@@ -102,8 +102,9 @@ package GOLDI_COMM_STANDARD is
 
 
 
-    --****BUS CONSTANTS****
+    --****CONSTANTS****
     -----------------------------------------------------------------------------------------------
+    --**BUS Constants** 
     --Master interface constants
     constant gnd_mbus_o     :   mbus_out :=(
         we  => '0',
@@ -127,6 +128,21 @@ package GOLDI_COMM_STANDARD is
         dat => (others => '0'),
         val => '0'
     );
+
+
+    --**Register systhesis constants**
+    --Initialization constant used as default generic paramter for REGISTER_UNIT. Constant
+    --allows changes to the SYSTEM_DATA_WIDTH constant for simulation or synthesis of the 
+    --module as an independent unit 
+    constant reg_unit_default   :   data_word := (others => '0');
+
+    --Initialization constant used as default generic paramter for REGISTER_TABLE. Constant
+    --allows changes to the SYSTEM_DATA_WIDTH constant for simulation or synthesis of the 
+    --module as an independent unit 
+    constant reg_table_default  :   data_word_vector(2 downto 0) :=
+        (std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH)),
+         std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH)),
+         std_logic_vector(to_unsigned( 15,SYSTEM_DATA_WIDTH)));
     -----------------------------------------------------------------------------------------------
 
 
