@@ -29,25 +29,46 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 
---! @brief
+--! @brief ROM based fifo unit for initial configuration of ICs
 --! @details
+--! The ROM16XN_FIFO is a static First-In / First-Out memory structure designed 
+--! to progressively load the configuration data needed to initialize an IC, for
+--! example an external sensor or a motor driver. The ROM16XN_FIFO module uses
+--! multiple PFU (Programmable Function Units) based ROM units with a width of 
+--! 16 bits to store the configuration data provided by the generic parameter
+--! "g_init_values". Once the initial delay time (g_init_delay*sys_clock_period)
+--! has elapsed, the module starts loading the configuration word by accessing the
+--! individual ROM bits. Once the configuration word has been loaded the valid 
+--! flag is asserted allowing the data transfer based on a tvalid/tready handshake
+--! in which data is registered when both valid and ready flags are high. The process
+--! described previously is repeted until all ROM units have been paresed or 
+--! the number of bits remaining is insuficient to fill a configuration word. When
+--! the last configuration word has been transfered the module enters an idle
+--! state and asserts the fifo_empty flag. 
+--! 
+--! The ROM16XN_FIFO uses ROM16X1A component of the machxo2 lattice library
+--! available for the LCMXO2 lattice devices to optimize the synthesis of the ROM
+--! units. The use of PFU ROM limits the use of this module to small initialization
+--! protocols.
 --!
+--! The time taken by the module to load a configuration word corresponds to
+--! g_data_width*sys_clock_period. 
 entity ROM16XN_FIFO is
     generic(
-        g_data_width    :   integer := 16;
-        g_init_delay    :   integer := 100;
-        g_init_values   :   array_16_bit := (x"00FF",x"000F")
+        g_data_width    :   integer := 16;                                      --! Configuration word width
+        g_init_delay    :   integer := 100;                                     --! Initial time delay before module starts operating
+        g_init_values   :   array_16_bit := (x"00FF",x"000F")                   --! Configuration data formated in 16-bit words
     );
     port(
         --General 
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk             : in    std_logic;                                      --! System clock
+        rst             : in    std_logic;                                      --! Asynchronous reset
         --Flag
-        o_fifo_empty    : out   std_logic;
-        --Data interface
-        i_cword_tready  : in    std_logic;
-        o_cword_tvalid  : out   std_logic;
-        o_cword_tdata   : out   std_logic_vector(g_data_width-1 downto 0)
+        p_fifo_empty    : out   std_logic;                                      --! Complete configuration data transfered, module in idle state
+        --Data interface 
+        p_cword_tready  : in    std_logic;                                      --! Ready flag - configuration data recipient ready for transfer
+        p_cword_tvalid  : out   std_logic;                                      --! Valid flag - configuration data transmitter ready for transfer
+        p_cword_tdata   : out   std_logic_vector(g_data_width-1 downto 0)       --! Configuration data word
     );
 end entity;
 
@@ -128,9 +149,9 @@ begin
                 end if;
 
             when s_transfer =>
-                if(i_cword_tready = '1' and rom_blocK_counter = g_init_values'length) then
+                if(p_cword_tready = '1' and rom_blocK_counter = g_init_values'length) then
                     ps_fifo <= s_idle;
-                elsif(i_cword_tready = '1') then
+                elsif(p_cword_tready = '1') then
                     ps_fifo <= s_load;
                 else
                     ps_fifo <= s_transfer;
@@ -152,11 +173,11 @@ begin
     EMPTY_FLAG_CONTROL : process(rst,ps_fifo)
     begin
         if(rst = '1') then
-            o_fifo_empty <= '0';
+            p_fifo_empty <= '0';
         elsif(ps_fifo = s_idle) then
-            o_fifo_empty <= '1';
+            p_fifo_empty <= '1';
         else
-            o_fifo_empty <= '0';
+            p_fifo_empty <= '0';
         end if;
     end process;
 
@@ -164,11 +185,11 @@ begin
     READY_FLAG_CONTROL : process(rst,ps_fifo)
     begin
         if(rst = '1') then
-            o_cword_tvalid <= '0';
+            p_cword_tvalid <= '0';
         elsif(ps_fifo = s_transfer) then
-            o_cword_tvalid <= '1';
+            p_cword_tvalid <= '1';
         else
-            o_cword_tvalid <= '0';
+            p_cword_tvalid <= '0';
         end if;
     end process;
 
@@ -176,12 +197,12 @@ begin
     DATA_CONTROL : process(clk, rst)
     begin
         if(rst = '1') then
-            o_cword_tdata <= (others => '0');
+            p_cword_tdata <= (others => '0');
         elsif(rising_edge(clk)) then
             if(ps_fifo = s_delay or ps_fifo = s_idle) then
-                o_cword_tdata <= (others => '0');
+                p_cword_tdata <= (others => '0');
             elsif(ps_fifo = s_load) then
-                o_cword_tdata(data_bit_counter) <= rom_output(rom_blocK_counter);
+                p_cword_tdata(data_bit_counter) <= rom_output(rom_blocK_counter);
             else null;
             end if;
         end if;
