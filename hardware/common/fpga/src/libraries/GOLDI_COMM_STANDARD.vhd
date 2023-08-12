@@ -21,6 +21,10 @@
 -- Revision V2.00.00 - Defualt module version for release 2.00.00
 -- Additional Comments: Release of Warehouse_V2. Correction of
 --                      slice ranges
+--
+-- Revision V3.01.00 - Additional simulation resources
+-- Additional Comments: Simulation procedures and functions for use in
+--                      verification simulations of the GOLDi boards
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -35,21 +39,31 @@ package GOLDI_COMM_STANDARD is
     --****SYSTEM GENERAL CONSTANTS****
     -----------------------------------------------------------------------------------------------
 	--Address width sets the protocol for SPI communication and the number of possible registers
-    --SPI communication protocol takes first bit of the configuration byte's for write enable
-    --because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
+    --SPI communication protocol takes first bit of the configuration byte as write enable bit.
+    --Because of that BUS_ADDRESS_WIDTH = (n*bytes)-1
     constant BUS_ADDRESS_WIDTH	    :	natural range 7 to 31 := 15;
 
-    --Main parameter of the system. Sets the width of data words 
+    --Main parameter of the GOLDi system. Sets the width of standard "data_word" vector which is 
+    --the data unit used by the GOLDi system's registers, bus structure, and main communication 
+    --modules.
 	constant SYSTEM_DATA_WIDTH	    :	natural range 8 to 32 := 8;
+
+    --SPI word length defined by the number of bits needed for a single SPI transaction.
+    --The constant is used in simulations.
+    constant SPI_DATA_WIDTH         :   natural := BUS_ADDRESS_WIDTH + SYSTEM_DATA_WIDTH +1;
     -----------------------------------------------------------------------------------------------
 
 
 
     --****SYSTEM DATA VECTORS****
     -----------------------------------------------------------------------------------------------
+    --Definition of the address vector used by the custom BUS and custom SPI interface to access
+    --the system registers and arbitrate the incomming and outgoing data
     subtype address_word  is std_logic_vector(BUS_ADDRESS_WIDTH-1 downto 0);
-    subtype data_word     is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-    
+
+    --Definition of "data word" and "data word vector" used as the standard data units in the
+    --GOLDi system.
+    subtype data_word     is std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);    
     type data_word_vector is array(natural range <>) of data_word;
     -----------------------------------------------------------------------------------------------
 
@@ -58,12 +72,18 @@ package GOLDI_COMM_STANDARD is
     --****SYSTEM BUS****
     -----------------------------------------------------------------------------------------------
     --Master interface structures
+    -- + we:  write enable indicates a write operation when high and read operation when low
+    -- + adr: address of accessed register in the GOLDi system
+    -- + dat: write data for accessed register (ignored in read operation)
     type mbus_out is record
         we  :   std_logic;
         adr :   address_word;
         dat :   data_word;
     end record;
 
+    -- + dat: read data of accessed register (ignored in write operation)
+    -- + val: operation valid, indicates the end of a wirte operation and data available for the
+    --        read operation. Signal can be used to multiplex the bus
     type mbus_in is record
         dat :   data_word;
         val :   std_logic;
@@ -96,6 +116,7 @@ package GOLDI_COMM_STANDARD is
         val => '0'
     );
 
+    --Slave interface constants
     constant gnd_sbus_i     :   sbus_in := (
         we  => '0',
         adr => (others => '0'),
@@ -113,12 +134,17 @@ package GOLDI_COMM_STANDARD is
     --****FUNCTIONS****
     -----------------------------------------------------------------------------------------------
     --Synthesisable functions
-    function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
-    function reduceRegStrobe(stb_vector : std_logic_vector) return std_logic;
+    --Parametrization functions
     function getMemoryLength(vector_length : natural) return natural;
+    --BUS management functions
+    function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
+    function reduceBusVector2(bus_vector : sbus_o_vector) return sbus_out;
+    --Data management functions
     function setMemory(data_vector : std_logic_vector) return data_word_vector;
     function getMemory(data_vector : data_word_vector) return std_logic_vector;
+    function reduceRegStrobe(stb_vector : std_logic_vector) return std_logic;
     function invertIndex(data_vector : std_logic_vector) return std_logic_vector;
+
     --Simulation functions
     function readBus(adr : std_logic_vector) return mbus_out;
     function readBus(adr : natural) return mbus_out;
@@ -130,9 +156,6 @@ package GOLDI_COMM_STANDARD is
 
     --****POCEDURES****
     -----------------------------------------------------------------------------------------------
-    --SPI transfered word length. Used in simulations.
-    constant SPI_DATA_WIDTH     :   natural := BUS_ADDRESS_WIDTH + SYSTEM_DATA_WIDTH +1;
-
     --Simulation procedures
     procedure p_spiTransaction(
         constant c_sclk_period  : in    time;
@@ -154,38 +177,6 @@ package body GOLDI_COMM_STANDARD is
 
     --****SYNTHESIS FUNCTIONS****
     -----------------------------------------------------------------------------------------------
-    --! @brief BUS vector "sbus_out" multiplexer 
-    --! @details
-    --! Returns a sbus_out structure corresponding to the addressed register.
-	--! Used in synthesis to generate multiplexer for multiple register tables.
-    function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
-    begin
-        for i in bus_vector'range loop
-            if(bus_vector(i).val = '1') then
-                return bus_vector(i);
-            end if;
-        end loop;
-
-        return gnd_sbus_o;
-    end function;
-
-
-
-    --! @brief Strobe vector reduction
-    --! @details
-    --! Function reduces the strobe vector of the REGISTER_TABLE to a  
-    --! std_logic signal equivalent to the "or" operation
-    function reduceRegStrobe(stb_vector : std_logic_vector) return std_logic is
-    begin
-        if((stb_vector'range => '0') = stb_vector) then
-            return '0';
-        else
-            return '1';
-        end if;
-    end function;
-
-
-
     --! @brief Get number of registers for a std_logic_vector range
     --! @details 
     --! Returns the minimum number of registers needed to save a vector of  a given 
@@ -203,6 +194,49 @@ package body GOLDI_COMM_STANDARD is
 
         return quotient; 
     end function;
+    
+
+
+    --! @brief BUS vector "sbus_out" multiplexer 
+    --! @details
+    --! Returns a sbus_out structure corresponding to the addressed register.
+    --! The function uses the "val" signal in the bus interface to multiplex the bus vector.
+	--! The function is used in synthesis to generate arbitrate the data of multiple
+    --! register tables and register. 
+    function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out is
+    begin
+        for i in bus_vector'range loop
+            if(bus_vector(i).val = '1') then
+                return bus_vector(i);
+            end if;
+        end loop;
+
+        return gnd_sbus_o;
+    end function;
+
+
+
+    --! @brief BUS vector "sbus_out" multiplexer
+    --! @details
+    --! Returns a sbus_out structure corresponding to the addressed register.
+    --! The function performs an "or" function accross the vector. Because all sbus_out
+    --! interfaces are grounded when not addressed, the result equals the addressed register
+    --! interface. The function is used in synthesis to generate arbitrate the data of multiple
+    --! register tables and register.
+    function reduceBusVector2(bus_vector : sbus_o_vector) return sbus_out is
+        variable rbus   :   sbus_out := gnd_sbus_o;
+    begin
+        for i in bus_vector'range loop
+            for j in data_word'range loop
+                rbus.dat(j) := rbus.dat(j) or bus_vector(i).dat(j);
+            end loop;
+
+            rbus.val := rbus.val or bus_vector(i).val;
+        end loop;
+
+        return rbus;
+    end function;
+
 
 
     --! @brief Convert std_logic_vector to data_word_vector
@@ -250,6 +284,21 @@ package body GOLDI_COMM_STANDARD is
 
 		return vector;
 	end function;
+
+
+
+    --! @brief Strobe vector reduction
+    --! @details
+    --! Function reduces the strobe vector of the REGISTER_TABLE to a  
+    --! std_logic signal equivalent to the "or" operation
+    function reduceRegStrobe(stb_vector : std_logic_vector) return std_logic is
+    begin
+        if((stb_vector'range => '0') = stb_vector) then
+            return '0';
+        else
+            return '1';
+        end if;
+    end function;
 
 
 
@@ -316,8 +365,8 @@ package body GOLDI_COMM_STANDARD is
 
     --! @brief Configure BUS to write register
     --! @details
-    -- Function used for simulation. Converts std_logic_vector into 
-    -- master bus input configured for read operation
+    --! Function used for simulation. Converts std_logic_vector into 
+    --! master bus input configured for read operation
     function writeBus(adr : std_logic_vector; dat : std_logic_vector) return mbus_out is
         variable adr_buff   :   std_logic_vector(adr'high downto adr'low);
         variable dat_buff   :   std_logic_vector(dat'high downto dat'low);
@@ -349,8 +398,8 @@ package body GOLDI_COMM_STANDARD is
 
     --! @brief Configure BUS to write register
     --! @details
-    -- Function used for simulation. Converts natural integer into 
-    -- master bus input configured for read operation
+    --! Function used for simulation. Converts natural integer into 
+    --! master bus input configured for read operation
     function writeBus(adr : natural; dat : natural) return mbus_out is
         variable sys_bus : mbus_out;
     begin
@@ -366,6 +415,12 @@ package body GOLDI_COMM_STANDARD is
     
     --****SIMULATION PROCEDURES****
     -----------------------------------------------------------------------------------------------
+    --! @brief Custom SPI master interface for use in GOLDi board's "_BS.vhd" simulations
+    --! @details
+    --! The procedure simulates a SPI master unit that drives the FPGA unit in the GOLDi model.
+    --! This is used in the verification simulation for the top modules of the GOLDi models to
+    --! simulate the microcontroller that controlls the FPGA. The procedure simulates a single
+    --! SPI transaction.
     procedure p_spiTransaction(
         constant c_sclk_period  : in    time;
         signal i_mosi_data      : in    std_logic_vector(SPI_DATA_WIDTH-1 downto 0);

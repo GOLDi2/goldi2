@@ -4,7 +4,7 @@
 --
 -- Create Date:		15/04/2023
 -- Design Name:		Crossbar data types and constants for testing
--- Module Name:		GOLDI_CROSSBAR_DEFAULT
+-- Module Name:		GOLDI_CROSSBAR_DEFAULT (MOCKUP)
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
@@ -17,6 +17,10 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V3.00.00 - Library modified to tamplate
+-- Additional Comments: "MOCKUP" denomination added to avoid multiple 
+--                      versions of the file when simulating CROSSBAR
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -33,7 +37,7 @@ package GOLDI_CROSSBAR_DEFAULT_MOCKUP is
 
     --****CROSBAR DATA STURCTURES****
 	-----------------------------------------------------------------------------------------------
-	type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+    type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
 	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
 	-----------------------------------------------------------------------------------------------
     

@@ -3,11 +3,11 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		GOLDi data types for complex structures 
--- Module Name:		GOLDI_DATA_TYPES.vhd
+-- Design Name:		Special data types for the GOLDi project 
+-- Module Name:		GOLDI_DATA_TYPES
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition  
 --
 -- Dependencies:	none
 --
@@ -28,10 +28,14 @@ use IEEE.numeric_std.all;
 
 package GOLDI_DATA_TYPES is
 
-    --****TMC2660 ROM MEMORY - SLICE USE****
+    --****ROM MEMORY - PFU BASED STRUCTURES****
 	-----------------------------------------------------------------------------------------------
-    type tmc2660_rom is array(natural range <>) of std_logic_vector(23 downto 0);
+    --PFU ROM memory for the general use ROM16XN_FIFO module used to initialize ICs
     type array_16_bit is array(natural range <>) of std_logic_vector(15 downto 0);
+
+    --PFU ROM memory for the TMC2660 stepper motor driver module. The rom is used to configure
+    --the initial state of the IC 
+    type tmc2660_rom is array(natural range <>) of std_logic_vector(23 downto 0);
 	-----------------------------------------------------------------------------------------------
 
 
