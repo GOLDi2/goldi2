@@ -16,7 +16,10 @@
 -- Additional Comments: First commitment
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: -  
+-- Additional Comments: - 
+--
+-- Revision V4.00.00 - Extension of package documentation
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -27,6 +30,7 @@ use IEEE.numeric_std.all;
 
 
 package GOLDI_DATA_TYPES is
+
 
     --****ROM MEMORY - PFU BASED STRUCTURES****
 	-----------------------------------------------------------------------------------------------
@@ -42,7 +46,13 @@ package GOLDI_DATA_TYPES is
 
     --****VIRTUAL SENSOR ARRAY LIMITS****
     -----------------------------------------------------------------------------------------------
+    --The sensor_limit data type is a representation of an interval usign two integers.
+    --The first integer in the array represent the middle point (arithmetic average) of the 
+    --interval. The second integer represents the symetric range of the interval.
+    --Example: The interval (10,5) is to be interpreted as the interval [10-5|10+5].
     type sensor_limit is array(1 downto 0) of integer;
+
+    --Vector structure of limit arrays for codification of multiple intervals
     type sensor_limit_array is array(natural range <>) of sensor_limit;
     -----------------------------------------------------------------------------------------------
 
