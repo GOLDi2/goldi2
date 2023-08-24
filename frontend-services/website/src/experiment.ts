@@ -13,7 +13,7 @@ export function experiment_router(language: string, renderPage: renderPageType, 
             return renderPage('experiment', language, res, req.user);
         }
 
-        let experiment: ExperimentServiceTypes.Experiment<"request"> = {}
+        let experiment: ExperimentServiceTypes.Experiment<'request'> = {}
         if (req.method === 'GET') {
             try {
                 experiment = await buildSimpleExperiment(req)
@@ -50,23 +50,18 @@ export function experiment_router(language: string, renderPage: renderPageType, 
         return renderPage('experiment', language, res, req.user, { experiment, pspus, bpus });
     }
 
-    async function experimentSetup(req: Request, res: Response, _next: NextFunction, experiment: ExperimentServiceTypes.Experiment) {
+    async function experimentSetup(req: Request, res: Response, _next: NextFunction, experiment: ExperimentServiceTypes.Experiment<"response">) {
         if (experiment.status !== 'setup') {
             throw new Error('Experiment is not in setup phase')
         }
         const instances: { codeUrl: string, instanceUrl: string, deviceToken: string }[] = []
-        for (const device of experiment.devices ?? []) {
-            if (device.device) {
-                const setupProps = device.additionalProperties as { instanceUrl?: string, deviceToken?: string }
-                const deviceDetails = await req.apiClient.getDevice(device.device)
-                console.log({ deviceDetails, setupProps })
-                if (deviceDetails.type === 'edge instantiable' && setupProps.instanceUrl && setupProps.deviceToken && deviceDetails.codeUrl) {
-                    device.device = setupProps.instanceUrl
-                    instances.push({ codeUrl: deviceDetails.codeUrl, instanceUrl: setupProps.instanceUrl, deviceToken: setupProps.deviceToken })
-                }
+        for (const device of experiment.instantiatedDevices ?? []) {
+            const deviceDetails = await req.apiClient.getDevice(device.instanceOf)
+            if (deviceDetails.type === 'edge instantiable' && device.url && device.token && deviceDetails.codeUrl) {
+                instances.push({ codeUrl: deviceDetails.codeUrl, instanceUrl: device.url, deviceToken: device.token })
             }
         }
-        await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
+        //await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
         return renderPage('experiment-setup', language, res, req.user, { experiment, instances });
     }
 
@@ -104,7 +99,7 @@ const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
     }
 ]
 
-async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment<"request">> {
+async function buildSimpleExperiment(req: Request): Promise<ExperimentServiceTypes.Experiment<'request'>> {
     const pspu = req.query.pspu as string
     const bpu = req.query.bpu as string
     const ecp = 'https://api.goldi-labs.de/devices/cc1de37e-1a6a-4470-affd-12eb41a3231e'
