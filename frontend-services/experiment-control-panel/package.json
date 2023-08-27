@@ -18,6 +18,7 @@
     "@cross-lab-project/soa-service-file": "file:../../crosslab/clients/soa_services/file/js",
     "@cross-lab-project/soa-service-webcam": "file:../../crosslab/clients/soa_services/webcam/js",
     "@cross-lab-project/soa-service-message": "file:../../crosslab/clients/soa_services/message/js",
+    "@cross-lab-project/soa-service-parameter": "file:../../crosslab/clients/soa_services/parameter/js",
     "isomorphic-ws": "5.0.0",
     "autoprefixer": "^10.4.11",
     "cross-fetch": "^3.1.5",
