@@ -10,6 +10,7 @@
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
 -- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+--					-> REGISTER_UNIT.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
@@ -23,10 +24,12 @@
 --                      with register indexing and introduction of read_stb
 --                      signal for use in fifo structures
 --
--- Revision V3.01.00 - Modification to the default generic parameters
--- Additional Comments: Introduction of reg_table_default as parameter
---                      to prevent synthesis errors when changes to the 
---                      SYSTEM_DATA_WIDTH parameter are applied
+-- Revision V4.00.00 - Extension of BUS protocol and reset change
+-- Additional Comments: Change from synchronous to asynchronous reset and
+--                      introduction of "stb" signal to the GOLDi BUS 
+--                      interface to prevent continuous read and write 
+--                      operations. Addition of tags to the BUS interfaces
+--                      to extend BUS flexibility
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -46,12 +49,12 @@ use work.GOLDI_COMM_STANDARD.all;
 --! in the GOLDI_COMM_STANDARD package.
 --!
 --! The module allows the data interchange between the individual submodules 
---! building the GOLDi Model and the custom SPI master interface (SPI_TO_BUS).
---! The register counts with two independent ports: the custom BUS port and the
---! internal data port.
+--! in the GOLDi Board Models and the custom SPI master interface 
+--! (GOLDI_SPI_SMODULE). The register counts with two independent ports: the
+--! custom BUS port and the internal data port.
 --!
---! The custom BUS interface is an addressable port that can access one of the
---! a single data word at a time and perform exclusive write or read operations. 
+--! The custom BUS interface is an addressable port that can access one data word 
+--! at a time and perform exclusive write or read operations. 
 --! The data word accessed is defined by the address value presented in the input
 --! BUS signals. A read operation returns the data present in the "data_in" input
 --! corresponding to the data word address; and a write operation overwrites the 
@@ -66,28 +69,28 @@ use work.GOLDI_COMM_STANDARD.all;
 --! The base address of the register table, the table length and the default values
 --! of the registers can be configured using generic parameters.
 --!
---! Two architectures have been designed for the REGISTER_TABLE. The RTL architecture
---! uses a cascading principle and instantiates multiple REGISTER_UNITs to generate the
---! table. The valid signal of the BUS output signals is used to asynchronously multiplex
---! the output data. The EXPERIMENTAL architecture uses instead data word arrays to 
---! store the data. A decoder converts the address signal into the array index and allows
---! the data to be accessed. This reduces the complexity of the output data multiplexing.
+--! Two architectures have been designed for the REGISTER_T_TABLE. The RTL architecture
+--! uses a cascading principle and instantiates multiple REGISTER_T_UNITs to generate the
+--! table. An "or" operation is used to return the data from the addressed regiseter. The 
+--! EXPERIMENTAL architecture uses instead data word arrays to store the data. A decoder 
+--! converts the address signal into the array index and allows the data to be accessed.
+--! This reduces the timing of the output data routing.
 --!
 --! **Latency: 1cyc**
 entity REGISTER_TABLE is
 	generic(
 		BASE_ADDRESS		:	integer := 1;                                       --! Register table lowest address
 		NUMBER_REGISTERS	:	integer := 3;                                       --! Length of register table
-		REG_DEFAULT_VALUES	:	data_word_vector := reg_table_default               --! Reset default values for registers
+		REG_DEFAULT_VALUES	:	data_word_vector := reg_table_d_default             --! Reset default values for registers
 	);
 	port(
 		--General
 		clk				    : in	std_logic;                                      --! System clock
 		rst				    : in	std_logic;                                      --! Asynchronous reset
-		--Communication
-		sys_bus_i		    : in	sbus_in;                                        --! BUS port input signals [we,adr,dat]
-		sys_bus_o		    : out	sbus_out;                                       --! BUS port output signals [dat,valid]
-		--Internal port
+        --BUS interface
+		sys_bus_i		    : in	sbus_in;                                        --! BUS port input signals [stb,we,adr,dat,tag]
+		sys_bus_o		    : out	sbus_out;                                       --! BUS port output signals [dat,tag]
+     	--Data interface
 		data_in		        : in	data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Data port write data vector - BUS port read data vector
 		data_out	        : out   data_word_vector(NUMBER_REGISTERS-1 downto 0);  --! Data port read data vector - BUS port write data vector
 		read_stb	        : out	std_logic_vector(NUMBER_REGISTERS-1 downto 0);  --! Read strobe signal indicates a read operation by the BUS port 
@@ -98,81 +101,89 @@ end entity REGISTER_TABLE;
 
 
 
---! Experimental architecure used to reduce multiplexing
-architecture EXPERIMENTAL of REGISTER_TABLE is
-  
-    --****INTERNAL SIGNALS****
-    --Address constants
-    constant min_address    :   signed(BUS_ADDRESS_WIDTH downto 0) 
-                                := to_signed(BASE_ADDRESS,BUS_ADDRESS_WIDTH+1);
-    constant max_address    :   signed(BUS_ADDRESS_WIDTH downto 0)
-                                := to_signed(BASE_ADDRESS+NUMBER_REGISTERS,BUS_ADDRESS_WIDTH+1);
+--! Secondary architecture used to reduce multiplexing fan-in
+architecture BH of REGISTER_TABLE is
 
+	--****INTERNAL SIGNALS****
+	--Address constants
+	constant min_address	:	signed(BUS_ADDRESS_WIDTH downto 0)
+		:= to_signed(BASE_ADDRESS,BUS_ADDRESS_WIDTH+1);
+	constant max_address	:	signed(BUS_ADDRESS_WIDTH downto 0)
+		:= to_signed(BASE_ADDRESS+NUMBER_REGISTERS,BUS_ADDRESS_WIDTH+1);
 
 begin
 
-    READ_OPERATION : process(clk,rst)
-        variable reg_index  :   signed(BUS_ADDRESS_WIDTH downto 0);
-        variable adr_buff   :   std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
-    begin
-        if(rst = '1') then
-            sys_bus_o <= gnd_sbus_o;
-            read_stb  <= (others => '0');
-        
-        elsif(rising_edge(clk)) then
-            --Ground read strobe to avoid multiple stb when continous reading
-            read_stb  <= (others => '0');
-            --Decode address 
-            adr_buff  := "0" & sys_bus_i.adr;
-            reg_index := signed(adr_buff) - min_address;
+	READ_OPERATION : process(clk,rst)
+		variable bus_adr	:	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+		variable reg_index	:	signed(BUS_ADDRESS_WIDTH downto 0);
+	begin
+		if(rst = '1') then
+			sys_bus_o <= gnd_sbus_o;
+			read_stb  <= (others => '0');
 
-            --Recover value form data table if address belongs to table
-            if((min_address <= signed(adr_buff)) and (signed(adr_buff) < max_address) and
-               (sys_bus_i.we = '0'))                                                  then
-                
+		elsif(rising_edge(clk)) then
+            --Ground read strobe vector to avoid multiple stb pulses when continuous
+            --read operations accross different registers happen
+			read_stb <= (others => '0');
+			--Norm bus address and get an array index
+			bus_adr   := "0" & sys_bus_i.adr;
+			reg_index := (signed(bus_adr)) - min_address;
+
+			--Recover value from data table if address belongs to table
+			if((min_address <= signed(bus_adr)) and (signed(bus_adr) < max_address) and
+			   (sys_bus_i.we = '0') and (sys_bus_i.stb = '1')) then
+			   
+			   sys_bus_o.dat <= data_in(to_integer(reg_index));
+			   sys_bus_o.tag <= (others => '0');
+			   read_stb(to_integer(reg_index)) <= '1';
+
+			elsif((min_address <= signed(bus_adr)) and (signed(bus_adr) < max_address) and 
+                  (sys_bus_i.we = '0')) then
+				
                 sys_bus_o.dat <= data_in(to_integer(reg_index));
-                sys_bus_o.val <= '1';
-                read_stb(to_integer(reg_index)) <= '1';
-            
-            else
-                sys_bus_o <= gnd_sbus_o;
-            end if;
-
-        end if;
-    end process;
-
-
-
-    WRITE_OPERATION : process(clk,rst)
-        variable reg_index  :   signed(BUS_ADDRESS_WIDTH downto 0);
-        variable adr_buff   :   std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
-    begin
-        if(rst = '1') then
-            data_out  <= REG_DEFAULT_VALUES;
-            write_stb <= (others => '1');
-
-        elsif(rising_edge(clk)) then
-            --Ground read strobe to avoid multiple stb when continous reading
-            write_stb  <= (others => '0');
-            --Decode address 
-            adr_buff  := "0" & sys_bus_i.adr;
-            reg_index := signed(adr_buff) - min_address;
-
-            --Recover value form data table if address belongs to table
-            if((min_address <= signed(adr_buff)) and (signed(adr_buff) < max_address) and
-               (sys_bus_i.we = '1'))                                                  then
-                
-                data_out(to_integer(reg_index))  <= sys_bus_i.dat;
-                write_stb(to_integer(reg_index)) <= '1';
-            else
-                write_stb <= (others => '0');
-            end if;
-
-        end if;
-    end process;
+				sys_bus_o.tag <= (others => '0');
+				read_stb 	  <= (others => '0');
+			
+			else
+				sys_bus_o <= gnd_sbus_o;
+				read_stb  <= (others => '0');
+			end if;
+		
+		end if;
+	end process;
 
 
-end EXPERIMENTAL;
+	WRITE_OPERATION : process(clk,rst)
+		variable bus_adr	:	std_logic_vector(BUS_ADDRESS_WIDTH downto 0);
+		variable reg_index	:	signed(BUS_ADDRESS_WIDTH downto 0);
+	begin
+		if(rst = '1') then
+			data_out  <= REG_DEFAULT_VALUES;
+			write_stb <= (others => '1');
+		
+		elsif(rising_edge(clk)) then
+			--Ground wirte strobe vector to avoid multiple stb pulses when a continuous
+			--write operations accross different registers happen
+			write_stb <= (others => '0');
+			--Norm bus address and get an array index
+			bus_adr   := "0" & sys_bus_i.adr;
+			reg_index := signed(bus_adr) - min_address;
+
+			--Overwrite values to the registers if address belongs to table
+			if((min_address <= signed(bus_adr)) and (signed(bus_adr) < max_address) and
+			   (sys_bus_i.we = '1') and (sys_bus_i.stb = '1')) then
+
+				data_out(to_integer(reg_index))  <= sys_bus_i.dat;
+				write_stb(to_integer(reg_index)) <= '1';
+			else
+				write_stb <= (others => '0');
+			end if;
+
+		end if;
+	end process;
+
+
+end architecture;
 
 
 
@@ -182,7 +193,6 @@ architecture RTL of REGISTER_TABLE is
 
     --****INTERNAL SIGNALS****
     signal bus_o_vector     :   sbus_o_vector(NUMBER_REGISTERS-1 downto 0);
-
 
 begin
 

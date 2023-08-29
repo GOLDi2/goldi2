@@ -23,7 +23,7 @@
 -- Revision V3.00.02 - Minor corrections to the testbench
 -- Additional Comments: -
 --
--- Revision V3.01.00 - General improvements to simulation control
+-- Revision V4.00.00 - General improvements to simulation control
 -- Additional Comments: Use of env library to stop simulation and
 --						generalization of vector sizes to account for
 --						changes in the GOLDI_COMM_STANDARD library
@@ -32,10 +32,10 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation control and assertions
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
-use std.env.all;
+-- use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -56,9 +56,9 @@ architecture TB of REGISTER_TABLE_TB is
 	--****DUT****
 	component REGISTER_TABLE
 		generic(
-			BASE_ADDRESS		:	integer := 1;
-			NUMBER_REGISTERS	:	integer := 3;
-			REG_DEFAULT_VALUES	:	data_word_vector := (x"0F",x"F0",x"FF")
+			BASE_ADDRESS		:	integer;
+			NUMBER_REGISTERS	:	integer;
+			REG_DEFAULT_VALUES	:	data_word_vector
 		);
 		port(
 			clk					: in	std_logic;
@@ -75,7 +75,7 @@ architecture TB of REGISTER_TABLE_TB is
 	
 	--****INTERNAL SIGNALS****
 	--Simulation timing
-	constant clk_period		:	time := 10 ns;
+	constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
@@ -124,7 +124,7 @@ begin
 	--****SIMULATION TIMING****
 	-----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
 	-----------------------------------------------------------------------------------------------
 
 
@@ -135,7 +135,7 @@ begin
 		--Timing
 		variable init_hold			:	time :=	5*clk_period/2;
 		variable assert_hold		:	time := 3*clk_period/2;
-		variable post_hold			:	time := clk_period/2;
+		variable post_hold			:	time := 1*clk_period/2;
 	begin
 		--**Initial setup**
 		wait for init_hold;
@@ -153,6 +153,8 @@ begin
 			report "ID04: Test reset - expecting read_stb = 000" severity error;
 		assert(write_stb = (write_stb'range => '0'))
 			report "ID05: Test reset - expecting write_stb = 000" severity error;
+		assert(sys_bus_o = gnd_sbus_o) 
+			report "ID06: Test bus write - expecting sys_bus_o = gnd_sbus_o" severity error;
 		wait for post_hold;
 		
 		
@@ -163,49 +165,80 @@ begin
 		data_in <= setMemory(data_buff);
 		wait for clk_period;
 		for i in 1 to 3 loop
+			--Load address, write enable and data
+			sys_bus_i.we  <= '0';
+			sys_bus_i.adr <= std_logic_vector(to_unsigned(i,BUS_ADDRESS_WIDTH));
+			sys_bus_i.dat <= std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
+
+			wait for assert_hold;
+			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,SYSTEM_DATA_WIDTH)))
+				report "ID07: Test bus read - expecting sys_bus_o.dat = " & integer'image(i)
+				severity error;
+			assert(read_stb = (read_stb'range => '0'))
+				report "ID08: Test bus read - expecting read_stb = '0'" 
+				severity error;
+			wait for post_hold;
+
 			sys_bus_i <= readBus(i);
 			wait for assert_hold;
 			assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,SYSTEM_DATA_WIDTH))) 
-				report "ID06: Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
-				severity error;
-			assert(sys_bus_o.val = '1')
-				report "ID07: Test bus read - expecting sys_bus_o.val = '1'" 
+				report "ID09: Test bus read - expecting sys_bus_o.dat = " & integer'image(i) 
 				severity error;
 			assert(read_stb(i-1) = '1')
-				report "ID08: Test bus read - expecting read_stb(" & integer'image(i-1) & ") = '1'"
+				report "ID10: Test bus read - expecting read_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
+			sys_bus_i <= gnd_sbus_i;
+			
 		end loop;
 
 		
+
 		wait for 5*clk_period;
 		
+
 		
 		--**Test write bus**
 		for i in 1 to 3 loop
+			--Load address, write enable and data
+			sys_bus_i.we  <= '1';
+			sys_bus_i.adr <= std_logic_vector(to_unsigned(1,BUS_ADDRESS_WIDTH));
+			sys_bus_i.dat <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
+
+			wait for assert_hold;
+			assert(data_out(i-1) = reg_default(i-1))
+				report "ID11: Test bus write - expecting data_out(i) = reg_default(i)"
+				severity error;
+			assert(write_stb = (write_stb'range => '0'))
+				report "ID12: Test bus write - expecting write_stb = '0'"
+				severity error;
+			wait for post_hold;
+ 
 			sys_bus_i <= writeBus(i,10);
 			wait for assert_hold;
 			assert(sys_bus_o.dat = (sys_bus_o.dat'range => '0')) 
-				report "ID09: Test bus write - expecting sys_bus_o.dat = x00" 
+				report "ID13: Test bus write - expecting sys_bus_o.dat = x00" 
 				severity error;
 			assert(data_out(i-1) = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH))) 
-				report "ID10: Test bus write - expecting reg_data_out("& integer'image(i-1)&") = x0F"
+				report "ID14: Test bus write - expecting data_out("& integer'image(i-1)&") = x0A"
 				severity error;
 			assert(write_stb(i-1) = '1')
-				report "ID11: Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
+				report "ID15: Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
+			sys_bus_i <= gnd_sbus_i;
+
 		end loop;		
 		
 		
-		--End simulation
+		--**End simulation**
 		wait for 50 ns;
-        report "REGISTER_TABLE_TB - testbench successful";
+        report "REGISTER_TABLE_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-        std.env.finish;
+    --    std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        --run_sim <= '0';
-        --wait;
+        run_sim <= '0';
+        wait;
 		
 	end process;
 	-----------------------------------------------------------------------------------------------
