@@ -1,0 +1,231 @@
+version: "3"
+
+# docker plugin install grafana/loki-docker-driver:2.8.2 --alias loki --grant-all-permissions
+
+x-loki: &loki-logging
+  driver: loki
+  options:
+    loki-url: http://127.0.0.1:$LOKI_PORT/loki/api/v1/push
+    loki-external-labels: project=crosslab
+    loki-pipeline-stages: |
+      - regex:
+          expression: '"(level)":"(?P<level>\w+)"'
+      - labels:
+          level:
+    loki-relabel-config: |
+      - action: labelmap
+        regex: compose_(service)
+      - action: labelkeep
+        regex: (service|project)
+    labels: level,service
+  
+x-config: &common-config
+  AUTHORIZATION_SERVER: "http://authorization.$DOMAIN:3010"
+  AUTHORIZATION_PSK: "$AUTHORIZATION_PSK"
+  LOGGING: "$LOGGING"
+  BASE_URL: https://api.$DOMAIN
+
+networks:
+  loki:
+  global_default:
+    external: true
+
+volumes:
+  loki:
+  auth_db:
+  device_db:
+  experiment_db:
+  federation_db:
+  update_db:
+
+services:
+  # Logging
+  loki:
+    image: grafana/loki:2.8.3
+    command: -config.file=/loki.yaml
+    volumes:
+      - ./loki/loki.yaml:/loki.yaml
+    networks:
+      loki:
+    ports:
+      - "127.0.0.1:$LOKI_PORT:3100"
+  grafana:
+    environment:
+      - VIRTUAL_HOST=logs.$DOMAIN
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=logs.$DOMAIN
+      - SERVER_NAME=logs.$DOMAIN
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_PASSWORD
+      - GF_SERVER_HTTP_PORT=80
+    volumes:
+      - ./grafana/datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    image: grafana/grafana:latest
+    networks:
+      loki:
+      global_default:
+  # Services
+  gateway:
+    image: gateway-service
+    environment:
+      <<: *common-config
+      VIRTUAL_HOST: api.$DOMAIN
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: api.$DOMAIN
+      SERVER_NAME: api.$DOMAIN
+      AUTH_SERVICE_URL: "authentication.$DOMAIN:3000"
+      DEVICE_SERVICE_URL: "device.$DOMAIN:3001"
+      EXPERIMENT_SERVICE_URL: "experiment.$DOMAIN:3002"
+      FEDERATION_SERVICE_URL: "federation.$DOMAIN:3003"
+      UPDATE_SERVICE_URL: "update.$DOMAIN:1"
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+  authentication:
+    hostname: authentication.$DOMAIN
+    image: auth-service
+    environment:
+      <<: *common-config
+      JWT_SECRET: $JWT_SECRET
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+  authorization:
+    hostname: authorization.$DOMAIN
+    image: authorization-service
+    environment:
+      <<: *common-config
+      JWT_SECRET: $JWT_SECRET
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+  device:
+    hostname: device.$DOMAIN
+    image: device-service
+    environment: *common-config
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+  experiment:
+    hostname: experiment.$DOMAIN
+    image: experiment-service
+    environment: *common-config
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+  federation:
+    hostname: federation.$DOMAIN
+    image: federation-service
+    environment: *common-config
+    networks:
+      loki:
+      global_default:
+    logging: *loki-logging
+    restart: on-failure
+
+# Frontend ########################################################################################
+  frontend:
+    image: frontend
+    environment:
+      - GOLDI_API_URL=https://api.$DOMAIN
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=8080
+      - VIRTUAL_PATH=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  esp:
+    image: esp
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/esp
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  ecp:
+    image: ecp
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/ecp
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+  
+  gift:
+    image: goldi2/gift
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/gift
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  sane:
+    image: goldi2/sane
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/SANE
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+      - BASE_PATH=/SANE/
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  beast:
+    image: goldi2/beast
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/BEAST
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  wide-server:
+    image: goldi2/wide-server
+    environment:
+      - VIRTUAL_HOST=www.$DOMAIN
+      - VIRTUAL_PORT=8080
+      - VIRTUAL_PATH=/wide/
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.$DOMAIN
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging

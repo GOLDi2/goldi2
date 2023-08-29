@@ -1,4 +1,4 @@
-import { DeviceHandler } from "@cross-lab-project/soa-client";
+/*import { DeviceHandler } from "@cross-lab-project/soa-client";
 import { ParameterService__Producer } from "@cross-lab-project/soa-service-parameter";
 import { ParameterDescription} from "@cross-lab-project/soa-service-parameter/lib/types/messages";
 import { LitElement, html, adoptStyles, unsafeCSS } from "lit";
@@ -49,3 +49,4 @@ export class Message extends LitElement {
     `;
   }
 }
+*/

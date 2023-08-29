@@ -33,21 +33,37 @@ export function experiment_router(language: string, renderPage: renderPageType, 
         }
 
 
-        const pspuGroup = await req.apiClient.getDevice('https://api.goldi-labs.de/devices/16148f37-9f90-4b4e-91a0-963faf6571eb')
-        if (pspuGroup.type !== 'group') {
-            throw new Error('Device is not a group')
+        try{
+            const { pspuGroup, bpuGroup } = await getPspuBpuGroup();
+            const pspus = await Promise.all(pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
+            const bpus = await Promise.all(bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
+            return renderPage('experiment', language, res, req.user, { experiment, pspus, bpus });
+        }catch{
+            return renderPage('experiment', language, res, req.user, { experiment, pspus: [], bpus: [] });
         }
 
-        const bpuGroup = await req.apiClient.getDevice('https://api.goldi-labs.de/devices/ab6c9737-a022-448d-b8a6-e0a6c46919fd')
-        if (bpuGroup.type !== 'group') {
-            throw new Error('Device is not a group')
+        async function getPspuBpuGroup() {
+            const devices=await req.apiClient.listDevices();
+            const deviceGroups=devices.filter((d)=>d.type==='group')
+            const pspuGroupUrl=deviceGroups.find((d)=>d.name==='pspu')?.url
+            const bpuGroupUrl=deviceGroups.find((d)=>d.name==='bpu')?.url
+            if (!pspuGroupUrl) {
+                throw new Error('Could not find pspu group')
+            }
+            if (!bpuGroupUrl) {
+                throw new Error('Could not find bpu group');
+            }
+            const pspuGroup = await req.apiClient.getDevice(pspuGroupUrl);
+            if (pspuGroup.type !== 'group') {
+                throw new Error('Device is not a group');
+            }
+
+            const bpuGroup = await req.apiClient.getDevice(bpuGroupUrl);
+            if (bpuGroup.type !== 'group') {
+                throw new Error('Device is not a group');
+            }
+            return { pspuGroup, bpuGroup };
         }
-
-        console.log({ pspuGroup, bpus: bpuGroup })
-
-        const pspus = await Promise.all(pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
-        const bpus = await Promise.all(bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url)))
-        return renderPage('experiment', language, res, req.user, { experiment, pspus, bpus });
     }
 
     async function experimentSetup(req: Request, res: Response, _next: NextFunction, experiment: ExperimentServiceTypes.Experiment<"response">) {

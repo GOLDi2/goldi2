@@ -1,15 +1,4 @@
 ################################################################################
-# Build Development Container ##################################################
-################################################################################
-
-helper/goldi-development-container:
-  - script: build
-    dependencies:
-      - crosslab/helper/development-container:build
-    tags:
-      - environment
-
-################################################################################
 # Frontend Services ############################################################
 ################################################################################
 
@@ -31,6 +20,14 @@ frontend-services/experiment-control-panel:
       - crosslab/clients/soa_services/electricalConnection/js:build
       - crosslab/clients/soa_services/webcam/js:build
       - crosslab/clients/soa_services/file/js:build
+
+frontend-services/fsm-interpreter:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
 
 ################################################################################
 # Hardware #####################################################################

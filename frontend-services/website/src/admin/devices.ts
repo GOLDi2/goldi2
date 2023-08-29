@@ -20,9 +20,10 @@ export function device_router(language: string, renderPage: renderPageType, _log
             if (req.body.type === 'group') {
                 req.body.devices = req.body.devices?.map((device: string) => ({ url: device })) ?? []
             }
-	    if (req.body.services === ''){
-	        delete req.body.services
-	    }
+            if (req.body.services === ''){
+                delete req.body.services
+            }
+            req.body.isPublic = req.body.isPublic === 'Yes'
             console.log(req.body)
             try{
                 const device = await req.apiClient.createDevice(req.body)
@@ -44,6 +45,7 @@ export function device_router(language: string, renderPage: renderPageType, _log
             if (req.body.type === 'device') {
                 req.body.services = JSON.parse(req.body.services)
             }
+            req.body.isPublic = req.body.isPublic === 'Yes'
             await req.apiClient.updateDevice(req.query.url as string, req.body)
         }
         const device = await req.apiClient.getDevice(req.query.url as string);
@@ -65,7 +67,8 @@ export function device_router(language: string, renderPage: renderPageType, _log
 
     async function deviceToken(req: Request, res: Response, _next: NextFunction) {
         const url =req.query.url as string;
-        const token = await req.apiClient.createDeviceAuthenticationToken(url)
+        //const token = await req.apiClient.createDeviceAuthenticationToken(url)
+        const token="undefined"
         return renderPage('admin/devices/token', language, res, req.user, { token, url });
     }
 

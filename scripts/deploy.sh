@@ -65,42 +65,51 @@ else
 
   ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose down || true"
 
+  for dir in "grafana" "loki"; do
+    ssh -o StrictHostKeyChecking=no "$HOST" "rm -rf $DIR/$VARIANT/$dir"
+    scp -r -o StrictHostKeyChecking=no deployment/production/$dir "$HOST:$DIR/$VARIANT/$dir"
+  done
+
+  cat helper/deploy-files/init.sql | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/init.sql"
+
   function load_docker_image(){
-    cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | sed -e 's/^.* //'
+    cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | tail -1 | grep -Eo "[^ ]+$"
   }
 
   # Specify the exact version in the compose file
-  COMPOSE=$(cat helper/deploy-files/docker-compose.instance.yml)
+  COMPOSE=$(cat deployment/production/docker-compose.yml)
   echo "Loading Gateway-Service"
-  echo "$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")"
+  # echo "$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: gateway-service/image: '$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")'/g')
-  echo "Loading Auth-Service"
-  echo "$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")"
+  echo "Loading Authentication-Service"
+  # echo "$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: auth-service/image: '$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")'/g')
+  echo "Loading Authorization-Service"
+  # echo "$(load_docker_image "crosslab/services/authorization/dist/docker-image.tar")"
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: authorization-service/image: '$(load_docker_image "crosslab/services/authorization/dist/docker-image.tar")'/g')
   echo "Loading Device-Service"
-  echo "$(load_docker_image "crosslab/services/device/dist/docker-image.tar")"
+  # echo "$(load_docker_image "crosslab/services/device/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: device-service/image: '$(load_docker_image "crosslab/services/device/dist/docker-image.tar")'/g')
   echo "Loading Experiment-Service"
-  echo "$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")"
+  # echo "$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: experiment-service/image: '$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")'/g')
   echo "Loading Federation-Service"
-  echo "$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")"
+  # echo "$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: federation-service/image: '$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")'/g')
   echo "Loading Update-Service"
-  echo "$(load_docker_image "crosslab/services/update/dist/docker-image.tar")"
+  # echo "$(load_docker_image "crosslab/services/update/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: update-service/image: '$(load_docker_image "crosslab/services/update/dist/docker-image.tar")'/g')
 
   echo "Loading Config Tool"
-  echo "$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")"
+  # echo "$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp/image: '$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
   echo "Loading Experiment Control Panel"
-  echo "$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")"
+  # echo "$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
   echo "Loading Website"
-  echo "$(load_docker_image "frontend-services/website/dist/docker-image.tar")"
+  # echo "$(load_docker_image "frontend-services/website/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend/image: '$(load_docker_image "frontend-services/website/dist/docker-image.tar")'/g')
 
   echo "$COMPOSE" | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
-  cat helper/deploy-files/init.sql | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/init.sql"
   ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
 fi
