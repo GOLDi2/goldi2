@@ -13,14 +13,14 @@
 --                  -> ROM16XN_FIFO.vhd
 --
 -- Revisions:
--- Revision V3.01.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation control and assertions
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
 use std.env.all;
@@ -65,7 +65,7 @@ architecture TB of ROM16XN_FIFO_TB is
     --****INTERNAL SIGNALS****
     constant default_conf   :   array_16_bit(1 downto 0) := (x"0403",x"0201");
     --Simulation timing
-    constant clk_period		:	time := 10 ns;
+    constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
@@ -102,7 +102,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -112,8 +112,8 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         variable init_hold      :   time := 3*clk_period/2;
-        variable assert_hold    :   time := clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable assert_hold    :   time := 1*clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
         --**Initial setup**
         wait for init_hold;
@@ -170,7 +170,7 @@ begin
 
         --**End simulation**
         wait for 50 ns;
-        report "ROM16XN_FIFO_TB - testbench successful";
+        report "ROM16XN_FIFO_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
         std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)

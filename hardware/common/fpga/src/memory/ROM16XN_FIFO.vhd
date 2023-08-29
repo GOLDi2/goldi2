@@ -12,7 +12,7 @@
 -- Dependencies:	-> GOLDI_DATA_TYPES.vhd
 --
 -- Revisions:
--- Revision V3.01.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
