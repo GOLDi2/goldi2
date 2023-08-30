@@ -2,7 +2,7 @@
 	"name": "Crosslab",
 	"build":{
 		"dockerfile": "Dockerfile",
-		"cacheFrom": "crosslab/goldi-devcontainer"
+		"cacheFrom": "goldi2/devcontainer"
 	},
 	//"features": {
 	//	"./goldiFeature": {}

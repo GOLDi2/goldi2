@@ -65,12 +65,10 @@ else
 
   ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose down || true"
 
-  for dir in "grafana" "loki"; do
-    ssh -o StrictHostKeyChecking=no "$HOST" "rm -rf $DIR/$VARIANT/$dir"
-    scp -r -o StrictHostKeyChecking=no deployment/production/$dir "$HOST:$DIR/$VARIANT/$dir"
-  done
+  ssh -o StrictHostKeyChecking=no "$HOST" "mkdir -p $DIR/$VARIANT/data"
 
-  cat helper/deploy-files/init.sql | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/init.sql"
+  ssh -o StrictHostKeyChecking=no "$HOST" "rm -rf $DIR/$VARIANT/config"
+  scp -r -o StrictHostKeyChecking=no deployment/production/config "$HOST:$DIR/$VARIANT/config"
 
   function load_docker_image(){
     cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | tail -1 | grep -Eo "[^ ]+$"

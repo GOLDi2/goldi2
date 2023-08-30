@@ -1,1 +1,1 @@
-FROM crosslab/crosslab-devcontainer:latest
+FROM crosslab/devcontainer:latest
