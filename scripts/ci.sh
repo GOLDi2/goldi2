@@ -40,7 +40,7 @@ fi
 REPOSITORY=admin@ci.goldi-labs.de:/data/www/ci/goldi
 WEB_REPOSITORY=https://ci.goldi-labs.de/goldi
 
-#$SCRIPT_DIR/../crosslab/scripts/ci.sh $SUBCOMMANDVARS --no-upload --skip-tag test
+$SCRIPT_DIR/../crosslab/scripts/ci.sh $SUBCOMMANDVARS --no-upload --skip-tag test
 
 set -e
 $SCRIPT_DIR/ci.d/ci.sh --include crosslab --repository $REPOSITORY --web-repository $WEB_REPOSITORY $SUBCOMMANDVARS
