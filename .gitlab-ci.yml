@@ -25,22 +25,8 @@ default:
 #       BRANCH: CI_COMMIT_TAG
 #       RELEASE: '--release'
 
-build-environment:
-  image: goldi-devcontainer:build
-  rules:
-    - !reference [.default_rules]
-    - if : '$CI_PIPELINE_SOURCE == "schedule"'
-      variables:
-        BRANCH: $CI_COMMIT_BRANCH
-        RELEASE: ''
-      when: always
-  stage: build-environment
-  script:
-    - ./scripts/ci.sh --tag environment --no-upload --branch $BRANCH
-    - cat ./helper/goldi-development-container/dist/goldi-devcontainer.tar | docker load
-
 build:
-  image: goldi-devcontainer:build
+  image: goldi2/devcontainer:latest
   rules:
     - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
@@ -51,7 +37,7 @@ build:
 
 build-daily:
   timeout: 6h
-  image: goldi-devcontainer:build
+  image: goldi2/devcontainer:latest
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "daily"'
       when: always
@@ -65,7 +51,7 @@ build-daily:
 
 build-weekly:
   timeout: 48h
-  image: goldi-devcontainer:build
+  image: goldi2/devcontainer:latest
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
       when: always
