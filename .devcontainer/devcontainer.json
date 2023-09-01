@@ -16,7 +16,8 @@
 				"ms-python.vscode-pylan1ce",
 				"ryanluker.vscode-coverage-gutters",
 				"onatm.open-in-new-window",
-				"rvest.vs-code-prettier-eslint"
+				"rvest.vs-code-prettier-eslint",
+				"ms-python.python"
 			]
 		}
 	},
