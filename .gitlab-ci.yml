@@ -27,7 +27,7 @@ default:
 #       RELEASE: '--release'
 
 build:
-  image: goldi2/devcontainer:latest
+  image: goldi2/devcontainer:hardware
   rules:
     - !reference [.default_rules]
     - if : '$CI_PIPELINE_SOURCE == "schedule"'
@@ -38,7 +38,7 @@ build:
 
 build-daily:
   timeout: 6h
-  image: goldi2/devcontainer:latest
+  image: goldi2/devcontainer:hardware
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "daily"'
       when: always
@@ -52,7 +52,7 @@ build-daily:
 
 build-weekly:
   timeout: 48h
-  image: goldi2/devcontainer:latest
+  image: goldi2/devcontainer:hardware
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
       when: always
