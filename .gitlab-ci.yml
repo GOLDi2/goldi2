@@ -34,7 +34,7 @@ build:
       when: never
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily --skip-tag weekly $RELEASE
+    - ./scripts/ci.sh --verbose --upload --branch $BRANCH --skip-tag daily --skip-tag weekly $RELEASE
 
 build-daily:
   timeout: 6h
