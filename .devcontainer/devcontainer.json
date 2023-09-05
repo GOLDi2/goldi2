@@ -18,7 +18,12 @@
 				"onatm.open-in-new-window",
 				"rvest.vs-code-prettier-eslint",
 				"ms-python.python"
-			]
+			],
+			"settings": {
+				"github.copilot.enable": {
+					"*": false
+				}
+			}
 		}
 	},
 	"containerEnv": {
