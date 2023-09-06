@@ -73,15 +73,17 @@ services:
       - "127.0.0.1:${LOKI_PORT}:3100"
   grafana:
     environment:
-      - VIRTUAL_HOST=logs.${DOMAIN}
-      - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=logs.${DOMAIN}
-      - SERVER_NAME=logs.${DOMAIN}
-      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-      - GF_AUTH_ANONYMOUS_ENABLED=false
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      - GF_SERVER_HTTP_PORT=80
+      VIRTUAL_HOST: logs.${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: logs.${DOMAIN}
+      SERVER_NAME: logs.${DOMAIN}
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+      GF_AUTH_ANONYMOUS_ENABLED: false
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_SERVER_HTTP_PORT: 80
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/dashboard.json
+      GF_USERS_DEFAULT_THEME: light
     volumes:
       - ./config/grafana/datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml
       - ./config/grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
