@@ -7,10 +7,10 @@ frontend-services/website:
     dependencies:
       - crosslab/clients/api/js:build
 
-frontend-services/config-tool:
-  - script: build
-    dependencies:
-      - crosslab/clients/api/js:build
+# frontend-services/config-tool:
+#   - script: build
+#     dependencies:
+#       - crosslab/clients/api/js:build
 
 frontend-services/experiment-control-panel:
   - script: build

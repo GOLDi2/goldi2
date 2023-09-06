@@ -17,7 +17,8 @@
 				"ryanluker.vscode-coverage-gutters",
 				"onatm.open-in-new-window",
 				"rvest.vs-code-prettier-eslint",
-				"ms-python.python"
+				"ms-python.python",
+				"esbenp.prettier-vscode"
 			],
 			"settings": {
 				"github.copilot.enable": {

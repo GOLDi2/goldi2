@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response, NextFunction } from "express";
 import passwd from 'passwd-linux';
 
 import {config} from './config';
@@ -6,7 +6,7 @@ import {config} from './config';
 export function pam_auth(realm: string) {
   let cache: undefined | string = undefined;
   let cache_time: undefined | number = undefined;
-  async function _pam_auth(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async function _pam_auth(req: Request, res: Response, next: NextFunction) {
     if (config.NODE_ENV === 'development') {
       return next();
     }
