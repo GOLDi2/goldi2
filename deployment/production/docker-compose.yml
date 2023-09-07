@@ -27,6 +27,10 @@ x-config: &common-config
   DB_TYPE: mariadb
   DB_HOST: db
   DB_PORT: 3306
+  AUTH_SERVICE_URL: "authentication:3000"
+  DEVICE_SERVICE_URL: "device:3001"
+  EXPERIMENT_SERVICE_URL: "experiment:3002"
+  FEDERATION_SERVICE_URL: "federation:3003"
 
 networks:
   db:
@@ -101,10 +105,6 @@ services:
       VIRTUAL_PORT: 80
       LETSENCRYPT_HOST: api.${DOMAIN}
       SERVER_NAME: api.${DOMAIN}
-      AUTH_SERVICE_URL: "authentication:3000"
-      DEVICE_SERVICE_URL: "device:3001"
-      EXPERIMENT_SERVICE_URL: "experiment:3002"
-      FEDERATION_SERVICE_URL: "federation:3003"
     networks:
       loki:
       global_default:
@@ -136,7 +136,10 @@ services:
     restart: on-failure
   device:
     image: device-service:latest
-    environment: *common-config
+    environment:
+      <<: *common-config
+      DB_USERNAME: device
+      DB_NAME: device
     networks:
       loki:
       global_default:
@@ -145,7 +148,10 @@ services:
     restart: on-failure
   experiment:
     image: experiment-service:latest
-    environment: *common-config
+    environment:
+      <<: *common-config
+      DB_USERNAME: experiment
+      DB_NAME: experiment
     networks:
       loki:
       global_default:
