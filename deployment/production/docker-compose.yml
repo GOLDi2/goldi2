@@ -139,7 +139,7 @@ services:
     environment:
       <<: *common-config
       DB_USERNAME: device
-      DB_NAME: device
+      DB_DATABASE: device
     networks:
       loki:
       global_default:
@@ -151,7 +151,7 @@ services:
     environment:
       <<: *common-config
       DB_USERNAME: experiment
-      DB_NAME: experiment
+      DB_DATABASE: experiment
     networks:
       loki:
       global_default:
@@ -163,7 +163,7 @@ services:
     environment:
       <<: *common-config
       DB_USERNAME: federation
-      DB_NAME: federation
+      DB_DATABASE: federation
       SECURITY_ISSUER: https://${DOMAIN}
       SECURITY_AUDIENCE: https://${DOMAIN}
       JWKS_URL: https://api.${DOMAIN}/.well-known/jwks.json
@@ -179,7 +179,7 @@ services:
     environment:
       <<: *common-config
       DB_USERNAME: lti
-      DB_NAME: lti
+      DB_DATABASE: lti
       SECURITY_ISSUER: https://${DOMAIN}
       SECURITY_AUDIENCE: https://${DOMAIN}
       JWKS_URL: https://api.${DOMAIN}/.well-known/jwks.json

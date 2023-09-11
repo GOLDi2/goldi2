@@ -20,7 +20,9 @@
         "compile-languages": "mrmdir monaco-languages/release && tsc -p monaco-languages/src/tsconfig.json && tsc -p monaco-languages/src/tsconfig.esm.json",
         "prepublishLanguages": "npm run compile-languages && node ./bundle-lang",
         "buildEditor": "gulp release",
-        "test-lang": "mocha --opts test-langgithub.com/jonau/wide/mocha.opts"
+        "test-lang": "mocha --opts test-langgithub.com/jonau/wide/mocha.opts",
+        "format": "prettier . --write",
+        "lint": "eslint ."
     },
     "author": "Johannes Nau",
     "license": "GPL-3.0",

@@ -20,7 +20,9 @@
     "skins/**"
   ],
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "format": "prettier . --write",
+    "lint": "eslint ."
   },
   "keywords": [
     "waveform",
