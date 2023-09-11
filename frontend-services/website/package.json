@@ -15,10 +15,11 @@
     "start": "npm run start:prod",
     "start:dev": "tsc-watch --onSuccess \"node app/index.js\"",
     "start:prod": "node dist/index.js",
-    "build": "npm run build:node",
-    "build:node": "node build.js",
-    "build:docker": "docker build . -t goldi2/web-frontend:latest",
-    "test": "mocha -r ts-node/register 'test/**/*.ts'"
+    "build": "npm run build:compile",
+    "build:compile": "node build.js",
+    "test": "mocha -r ts-node/register 'test/**/*.ts'",
+    "format": "prettier . --write",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@types/browser-sync": "^2.26.3",

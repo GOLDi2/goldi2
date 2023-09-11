@@ -9,7 +9,7 @@
         <div class="p-10">
             Start all devices that were instatiated for you, by clickling the following links:<br>
         {% for instance in instances %}
-            <a class="primary-button" href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="popup">{{ instance.codeUrl }}</a><br>
+            <a class="primary-button" href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="_blank">{{ instance.codeUrl }}</a><br>
         {% endfor %}
         </div>
     </div>

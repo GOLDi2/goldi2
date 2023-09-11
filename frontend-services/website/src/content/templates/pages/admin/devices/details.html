@@ -11,6 +11,8 @@
             <input type="text" name="name" placeholder="Name" value="{{ device.name }}"/>
             <input type="text" name="description" placeholder="Description" value="{{ device.description }}"/>
             <input type="hidden" name="type" value="{{type}}"/>
+            <input id="isPublic" type="checkbox" name="isPublic" value="Yes" {{- ' checked' if device.isPublic }}/>
+            <label for="isPublic">Public</label><br/>
             {% if type=="edge instantiable" %}
                 <input type="text" name="codeUrl" placeholder="Code Url" value="{{ device.codeUrl }}"/>
             {% endif %}
