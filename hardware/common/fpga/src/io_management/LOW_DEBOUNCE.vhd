@@ -3,8 +3,8 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		10/05/2023
--- Design Name:		Debounce module for input signals - "or" operation
--- Module Name:		HIGH_DEBOUNCE
+-- Design Name:		Debounce module for input signals - "and" operation
+-- Module Name:		LOW_DEBOUNCE
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
@@ -12,17 +12,8 @@
 -- Dependencies:	none
 --
 -- Revisions:
--- Revision V1.00.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
---
--- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: Release for Warehouse_V2
---
--- Revision V4.00.00 - Module renaming and change to reset and sampling
--- Additional Comments: Renaming of module to follow V4.00.00 conventions.
---                      (IO_DEBOUNCE.vhd -> HIGH_DEBOUNCE.vhd)
---						Change from synchronous to asynchronous reset.
---                      Modification to the sampling process.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -37,9 +28,9 @@ use IEEE.numeric_std.all;
 --! The module contains a shift register of length "g_stages" that samples the
 --! input data at a rate of "g_clk_factor" if a logic high is presented on the
 --! input port. The module shifts the stored data at a rate set by g_clk_factor 
---! and outputs a logic high if a '1' remains in the shift register. 
---! (equivalent to "or" operation)
-entity HIGH_DEBOUNCE is
+--! and outputs a logic low if a '0' remains in the shift register. 
+--! (equivalent to "and" operation)
+entity LOW_DEBOUNCE is
     generic(
         g_stages        :   natural := 4;       --! Number of flip-flops in shift register
         g_clk_factor    :   natural := 12000    --! Shift rate
@@ -52,13 +43,13 @@ entity HIGH_DEBOUNCE is
         p_io_raw        : in    std_logic;      --! Input data
         p_io_stable     : out   std_logic       --! Output data
     );
-end entity HIGH_DEBOUNCE;
+end entity LOW_DEBOUNCE;
 
 
 
 
 --! General architecture
-architecture BH of HIGH_DEBOUNCE is
+architecture BH of LOW_DEBOUNCE is
 
     --****INTERNAL SIGNALS****
     signal shift_reg    :   std_logic_vector(g_stages-1 downto 0);
@@ -69,7 +60,7 @@ begin
 
     --****OUTPUT MANAGEMENT****
     -----------------------------------------------------------------------------------------------
-    p_io_stable <= '0' when(shift_reg = (shift_reg'range => '0')) else '1'; 
+    p_io_stable <= '1' when(shift_reg = (shift_reg'range => '1')) else '0'; 
     -----------------------------------------------------------------------------------------------
 
 
@@ -100,10 +91,8 @@ begin
             if(clk_counter = g_clk_factor-1) then
                 shift_reg <= shift_reg(g_stages-2 downto 0) & '0';
             end if;
-            --wirte a '1' at the end of the shift register if a '1' is presented
-            if(p_io_raw = '1') then
-                shift_reg(0) <= '1';
-            end if;
+            
+            shift_reg(0) <= p_io_raw;
 
         end if;
     end process;
@@ -111,3 +100,6 @@ begin
 
 
 end architecture;
+
+
+

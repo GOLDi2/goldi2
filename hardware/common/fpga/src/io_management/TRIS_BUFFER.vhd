@@ -32,7 +32,7 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Tri-state synchronizer buffer
 --! @details
---! Buffer transforms the inout signals of a FPGA into the io_o/io_i standard
+--! Buffer transforms the tri-state signals of a FPGA into the io_o/io_i standard
 --! used in the system. The incomming data is presented in to ways. A synchronizer 
 --! samples the input data every rising edge of the main clock and a asyncrhonous
 --! port shifts input data directly.

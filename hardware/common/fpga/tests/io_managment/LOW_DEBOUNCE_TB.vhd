@@ -3,26 +3,17 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		10/05/2023
--- Design Name:		Debounce module for input signals - "or" operaton
--- Module Name:		HIGH_DEBOUNCE_TB
+-- Design Name:		Debounce module for input signals - "and" operaton
+-- Module Name:		LOW_DEBOUNCE_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	-> HIGH_DEBOUNCE.vhd
+-- Dependencies:	-> LOW_DEBOUNCE.vhd
 --
 -- Revisions:
--- Revision V3.00.01 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
---
--- Revision V3.00.01 - Default testbench
--- Additional Comments: -
---
--- Revision V4.00.00 - Module renaming and refactoring
--- Additional Comments: Module renamed to follow V4.00.00 naming convention.
---						(IO_DEBOUNCE_TB.vhd -> HIGH_DEBOUNCE_TB.vhd)
---						Changes to the DUT entity and the port signal names.
---						Use of env library to stop simulation.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -37,17 +28,17 @@ use std.env.all;
 
 
 --! Functionality simulation
-entity HIGH_DEBOUNCE_TB is
-end entity HIGH_DEBOUNCE_TB;
+entity LOW_DEBOUNCE_TB is
+end entity LOW_DEBOUNCE_TB;
 
 
 
 
 --! General architecture
-architecture TB of HIGH_DEBOUNCE_TB is
-  
+architecture TB of LOW_DEBOUNCE_TB is
+
     --****DUT****
-    component HIGH_DEBOUNCE
+    component LOW_DEBOUNCE
         generic(
             g_stages        :   natural;
             g_clk_factor    :   natural
@@ -76,7 +67,7 @@ begin
 
     --****COMPONENT****
     -----------------------------------------------------------------------------------------------
-    DUT : HIGH_DEBOUNCE
+    DUT : LOW_DEBOUNCE
     generic map(
         g_stages        => 4,
         g_clk_factor    => 10
@@ -104,14 +95,14 @@ begin
     TEST : process
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
-        variable assert_hold    :   time := 3*clk_period/2;
+        variable assert_hold    :   time := 1*clk_period/2;
         variable post_hold      :   time := 1*clk_period/2;
     begin
         --**Initial Setup**
         wait for init_hold;
 
 
-        --**Test reset contidions**
+        --**Test reset conditions**
         wait for assert_hold;
         assert(p_io_stable = '0')
             report "ID01: Test reset - expecting io_stable = '0'" severity error;
@@ -121,57 +112,40 @@ begin
         --**Test reaction to high input**
         p_io_raw <= '1';
         wait for assert_hold;
+        for i in 1 to 4 loop
+            assert(p_io_stable = '0')
+                report "ID02: Test input high - expecting io_stable = '0'" severity error;
+            wait for 10*clk_period; 
+        end loop;
+        
         assert(p_io_stable = '1')
-            report "ID02: Test input high - expecting io_stable = '1'" severity error;
+            report "ID03: Test input high - expecting io_stable = '1'" severity error;
         wait for post_hold;
 
 
         wait for 5*clk_period;
 
 
-        --**Test glitching reaction**
-        for i in 0 to 3 loop
-            p_io_raw <= not p_io_raw;
-            wait for assert_hold;
-            assert(p_io_stable = '1')
-                report "ID03: Test glitching - expecting io_stable = '1'" severity error;
-            wait for post_hold;
-        end loop;
+        --**Test glitching process**
         p_io_raw <= '0';
-
-
-        wait for 50*clk_period;
-
-
-        --**Test hold input**
-        p_io_raw <= '1';
         wait for clk_period;
-        p_io_raw <= '0';
-        wait for clk_period/2;
-        for i in 1 to 40 loop
-            assert(p_io_stable = '1')
-                report "ID04: Test input hold - expecting io_stable = '1' [" & integer'image(i) & "]"
-                severity error;
-            wait for clk_period;
-        end loop;
 
+        wait for assert_hold;
         assert(p_io_stable = '0')
-            report "ID05: Test input hold - expecting io_stable = '0'" severity error;
+            report "ID04: Test glitching - expecting io_stable = '0'" severity error;
         wait for post_hold;
-        
 
-		--**End simulation**
+
+        --**End simulation**
 		wait for 50 ns;
-        report "HIGH_DEBOUNCE_TB - testbench completed";
+        report "LOW_DEBOUNCE_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
        	std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
         -- run_sim <= '0';
         -- wait;
 
-
     end process;
-    -----------------------------------------------------------------------------------------------
 
 
-end TB;
+end architecture;
