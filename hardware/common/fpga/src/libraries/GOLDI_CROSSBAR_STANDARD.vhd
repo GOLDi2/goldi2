@@ -21,6 +21,10 @@
 -- Revision V3.00.00 - Library modified to tamplate
 -- Additional Comments: "MOCKUP" denomination added to avoid multiple 
 --                      versions of the file when simulating CROSSBAR
+--
+-- Revision V4.00.00 - Package renaming and restructuring
+-- Additional Comments: Package used as a fix imported package and change
+--                      of the declared constants to testbench constants.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -33,39 +37,46 @@ use work.GOLDI_COMM_STANDARD.all;
 
 
 
-package GOLDI_CROSSBAR_DEFAULT_MOCKUP is
+package GOLDI_CROSSBAR_STANDARD is
 
     --****CROSBAR DATA STURCTURES****
 	-----------------------------------------------------------------------------------------------
-    type cb_left_port_ram is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
+    type cb_left_port_ram  is array(natural range <>) of unsigned(BUS_ADDRESS_WIDTH-1 downto 0);
 	type cb_right_port_ram is array(natural range <>) of unsigned(SYSTEM_DATA_WIDTH-1 downto 0);
 	-----------------------------------------------------------------------------------------------
     
 
     
-    --****CONSTANT DEFINITION***
+    --****CONSTANT DEFINITION FOR TESTBENCH AND AS TEMPLATE FOR CROSSBAR CONFIGURATION***
     -----------------------------------------------------------------------------------------------
-    --Block dynamic changes to crossbar in design.
-    --The default layout will be used as the routing map
-    constant block_layout   :   boolean := false;
-
-
     --Crossbar bank reduction constants
-    --Rigth side of bank crossbar
-    constant RIGHT_SIZE    :   natural := 3;
     --Left side of the bandk crossbar
-    constant LEFT_SIZE    :   natural := 6;
+    constant TB_CB_LEFT_SIZE   :   natural := 6;
+    --Rigth side of bank crossbar
+    constant TB_CB_RIGHT_SIZE  :   natural := 3;
 
-
-    --Layout of right side port of crossbar. Assignment of multiple 
+    --Default layout of right side port of the crossbar. Assignment of multiple 
     --right side port lines to the same left side port line will provoque an operation error.
-    constant DEFAULT_CROSSBAR_LAYOUT :   cb_right_port_ram(RIGHT_SIZE-1 downto 0) :=
+    constant TB_DEFAULT_RIGHT_CB_LAYOUT :   cb_right_port_ram(TB_CB_RIGHT_SIZE-1 downto 0) :=
     (
-        0   => x"00",
-        1   => x"01",
-        2   => x"02"
+        0 => x"00",
+        1 => x"01",
+        2 => x"02"
+    );
+
+    --Default layout of the left side port of the crossbar. This is matrix is equivalent
+    --to the transposed matrix of the right side and the right input ports for the  
+    --disconnected left signals.
+    constant TB_DEFAULT_LEFT_CB_LAYOUT  :   cb_left_port_ram(TB_CB_LEFT_SIZE-1 downto 0) := 
+    (
+        0 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
+        1 => std_logic_vector(to_unsigned(1,BUS_ADDRESS_WIDTH)),
+        2 => std_logic_vector(to_unsigned(2,BUS_ADDRESS_WIDTH)),
+        3 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
+        4 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
+        5 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)) 
     );
     -----------------------------------------------------------------------------------------------
 
 
-end package GOLDI_CROSSBAR_DEFAULT_MOCKUP;
+end package GOLDI_CROSSBAR_STANDARD;
