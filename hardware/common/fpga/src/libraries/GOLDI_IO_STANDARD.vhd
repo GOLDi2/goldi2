@@ -68,6 +68,8 @@ package GOLDI_IO_STANDARD is
 	--****CONSTANTS****
 	-----------------------------------------------------------------------------------------------
 	constant gnd_io_i 		: 	io_i := (dat => '0');
+	constant low_io_i		:	io_i := (dat => '0');
+	constant high_io_i		:	io_i := (dat => '1');
 	constant gnd_io_o 		: 	io_o := (enb => '0', dat => '0');
 	constant low_io_o		:	io_o := (enb => '1', dat => '0');
 	constant high_io_o		:	io_o := (enb => '1', dat => '1');
