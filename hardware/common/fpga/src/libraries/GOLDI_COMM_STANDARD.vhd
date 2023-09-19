@@ -111,9 +111,11 @@ package GOLDI_COMM_STANDARD is
     --Input signals:
     -- + dat: read data of accessed register (ignored in write operation)
     -- + tag: tags used to label data by the slave interface
+    -- + mux: additional multiplexing signal
     type mbus_in is record
         dat :   data_word;
         tag :   tag_word;
+        mux :   std_logic;
     end record;
 
 
@@ -145,7 +147,8 @@ package GOLDI_COMM_STANDARD is
 
     constant gnd_mbus_i     :   mbus_in := (
         dat => (others => '0'),
-        tag => (others => '0')
+        tag => (others => '0'),
+        mux => '0'
     );
 
     --Slave interface constants
@@ -159,7 +162,8 @@ package GOLDI_COMM_STANDARD is
 
     constant gnd_sbus_o     :   sbus_out := (
         dat => (others => '0'),
-        tag => (others => '0')
+        tag => (others => '0'),
+        mux => '0'
     );
     -------------------------------------------------------------------------------------------------------------------
 
@@ -207,6 +211,7 @@ package GOLDI_COMM_STANDARD is
 
     --GOLDi BUS management functions
     function reduceBusVector(bus_vector : sbus_o_vector) return sbus_out;
+    function reduceBusVector2(bus_vector : sbus_o_vector) return sbus_out;
     function reduceRegStrobe(stb_vector : std_logic_vector) return std_logic;
     function setMemory(data_vector : std_logic_vector) return data_word_vector;
     function getMemory(data_vector : data_word_vector) return std_logic_vector;
@@ -376,9 +381,30 @@ package body GOLDI_COMM_STANDARD is
             for j in tag_word'range loop
                 rbus.tag(j) := rbus.tag(j) or bus_vector(i).tag(j);
             end loop;
+
+            rbus.mux := rbus.mux or bus_vector(i).mux;
+            
         end loop;
 
         return rbus;
+    end function;
+
+
+    --! @brief Multiplexing of a sbus_out vector
+    --! @details
+    --! Returns a sbus_out structure corresponding to the addressed register. The 
+    --! function use the additional multiplexing signal "mux" in the BUS interface
+    --! to select the addressed interface.The function is used in synthesis to 
+    --! arbitrate the data of multiple register tables and register.
+    function reduceBusVector2(bus_vector : sbus_o_vector) return sbus_out is
+    begin
+        for i in bus_vector'range loop
+            if(bus_vector(i).mux = '1') then
+                return bus_vector(i);
+            end if;
+        end loop;
+        
+        return gnd_sbus_o;
     end function;
 
 

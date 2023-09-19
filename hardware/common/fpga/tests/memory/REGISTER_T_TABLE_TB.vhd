@@ -24,7 +24,7 @@ use IEEE.numeric_std.all;
 --! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
---use std.env.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -44,22 +44,22 @@ architecture TB of REGISTER_T_TABLE_TB is
     --****DUT****
     component REGISTER_T_TABLE
         generic(
-            g_base_address      :   integer;
-            g_number_registers  :   integer;
-            g_reg_def_dvalues   :   data_word_vector;
-            g_reg_def_tvalues   :   tag_word_vector
+            g_address       :   integer;
+            g_reg_number    :   integer;
+            g_def_dvalues   :   data_word_vector;
+            g_def_tvalues   :   tag_word_vector
         );
         port(
-            clk                 : in    std_logic;
-            rst                 : in    std_logic;
-            sys_bus_i           : in    sbus_in;
-            sys_bus_o           : out   sbus_out;
-            data_in             : in    data_word_vector(g_number_registers-1 downto 0);
-            tag_in              : in    tag_word_vector(g_number_registers-1 downto 0);
-            data_out            : out   data_word_vector(g_number_registers-1 downto 0);
-            tag_out             : out   tag_word_vector(g_number_registers-1 downto 0);
-            read_stb            : out   std_logic_vector(g_number_registers-1 downto 0);
-            write_stb           : out   std_logic_vector(g_number_registers-1 downto 0)
+            clk             : in    std_logic;
+            rst             : in    std_logic;
+            sys_bus_i       : in    sbus_in;
+            sys_bus_o       : out   sbus_out;
+            p_data_in       : in    data_word_vector(g_reg_number-1 downto 0);
+            p_tag_in        : in    tag_word_vector(g_reg_number-1 downto 0);
+            p_data_out      : out   data_word_vector(g_reg_number-1 downto 0);
+            p_tag_out       : out   tag_word_vector(g_reg_number-1 downto 0);
+            p_read_stb      : out   std_logic_vector(g_reg_number-1 downto 0);
+            p_write_stb     : out   std_logic_vector(g_reg_number-1 downto 0)
         );
     end component;
 
@@ -82,12 +82,12 @@ architecture TB of REGISTER_T_TABLE_TB is
     );
     signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
     signal sys_bus_o        :   sbus_out := gnd_sbus_o;
-    signal data_in          :   data_word_vector(2 downto 0) := (others => (others => '0'));
-    signal tag_in           :   tag_word_vector(2 downto 0)  := (others => (others => '0'));
-    signal data_out         :   data_word_vector(2 downto 0) := (others => (others => '0'));
-    signal tag_out          :   tag_word_vector(2 downto 0)  := (others => (others => '0'));
-    signal read_stb         :   std_logic_vector(2 downto 0) := (others => '0');
-    signal write_stb        :   std_logic_vector(2 downto 0) := (others => '0');
+    signal p_data_in        :   data_word_vector(2 downto 0) := (others => (others => '0'));
+    signal p_tag_in         :   tag_word_vector(2 downto 0)  := (others => (others => '0'));
+    signal p_data_out       :   data_word_vector(2 downto 0) := (others => (others => '0'));
+    signal p_tag_out        :   tag_word_vector(2 downto 0)  := (others => (others => '0'));
+    signal p_read_stb       :   std_logic_vector(2 downto 0) := (others => '0');
+    signal p_write_stb      :   std_logic_vector(2 downto 0) := (others => '0');
     --Testbench
     signal data_buff		:	std_logic_vector(3*SYSTEM_DATA_WIDTH-1 downto 0) :=
 		std_logic_vector(to_unsigned(3,SYSTEM_DATA_WIDTH)) &
@@ -103,24 +103,24 @@ begin
 
     --****COMPONENT****
     -----------------------------------------------------------------------------------------------
-    DUT : REGISTER_T_TABLE
+    DUT : entity work.REGISTER_T_TABLE(RTL)
     generic map(
-        g_base_address      => 1,
-        g_number_registers  => 3,
-        g_reg_def_dvalues   => reg_d_default,
-        g_reg_def_tvalues   => reg_t_default
+        g_address       => 1,
+        g_reg_number    => 3,
+        g_def_dvalues   => reg_d_default,
+        g_def_tvalues   => reg_t_default
     )
     port map(
-        clk                 => clock,
-        rst                 => reset,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o,
-        data_in             => data_in,
-        tag_in              => tag_in,
-        data_out            => data_out,
-        tag_out             => tag_out,
-        read_stb            => read_stb,
-        write_stb           => write_stb
+        clk             => clock,
+        rst             => reset,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => p_data_in,
+        p_tag_in        => p_tag_in,
+        p_data_out      => p_data_out,
+        p_tag_out       => p_tag_out,
+        p_read_stb      => p_read_stb,
+        p_write_stb     => p_write_stb
     );
     -----------------------------------------------------------------------------------------------
 
@@ -148,22 +148,22 @@ begin
 
         --**Test reset conditions**
         wait for assert_hold;
-  		assert(data_out(0) = std_logic_vector(to_unsigned(15,SYSTEM_DATA_WIDTH))) 
-			report "ID01: Test reset - expecting data_out(0) = x0F" severity error;
-		assert(data_out(1) = std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH))) 
-			report "ID02: Test reset - expecting data_out(1) = xF0" severity error;
-		assert(data_out(2) = std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH))) 
-            report "ID03: Test reset - expecting data_out(2) = xFF" severity error;
-        assert(tag_out(0) = std_logic_vector(to_unsigned(2,BUS_TAG_BITS)))
-            report "ID04: Test reset - expecting tag_out(0) = x02" severity error;
-        assert(tag_out(1) = std_logic_vector(to_unsigned(3,BUS_TAG_BITS)))
-            report "ID05: Test reset - expecting tag_out(1) = x03" severity error;
-        assert(tag_out(2) = std_logic_vector(to_unsigned(1,BUS_TAG_BITS)))
-            report "ID06: Test reset - expecting tag_out(2) = x01" severity error;
-		assert(read_stb = (read_stb'range => '0'))
-			report "ID07: Test reset - expecting read_stb = 000" severity error;
-		assert(write_stb = (write_stb'range => '0'))
-			report "ID08: Test reset - expecting write_stb = 000" severity error;
+  		assert(p_data_out(0) = std_logic_vector(to_unsigned(15,SYSTEM_DATA_WIDTH))) 
+			report "ID01: Test reset - expecting p_data_out(0) = x0F" severity error;
+		assert(p_data_out(1) = std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH))) 
+			report "ID02: Test reset - expecting p_data_out(1) = xF0" severity error;
+		assert(p_data_out(2) = std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH))) 
+            report "ID03: Test reset - expecting p_data_out(2) = xFF" severity error;
+        assert(p_tag_out(0) = std_logic_vector(to_unsigned(2,BUS_TAG_BITS)))
+            report "ID04: Test reset - expecting p_tag_out(0) = x02" severity error;
+        assert(p_tag_out(1) = std_logic_vector(to_unsigned(3,BUS_TAG_BITS)))
+            report "ID05: Test reset - expecting p_tag_out(1) = x03" severity error;
+        assert(p_tag_out(2) = std_logic_vector(to_unsigned(1,BUS_TAG_BITS)))
+            report "ID06: Test reset - expecting p_tag_out(2) = x01" severity error;
+		assert(p_read_stb = (p_read_stb'range => '0'))
+			report "ID07: Test reset - expecting p_read_stb = 000" severity error;
+		assert(p_write_stb = (p_write_stb'range => '0'))
+			report "ID08: Test reset - expecting p_write_stb = 000" severity error;
 		assert(sys_bus_o = gnd_sbus_o)
             report "ID09: Test reset - expecting sys_bus_o = gnd_sbus_o" severity error;
         wait for post_hold;
@@ -175,8 +175,8 @@ begin
 
 
         --**Test read bus**
-        data_in <= setMemory(data_buff);
-        tag_in  <= setTag(tag_buff);
+        p_data_in <= setMemory(data_buff);
+        p_tag_in  <= setTag(tag_buff);
         wait for clk_period;
         for i in 1 to 3 loop
             --Load address, write enable, data and tags
@@ -192,8 +192,11 @@ begin
             assert(sys_bus_o.tag = std_logic_vector(to_unsigned(i,BUS_TAG_BITS)))
                 report "ID11: Test bus read - expecting sys_bus_o.tag = " & integer'image(i)
                 severity error;
-            assert(read_stb = (read_stb'range => '0'))
-				report "ID12: Test bus read - expecting read_stb = '0'" 
+            assert(sys_bus_o.mux = '1')
+                report "ID12: Test bus read - expecting sys_bus_o.mux = '1'"
+                severity error;
+            assert(p_read_stb = (p_read_stb'range => '0'))
+				report "ID13: Test bus read - expecting p_read_stb = '0'" 
 				severity error;
 			wait for post_hold;
 
@@ -201,13 +204,16 @@ begin
             sys_bus_i.stb <= '1';
             wait for assert_hold;
             assert(sys_bus_o.dat = std_logic_vector(to_unsigned(i,SYSTEM_DATA_WIDTH)))
-                report "ID13: Test bus read - expecting sys_bus_o.dat = " & integer'image(i)
+                report "ID14: Test bus read - expecting sys_bus_o.dat = " & integer'image(i)
                 severity error;
             assert(sys_bus_o.tag = std_logic_vector(to_unsigned(i,BUS_TAG_BITS)))
-                report "ID14: Test bus read - expecting sys_bus_o.tag = " & integer'image(i)
+                report "ID15: Test bus read - expecting sys_bus_o.tag = " & integer'image(i)
                 severity error;
-            assert(read_stb(i-1) = '1')
-                report "ID15: Test bus read - expecting read_stb(" & integer'image(i-1) & ") = '1'"
+            assert(sys_bus_o.mux = '1')
+                report "ID16: Test bus read - expecting sys_bus_o.mux = '1'"
+                severity error;
+            assert(p_read_stb(i-1) = '1')
+                report "ID17: Test bus read - expecting p_read_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
 			wait for post_hold;
             sys_bus_i <= gnd_sbus_i;
@@ -229,27 +235,27 @@ begin
             sys_bus_i.tag <= std_logic_vector(to_unsigned(0,BUS_TAG_BITS));
         
             wait for assert_hold;
-			assert(data_out(i-1) = reg_d_default(i-1))
-				report "ID16: Test bus write - expecting data_out(i) = reg_default(i)"
+			assert(p_data_out(i-1) = reg_d_default(i-1))
+				report "ID18: Test bus write - expecting p_data_out(i) = reg_default(i)"
 				severity error;
-            assert(tag_out(i-1) = reg_t_default(i-1))
-                report "ID17: Test bus write - expecting tag_out(i) = reg_d_default(i)"
+            assert(p_tag_out(i-1) = reg_t_default(i-1))
+                report "ID19: Test bus write - expecting p_tag_out(i) = reg_d_default(i)"
                 severity error;    
-			assert(write_stb = (write_stb'range => '0'))
-				report "ID18: Test bus write - expecting write_stb = '0'"
+			assert(p_write_stb = (p_write_stb'range => '0'))
+				report "ID20: Test bus write - expecting p_write_stb = '0'"
 				severity error;
 			wait for post_hold;
 
             sys_bus_i.stb <= '1';
             wait for assert_hold;
-            assert(data_out(i-1) = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH))) 
-				report "ID19: Test bus write - expecting data_out("& integer'image(i-1)&") = x0A"
+            assert(p_data_out(i-1) = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH))) 
+				report "ID21: Test bus write - expecting p_data_out("& integer'image(i-1)&") = x0A"
 				severity error;
-            assert(tag_out(i-1) = std_logic_vector(to_unsigned(0,BUS_TAG_BITS))) 
-				report "ID20: Test bus write - expecting tag_out("& integer'image(i-1)&") = x00"
+            assert(p_tag_out(i-1) = std_logic_vector(to_unsigned(0,BUS_TAG_BITS))) 
+				report "ID22: Test bus write - expecting p_tag_out("& integer'image(i-1)&") = x00"
 				severity error;
-            assert(write_stb(i-1) = '1')
-				report "ID21: Test bus write - expecting write_stb(" & integer'image(i-1) & ") = '1'"
+            assert(p_write_stb(i-1) = '1')
+				report "ID23: Test bus write - expecting p_write_stb(" & integer'image(i-1) & ") = '1'"
 				severity error;
             wait for post_hold;
             sys_bus_i <= gnd_sbus_i;
@@ -262,10 +268,10 @@ begin
 		wait for 50 ns;
         report "REGISTER_TABLE_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-       --std.env.finish;
+        std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        run_sim <= '0';
-        wait;
+        -- run_sim <= '0';
+        -- wait;
 		
 	end process;
     -----------------------------------------------------------------------------------------------

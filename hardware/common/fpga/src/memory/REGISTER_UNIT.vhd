@@ -20,7 +20,8 @@
 --                      introduction of "stb" signal to the GOLDi BUS 
 --                      interface to prevent continuous read and write 
 --                      operations. Addition of tags to the BUS interfaces
---                      to extend BUS flexibility
+--                      to extend BUS flexibility. Change to generic and
+--                      port signal names to follow V4.00.00 naming convention
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -46,12 +47,12 @@ use work.GOLDI_COMM_STANDARD.all;
 --!
 --! The custom BUS interface is an addressable port that can perform exclusive
 --! write or read operations. A read operation returns the data present in the
---! "data_in" input and a write operation overwrites the data present on the 
---! "data_out" output. The custom BUS structure and its corresponding signals
+--! "p_data_in" input and a write operation overwrites the data present on the 
+--! "p_data_out" output. The custom BUS structure and its corresponding signals
 --! are defined in the GOLDI_COMM_STANDARD package.
 --!
 --! The internal data port can perform simultaneous read an write operations.
---! Additionaly the "read_stb" and "write_stb" flags indicate write and read
+--! Additionaly the "p_read_stb" and "p_write_stb" flags indicate write and read
 --! operations performed by the BUS port when the transfer is validated allowing
 --! data flow control.
 --!
@@ -61,8 +62,8 @@ use work.GOLDI_COMM_STANDARD.all;
 --! **Latency: 1cyc**
 entity REGISTER_UNIT is
     generic(
-        ADDRESS     :   natural := 1;                   --! Register address 
-        DEF_VALUE   :   data_word := reg_unit_d_default --! Register reset value
+        g_address   :   natural := 1;                   --! Register address 
+        g_def_value :   data_word := reg_unit_d_default --! Register reset value
     );
     port(
         --General
@@ -70,12 +71,12 @@ entity REGISTER_UNIT is
         rst         : in    std_logic;                  --! Asynchronous reset
         --BUS interface     
         sys_bus_i   : in    sbus_in;                    --! BUS port input signals [stb,we,adr,dat,tag]
-        sys_bus_o   : out   sbus_out;                   --! BUS port output signals [dat,tag]
+        sys_bus_o   : out   sbus_out;                   --! BUS port output signals [dat,tag,mux]
         --Data interface
-        data_in     : in    data_word;                  --! Data port write data - BUS port read data
-        data_out    : out   data_word;                  --! Data port read data - BUS port write data
-        read_stb    : out   std_logic;                  --! Read strobe signal indicates a valid read operation by the BUS port
-        write_stb   : out   std_logic                   --! Write strobe signal indicates a valid write operation by the BUS port
+        p_data_in   : in    data_word;                  --! Data port write data - BUS port read data
+        p_data_out  : out   data_word;                  --! Data port read data - BUS port write data
+        p_read_stb  : out   std_logic;                  --! Read strobe signal indicates a valid read operation by the BUS port
+        p_write_stb : out   std_logic                   --! Write strobe signal indicates a valid write operation by the BUS port
     );
 end entity REGISTER_UNIT;
 
@@ -90,25 +91,27 @@ begin
         variable bus_address    :   integer;
     begin
         if(rst = '1') then
-            sys_bus_o <= gnd_sbus_o;
-            read_stb  <= '0';
+            sys_bus_o  <= gnd_sbus_o;
+            p_read_stb <= '0';
 
         elsif(rising_edge(clk)) then
             --Typecast bus address to decode
             bus_address := to_integer(unsigned(sys_bus_i.adr));
 
             --Decode master bus interface and drive response
-            if(sys_bus_i.we = '0' and sys_bus_i.stb = '1' and bus_address = ADDRESS) then
-                sys_bus_o.dat <= data_in;
+            if(sys_bus_i.we = '0' and sys_bus_i.stb = '1' and bus_address = g_address) then
+                sys_bus_o.dat <= p_data_in;
                 sys_bus_o.tag <= (others => '0');
-                read_stb      <= '1';
-            elsif(sys_bus_i.we = '0' and bus_address = ADDRESS) then
-                sys_bus_o.dat <=  data_in;
+                sys_bus_o.mux <= '1';
+                p_read_stb    <= '1';
+            elsif(sys_bus_i.we = '0' and bus_address = g_address) then
+                sys_bus_o.dat <=  p_data_in;
                 sys_bus_o.tag <= (others => '0');
-                read_stb      <= '0';
+                sys_bus_o.mux <= '1';
+                p_read_stb    <= '0';
             else
                 sys_bus_o     <= gnd_sbus_o;
-                read_stb      <= '0';
+                p_read_stb    <= '0';
             end if;
 
         end if;
@@ -120,19 +123,19 @@ begin
         variable bus_address    :   integer;
     begin
         if(rst = '1') then
-            data_out  <= DEF_VALUE;
-            write_stb <= '1';
+            p_data_out  <= g_def_value;
+            p_write_stb <= '1';
 
         elsif(rising_edge(clk)) then
             --Typecast bus address to decode
             bus_address := to_integer(unsigned(sys_bus_i.adr));
 
             --Decode master bus interface and drive response
-            if(sys_bus_i.we = '1' and sys_bus_i.stb = '1' and bus_address = ADDRESS) then
-                data_out  <= sys_bus_i.dat;
-                write_stb <= '1';
+            if(sys_bus_i.we = '1' and sys_bus_i.stb = '1' and bus_address = g_address) then
+                p_data_out  <= sys_bus_i.dat;
+                p_write_stb <= '1';
             else
-                write_stb <= '0';
+                p_write_stb <= '0';
             end if;
 
         end if;

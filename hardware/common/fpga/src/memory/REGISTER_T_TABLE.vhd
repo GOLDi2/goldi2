@@ -42,9 +42,9 @@ use work.GOLDI_COMM_STANDARD.all;
 --! The custom BUS interface is an addressable port that can access one data and tag
 --! word at a time and perform exclusive write or read operations. 
 --! The data and tag words accessed are defined by the address value presented in 
---! the input BUS signals. A read operation returns the data present in the "data_in"
---! and "tag_in" inputs corresponding to the data word address; and a write operation
---! overwrites the data present on the "data_out" and "tag_out" outputs of the address.
+--! the input BUS signals. A read operation returns the data present in the "p_data_in"
+--! and "p_tag_in" inputs corresponding to the data word address; and a write operation
+--! overwrites the data present on the "p_data_out" and "p_tag_out" outputs of the address.
 --! The custom BUS structure and its corresponding signals are defined in the 
 --! GOLDI_COMM_STANDARD package.
 --!
@@ -61,25 +61,25 @@ use work.GOLDI_COMM_STANDARD.all;
 --! **Latency: 1cyc**
 entity REGISTER_T_TABLE is
     generic(
-        g_base_address      :   integer := 1;                                           --! Register table lowest address
-        g_number_registers  :   integer := 3;                                           --! Length of register table
-        g_reg_def_dvalues   :   data_word_vector := reg_table_d_default;                --! Registers reset data values
-        g_reg_def_tvalues   :   tag_word_vector  := reg_table_t_default                 --! Registers reset tag values
+        g_address       :   integer := 1;                                     --! Register table lowest address
+        g_reg_number    :   integer := 3;                                     --! Length of register table
+        g_def_dvalues   :   data_word_vector := reg_table_d_default;          --! Registers reset data values
+        g_def_tvalues   :   tag_word_vector  := reg_table_t_default           --! Registers reset tag values
     );
     port(
         --General
-        clk                 : in    std_logic;                                          --! System clock
-        rst                 : in    std_logic;                                          --! Asynchronous reset
+        clk             : in    std_logic;                                    --! System clock
+        rst             : in    std_logic;                                    --! Asynchronous reset
         --BUS interface
-        sys_bus_i           : in    sbus_in;                                            --! BUS port input signals [stb,we,adr,dat,tag]
-        sys_bus_o           : out   sbus_out;                                           --! BUS port output signals [dat,tag]
+        sys_bus_i       : in    sbus_in;                                      --! BUS port input signals [stb,we,adr,dat,tag]
+        sys_bus_o       : out   sbus_out;                                     --! BUS port output signals [dat,tag,mux]
         --Data interface
-        data_in             : in    data_word_vector(g_number_registers-1 downto 0);    --! Data port write data vector - BUS port read data vector
-        tag_in              : in    tag_word_vector(g_number_registers-1 downto 0);     --! Data port write tag vector  - BUS port read tag vector 
-        data_out            : out   data_word_vector(g_number_registers-1 downto 0);    --! Data port read data vector - BUS port write data vector
-        tag_out             : out   tag_word_vector(g_number_registers-1 downto 0);     --! Data port read tag vector  - BUS port write tag vector
-        read_stb            : out   std_logic_vector(g_number_registers-1 downto 0);    --! Read strobe signal indicates a valid read operation by the BUS port
-        write_stb           : out   std_logic_vector(g_number_registers-1 downto 0)     --! Write strobe signal indicates a valid write operation by the BUS port
+        p_data_in       : in    data_word_vector(g_reg_number-1 downto 0);    --! Data port write data vector - BUS port read data vector
+        p_tag_in        : in    tag_word_vector(g_reg_number-1 downto 0);     --! Data port write tag vector  - BUS port read tag vector 
+        p_data_out      : out   data_word_vector(g_reg_number-1 downto 0);    --! Data port read data vector - BUS port write data vector
+        p_tag_out       : out   tag_word_vector(g_reg_number-1 downto 0);     --! Data port read tag vector  - BUS port write tag vector
+        p_read_stb      : out   std_logic_vector(g_reg_number-1 downto 0);    --! Read strobe signal indicates a valid read operation by the BUS port
+        p_write_stb     : out   std_logic_vector(g_reg_number-1 downto 0)     --! Write strobe signal indicates a valid write operation by the BUS port
     );
 end entity REGISTER_T_TABLE;
 
@@ -93,9 +93,9 @@ architecture BH of REGISTER_T_TABLE is
     --****INTERNAL SIGNALS****
     --Address constants
     constant min_address    :   signed(BUS_ADDRESS_WIDTH downto 0)
-        := to_signed(g_base_address,BUS_ADDRESS_WIDTH+1);
+        := to_signed(g_address,BUS_ADDRESS_WIDTH+1);
     constant max_address    :   signed(BUS_ADDRESS_WIDTH downto 0)
-        := to_signed(g_base_address+g_number_registers,BUS_ADDRESS_WIDTH+1);
+        := to_signed(g_address+g_reg_number,BUS_ADDRESS_WIDTH+1);
 
 begin
 
@@ -105,12 +105,12 @@ begin
     begin
         if(rst = '1') then
             sys_bus_o <= gnd_sbus_o;
-            read_stb  <= (others => '0');
+            p_read_stb  <= (others => '0');
 
         elsif(rising_edge(clk)) then
             --Ground read strobe vector to avoid multiple stb pulses when continuous
             --read operations accross different registers happen.
-            read_stb <= (others => '0');
+            p_read_stb <= (others => '0');
             
             --Norm bus address and get an array index
             bus_adr   := "0" & sys_bus_i.adr;
@@ -119,15 +119,16 @@ begin
             --Recover value from data table if address is in the index range
             if((min_address <= signed(bus_adr)) and (signed(bus_adr) < max_address) and (sys_bus_i.we = '0')) then
                 --Drive BUS interface
-                sys_bus_o.dat <= data_in(to_integer(reg_index));
-                sys_bus_o.tag <= tag_in(to_integer(reg_index));
+                sys_bus_o.dat <= p_data_in(to_integer(reg_index));
+                sys_bus_o.tag <= p_tag_in(to_integer(reg_index));
+                sys_bus_o.mux <= '1';
 
                 if(sys_bus_i.stb = '1') then
-                    read_stb(to_integer(reg_index)) <= '1';
+                    p_read_stb(to_integer(reg_index)) <= '1';
                 end if;
             else
-                sys_bus_o <= gnd_sbus_o;
-                read_stb  <= (others => '0');
+                sys_bus_o  <= gnd_sbus_o;
+                p_read_stb <= (others => '0');
             end if;    
         
         end if;
@@ -139,14 +140,14 @@ begin
         variable reg_index  :   signed(BUS_ADDRESS_WIDTH downto 0);
     begin
         if(rst = '1') then
-            data_out  <= g_reg_def_dvalues;
-            tag_out   <= g_reg_def_tvalues;
-            write_stb <= (others => '1');
+            p_data_out  <= g_def_dvalues;
+            p_tag_out   <= g_def_tvalues;
+            p_write_stb <= (others => '1');
 
         elsif(rising_edge(clk)) then
             --Ground write strobe vector to avoid multiple stb pulsed when contiuous
             --write operations accross different registers happen
-            write_stb <= (others => '0');
+            p_write_stb <= (others => '0');
             
             --Norm bus address and get an array index
             bus_adr   := "0" & sys_bus_i.adr;
@@ -156,12 +157,12 @@ begin
             if((min_address <= signed(bus_adr)) and (signed(bus_adr) < max_address) and (sys_bus_i.we = '1')) then
                 --Drive data interface
                 if(sys_bus_i.stb = '1') then
-                    data_out(to_integer(reg_index)) <= sys_bus_i.dat;
-                    tag_out(to_integer(reg_index))  <= sys_bus_i.tag;
-                    write_stb(to_integer(reg_index)) <= '1';
+                    p_data_out(to_integer(reg_index))  <= sys_bus_i.dat;
+                    p_tag_out(to_integer(reg_index))   <= sys_bus_i.tag;
+                    p_write_stb(to_integer(reg_index)) <= '1';
                 end if;
             else
-                write_stb <= (others => '0');
+                p_write_stb <= (others => '0');
             end if;
 
         end if;
@@ -176,27 +177,27 @@ end architecture;
 --! General architecture
 architecture RTL of REGISTER_T_TABLE is
     --****INTERNAL SIGNALS****
-    signal bus_o_vector :   sbus_o_vector(g_number_registers-1 downto 0);    
+    signal bus_o_vector :   sbus_o_vector(g_reg_number-1 downto 0);    
 begin
 
-    REGISTERS : for i in 0 to g_number_registers-1 generate
+    REGISTERS : for i in 0 to g_reg_number-1 generate
         REG : entity work.REGISTER_T_UNIT
         generic map(
-            g_address       => i + g_base_address,
-            g_def_dvalue    => g_reg_def_dvalues(i),
-            g_def_tvalue    => g_reg_def_tvalues(i)
+            g_address       => i + g_address,
+            g_def_dvalue    => g_def_dvalues(i),
+            g_def_tvalue    => g_def_tvalues(i)
         )
         port map(
             clk             => clk,
             rst             => rst,
             sys_bus_i       => sys_bus_i,
             sys_bus_o       => bus_o_vector(i),
-            data_in         => data_in(i),
-            tag_in          => tag_in(i),
-            data_out        => data_out(i),
-            tag_out         => tag_out(i),
-            read_stb        => read_stb(i),
-            write_stb       => write_stb(i)
+            p_data_in         => p_data_in(i),
+            p_tag_in          => p_tag_in(i),
+            p_data_out        => p_data_out(i),
+            p_tag_out         => p_tag_out(i),
+            p_read_stb        => p_read_stb(i),
+            p_write_stb       => p_write_stb(i)
         );
     end generate;
 

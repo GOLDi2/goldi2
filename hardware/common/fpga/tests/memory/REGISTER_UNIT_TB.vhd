@@ -44,18 +44,18 @@ architecture TB of REGISTER_UNIT_TB is
     --****DUT****
     component REGISTER_UNIT
         generic(
-            ADDRESS     :   natural;
-            DEF_VALUE   :   data_word
+            g_address   :   natural;
+            g_def_value :   data_word
         );
         port(
             clk         : in    std_logic;
             rst         : in    std_logic;
             sys_bus_i   : in    sbus_in;
             sys_bus_o   : out   sbus_out;
-            data_in     : in    data_word;
-            data_out    : out   data_word;
-            read_stb    : out   std_logic;
-            write_stb   : out   std_logic
+            p_data_in   : in    data_word;
+            p_data_out  : out   data_word;
+            p_read_stb  : out   std_logic;
+            p_write_stb : out   std_logic
         );
     end component;
 
@@ -70,10 +70,10 @@ architecture TB of REGISTER_UNIT_TB is
     constant reg_default    :   data_word := std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH));
     signal sys_bus_i        :   sbus_in   := gnd_sbus_i;
     signal sys_bus_o        :   sbus_out  := gnd_sbus_o;
-    signal data_in          :   data_word := (others => '0');
-    signal data_out         :   data_word := (others => '0');
-    signal read_stb         :   std_logic := '0';
-    signal write_stb        :   std_logic := '0';
+    signal p_data_in        :   data_word := (others => '0');
+    signal p_data_out       :   data_word := (others => '0');
+    signal p_read_stb       :   std_logic := '0';
+    signal p_write_stb      :   std_logic := '0';
 
 
 begin
@@ -82,18 +82,18 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : REGISTER_UNIT
     generic map(
-        ADDRESS     => 1,
-        DEF_VALUE   => reg_default
+        g_address   => 1,
+        g_def_value => reg_default
     )
     port map(
         clk         => clock,
         rst         => reset,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o,
-        data_in     => data_in,
-        data_out    => data_out,
-        read_stb    => read_stb,
-        write_stb   => write_stb
+        p_data_in   => p_data_in,
+        p_data_out  => p_data_out,
+        p_read_stb  => p_read_stb,
+        p_write_stb => p_write_stb
     );
     -----------------------------------------------------------------------------------------------
 
@@ -121,12 +121,12 @@ begin
 
         --**Test reset conditions**
         wait for assert_hold;
-        assert(data_out = reg_default)
-            report "ID01: Test reset - expecting data_out = xF0" severity error;
-        assert(read_stb = '0')
-            report "ID02: Test reset - expecting read_stb = '0'" severity error;
-        assert(write_stb = '0')
-            report "ID03: Test reset - expecting write_stb = '0'" severity error;
+        assert(p_data_out = reg_default)
+            report "ID01: Test reset - expecting p_data_out = xF0" severity error;
+        assert(p_read_stb = '0')
+            report "ID02: Test reset - expecting p_read_stb = '0'" severity error;
+        assert(p_write_stb = '0')
+            report "ID03: Test reset - expecting p_write_stb = '0'" severity error;
         assert(sys_bus_o = gnd_sbus_o)
             report "ID04: Test reset - expecting sys_bus_o = gnd_sbus_o" severity error;
         wait for post_hold;
@@ -138,7 +138,7 @@ begin
 
 
         --**Test read bus**
-        data_in <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
+        p_data_in <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
         wait for clk_period;
         --Load address, write enable and data
         sys_bus_i.we  <= '0';
@@ -148,17 +148,21 @@ begin
         wait for assert_hold;
         assert(sys_bus_o.dat = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
             report "ID05: Test bus read - expecting sys_bus_o.dat = x0A" severity error;
-        assert(read_stb = '0')
-            report "ID06: Test bus read - epxecting read_stb = '0'" severity error;
+        assert(sys_bus_o.mux = '1')
+            report "ID06: Test bus read - expecting sys_bus_o.mux = '1'" severity error;
+        assert(p_read_stb = '0')
+            report "ID07: Test bus read - epxecting p_read_stb = '0'" severity error;
         wait for post_hold;
 
         --Enable strobe signal
         sys_bus_i.stb <= '1';        
         wait for assert_hold;
         assert(sys_bus_o.dat = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
-            report "ID07: Test bus read - expecting sys_bus_o.dat = x0A" severity error;
-        assert(read_stb = '1')
-            report "ID08: Test bus read - expecting read_stb = '1'" severity error;
+            report "ID08: Test bus read - expecting sys_bus_o.dat = x0A" severity error;
+        assert(sys_bus_o.mux = '1')
+            report "ID09: Test bus read - expecting sys_bus_o.mux = '1'" severity error;
+        assert(p_read_stb = '1')
+            report "ID10: Test bus read - expecting p_read_stb = '1'" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
 
@@ -175,21 +179,21 @@ begin
         sys_bus_i.dat <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
 
         wait for assert_hold;
-        assert(data_out = reg_default)
-            report "ID09: Test bus write - expecting data_out = reg_default" severity error;
-        assert(write_stb = '0')
-            report "ID10: Test bus write - expecting write_stb = '0'" severity error;
+        assert(p_data_out = reg_default)
+            report "ID11: Test bus write - expecting p_data_out = reg_default" severity error;
+        assert(p_write_stb = '0')
+            report "ID12: Test bus write - expecting p_write_stb = '0'" severity error;
         wait for post_hold;
 
         --Enable strobe signal
         sys_bus_i.stb <= '1';
         wait for assert_hold;
         assert(sys_bus_o.dat = (sys_bus_o.dat'range => '0'))
-            report "ID11: Test bus write - expecting sys_bus_o = x00" severity error;
-        assert(data_out = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
-            report "ID12: Test bus write - expecting data_out = x0A" severity error;
-        assert(write_stb = '1')
-            report "ID13: Test bus write - expecting write_stb = '1'" severity error;
+            report "ID13: Test bus write - expecting sys_bus_o = x00" severity error;
+        assert(p_data_out = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
+            report "ID14: Test bus write - expecting p_data_out = x0A" severity error;
+        assert(p_write_stb = '1')
+            report "ID15: Test bus write - expecting p_write_stb = '1'" severity error;
         wait for post_hold;
         sys_bus_i <= gnd_sbus_i;
         
