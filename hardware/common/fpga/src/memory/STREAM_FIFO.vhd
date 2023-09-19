@@ -17,6 +17,10 @@
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: -  
+--
+-- Revision V4.00.00 - Modifications to the generic and port signal names
+-- Additional Comments: Changes to the module's generic and port signals to
+--                      follow V4.00.00 naming convention.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -44,8 +48,8 @@ use IEEE.numeric_std.all;
 --! **Latency: 1cyc**
 entity STREAM_FIFO is
     generic(
-        FIFO_WIDTH      :   natural := 16;                                  --! Memory width, width of the data word vector
-        FIFO_DEPTH      :   natural := 16                                   --! Memory depth, number of data words that can be stored
+        g_fifo_width    :   natural := 16;                                  --! Memory width, width of the data word vector
+        g_fifo_depth    :   natural := 16                                   --! Memory depth, number of data words that can be stored
     );
     port(
         --General
@@ -54,10 +58,10 @@ entity STREAM_FIFO is
         --Data
         p_write_tready  : out   std_logic;                                  --! Input ready flag, fifo ready for transfer (!queue_full)
         p_write_tvalid  : in    std_logic;                                  --! Input valid flag, data transmitter ready for transfer
-        p_write_tdata   : in    std_logic_vector(FIFO_WIDTH-1 downto 0);    --! Input data      
+        p_write_tdata   : in    std_logic_vector(g_fifo_width-1 downto 0);  --! Input data      
         p_read_tready   : in    std_logic;                                  --! Output ready flag, data recipient redy for transfer
         p_read_tvalid   : out   std_logic;                                  --! Output valid flag, fifo ready for transfer (!queue_empty)
-        p_read_tdata    : out   std_logic_vector(FIFO_WIDTH-1 downto 0)     --! Output data
+        p_read_tdata    : out   std_logic_vector(g_fifo_width-1 downto 0)   --! Output data
     );
 end entity STREAM_FIFO;
 
@@ -69,13 +73,13 @@ architecture RTL of STREAM_FIFO is
 
     --****INTERNAL SIGNALS****
     --Memory
-    type ram_type is array(FIFO_DEPTH-1 downto 0) of std_logic_vector(FIFO_WIDTH-1 downto 0);
+    type ram_type is array(g_fifo_depth-1 downto 0) of std_logic_vector(g_fifo_width-1 downto 0);
     signal memory       :   ram_type;
     --Memory pointers
-    signal wr_pointer       :   natural range 0 to FIFO_DEPTH-1;
-    signal rd_pointer       :   natural range 0 to FIFO_DEPTH-1;
-    signal memory_count     :   natural range 0 to FIFO_DEPTH;
-    signal memory_count_1   :   natural range 0 to FIFO_DEPTH;
+    signal wr_pointer       :   natural range 0 to g_fifo_depth-1;
+    signal rd_pointer       :   natural range 0 to g_fifo_depth-1;
+    signal memory_count     :   natural range 0 to g_fifo_depth;
+    signal memory_count_1   :   natural range 0 to g_fifo_depth;
     --Flags
     signal write_ready_i    :   std_logic;
     signal read_valid_i     :   std_logic;
@@ -90,7 +94,7 @@ architecture RTL of STREAM_FIFO is
     ) return natural is
     begin
         if(ready = '1' and valid = '1') then
-            if(index = FIFO_DEPTH-1) then
+            if(index = g_fifo_depth-1) then
                 return 0;
             else
                 return index + 1;
@@ -140,7 +144,7 @@ begin
 
 
     MEMORY_COUNTER : process(clk)
-        variable counter    :   natural range 0 to FIFO_DEPTH;
+        variable counter    :   natural range 0 to g_fifo_depth;
     begin
         if(rising_edge(clk)) then
             if(rst = '1') then
@@ -191,9 +195,11 @@ begin
 
     --****Flag management****
     -----------------------------------------------------------------------------------------------
-    WRITE_READY_FLAG : process(memory_count)
+    WRITE_READY_FLAG : process(rst,memory_count)
     begin
-        if(memory_count < FIFO_DEPTH) then
+        if(rst = '1') then
+            write_ready_i <= '0';
+        elsif(memory_count < g_fifo_depth) then
             write_ready_i <= '1';
         else
             write_ready_i <= '0';

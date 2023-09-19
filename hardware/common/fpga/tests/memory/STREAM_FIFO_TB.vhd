@@ -17,6 +17,10 @@
 --
 -- Revision V4.00.00 - General improvements to simulation control
 -- Additional Comments: Use of env library to stop simulation.
+--
+-- Revision V4.00.00 - Modifications to the generic and port signal names
+-- Additional Comments: Changes to the module's generic and port signals to
+--                      follow V4.00.00 naming convention.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -43,18 +47,18 @@ architecture TB of STREAM_FIFO_TB is
     --****DUT****
     component STREAM_FIFO
         generic(
-            FIFO_WIDTH      :   natural := 16;
-            FIFO_DEPTH      :   natural := 16
+            g_fifo_width    :   natural := 16;
+            g_fifo_depth    :   natural := 16
         );
         port(
             clk             : in    std_logic;
             rst             : in    std_logic;
             p_write_tready  : out   std_logic;
             p_write_tvalid  : in    std_logic;
-            p_write_tdata   : in    std_logic_vector(FIFO_WIDTH-1 downto 0);        
+            p_write_tdata   : in    std_logic_vector(g_fifo_width-1 downto 0);        
             p_read_tready   : in    std_logic;
             p_read_tvalid   : out   std_logic;
-            p_read_tdata    : out   std_logic_vector(FIFO_WIDTH-1 downto 0)        
+            p_read_tdata    : out   std_logic_vector(g_fifo_width-1 downto 0)        
         );
     end component;   
 
@@ -80,8 +84,8 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : STREAM_FIFO
     generic map(
-        FIFO_WIDTH      => 8,
-        FIFO_DEPTH      => 4
+        g_fifo_width    => 8,
+        g_fifo_depth    => 4
     )
     port map(
         clk             => clock,
