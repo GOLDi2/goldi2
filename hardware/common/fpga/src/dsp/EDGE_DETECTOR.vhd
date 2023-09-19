@@ -16,7 +16,10 @@
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)  
+-- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V4.00.0 - Change of reset type
+-- Additional Comments: Change from synchronous to asynchronous reset 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -54,34 +57,31 @@ architecture RTL of EDGE_DETECTOR is
 	
 	--****INTERNAL SIGNALS****
 	--Buffer
-	signal data_in_buff	:	std_logic_vector(1 downto 0);
+	signal data_in_buff	:	std_logic;
 
 begin
 	
-	ED : process(clk) 
+	EDGE_DETECTION : process(clk,rst) 
 	begin
-		if(rising_edge(clk)) then
-			if(rst = '1') then
-				data_in_buff <= (others => '0');
-			
-			else
-				--Input data
-				data_in_buff <= data_in_buff(0) & data_in;
-				
-				if(data_in_buff = "01") then
-					p_edge <= '1';
-					n_edge <= '0';
-				
-				elsif(data_in_buff = "10") then
-					p_edge <= '0';
-					n_edge <= '1';
-					
-				else 
-					p_edge <= '0';
-					n_edge <= '0';
-				
-				end if;
-			end if;	
+		if(rst = '1') then
+			data_in_buff <= '0';
+			p_edge		 <= '0';
+			n_edge	     <= '0';
+
+		elsif(rising_edge(clk)) then			
+			if((data_in_buff = '0') and (data_in = '1')) then
+				p_edge <= '1';
+				n_edge <= '0';
+			elsif((data_in_buff = '1') and (data_in = '0')) then
+				p_edge <= '0';
+				n_edge <= '1';	
+			else 
+				p_edge <= '0';
+				n_edge <= '0';
+			end if;
+
+			--Shift data
+			data_in_buff <= data_in;
 		end if;
 	end process;
 	

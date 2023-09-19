@@ -9,21 +9,26 @@
 -- Target Devices: 	LCMXO2-7000HC-4TG144C
 -- Tool versions: 	Lattice Diamond 3.12, Modelsim Lattice Edition
 --
--- Dependencies: 	EDGE_DETECTOR.vhd;
+-- Dependencies: 	-> EDGE_DETECTOR.vhd;
 --
 -- Revisions:
 -- Revision V0.01.03 - File Created
 -- Additional Comments: First commit
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: -  
+-- Additional Comments: - 
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to stop simulation. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation control and assertions
+library std;
 use std.standard.all;
+use std.env.all;
 
 
 
@@ -52,14 +57,14 @@ architecture TB of EDGE_DETECTOR_TB is
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period	:	time := 10 ns;
+	constant clk_period	:	time := 20 ns;
 	signal clock		:	std_logic := '0';
 	signal reset		:	std_logic := '0';
 	signal run_sim		:	std_logic := '1';
 	--DUT IOs
-    signal data_in      :   std_logic;
-    signal n_edge       :   std_logic;
-    signal p_edge       :   std_logic;
+    signal data_in      :   std_logic := '0';
+    signal n_edge       :   std_logic := '0';
+    signal p_edge       :   std_logic := '0';
 
 
 begin
@@ -81,7 +86,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -91,11 +96,10 @@ begin
     TEST : process
         --Timing
 		variable init_hold		:	time := 5*clk_period/2;
-        variable assert_hold    :   time := 5*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable assert_hold    :   time := 3*clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
         --**Initial Setup**
-        data_in <= '0';
         wait for init_hold;
 
 
@@ -131,10 +135,14 @@ begin
         wait for post_hold;
 
 
-        --End simulation
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
+        --**End simulation**
+		wait for 50 ns;
+        report "EDGE_DETECTOR_TB - testbench successful";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/05/2023
--- Design Name:		Virtual sensor test bench
+-- Design Name:		Virtual sensor testbench
 -- Module Name:		VIRTUAL_SENSOR_ARRAY_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -15,13 +15,19 @@
 -- Revisions:
 -- Revision V2.00.00 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to stop simulation.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library 
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation control and assertions
+library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_DATA_TYPES.all;
@@ -42,34 +48,30 @@ architecture TB of VIRTUAL_SENSOR_ARRAY_TB is
     --****DUT****
     component VIRTUAL_SENSOR_ARRAY
         generic(
-            INVERT              :   boolean := false;
-            NUMBER_SENSORS      :   integer := 3;
-            SENSOR_LIMITS       :   sensor_limit_array := ((0,0),(0,0),(0,0))
+            g_invert            :   boolean := false;
+            g_number_sensors    :   integer := 3;
+            g_sensor_limits     :   sensor_limit_array := ((0,0),(0,0),(0,0))
         );
         port(
-            --General
             clk                 : in    std_logic;
             rst                 : in    std_logic;
-            --Incremental encoder interface
-            enc_channel_a       : in    std_logic;
-            enc_channel_b       : in    std_logic;
-            --Sensor outputs
-            sensor_data_out     : out   std_logic_vector(NUMBER_SENSORS-1 downto 0)
-
+            p_channel_a         : in    std_logic;
+            p_channel_b         : in    std_logic;
+            p_sensor_data       : out   std_logic_vector(g_number_sensors-1 downto 0)
         );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-    constant clk_period		    :	time := 10 ns;
+    constant clk_period		    :	time := 20 ns;
 	signal reset			    :	std_logic := '0';
 	signal clock			    :	std_logic := '0';
 	signal run_sim			    :	std_logic := '1';
 	--DUT i/o
-    signal enc_channel_a        :   std_logic;
-    signal enc_channel_b        :   std_logic;
-    signal sensor_full_range    :   std_logic_vector(2 downto 0);
+    signal p_channel_a          :   std_logic := '0';
+    signal p_channel_b          :   std_logic := '0';
+    signal sensor_full_range    :   std_logic_vector(2 downto 0) := (others => '0');
 
 
 begin
@@ -78,16 +80,16 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : VIRTUAL_SENSOR_ARRAY
     generic map(
-        INVERT              => false,
-        NUMBER_SENSORS      => 3,
-        SENSOR_LIMITS       => ((100,20),(200,20),(300,20))
+        g_invert            => false,
+        g_number_sensors    => 3,
+        g_sensor_limits     => ((100,20),(200,20),(300,20))
     )
     port map(
         clk                 => clock,
         rst                 => reset,
-        enc_channel_a       => enc_channel_a,
-        enc_channel_b       => enc_channel_b,
-        sensor_data_out     => sensor_full_range
+        p_channel_a         => p_channel_a,
+        p_channel_b         => p_channel_b,
+        p_sensor_data       => sensor_full_range
     );
     -----------------------------------------------------------------------------------------------
 
@@ -96,7 +98,7 @@ begin
     --***SIMULATION TIMING****
 	-----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
 	-----------------------------------------------------------------------------------------------
 
 
@@ -107,11 +109,9 @@ begin
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
-        --Preset signals
-        enc_channel_a <= '0';
-        enc_channel_b <= '0';
+        --**Initial Setup**
         wait for init_hold;
 
 
@@ -124,12 +124,12 @@ begin
 
 
         --****Test operation****
-        enc_channel_b <= '1';
-        enc_channel_a <= '0';
+        p_channel_b <= '1';
+        p_channel_a <= '0';
         wait for 4*clk_period;
         --Simulate encoder impulses in positive direction
         for i in 0 to 399 loop
-            enc_channel_a <= not enc_channel_a;
+            p_channel_a <= not p_channel_a;
 
             --**Test cases**
             wait for assert_hold;
@@ -152,15 +152,19 @@ begin
                     severity error;
             end if;
 
-            enc_channel_b <= not enc_channel_b;
+            p_channel_b <= not p_channel_b;
             wait for 2*clk_period;
         end loop;
 
 
-        --End simulation
-        wait for 5*clk_period;
-        run_sim <= '0';
-        wait;
+        --**End simulation**
+		wait for 50 ns;
+        report "VIRTUAL_SENSOR_ARRAYa_TB - testbench successful";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

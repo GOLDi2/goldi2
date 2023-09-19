@@ -19,6 +19,11 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V4.00.00 - Module renaming and change of reset type
+-- Additional Comments: Renaming of module to follow V4.00.00 conventions.
+--                      (INC_ENCODER.vhd -> ENCODER_SMODULE.vhd)
+--						Change from synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -34,18 +39,44 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Incremental encoder dsp module 
 --! @details
---! Incremental encoder processing unit for 3 or 2 channel sensor.
---! The module reacts to the edges of the a channel providing an impulse
---! counts for channel a edge using the b channel to determinate direction. 
---! The counter value is stored in a signed 16 bit integer. The counter 
---! values are stored in internal registers (default 8 bits) and can be 
---! access through a custom parallel BUS stucture
+--! Incremental encoder processing unit for 3 or 2 channel sensor. The module
+--! reacts to the edges of the a channel providing an impulse counts for 
+--! "p_channel_a" edge using the "p_channel_b" to determine the movement direction. 
+--! The counter value is stored in a unsigned 16 bit data word and then stored 
+--! in the internal registers. The data can then be accessed through the GOLDi 
+--! BUS interface. The parameter "g_address" is the base address of the module
+--! i.e. the address of the data word or in the case of a SYSTEM_DATA_WIDTH
+--! value smaller than 16, then the lower bits of the data
 --!
---! The reset signal returns the registers to x"00" [counter = 0] and
---! sets the driver to an idle state that waits for the index signal 
---! to restart normal operation. This provides a fix reference point.
+--! The parameter "g_invert" selects the direction of the positive axis of
+--! rotation. By setting the parameter to true the moduel increases the counter
+--! when the encoder is rotated in the clockwise direction. A rising edge on the
+--! "p_channel_a" and a high state in the "p_channel_b" increase the counter. If
+--! the parameter is set to false this behaviour is inverted an the counter
+--! clockwise movement produces an increment in the module's counter. A rising
+--! edge on the "p_channel_a" and a low state in the "p_channel_b" increase the
+--! counter.
+--!
+--! g_invert = false 
+--! -> [channel_a: 01 | channel_b: '0'] counter --
+--! -> [channel_a: 01 | channel_b: '1'] counter ++
+--! -> [channel_a: 10 | channel_b: '0'] counter ++
+--! -> [channel_a: 10 | channel_b: '1'] counter --
+--! 
+--! g_invert = true
+--! -> [channel_a: 01 | channel_b: '0'] counter ++
+--! -> [channel_a: 01 | channel_b: '1'] counter --
+--! -> [channel_a: 10 | channel_b: '0'] counter --
+--! -> [channel_a: 10 | channel_b: '1'] counter ++
+--!
+--! When the "g_index_rst" is set to true the assertion of the reset signal
+--! returns the registers to the value x"00" [counter = 0] and sets the driver 
+--! in an idle state that holds until the index signal is asserted to restart 
+--! the normal operation of the module. This provides a fix reference point.
 --!
 --! #### Registers: 
+--!
+--! SYSTEM_DATA_WIDTH = 8
 --!
 --! | Address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -53,11 +84,11 @@ use work.GOLDI_IO_STANDARD.all;
 --! | +1		| VALUE [15:8] ||||||||
 --!
 --! **Latency:3**
-entity INC_ENCODER is
+entity ENCODER_SMODULE is
 	generic(
-		ADDRESS		:	natural := 1;			--! Module base address
-		INDEX_RST	:	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
-        INVERT      :   boolean := false        --! Select positive direction [false -> CCW | true -> CC]
+		g_address	:	natural := 1;			--! Module base address
+		g_index_rst	:	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
+        g_invert    :   boolean := false        --! Select positive direction [false -> CCW | true -> CC]
     );
 	port(
 		--General
@@ -67,26 +98,26 @@ entity INC_ENCODER is
 		sys_bus_i	: in	sbus_in;			--! BUS input signals [we,adr,dat]
 		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,val]
 		--3 Channel encoder signals
-		channel_a	: in	io_i;				--! Channel_a input
-		channel_b	: in	io_i;				--! Channel_b input
-		channel_i	: in	io_i				--! Channel_i input
+		p_channel_a	: in	io_i;				--! Channel_a input
+		p_channel_b	: in	io_i;				--! Channel_b input
+		p_channel_i	: in	io_i				--! Channel_i input
 	);
-end entity INC_ENCODER;
+end entity ENCODER_SMODULE;
 
 
 
 
 --! General architecture
-architecture RTL of INC_ENCODER is 
+architecture RTL of ENCODER_SMODULE is 
 
     --****INTERNAL SIGNALS****
     --Memory
     constant memory_length  :   natural := getMemoryLength(16);
-    constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
+    constant c_reg_default  :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
     signal reg_data_in      :   data_word_vector(memory_length-1 downto 0);
     signal reg_data_buff    :   std_logic_vector(15 downto 0);
     --Arithmetic
-    signal enc_counter      :   integer := 0;
+    signal enc_counter      :   unsigned(15 downto 0);
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     signal enc_block        :   std_logic;
@@ -98,48 +129,48 @@ begin
     -----------------------------------------------------------------------------------------------
     SIGNAL_DECODER : process(clk)
     begin
-        if(rising_edge(clk)) then
-            --Reset encoder and block until index channel detection
-            
-            if(rst = '1') then
-                enc_counter  <= 0;
-                enc_signal_a <= (others => channel_a.dat);
-                enc_signal_b <= channel_b.dat;
-            elsif(enc_block /= '0') then
-                enc_counter <= 0;
-            else
+        if(rst = '1') then
+            enc_counter  <= (others => '0');
+            enc_signal_a <= (others => p_channel_a.dat);
+            enc_signal_b <= p_channel_b.dat;
+
+        elsif(rising_edge(clk)) then
+            --After reset block until index channel detection
+            if(enc_block = '0') then
+
                 --Buffer signals to detect rising and falling
-                enc_signal_a <= enc_signal_a(0) & channel_a.dat;
-                enc_signal_b <= channel_b.dat;
+                enc_signal_a <= enc_signal_a(0) & p_channel_a.dat;
+                enc_signal_b <= p_channel_b.dat;
 
                 case enc_signal_a is
                     when "01" =>
-                        if(enc_signal_b = '1' and INVERT = false) then
+                        if(enc_signal_b = '1' and g_invert = false) then
                             enc_counter <= enc_counter + 1;
-                        elsif(enc_signal_b = '1' and INVERT = true) then
+                        elsif(enc_signal_b = '1' and g_invert = true) then
                             enc_counter <= enc_counter - 1;
-                        elsif(enc_signal_b = '0' and INVERT = false) then
+                        elsif(enc_signal_b = '0' and g_invert = false) then
                             enc_counter <= enc_counter - 1;
-                        elsif(enc_signal_b = '0' and INVERT = true) then
+                        elsif(enc_signal_b = '0' and g_invert = true) then
                             enc_counter <= enc_counter + 1;
                         else null; 
                         end if;
                     
                     when "10" =>
-                        if(enc_signal_b = '1' and INVERT = false) then
+                        if(enc_signal_b = '1' and g_invert = false) then
                             enc_counter <= enc_counter - 1;
-                        elsif(enc_signal_b = '1' and INVERT = true) then
+                        elsif(enc_signal_b = '1' and g_invert = true) then
                             enc_counter <= enc_counter + 1;
-                        elsif(enc_signal_b = '0' and INVERT = false) then
+                        elsif(enc_signal_b = '0' and g_invert = false) then
                             enc_counter <= enc_counter + 1;
-                        elsif(enc_signal_b = '0' and INVERT = true) then
+                        elsif(enc_signal_b = '0' and g_invert = true) then
                             enc_counter <= enc_counter - 1;
                         else null;
                         end if;
                     
                     when others => null;
                 end case;
-            
+
+            else null;            
             end if;
         end if;
     end process;
@@ -151,20 +182,16 @@ begin
     -----------------------------------------------------------------------------------------------
     RST_MODE_SELECTION : process(clk)
     begin
-        if(rising_edge(clk)) then
-            if((INDEX_RST = false)) then
-                enc_block <= '0';
-            
-            elsif(rst = '1') then
-                enc_block <= '1';
-            
-            elsif(channel_i.dat = '1') then
+        if(rst = '1' and g_index_rst = false) then
+            enc_block <= '0';
+        elsif(rst = '1' and g_index_rst = true) then
+            enc_block <= '1';
+        elsif(rising_edge(clk)) then
+            if(p_channel_i.dat = '1') then
                 --Unblock incremental encoder after reference channel index
                 enc_block <= '0';
-            
             else null;
             end if;
-
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -174,24 +201,24 @@ begin
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     --Typecast data
-    reg_data_buff <= std_logic_vector(to_unsigned(enc_counter,16));
+    reg_data_buff <= std_logic_vector(enc_counter);
     reg_data_in   <= setMemory(reg_data_buff);
     
     MEMROY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS        => ADDRESS,
-        NUMBER_REGISTERS    => memory_length,
-        REG_DEFAULT_VALUES  => reg_default
+        g_address       => g_address,
+        g_reg_number    => memory_length,
+        g_def_values    => c_reg_default
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o,
-        data_in             => reg_data_in,
-        data_out            => open,
-        read_stb            => open,
-        write_stb           => open
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => reg_data_in,
+        p_data_out      => open,
+        p_read_stb      => open,
+        p_write_stb     => open
     );
     -----------------------------------------------------------------------------------------------
 
