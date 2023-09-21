@@ -149,6 +149,7 @@ begin
                 --Return the configuration of the FPGA Pin interface
                 cb_bus_o.dat <= std_logic_vector(ram_right_port_layout(index));
                 cb_bus_o.tag <= (others => '0');
+                cb_bus_o.mux <= '1';
 
             else
                 cb_bus_o <= gnd_sbus_o;

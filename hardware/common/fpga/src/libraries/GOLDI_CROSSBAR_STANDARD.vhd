@@ -69,12 +69,12 @@ package GOLDI_CROSSBAR_STANDARD is
     --disconnected left signals.
     constant TB_DEFAULT_LEFT_CB_LAYOUT  :   cb_left_port_ram(TB_CB_LEFT_SIZE-1 downto 0) := 
     (
-        0 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
-        1 => std_logic_vector(to_unsigned(1,BUS_ADDRESS_WIDTH)),
-        2 => std_logic_vector(to_unsigned(2,BUS_ADDRESS_WIDTH)),
-        3 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
-        4 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)),
-        5 => std_logic_vector(to_unsigned(0,BUS_ADDRESS_WIDTH)) 
+        0 => to_unsigned(0,BUS_ADDRESS_WIDTH),
+        1 => to_unsigned(1,BUS_ADDRESS_WIDTH),
+        2 => to_unsigned(2,BUS_ADDRESS_WIDTH),
+        3 => to_unsigned(0,BUS_ADDRESS_WIDTH),
+        4 => to_unsigned(0,BUS_ADDRESS_WIDTH),
+        5 => to_unsigned(0,BUS_ADDRESS_WIDTH) 
     );
     -----------------------------------------------------------------------------------------------
 
