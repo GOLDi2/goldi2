@@ -133,8 +133,10 @@ begin
         p_io_sync   => FPGA_nReset_sync
     );
     
+    --Reset routing for use in the models
     rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
-
+    --Reset routing for use in the test Breakoutboard
+    --rst <= not FPGA_nReset_sync;
 
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER

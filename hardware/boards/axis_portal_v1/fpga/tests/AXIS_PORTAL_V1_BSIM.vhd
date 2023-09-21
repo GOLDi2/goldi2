@@ -19,11 +19,11 @@
 -- Additional Comments: First commitment
 --
 -- Revision V4.00.00 - Refactoring of testbench and renaming of module
--- Additional Comments: Modificatin to communication process to acount for 
+-- Additional Comments: Modification to communication process to account for 
 --                      new SPI protocol. Extension of test cases to verify
---                      model. Use of env library for control of the simulation
---                      flow. Renaming of module to follow V4.00.00 naming
---                      conventions.
+--                      model. Use of "env" library for control of the 
+--                      simulation flow. Renaming of module to follow V4.00.00 
+--                      naming conventions.
 --                      (AXIS_PORTAL_V1_MOLE.vhd -> AXIS_PORTAL_V1_BSIM.vhd)
 -------------------------------------------------------------------------------
 --! Use standard library
@@ -113,7 +113,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
    	clock <= run_sim and (not clock) after clk_period/2;
-    reset <= '1' after 10 ns, '0' after 30 ns;
+    reset <= '1' after 10 ns, '0' after 110 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -122,7 +122,7 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         --Timing
-        variable init_hold      :   time := 11*clk_period/2;
+        variable init_hold      :   time := 13*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
         variable post_hold      :   time := 1*clk_period/2;
     begin

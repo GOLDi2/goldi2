@@ -124,4 +124,4 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     
 
-end package;
+end package GOLDI_MODULE_CONFIG;
