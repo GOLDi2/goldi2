@@ -19,8 +19,8 @@
 - (3) Axis Portal V2
 - -[0]: Testbenches and simulations
 - -[1]: General corrections to the AP2
-- (4) Microcontroller
-- (5) IO board
+- (4) -
+- (5) -
 - (6) Warehouse_2
   - [0]: Board construction
   - [1]: Testbenches and simulations
