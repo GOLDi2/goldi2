@@ -40,12 +40,12 @@ use IEEE.numeric_std.all;
 entity EDGE_DETECTOR is
 	port(
 	--General
-		clk		: in	std_logic;		--! System clock
-		rst		: in	std_logic;		--! Synchronous reset
+		clk			: in	std_logic;		--! System clock
+		rst			: in	std_logic;		--! Synchronous reset
 	--Data	
-		data_in	: in	std_logic;		--! Input signal
-		n_edge	: out	std_logic;		--! Falling edge strobe
-		p_edge	: out	std_logic		--! Rising edge strobe
+		data_in		: in	std_logic;		--! Input signal
+		p_f_edge	: out	std_logic;		--! Falling edge strobe
+		p_r_edge	: out	std_logic		--! Rising edge strobe
 	);
 end entity EDGE_DETECTOR;
 
@@ -65,19 +65,19 @@ begin
 	begin
 		if(rst = '1') then
 			data_in_buff <= '0';
-			p_edge		 <= '0';
-			n_edge	     <= '0';
+			p_r_edge 	 <= '0';
+			p_f_edge	 <= '0';
 
 		elsif(rising_edge(clk)) then			
 			if((data_in_buff = '0') and (data_in = '1')) then
-				p_edge <= '1';
-				n_edge <= '0';
+				p_r_edge <= '1';
+				p_f_edge <= '0';
 			elsif((data_in_buff = '1') and (data_in = '0')) then
-				p_edge <= '0';
-				n_edge <= '1';	
+				p_r_edge <= '0';
+				p_f_edge <= '1';	
 			else 
-				p_edge <= '0';
-				n_edge <= '0';
+				p_r_edge <= '0';
+				p_f_edge <= '0';
 			end if;
 
 			--Shift data

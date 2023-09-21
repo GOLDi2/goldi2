@@ -40,13 +40,13 @@ use work.GOLDI_IO_STANDARD.all;
 --! @brief Incremental encoder dsp module 
 --! @details
 --! Incremental encoder processing unit for 3 or 2 channel sensor. The module
---! reacts to the edges of the a channel providing an impulse counts for 
---! "p_channel_a" edge using the "p_channel_b" to determine the movement direction. 
---! The counter value is stored in a unsigned 16 bit data word and then stored 
---! in the internal registers. The data can then be accessed through the GOLDi 
---! BUS interface. The parameter "g_address" is the base address of the module
---! i.e. the address of the data word or in the case of a SYSTEM_DATA_WIDTH
---! value smaller than 16, then the lower bits of the data
+--! reacts to the data of the a channel providing an impulse counts for 
+--! "p_channel_a" edges using the "p_channel_b" to determine the movement 
+--! direction. The counter value is stored in a unsigned 16 bit data word and 
+--! then stored in the internal registers. The data can be accessed through 
+--! the GOLDi BUS interface. The parameter "g_address" is the base address of 
+--! the module i.e. the address of the data word or, in the case of a 
+--! SYSTEM_DATA_WIDTH value smaller than 16, the lower bits of the data.
 --!
 --! The parameter "g_invert" selects the direction of the positive axis of
 --! rotation. By setting the parameter to true the moduel increases the counter
@@ -93,7 +93,7 @@ entity ENCODER_SMODULE is
 	port(
 		--General
 		clk			: in	std_logic;			--! System clock
-		rst			: in	std_logic;			--! Synchronous reset
+		rst			: in	std_logic;			--! Asynchronous reset
 		--BUS slave interface
 		sys_bus_i	: in	sbus_in;			--! BUS input signals [we,adr,dat]
 		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,val]

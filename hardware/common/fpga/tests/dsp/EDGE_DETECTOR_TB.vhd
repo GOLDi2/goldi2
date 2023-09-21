@@ -46,11 +46,11 @@ architecture TB of EDGE_DETECTOR_TB is
     --****DUT**** 
     component EDGE_DETECTOR
         port(
-            clk		: in	std_logic;
-            rst		: in	std_logic;
-            data_in	: in	std_logic;
-            n_edge	: out	std_logic;
-            p_edge	: out	std_logic
+            clk		    : in	std_logic;
+            rst		    : in	std_logic;
+            data_in	    : in	std_logic;
+            p_f_edge	: out	std_logic;
+            p_r_edge    : out	std_logic
         );
     end component;
 
@@ -63,8 +63,8 @@ architecture TB of EDGE_DETECTOR_TB is
 	signal run_sim		:	std_logic := '1';
 	--DUT IOs
     signal data_in      :   std_logic := '0';
-    signal n_edge       :   std_logic := '0';
-    signal p_edge       :   std_logic := '0';
+    signal p_f_edge       :   std_logic := '0';
+    signal p_r_edge       :   std_logic := '0';
 
 
 begin
@@ -73,11 +73,11 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : EDGE_DETECTOR
     port map(
-        clk		=> clock,
-        rst		=> reset,
-        data_in => data_in,
-        n_edge	=> n_edge,
-        p_edge	=> p_edge
+        clk		    => clock,
+        rst		    => reset,
+        data_in     => data_in,
+        p_f_edge	=> p_f_edge,
+        p_r_edge	=> p_r_edge
     );
     -----------------------------------------------------------------------------------------------
 
@@ -105,20 +105,20 @@ begin
 
         --**Test reset state**
         wait for assert_hold;
-        assert(p_edge = '0')
-            report "ID01: Test reset - expecting p_edge = '0'" severity error;
-        assert(n_edge = '0')
-            report "ID02: Test reset - expecting n_edge = '0'" severity error;
+        assert(p_r_edge = '0')
+            report "ID01: Test reset - expecting p_r_edge = '0'" severity error;
+        assert(p_f_edge = '0')
+            report "ID02: Test reset - expecting p_f_edge = '0'" severity error;
         wait for post_hold;
 
 
         --**Teset risign edge**
         data_in <= '1';
         wait for assert_hold;
-        assert(p_edge = '1') 
-            report "ID03: Test rising edge - expecting p_edge = '1'" severity error;
-        assert(n_edge = '0')
-            report "ID04: Test rising edge - expecting n_edge = '0'" severity error;
+        assert(p_r_edge = '1') 
+            report "ID03: Test rising edge - expecting p_r_edge = '1'" severity error;
+        assert(p_f_edge = '0')
+            report "ID04: Test rising edge - expecting p_f_edge = '0'" severity error;
         wait for post_hold;
 
 
@@ -128,10 +128,10 @@ begin
         --**Test falling edge**
         data_in <= '0';
         wait for assert_hold;
-        assert(p_edge = '0') 
-            report "ID05: Test falling edge - expecting p_edge = '0'" severity error;
-        assert(n_edge = '1')
-            report "ID06: Test falling edge - expecting n_edge = '1'" severity error;
+        assert(p_r_edge = '0') 
+            report "ID05: Test falling edge - expecting p_r_edge = '0'" severity error;
+        assert(p_f_edge = '1')
+            report "ID06: Test falling edge - expecting p_f_edge = '1'" severity error;
         wait for post_hold;
 
 
