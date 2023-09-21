@@ -183,18 +183,18 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_UNIT
     generic map(
-        ADDRESS     => g_address,
-        DEF_VALUE   => reg_default
+        g_address   => g_address,
+        g_def_value => reg_default
     )
     port map(
         clk         => clk,
         rst         => rst,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o,
-        data_in     => reg_data,
-        data_out    => reg_data,
-        read_stb    => open,
-        write_stb   => open
+        p_data_in   => reg_data,
+        p_data_out  => reg_data,
+        p_read_stb  => open,
+        p_write_stb => open
     );
     -----------------------------------------------------------------------------------------------
 

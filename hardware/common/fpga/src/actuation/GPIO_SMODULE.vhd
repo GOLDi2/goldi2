@@ -109,19 +109,19 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE(BH)
 	generic map(
-		BASE_ADDRESS		=> g_address,
-		NUMBER_REGISTERS	=> g_gpio_number,
-		REG_DEFAULT_VALUES	=> reg_default
+		g_address		=> g_address,
+		g_reg_number	=> g_gpio_number,
+		g_def_values	=> reg_default
 	)
 	port map(
-		clk				    => clk,
-		rst				    => rst,
-		sys_bus_i		    => sys_bus_i,
-		sys_bus_o		    => sys_bus_o,
-		data_in		        => reg_data_i,
-		data_out	        => reg_data_o,
-		read_stb	        => open,
-        write_stb           => open
+		clk				=> clk,
+		rst				=> rst,
+		sys_bus_i		=> sys_bus_i,
+		sys_bus_o		=> sys_bus_o,
+		p_data_in	    => reg_data_i,
+		p_data_out	    => reg_data_o,
+		p_read_stb	    => open,
+        p_write_stb     => open
     );
     -----------------------------------------------------------------------------------------------
     
