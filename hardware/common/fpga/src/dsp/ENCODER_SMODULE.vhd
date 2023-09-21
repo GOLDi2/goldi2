@@ -127,12 +127,12 @@ begin
 
     --****DECODER****
     -----------------------------------------------------------------------------------------------
-    SIGNAL_DECODER : process(clk)
+    SIGNAL_DECODER : process(clk,rst)
     begin
         if(rst = '1') then
             enc_counter  <= (others => '0');
-            enc_signal_a <= (others => p_channel_a.dat);
-            enc_signal_b <= p_channel_b.dat;
+            enc_signal_a <= (others => '0');
+            enc_signal_b <= '0';
 
         elsif(rising_edge(clk)) then
             --After reset block until index channel detection
@@ -180,7 +180,7 @@ begin
 
     --***RESET CONTROL****
     -----------------------------------------------------------------------------------------------
-    RST_MODE_SELECTION : process(clk)
+    RST_MODE_SELECTION : process(clk,rst)
     begin
         if(rst = '1' and g_index_rst = false) then
             enc_block <= '0';
