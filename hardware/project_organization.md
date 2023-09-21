@@ -24,8 +24,9 @@
 - (6) Warehouse_2
   - [0]: Board construction
   - [1]: Testbenches and simulations
-- (7) Control Unit Mobile {control_unit_v1}
-  - [0]: Board construction 
+- (7) Control Unit Mobile {mole_v1}
+  - [0]: Board construction
+  - [1]: Testbenches and simulations 
 
 
 ## Release structure: [V]

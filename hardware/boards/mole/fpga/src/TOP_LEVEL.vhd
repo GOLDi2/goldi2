@@ -3,7 +3,7 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
--- Design Name:		Top Level - Mobile control unit [control_unit_v1] 
+-- Design Name:		Top Level - Mobile control unit [MOLE] 
 -- Module Name:		TOP_LEVEL
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -14,7 +14,13 @@
 -- Additional Comments: First commitment
 --
 -- Revision V3.00.00 - First stable release
--- Additional Comments: Release for Mobile Control Unit [control_unit_v1] 
+-- Additional Comments: Release for Mobile Control Unit [MOLE]
+--
+-- Revision V4.00.00 - Moduel refactor
+-- Additional Comments: Change to the entity names, generic and port signal 
+--                      names to follow the V4.00.00 naming convention. Use 
+--                      of the updated GOLDI SPI communication modules.
+--                      Update to crossbar design.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -27,22 +33,23 @@ use machxo2.all;
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_CROSSBAR_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
-use work.GOLDI_CROSSBAR_DEFAULT.all;
+use work.GOLDI_CROSSBAR_CONFIG.all;
 
 
 
 
---! @brief Top Level of FPGA system for the Mobile Control Unit 
+--! @brief Top Level of FPGA system for the Mobile Control Unit [MOLE]
 --! @details
 --! The top module contains the drivers for the sensors and actuators 
---! of the control_unit_v1 system.
+--! of the MOLE system.
 --!
 --! <https://www.goldi-labs.net/>
 entity TOP_LEVEL is
     port(
         --General
-        ClockFPGA   : in    std_logic;                                        --! External system clock
+        ClockFPGA   : in    std_logic;                                          --! External system clock
         FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
         --SPI
@@ -70,11 +77,10 @@ architecture RTL of TOP_LEVEL is
     signal spi0_sclk_sync       :   std_logic;
     signal spi0_mosi_sync       :   std_logic;
     signal spi0_nce0_sync       :   std_logic;
-    signal spi0_ce0             :   std_logic;
     --System Internal communications
     signal master_bus_o         :   mbus_out;
     signal master_bus_i   	    :   mbus_in;
-    signal cb_bus_i             :   sbus_i_vector(7 downto 0);
+    signal cb_bus_i             :   sbus_i_vector(8 downto 1);
     signal cb_bus_o             :   sbus_o_vector(8 downto 0);
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(19 downto 0);
@@ -152,10 +158,10 @@ begin
     --Synchronization of Reset input
     RESET_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => '0',
-        io_i    => FPGA_nReset,
-        io_sync => FPGA_nReset_sync
+        clk         => clk,
+        rst         => '0',
+        p_io_i      => FPGA_nReset,
+        p_io_sync   => FPGA_nReset_sync
     );
     --Reset routing for use in the models
     rst <= FPGA_nReset_sync;    --Incorrect port name for signal FPGA_nReset -> Signal active high
@@ -166,43 +172,40 @@ begin
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_SCLK,
-        io_sync => spi0_sclk_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_SCLK,
+        p_io_sync   => spi0_sclk_sync
     );
 
     MOSI_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_MOSI,
-        io_sync => spi0_mosi_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_MOSI,
+        p_io_sync   => spi0_mosi_sync
     );
 
     NCE0_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_nCE0,
-        io_sync => spi0_nce0_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_nCE0,
+        p_io_sync   => spi0_nce0_sync
     );
-    
-    --Negate nce for use in comm modules
-    spi0_ce0 <= not spi0_nce0_sync;
 
 
     --SPI comm modules
-    SPI_BUS_COMMUNICATION : entity work.SPI_TO_BUS
+    SPI_BUS_COMMUNICATION : entity work.GOLDI_SPI_SMODULE
     port map(
         clk             => clk,
         rst             => rst,
-        ce              => spi0_ce0,
-        sclk            => spi0_sclk_sync,
-        mosi            => spi0_mosi_sync,
-        miso            => SPI0_MISO,
-        master_bus_o    => master_bus_o,
-        master_bus_i    => master_bus_i
+        p_spi_nce       => spi0_nce0_sync,
+        p_spi_sclk      => spi0_sclk_sync,
+        p_spi_mosi      => spi0_mosi_sync,
+        p_spi_miso      => SPI0_MISO,
+        p_master_bus_o  => master_bus_o,
+        p_master_bus_i  => master_bus_i
     );
     -----------------------------------------------------------------------------------------------
 
@@ -213,18 +216,18 @@ begin
     --Register to select the main communication bus or the io crossbar structure module
     SYSTEM_CONFIG_REG : entity work.REGISTER_UNIT
     generic map(
-        ADDRESS         => CTRL_REG_ADDRESS,
-        DEF_VALUE       => ctrl_default
+        g_address   => CTRL_REG_ADDRESS,
+        g_def_value => ctrl_default
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        sys_bus_i       => master_bus_o,
-        sys_bus_o       => sys_bus_o(0),
-        data_in         => ctrl_data,
-        data_out        => ctrl_data,
-        read_stb        => open,
-        write_stb       => open
+        clk         => clk,
+        rst         => rst,
+        sys_bus_i   => master_bus_o,
+        sys_bus_o   => sys_bus_o(0),
+        p_data_in   => ctrl_data,
+        p_data_out  => ctrl_data,
+        p_read_stb  => open,
+        p_write_stb => open
     );
     
     --Mirror output bus to make register accessible in both modes of operation
@@ -233,30 +236,30 @@ begin
 
     --Multiplexing of BUS 
     sys_bus_i    <= master_bus_o when(selected_bus = x"0") else gnd_sbus_i;
-    cb_bus_i(0)  <= master_bus_o when(selected_bus = x"1") else gnd_sbus_i;
-    cb_bus_i(1)  <= master_bus_o when(selected_bus = x"2") else gnd_sbus_i;
-    cb_bus_i(2)  <= master_bus_o when(selected_bus = x"3") else gnd_sbus_i;    
-    cb_bus_i(3)  <= master_bus_o when(selected_bus = x"4") else gnd_sbus_i;
-    cb_bus_i(4)  <= master_bus_o when(selected_bus = x"5") else gnd_sbus_i;
-    cb_bus_i(5)  <= master_bus_o when(selected_bus = x"6") else gnd_sbus_i;
-    cb_bus_i(6)  <= master_bus_o when(selected_bus = x"7") else gnd_sbus_i;
-    cb_bus_i(7)  <= master_bus_o when(selected_bus = x"8") else gnd_sbus_i;
+    cb_bus_i(1)  <= master_bus_o when(selected_bus = x"1") else gnd_sbus_i;
+    cb_bus_i(2)  <= master_bus_o when(selected_bus = x"2") else gnd_sbus_i;
+    cb_bus_i(3)  <= master_bus_o when(selected_bus = x"3") else gnd_sbus_i;    
+    cb_bus_i(4)  <= master_bus_o when(selected_bus = x"4") else gnd_sbus_i;
+    cb_bus_i(5)  <= master_bus_o when(selected_bus = x"5") else gnd_sbus_i;
+    cb_bus_i(6)  <= master_bus_o when(selected_bus = x"6") else gnd_sbus_i;
+    cb_bus_i(7)  <= master_bus_o when(selected_bus = x"7") else gnd_sbus_i;
+    cb_bus_i(8)  <= master_bus_o when(selected_bus = x"8") else gnd_sbus_i;
     
     
     BUS_MUX : process(clk)
     begin
         if(rising_edge(clk)) then
             if(selected_bus = (selected_bus'range => '0')) then
-                if(unsigned(master_bus_o.adr) = to_unsigned(1,master_bus_o.adr'length)) 			then
+                if(unsigned(master_bus_o.adr) = to_unsigned(1,master_bus_o.adr'length)) 		then
 					master_bus_i <= sys_bus_o(0);
 				elsif((unsigned(master_bus_o.adr) >= to_unsigned(2,master_bus_o.adr'length))   	and
 				      (unsigned(master_bus_o.adr) <= to_unsigned(65,master_bus_o.adr'length)))	then
 					master_bus_i <= sys_bus_o(1);
 				else
-					master_bus_i <= reduceBusVector(sys_bus_o(19 downto 2));
+					master_bus_i <= reduceBusVector2(sys_bus_o(19 downto 2));
 				end if;
 			else
-                master_bus_i <= reduceBusVector(cb_bus_o);
+                master_bus_i <= reduceBusVector2(cb_bus_o);
             end if;
         end if;
     end process;
@@ -270,7 +273,7 @@ begin
     --Routing IO formatted data between FPGA Pins ([io_i,io_o] <-> inout std_logic)
     FPGA_PIN_INTERFACE : entity work.TRIS_BUFFER_ARRAY
     generic map(
-        BUFF_NUMBER     => PHYSICAL_PIN_NUMBER
+        g_buff_number   => PHYSICAL_PIN_NUMBER
     )
     port map(
         clk             => clk,
@@ -287,35 +290,35 @@ begin
 
     --****GPIO DRIVERS****
     -----------------------------------------------------------------------------------------------
-    FPGA_GPIOs : entity work.GPIO_DRIVER_ARRAY
+    FPGA_GPIOs : entity work.GPIO_SMODULE
     generic map(
-        ADDRESS         => GPIO_BASE_ADDRESS,
-        GPIO_NUMBER     => 64
+        g_address       => GPIO_BASE_ADDRESS,
+        g_gpio_number   => 64
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(1),
-        gpio_i_vector   => gpio_io_i,
-        gpio_o_vector   => gpio_io_o
+        p_gpio_i_vector => gpio_io_i,
+        p_gpio_o_vector => gpio_io_o
     );
 
 
 
     PWM_SIGNALS : for i in 0 to 15 generate
-        PWM_DRIVER : entity work.PWM_GENERATOR_UNIT
+        PWM_DRIVER : entity work.PWM_SMODULE
         generic map(
-            ADDRESS     => PWM_BASE_ADDRESS + i,
-            FRQ_SYSTEM  => SYS_CLOCK_FREQUENCY,
-            FRQ_PWM     => PWM_FREQUENCY
+            g_address       => PWM_BASE_ADDRESS + i,
+            g_sys_freq      => SYS_CLOCK_FREQUENCY,
+            g_pwm_freq      => PWM_FREQUENCY
         )
         port map(
-            clk         => clk,
-            rst         => rst,
-            sys_bus_i   => sys_bus_i,
-            sys_bus_o   => sys_bus_o(i+2),
-            pwm_out     => pwm_io_o(i)
+            clk             => clk,
+            rst             => rst,
+            sys_bus_i       => sys_bus_i,
+            sys_bus_o       => sys_bus_o(i+2),
+            p_pwm_output    => pwm_io_o(i)
         );
     end generate;
     -----------------------------------------------------------------------------------------------
@@ -324,33 +327,33 @@ begin
 
     --****LEDs****
     -----------------------------------------------------------------------------------------------
-    POWER_RED : entity work.LED_DRIVER
+    POWER_RED : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => PR_LED_ADDRESS,
-        CLK_FREQUENCY   => PR_LED_FREQUENCY,
-        INVERTED        => PR_LED_INVERTED
+        g_address       => PR_LED_ADDRESS,
+        g_clk_frequency => PR_LED_FREQUENCY,
+        g_inverted      => PR_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(18),
-        led_output      => external_io_o(64)
+        p_led_output    => external_io_o(64)
     );
 
     
-    POWER_GREEN : entity work.LED_DRIVER
+    POWER_GREEN : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => PG_LED_ADDRESS,
-        CLK_FREQUENCY   => PG_LED_FREQUENCY,
-        INVERTED        => PG_LED_INVERTED
+        g_address       => PG_LED_ADDRESS,
+        g_clk_frequency => PG_LED_FREQUENCY,
+        g_inverted      => PG_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(19),
-        led_output      => external_io_o(65)
+        p_led_output    => external_io_o(65)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -360,23 +363,23 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_1 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(0),
-        cb_bus_o            => cb_bus_o(1),
-        left_io_i_vector    => i_bank_1_i,
-        left_io_o_vector    => i_bank_1_o,
-        right_io_i_vector   => e_bank_1_i,
-        right_io_o_vector   => e_bank_1_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(1),
+        cb_bus_o                => cb_bus_o(1),
+        left_io_i_vector        => i_bank_1_i,
+        left_io_o_vector        => i_bank_1_o,
+        right_io_i_vector       => e_bank_1_i,
+        right_io_o_vector       => e_bank_1_o
     );
 
-    --Route bandk inputs
+    --Route bank inputs
     gpio_io_i(7 downto 0)  <= i_bank_1_i(7 downto 0);
     --Route bank outputs
     i_bank_1_o(7 downto 0) <= gpio_io_o(7 downto 0);
@@ -389,20 +392,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_2 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(1),
-        cb_bus_o            => cb_bus_o(2),
-        left_io_i_vector    => i_bank_2_i,
-        left_io_o_vector    => i_bank_2_o,
-        right_io_i_vector   => e_bank_2_i,
-        right_io_o_vector   => e_bank_2_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(2),
+        cb_bus_o                => cb_bus_o(2),
+        left_io_i_vector        => i_bank_2_i,
+        left_io_o_vector        => i_bank_2_o,
+        right_io_i_vector       => e_bank_2_i,
+        right_io_o_vector       => e_bank_2_o
     );
 
     --Route bandk inputs
@@ -418,20 +421,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_3 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(2),
-        cb_bus_o            => cb_bus_o(3),
-        left_io_i_vector    => i_bank_3_i,
-        left_io_o_vector    => i_bank_3_o,
-        right_io_i_vector   => e_bank_3_i,
-        right_io_o_vector   => e_bank_3_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(3),
+        cb_bus_o                => cb_bus_o(3),
+        left_io_i_vector        => i_bank_3_i,
+        left_io_o_vector        => i_bank_3_o,
+        right_io_i_vector       => e_bank_3_i,
+        right_io_o_vector       => e_bank_3_o
     );
 
     --Route bandk inputs
@@ -447,20 +450,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_4 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(3),
-        cb_bus_o            => cb_bus_o(4),
-        left_io_i_vector    => i_bank_4_i,
-        left_io_o_vector    => i_bank_4_o,
-        right_io_i_vector   => e_bank_4_i,
-        right_io_o_vector   => e_bank_4_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(4),
+        cb_bus_o                => cb_bus_o(4),
+        left_io_i_vector        => i_bank_4_i,
+        left_io_o_vector        => i_bank_4_o,
+        right_io_i_vector       => e_bank_4_i,
+        right_io_o_vector       => e_bank_4_o
     );
 
     --Route bandk inputs
@@ -476,20 +479,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_5 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(4),
-        cb_bus_o            => cb_bus_o(5),
-        left_io_i_vector    => i_bank_5_i,
-        left_io_o_vector    => i_bank_5_o,
-        right_io_i_vector   => e_bank_5_i,
-        right_io_o_vector   => e_bank_5_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(5),
+        cb_bus_o                => cb_bus_o(5),
+        left_io_i_vector        => i_bank_5_i,
+        left_io_o_vector        => i_bank_5_o,
+        right_io_i_vector       => e_bank_5_i,
+        right_io_o_vector       => e_bank_5_o
     );
 
     --Route bandk inputs
@@ -505,20 +508,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_6 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(5),
-        cb_bus_o            => cb_bus_o(6),
-        left_io_i_vector    => i_bank_6_i,
-        left_io_o_vector    => i_bank_6_o,
-        right_io_i_vector   => e_bank_6_i,
-        right_io_o_vector   => e_bank_6_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(6),
+        cb_bus_o                => cb_bus_o(6),
+        left_io_i_vector        => i_bank_6_i,
+        left_io_o_vector        => i_bank_6_o,
+        right_io_i_vector       => e_bank_6_i,
+        right_io_o_vector       => e_bank_6_o
     );
 
     --Route bandk inputs
@@ -534,20 +537,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_7 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(6),
-        cb_bus_o            => cb_bus_o(7),
-        left_io_i_vector    => i_bank_7_i,
-        left_io_o_vector    => i_bank_7_o,
-        right_io_i_vector   => e_bank_7_i,
-        right_io_o_vector   => e_bank_7_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(7),
+        cb_bus_o                => cb_bus_o(7),
+        left_io_i_vector        => i_bank_7_i,
+        left_io_o_vector        => i_bank_7_o,
+        right_io_i_vector       => e_bank_7_i,
+        right_io_o_vector       => e_bank_7_o
     );
 
     --Route bandk inputs
@@ -563,20 +566,20 @@ begin
     -----------------------------------------------------------------------------------------------
     IO_ROUTING_BANK_8 : entity work.IO_CROSSBAR
     generic map(
-        LEFT_PORT_LENGTH    => L_BANK_SIZE,
-        RIGHT_PORT_LENGTH   => R_BANK_SIZE,
-        LAYOUT_BLOCKED      => block_layout,
-        DEFAULT_CB_LAYOUT   => DEFAULT_CROSSBAR_LAYOUT
+        g_left_port_length      => L_BANK_SIZE,
+        g_right_port_length     => R_BANK_SIZE,
+        g_default_left_layout   => DEFAULT_L_CROSSBAR_LAYOUT,  
+        g_default_right_layout  => DEFAULT_R_CROSSBAR_LAYOUT
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        cb_bus_i            => cb_bus_i(7),
-        cb_bus_o            => cb_bus_o(8),
-        left_io_i_vector    => i_bank_8_i,
-        left_io_o_vector    => i_bank_8_o,
-        right_io_i_vector   => e_bank_8_i,
-        right_io_o_vector   => e_bank_8_o
+        clk                     => clk,
+        rst                     => rst,
+        cb_bus_i                => cb_bus_i(8),
+        cb_bus_o                => cb_bus_o(8),
+        left_io_i_vector        => i_bank_8_i,
+        left_io_o_vector        => i_bank_8_o,
+        right_io_i_vector       => e_bank_8_i,
+        right_io_o_vector       => e_bank_8_o
     );
 
     --Route bandk inputs
@@ -587,4 +590,4 @@ begin
     -----------------------------------------------------------------------------------------------
 
 
-end architecture RTL;
+end architecture;
