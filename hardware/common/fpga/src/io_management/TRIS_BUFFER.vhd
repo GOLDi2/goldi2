@@ -85,10 +85,10 @@ begin
 
     SYNC_INPUT : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => io_buffer.dat,
-        io_sync => io_sync.dat
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => io_buffer.dat,
+        p_io_sync   => io_sync.dat
     );
     
 

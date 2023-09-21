@@ -75,4 +75,4 @@ begin
     end generate; 
 
 
-end RTL;
+end architecture;
