@@ -47,7 +47,7 @@ package GOLDI_CROSSBAR_STANDARD is
     
 
     
-    --****CONSTANT DEFINITION FOR TESTBENCH AND AS TEMPLATE FOR CROSSBAR CONFIGURATION***
+    --****CONSTANT DEFINITION FOR TESTBENCH AND TEMPLATE FOR CROSSBAR CONFIGURATION***
     -----------------------------------------------------------------------------------------------
     --Crossbar bank reduction constants
     --Left side of the bandk crossbar
