@@ -15,31 +15,34 @@
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/DC_MOTOR_DRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/HBRIDGE_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/EMAGNET_DRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/EMAGNET_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/LED_DRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/EMAGNET_SMODULE_2.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/GPIO_DRIVER_ARRAY.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/LED_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/BUS_CONVERTER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/SPI_TO_BUS.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/INC_ENCODER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/io_management/IO_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/HIGH_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/io_management/SYNCHRONIZER.vhd" type="VHDL" type_short="VHDL">

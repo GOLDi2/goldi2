@@ -19,6 +19,10 @@
 --
 -- Revision V3.00.00 - Default module version for release 2.00.00
 -- Additional Comments: Release for Axis Portal V2 (AP2)
+
+-- Revision V4.00.00 - Change to the port signal names
+-- Additional Comments: Change to the port signal names to follow the
+--                      V4.00.00 naming convention.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -39,7 +43,7 @@ use work.GOLDI_COMM_STANDARD.all;
 --! of flags correspoinding to the possible user and system errors.
 entity ERROR_DETECTOR is 
     generic(
-        ADDRESS         :   natural := 1                                        --! Module's base address
+        g_address       :   natural := 1                                        --! Module's base address
     );
     port(
         --General
@@ -49,8 +53,8 @@ entity ERROR_DETECTOR is
         sys_bus_i       : in    sbus_in;                                        --! BUS slave input signals [we,adr,dat]
         sys_bus_o       : out   sbus_out;                                       --! BUS slave output signals [dat,val]
         --IO's 
-        sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
-        sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! System output data (drivers)
+        p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
+        p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! System output data (drivers)
     );
 end entity ERROR_DETECTOR;
 
@@ -62,20 +66,20 @@ architecture RTL of ERROR_DETECTOR is
 
     --****INTERNAL SIGNALS****
     --Sensor aliases
-    alias limit_x_neg       :   std_logic is sys_io_i(2).dat;
-    alias limit_x_pos       :   std_logic is sys_io_i(3).dat;
-    alias limit_y_neg       :   std_logic is sys_io_i(4).dat;
-    alias limit_y_pos       :   std_logic is sys_io_i(5).dat;
-    alias limit_z_neg       :   std_logic is sys_io_i(6).dat;
-    alias limit_z_pos       :   std_logic is sys_io_i(7).dat;
+    alias limit_x_neg       :   std_logic is p_sys_io_i(2).dat;
+    alias limit_x_pos       :   std_logic is p_sys_io_i(3).dat;
+    alias limit_y_neg       :   std_logic is p_sys_io_i(4).dat;
+    alias limit_y_pos       :   std_logic is p_sys_io_i(5).dat;
+    alias limit_z_neg       :   std_logic is p_sys_io_i(6).dat;
+    alias limit_z_pos       :   std_logic is p_sys_io_i(7).dat;
     --Actuator aliases
-    alias motor_x_step      :   std_logic is sys_io_o(16).dat;
-    alias motor_x_dir       :   std_logic is sys_io_o(17).dat;
-    alias motor_y_step      :   std_logic is sys_io_o(25).dat;
-    alias motor_y_dir       :   std_logic is sys_io_o(26).dat;
-    alias motor_z_enb       :   std_logic is sys_io_o(31).dat;
-    alias motor_z_out_1     :   std_logic is sys_io_o(32).dat;
-    alias motor_z_out_2     :   std_logic is sys_io_o(33).dat;
+    alias motor_x_step      :   std_logic is p_sys_io_o(16).dat;
+    alias motor_x_dir       :   std_logic is p_sys_io_o(17).dat;
+    alias motor_y_step      :   std_logic is p_sys_io_o(25).dat;
+    alias motor_y_dir       :   std_logic is p_sys_io_o(26).dat;
+    alias motor_z_enb       :   std_logic is p_sys_io_o(31).dat;
+    alias motor_z_out_1     :   std_logic is p_sys_io_o(32).dat;
+    alias motor_z_out_2     :   std_logic is p_sys_io_o(33).dat;
     
     --Memory
     constant memory_length  :   natural := getMemoryLength(13);
@@ -92,40 +96,40 @@ begin
 
     --****DETECTION OF ACTIVE STEPPERS****
     -----------------------------------------------------------------------------------------------
-    X_STEPPER_ON : entity work.IO_DEBOUNCE
+    X_STEPPER_ON : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 5,       
-        CLK_FACTOR  => 19200    
+        g_stages        => 5,       
+        g_clk_factor    => 19200    
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => motor_x_step,
-        io_stable   => x_stepper_active
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => motor_x_step,
+        p_io_stable     => x_stepper_active
     );
 
-    Y_STEPPER_ON : entity work.IO_DEBOUNCE
+    Y_STEPPER_ON : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 5,       
-        CLK_FACTOR  => 19200    
+        g_stages        => 5,       
+        g_clk_factor    => 19200    
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => motor_y_step,
-        io_stable   => y_stepper_active
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => motor_y_step,
+        p_io_stable     => y_stepper_active
     );
 
-    Z_STEPPER_ON : entity work.IO_DEBOUNCE
+    Z_STEPPER_ON : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 5,       
-        CLK_FACTOR  => 19200    
+        g_stages        => 5,       
+        g_clk_factor    => 19200    
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => motor_z_enb,
-        io_stable   => z_motor_active
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => motor_z_enb,
+        p_io_stable     => z_motor_active
     ); 
     -----------------------------------------------------------------------------------------------
 
@@ -176,19 +180,19 @@ begin
 
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS		=> ADDRESS,
-        NUMBER_REGISTERS	=> memory_length,
-        REG_DEFAULT_VALUES	=> reg_default
+        g_address		=> g_address,
+        g_reg_number	=> memory_length,
+        g_def_values	=> reg_default
     )
     port map(
-        clk				    => clk,
-        rst				    => rst,
-        sys_bus_i		    => sys_bus_i,
-        sys_bus_o		    => sys_bus_o,
-        data_in		        => reg_buff,
-        data_out	        => open,
-        read_stb	        => open,
-        write_stb           => open
+        clk				=> clk,
+        rst				=> rst,
+        sys_bus_i		=> sys_bus_i,
+        sys_bus_o		=> sys_bus_o,
+        p_data_in		=> reg_buff,
+        p_data_out	    => open,
+        p_read_stb	    => open,
+        p_write_stb     => open
     );
     -----------------------------------------------------------------------------------------------
 

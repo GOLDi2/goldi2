@@ -19,6 +19,10 @@
 --
 -- Revision V3.00.00 - Default module version for release 2.00.00
 -- Additional Comments: Release for Axis Portal V2 (AP2)
+--
+-- Revision V4.00.00 - Change to the port signal names
+-- Additional Comments: Change to the port signal names to follow the
+--                      V4.00.00 naming convention
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -40,10 +44,10 @@ use work.GOLDI_COMM_STANDARD.all;
 entity ACTUATOR_MASK is
     port(
         --System raw data
-        sys_io_i    : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System asynchronous input data (sensors)
-        sys_io_o    : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System output data (drivers)
+        p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System asynchronous input data (sensors)
+        p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System output data (drivers)
         --Masked data
-        safe_io_out : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! Safe output data (drivers)
+        p_safe_io_o : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! Safe output data (drivers)
     );
 end entity ACTUATOR_MASK;
 
@@ -55,20 +59,20 @@ architecture RTL of ACTUATOR_MASK is
     
     --****INTERNAL SIGNALS****
     --Sensor aliases
-    alias limit_x_neg       :   std_logic is sys_io_i(2).dat;
-    alias limit_x_pos       :   std_logic is sys_io_i(3).dat;
-    alias limit_y_neg       :   std_logic is sys_io_i(4).dat;
-    alias limit_y_pos       :   std_logic is sys_io_i(5).dat;
-    alias limit_z_neg       :   std_logic is sys_io_i(6).dat;
-    alias limit_z_pos       :   std_logic is sys_io_i(7).dat;
+    alias limit_x_neg       :   std_logic is p_sys_io_i(2).dat;
+    alias limit_x_pos       :   std_logic is p_sys_io_i(3).dat;
+    alias limit_y_neg       :   std_logic is p_sys_io_i(4).dat;
+    alias limit_y_pos       :   std_logic is p_sys_io_i(5).dat;
+    alias limit_z_neg       :   std_logic is p_sys_io_i(6).dat;
+    alias limit_z_pos       :   std_logic is p_sys_io_i(7).dat;
     --Actuator aliases
-    alias motor_x_step      :   std_logic is sys_io_o(16).dat;
-    alias motor_x_dir       :   std_logic is sys_io_o(17).dat;
-    alias motor_y_step      :   std_logic is sys_io_o(25).dat;
-    alias motor_y_dir       :   std_logic is sys_io_o(26).dat;
-    alias motor_z_enb       :   std_logic is sys_io_o(31).dat;
-    alias motor_z_out_1     :   std_logic is sys_io_o(32).dat;
-    alias motor_z_out_2     :   std_logic is sys_io_o(33).dat;
+    alias motor_x_step      :   std_logic is p_sys_io_o(16).dat;
+    alias motor_x_dir       :   std_logic is p_sys_io_o(17).dat;
+    alias motor_y_step      :   std_logic is p_sys_io_o(25).dat;
+    alias motor_y_dir       :   std_logic is p_sys_io_o(26).dat;
+    alias motor_z_enb       :   std_logic is p_sys_io_o(31).dat;
+    alias motor_z_out_1     :   std_logic is p_sys_io_o(32).dat;
+    alias motor_z_out_2     :   std_logic is p_sys_io_o(33).dat;
     
     --Buffers
     signal act_mask     :   std_logic_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -112,8 +116,8 @@ begin
     --****SAFE ACTUATION SIGNAL GENERATION****
     -----------------------------------------------------------------------------------------------
     SIGNAL_PROTECTON : for i in 0 to PHYSICAL_PIN_NUMBER-1 generate
-        safe_io_out(i).enb <= sys_io_o(i).enb;
-        safe_io_out(i).dat <= sys_io_o(i).dat and act_mask(i);
+        p_safe_io_o(i).enb <= p_sys_io_o(i).enb;
+        p_safe_io_o(i).dat <= p_sys_io_o(i).dat and act_mask(i);
     end generate;
     -----------------------------------------------------------------------------------------------
 
