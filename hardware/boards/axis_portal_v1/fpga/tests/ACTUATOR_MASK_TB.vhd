@@ -247,7 +247,6 @@ begin
         --Simulation end usign vhdl2008 env library (Pipeline use)
        	std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        -- run_sim <= '0';
         -- wait;
 		
     end process;
