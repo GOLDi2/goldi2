@@ -17,14 +17,19 @@
 -- Revisions:
 -- Revision V3.00.01 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to control simulation flow.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+-- use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -54,8 +59,8 @@ architecture TB of ERROR_DETECTOR_TB is
             rst             : in    std_logic;
             sys_bus_i       : in    sbus_in;
             sys_bus_o       : out   sbus_out;
-            sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+            p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
         );
     end component;
 
@@ -68,8 +73,8 @@ architecture TB of ERROR_DETECTOR_TB is
     signal reset            :   std_logic := '0';
     signal run_sim          :   std_logic := '1';
     --DUT IOs
-    signal sys_bus_i        :   sbus_in;
-    signal sys_bus_o        :   sbus_out;
+    signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
+    signal sys_bus_o        :   sbus_out := gnd_sbus_o;
     signal sys_io_i         :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_i);
     signal sys_io_o         :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_o);
     --Buffers
@@ -100,15 +105,15 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : ERROR_DETECTOR 
     generic map(
-        ADDRESS         => 1
+        g_address         => 1
     )
     port map(
         clk             => clock,
         rst             => reset,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
-        sys_io_i        => sys_io_i,
-        sys_io_o        => sys_io_o
+        p_sys_io_i      => sys_io_i,
+        p_sys_io_o      => sys_io_o
     );
     -----------------------------------------------------------------------------------------------
 
@@ -117,7 +122,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-    reset <= '1' after 5 ns, '0' after 15 ns;
+    reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -149,10 +154,9 @@ begin
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
-        --Preset bus signals
-        sys_bus_i <= gnd_sbus_i;
+        --**Initial Setup**
         wait for init_hold;
 
 
@@ -246,8 +250,12 @@ begin
         end loop; 
 
 
-        --End simulation
-        wait for 50 ns;
+  		--**End simulation**
+		wait for 50 ns;
+        report "AP2: ERROR_DETECTOR_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	-- std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
         run_sim <= '0';
         wait;
 
