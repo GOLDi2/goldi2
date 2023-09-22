@@ -38,9 +38,9 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 
---! @brief
+--! @brief TMC2660 Stepper Driver controller (legacy)
 --! @details
---!
+--! The "TMC2660_DRIVER" is 
 entity TMC2660_DRIVER is
     generic(
         ADDRESS         :   natural := 1;
@@ -136,14 +136,12 @@ begin
 
     --****CLOCKING****
     -----------------------------------------------------------------------------------------------
-    TMC2660_CLOCK_DRIVER : process(clk)
+    TMC2660_CLOCK_DRIVER : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                clock_buff <= (others => '0');
-            else
-                clock_buff <= clock_buff + 1;
-            end if;
+        if(rst = '1') then
+            clock_buff <= (others => '0');
+        elsif(rising_edge(clk)) then
+            clock_buff <= clock_buff + 1;
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -175,18 +173,18 @@ begin
 
     STREAM_QUEUE : entity work.STREAM_FIFO
     generic map(
-        FIFO_WIDTH      => 24,
-        FIFO_DEPTH      => 5
+        g_fifo_width    => 24,
+        g_fifo_depth    => 5
     )
     port map(
         clk             => clk,
         rst             => config_o_tvalid,
-        s_write_tready  => open,
-        s_write_tvalid  => reg_write_stb(3),
-        s_write_tdata   => reg_spi_data,
-        m_read_tready   => stream_o_tready,
-        m_read_tvalid   => stream_o_tvalid,
-        m_read_tdata    => stream_o_tdata       
+        p_write_tready  => open,
+        p_write_tvalid  => reg_write_stb(3),
+        p_write_tdata   => reg_spi_data,
+        p_read_tready   => stream_o_tready,
+        p_read_tvalid   => stream_o_tvalid,
+        p_read_tdata    => stream_o_tdata       
     );
 
 
@@ -292,28 +290,28 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS        => ADDRESS,
-        NUMBER_REGISTERS    => memory_length,
-        REG_DEFAULT_VALUES  => reg_default
+        g_address       => ADDRESS,
+        g_reg_number    => memory_length,
+        g_def_values    => reg_default
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o,
-        data_in             => reg_data_in,
-        data_out            => reg_data_out,
-        read_stb            => open,
-        write_stb           => reg_write_stb
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => reg_data_in,
+        p_data_out      => reg_data_out,
+        p_read_stb      => open,
+        p_write_stb     => reg_write_stb
     );
 
     --SPI read data - route into memory
     MISO_DATA_TRANSFER : process(clk)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1')  then
-                reg_data_in_buff(47 downto 24) <= (others => '0');
-            elsif(spi_i_tvalid = '1') then
+        if(rst = '1') then
+            reg_data_in_buff(47 downto 24) <= (others =>'0');
+        elsif(rising_edge(clk)) then
+            if(spi_i_tvalid = '1') then
                 reg_data_in_buff(47 downto 24) <= spi_i_tdata;
             else null;
             end if;
@@ -331,4 +329,4 @@ begin
     -----------------------------------------------------------------------------------------------
 
 
-end RTL;
+end architecture;
