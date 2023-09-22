@@ -4,40 +4,41 @@
 --
 -- Create Date:		01/07/2023
 -- Design Name:		SPI General Reciver Testbench 
--- Module Name:		SPI_R_INTERFACE_TB
+-- Module Name:		SPI_R_DRIVER_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	-> SPI_R_INTERFACE.vhd
+-- Dependencies:	-> SPI_R_DRIVER.vhd
 --
 -- Revisions:
--- Revision V3.01.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 
 
 
 
 --! Functionality simulation
-entity SPI_R_INTERFACE_TB is
-end entity SPI_R_INTERFACE_TB;
+entity SPI_R_DRIVER_TB is
+end entity SPI_R_DRIVER_TB;
 
 
 
 
 --! Simulation architecture
-architecture TB of SPI_R_INTERFACE_TB is
+architecture TB of SPI_R_DRIVER_TB is
 
     --****DUT****
-    component SPI_R_INTERFACE
+    component SPI_R_DRIVER
     generic(
         g_word_length       :   integer   := 8;
         g_cpol              :   std_logic := '1';
@@ -45,50 +46,47 @@ architecture TB of SPI_R_INTERFACE_TB is
         g_msbf              :   boolean   := true
     );
     port(
-        --General
         clk                 : in    std_logic;
         rst                 : in    std_logic;
-        --Parallel interface
-        i_dword_tvalid      : in    std_logic;
-        i_dword_tdata       : in    std_logic_vector(g_word_length-1 downto 0);
-        o_dword_tvalid      : out   std_logic;
-        o_dword_tdata       : out   std_logic_vector(g_word_length-1 downto 0);
-        --SPI interface
-        i_spi_ncs           : in    std_logic;
-        i_spi_sclk          : in    std_logic;
-        i_spi_mosi          : in    std_logic;
-        o_spi_miso          : out   std_logic;
-        o_spi_miso_highz    : out   std_logic
+        p_tdword_tvalid     : in    std_logic;
+        p_tdword_tdata      : in    std_logic_vector(g_word_length-1 downto 0);
+        p_rdword_tvalid     : out   std_logic;
+        p_rdword_tdata      : out   std_logic_vector(g_word_length-1 downto 0);
+        p_spi_ncs           : in    std_logic;
+        p_spi_sclk          : in    std_logic;
+        p_spi_mosi          : in    std_logic;
+        p_spi_miso          : out   std_logic;
+        p_spi_miso_highz    : out   std_logic
     );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-    constant clk_period		    :	time := 10 ns;
-    constant sclk_period        :   time := 80 ns;
+    constant clk_period		    :	time := 20 ns;
+    constant sclk_period        :   time := 160 ns;
 	signal reset			    :	std_logic := '0';
 	signal clock			    :	std_logic := '0';
 	signal run_sim			    :	std_logic := '1';
     --DUT IOs
     --Byte array structure to simplify testbench
     type byte_vector is array (natural range <>) of std_logic_vector(7 downto 0);
-    --parallel interface signals
-    signal i_dword_tvalid       :   std_logic := '0';
-    signal i_dword_tdata        :   std_logic_vector(7 downto 0) := (others => '0');
-    signal o_dword_tvalid       :   std_logic_vector(3 downto 0) := (others => '0');
-    signal o_dword_tdata        :   byte_vector(3 downto 0)      := (others => (others => '0'));
-    --spi interface signals
-    signal i_spi_ncs            :   std_logic := '1';
-    signal i_spi_sclk           :   std_logic := '0';
-    signal i_spi_mosi           :   std_logic := '0';
-    signal o_spi_miso           :   std_logic_vector(3 downto 0) := (others => '0');
-    signal o_spi_miso_highz     :   std_logic_vector(3 downto 0) := (others => '1');
+    --Parallel interface signals
+    signal p_tdword_tvalid      :   std_logic := '0';
+    signal p_tdword_tdata       :   std_logic_vector(7 downto 0) := (others => '0');
+    signal p_rdword_tvalid      :   std_logic_vector(3 downto 0) := (others => '0');
+    signal p_rdword_tdata       :   byte_vector(3 downto 0) := (others => (others => '0'));
+    --SPI interface signals
+    signal p_spi_ncs            :   std_logic := '1';
+    signal p_spi_sclk           :   std_logic := '0';
+    signal p_spi_mosi           :   std_logic := '0';
+    signal p_spi_miso           :   std_logic_vector(3 downto 0) := (others => '0');
+    signal p_spi_miso_highz     :   std_logic_vector(3 downto 0) := (others => '1');
     --Testbench
-    constant mosi_data          :   std_logic_vector(7 downto 0) := x"BF";
-    constant miso_data          :   std_logic_vector(7 downto 0) := x"AB";
-    signal mosi_buff            :   byte_vector(3 downto 0)      := (others => (others => '0'));
-    signal miso_buff            :   byte_vector(3 downto 0)      := (others => (others => '0'));
+    constant mosi_data          :   std_logic_vector(7 downto 0) := x"3C";
+    constant miso_data          :   std_logic_vector(7 downto 0) := x"C3";
+    signal mosi_buff            :   byte_vector(3 downto 0) := (others => (others => '0'));
+    signal miso_buff            :   byte_vector(3 downto 0) := (others => (others => '0'));
 
 
 
@@ -97,7 +95,7 @@ begin
     --****COMPONENTS****
     -----------------------------------------------------------------------------------------------
     --Capture -> rising edge / Shift -> falling edge
-    DUT_MODE0 : SPI_R_INTERFACE
+    DUT_MODE0 : SPI_R_DRIVER
     generic map(
         g_word_length       =>  8,
         g_cpol              => '0',
@@ -107,20 +105,20 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
-        i_dword_tvalid      => i_dword_tvalid,
-        i_dword_tdata       => i_dword_tdata,
-        o_dword_tvalid      => o_dword_tvalid(0),
-        o_dword_tdata       => o_dword_tdata(0),
-        i_spi_ncs           => i_spi_ncs,
-        i_spi_sclk          => i_spi_sclk,
-        i_spi_mosi          => i_spi_mosi,
-        o_spi_miso          => o_spi_miso(0),
-        o_spi_miso_highz    => o_spi_miso_highz(0)
+        p_tdword_tvalid     => p_tdword_tvalid,
+        p_tdword_tdata      => p_tdword_tdata,
+        p_rdword_tvalid     => p_rdword_tvalid(0),
+        p_rdword_tdata      => p_rdword_tdata(0),
+        p_spi_ncs           => p_spi_ncs,
+        p_spi_sclk          => p_spi_sclk,
+        p_spi_mosi          => p_spi_mosi,
+        p_spi_miso          => p_spi_miso(0),
+        p_spi_miso_highz    => p_spi_miso_highz(0)
     );
 
 
     --Capture -> falling edge / Shift -> rising edge
-    DUT_MODE1 : SPI_R_INTERFACE
+    DUT_MODE1 : SPI_R_DRIVER
     generic map(
         g_word_length       =>  8,
         g_cpol              => '0',
@@ -130,20 +128,20 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
-        i_dword_tvalid      => i_dword_tvalid,
-        i_dword_tdata       => i_dword_tdata,
-        o_dword_tvalid      => o_dword_tvalid(1),
-        o_dword_tdata       => o_dword_tdata(1),
-        i_spi_ncs           => i_spi_ncs,
-        i_spi_sclk          => i_spi_sclk,
-        i_spi_mosi          => i_spi_mosi,
-        o_spi_miso          => o_spi_miso(1),
-        o_spi_miso_highz    => o_spi_miso_highz(1)
+        p_tdword_tvalid     => p_tdword_tvalid,
+        p_tdword_tdata      => p_tdword_tdata,
+        p_rdword_tvalid     => p_rdword_tvalid(1),
+        p_rdword_tdata      => p_rdword_tdata(1),
+        p_spi_ncs           => p_spi_ncs,
+        p_spi_sclk          => p_spi_sclk,
+        p_spi_mosi          => p_spi_mosi,
+        p_spi_miso          => p_spi_miso(1),
+        p_spi_miso_highz    => p_spi_miso_highz(1)
     );
 
 
     --Capture -> falling edge / Shift -> rising edge
-    DUT_MODE2 : SPI_R_INTERFACE
+    DUT_MODE2 : SPI_R_DRIVER
     generic map(
         g_word_length       =>  8,
         g_cpol              => '1',
@@ -153,20 +151,20 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
-        i_dword_tvalid      => i_dword_tvalid,
-        i_dword_tdata       => i_dword_tdata,
-        o_dword_tvalid      => o_dword_tvalid(2),
-        o_dword_tdata       => o_dword_tdata(2),
-        i_spi_ncs           => i_spi_ncs,
-        i_spi_sclk          => i_spi_sclk,
-        i_spi_mosi          => i_spi_mosi,
-        o_spi_miso          => o_spi_miso(2),
-        o_spi_miso_highz    => o_spi_miso_highz(2)
+        p_tdword_tvalid     => p_tdword_tvalid,
+        p_tdword_tdata      => p_tdword_tdata,
+        p_rdword_tvalid     => p_rdword_tvalid(2),
+        p_rdword_tdata      => p_rdword_tdata(2),
+        p_spi_ncs           => p_spi_ncs,
+        p_spi_sclk          => p_spi_sclk,
+        p_spi_mosi          => p_spi_mosi,
+        p_spi_miso          => p_spi_miso(2),
+        p_spi_miso_highz    => p_spi_miso_highz(2)
     );
 
 
     --Capture -> rising edge / Shift -> falling edge
-    DUT_MODE3 : SPI_R_INTERFACE
+    DUT_MODE3 : SPI_R_DRIVER
     generic map(
         g_word_length       =>  8,
         g_cpol              => '1',
@@ -176,15 +174,15 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
-        i_dword_tvalid      => i_dword_tvalid,
-        i_dword_tdata       => i_dword_tdata,
-        o_dword_tvalid      => o_dword_tvalid(3),
-        o_dword_tdata       => o_dword_tdata(3),
-        i_spi_ncs           => i_spi_ncs,
-        i_spi_sclk          => i_spi_sclk,
-        i_spi_mosi          => i_spi_mosi,
-        o_spi_miso          => o_spi_miso(3),
-        o_spi_miso_highz    => o_spi_miso_highz(3)
+        p_tdword_tvalid     => p_tdword_tvalid,
+        p_tdword_tdata      => p_tdword_tdata,
+        p_rdword_tvalid     => p_rdword_tvalid(3),
+        p_rdword_tdata      => p_rdword_tdata(3),
+        p_spi_ncs           => p_spi_ncs,
+        p_spi_sclk          => p_spi_sclk,
+        p_spi_mosi          => p_spi_mosi,
+        p_spi_miso          => p_spi_miso(3),
+        p_spi_miso_highz    => p_spi_miso_highz(3)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -193,7 +191,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after  5 ns, '0' after 15 ns;
+	reset <= '1' after  10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -203,20 +201,20 @@ begin
     DATA_SHIFTING : process(clock)
     begin
         if(rising_edge(clock)) then
-            if(o_dword_tvalid(0) = '1') then
-                mosi_buff(0) <= o_dword_tdata(0);
+            if(p_rdword_tvalid(0) = '1') then
+                mosi_buff(0) <= p_rdword_tdata(0);
             end if;
 
-            if(o_dword_tvalid(1) = '1') then
-                mosi_buff(1) <= o_dword_tdata(1);
+            if(p_rdword_tvalid(1) = '1') then
+                mosi_buff(1) <= p_rdword_tdata(1);
             end if;
 
-            if(o_dword_tvalid(2) = '1') then
-                mosi_buff(2) <= o_dword_tdata(2);
+            if(p_rdword_tvalid(2) = '1') then
+                mosi_buff(2) <= p_rdword_tdata(2);
             end if;
 
-            if(o_dword_tvalid(3) = '1') then
-                mosi_buff(3) <= o_dword_tdata(3);
+            if(p_rdword_tvalid(3) = '1') then
+                mosi_buff(3) <= p_rdword_tdata(3);
             end if;
         end if;
     end process;
@@ -227,36 +225,36 @@ begin
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
-        --Initial setup
+        --**Initial Setup**
         wait for init_hold;
 
 
         --**Test idle state**
         wait for assert_hold;
-        assert(o_dword_tvalid(0) = '0' and o_dword_tdata(0) = (o_dword_tdata(0)'range => '0'))
+        assert(p_rdword_tvalid(0) = '0' and p_rdword_tdata(0) = (p_rdword_tdata(0)'range => '0'))
             report "ID01: Test reset - expecting DUT_MODE0 o_dword interface grounded"
             severity error;
-        assert(o_spi_miso(0) = '0' and o_spi_miso_highz(0) = '1')
+        assert(p_spi_miso(0) = '0' and p_spi_miso_highz(0) = '1')
             report "ID02: Test reset - expecting DUT_MODE0 spi_miso interface ('0';'1')"
             severity error;
-        assert(o_dword_tvalid(1) = '0' and o_dword_tdata(1) = (o_dword_tdata(1)'range => '0'))
+        assert(p_rdword_tvalid(1) = '0' and p_rdword_tdata(1) = (p_rdword_tdata(1)'range => '0'))
             report "ID03: Test reset - expecting DUT_MODE1 o_dword interface grounded"
             severity error;
-        assert(o_spi_miso(1) = '0' and o_spi_miso_highz(1) = '1')
+        assert(p_spi_miso(1) = '0' and p_spi_miso_highz(1) = '1')
             report "ID04: Test reset - expecting DUT_MODE1 spi_miso interface ('0';'1')"
             severity error;
-        assert(o_dword_tvalid(2) = '0' and o_dword_tdata(2) = (o_dword_tdata(2)'range => '0'))
+        assert(p_rdword_tvalid(2) = '0' and p_rdword_tdata(2) = (p_rdword_tdata(2)'range => '0'))
             report "ID05: Test reset - expecting DUT_MODE2 o_dword interface grounded"
             severity error;
-        assert(o_spi_miso(2) = '0' and o_spi_miso_highz(2) = '1')
+        assert(p_spi_miso(2) = '0' and p_spi_miso_highz(2) = '1')
             report "ID06: Test reset - expecting DUT_MODE2 spi_miso interface ('0';'1')"
             severity error;
-        assert(o_dword_tvalid(3) = '0' and o_dword_tdata(3) = (o_dword_tdata(3)'range => '0'))
+        assert(p_rdword_tvalid(3) = '0' and p_rdword_tdata(3) = (p_rdword_tdata(3)'range => '0'))
             report "ID07: Test reset - expecting DUT_MODE3 o_dword interface grounded"
             severity error;
-        assert(o_spi_miso(3) = '0' and o_spi_miso_highz(3) = '1')
+        assert(p_spi_miso(3) = '0' and p_spi_miso_highz(3) = '1')
             report "ID08: Test reset - expecting DUT_MODE3 spi_miso interface ('0';'1')"
             severity error;
         wait for post_hold;
@@ -265,23 +263,23 @@ begin
 
         --**Test transaction**
         --*Test DUT_MODE0*
-        i_dword_tdata  <= miso_data;
-        i_dword_tvalid <= '1';
-        i_spi_sclk     <= '0';
+        p_tdword_tdata  <= miso_data;
+        p_tdword_tvalid <= '1';
+        p_spi_sclk      <= '0';
         wait for clk_period;
-        i_dword_tvalid <= '0';
-        i_spi_ncs      <= '0';
+        p_tdword_tvalid <= '0';
+        p_spi_ncs       <= '0';
 
         for i in 0 to 7 loop
-            i_spi_mosi        <= mosi_data(7-i);
+            p_spi_mosi        <= mosi_data(7-i);
             wait for sclk_period/2;
-            i_spi_sclk        <= '1';
-            miso_buff(0)(7-i) <= o_spi_miso(0); 
+            p_spi_sclk        <= '1';
+            miso_buff(0)(7-i) <= p_spi_miso(0); 
             wait for sclk_period/2;
-            i_spi_sclk        <= '0';
+            p_spi_sclk        <= '0';
         end loop;
         wait for sclk_period/2;
-        i_spi_ncs <= '1';
+        p_spi_ncs <= '1';
 
         wait for assert_hold;
         assert(mosi_buff(0) = mosi_data)
@@ -297,23 +295,23 @@ begin
 
 
         --*Test DUT_MODE1*
-        i_dword_tdata  <= miso_data;
-        i_dword_tvalid <= '1';
-        i_spi_sclk     <= '0';
+        p_tdword_tdata  <= miso_data;
+        p_tdword_tvalid <= '1';
+        p_spi_sclk      <= '0';
         wait for clk_period;
-        i_dword_tvalid <= '0';
-        i_spi_ncs      <= '0';
+        p_tdword_tvalid <= '0';
+        p_spi_ncs       <= '0';
 
         for i in 0 to 7 loop
             wait for sclk_period/2;
-            i_spi_sclk        <= '1';
-            i_spi_mosi        <= mosi_data(7-i);
+            p_spi_sclk        <= '1';
+            p_spi_mosi        <= mosi_data(7-i);
             wait for sclk_period/2;
-            i_spi_sclk        <= '0';
-            miso_buff(1)(7-i) <= o_spi_miso(1);
+            p_spi_sclk        <= '0';
+            miso_buff(1)(7-i) <= p_spi_miso(1);
         end loop;
         wait for sclk_period/2;
-        i_spi_ncs <= '1';
+        p_spi_ncs <= '1';
 
         wait for assert_hold;
         assert(mosi_buff(1) = mosi_data)
@@ -329,24 +327,24 @@ begin
 
 
         --*Test DUT_MODE2*
-        i_dword_tdata  <= miso_data;
-        i_dword_tvalid <= '1';
-        i_spi_sclk     <= '1';
+        p_tdword_tdata  <= miso_data;
+        p_tdword_tvalid <= '1';
+        p_spi_sclk      <= '1';
         wait for clk_period;
-        i_dword_tvalid <= '0';
-        i_spi_ncs      <= '0';
+        p_tdword_tvalid <= '0';
+        p_spi_ncs       <= '0';
 
         for i in 0 to 7 loop
-            i_spi_mosi        <= mosi_data(7-i);
+            p_spi_mosi        <= mosi_data(7-i);
             wait for sclk_period/2;
-            i_spi_sclk        <= '0';
-            miso_buff(2)(7-i) <= o_spi_miso(2);
+            p_spi_sclk        <= '0';
+            miso_buff(2)(7-i) <= p_spi_miso(2);
             wait for sclk_period/2;
-            i_spi_sclk        <= '1';
+            p_spi_sclk        <= '1';
             
         end loop;
         wait for sclk_period/2;
-        i_spi_ncs <= '1'; 
+        p_spi_ncs <= '1'; 
 
         wait for assert_hold;
         assert(mosi_buff(2) = mosi_data)
@@ -362,23 +360,23 @@ begin
 
 
         --*Test DUT_MODE3*
-        i_dword_tdata  <= miso_data;
-        i_dword_tvalid <= '1';
-        i_spi_sclk     <= '1';
+        p_tdword_tdata  <= miso_data;
+        p_tdword_tvalid <= '1';
+        p_spi_sclk      <= '1';
         wait for clk_period;
-        i_dword_tvalid <= '0';
-        i_spi_ncs      <= '0';
+        p_tdword_tvalid <= '0';
+        p_spi_ncs       <= '0';
 
         for i in 0 to 7 loop
             wait for sclk_period/2;
-            i_spi_sclk        <= '0';
-            i_spi_mosi        <= mosi_data(7-i);
+            p_spi_sclk        <= '0';
+            p_spi_mosi        <= mosi_data(7-i);
             wait for sclk_period/2;
-            i_spi_sclk        <= '1';
-            miso_buff(3)(7-i) <= o_spi_miso(3); 
+            p_spi_sclk        <= '1';
+            miso_buff(3)(7-i) <= p_spi_miso(3); 
         end loop;
         wait for sclk_period/2;
-        i_spi_ncs <= '1';
+        p_spi_ncs <= '1';
 
         wait for assert_hold;
         assert(mosi_buff(3) = mosi_data)
@@ -389,16 +387,16 @@ begin
 
 
 
-        --**End simulation**
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
+		--**End simulation**
+		wait for 50 ns;
+        report "SPI_R_DRIVER_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
-
-
-
-
     -----------------------------------------------------------------------------------------------
 
 
