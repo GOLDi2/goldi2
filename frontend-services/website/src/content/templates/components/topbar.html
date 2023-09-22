@@ -6,17 +6,26 @@
 {% endmacro %}
 
 {% macro topbar(title) %}
-    <div class="h-12 p-1 bg-primary-600 shadow-l fixed flex flex-row justify-end right-0 left-52">
-        {{ caller() }}
+
+    <div class="h-12 p-1 bg-primary-600 shadow-l fixed flex flex-row text-left right-0 left-0">   
+        <div class=" text-ellipsis text-white text-4xl text-left h-12 w-80">
+            Admin
+        </div>   
+        <div class ="grow">
+
+        </div>
+        {{ caller() }}               
     </div>
+    
 {% endmacro %}
 {% macro element(language, href) %}
     {% set href="/"+language+href %}
     {{ caller() }}
 {% endmacro %}
+
 {% macro content() %}
-    <div class="flex-grow flex flex-col mt-16 my-4 mb-4 items-center">
-        <div class="w-full">
+    <div class="flex-grow flex flex-col mt-16 my-4 mb-4 items-center">    
+            <div class="bg-primary-50 rounded-3xl p-5 lg:w-300 shadow-xl text-center">
         {{ caller() }}
         </div>
     </div>
