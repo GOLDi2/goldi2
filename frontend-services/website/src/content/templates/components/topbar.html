@@ -14,7 +14,23 @@
         <div class ="grow">
 
         </div>
-        {{ caller() }}               
+
+        <div class="flex items-center px-10 text-primary-50 z-0">
+            <div class="hover:font-bold py-2 dropdown">
+                <div class="absolute w-max -z-10 -mt-10 font-normal">
+                    <div class=" rounded-xl flex flex-col pt-20">
+                        {{ caller() }}
+                        <span class="h-2"/>
+                    </div>
+                </div>
+                <div class="px-5">             
+                        <span class="hover:font-bold bold-width text-center">
+                            Add
+                        </span>      
+                </div>
+            </div>
+        </div>
+                   
     </div>
     
 {% endmacro %}

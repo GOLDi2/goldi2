@@ -5,9 +5,9 @@
 {% block content %}
     {% call topbar.container() %}
     {% call topbar.topbar() %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=edge instantiable", icon="add") %}Add Edge Device{% endcall %}{% endcall %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=group", icon="add") %}Add Group{% endcall %}{% endcall %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create", icon="add") %}Add Device{% endcall %}{% endcall %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=edge instantiable") %}Edge Device{% endcall %}{% endcall %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=group") %}Group{% endcall %}{% endcall %}
+    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create") %}Device{% endcall %}{% endcall %}
     {% endcall %}
     {% call topbar.content() %}
     <div class="flex">
