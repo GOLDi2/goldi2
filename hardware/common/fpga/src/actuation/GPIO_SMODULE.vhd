@@ -58,7 +58,7 @@ use work.GOLDI_IO_STANDARD.all;
 --! **Latency: 1cyl**
 entity GPIO_SMODULE is
     generic(
-        g_address       :   natural := 1;                               --! Module's base g_address
+        g_address       :   natural := 1;                               --! Module's base address
         g_gpio_number   :   natural := 10                               --! Number of pins/registers
     );
     port(

@@ -56,7 +56,7 @@ use work.GOLDI_IO_STANDARD.all;
 --! **Latency: 3 **
 entity EMAGNET_SMODULE is
 	generic(
-		g_address		:	natural := 1;		--! Module's base g_address
+		g_address		:	natural := 1;		--! Module's base address
 		g_magnet_tao	:	natural := 100;		--! Electromagnet time constant
 		g_demag_time	:	natural := 50 		--! Demagnetization time constant
 	);
@@ -66,7 +66,7 @@ entity EMAGNET_SMODULE is
 		rst				: in	std_logic;		--! Asynchronous reset
 		--BUS slave interface
 		sys_bus_i		: in	sbus_in;		--! BUS input signals [stb,we,adr,dat,tag]
-		sys_bus_o		: out	sbus_out;		--! BUS output signals [dat,tag]
+		sys_bus_o		: out	sbus_out;		--! BUS output signals [dat,tag,mux]
 		--HBridge interface
 		p_em_enb		: out	io_o;			--! H-Bridge Enable
 		p_em_out_1		: out	io_o;			--! H-Bridge Output 1 
