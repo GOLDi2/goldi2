@@ -18,9 +18,10 @@
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: -  
 --
--- Revision V4.00.00 - Modifications to the generic and port signal names
+-- Revision V4.00.00 - Modifications to the generic and port signal and rst type
 -- Additional Comments: Changes to the module's generic and port signals to
---                      follow V4.00.00 naming convention.
+--                      follow V4.00.00 naming convention. Change from
+--                      synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -109,12 +110,13 @@ begin
 
     --****RAM****
     -----------------------------------------------------------------------------------------------
-    FIFO_RAM : process(clk)
+    FIFO_RAM : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                memory <= (others => (others => '0'));
-            elsif(write_ready_i = '1' and p_write_tvalid = '1') then
+        if(rst = '1') then
+            memory       <= (others => (others => '0'));
+            p_read_tdata <= (others => '0');
+        elsif(rising_edge(clk)) then
+            if(write_ready_i = '1' and p_write_tvalid = '1') then
                 memory(wr_pointer) <= p_write_tdata;
             else null;
             end if;
@@ -129,34 +131,30 @@ begin
     --****FIFO control****
     -----------------------------------------------------------------------------------------------
     --Update write and read pointers to output input/output data to ram
-    POINTER_CONTROL : process(clk)
+    POINTER_CONTROL : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                rd_pointer <= 0;
-                wr_pointer <= 0;
-            else
-                wr_pointer <= getIndex(wr_pointer,write_ready_i,p_write_tvalid);
-                rd_pointer <= getIndex(rd_pointer,p_read_tready,read_valid_i);
-            end if;
+        if(rst = '1') then
+            rd_pointer <= 0;
+            wr_pointer <= 0;
+        elsif(rising_edge(clk)) then
+            wr_pointer <= getIndex(wr_pointer,write_ready_i,p_write_tvalid);
+            rd_pointer <= getIndex(rd_pointer,p_read_tready,read_valid_i);
         end if;
     end process;
 
 
-    MEMORY_COUNTER : process(clk)
+    MEMORY_COUNTER : process(clk,rst)
         variable counter    :   natural range 0 to g_fifo_depth;
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                counter := 0;
-            else
-                if(write_ready_i = '1' and p_write_tvalid = '1') then
-                    counter := counter + 1;
-                end if;
+        if(rst = '1') then
+            counter := 0;
+        elsif(rising_edge(clk)) then
+            if(write_ready_i = '1' and p_write_tvalid = '1') then
+                counter := counter + 1;
+            end if;
 
-                if(p_read_tready = '1' and read_valid_i = '1') then
-                    counter := counter - 1;
-                end if;
+            if(p_read_tready = '1' and read_valid_i = '1') then
+                counter := counter - 1;
             end if;
         end if;
 
@@ -164,25 +162,23 @@ begin
     end process;
 
 
-    MEMORY_COUTER_DELAY : process(clk)
+    MEMORY_COUTER_DELAY : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                memory_count_1 <= 0;
-            else
-                memory_count_1 <= memory_count;
-            end if;
+        if(rst = '1') then
+            memory_count_1 <= 0;
+        elsif(rising_edge(clk)) then
+            memory_count_1 <= memory_count;
         end if;
     end process;
 
 
-    READ_WRITE_FLAG : process(clk)
+    READ_WRITE_FLAG : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then  
-                read_write_valid <= '0';
-            elsif(write_ready_i = '1' and p_write_tvalid = '1' and
-                  p_read_tready = '1' and read_valid_i = '1') then
+        if(rst = '1') then
+            read_write_valid <= '0';
+        elsif(rising_edge(clk)) then
+            if(write_ready_i = '1' and p_write_tvalid = '1' and
+               p_read_tready = '1' and read_valid_i = '1')  then
                 read_write_valid <= '1';
             else
                 read_write_valid <= '0';
@@ -224,4 +220,4 @@ begin
     -----------------------------------------------------------------------------------------------
 
 
-end RTL;
+end architecture;
