@@ -56,10 +56,10 @@ use IEEE.numeric_std.all;
 --! It is recommended to use an even value to have 50% duty cycle.
 --!
 --! The transfer data is registered when both the tdword_ready and tdword_valid flags
---! are valid. This allows a transfer cycle to occur when the module is in an idle 
---! state or after the current data transfer has finished but the ncs signal remains
---! low. This allows the user to stream data for multiple continuous data words.
---! 
+--! are valid. The ready flag is asserted if the module is idle or if the "p_stream_enb"
+--! is held high during the data a data transfer. This allows multiple data words to be
+--! transfered without setting the ncs signal high.
+--!
 --! **Latency: 1cyc**
 entity SPI_T_DRIVER is
     generic(
@@ -74,6 +74,7 @@ entity SPI_T_DRIVER is
         clk                 : in    std_logic;                                  --! System clock
         rst                 : in    std_logic;                                  --! Asynchronous clock
         --Parallel interface
+        p_stream_enb        : in    std_logic;                                  --! Ennable multi-word continous transfer
         p_tdword_tready     : out   std_logic;                                  --! Parallel input data word ready
         p_tdword_tvalid     : in    std_logic;                                  --! Parallel input data word valid
         p_tdword_tdata      : in    std_logic_vector(g_word_length-1 downto 0); --! Parallel input data word - "MOSI" data
@@ -102,7 +103,7 @@ architecture RTL of SPI_T_DRIVER is
     signal mosi_buffer_i    :   std_logic_vector(g_word_length-1 downto 0);
     signal miso_buffer_i    :   std_logic_vector(g_word_length-1 downto 0);
     --State machine
-    type spi_state is (s_idle, s_setup, s_transfer, s_hold);
+    type spi_state is (s_idle, s_setup, s_transfer, s_hold, s_hold_idle);
     signal ps_spi   :   spi_state;
 
 
@@ -133,11 +134,16 @@ begin
                 end if;
             
             when s_hold =>  --Hold for a possible stream data word. Hold chip selected
-                if(p_tdword_tvalid = '1') then ps_spi <= s_setup;
-                elsif(spi_ncs_counter = g_clk_factor/2-1) then ps_spi <= s_idle;
+                if(p_tdword_tvalid = '1' and p_stream_enb = '1') then ps_spi <= s_setup;
+                elsif(spi_ncs_counter = g_clk_factor/2-1) then ps_spi <= s_hold_idle;
                 else ps_spi <= s_hold;
                 end if;
             
+            when s_hold_idle =>
+                if(spi_sclk_counter = g_clk_factor-1) then ps_spi <= s_idle;
+                else ps_spi <= s_hold_idle;
+                end if;
+
             when others => 
                 ps_spi <= s_idle;
                 
@@ -167,11 +173,13 @@ begin
     end process;
 
 
-    READY_FLAG_CONTROL : process(rst,ps_spi)
+    READY_FLAG_CONTROL : process(rst,ps_spi,p_stream_enb)
     begin
         if(rst = '1') then 
             p_tdword_tready <= '0';
-        elsif(ps_spi = s_idle or ps_spi = s_hold) then
+        elsif(ps_spi = s_idle) then
+            p_tdword_tready <= '1';
+        elsif(ps_spi = s_hold and p_stream_enb = '1') then
             p_tdword_tready <= '1';
         else
             p_tdword_tready <= '0';
@@ -188,7 +196,7 @@ begin
         if(rst = '1') then
             p_spi_ncs <= '1';
         elsif(rising_edge(clk)) then
-            if(ps_spi = s_idle) then
+            if(ps_spi = s_idle or ps_spi = s_hold_idle) then
                 p_spi_ncs <= '1';
             else
                 p_spi_ncs <= '0';
@@ -219,9 +227,10 @@ begin
             mosi_buffer_i <= (others => '0');
 
         elsif(rising_edge(clk)) then
-            if((ps_spi = s_idle or ps_spi = s_hold) and (p_tdword_tvalid = '1')) then
+            if(ps_spi = s_idle  and p_tdword_tvalid = '1') then
                 mosi_buffer_i <= p_tdword_tdata;
 
+            elsif(ps_spi = s_hold and p_stream_enb = '1' and p_tdword_tvalid = '1') then
             elsif(g_cpha = '0' and ps_spi = s_transfer and spi_sclk_counter = g_clk_factor/2) then
                 if(g_msbf = true) then
                     mosi_buffer_i <= mosi_buffer_i(g_word_length-2 downto 0) & "0";
@@ -280,7 +289,7 @@ begin
         if(rst = '1') then
             spi_sclk_counter <= 0;
         elsif(rising_edge(clk)) then
-            if(ps_spi /= s_transfer) then
+            if(ps_spi = s_idle or ps_spi = s_setup or ps_spi = s_hold) then
                 spi_sclk_counter <= 0;
             elsif(spi_sclk_counter = g_clk_factor-1) then
                 spi_sclk_counter <= 0;

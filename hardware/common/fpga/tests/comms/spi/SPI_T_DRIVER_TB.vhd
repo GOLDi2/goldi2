@@ -49,6 +49,7 @@ architecture TB of SPI_T_DRIVER_TB is
         port(
             clk                 : in    std_logic;
             rst                 : in    std_logic;
+            p_stream_enb        : in    std_logic;
             p_tdword_tready     : out   std_logic;
             p_tdword_tvalid     : in    std_logic;
             p_tdword_tdata      : in    std_logic_vector(g_word_length-1 downto 0);
@@ -79,10 +80,10 @@ architecture TB of SPI_T_DRIVER_TB is
     signal p_rdword_tvalid      :   std_logic_vector(3 downto 0) := (others => '0');
     signal p_rdword_tdata       :   byte_vector(3 downto 0) := (others => (others => '0'));
     --SPI interface
-    signal p_spi_ncs            :   std_logic(3 downto 0) := (others => '0');
-    signal p_spi_sclk           :   std_logic(3 downto 0) := (others => '0');
-    signal p_spi_mosi           :   std_logic(3 downto 0) := (others => '0');
-    signal p_spi_miso           :   std_logic(3 downto 0) := (others => '0');
+    signal p_spi_ncs            :   std_logic_vector(3 downto 0) := (others => '0');
+    signal p_spi_sclk           :   std_logic_vector(3 downto 0) := (others => '0');
+    signal p_spi_mosi           :   std_logic_vector(3 downto 0) := (others => '0');
+    signal p_spi_miso           :   std_logic_vector(3 downto 0) := (others => '0');
     --Testbench
     constant mosi_data          :   std_logic_vector(7 downto 0) := x"3C";
     constant miso_data          :   std_logic_vector(7 downto 0) := x"C3";
@@ -106,6 +107,7 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
+        p_stream_enb        => '0',
         p_tdword_tready     => p_tdword_tready(0),
         p_tdword_tvalid     => p_tdword_tvalid(0),
         p_tdword_tdata      => p_tdword_tdata(0),
@@ -130,6 +132,7 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
+        p_stream_enb        => '0',
         p_tdword_tready     => p_tdword_tready(1),
         p_tdword_tvalid     => p_tdword_tvalid(1),
         p_tdword_tdata      => p_tdword_tdata(1),
@@ -154,6 +157,7 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
+        p_stream_enb        => '0',
         p_tdword_tready     => p_tdword_tready(2),
         p_tdword_tvalid     => p_tdword_tvalid(2),
         p_tdword_tdata      => p_tdword_tdata(2),
@@ -178,6 +182,7 @@ begin
     port map(
         clk                 => clock,
         rst                 => reset,
+        p_stream_enb        => '0',
         p_tdword_tready     => p_tdword_tready(3),
         p_tdword_tvalid     => p_tdword_tvalid(3),
         p_tdword_tdata      => p_tdword_tdata(3),
@@ -441,10 +446,10 @@ begin
 		wait for 50 ns;
         report "SPI_T_DRIVER_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-       	std.env.finish;
+       	--std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        -- run_sim <= '0';
-        -- wait;
+         run_sim <= '0';
+         wait;
 
     end process;
     -----------------------------------------------------------------------------------------------
