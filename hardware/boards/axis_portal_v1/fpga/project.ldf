@@ -3,19 +3,7 @@
     <Options/>
     <Implementation title="impl1" dir="build" description="impl1" synthesis="lse" default_strategy="Strategy1">
         <Options top="TOP_LEVEL"/>
-        <Source name="src/ACTUATOR_MASK.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/HBRIDGE_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/EMAGNET_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/ERROR_DETECTOR.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/libraries/GOLDI_COMM_STANDARD.vhd" type="VHDL" type_short="VHDL">
@@ -24,31 +12,40 @@
         <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/ACTUATOR_MASK.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/ERROR_DETECTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/LED_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/comms/goldi_spi/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/HBRIDGE_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/EMAGNET_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/LED_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/io_management/SYNCHRONIZER.vhd" type="VHDL" type_short="VHDL">
@@ -57,13 +54,16 @@
         <Source name="src/common/io_management/SYNCHRONIZER_ARRAY.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/io_management/TRIS_BUFFER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/io_management/TRIS_BUFFER_ARRAY.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="constraints.lpf" type="Logic Preference" type_short="LPF">
