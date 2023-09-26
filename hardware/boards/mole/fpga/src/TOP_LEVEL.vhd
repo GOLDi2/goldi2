@@ -53,7 +53,7 @@ entity TOP_LEVEL is
         FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
         --SPI
-        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock (max: system_clk/5)
+        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock
         SPI0_MOSI   : in    std_logic;                                          --! SPI - Master out / Slave in
         SPI0_MISO   : out   std_logic;                                          --! SPI - Master in / Slave out
         SPI0_nCE0   : in    std_logic;                                          --! SPI - Active low chip enable
