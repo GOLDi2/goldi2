@@ -20,14 +20,19 @@
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: Release for Warehouse_V2
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to control the simulation flow.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_IO_STANDARD.all;
@@ -50,50 +55,46 @@ architecture TB of ACTUATOR_MASK_TB is
     --****DUT****
     component ACTUATOR_MASK
         generic(
-            g_enc_x_invert  :   boolean := false;
-            g_enc_z_invert  :   boolean := false;
-            g_x_box_margins :   sensor_limit_array(9 downto 0) := (others => (0,0));
-            g_z_box_margins :   sensor_limit_array(4 downto 0) := (others => (0,0))
+            g_enc_x_invert      :   boolean;
+            g_enc_z_invert      :   boolean;
+            g_x_box_margins     :   sensor_limit_array(9 downto 0);
+            g_z_box_margins     :   sensor_limit_array(4 downto 0)
         );
         port(
-            --General
-            clk             : in    std_logic;
-            rst             : in    std_logic;
-            --Flags
-            rst_x_encoder   : in    std_logic;
-            rst_z_encoder   : in    std_logic;
-            block_x_margin  : in    std_logic;
-            block_z_margin  : in    std_logic;
-            unblock_y_axis  : in    std_logic;
-            --System data
-            sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            --Masked data
-            safe_io_o       : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+            clk                 : in    std_logic;
+            rst                 : in    std_logic;
+            ref_x_encoder       : in    std_logic;
+            ref_z_encoder       : in    std_logic;
+            p_block_x_margin    : in    std_logic;
+            p_block_z_margin    : in    std_logic;
+            p_unblock_y_axis    : in    std_logic;
+            p_sys_io_i          : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_sys_io_o          : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_safe_io_o         : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
         );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-    constant clk_period		:	time := 10 ns;
+    constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
     --DUT IOs
     constant tb_x_margins   :   sensor_limit_array(9 downto 0) := (others => (0,10));
     constant tb_z_margins   :   sensor_limit_array(4 downto 0) := (others => (0,10));
-    signal rst_x_encoder    :   std_logic := '0';
-    signal rst_z_encoder    :   std_logic := '0';
-    signal block_x_margin   :   std_logic := '0';
-    signal block_z_margin   :   std_logic := '0';
-    signal unblock_y_axis   :   std_logic := '0';
-    signal sys_io_i         :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal sys_io_o         :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal safe_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-        alias smotor_x_step :   std_logic is safe_io_o(18).dat;
-        alias smotor_y_enb  :   std_logic is safe_io_o(24).dat;
-        alias smotor_z_step :   std_logic is safe_io_o(30).dat;
+    signal ref_x_encoder    :   std_logic := '0';
+    signal ref_z_encoder    :   std_logic := '0';
+    signal p_block_x_margin :   std_logic := '0';
+    signal p_block_z_margin :   std_logic := '0';
+    signal p_unblock_y_axis :   std_logic := '0';
+    signal p_sys_io_i       :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal p_sys_io_o       :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal p_safe_io_o      :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+        alias smotor_x_step :   std_logic is p_safe_io_o(18).dat;
+        alias smotor_y_enb  :   std_logic is p_safe_io_o(24).dat;
+        alias smotor_z_step :   std_logic is p_safe_io_o(30).dat;
     --Testbench
     constant debounce_time  :   integer := 2400*4;
     signal tb_abs_inputs    :   std_logic_vector(9 downto 0) := (others => '0');
@@ -122,22 +123,22 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : ACTUATOR_MASK
     generic map(
-        g_enc_x_invert  => false,
-        g_enc_z_invert  => false,
-        g_x_box_margins => tb_x_margins,
-        g_z_box_margins => tb_z_margins
+        g_enc_x_invert      => false,
+        g_enc_z_invert      => false,
+        g_x_box_margins     => tb_x_margins,
+        g_z_box_margins     => tb_z_margins
     )
     port map(
-        clk             => clock,
-        rst             => reset,
-        rst_x_encoder   => rst_x_encoder,
-        rst_z_encoder   => rst_z_encoder,
-        block_x_margin  => block_x_margin,
-        block_z_margin  => block_z_margin,
-        unblock_y_axis  => unblock_y_axis,
-        sys_io_i        => sys_io_i,
-        sys_io_o        => sys_io_o,
-        safe_io_o       => safe_io_o
+        clk                 => clock,
+        rst                 => reset,
+        ref_x_encoder       => ref_x_encoder,
+        ref_z_encoder       => ref_z_encoder,
+        p_block_x_margin    => p_block_x_margin,
+        p_block_z_margin    => p_block_z_margin,
+        p_unblock_y_axis    => p_unblock_y_axis,
+        p_sys_io_i          => p_sys_io_i,
+        p_sys_io_o          => p_sys_io_o,
+        p_safe_io_o         => p_safe_io_o
     );
     -----------------------------------------------------------------------------------------------
 
@@ -146,7 +147,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -154,31 +155,31 @@ begin
     --****SIGNAL ROUTING****
     -----------------------------------------------------------------------------------------------
     --Sensor routing
-    sys_io_i(1 downto 0)                <= (others => gnd_io_i);
-    sys_io_i(2).dat                     <= limit_x_neg;
-    sys_io_i(3).dat                     <= limit_x_pos;
-    sys_io_i(4).dat                     <= limit_y_neg;
-    sys_io_i(5).dat                     <= limit_y_pos;
-    sys_io_i(6).dat                     <= limit_z_neg;
-    sys_io_i(7).dat                     <= limit_z_pos;
-    sys_io_i(8)                         <= gnd_io_i;
-    sys_io_i(9).dat                     <= x_channel_a;
-    sys_io_i(10).dat                    <= x_channel_b;
-    sys_io_i(11)                        <= gnd_io_i;
-    sys_io_i(12).dat                    <= z_channel_a;
-    sys_io_i(13).dat                    <= z_channel_b;
-    sys_io_i(sys_io_i'left downto 14)   <= (others => gnd_io_i); 
+    p_sys_io_i(1 downto 0)                <= (others => gnd_io_i);
+    p_sys_io_i(2).dat                     <= limit_x_neg;
+    p_sys_io_i(3).dat                     <= limit_x_pos;
+    p_sys_io_i(4).dat                     <= limit_y_neg;
+    p_sys_io_i(5).dat                     <= limit_y_pos;
+    p_sys_io_i(6).dat                     <= limit_z_neg;
+    p_sys_io_i(7).dat                     <= limit_z_pos;
+    p_sys_io_i(8)                         <= gnd_io_i;
+    p_sys_io_i(9).dat                     <= x_channel_a;
+    p_sys_io_i(10).dat                    <= x_channel_b;
+    p_sys_io_i(11)                        <= gnd_io_i;
+    p_sys_io_i(12).dat                    <= z_channel_a;
+    p_sys_io_i(13).dat                    <= z_channel_b;
+    p_sys_io_i(p_sys_io_i'left downto 14)   <= (others => gnd_io_i); 
     --Actuator routing
-    sys_io_o(17 downto 0)               <= (others => gnd_io_o);
-    sys_io_o(18)                        <= ('1', '1');
-    sys_io_o(19)                        <= ('1', motor_x_dir);
-    sys_io_o(23 downto 20)              <= (others => gnd_io_o);
-    sys_io_o(24)                        <= ('1', '1');
-    sys_io_o(25)                        <= ('1', motor_y_out_1);
-    sys_io_o(26)                        <= ('1', motor_y_out_2);
-    sys_io_o(29 downto 27)              <= (others => gnd_io_o);
-    sys_io_o(30)                        <= ('1', '1');
-    sys_io_o(31)                        <= ('1', motor_z_dir);
+    p_sys_io_o(17 downto 0)               <= (others => gnd_io_o);
+    p_sys_io_o(18)                        <= ('1', '1');
+    p_sys_io_o(19)                        <= ('1', motor_x_dir);
+    p_sys_io_o(23 downto 20)              <= (others => gnd_io_o);
+    p_sys_io_o(24)                        <= ('1', '1');
+    p_sys_io_o(25)                        <= ('1', motor_y_out_1);
+    p_sys_io_o(26)                        <= ('1', motor_y_out_2);
+    p_sys_io_o(29 downto 27)              <= (others => gnd_io_o);
+    p_sys_io_o(30)                        <= ('1', '1');
+    p_sys_io_o(31)                        <= ('1', motor_z_dir);
     -----------------------------------------------------------------------------------------------
 
 
@@ -280,8 +281,8 @@ begin
 
 
         --**Test block flags**
-        block_x_margin <= '1';
-        block_z_margin <= '1';
+        p_block_x_margin <= '1';
+        p_block_z_margin <= '1';
 
         wait for assert_hold;
         assert(smotor_x_step = '0')
@@ -292,8 +293,8 @@ begin
             severity error;
         wait for post_hold;
 
-        block_x_margin <= '0';
-        block_z_margin <= '0';        
+        p_block_x_margin <= '0';
+        p_block_z_margin <= '0';        
 
 
         wait for 5*clk_period;
@@ -365,10 +366,14 @@ begin
         wait for post_hold;
 
 
-        --**End simulation**
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
+		--**End simulation**
+		wait for 50 ns;
+        report "WH: ACTUATOR_MASK_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

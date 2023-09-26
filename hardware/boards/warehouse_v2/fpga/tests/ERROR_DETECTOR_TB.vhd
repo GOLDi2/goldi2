@@ -13,19 +13,20 @@
 --                  -> GOLDI_IO_STANDARD.vhd
 --                  -> GOLDI_DATA_TYPES.vhd
 --                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> ERROR_LIST.vhd
+--                  -> ERROR_DETECTOR.vhd
 --
 -- Revisions:
--- Revision V3.01.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -49,40 +50,40 @@ architecture TB of ERROR_DETECTOR_TB is
     --****DUT****
     component ERROR_DETECTOR
     generic(
-        g_address       :   natural := 1;
-        g_enc_x_invert  :   boolean := false;
-        g_enc_z_invert  :   boolean := false;
-        g_x_box_margins :   sensor_limit_array(9 downto 0) := (others => (0,0));
-        g_z_box_margins :   sensor_limit_array(4 downto 0) := (others => (0,0))
+        g_address       :   natural;
+        g_enc_x_invert  :   boolean;
+        g_enc_z_invert  :   boolean;
+        g_x_box_margins :   sensor_limit_array(9 downto 0);
+        g_z_box_margins :   sensor_limit_array(4 downto 0)
     );
     port(
         clk             : in    std_logic;
         rst             : in    std_logic;
-        rst_x_encoder   : in    std_logic;
-        rst_z_encoder   : in    std_logic;
+        ref_x_encoder   : in    std_logic;
+        ref_z_encoder   : in    std_logic;
         sys_bus_i       : in    sbus_in;
         sys_bus_o       : out   sbus_out;
-        sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-        sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+        p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+        p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
     );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period		:	time := 10 ns;
+	constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
     --DUT IOs
     constant tb_x_margins   :   sensor_limit_array(9 downto 0) := (others => (0,10));
     constant tb_z_margins   :   sensor_limit_array(4 downto 0) := (others => (0,10));
-    signal rst_x_encoder    :   std_logic := '0';
-    signal rst_z_encoder    :   std_logic := '0';
-    signal sys_bus_i        :   sbus_in := gnd_sbus_i;
+    signal ref_x_encoder    :   std_logic := '0';
+    signal ref_z_encoder    :   std_logic := '0';
+    signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
     signal sys_bus_o        :   sbus_out := gnd_sbus_o;
-    signal sys_io_i         :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal sys_io_o         :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+    signal p_sys_io_i       :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_i);
+    signal p_sys_io_o       :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_o);
     --Testbench
     constant debounce_time  :   integer := 2400*4;
     signal tb_abs_inputs    :   std_logic_vector(12 downto 0) := (others => '0');
@@ -126,12 +127,12 @@ begin
     port map(
         clk             => clock,
         rst             => reset,
-        rst_x_encoder   => rst_x_encoder,
-        rst_z_encoder   => rst_z_encoder,
+        ref_x_encoder   => ref_x_encoder,
+        ref_z_encoder   => ref_z_encoder,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
-        sys_io_i        => sys_io_i,
-        sys_io_o        => sys_io_o
+        p_sys_io_i      => p_sys_io_i,
+        p_sys_io_o      => p_sys_io_o
     );
     -----------------------------------------------------------------------------------------------
 
@@ -140,7 +141,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -148,31 +149,31 @@ begin
     --****SIGNAL ROUTING****
     -----------------------------------------------------------------------------------------------
     --Sensor routing
-    sys_io_i(1 downto 0)                <= (others => gnd_io_i);
-    sys_io_i(2).dat                     <= limit_x_neg;
-    sys_io_i(3).dat                     <= limit_x_pos;
-    sys_io_i(4).dat                     <= limit_y_neg;
-    sys_io_i(5).dat                     <= limit_y_pos;
-    sys_io_i(6).dat                     <= limit_z_neg;
-    sys_io_i(7).dat                     <= limit_z_pos;
-    sys_io_i(8)                         <= gnd_io_i;
-    sys_io_i(9).dat                     <= x_channel_a;
-    sys_io_i(10).dat                    <= x_channel_b;
-    sys_io_i(11)                        <= gnd_io_i;
-    sys_io_i(12).dat                    <= z_channel_a;
-    sys_io_i(13).dat                    <= z_channel_b;
-    sys_io_i(sys_io_i'left downto 14)   <= (others => gnd_io_i); 
+    p_sys_io_i(1 downto 0)                <= (others => gnd_io_i);
+    p_sys_io_i(2).dat                     <= limit_x_neg;
+    p_sys_io_i(3).dat                     <= limit_x_pos;
+    p_sys_io_i(4).dat                     <= limit_y_neg;
+    p_sys_io_i(5).dat                     <= limit_y_pos;
+    p_sys_io_i(6).dat                     <= limit_z_neg;
+    p_sys_io_i(7).dat                     <= limit_z_pos;
+    p_sys_io_i(8)                         <= gnd_io_i;
+    p_sys_io_i(9).dat                     <= x_channel_a;
+    p_sys_io_i(10).dat                    <= x_channel_b;
+    p_sys_io_i(11)                        <= gnd_io_i;
+    p_sys_io_i(12).dat                    <= z_channel_a;
+    p_sys_io_i(13).dat                    <= z_channel_b;
+    p_sys_io_i(p_sys_io_i'left downto 14) <= (others => gnd_io_i); 
     --Actuator routing
-    sys_io_o(17 downto 0)               <= (others => gnd_io_o);
-    sys_io_o(18)                        <= ('1', motor_x_step);
-    sys_io_o(19)                        <= ('1', motor_x_dir);
-    sys_io_o(23 downto 20)              <= (others => gnd_io_o);
-    sys_io_o(24)                        <= ('1', motor_y_enb);
-    sys_io_o(25)                        <= ('1', motor_y_out_1);
-    sys_io_o(26)                        <= ('1', motor_y_out_2);
-    sys_io_o(29 downto 27)              <= (others => gnd_io_o);
-    sys_io_o(30)                        <= ('1', motor_z_step);
-    sys_io_o(31)                        <= ('1', motor_z_dir);
+    p_sys_io_o(17 downto 0)               <= (others => gnd_io_o);
+    p_sys_io_o(18)                        <= ('1', motor_x_step);
+    p_sys_io_o(19)                        <= ('1', motor_x_dir);
+    p_sys_io_o(23 downto 20)              <= (others => gnd_io_o);
+    p_sys_io_o(24)                        <= ('1', motor_y_enb);
+    p_sys_io_o(25)                        <= ('1', motor_y_out_1);
+    p_sys_io_o(26)                        <= ('1', motor_y_out_2);
+    p_sys_io_o(29 downto 27)              <= (others => gnd_io_o);
+    p_sys_io_o(30)                        <= ('1', motor_z_step);
+    p_sys_io_o(31)                        <= ('1', motor_z_dir);
     -----------------------------------------------------------------------------------------------
 
 
@@ -319,11 +320,14 @@ begin
 
 
         
-        --**End simulation**
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
-
+		--**End simulation**
+		wait for 50 ns;
+        report "WH: ERROR_DETECTOR_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
     end process;
     -----------------------------------------------------------------------------------------------
 

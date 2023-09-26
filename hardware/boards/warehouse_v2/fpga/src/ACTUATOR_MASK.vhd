@@ -12,6 +12,8 @@
 -- Dependencies:	-> GOLDI_IO_STANDARD.vhd
 --                  -> GOLDI_DATA_TYPES.vhd
 --                  -> GOLDI_MODULE_CONFIG.vhd
+--                  -> HIGH_DEBOUNCE.vhd
+--                  -> VIRTUAL_LIMIT_ARRAY.vhd
 --                  -> VIRTUAL_SENSOR_ARRAY.vhd
 --
 -- Revisions:
@@ -21,8 +23,11 @@
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: Release for Warehouse_V2
 --
--- Revision V3.01.00 - Optimized mask
--- Additional Comments: Simplification of enityt and protection cases
+-- Revision V4.00.00 - Optimized mask and general refactoring
+-- Additional Comments: Simplification of entity and protection cases.
+--                      Change to the generic and port signal names to follow
+--                      V4.00.00 naming convention. Correction of the 
+--                      instantiated entities.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -37,31 +42,32 @@ use work.GOLDI_MODULE_CONFIG.all;
 
 
 
---! @brief
+--! @brief System protection module
 --! @details
---!
+--! The module uses sensor inputs and driver outputs to generate a mask that blocks
+--! the driver signals in case of user error to prevent damage to the physical model.
 entity ACTUATOR_MASK is
     generic(
-        g_enc_x_invert  :   boolean := false;
-        g_enc_z_invert  :   boolean := false;
-        g_x_box_margins :   sensor_limit_array(9 downto 0) := (others => (0,0));
-        g_z_box_margins :   sensor_limit_array(4 downto 0) := (others => (0,0))
+        g_enc_x_invert      :   boolean := false;                                       --! Select x encoder positive direction [false -> CCW | true -> CC]
+        g_enc_z_invert      :   boolean := false;                                       --! Select z encoder positive direction [false -> CCW | true -> CC]
+        g_x_box_margins     :   sensor_limit_array(9 downto 0) := (others => (0,0));    --! X-axis loading bays position values (GOLDI_MODULE_CONFIG)
+        g_z_box_margins     :   sensor_limit_array(4 downto 0) := (others => (0,0))     --! Z-axis loading bays position values (GOLDI_MODULE_CONFIG)
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk                 : in    std_logic;                                          --! System clock
+        rst                 : in    std_logic;                                          --! Asynchronous reset
+        ref_x_encoder       : in    std_logic;                                          --! Reset for x virtual sensor array
+        ref_z_encoder       : in    std_logic;                                          --! Reset for z virtual sensor array
         --Flags
-        rst_x_encoder   : in    std_logic;
-        rst_z_encoder   : in    std_logic;
-        block_x_margin  : in    std_logic;
-        block_z_margin  : in    std_logic;
-        unblock_y_axis  : in    std_logic;
+        p_block_x_margin    : in    std_logic;                                          --! Block x movement when next loading bay is reached
+        p_block_z_margin    : in    std_logic;                                          --! Block z movement when next loading bay is reached
+        p_unblock_y_axis    : in    std_logic;                                          --! Unblock y movement inside loading bay for debbuging
         --System data
-        sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-        sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+        p_sys_io_i          : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! System synchronous input data (sensors)
+        p_sys_io_o          : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! System output data (drivers)
         --Masked data
-        safe_io_o       : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+        p_safe_io_o         : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)         --! Safe output data (drivers)
     );
 end entity ACTUATOR_MASK;
 
@@ -82,18 +88,18 @@ architecture RTL of ACTUATOR_MASK is
     alias limit_z_neg           :   std_logic is stable_sensors_i(4);
     alias limit_z_pos           :   std_logic is stable_sensors_i(5);
     --Incremental encoders
-    alias x_channel_a           :   std_logic is sys_io_i(9).dat;
-    alias x_channel_b           :   std_logic is sys_io_i(10).dat;
-    alias z_channel_a           :   std_logic is sys_io_i(12).dat;
-    alias z_channel_b           :   std_logic is sys_io_i(13).dat;
+    alias x_channel_a           :   std_logic is p_sys_io_i(9).dat;
+    alias x_channel_b           :   std_logic is p_sys_io_i(10).dat;
+    alias z_channel_a           :   std_logic is p_sys_io_i(12).dat;
+    alias z_channel_b           :   std_logic is p_sys_io_i(13).dat;
 	--Motor inputs
-    alias motor_x_step          :   std_logic is sys_io_o(18).dat;
-    alias motor_x_dir           :   std_logic is sys_io_o(19).dat;
-    alias motor_y_enb           :   std_logic is sys_io_o(24).dat;
-    alias motor_y_out_1         :   std_logic is sys_io_o(25).dat;
-    alias motor_y_out_2         :   std_logic is sys_io_o(26).dat;
-    alias motor_z_step          :   std_logic is sys_io_o(30).dat;
-    alias motor_z_dir           :   std_logic is sys_io_o(31).dat;
+    alias motor_x_step          :   std_logic is p_sys_io_o(18).dat;
+    alias motor_x_dir           :   std_logic is p_sys_io_o(19).dat;
+    alias motor_y_enb           :   std_logic is p_sys_io_o(24).dat;
+    alias motor_y_out_1         :   std_logic is p_sys_io_o(25).dat;
+    alias motor_y_out_2         :   std_logic is p_sys_io_o(26).dat;
+    alias motor_z_step          :   std_logic is p_sys_io_o(30).dat;
+    alias motor_z_dir           :   std_logic is p_sys_io_o(31).dat;
     --Box margin signals
     signal box_x_rst            :   std_logic;
     signal box_z_rst            :   std_logic;
@@ -112,16 +118,16 @@ begin
     --Sensor debounce removes signal jitter by holding the signal until a logic low is detected
     --for at least 1ms (clk(48*10^6)/stages(4)*clk_factor(12000))
     STABILIZERS : for i in 0 to 5 generate
-        DEBOUNCE : entity work.IO_DEBOUNCE
+        DEBOUNCE : entity work.HIGH_DEBOUNCE
         generic map(
-            STAGES      => 4,
-            CLK_FACTOR  => 1200
+            g_stages        => 4,
+            g_clk_factor    => 1200
         )
         port map(
-            clk         => clk,
-            rst         => rst,
-            io_raw      => sys_io_i(i+2).dat,
-            io_stable   => stable_sensors_i(i)
+            clk             => clk,
+            rst             => rst,
+            p_io_raw        => p_sys_io_i(i+2).dat,
+            p_io_stable     => stable_sensors_i(i)
         );
     end generate;
     -----------------------------------------------------------------------------------------------
@@ -130,39 +136,39 @@ begin
 
     --****VIRTUAL BOX MARGINS****
     -----------------------------------------------------------------------------------------------
-    box_x_rst <= rst or rst_x_encoder;
-    box_z_rst <= rst or rst_z_encoder;
+    box_x_rst <= rst or ref_x_encoder;
+    box_z_rst <= rst or ref_z_encoder;
 
     X_BOX_MARGINS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
-        INVERT          => g_enc_x_invert,
-        NUMBER_SENSORS  => 10,
-        SENSOR_LIMITS   => g_x_box_margins
+        g_invert            => g_enc_x_invert,
+        g_number_sensors    => 10,
+        g_sensor_limits     => g_x_box_margins
     )
     port map(
-        clk             => clk,
-        rst             => box_x_rst,
-        enc_channel_a   => x_channel_a,
-        enc_channel_b   => x_channel_b,
-        sensor_data_out => box_x_margins
+        clk                 => clk,
+        rst                 => box_x_rst,
+        p_channel_a         => x_channel_a,
+        p_channel_b         => x_channel_b,
+        p_sensor_data       => box_x_margins
     );
 
 
     Z_BOX_MARGINS : entity work.VIRTUAL_LIMIT_ARRAY
     generic map(
-        INVERT          => g_enc_z_invert,
-        NUMBER_SENSORS  => 5,
-        BORDER_MARGIN   => 5,
-        SENSOR_LIMITS   => g_z_box_margins
+        g_invert            => g_enc_z_invert,
+        g_number_sensors    => 5,
+        g_border_margin     => 5,
+        g_sensor_limits     => g_z_box_margins
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        enc_channel_a   => z_channel_a,
-        enc_channel_b   => z_channel_b,
-        sensor_data_out => box_z_margins,
-        sensor_flag_neg => box_z_lmargin,
-        sensor_flag_pos => box_z_umargin
+        clk                 => clk,
+        rst                 => box_z_rst,
+        p_channel_a         => z_channel_a,
+        p_channel_b         => z_channel_b,
+        p_sensor_data       => box_z_margins,
+        p_flag_neg          => box_z_lmargin,
+        p_flag_pos          => box_z_umargin
     );
 
 
@@ -174,62 +180,62 @@ begin
 
     --****MASK GENERATOR****
     -----------------------------------------------------------------------------------------------
-    safe_io_o(17 downto 0) <= sys_io_o(17 downto 0);
+    p_safe_io_o(17 downto 0) <= p_sys_io_o(17 downto 0);
 
 
     --X motor protection
     --TMC2660 step signal blocked to avoid damage
-    safe_io_o(18).enb <= sys_io_o(18).enb;
-    safe_io_o(18).dat <= '0' when((limit_x_neg    = '1' and limit_x_pos   = '1') or
-                                  (limit_x_neg    = '1' and motor_x_dir   = '0') or
-                                  (limit_x_pos    = '1' and motor_x_dir   = '1') or
-                                  (block_x_margin = '1' and x_margin_flag = '1') or
-                                  (limit_y_neg    = '0'))                        else
-                         sys_io_o(18).dat;
+    p_safe_io_o(18).enb <= p_sys_io_o(18).enb;
+    p_safe_io_o(18).dat <= '0' when((limit_x_neg      = '1' and limit_x_pos   = '1') or
+                                    (limit_x_neg      = '1' and motor_x_dir   = '0') or
+                                    (limit_x_pos      = '1' and motor_x_dir   = '1') or
+                                    (p_block_x_margin = '1' and x_margin_flag = '1') or
+                                    (limit_y_neg      = '0'))                        else
+                           p_sys_io_o(18).dat;
 
 
-    safe_io_o(23 downto 19) <= sys_io_o(23 downto 19);
+    p_safe_io_o(23 downto 19) <= p_sys_io_o(23 downto 19);
 
 
     --Y motor protection
     --H-Bridge enable signal blocked to avoid damage
-    safe_io_o(24).enb <= sys_io_o(24).enb;
-    safe_io_o(24).dat <= '0' when((limit_y_neg    = '1' and limit_y_pos   = '1')  or
-                                  (limit_y_neg    = '1' and motor_y_out_2 = '1')  or
-                                  (limit_y_pos    = '1' and motor_y_out_1 = '1')  or
-                                  (unblock_y_axis = '0' and x_margin_flag = '0')  or
-                                  (unblock_y_axis = '0' and z_margin_flag = '0')) else
-                         sys_io_o(24).dat;
+    p_safe_io_o(24).enb <= p_sys_io_o(24).enb;
+    p_safe_io_o(24).dat <= '0' when((limit_y_neg      = '1' and limit_y_pos   = '1')  or
+                                    (limit_y_neg      = '1' and motor_y_out_2 = '1')  or
+                                    (limit_y_pos      = '1' and motor_y_out_1 = '1')  or
+                                    (p_unblock_y_axis = '0' and x_margin_flag = '0')  or
+                                    (p_unblock_y_axis = '0' and z_margin_flag = '0')) else
+                           p_sys_io_o(24).dat;
 
-    safe_io_o(29 downto 25) <= sys_io_o(29 downto 25);
+    p_safe_io_o(29 downto 25) <= p_sys_io_o(29 downto 25);
 
 
     --Z motor protection
     --TMC2660 step signal blocked to avoid damage
-    safe_io_o(30).enb <= sys_io_o(30).enb;
-    safe_io_o(30).dat <= '0' when((limit_z_neg    = '1' and limit_z_pos   = '1')  or
-                                  (limit_z_neg    = '1' and motor_z_dir   = '0')  or
-                                  (limit_z_pos    = '1' and motor_z_dir   = '1')  or
-                                  (block_z_margin = '1' and z_margin_flag = '1')  or
-                                  (z_margin_flag  = '0'                        )  or
-                                --Box 1 margins
-                                  (limit_y_neg = '0' and box_z_margins(0) = '1' and box_z_lmargin(0) = '1' and motor_z_dir = '0')  or
-                                  (limit_y_neg = '0' and box_z_margins(0) = '1' and box_z_umargin(0) = '1' and motor_z_dir = '1')  or
-                                --Box 2 margins
-                                  (limit_y_neg = '0' and box_z_margins(1) = '1' and box_z_lmargin(1) = '1' and motor_z_dir = '0')  or
-                                  (limit_y_neg = '0' and box_z_margins(1) = '1' and box_z_umargin(1) = '1' and motor_z_dir = '1')  or
-                                --Box 3 margins
-                                  (limit_y_neg = '0' and box_z_margins(2) = '1' and box_z_lmargin(2) = '1' and motor_z_dir = '0')  or
-                                  (limit_y_neg = '0' and box_z_margins(2) = '1' and box_z_umargin(2) = '1' and motor_z_dir = '1')  or
-                                --Box 4 margins
-                                  (limit_y_neg = '0' and box_z_margins(3) = '1' and box_z_lmargin(3) = '1' and motor_z_dir = '0')  or
-                                  (limit_y_neg = '0' and box_z_margins(3) = '1' and box_z_umargin(3) = '1' and motor_z_dir = '1')  or
-                                --Box 5 margins
-                                  (limit_y_neg = '0' and box_z_margins(4) = '1' and box_z_lmargin(4) = '1' and motor_z_dir = '0')  or
-                                  (limit_y_neg = '0' and box_z_margins(4) = '1' and box_z_umargin(4) = '1' and motor_z_dir = '1')) else
-                         sys_io_o(30).dat;
+    p_safe_io_o(30).enb <= p_sys_io_o(30).enb;
+    p_safe_io_o(30).dat <= '0' when((limit_z_neg      = '1' and limit_z_pos   = '1')  or
+                                    (limit_z_neg      = '1' and motor_z_dir   = '0')  or
+                                    (limit_z_pos      = '1' and motor_z_dir   = '1')  or
+                                    (p_block_z_margin = '1' and z_margin_flag = '1')  or
+                                    (z_margin_flag    = '0'                        )  or
+                                    --Box 1 margins
+                                    (limit_y_neg = '0' and box_z_margins(0) = '1' and box_z_lmargin(0) = '1' and motor_z_dir = '0')  or
+                                    (limit_y_neg = '0' and box_z_margins(0) = '1' and box_z_umargin(0) = '1' and motor_z_dir = '1')  or
+                                    --Box 2 margins
+                                    (limit_y_neg = '0' and box_z_margins(1) = '1' and box_z_lmargin(1) = '1' and motor_z_dir = '0')  or
+                                    (limit_y_neg = '0' and box_z_margins(1) = '1' and box_z_umargin(1) = '1' and motor_z_dir = '1')  or
+                                    --Box 3 margins
+                                    (limit_y_neg = '0' and box_z_margins(2) = '1' and box_z_lmargin(2) = '1' and motor_z_dir = '0')  or
+                                    (limit_y_neg = '0' and box_z_margins(2) = '1' and box_z_umargin(2) = '1' and motor_z_dir = '1')  or
+                                    --Box 4 margins
+                                    (limit_y_neg = '0' and box_z_margins(3) = '1' and box_z_lmargin(3) = '1' and motor_z_dir = '0')  or
+                                    (limit_y_neg = '0' and box_z_margins(3) = '1' and box_z_umargin(3) = '1' and motor_z_dir = '1')  or
+                                    --Box 5 margins
+                                    (limit_y_neg = '0' and box_z_margins(4) = '1' and box_z_lmargin(4) = '1' and motor_z_dir = '0')  or
+                                    (limit_y_neg = '0' and box_z_margins(4) = '1' and box_z_umargin(4) = '1' and motor_z_dir = '1')) else
+                           p_sys_io_o(30).dat;
 
-    safe_io_o(safe_io_o'left downto 31) <= sys_io_o(sys_io_o'left downto 31);
+    p_safe_io_o(p_safe_io_o'left downto 31) <= p_sys_io_o(p_sys_io_o'left downto 31);
     -----------------------------------------------------------------------------------------------
 
 

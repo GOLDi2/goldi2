@@ -4,7 +4,7 @@
 --
 -- Create Date:		30/04/2023
 -- Design Name:		Warehouse sensor array testbench
--- Module Name:		SENSOR_ARRAY_TB
+-- Module Name:		WH_SENSOR_ARRAY_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
@@ -21,14 +21,19 @@
 -- 
 -- Revision V2.00.00 - First release
 -- Additional Comments:
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to control the simulation flow.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -39,82 +44,89 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 --! Functionality Simulation
-entity SENSOR_ARRAY_TB is
-end entity SENSOR_ARRAY_TB;
+entity WH_SENSOR_ARRAY_TB is
+end entity WH_SENSOR_ARRAY_TB;
 
 
 
 
 --! Simulation architecture
-architecture TB of SENSOR_ARRAY_TB is
+architecture TB of wH_SENSOR_ARRAY_TB is
 
     --****DUT****
-    component SENSOR_ARRAY
+    component WH_SENSOR_ARRAY
         generic(
-            ADDRESS         :   natural := 1;
-            ENC_X_INVERT    :   boolean := false;
-            ENC_Z_INVERT    :   boolean := false;
-            LIMIT_X_SENSORS :   sensor_limit_array(9 downto 0) := (others => (10,5));
-            LIMIT_Z_SENSORS :   sensor_limit_array(4 downto 0) := (others => (10,5))
+            g_address           :   natural;
+            g_enc_x_invert      :   boolean;
+            g_enc_z_invert      :   boolean;
+            g_x_limit_sensors   :   sensor_limit_array(9 downto 0);
+            g_z_limit_sensors   :   sensor_limit_array(4 downto 0)
         );
         port(
-            clk             : in    std_logic;
-            rst             : in    std_logic;
-            rst_virtual_x   : in    std_logic;
-            rst_virtual_z   : in    std_logic;
-            sys_bus_i       : in    sbus_in;
-            sys_bus_o       : out   sbus_out;
-            lim_x_neg       : in    io_i;
-            lim_x_pos       : in    io_i;
-            lim_y_neg       : in    io_i;
-            lim_y_pos       : in    io_i;
-            lim_z_neg       : in    io_i;
-            lim_z_pos       : in    io_i;
-            inductive       : in    io_i;
-            enc_channel_x_a : in    io_i;
-            enc_channel_x_b : in    io_i;
-            enc_channel_z_a : in    io_i;
-            enc_channel_z_b : in    io_i
+            clk                 : in    std_logic;
+            rst                 : in    std_logic;
+            ref_virtual_x       : in    std_logic;
+            ref_virtual_z       : in    std_logic;
+            sys_bus_i           : in    sbus_in;
+            sys_bus_o           : out   sbus_out;
+            p_lim_x_neg         : in    io_i;
+            p_lim_x_pos         : in    io_i;
+            p_lim_y_neg         : in    io_i;
+            p_lim_y_pos         : in    io_i;
+            p_lim_z_neg         : in    io_i;
+            p_lim_z_pos         : in    io_i;
+            p_inductive         : in    io_i;
+            p_channel_x_a       : in    io_i;
+            p_channel_x_b       : in    io_i;
+            p_channel_z_a       : in    io_i;
+            p_channel_z_b       : in    io_i
         );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-    constant clk_period		:	time := 10 ns;
+    constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
     --DUT IOs
-    signal sys_bus_i        :   sbus_in;
-    signal sys_bus_o        :   sbus_out;
-    signal limits           :   io_i_vector(6 downto 0);
-    signal encoder          :   io_i_vector(3 downto 0);      
+    signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
+    signal sys_bus_o        :   sbus_out := gnd_sbus_o;
+    signal limits           :   io_i_vector(6 downto 0) := (others => gnd_io_i);
+    signal encoder          :   io_i_vector(3 downto 0) := (others => gnd_io_i);      
 
 
 begin
 
     --****COMPONENT****
     -----------------------------------------------------------------------------------------------
-    DUT : SENSOR_ARRAY
+    DUT : WH_SENSOR_ARRAY
+    generic map(
+        g_address           => 1,
+        g_enc_x_invert      => false,
+        g_enc_z_invert      => false,
+        g_x_limit_sensors   => (others => (10,5)),
+        g_z_limit_sensors   => (others => (10,5))
+    )
     port map(
-        clk             => clock,
-        rst             => reset,
-        rst_virtual_x   => reset,
-        rst_virtual_z   => reset,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o,
-        lim_x_neg       => limits(0),
-        lim_x_pos       => limits(1),
-        lim_y_neg       => limits(2),
-        lim_y_pos       => limits(3),
-        lim_z_neg       => limits(4),
-        lim_z_pos       => limits(5),
-        inductive       => limits(6),
-        enc_channel_x_a => encoder(0),
-        enc_channel_x_b => encoder(1),
-        enc_channel_z_a => encoder(2),
-        enc_channel_z_b => encoder(3)
+        clk                 => clock,
+        rst                 => reset,
+        ref_virtual_x       => reset,
+        ref_virtual_z       => reset,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o,
+        p_lim_x_neg         => limits(0),
+        p_lim_x_pos         => limits(1),
+        p_lim_y_neg         => limits(2),
+        p_lim_y_pos         => limits(3),
+        p_lim_z_neg         => limits(4),
+        p_lim_z_pos         => limits(5),
+        p_inductive         => limits(6),
+        p_channel_x_a       => encoder(0),
+        p_channel_x_b       => encoder(1),
+        p_channel_z_a       => encoder(2),
+        p_channel_z_b       => encoder(3)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -123,7 +135,7 @@ begin
     --****SIMULATION TIMING****
 	-----------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 5 ns, '0' after 15 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
 	-----------------------------------------------------------------------------------------------
 
 
@@ -134,15 +146,13 @@ begin
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
-        limits      <= (others => gnd_io_i);
-        encoder     <= (others => gnd_io_i);
-        sys_bus_i   <= gnd_sbus_i;
+        --**Initial Setup**
         wait for init_hold;
 
         
-        --**Test Idle**¨
+        --**Test idle state**¨
         --Test limit sensors
         sys_bus_i <= readBus(1);
         wait for assert_hold;
@@ -234,12 +244,17 @@ begin
 
 
 
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
+		--**End simulation**
+		wait for 50 ns;
+        report "WH: SENSOR_ARRAY_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------
 
 
-end TB;
+end architecture;
