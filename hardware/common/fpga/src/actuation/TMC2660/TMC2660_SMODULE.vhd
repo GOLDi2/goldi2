@@ -3,8 +3,8 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		TMC2660 Stepper motor driver control (legacy)
--- Module Name:		TMC2660_DRIVER
+-- Design Name:		TMC2660 Stepper motor driver control 
+-- Module Name:		TMC2660_SMODULE
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
@@ -14,16 +14,12 @@
 --                  -> GOLDI_DATA_TYPES.vhd
 --                  -> REGISTER_TABLE.vhd
 --                  -> STREAM_FIFO.vhd
---                  -> TMC2660_CONFIG_FIFO.vhd
---                  -> TMC2660_SD.vhd
---                  -> TMC2660_SPI.vhd
+--                  -> ROM16XN_FIFO.vhd
+--                  -> SPI_T_DRIVER.vhd
 --
 -- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: -  
+-- Revision V4.00.00 - File Created
+-- Additional Comments: First commitment 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -38,45 +34,46 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 
---! @brief TMC2660 Stepper motor controller interface (legacy)
---! @details
---! The "TMC2660_DRIVER" is 
-entity TMC2660_DRIVER is
+--! @brief TMC2660 Stepper motor controller interface
+--! @brief
+--!
+entity TMC2660_SMODULE is
     generic(
-        ADDRESS         :   natural := 1;
-        SCLK_FACTOR     :   natural := 8;
-        TMC2660_CONFIG  :   tmc2660_rom := (x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF")
+        g_address           :   natural := 1;
+        g_sclk_factor       :   natural := 8;
+        g_rst_delay         :   natural := 100;
+        g_tmc2660_config    :   array_16_bit := (x"0000",x"0000")        
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk                 : in    std_logic;
+        rst                 : in    std_logic;
         --BUS slave interface
-        sys_bus_i       : in    sbus_in;
-        sys_bus_o       : out   sbus_out;
+        sys_bus_i           : in    sbus_in;
+        sys_bus_o           : out   sbus_out;
         --TMC2660 interface
-        tmc2660_clk     : out   io_o;
-        tmc2660_enn     : out   io_o;
-        tmc2660_sg      : in    io_i;
-        tmc2660_dir     : out   io_o;
-        tmc2660_step    : out   io_o;
-        tmc2660_sclk    : out   io_o;
-        tmc2660_ncs     : out   io_o;
-        tmc2660_mosi    : out   io_o;
-        tmc2660_miso    : in    io_i
+        p_tmc2660_clk       : out   io_o;
+        p_tmc2660_enn       : out   io_o;
+        p_tmc2660_sg        : in    io_i;
+        p_tmc2660_dir       : out   io_o;
+        p_tmc2660_step      : out   io_o;
+        p_tmc2660_ncs       : out   io_o;
+        p_tmc2660_sclk      : out   io_o;
+        p_tmc2660_mosi      : out   io_o;
+        p_tmc2660_miso      : in    io_i
     );
-end entity TMC2660_DRIVER;
+end entity TMC2660_SMODULE;
 
 
 
 
 --! General architecture
-architecture RTL of TMC2660_DRIVER is
-  
+architecture RTL of TMC2660_SMODULE is
+
     --****INTERNAL SIGNALS****
     --Memory
     constant memory_length      :   natural := getMemoryLength(48);
-    constant reg_default        :   data_word_vector(memory_length-1 downto 0) := (x"00",x"00",x"00",x"09",x"C4",x"00");
+    constant c_reg_default      :   data_word_vector(memory_length-1 downto 0) := (x"00",x"00",x"00",x"09",x"C4",x"00");
     signal reg_data_in          :   data_word_vector(memory_length-1 downto 0);
     signal reg_data_out         :   data_word_vector(memory_length-1 downto 0);
     signal reg_data_in_buff     :   std_logic_vector(47 downto 0);
@@ -86,51 +83,46 @@ architecture RTL of TMC2660_DRIVER is
         alias reg_enn           :   std_logic is reg_data_out_buff(7);
         alias reg_speed         :   std_logic_vector(15 downto 0) is reg_data_out_buff(23 downto 8);
         alias reg_spi_data      :   std_logic_vector(23 downto 0) is reg_data_out_buff(47 downto 24);
-    signal reg_write_stb        :   std_logic_vector(5 downto 0);
+    signal reg_write_stb        :   std_logic_vector(memory_length-1 downto 0);
     --Clocking
-    signal clock_buff           :   unsigned(1 downto 0);
+    signal clock_buffer         :   unsigned(1 downto 0);
     --Configuration data
-    signal config_o_tready      :   std_logic;
-    signal config_o_tvalid      :   std_logic;
-    signal config_o_tdata       :   std_logic_vector(23 downto 0);
+    signal config_word_tready   :   std_logic;
+    signal config_word_tvalid   :   std_logic;
+    signal config_word_tdata    :   std_logic_vector(23 downto 0);
+    signal config_fifo_empty    :   std_logic;   
     --Stream data
-    signal stream_o_tready      :   std_logic;
-    signal stream_o_tvalid      :   std_logic;
-    signal stream_o_tdata       :   std_logic_vector(23 downto 0);
-    --SPI Interface
-    signal spi_o_tready         :   std_logic;
-    signal spi_o_tvalid         :   std_logic;
-    signal spi_o_tdata          :   std_logic_vector(23 downto 0);
-    signal spi_i_tvalid         :   std_logic;
-    signal spi_i_tdata          :   std_logic_vector(23 downto 0);
+    signal stream_rst           :   std_logic;
+    signal stream_word_tready   :   std_logic;
+    signal stream_word_tvalid   :   std_logic;
+    signal stream_word_tdata    :   std_logic_vector(23 downto 0);
+    --SPI interface
+    signal spi_t_tready         :   std_logic;
+    signal spi_t_tvalid         :   std_logic;
+    signal spi_t_tdata          :   std_logic_vector(23 downto 0);
+    signal spi_r_tvalid         :   std_logic;
+    signal spi_r_tdata          :   std_logic_vector(23 downto 0);
 
 
     --##############################################################################################
     -- Adapded module
     --##############################################################################################
-    type tState is  (   z_StandBy,
-                        z_Idle,
-                        z_DriveDir0,
-                        z_DriveDir1,
-                        z_Stop,
-                        z_Stop2
-                    );
+    type tState is  (z_StandBy, z_Idle, z_DriveDir0, z_DriveDir1, z_Stop, z_Stop2);
     signal sCurrentState    :   tState;
-    signal sStartMovement   :   STD_LOGIC;
-    signal sStopMovement    :   STD_LOGIC;
-    
+    signal sStartMovement   :   std_logic;
+    signal sStopMovement    :   std_logic;
+
 
 begin
 
     --****GENERAL****
     -----------------------------------------------------------------------------------------------
-    tmc2660_clk.enb <= '1';
-    tmc2660_clk.dat <= clock_buff(1);
+    p_tmc2660_clk.enb <= '1';
+    p_tmc2660_clk.dat <= clock_buffer(1);
 
-    tmc2660_enn.enb <= '1';
-    tmc2660_enn.dat <= reg_data_out_buff(7);
+    p_tmc2660_enn.enb <= '1';
+    p_tmc2660_enn.dat <= reg_data_out_buff(7);
     -----------------------------------------------------------------------------------------------
-
 
 
 
@@ -139,76 +131,87 @@ begin
     TMC2660_CLOCK_DRIVER : process(clk,rst)
     begin
         if(rst = '1') then
-            clock_buff <= (others => '0');
+            clock_buffer <= (others => '0');
         elsif(rising_edge(clk)) then
-            clock_buff <= clock_buff + 1;
+            clock_buffer <= clock_buffer + 1;
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
 
 
 
-
     --****TMC2660 SPI COMMUNICATION****
     -----------------------------------------------------------------------------------------------
-    --Multiplex configuration data and spi communication data
-    config_o_tready <= spi_o_tready    when(config_o_tvalid = '1') else '0';
-    stream_o_tready <= spi_o_tready    when(config_o_tvalid = '0') else '0';
-    spi_o_tvalid    <= config_o_tvalid when(config_o_tvalid = '1') else stream_o_tvalid;
-    spi_o_tdata     <= config_o_tdata  when(config_o_tvalid = '1') else stream_o_tdata;
+    --Multiplexing configuration data and stream data
+    config_word_tready <= spi_t_tready when(config_fifo_empty = '0') else '0';
+    stream_word_tready <= spi_t_tready when(config_fifo_empty = '1') else '0';
+    spi_t_tvalid       <= config_word_tvalid when(config_fifo_empty = '0') else stream_word_tvalid;
+    spi_t_tdata        <= config_word_tdata  when(config_fifo_empty = '0') else stream_word_tdata;
     
-    
-    CONFIGURATION_QUEUE : entity work.TMC2660_CONFIG_FIFO
+
+    CONFIGURATION_FIFO : entity work.ROM16XN_FIFO
     generic map(
-        ROM             => TMC2660_CONFIG
+        g_data_width    => 24,
+        g_init_delay    => g_rst_delay,
+        g_init_values   => g_tmc2660_config
     )
     port map(
         clk             => clk,
         rst             => rst,
-        m_read_tready   => config_o_tready,
-        m_read_tvalid   => config_o_tvalid,
-        m_read_tdata    => config_o_tdata
+        p_fifo_empty    => config_fifo_empty,
+        p_cword_tready  => config_word_tready,
+        p_cword_tvalid  => config_word_tvalid,
+        p_cword_tdata   => config_word_tdata
     );
 
 
-    STREAM_QUEUE : entity work.STREAM_FIFO
+    --Reset stream fifo to prevent auto-loading from the register
+    stream_rst <= rst or (not config_fifo_empty);
+
+    STREAM_FIFO : entity work.STREAM_FIFO
     generic map(
         g_fifo_width    => 24,
         g_fifo_depth    => 5
     )
     port map(
         clk             => clk,
-        rst             => config_o_tvalid,
+        rst             => stream_rst,
         p_write_tready  => open,
         p_write_tvalid  => reg_write_stb(3),
         p_write_tdata   => reg_spi_data,
-        p_read_tready   => stream_o_tready,
-        p_read_tvalid   => stream_o_tvalid,
-        p_read_tdata    => stream_o_tdata       
+        p_read_tready   => stream_word_tready,
+        p_read_tvalid   => stream_word_tvalid,
+        p_read_tdata    => stream_word_tdata
     );
 
 
-    SPI_COMMS : entity work.TMC2660_SPI
+    SPI_INTERFACE : entity work.SPI_T_DRIVER
     generic map(
-        CLOCK_FACTOR    => SCLK_FACTOR
+        g_clk_factor        => g_sclk_factor,
+        g_word_length       => 24,
+        g_cpol              => '1',
+        g_cpha              => '0',
+        g_msbf              => true    
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        s_word_i_tready => spi_o_tready,
-        s_word_i_tvalid => spi_o_tvalid,
-        s_word_i_tdata  => spi_o_tdata,
-        m_word_o_tvalid => spi_i_tvalid,
-        m_word_o_tdata  => spi_i_tdata,
-        m_spi_sclk      => tmc2660_sclk.dat,
-        m_spi_ncs       => tmc2660_ncs.dat,
-        m_spi_mosi      => tmc2660_mosi.dat,
-        m_spi_miso      => tmc2660_miso.dat
+        clk                 => clk,
+        rst                 => rst,
+        p_stream_enb        => '0',
+        p_tdword_tready     => spi_t_tready,
+        p_tdword_tvalid     => spi_t_tvalid,
+        p_tdword_tdata      => spi_t_tdata,
+        p_rdword_tvalid     => spi_r_tvalid,
+        p_rdword_tdata      => spi_r_tdata,
+        p_spi_ncs           => p_tmc2660_ncs.dat,
+        p_spi_sclk          => p_tmc2660_sclk.dat,
+        p_spi_mosi          => p_tmc2660_mosi.dat,
+        p_spi_miso          => p_tmc2660_miso.dat
     );
+    
     --Configura IOs to output
-    tmc2660_sclk.enb <= '1';
-    tmc2660_ncs.enb  <= '1';
-    tmc2660_mosi.enb <= '1';
+    p_tmc2660_sclk.enb <= '1';
+    p_tmc2660_ncs.enb  <= '1';
+    p_tmc2660_mosi.enb <= '1';
     -----------------------------------------------------------------------------------------------
 
 
@@ -219,7 +222,7 @@ begin
     port map (   
         pClock                  => clk,
         pReset                  => rst,
-        pStep                   => tmc2660_step.dat,
+        pStep                   => p_tmc2660_step.dat,
         pDoStartMovement        => sStartMovement,
         pDoStopMovement         => sStopMovement,
         pStartFrequency         => X"0500",
@@ -229,22 +232,22 @@ begin
     );
 
     --Output mode configuration
-    tmc2660_step.enb <= '1';
-    tmc2660_dir.enb  <= '1';
+    p_tmc2660_step.enb <= '1';
+    p_tmc2660_dir.enb  <= '1';
 
 
 
     --Drive signals of StepperControl
-    sStartMovement  <=  '1' when sCurrentState = z_DriveDir0 else
-                        '1' when sCurrentState = z_DriveDir1 else
-                        '0';
+    sStartMovement      <=  '1' when sCurrentState = z_DriveDir0 else
+                            '1' when sCurrentState = z_DriveDir1 else
+                            '0';
 
-    sStopMovement   <=  '1' when sCurrentState = z_Stop else
-                        '1' when sCurrentState = z_Stop2 else
-                        '0';
+    sStopMovement       <=  '1' when sCurrentState = z_Stop  else
+                            '1' when sCurrentState = z_Stop2 else
+                            '0';
 
-    tmc2660_dir.dat <=  '1' when sCurrentState = z_DriveDir1 else
-                        '0';
+    p_tmc2660_dir.dat   <=  '1' when sCurrentState = z_DriveDir1 else
+                            '0';
 
 
 
@@ -256,7 +259,7 @@ begin
         elsif(rising_edge(clk)) then
             --Modified state machine
             case sCurrentState is
-                when z_StandBy      =>  if(config_o_tvalid = '0') then sCurrentState <= z_Idle; 
+                when z_StandBy      =>  if(config_fifo_empty = '1') then sCurrentState <= z_Idle; 
                                         else sCurrentState <= z_StandBy;
                                         end if;
 
@@ -290,9 +293,9 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        g_address       => ADDRESS,
+        g_address       => g_address,
         g_reg_number    => memory_length,
-        g_def_values    => reg_default
+        g_def_values    => c_reg_default
     )
     port map(
         clk             => clk,
@@ -311,8 +314,8 @@ begin
         if(rst = '1') then
             reg_data_in_buff(47 downto 24) <= (others =>'0');
         elsif(rising_edge(clk)) then
-            if(spi_i_tvalid = '1') then
-                reg_data_in_buff(47 downto 24) <= spi_i_tdata;
+            if(spi_r_tvalid = '1') then
+                reg_data_in_buff(47 downto 24) <= spi_r_tdata;
             else null;
             end if;
         end if;
@@ -322,8 +325,8 @@ begin
     reg_data_out_buff <= getMemory(reg_data_out);
 
     --Route outputs
-    reg_data_in_buff( 1 downto 0) <= reg_data_out_buff( 1 downto 0);
-    reg_data_in_buff(2)           <= tmc2660_sg.dat;
+    reg_data_in_buff(1 downto 0)  <= reg_data_out_buff( 1 downto 0);
+    reg_data_in_buff(2)           <= p_tmc2660_sg.dat;
     reg_data_in_buff(23 downto 3) <= reg_data_out_buff(23 downto 3);
     reg_data_in <= setMemory(reg_data_in_buff);
     -----------------------------------------------------------------------------------------------
