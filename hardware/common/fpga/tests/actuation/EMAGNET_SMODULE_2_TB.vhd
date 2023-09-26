@@ -30,7 +30,7 @@ use IEEE.numeric_std.all;
 --! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
--- use std.env.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -234,10 +234,10 @@ begin
 		wait for 50 ns;
         report "EMAGNET_SMODULE_2_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-       	--std.env.finish;
+       	std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        run_sim <= '0';
-        wait;
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

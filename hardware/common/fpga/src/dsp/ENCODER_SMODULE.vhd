@@ -86,7 +86,7 @@ use work.GOLDI_IO_STANDARD.all;
 --! **Latency:3**
 entity ENCODER_SMODULE is
 	generic(
-		g_address	:	natural := 1;			--! Module base address
+		g_address	:	natural := 1;			--! Module's base address
 		g_index_rst	:	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
         g_invert    :   boolean := false        --! Select positive direction [false -> CCW | true -> CC]
     );
@@ -95,8 +95,8 @@ entity ENCODER_SMODULE is
 		clk			: in	std_logic;			--! System clock
 		rst			: in	std_logic;			--! Asynchronous reset
 		--BUS slave interface
-		sys_bus_i	: in	sbus_in;			--! BUS input signals [we,adr,dat]
-		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,val]
+		sys_bus_i	: in	sbus_in;			--! BUS input signals [stb,we,adr,dat,tag]
+		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,tag,mux]
 		--3 Channel encoder signals
 		p_channel_a	: in	io_i;				--! Channel_a input
 		p_channel_b	: in	io_i;				--! Channel_b input

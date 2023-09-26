@@ -446,10 +446,10 @@ begin
 		wait for 50 ns;
         report "SPI_T_DRIVER_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-       	--std.env.finish;
+       	std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-         run_sim <= '0';
-         wait;
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

@@ -107,7 +107,7 @@ begin
     --****SIMULATION TIMING****
 	-------------------------------------------------------------------------------------------------------------------
 	clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after 10 ns, '0' after 20 ns;
+	reset <= '1' after 10 ns, '0' after 30 ns;
 	-------------------------------------------------------------------------------------------------------------------
 
 
@@ -314,10 +314,10 @@ begin
 		wait for 50 ns;
         report "BUS_CONVERTER_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
-        -- std.env.finish;
+        std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        run_sim <= '0';
-        wait;
+        -- run_sim <= '0';
+        -- wait;
 
     end process;
     -------------------------------------------------------------------------------------------------------------------

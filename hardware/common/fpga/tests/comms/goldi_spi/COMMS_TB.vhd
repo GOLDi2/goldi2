@@ -36,7 +36,7 @@ use IEEE.numeric_std.all;
 --! Use standard library for simulation control and assertions
 library std;
 use std.standard.all;
- use std.env.all;
+use std.env.all;
 --! Use custom communication library
 library work;
 use work.GOLDI_COMM_STANDARD.all;
