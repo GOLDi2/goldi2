@@ -36,6 +36,7 @@ use machxo2.all;
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
+use work.GOLDI_DATA_TYPES.all;
 use work.GOLDI_MODULE_CONFIG.all;
 
 
@@ -54,7 +55,7 @@ entity TOP_LEVEL is
         FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
         --SPI
-        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock (max: system_clk/4)
+        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock
         SPI0_MOSI   : in    std_logic;                                          --! SPI - Master out / Slave in
         SPI0_MISO   : out   std_logic;                                          --! SPI - Master in / Slave out
         SPI0_nCE0   : in    std_logic;                                          --! SPI - Active low chip enable
@@ -355,54 +356,112 @@ begin
     );
 
 
-    X_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    --#########################################################################
+    -- OLD
+    --#########################################################################
+    -- X_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    -- generic map(
+    --     ADDRESS         => X_MOTOR_ADDRESS,
+    --     SCLK_FACTOR     => X_MOTOR_SCLK_FACTOR,
+    --     TMC2660_CONFIG  => X_MOTOR_CONFIGURATION
+    -- )
+    -- port map(
+    --     clk             => clk,
+    --     rst             => rst,
+    --     sys_bus_i       => sys_bus_i,
+    --     sys_bus_o       => sys_bus_o(6),
+    --     tmc2660_clk     => system_io_o(13),
+    --     tmc2660_enn     => system_io_o(14),
+    --     tmc2660_sg      => system_io_i(15),
+    --     tmc2660_dir     => system_io_o(17),
+    --     tmc2660_step    => system_io_o(16),
+    --     tmc2660_sclk    => system_io_o(18),
+    --     tmc2660_ncs     => system_io_o(19),
+    --     tmc2660_mosi    => system_io_o(20),
+    --     tmc2660_miso    => system_io_i(21)
+    -- );
+    --#########################################################################
+    
+
+    X_AXIS_MOTOR : entity work.TMC2660_SMODULE
     generic map(
-        ADDRESS         => X_MOTOR_ADDRESS,
-        SCLK_FACTOR     => X_MOTOR_SCLK_FACTOR,
-        TMC2660_CONFIG  => X_MOTOR_CONFIGURATION
+        g_address           => X_MOTOR_ADDRESS,
+        g_sclk_factor       => X_MOTOR_SCLK_FACTOR,
+        g_rst_delay         => X_MOTOR_RST_DELAY,
+        g_tmc2660_config    => X_MOTOR_CONFIG_16BIT
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o(6),
-        tmc2660_clk     => system_io_o(13),
-        tmc2660_enn     => system_io_o(14),
-        tmc2660_sg      => system_io_i(15),
-        tmc2660_dir     => system_io_o(17),
-        tmc2660_step    => system_io_o(16),
-        tmc2660_sclk    => system_io_o(18),
-        tmc2660_ncs     => system_io_o(19),
-        tmc2660_mosi    => system_io_o(20),
-        tmc2660_miso    => system_io_i(21)
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(6),
+        p_tmc2660_clk       => system_io_o(13),
+        p_tmc2660_enn       => system_io_o(14),
+        p_tmc2660_sg        => system_io_i(15),
+        p_tmc2660_dir       => system_io_o(17),
+        p_tmc2660_step      => system_io_o(16),
+        p_tmc2660_ncs       => system_io_o(19),
+        p_tmc2660_sclk      => system_io_o(18),
+        p_tmc2660_mosi      => system_io_o(20),
+        p_tmc2660_miso      => system_io_i(21)
     );
+    
     --Configure io to input mode
     system_io_o(15) <= gnd_io_o;
     system_io_o(21) <= gnd_io_o;
 
 
 
-    Y_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    --#########################################################################
+    -- OLD
+    --#########################################################################
+    -- Y_AXIS_MOTOR : entity work.TMC2660_DRIVER
+    -- generic map(
+    --     ADDRESS         => Y_MOTOR_ADDRESS,
+    --     SCLK_FACTOR     => Y_MOTOR_SCLK_FACTOR,
+    --     TMC2660_CONFIG  => Y_MOTOR_CONFIGURATION
+    -- )
+    -- port map(
+    --     clk             => clk,
+    --     rst             => rst,
+    --     sys_bus_i       => sys_bus_i,
+    --     sys_bus_o       => sys_bus_o(7),
+    --     tmc2660_clk     => system_io_o(22),
+    --     tmc2660_enn     => system_io_o(23),
+    --     tmc2660_sg      => system_io_i(24),
+    --     tmc2660_dir     => system_io_o(26),
+    --     tmc2660_step    => system_io_o(25),
+    --     tmc2660_sclk    => system_io_o(27),
+    --     tmc2660_ncs     => system_io_o(28),
+    --     tmc2660_mosi    => system_io_o(29),
+    --     tmc2660_miso    => system_io_i(30)
+    -- );
+    --#########################################################################
+    
+
+    Y_AXIS_MOTOR : entity work.TMC2660_SMODULE
     generic map(
-        ADDRESS         => Y_MOTOR_ADDRESS,
-        SCLK_FACTOR     => Y_MOTOR_SCLK_FACTOR,
-        TMC2660_CONFIG  => Y_MOTOR_CONFIGURATION
+        g_address           => Y_MOTOR_ADDRESS,
+        g_sclk_factor       => Y_MOTOR_SCLK_FACTOR,
+        g_rst_delay         => Y_MOTOR_RST_DELAY,
+        g_tmc2660_config    => Y_MOTOR_CONFIG_16BIT
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o(7),
-        tmc2660_clk     => system_io_o(22),
-        tmc2660_enn     => system_io_o(23),
-        tmc2660_sg      => system_io_i(24),
-        tmc2660_dir     => system_io_o(26),
-        tmc2660_step    => system_io_o(25),
-        tmc2660_sclk    => system_io_o(27),
-        tmc2660_ncs     => system_io_o(28),
-        tmc2660_mosi    => system_io_o(29),
-        tmc2660_miso    => system_io_i(30)
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(7),
+        p_tmc2660_clk       => system_io_o(22),
+        p_tmc2660_enn       => system_io_o(23),
+        p_tmc2660_sg        => system_io_i(24),
+        p_tmc2660_dir       => system_io_o(26),
+        p_tmc2660_step      => system_io_o(25),
+        p_tmc2660_ncs       => system_io_o(28),
+        p_tmc2660_sclk      => system_io_o(27),
+        p_tmc2660_mosi      => system_io_o(29),
+        p_tmc2660_miso      => system_io_i(30)
     );
+
     --Configure io to input mode
     system_io_o(24) <= gnd_io_o;
     system_io_o(30) <= gnd_io_o;

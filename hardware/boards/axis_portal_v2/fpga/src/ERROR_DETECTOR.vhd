@@ -48,10 +48,10 @@ entity ERROR_DETECTOR is
     port(
         --General
         clk             : in    std_logic;                                      --! System clock
-        rst             : in    std_logic;                                      --! Synchronous reset
+        rst             : in    std_logic;                                      --! Asynchronous reset
         --Communication
-        sys_bus_i       : in    sbus_in;                                        --! BUS slave input signals [we,adr,dat]
-        sys_bus_o       : out   sbus_out;                                       --! BUS slave output signals [dat,val]
+        sys_bus_i       : in    sbus_in;                                        --! BUS slave input signals [stb,we,adr,dat,tag]
+        sys_bus_o       : out   sbus_out;                                       --! BUS slave output signals [dat,tag,mux]
         --IO's 
         p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
         p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! System output data (drivers)

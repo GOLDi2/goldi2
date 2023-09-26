@@ -38,13 +38,13 @@ use work.GOLDI_COMM_STANDARD.all;
 
 --! @brief System protection module
 --! @details
---! Module uses sensor inputs and driver outputs to generate
---! a mask that blocks the driver signals in case of user error to 
---! prevent damage to the physical model.
+--! The module uses sensor inputs and driver outputs to generate a mask 
+--! that blocks the driver signals in case of user error to  prevent 
+--! damage to the physical model.
 entity ACTUATOR_MASK is
     port(
         --System raw data
-        p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System asynchronous input data (sensors)
+        p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
         p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System output data (drivers)
         --Masked data
         p_safe_io_o : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! Safe output data (drivers)
