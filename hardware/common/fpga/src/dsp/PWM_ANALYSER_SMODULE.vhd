@@ -29,23 +29,43 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 
---! @brief
+--! @brief PWM analyser
 --! @details
+--! The pwm analyser sub-module samples the input signal to calculate the
+--! period of the periodic signal and the corresponding possitive and negative 
+--! proportions of it. The module samples the signal at a give rate and using
+--! the rising edges of the input signal it calculates the period. Simultaneusly
+--! two 16-bit counters sum the number of saples for the high and low parts of the
+--! signal. A rising edge of the signal gives the conter values to a filter unit. 
+--! Secondarily, if one of the conters reaches the value of the signal period the
+--! modules assumes that the signal is either in a low or high state and passes the
+--! data to the filter unit.
+--!
+--! To clean the data a moving average filter is used to average the last 4 samples
+--! before they are stored in the internal registers.
+--!
+--! ### Registers:
+--! |   g_address   |           data            |
+--! |:-------------:|:-------------------------:|
+--! |   +0          |      neg_counter[7:0]     |
+--! |   +1          |      neg_counter[15:8]    |
+--! |   +2          |      pos_counter[7:0]     |
+--! |   +3          |      pos_counter[15:8]    |
 --!
 entity PWM_ANALYSER_SMODULE is
     generic(
-        g_address           :   integer := 1;
-        g_sampling_period   :   integer := 10000
+        g_address           :   integer := 1;       --! Module's base address
+        g_sampling_period   :   integer := 10000    --! Sampling period as a multiple of the system clock period
     );
     port(
         --General
-        clk                 : in    std_logic;
-        rst                 : in    std_logic;
+        clk                 : in    std_logic;      --! System clock
+        rst                 : in    std_logic;      --! Asynchronous reset
         --BUS slave interface
-        sys_bus_i           : in    sbus_in;
-        sys_bus_o           : out   sbus_out;
+        sys_bus_i           : in    sbus_in;        --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o           : out   sbus_out;       --! BUS output signals [dat,tag,mux]
         --Data signals
-        p_pwm_signal        : in    io_i
+        p_pwm_signal        : in    io_i            --! PWM input signal
     );
 end entity PWM_ANALYSER_SMODULE;
 

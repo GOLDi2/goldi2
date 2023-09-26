@@ -23,20 +23,24 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
+--! @brief Periodic signal frequency analyser
 --! @details
---!
+--! The frequency analyser module samples the signal at a given rate to calculates
+--! the period of the input signal. The module uses the rising edges of the input
+--! signal to calculate the amount of samples in the period. The values are then
+--! averaged with the last four samples to clean the data. The data is formatted
+--! as 32-bit unsigned value
 entity FREQUENCY_ANALYSER is
     generic(
-        g_sampling_period   :   integer := 1
+        g_sampling_period   :   integer := 1                        --! Sampling period as a multiple of the system clock period
     );
     port(
         --General
-        clk                 : in    std_logic;
-        rst                 : in    std_logic;
+        clk                 : in    std_logic;                      --! System clock
+        rst                 : in    std_logic;                      --! Asynchronous reset
         --Analyser interface
-        p_data_in           : in    std_logic;
-        p_data_period       : out   std_logic_vector(31 downto 0)   
+        p_data_in           : in    std_logic;                      --! Input signal
+        p_data_period       : out   std_logic_vector(31 downto 0)   --! Signal period
     );
 end entity FREQUENCY_ANALYSER;
 
