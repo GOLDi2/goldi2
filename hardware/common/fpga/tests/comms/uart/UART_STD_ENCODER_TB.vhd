@@ -12,16 +12,17 @@
 -- Dependencies:	-> UART_STD_ENCODER.vhd
 --
 -- Revisions:
--- Revision V3.01.00 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 
 
 
@@ -38,36 +39,38 @@ architecture TB of UART_STD_ENCODER_TB is
     
     --****DUT****
     component UART_STD_ENCODER is
-    generic(
-        g_data_width    :   integer := 8;
-        g_stop_bits     :   integer := 1
-    );
-    port(
-        clk             : in    std_logic;
-        rst             : in    std_logic;
-        o_dword_tready  : out   std_logic;
-        i_dword_tvalid  : in    std_logic;
-        i_dword_tdata   : in    std_logic_vector(g_data_width-1 downto 0);
-        i_eword_tready  : in    std_logic;
-        o_eword_tvalid  : out   std_logic;
-        o_eword_tdata   : out   std_logic_vector((g_data_width+g_stop_bits) downto 0)
-    );
+        generic(
+            g_encoded_length    :   integer;
+            g_data_width        :   integer;
+            g_parity_bit        :   integer;
+            g_even_pol          :   boolean
+        );
+        port(
+            clk                 : in    std_logic;
+            rst                 : in    std_logic;
+            p_dword_tready      : out   std_logic;
+            p_dword_tvalid      : in    std_logic;
+            p_dword_tdata       : in    std_logic_vector(g_data_width-1 downto 0);
+            p_eword_tready      : in    std_logic;
+            p_eword_tvalid      : out   std_logic;
+            p_eword_tdata       : out   std_logic_vector(g_encoded_length-1 downto 0)
+        );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period		:	time := 10 ns;
+	constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:	std_logic := '1';
     --DUT IOs
-    signal o_dword_tready   :   std_logic := '1';
-    signal i_dword_tvalid   :   std_logic := '0';
-    signal i_dword_tdata    :   std_logic_vector(7 downto 0) := (others => '0');
-    signal i_eword_tready   :   std_logic := '0';
-    signal o_eword_tvalid   :   std_logic := '0';
-    signal o_eword_tdata    :   std_logic_vector(8 downto 0) := (others => '0');
+    signal p_dword_tready   :   std_logic := '1';
+    signal p_dword_tvalid   :   std_logic := '0';
+    signal p_dword_tdata    :   std_logic_vector(7 downto 0) := (others => '0');
+    signal p_eword_tready   :   std_logic := '0';
+    signal p_eword_tvalid   :   std_logic := '0';
+    signal p_eword_tdata    :   std_logic_vector(10 downto 0) := (others => '0');
 
 
 begin
@@ -76,18 +79,20 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : UART_STD_ENCODER
     generic map(
-        g_data_width    => 8,
-        g_stop_bits     => 0
+        g_encoded_length    => 11,
+        g_data_width        => 8,
+        g_parity_bit        => 1,
+        g_even_pol          => true
     )
     port map(
         clk             => clock,
         rst             => reset,
-        o_dword_tready  => o_dword_tready,
-        i_dword_tvalid  => i_dword_tvalid,
-        i_dword_tdata   => i_dword_tdata,
-        i_eword_tready  => i_eword_tready,
-        o_eword_tvalid  => o_eword_tvalid,
-        o_eword_tdata   => o_eword_tdata
+        p_dword_tready  => p_dword_tready,
+        p_dword_tvalid  => p_dword_tvalid,
+        p_dword_tdata   => p_dword_tdata,
+        p_eword_tready  => p_eword_tready,
+        p_eword_tvalid  => p_eword_tvalid,
+        p_eword_tdata   => p_eword_tdata
     );
     -----------------------------------------------------------------------------------------------
 
@@ -96,7 +101,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-	reset <= '1' after  5 ns, '0' after 15 ns;
+	reset <= '1' after  10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -114,11 +119,11 @@ begin
 
         --**Test reset conditions**
         wait for assert_hold;
-        assert(o_dword_tready = '1')
+        assert(p_dword_tready = '1')
             report "ID01: Test reset - expecting dword_tready = '1'" severity error;
-        assert(o_eword_tvalid = '0')
+        assert(p_eword_tvalid = '0')
             report "ID02: Test reset - expecting eword_tvalid = '0'" severity error;
-        assert(o_eword_tdata = (o_eword_tdata'range => '0'))
+        assert(p_eword_tdata = (p_eword_tdata'range => '0'))
             report "ID03: Test reset - expecting eword_tvalid = x00" severity error;
         wait for post_hold;
 
@@ -126,16 +131,16 @@ begin
 
         --**Test operation**
         --Test encoding
-        i_dword_tdata  <= x"07";
-        i_dword_tvalid <= '1';
+        p_dword_tdata  <= x"07";
+        p_dword_tvalid <= '1';
 
         wait for assert_hold;
-        assert(o_dword_tready = '0')
+        assert(p_dword_tready = '0')
             report "ID04: Test operation - expecting dword_tready = '0'" severity error;
-        assert(o_eword_tvalid = '1')
+        assert(p_eword_tvalid = '1')
             report "ID05: Test operation - expecting eword_tvalid = '1'" severity error;
-        assert(o_eword_tdata = "100000111")
-            report "ID06: Test operation - expecting eword_tdata x107" severity error;
+        assert(p_eword_tdata = "11000001110")
+            report "ID06: Test operation - expecting eword_tdata x60E" severity error;
         wait for post_hold;
 
 
@@ -143,24 +148,29 @@ begin
 
 
         --Test transmission
-        i_dword_tvalid <= '0';
+        p_dword_tvalid <= '0';
         wait for clk_period;
-        i_eword_tready <= '1';
+        p_eword_tready <= '1';
 
         wait for assert_hold;
-        assert(o_dword_tready = '1')
+        assert(p_dword_tready = '1')
             report "ID07: Test operation - expecting dword_tready = '1'" severity error;
-        assert(o_eword_tvalid = '0')
+        assert(p_eword_tvalid = '0')
             report "ID08: Test operation - expecting eword_tvalid = '0'" severity error;
-        assert(o_eword_tdata = "100000111")
-            report "ID09: Test operation - expecting eword_tdata = x107" severity error;
+        assert(p_eword_tdata = "11000001110")
+            report "ID09: Test operation - expecting eword_tdata = x60E" severity error;
         wait for post_hold;
+
 
 
         --**End simulation**
         wait for 50 ns;
-        run_sim <= '0';
-        wait;
+        report"UART_STD_ENCODER_TB - testbench completed";
+        --Simulation end using vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries not supported)
+        -- run_sim <= '0';
+        -- wait;      
 
     end process;
     -----------------------------------------------------------------------------------------------
