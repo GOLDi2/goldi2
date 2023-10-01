@@ -14,23 +14,31 @@ export function experiment_router(
   _logger: winston.Logger
 ) {
   async function experiment(req: Request, res: Response, _next: NextFunction) {
+    const templateUrl = req.query.template;
+
     // TODO: maybe check somewhere else and return a specific page experiment_401.html
     if (!req.user) {
       return renderPage("experiment", language, res, req.user);
     }
 
     let experiment: Partial<ExperimentServiceTypes.Experiment<"request">> = {};
+    if (typeof templateUrl === "string") {
+      experiment = {
+        ...(await req.apiClient.getTemplate(templateUrl)).configuration,
+        status: "running",
+      };
+    }
 
     if (req.method === "GET") {
       try {
-        experiment = await buildSimpleExperiment(req);
+        if (!experiment) experiment = await buildSimpleExperiment(req);
       } catch (e) {
         //ignore
       }
     }
 
     if (req.method === "POST") {
-      experiment = JSON.parse(req.body.experiment);
+      if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
       experiment.status = "running";
       console.log(JSON.stringify(experiment, null, 2));
       const response = await req.apiClient.createExperiment(

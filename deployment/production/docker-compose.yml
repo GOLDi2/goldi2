@@ -27,10 +27,14 @@ x-config: &common-config
   DB_TYPE: mariadb
   DB_HOST: db
   DB_PORT: 3306
-  AUTH_SERVICE_URL: "authentication:3000"
-  DEVICE_SERVICE_URL: "device:3001"
-  EXPERIMENT_SERVICE_URL: "experiment:3002"
-  FEDERATION_SERVICE_URL: "federation:3003"
+  AUTH_SERVICE_URL: "http://authentication:3000"
+  DEVICE_SERVICE_URL: "http://device:3001"
+  EXPERIMENT_SERVICE_URL: "http://experiment:3002"
+  FEDERATION_SERVICE_URL: "http://federation:3003"
+  AUTH_SERVICE_DOMAIN: "authentication:3000"
+  DEVICE_SERVICE_DOMAIN: "device:3001"
+  EXPERIMENT_SERVICE_DOMAIN: "experiment:3002"
+  FEDERATION_SERVICE_DOMAIN: "federation:3003"
 
 networks:
   db:
@@ -230,6 +234,19 @@ services:
       - VIRTUAL_HOST=www.${DOMAIN}
       - VIRTUAL_PORT=80
       - VIRTUAL_PATH=/ecp
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.${DOMAIN}
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  fsm-interpreter:
+    image: fsm-interpreter:latest
+    environment:
+      - VIRTUAL_HOST=www.${DOMAIN}
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/fsm
       - VIRTUAL_DEST=/
       - LETSENCRYPT_HOST=www.${DOMAIN}
     networks:

@@ -3,11 +3,11 @@ import { DeviceHandler } from "@cross-lab-project/soa-client";
 import { adoptStyles, html, LitElement, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ElectricalConnection } from "./electricalConnection";
-import { FileUpload } from './file';
+import { FileUpload } from "./file";
 import { Webcam } from "./webcam";
 
 let device_url = "";
-const client = new APIClient("https://api.goldi-labs.de");
+const client = new APIClient("https://api.dev.goldi-labs.de");
 const deviceHandler = new DeviceHandler();
 
 import style from "./styles.css";
@@ -38,22 +38,22 @@ export class App extends LitElement {
     if (instanceUrl && deviceToken) {
       device_url = instanceUrl;
       this.start(deviceToken);
-    }else{
+    } else {
       window.addEventListener("message", (event) => {
-        if(event.data.token){
+        if (event.data.token) {
           device_url = event.data.device_url;
-          this.start(event.data.token)
+          this.start(event.data.token);
         }
       });
       // Send a message to the parent window
-      window.parent.postMessage("ecp-loaded", "*");
-      window.opener.postMessage("ecp-loaded", "*");
+      if (window.parent) window.parent.postMessage("ecp-loaded", "*");
+      if (window.opener) window.opener.postMessage("ecp-loaded", "*");
     }
   }
 
   async start(accesstoken: string) {
-    console.log({accesstoken, device_url})
-    client.accessToken=accesstoken;
+    console.log({ accesstoken, device_url });
+    client.accessToken = accesstoken;
     const token = await client.createWebsocketToken(device_url);
 
     this.electrical = new ElectricalConnection("electrical");
@@ -69,20 +69,25 @@ export class App extends LitElement {
     this.message.register(deviceHandler);
 
     await deviceHandler.connect({
-      endpoint: "wss://api.goldi-labs.de/devices/websocket",
+      endpoint: "wss://api.dev.goldi-labs.de/devices/websocket",
       id: device_url,
       token,
     });
 
     // Wait for a second
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    window.parent.postMessage("ecp-authorized", "*");
-    window.opener.postMessage("ecp-authorized", "*");
+    if (window.parent) window.parent.postMessage("ecp-authorized", "*");
+    if (window.opener) window.opener.postMessage("ecp-authorized", "*");
   }
 
   render() {
     return html`
-      <div class="h-full flex flex-col" @webcam="${() => {this.isLoading = false;}}">
+      <div
+        class="h-full flex flex-col"
+        @webcam="${() => {
+          this.isLoading = false;
+        }}"
+      >
         <div class="bg-primary-900 w-full h-12"></div>
         <div class="grow flex w-full items-center">
           <div class="flex-1">${this.webcam}</div>
@@ -91,20 +96,16 @@ export class App extends LitElement {
             <div class="p-4">${this.electrical}</div>
           </div>
         </div>
-        <div>
-          ${this.message}
-        </div>
+        <div>${this.message}</div>
         <div class="bg-primary-100 w-full h-12"></div>
       </div>
-      ${
-        this.isLoading
-          ? html`<div
-              class="absolute top-0 left-0 w-full h-full bg-primary-900 bg-opacity-50 flex items-center justify-center"
-            >
-              Loading...
-            </div>`
-          : html``
-      }
+      ${this.isLoading
+        ? html`<div
+            class="absolute top-0 left-0 w-full h-full bg-primary-900 bg-opacity-50 flex items-center justify-center"
+          >
+            Loading...
+          </div>`
+        : html``}
     `;
   }
 }
