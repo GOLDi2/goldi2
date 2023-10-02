@@ -1,5 +1,5 @@
 #!/bin/bash
-VARIANT="dev"
+VARIANT="prod"
 USER="johannes"
 DOMAIN="www.goldi-labs.de"
 
@@ -21,11 +21,6 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    --deploy)
-      DEPLOY="$2"
-      shift # past argument
-      shift # past value
-      ;;
     --database)
       DATABASE="$2"
       shift # past argument
@@ -36,11 +31,6 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-
-    *) # unknown option
-      SUBCOMMANDVARS="$SUBCOMMANDVARS $1"
-      shift # past argument
-    ;;
   esac
 done
 
