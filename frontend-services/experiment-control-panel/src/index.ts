@@ -83,15 +83,15 @@ export class App extends LitElement {
   render() {
     return html`
       <div
-        class="h-full flex flex-col"
+        class="min-h-full flex flex-col"
         @webcam="${() => {
           this.isLoading = false;
         }}"
       >
         <div class="bg-primary-900 w-full h-12"></div>
-        <div class="grow flex w-full items-center">
-          <div class="flex-1">${this.webcam}</div>
-          <div class="flex-1 flex flex-col">
+        <div class="grow flex w-full items-center flex-wrap">
+          <div class="flex-1 shrink-0 basis-96">${this.webcam}</div>
+          <div class="flex-1 shrink-0 basis-96 flex flex-col">
             <div class="p-4">${this.file}</div>
             <div class="p-4">${this.electrical}</div>
           </div>
