@@ -23,4 +23,6 @@ class HAL:
         self.ZMotor = Motor(registers, 17, 18)
         self.Magnet = Bit(registers, 19, 0)
 
+        self.Light = Bit(registers, 23, 7)
+
         asyncio.create_task(registers.communicate_coroutine())

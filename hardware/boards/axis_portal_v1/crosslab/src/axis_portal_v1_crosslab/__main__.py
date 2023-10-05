@@ -200,6 +200,13 @@ async def main_async():
     )
     deviceHandler.add_service(webcamService)
 
+    def lightControl():
+        if len(deviceHandler._connections):
+            hal.Light.set(True)
+        else:
+            hal.Light.set(False)
+    deviceHandler.on("connectionsChanged", lightControl)
+
     async with APIClient(url) as client:
         client.set_auth_token(auth_token)
         os.system("set_led_connected")
@@ -209,6 +216,8 @@ async def main_async():
         )
 
         await deviceHandlerTask
+    
+    exit(1)
 
 
 def main():
