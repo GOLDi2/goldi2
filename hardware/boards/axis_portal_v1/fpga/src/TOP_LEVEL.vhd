@@ -29,14 +29,14 @@
 --                      names to follow the V4.00.00 naming convention. Use 
 --                      of the updated GOLDI SPI communication modules.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! MachX02 library
 library machxo2;
 use machxo2.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -70,6 +70,7 @@ end entity TOP_LEVEL;
 
 
 
+--! GOLDi Axis Portal V1 Top Level architecture
 architecture RTL of TOP_LEVEL is
     
     --****INTRENAL SIGNALS****
@@ -89,7 +90,8 @@ architecture RTL of TOP_LEVEL is
     --System memory
     constant ctrl_default       :   data_word :=  x"10";
     signal ctrl_data            :   data_word;
-        alias encoder_ref       :   std_logic is ctrl_data(0);
+        alias encoder_ref_x     :   std_logic is ctrl_data(0);
+        alias encoder_ref_y     :   std_logic is ctrl_data(1);
     --External data interface
     signal system_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal system_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -315,7 +317,7 @@ begin
         p_channel_i => system_io_i(13)
     );
     --User accessible rst to zero encoder acumulator
-    x_encoder_rst <= rst or encoder_ref;
+    x_encoder_rst <= rst or encoder_ref_x;
     --Ground io_o to ensure input configuration
     system_io_o(13 downto 11) <= (others => gnd_io_o);
 
@@ -336,7 +338,7 @@ begin
         p_channel_i => system_io_i(16)
     );
     --User accesible rst to zero encoder acumulator
-    y_encoder_rst <= rst or encoder_ref;
+    y_encoder_rst <= rst or encoder_ref_y;
     --Ground io_o to ensure input configuration
     system_io_o(16 downto 14) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
