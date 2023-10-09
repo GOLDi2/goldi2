@@ -22,14 +22,14 @@
 --                      of the updated GOLDI SPI communication modules.
 --                      Update to crossbar design.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! MachX02 library
 library machxo2;
 use machxo2.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -65,7 +65,7 @@ end entity TOP_LEVEL;
 
 
 
---! General architecture
+--! GOLDi Mobile Control Unit Top Level architecture
 architecture RTL of TOP_LEVEL is
     
     --****INTRENAL SIGNALS****
