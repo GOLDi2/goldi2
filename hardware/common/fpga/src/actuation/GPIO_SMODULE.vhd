@@ -27,11 +27,11 @@
 -- Additional Comments: Renaming of module to follow V4.00.00 conventions.
 --                      (GPIO_DRIVER_ARRAY.vhd -> GPIO_SMODULE.vhd)
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -47,15 +47,16 @@ use work.GOLDI_IO_STANDARD.all;
 --!
 --! #### Register structure:
 --!
---! |g_address    |Bit 7  |Bit 6  |Bit 5  |Bit 4  |Bit 3  |Bit 1  |Bit 0  |
+--! |g_address    |Bit 7  |Bit 6  |Bit 5  |Bit 4  |Bit 3  |Bit 1  |Bit 0|
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! |+0         |       |       |       |       |       |enb    |data   |
+--! |+1         |       |       |       |       |       |enb    |data   |
 --!
 --! + enb: ['1' - output mode | '0' - input mode]
 --! + data: in output mode the data bit is the value driving the pin
 --!         in input mode the data bit is the value presented to the pin
 --!
---! **Latency: 1cyl**
+--! ***Latency: 1cyc***
 entity GPIO_SMODULE is
     generic(
         g_address       :   natural := 1;                               --! Module's base address
@@ -64,7 +65,7 @@ entity GPIO_SMODULE is
     port(
         --General
         clk             : in    std_logic;                              --! System clock
-        rst             : in    std_logic;                              --! Synchronous reset
+        rst             : in    std_logic;                              --! Asynchronous reset
         --BUS slave interface
         sys_bus_i       : in    sbus_in;                                --! BUS input signals [stb,we,adr,dat,tag]
         sys_bus_o       : out   sbus_out;                               --! BUS output signals [dat,tag]

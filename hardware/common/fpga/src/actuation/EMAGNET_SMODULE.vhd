@@ -25,11 +25,11 @@
 --                      (EMAGNET_DRIVER.vhd -> EMAGNET_SMODULE.vhd)
 --						Change from synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -38,7 +38,7 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Electromagnet driver module using an H-Bridge
 --! @details
---! H-Bridge driver for control of an electromagnet. The module can be used
+--! A H-Bridge driver for control of an electromagnet. The module can be used
 --! in a single or double channel configuration allowing the module to reduce
 --! remanence effects by shortly reversing the polarity of the current. The 
 --! length of that pulse can be set using the parameter "g_demag_time".
@@ -47,13 +47,15 @@ use work.GOLDI_IO_STANDARD.all;
 --! to decrease in order to limit the inductive effects. The waiting time is
 --! set by the "g_magnet_tao" paramter. 	
 --!
---! #### Register:
+--!
+--! ### Register:
 --!
 --! | g_address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! | +0		|		|		|		|		|		|		|		|EM_pow	|
 --!
---! **Latency: 3 **
+--!
+--! ***Latency: 3cyc***
 entity EMAGNET_SMODULE is
 	generic(
 		g_address		:	natural := 1;		--! Module's base address

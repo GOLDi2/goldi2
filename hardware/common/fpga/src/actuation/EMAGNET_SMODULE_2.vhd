@@ -25,11 +25,11 @@
 --                      (EMAGNET_DRIVER_2.vhd -> EMAGNET_SMODULE_2.vhd)
 --                      Pulse width modified to static parameter.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -37,25 +37,26 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 
---! @brief Electromagnet driver module using an H-Bridge
+--! @brief Electromagnet driver module based on the use of an H-Bridge circuit
 --! @details
---! H-Bridge driver for control of an electromagnet. The module is designed
---! for a double channel (Out_1 and Out_2) configuration to reduece the magnetic
---! remanence effects. This is achieved through decreasing alternating pulses
---! that reduce the hysteresis effect. The inital pulse width is set by the
---! parameter "g_pulse_width" and the width reduction is set by the "g_pulse_reduction"
---! factors. The pulse width can be calculated as clk_period*g_pulse_width
+--! The module is an H-Bridge driver for control of an electromagnet. It is designed
+--! for a double channel (Out_1 and Out_2) configuration, capable of  reducing the 
+--! magnetic remanence. This is accomplished through decreasing alternating pulses
+--! that reduce the remanent magnetic field in the core. The inital pulse width is 
+--! set by the "g_pulse_width" parameter and the width reduction is set by the 
+--! "g_pulse_reduction" factor. The pulse width can be calculated as 
+--! clk_period*g_pulse_width
 --!
---! To prevent a shortcut or overload of the H-Bridge the module first waits for
---! the current to decrease to limit the inductive effects. The waiting time is
---! set by the "g_magnet_tao" parameter. This parameter also acts as the initial
---! width of the demagnetizatio pulses.
+--! To prevent a shortcut or overload of the H-Bridge the module waits for the current
+--! to decrease between every polarity change in the voltage, thereby reducing the
+--! inductive effects. The waiting time is set by the "g_magnet_tao" parameter.
 --!
---! #### Register:
+--! ### Register:
 --! | g_address | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! | +0		|		|		|		|		|		|		|		|EM_pow	|
 --!
---! **Latency: 3 **
+--! ***Latency: 3***
 entity EMAGNET_SMODULE_2 is
     generic(
         g_address           :   integer := 1;       --! Module's base address
@@ -69,7 +70,7 @@ entity EMAGNET_SMODULE_2 is
         rst                 : in    std_logic;      --! Asynchronous reset
         --BUS interface
         sys_bus_i           : in    sbus_in;        --! BUS input signals [stb,we,adr,dat,tag]
-        sys_bus_o           : out   sbus_out;       --! BUS output signals [dat,tag]
+        sys_bus_o           : out   sbus_out;       --! BUS output signals [dat,tag,mux]
         --HBridge interface
         p_em_enb            : out   io_o;           --! H-Bridge Enale
         p_em_out_1          : out   io_o;           --! H-Bridge Output 1

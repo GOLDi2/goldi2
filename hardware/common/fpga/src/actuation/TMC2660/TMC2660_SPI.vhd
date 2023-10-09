@@ -18,7 +18,7 @@
 -- Revision V2.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -  
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -26,27 +26,37 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
+--! @brief Custom SPI master interface for TMC2660 (V3.00.00)
 --! @details
+--! The TMC2660_SPI module acts as a custom master interface to control and 
+--! configure the TMC2660 stepper motor driver IC. The module takes a 24-bit
+--! data word formatted as register data (see TMC2660 datasheet) and transfers
+--! it to the IC. The module also reads the read response of the IC and presents
+--! it in the read port "m_word_o_tdata".
+--!
+--! The clock frequency for the SCLK serial clock can be configured using the 
+--! "CLOCK_FACTOR" parameter, which gives the serial clock period as a multiple
+--! of clock cycles.
+--!
 entity TMC2660_SPI is
     generic(
-        CLOCK_FACTOR    :   natural := 8
+        CLOCK_FACTOR    :   natural := 8                        --! SPI serial clock period as a multiple of clk cycles
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk             : in    std_logic;                      --! System clock
+        rst             : in    std_logic;                      --! Synchronous reset
         --Parallel interface
-        s_word_i_tready : out   std_logic;
-        s_word_i_tvalid : in    std_logic;
-        s_word_i_tdata  : in    std_logic_vector(23 downto 0);
-        m_word_o_tvalid : out   std_logic;
-        m_word_o_tdata  : out   std_logic_vector(23 downto 0);
+        s_word_i_tready : out   std_logic;                      --! SPI mosi data - ready flag
+        s_word_i_tvalid : in    std_logic;                      --! SPI mosi data - valid flag
+        s_word_i_tdata  : in    std_logic_vector(23 downto 0);  --! SPI mosi data - data
+        m_word_o_tvalid : out   std_logic;                      --! SPI miso data - valid flag 
+        m_word_o_tdata  : out   std_logic_vector(23 downto 0);  --! SPI miso data - data
         --Serial interface
-        m_spi_sclk      : out   std_logic;
-        m_spi_ncs       : out   std_logic;
-        m_spi_mosi      : out   std_logic;
-        m_spi_miso      : in    std_logic
+        m_spi_sclk      : out   std_logic;                      --! SPI serial clock
+        m_spi_ncs       : out   std_logic;                      --! SPI chip select signal
+        m_spi_mosi      : out   std_logic;                      --! SPI master-out/slave-in data
+        m_spi_miso      : in    std_logic                       --! SPI master-in/salve-out data
     );
 end entity TMC2660_SPI;
 

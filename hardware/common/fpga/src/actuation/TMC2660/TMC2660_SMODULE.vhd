@@ -21,11 +21,11 @@
 -- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment 
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -36,31 +36,65 @@ use work.GOLDI_DATA_TYPES.all;
 
 --! @brief TMC2660 Stepper motor controller interface
 --! @brief
+--! The "TMC2660_SMODULE" is a control interface for the stepper driver controller IC
+--! TMC2660. The IC integrates multiple features including a collision detection mechanism
+--! (StallGuard2), power consumption reduction system, micro-step interpolation, etc...
+--! 
+--! The TMC2660_SMODULE supplies the IC with the clock and enable signal needed to use the
+--! device. Additionaly, two interfaces used by the TMC2660 to communicate with external
+--! devices have been implemented; a SPI interface used to configure the device and a 
+--! step/direction interface to manage the step/mico-step cirtuitry driving the stepper motor.
+--!
+--! After reset or initialization the sub-module waits for an initial delay set by the "g_rst_delay"
+--! parameter and then loads the default configuration to the five 20-bit registers of the driver 
+--! using the SPI interface. The configuration data is set through the "g_tmc2660_config" parameter,
+--! which takes a 24-bit data word per register formated as a list of 16-bit words.
+--! (The 16-bit format is required to store the data in general purpose 16-bit PLU ROM units) 
+--!
+--! After initialization the module is ready for normal operation. The first of 6 registers in the
+--! sub-module controls the movement direction. The second and third registers contain the 16-bit
+--! unsigned velocity value given in steps per second. These three registers control the
+--! step/direction interface.
+--!
+--! During operation the IC can be reconfigured or controlled through the SPI interface using the
+--! remaining 3 registers. The registers contain the data to be transfered to the IC and the response
+--! after a SPI communication cycle. The data is organized in the msbf format and the data transfer
+--! to the IC is initialized once if the register with the lowes data bits [8:0] is modified.
+--! 
+--! ### Register:
+--! | g_address | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+--! | +0		| enb	|		|		|		|		|	sg	|  dir1 |  dir0 |
+--! | +1        | speed_value [8:0]                                      ||||||||
+--! | +2        | speed_value [15:9]                                     ||||||||
+--! | +3        | spi_data[8:0]                                          ||||||||
+--! | +4        | spi_data[15:9]                                         ||||||||
+--! | +5        | spi_data[23:16]                                        ||||||||
 --!
 entity TMC2660_SMODULE is
     generic(
-        g_address           :   natural := 1;
-        g_sclk_factor       :   natural := 8;
-        g_rst_delay         :   natural := 100;
-        g_tmc2660_config    :   array_16_bit := (x"0000",x"0000")        
+        g_address           :   natural := 1;                       --! Module's base address
+        g_sclk_factor       :   natural := 8;                       --! SPI serial clock period as a factor of clk
+        g_rst_delay         :   natural := 100;                     --! Initial delay after reset given in clk cycles
+        g_tmc2660_config    :   array_16_bit := (x"0000",x"0000")   --! Default configuration of TMC2660
     );
     port(
         --General
-        clk                 : in    std_logic;
-        rst                 : in    std_logic;
+        clk                 : in    std_logic;                      --! System clock
+        rst                 : in    std_logic;                      --! Asyncrhonous reset
         --BUS slave interface
-        sys_bus_i           : in    sbus_in;
-        sys_bus_o           : out   sbus_out;
+        sys_bus_i           : in    sbus_in;                        --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o           : out   sbus_out;                       --! BUS output signals [dat,tag,mux]
         --TMC2660 interface
-        p_tmc2660_clk       : out   io_o;
-        p_tmc2660_enn       : out   io_o;
-        p_tmc2660_sg        : in    io_i;
-        p_tmc2660_dir       : out   io_o;
-        p_tmc2660_step      : out   io_o;
-        p_tmc2660_ncs       : out   io_o;
-        p_tmc2660_sclk      : out   io_o;
-        p_tmc2660_mosi      : out   io_o;
-        p_tmc2660_miso      : in    io_i
+        p_tmc2660_clk       : out   io_o;                           --! TMC2660 external clock (sys_clock/2)
+        p_tmc2660_enn       : out   io_o;                           --! TMC2660 enable signal ('0'-on | '1'-off)
+        p_tmc2660_sg        : in    io_i;                           --! TMC2660 StallGuard2 input
+        p_tmc2660_dir       : out   io_o;                           --! TMC2660 direction signal
+        p_tmc2660_step      : out   io_o;                           --! TMC2660 step signal
+        p_tmc2660_ncs       : out   io_o;                           --! TMC2660 SPI chip select 
+        p_tmc2660_sclk      : out   io_o;                           --! TMC2660 SPI serial clock
+        p_tmc2660_mosi      : out   io_o;                           --! TMC2660 SPI master_out/slave-in
+        p_tmc2660_miso      : in    io_i                            --! TMC2660 SPI master-in/slave-out
     );
 end entity TMC2660_SMODULE;
 

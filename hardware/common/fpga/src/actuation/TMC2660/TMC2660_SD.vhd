@@ -26,9 +26,7 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
---! @details
---!
+
 entity TMC2660_SD is
     generic(
         SPEED_FACTOR            : natural := 100

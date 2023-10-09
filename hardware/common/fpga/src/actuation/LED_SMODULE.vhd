@@ -28,11 +28,11 @@
 --                      (LED_DRIVER.vhd -> LED_SMODULE.vhd)
 --						Change from synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -41,31 +41,33 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 --! @brief LED driver module
---! @detials
---! The LED driver module is a simple module used to controll a sandard
---! LED. The module is capable of turning the LED on and off or generating
---! a configurable blinking pattern based on the values stored in the module's
---! single register. The module uses the "clk_frequency" generic paramter and 
---! two 3-bit values to set the on/off time of the LED for the blinking pattern. 
---! The "clk_frequency" parameter determines maximum on/off time of the LED. The
---! "clk_frequency" paramter is divided by a factor of 16 and this fraction then
---! multiplied with the corresponding on/off values to set the on/off time of the
---! LED.
+--! @details
+--! The LED driver module is a signal generator unit used to control a LED. 
+--! The module is capable of turning the LED on and off or generating a blinking 
+--! pattern based on the values stored in the single register of the unit. The 
+--! module uses the "clk_frequency" generic paramter and  two 3-bit values to set
+--! the on/off time of the the blinking pattern. The "clk_frequency" value 
+--! determines the maximum on/off time of the LED. This paramter is divided by 
+--! a factor of 16 and the fraction is then multiplied with the corresponding
+--! on/off values to set the on/off time of the LED.
+--!
 --! 
---! #### Register:
+--! ### Register:
 --!
---! | Address	| Bit 7	| Bit 6	| Bit 5 | Bit 4	| Bit 3	| Bit 2	| Bit 1	| Bit 0 |
---! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
---!	| +0		| brightness | blink_enabled | delay_on ||| delay_off |||
+--! | g_address	| Bit 7	     |  Bit 6	     | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:----------:|:-------------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+--!	| +0		| brightness | blink_enabled | delay_on            |||           delay_off |||
 --!
 --!
---! Example: REG[0 1 000 001]
+--!
+--! #### Example: REG[0 1 000 001]
+--!
 --! If the "clk_frequency" parameter is set to 32 then the fractional value is 2. 
---! Setting the "delay_on" = "000/b0001" results in the on time 1*2*clk_period.
---! The "delay_off" = "001/b0011" results in an off time 3*2*clk_period
+--! Setting the "delay_on" = "000/b0001" results in an on-time of 1*2*clk_period.
+--! The "delay_off" = "001/b0011" results in an off-time of 3*2*clk_period
 --!
 --!
---! **Latency: 1cyc**
+--! ***Latency: 1cyc***
 entity LED_SMODULE is
     generic(
         g_address       :   natural := 1;       --! Module's base address

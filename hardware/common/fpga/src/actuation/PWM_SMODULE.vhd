@@ -20,11 +20,11 @@
 -- Additional Comments: Renaming of module to follow V4.00.00 naming convetion
 --                      (PWM_GENERATOR_UNIT.vhd -> PWM_SMODULE.vhd)
 -------------------------------------------------------------------------------
---! Use standard libary
+--! Standard libary
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -39,10 +39,16 @@ use work.GOLDI_IO_STANDARD.all;
 --! The configuration word in the module's memory corresponds with the 
 --! number of segments for which the signal is asserted.
 --!
---! **Latency: 3cyc** 
+--! ### Register:
+--!
+--! | g_address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+--!	| +0		|               PWM [7:0]                                ||||||||
+--!
+--! ***Latency: 3cyc*** 
 entity PWM_SMODULE is
     generic(
-        g_address       :   integer := 1;
+        g_address       :   integer := 1;           --! Module's base address
         g_sys_freq      :   natural := 100000000;   --! System clock frequency in Hz
         g_pwm_freq      :   natural := 5000         --! PWM output signal frequency in Hz
     );
@@ -52,7 +58,7 @@ entity PWM_SMODULE is
         rst             : in    std_logic;          --! Asynchronous reset
         --BUS slave interface 
         sys_bus_i       : in    sbus_in;            --! BUS slave input signals [stb,we,adr,dat,tag]
-        sys_bus_o       : out   sbus_out;           --! BUS slave output signals [dat,tag]
+        sys_bus_o       : out   sbus_out;           --! BUS slave output signals [dat,tag,mux]
         --PWM signal
         p_pwm_output    : out   io_o                --! PWM signal
     );

@@ -25,11 +25,11 @@
 --                      (DC_MOTOR_DRIVER.vhd -> HBRIDGE_SMODULE.vhd)
 --						Change from synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -40,10 +40,10 @@ use work.GOLDI_IO_STANDARD.all;
 --! @brief H-Bridge driver module to contorl a DC Motor
 --! @details
 --! The H-Bridge drives is a module originally designed to drive the L293DD H-Bridge
---! and control a two wire DC motor. Therefore the module has been designed to contorl
---! both direction and speed of movement. The module has two registers. The first 
---! selects the direction of the motor (enabling the Out1 or Out2 signals) and the 
---! second controls the pulse width modulated PWM signal that controls motor speed 
+--! and control a two wire DC motor. Therefore the module has been designed to control
+--! both the direction and speed of movement. The module has two registers, the first 
+--! selects the direction of the motor (enabling the Out1 or Out2 signals), and the 
+--! second controls the pulse width modulated PWM signal that controls the motor speed 
 --! (ENB signal).
 --!
 --! The direction register uses the first two bits to enable the Out1 and Out2 singals.
@@ -58,14 +58,16 @@ use work.GOLDI_IO_STANDARD.all;
 --!
 --! *g_clk_factor = f_clk/(f_pwm*255)*
 --!
---! #### Registers:
+--!
+--! ### Registers:
 --!
 --! | g_address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! |+0			|		|	    |       |   	|		|		|Out 1	| Out 2	|
 --!	|+1			| PWM[7:0]||||||||
 --!
---! **Latency: 3cyc**
+--!
+--! ***Latency: 3cyc***
 entity HBRIDGE_SMODULE is
     generic(
         g_address       :   natural := 1;   --! Module's base address
@@ -77,7 +79,7 @@ entity HBRIDGE_SMODULE is
         rst             : in    std_logic;  --! Asynchronous reset
         --BUS slave interface
         sys_bus_i       : in    sbus_in;    --! BUS port input signals [stb,we,adr,dat,tag]
-        sys_bus_o       : out   sbus_out;   --! BUS port output signals[dat,tag]
+        sys_bus_o       : out   sbus_out;   --! BUS port output signals[dat,tag,mux]
         --HBridge interface
         p_hb_enb        : out   io_o;       --! H-Bridge enable signal
         p_hb_out_1      : out   io_o;       --! H-Bridge Output 1 signal
