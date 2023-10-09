@@ -17,14 +17,14 @@
   -[0]: Testbenches and simulations 
   -[1]: General corrections to the AP1
 - (3) Axis Portal V2
-- -[0]: Testbenches and simulations
-- -[1]: General corrections to the AP2
+  -[0]: Testbenches and simulations
+  -[1]: General corrections to the AP2
 - (4) -
 - (5) -
 - (6) Warehouse_2
   - [0]: Board construction
   - [1]: Testbenches and simulations
-- (7) Control Unit Mobile {mole_v1}
+- (7) Mobile Control Unit {mole_v1}
   - [0]: Board construction
   - [1]: Testbenches and simulations 
 
