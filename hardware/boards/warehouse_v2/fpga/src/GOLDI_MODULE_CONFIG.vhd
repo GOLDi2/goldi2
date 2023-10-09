@@ -74,16 +74,16 @@ package GOLDI_MODULE_CONFIG is
     constant ACTUATOR_MASK_ADDRESS  :   natural := 5;       --Table length: 8
     constant ERROR_LIST_ADDRESS     :   natural := 13;      --Table length: 2
     constant GPIO_DRIVER_ADDRESS    :   natural := 15;      --Table length: 2
-    constant X_ENCODER_ADDRESS      :   natural := 16;       --Table length: 2
-    constant Z_ENCODER_ADDRESS      :   natural := 18;      --Table length: 2
-    constant X_MOTOR_ADDRESS        :   natural := 20;      --Table length: 6
-    constant Y_MOTOR_ADDRESS        :   natural := 26;      --Table length: 2
-    constant Z_MOTOR_ADDRESS        :   natural := 28;      --Table length: 6
-    constant PR_LED_ADDRESS         :   natural := 27;      --Table length: 1
-    constant PG_LED_ADDRESS         :   natural := 34;      --Table length: 1
-    constant ER_LED_ADDRESS         :   natural := 35;      --Table length: 1
-    constant EW_LED_ADDRESS         :   natural := 36;      --Table length: 1
-    constant EG_LED_ADDRESS         :   natural := 37;      --Table length: 1
+    constant X_ENCODER_ADDRESS      :   natural := 17;      --Table length: 2
+    constant Z_ENCODER_ADDRESS      :   natural := 19;      --Table length: 2
+    constant X_MOTOR_ADDRESS        :   natural := 21;      --Table length: 6
+    constant Y_MOTOR_ADDRESS        :   natural := 27;      --Table length: 2
+    constant Z_MOTOR_ADDRESS        :   natural := 29;      --Table length: 6
+    constant PR_LED_ADDRESS         :   natural := 35;      --Table length: 1
+    constant PG_LED_ADDRESS         :   natural := 36;      --Table length: 1
+    constant ER_LED_ADDRESS         :   natural := 37;      --Table length: 1
+    constant EW_LED_ADDRESS         :   natural := 38;      --Table length: 1
+    constant EG_LED_ADDRESS         :   natural := 39;      --Table length: 1
     -----------------------------------------------------------------------------------------------
 
 

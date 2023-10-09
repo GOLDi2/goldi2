@@ -30,11 +30,11 @@
 --                      V4.00.00 naming convention. Correction of the 
 --                      instantiated entities.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -44,7 +44,7 @@ use work.GOLDI_MODULE_CONFIG.all;
 
 
 
---! @brief List of user and system errors
+--! @brief List of user and system errors (V3.00.00)
 --! @details
 --! Module uses sensor inputs and driver outputs to generate a list
 --! of flags correspoinding to the possible user and system errors.

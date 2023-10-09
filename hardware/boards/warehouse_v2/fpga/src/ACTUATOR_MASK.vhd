@@ -29,11 +29,11 @@
 --                      V4.00.00 naming convention. Correction of the 
 --                      instantiated entities.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
@@ -42,7 +42,7 @@ use work.GOLDI_MODULE_CONFIG.all;
 
 
 
---! @brief System protection module
+--! @brief System protection module (V3.00.00)
 --! @details
 --! The module uses sensor inputs and driver outputs to generate a mask that blocks
 --! the driver signals in case of user error to prevent damage to the physical model.
