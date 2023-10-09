@@ -20,11 +20,11 @@
 -- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -79,6 +79,7 @@ entity ACTUATOR_MASK_D is
         --General
         clk             : in    std_logic;                                      --! System clock
         rst             : in    std_logic;                                      --! Asynchronous reset
+        ref_unblock     : in    std_logic;                                      --! Unblock mask to reset encoders
         ref_x_encoder   : in    std_logic;                                      --! Reset for x encoder dsp
         ref_z_encoder   : in    std_logic;                                      --! Reset for z encoder dsp
         --Slave BUS interface
@@ -236,11 +237,12 @@ begin
     --X motor protection
     --TMC2660 step signal blocked to avoid damage
     p_safe_io_o(18).enb <= p_sys_io_o(18).enb;
-    p_safe_io_o(18).dat <= '0' when((limit_x_neg   = '1' and limit_x_pos = '1')  or 
-                                    (limit_x_neg   = '1' and motor_x_dir = '0')  or
-                                    (limit_x_pos   = '1' and motor_x_dir = '1')  or
-                                    (limit_flag(0) = '1' and motor_x_dir = '0')  or
-                                    (limit_flag(1) = '1' and motor_x_dir = '1')) else
+    p_safe_io_o(18).dat <= '0' when((limit_x_neg   = '1' and limit_x_pos = '1')   or 
+                                    (limit_x_neg   = '1' and motor_x_dir = '0')   or
+                                    (limit_x_pos   = '1' and motor_x_dir = '1')   or
+                                    --Dynamic protection system
+                                    (limit_flag(0) = '1' and motor_x_dir = '0' and ref_unblock = '0')  or 
+                                    (limit_flag(1) = '1' and motor_x_dir = '1' and ref_unblock = '0')) else
                            p_sys_io_o(18).dat;
 
 
@@ -253,7 +255,8 @@ begin
     p_safe_io_o(24).dat <= '0' when((limit_y_neg = '1' and limit_y_pos   = '1') or
                                     (limit_y_neg = '1' and motor_y_out_2 = '1') or
                                     (limit_y_pos = '1' and motor_y_out_1 = '1') or
-                                    (limit_flag  /= (limit_flag'range => '0'))) else
+                                    (limit_flag  /= (limit_flag'range => '0') ) or
+                                    (ref_unblock = '1'))                        else
                             p_sys_io_o(24).dat; 
 
 
@@ -263,11 +266,12 @@ begin
     --Z motor protection
     --TMC2660 step signal blocked to avoid damage
     p_safe_io_o(30).enb <= p_sys_io_o(30).enb;
-    p_safe_io_o(30).dat <= '0' when((limit_z_neg   = '1' and limit_z_pos = '1')  or 
-                                    (limit_z_neg   = '1' and motor_z_dir = '0')  or
-                                    (limit_z_pos   = '1' and motor_z_dir = '1')  or
-                                    (limit_flag(2) = '1' and motor_z_dir = '0')  or
-                                    (limit_flag(3) = '1' and motor_z_dir = '1')) else
+    p_safe_io_o(30).dat <= '0' when((limit_z_neg   = '1' and limit_z_pos = '1')   or 
+                                    (limit_z_neg   = '1' and motor_z_dir = '0')   or
+                                    (limit_z_pos   = '1' and motor_z_dir = '1')   or
+                                    --Dynamic protection system
+                                    (limit_flag(2) = '1' and motor_z_dir = '0' and ref_unblock = '0')   or
+                                    (limit_flag(3) = '1' and motor_z_dir = '1' and ref_unblock = '0'))  else
                            p_sys_io_o(18).dat;
 
 

@@ -28,14 +28,14 @@
 --                      Introduction of improved TMC2660, ACTUATOR_MASK and
 --                      ERROR_DETECTOR modules
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! MachX02 library
 library machxo2;
 use machxo2.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -70,7 +70,7 @@ end entity TOP_LEVEL;
 
 
 
---! General architecture
+--! GOLDi Warehouse V2 Top Level architecture
 architecture RTL of TOP_LEVEL is
 
     --****INTERNAL SIGNALS****
@@ -88,13 +88,14 @@ architecture RTL of TOP_LEVEL is
     signal sys_bus_i            :   sbus_in;
     signal sys_bus_o            :   sbus_o_vector(14 downto 0);
     --Control register
-    constant ctrl_default       :   data_word := x"C0";
+    constant ctrl_default       :   data_word := x"40";
     signal ctrl_data            :   data_word;   
         alias enc_ref_x         :   std_logic is ctrl_data(0);
         alias enc_ref_z         :   std_logic is ctrl_data(1);
-        alias hold_x_motor      :   std_logic is ctrl_data(2);
-	    alias hold_z_motor		:	std_logic is ctrl_data(3);
-        alias unblock_y_axis    :   std_logic is ctrl_data(4);  
+        alias mask_unblock      :   std_logic is ctrl_data(2);
+        -- alias hold_x_motor      :   std_logic is ctrl_data(2);
+	    -- alias hold_z_motor		:	std_logic is ctrl_data(3);
+        -- alias unblock_y_axis    :   std_logic is ctrl_data(4);  
     --External data interface
     signal external_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal external_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -336,6 +337,7 @@ begin
     port map(
         clk             => clk,
         rst             => rst,
+        ref_unblock     => mask_unblock,
         ref_x_encoder   => enc_ref_x,
         ref_z_encoder   => enc_ref_z,
         sys_bus_i       => sys_bus_i,
