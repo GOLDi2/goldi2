@@ -25,11 +25,11 @@
 --                      to extend BUS flexibility. Renaming form BUS_CONVERTER
 --                      to BUS_ADAPTOR.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 
@@ -43,28 +43,35 @@ use work.GOLDI_COMM_STANDARD.all;
 --! the slave sub-modules in the system.
 --!
 --! ### GOLDi BUS Protocol
---!	|Configuration Word										||||
---! |:--:|:--:|:-------------------:|:------------------------:|
---! | WE | SE | TAG[BUS_TAG_BITS:0] | ADR[BUS_ADDRESS_WIDTH:0] |
---!	
+--!
 --! The SPI data consists of a configuration word and one or more
 --! data words transfered in an SPI communication cycle i.e "nCE" 
 --! remains in a low state during the entier data transfer.
 --!
 --! Two default modes of communication have been implemented in the 
 --! BUS_ADAPTOR module for the transfer of multiple data word: 
---! "multi-register"-communication and "stream"-communication. 
+--! "multi-register"-communication and "stream"-communication.
+--! 
 --! In multi-register mode the data is arranged following the MSBF
---! (most-significnat-bit-first) convention. The first data word is
---! stored in the explicitly addressed register and the following
---! data words are stored in decreasing addresses. This mode simplifies
---! transfer of data to a sub-module with multiple registers and data
---! formats.
---! In the "stream"-mode the data is writen to the register addressed.
---! This mode facilitates the transfer of large data packets to secondary
+--! (most-significant-bit-first) convention. The first data word is
+--! stored in the addressed register and the following data words are
+--! stored in decreasing addresses. This mode simplifies transfer of 
+--! data to a sub-module with multiple registers and data formats.
+--!
+--! In the "stream"-mode the data is writen only to the register addressed.
+--! This mode facilitates the transfer of large data vectors to secondary
 --! communication sub-modules
 --!
---! **Latency:1**
+--!	|Configuration Word						            		  ||||
+--! |:--:|:--:|:----------------------:|:---------------------------:|
+--! | WE | SE | TAG [BUS_TAG_BITS-1:0] | ADR [BUS_ADDRESS_WIDTH-1:0] |
+--!	
+--! - WE: write enable
+--! - SE: stream enable
+--! - TAG: Tag for incomming data words
+--! - ADR: Address of first accessed register
+--!
+--! ***Latency:1***
 entity BUS_ADAPTOR is
     port(
         --General
@@ -73,12 +80,12 @@ entity BUS_ADAPTOR is
         --Data interface
         p_nce           : in    std_logic;                                          --! Negated chip enable - active low
         p_word_val      : in    std_logic;                                          --! Parallel data available
-        p_config_word_i : in    std_logic_vector(CONFIGURATION_WORD-1 downto 0);    --! Configuration word
+        p_config_word_i : in    std_logic_vector(CONFIGURATION_WORD-1 downto 0);    --! Configuration word - SPI MOSI data
         p_data_word_i   : in    std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);     --! Input data word - SPI MOSI data
         p_data_word_o   : out   std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);     --! Output data word - SPI MISO data
         --BUS
         p_master_bus_o  : out   mbus_out;                                           --! BUS master interface output signals [stb,we,adr,dat,tag]
-        p_master_bus_i  : in    mbus_in                                             --! BUS master interface input signals [dat,tag]
+        p_master_bus_i  : in    mbus_in                                             --! BUS master interface input signals [dat,tag,mux]
     );
 end entity BUS_ADAPTOR;
 

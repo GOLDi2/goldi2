@@ -23,7 +23,7 @@
 --						"ce" - chip enabled to "nce" - negated chip enabled.
 --                      Change from synchronous to asynchronous reset
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -33,8 +33,8 @@ use IEEE.numeric_std.all;
 
 --! @brief SPI slave Serial/Parallel converter for the custom GOLDi SPI interface
 --! @details  
---! SPI slave interface for communication between the GOLDi Lattice FPGA driven 
---! control boards and the Raspberry Pi diriven control unit. The module contains
+--! A SPI slave interface for communication between the GOLDi Lattice FPGA driven 
+--! control boards and the microcontroller driven control unit. The module contains
 --! the shift registers used to transform the incomming and outgoing data between
 --! serial und parallel formats. The module is enabled by a logic low presented in
 --! the "nCE" input. It registers the "MOSI" data after a rising edge in the "SCLK"
@@ -43,7 +43,7 @@ use IEEE.numeric_std.all;
 --! the SPI interface is idle. The data is shifted following the MSBF convention.
 --! The maximum "SCLK" frequency is half the "clk" frequency
 --!
---! **Latency: 1cyc**
+--! ***Latency: 1cyc***
 entity SP_CONVERTER is
     generic(
         g_word_length   :   natural := 8                                        --! Length of shifted data word

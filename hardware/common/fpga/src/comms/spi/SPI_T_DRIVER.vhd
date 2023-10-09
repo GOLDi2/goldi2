@@ -15,7 +15,7 @@
 -- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -23,7 +23,7 @@ use IEEE.numeric_std.all;
 
 
 
---! @breif Customizable SPI controller interface 
+--! @brief Customizable SPI controller interface 
 --! @details
 --! SPI controller/master interface for general communication applications. The 
 --! module can be configure to be used in all 3 SPI modes through the generic
@@ -38,17 +38,17 @@ use IEEE.numeric_std.all;
 --! inverted
 --! 
 --! + Mode 0:
---!     -> [g_cpol='0']: sclk low when module idle
---!     -> [g_cpha='0']: data registered on rising edge and shifted on falling edge
+--!     - [g_cpol='0']: sclk low when module idle
+--!     - [g_cpha='0']: data registered on rising edge and shifted on falling edge
 --! + Mode 1:
---!     -> [g_cpol='0']: sclk low when module idle
---!     -> [g_cpha='1']: data registered on falling edge and shifted on rising edge
+--!     - [g_cpol='0']: sclk low when module idle
+--!     - [g_cpha='1']: data registered on falling edge and shifted on rising edge
 --! + Mode 2:
---!     -> [g_cpol='1']: sclk high when module idle
---!     -> [g_cpha='0']: data registered on falling edge and shifted on rising edge
+--!     - [g_cpol='1']: sclk high when module idle
+--!     - [g_cpha='0']: data registered on falling edge and shifted on rising edge
 --! + Mode 3:
---!     -> [g_cpol='1']: sclk high when module idle
---!     -> [g_cpha='1']: data registered on rising edge and shifted on falling edge
+--!     - [g_cpol='1']: sclk high when module idle
+--!     - [g_cpha='1']: data registered on rising edge and shifted on falling edge
 --!
 --! Both the transfered data width and direction can be controled with the parameters
 --! "g_word_length" and "g_msbf". The transfer rate is controlled by the "g_clk_factor"
@@ -60,7 +60,7 @@ use IEEE.numeric_std.all;
 --! is held high during the data a data transfer. This allows multiple data words to be
 --! transfered without setting the ncs signal high.
 --!
---! **Latency: 1cyc**
+--! ***Latency: 1cyc***
 entity SPI_T_DRIVER is
     generic(
         g_clk_factor        :   integer := 4;                                   --! Period of the serial clock signal

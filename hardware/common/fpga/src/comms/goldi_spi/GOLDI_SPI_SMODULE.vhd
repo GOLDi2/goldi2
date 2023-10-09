@@ -27,11 +27,11 @@
 --                      to extend BUS flexibility. Renaming form SPI_TO_BUS
 --                      to GOLDI_SPI_SMODULE.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 
@@ -40,33 +40,40 @@ use work.GOLDI_COMM_STANDARD.all;
 
 --! @brief SPI to custom GOLDi BUS protocol 
 --! @details
---! Module acts as the main SPI slave interface and the GOLDi BUS master
+--! The module acts as the main SPI slave interface and the GOLDi BUS master
 --! interface. The module manages the communication between the FPGA system
 --! and the microcontoller driven control unit. The BUS protocol is defined
---! in the GOLDI_COMM_STANDAR package.
+--! in the GOLDI_COMM_STANDARD package.
 --!
 --! ### GOLDi BUS Protocol
---!	|Configuration Word										||||
---! |:--:|:--:|:-------------------:|:------------------------:|
---! | WE | SE | TAG[BUS_TAG_BITS:0] | ADR[BUS_ADDRESS_WIDTH:0] |
 --!	
 --! The SPI data consists of a configuration word and one or more data words 
 --! transfered in an SPI communication cycle i.e "nCE" remains in a low state 
---! during the entier data transfer.
+--! during the entier data transfer. Two default modes of communication have 
+--! been implemented in the BUS_ADAPTOR module for the transfer of multiple 
+--! data words: "multi-register"-communication and "stream"-communication. 
 --!
---! Two default modes of communication have been implemented in the  BUS_ADAPTOR 
---! module for the transfer of multiple data word: 
---! "multi-register"-communication and "stream"-communication. In multi-register
---! mode the data is arranged following the MSBF (most-significnat-bit-first) 
---! convention. The first data word is stored in the explicitly addressed register
---! and the following data words are stored in decreasing addresses. This mode
---! simplifies transfer of data to a sub-module with multiple registers and data
---! formats.
---! In the "stream"-mode the data is writen to the register addressed. This mode
---! facilitates the transfer of large data packets to secondary communication 
+--! In multi-register mode the data is arranged following the MSBF 
+--! (most-significant-bit-first) convention. The first data word is stored in 
+--! the addressed register and the subsequent data words are stored in decreasing
+--! addresses. This mode simplifies the data transfer process to a sub-module with
+--! multiple registers and data formats.
+--!
+--! In the "stream"-mode the data is writen only to the register addressed. This
+--! mode facilitates the transfer of large data vectors to secondary communication 
 --! sub-modules
 --!
---! **Latency: 2cyc**
+--!	|Configuration Word					  		    			  ||||
+--! |:--:|:--:|:----------------------:|:---------------------------:|
+--! | WE | SE | TAG [BUS_TAG_BITS-1:0] | ADR [BUS_ADDRESS_WIDTH-1:0] |
+--!
+--! - WE: write enable
+--! - SE: stream enable
+--! - TAG: Tag for incomming data words
+--! - ADR: Address of first accessed register
+--!
+--!
+--! ***Latency: 2cyc***
 entity GOLDI_SPI_SMODULE is
     port(
         --General
@@ -79,7 +86,7 @@ entity GOLDI_SPI_SMODULE is
         p_spi_miso      : out   std_logic;      --! SPI Mastter in / Slave out data
         --BUS master interface
         p_master_bus_o  : out   mbus_out;       --! BUS master interface output signals [stb,we,adr,dat,tag]
-        p_master_bus_i  : in    mbus_in         --! BUS master interface input signals [dat,tag]
+        p_master_bus_i  : in    mbus_in         --! BUS master interface input signals [dat,tag,mux]
     );
 end entity GOLDI_SPI_SMODULE;
 
