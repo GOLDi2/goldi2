@@ -15,7 +15,7 @@
 -- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -40,19 +40,19 @@ use IEEE.numeric_std.all;
 --! edge on the "p_channel_a" and a low state in the "p_channel_b" increase the
 --! counter.
 --!
---! g_invert = false 
---! -> [channel_a: 01 | channel_b: '0'] counter --
---! -> [channel_a: 01 | channel_b: '1'] counter ++
---! -> [channel_a: 10 | channel_b: '0'] counter ++
---! -> [channel_a: 10 | channel_b: '1'] counter --
+--! + g_invert = false 
+--!     - [channel_a: 01 | channel_b: 0] counter --
+--!     - [channel_a: 01 | channel_b: 1] counter ++
+--!     - [channel_a: 10 | channel_b: 0] counter ++
+--!     - [channel_a: 10 | channel_b: 1] counter --
 --! 
---! g_invert = true
---! -> [channel_a: 01 | channel_b: '0'] counter ++
---! -> [channel_a: 01 | channel_b: '1'] counter --
---! -> [channel_a: 10 | channel_b: '0'] counter --
---! -> [channel_a: 10 | channel_b: '1'] counter ++
+--! + g_invert = true
+--!     - [channel_a: 01 | channel_b: 0] counter ++
+--!     - [channel_a: 01 | channel_b: 1] counter --
+--!     - [channel_a: 10 | channel_b: 0] counter --
+--!     - [channel_a: 10 | channel_b: 1] counter ++
 --!
---! **Latency:3**
+--! ***Latency: 3cyc***
 entity ENCODER_DRIVER is
     generic(
         g_invert_dir    :   boolean := false                    --! Select positive direction [false -> CCW | true -> CC]

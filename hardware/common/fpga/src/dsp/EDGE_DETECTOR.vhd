@@ -21,7 +21,7 @@
 -- Revision V4.00.0 - Change of reset type
 -- Additional Comments: Change from synchronous to asynchronous reset 
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -31,18 +31,18 @@ use IEEE.numeric_std.all;
 
 --! @brief Edge detector for time or signal analysis
 --! @details
---! Module uses the system clock to sample the input signal
+--! The module uses the system clock to sample the input signal
 --! and detects changes in it. The edges of the signal are
 --! flaged independently based on the type: rising or falling
---! edge.
+--! edges.
 --!
---! **Latency: 2cyl**
+--! ***Latency: 2cyl***
 entity EDGE_DETECTOR is
 	port(
-	--General
+		--General
 		clk			: in	std_logic;		--! System clock
-		rst			: in	std_logic;		--! Synchronous reset
-	--Data	
+		rst			: in	std_logic;		--! Asynchronous reset
+		--Data	
 		data_in		: in	std_logic;		--! Input signal
 		p_f_edge	: out	std_logic;		--! Falling edge strobe
 		p_r_edge	: out	std_logic		--! Rising edge strobe

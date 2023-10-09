@@ -25,11 +25,11 @@
 --                      (INC_ENCODER.vhd -> ENCODER_SMODULE.vhd)
 --						Change from synchronous to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -39,14 +39,14 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Incremental encoder dsp module 
 --! @details
---! Incremental encoder processing unit for 3 or 2 channel sensor. The module
+--! An incremental encoder processing unit for 3 or 2 channel sensor. The module
 --! reacts to the data of the a channel providing an impulse counts for 
 --! "p_channel_a" edges using the "p_channel_b" to determine the movement 
 --! direction. The counter value is stored in a unsigned 16 bit data word and 
 --! then stored in the internal registers. The data can be accessed through 
 --! the GOLDi BUS interface. The parameter "g_address" is the base address of 
 --! the module i.e. the address of the data word or, in the case of a 
---! SYSTEM_DATA_WIDTH value smaller than 16, the lower bits of the data.
+--! SYSTEM_DATA_WIDTH value smaller than 16, the lower bits of the unsigned word.
 --!
 --! The parameter "g_invert" selects the direction of the positive axis of
 --! rotation. By setting the parameter to true the moduel increases the counter
@@ -57,33 +57,35 @@ use work.GOLDI_IO_STANDARD.all;
 --! edge on the "p_channel_a" and a low state in the "p_channel_b" increase the
 --! counter.
 --!
---! g_invert = false 
---! -> [channel_a: 01 | channel_b: '0'] counter --
---! -> [channel_a: 01 | channel_b: '1'] counter ++
---! -> [channel_a: 10 | channel_b: '0'] counter ++
---! -> [channel_a: 10 | channel_b: '1'] counter --
+--! + g_invert = false 
+--!     - [channel_a: "01" | channel_b: 0] counter --
+--!     - [channel_a: "01" | channel_b: 1] counter ++
+--!     - [channel_a: "10" | channel_b: 0] counter ++
+--!     - [channel_a: "10" | channel_b: 1] counter --
 --! 
---! g_invert = true
---! -> [channel_a: 01 | channel_b: '0'] counter ++
---! -> [channel_a: 01 | channel_b: '1'] counter --
---! -> [channel_a: 10 | channel_b: '0'] counter --
---! -> [channel_a: 10 | channel_b: '1'] counter ++
+--! + g_invert = true
+--!     - [channel_a: "01" | channel_b: 0] counter ++
+--!     - [channel_a: "01" | channel_b: 1] counter --
+--!     - [channel_a: "10" | channel_b: 0] counter --
+--!     - [channel_a: "10" | channel_b: 1] counter ++
 --!
 --! When the "g_index_rst" is set to true the assertion of the reset signal
 --! returns the registers to the value x"00" [counter = 0] and sets the driver 
 --! in an idle state that holds until the index signal is asserted to restart 
 --! the normal operation of the module. This provides a fix reference point.
 --!
---! #### Registers: 
 --!
---! SYSTEM_DATA_WIDTH = 8
+--! ### Registers: 
+--!
+--! **SYSTEM_DATA_WIDTH = 8**
 --!
 --! | Address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --!	| +0 		| VALUE [7:0] ||||||||
 --! | +1		| VALUE [15:8] ||||||||
 --!
---! **Latency:3**
+--!
+--! ***Latency:3***
 entity ENCODER_SMODULE is
 	generic(
 		g_address	:	natural := 1;			--! Module's base address

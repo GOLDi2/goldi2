@@ -23,11 +23,11 @@
 --                      Changes to the module's generic and port signals to
 --                      follow V4.00.00 naming convention.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_DATA_TYPES.all;
 
@@ -45,25 +45,28 @@ use work.GOLDI_DATA_TYPES.all;
 --! with the range's index in the "sensor_limit_array" vector. Additionaly a border 
 --! margin defined through the "g_border_margin" parameter is used to flag the 
 --! approach of the encoder to the sensor limits. The "p_flag_neg" is asserted if the
---! possition is calculated to be smaller that the <min>+<g_border_margin> value. The
+--! possition is calculated to be smaller that the (min + g_border_margin) value. The
 --! "p_flag_pos" is asserted if the possition is calculated to be larger that the 
---! <max>-<g_border_margin> value.
+--! (max - g_border_margin) value.
 --!
 --! The module responds to the rising and falling edges of the "p_channel_a"
 --! port and uses the "p_channel_b" to deremine the movement direction. 
 --! 
 --! The "sensor_limit_array" is a custom structure defined in the GOLDI_DATA_TYPES
 --! package that contains custom structures used for the GOLDi project. The ranges
---! are defined using two values (<center>,<range>). The <center> value 
---! indicates the mid point of the range (arithmetic average) the <range> value
+--! are defined using two values [(center),(range)]. The (center) value 
+--! indicates the mid point of the range (arithmetic average) the (range) value
 --! indicates the inclussive distance from the center point in the positive and
 --! negative directions.
 --!
---! [<min> <---------------------   <center>    --------------------> <max>]
---! [<center-range> <------------   <center>    -----------> <center+range>]
---! [<min> ---> <min+border_margin>          <max-border_margin> <--- <max>]
+--! [(min) <---------------------   (center)    --------------------> (max)]
+--!
+--! [(center-range) <------------   (center)    -----------> (center+range)]
+--!
+--! [(min) ---> (min+border_margin)          (max-border_margin) <--- (max)]
 --! 
---! **Latency: 2cyc**
+--!
+--! ***Latency: 2cyc***
 entity VIRTUAL_LIMIT_ARRAY is
     generic(
         g_invert            :   boolean := false;                                   --! Select positive direction [false -> CCW | true -> CC]

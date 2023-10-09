@@ -23,11 +23,11 @@
 --                      Changes to the module's generic and port signals to
 --                      follow V4.00.00 naming convention.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_DATA_TYPES.all;
 
@@ -50,14 +50,14 @@ use work.GOLDI_DATA_TYPES.all;
 --! 
 --! The "sensor_limit_array" is a custom structure defined in the GOLDI_DATA_TYPES
 --! package that contains custom structures used for the GOLDi project. The ranges
---! are defined using two values (<center>,<range>). The <center> value 
---! indicates the mid point of the range (arithmetic average) the <range> value
+--! are defined using two values [(center),(range)]. The (center) value 
+--! indicates the mid point of the range (arithmetic average) the (range) value
 --! indicates the inclussive distance from the center point in the positive and
 --! negative directions.
 --!
---! [<center-range>  <-----------    <center>    -----------> <center+range>]
+--! [(center - range) <----------    (center)    ----------> (center+range)]
 --!
---! **Latency: 2cyc**
+--! ***Latency: 2cyc***
 entity VIRTUAL_SENSOR_ARRAY is
     generic(
         g_invert            :   boolean := false;                                   --! Select positive direction [false -> CCW | true -> CC]
