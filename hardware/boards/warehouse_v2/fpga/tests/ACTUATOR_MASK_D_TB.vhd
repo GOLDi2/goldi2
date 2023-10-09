@@ -55,6 +55,7 @@ architecture TB of ACTUATOR_MASK_D_TB is
         port(
             clk             : in    std_logic;
             rst             : in    std_logic;
+            ref_unblock     : in    std_logic;
             ref_x_encoder   : in    std_logic;
             ref_z_encoder   : in    std_logic;
             sys_bus_i       : in    sbus_in;
@@ -116,6 +117,7 @@ begin
     port map(
         clk             => clock,
         rst             => reset,
+        ref_unblock     => '0',
         ref_x_encoder   => ref_x_encoder,
         ref_z_encoder   => ref_z_encoder,
         sys_bus_i       => sys_bus_i,
