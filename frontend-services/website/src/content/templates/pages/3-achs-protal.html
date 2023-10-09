@@ -1,0 +1,45 @@
+{% import "components/elements.html" as elements %}
+{% set
+    text = {
+        heading: '3-Achs-Protal',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+   
+    } %}
+{% if language=='de' %}
+    {% set
+    text = {
+        heading: '3-Achs-Protal',
+        description: 'Mit dem Model 3-Achs-Portal wird ein Roboter zur Weitergabe von Werkstücken im dreidimensionalen Raum simuliert. Der Portalroboter kann mit den 
+        drei translatorischen Bewegungsachsen und dem elektromagnetischen Greifer
+        metallische Werkstücke aufnehmen und in dem quaderförmigen Arbeitsbereich umsetzen. 
+        So können zum Beispiel Werkstücke von dem Werkstückmagazin zum Ablageplatz bewegt 
+        werden. Mithilfe der Software-Endschalter kann die Bewegung in die drei Richtungen 
+        begrenzt werden. Außerdem besitzt das Model auch Hardware-Endschalter um eine Beschädigung 
+        durch Programmierfehler zu verhindern. Wird einer von diesen betätigt, wird die Bewegung 
+        entlang der betreffenden Achse gestoppt und nur die Aktivierung in die Gegenrichtung 
+        ermöglicht. Der Greifer kann in +Z-Richtung bewegt werden und besitzt einen Elektromagneten 
+        mit dem die metallischen Werkstücke durch Aktivierung aufgenommen werden. Wenn nach den 
+        Bewegungen in X- und Y-Richtung der Greifer sich über der Zielposition befindet, kann er 
+        in -Z-Richtung abgesengt werden. Das Werkstück wird durch Deaktivierung des Elektromagneten 
+        abgelegt.'
+    } %}
+{% endif %}
+{% extends "layout.html" %}
+{% block main %}
+    <!-- 3-Achs-Portal Überschrift und kurze Vorstellung -->
+    <div class= "flex-grow flex flex-col mt-16 my-4 mb-4 items-center">
+        <div class="mx-auto flex justify-center">
+            <div class=" px-10 space-y-5 text-center">
+                <div class="text-4xl font-bold text-primary-700 text-left">
+                    {{ text.heading }}
+                </div>
+                <div class="h-line h-line my-5"></div>
+                <div class="bg-primary-50 rounded-3xl p-5 lg:w-300 shadow-xl text-justify">
+                    {{ text.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex-grow"></div>
+{% endblock %}

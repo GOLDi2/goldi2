@@ -7,15 +7,8 @@ navbar = [
             {name: 'Roles', href: '/'+language+'/admin/roles'}
     ]},
     {name: 'Documentation', horizontal: true, children: [
-        {name: 'Controller', children: [
-            {name: 'Manual Control', href: '/'+language+'/about'},
-            {name: 'Digital Demo-Board', href: '/'+language+'/about'},
-            {name: 'PSOC', href: '/'+language+'/about'},
-            {name: 'PLD', href: '/'+language+'/about'},
-            {name: 'Automaton Graph', href: '/'+language+'/about'}
-        ]},
         {name: 'Physische Systeme', children: [
-            {name: '3-Achs-Portal', href: '/'+language+'/about'},
+            {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
             {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
             {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
             {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
@@ -54,15 +47,8 @@ navbar = [
             {name: 'Roles', href: '/'+language+'/admin/roles'}
         ]},
         {name: 'Documentation', horizontal: true, children: [
-            {name: 'Controller', children: [
-                {name: 'Manual Control', href: '/'+language+'/about'},
-                {name: 'Digital Demo-Board', href: '/'+language+'/about'},
-                {name: 'PSOC', href: '/'+language+'/about'},
-                {name: 'PLD', href: '/'+language+'/about'},
-                {name: 'Automaton Graph', href: '/'+language+'/about'}
-            ]},
             {name: 'Physische Systeme', children: [
-                {name: '3-Achs-Portal', href: '/'+language+'/about'},
+                {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
                 {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
                 {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
                 {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
@@ -93,7 +79,13 @@ navbar = [
     ] %}
 {% endif %}
 
-
+<!-- {name: 'Controller', children: [
+                {name: 'Manual Control', href: '/'+language+'/about'},
+                {name: 'Digital Demo-Board', href: '/'+language+'/about'},
+                {name: 'PSOC', href: '/'+language+'/about'},
+                {name: 'PLD', href: '/'+language+'/about'},
+                {name: 'Automaton Graph', href: '/'+language+'/about'}
+            ]}, -->
 
 {%- macro renderItemText(item) -%}
     <div class="px-5">
