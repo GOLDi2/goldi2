@@ -16,11 +16,6 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-  $(document).ready(function() { init_search(); });
-/* @license-end */
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -31,25 +26,10 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="download.png"/></td>
   <td id="projectalign">
-   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1.00.00</span>
+   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1</span>
    </div>
-   <div id="projectbrief">GOLDi FPGA system</div>
+   <div id="projectbrief">GOLDi FPGA Source Code</div>
   </td>
-    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.svg"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="Search" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
-          </span>
-        </div>
-</td>
  </tr>
  </tbody>
 </table>
@@ -61,6 +41,17 @@
 var searchBox = new SearchBox("searchBox", "search",'Search','.html');
 /* @license-end */
 </script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
 </div><!-- top -->
 <div id="side-nav" class="ui-resizable side-nav-resizable">
   <div id="nav-tree">
@@ -110,6 +101,7 @@ Inheritance diagram for EDGE_DETECTOR:</div>
   <img src="class_e_d_g_e___d_e_t_e_c_t_o_r.png" usemap="#EDGE_5FDETECTOR_map" alt=""/>
   <map id="EDGE_5FDETECTOR_map" name="EDGE_5FDETECTOR_map">
 <area href="class_e_r_r_o_r___d_e_t_e_c_t_o_r.html" title="List of user and system errors." alt="ERROR_DETECTOR" shape="rect" coords="0,56,127,80"/>
+<area href="class_t_o_p___l_e_v_e_l.html" title="Top Level of FPGA system for GOLDI Axis Portal V1." alt="TOP_LEVEL" shape="rect" coords="0,112,127,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -123,7 +115,7 @@ Entities</h2></td></tr>
 Libraries</h2></td></tr>
  <tr class="memitem:ae4f03c286607f3181e16b9aa12d0c6d4"><td class="memItemLeft" align="right" valign="top"><a id="ae4f03c286607f3181e16b9aa12d0c6d4" name="ae4f03c286607f3181e16b9aa12d0c6d4"></a>
 <a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#ae4f03c286607f3181e16b9aa12d0c6d4">IEEE</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
-<tr class="memdesc:ae4f03c286607f3181e16b9aa12d0c6d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use standard library. <br /></td></tr>
+<tr class="memdesc:ae4f03c286607f3181e16b9aa12d0c6d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard library. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="Use_20Clauses" name="Use_20Clauses"></a>
 Use Clauses</h2></td></tr>
@@ -139,21 +131,21 @@ Ports</h2></td></tr>
 <tr class="memdesc:a50da91b765765ac486df1b41692e962f"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">System clock. <br /></td></tr>
 <tr class="memitem:ae106f17a2b73445119c8eb039d3e102e"><td class="memItemLeft" align="right" valign="top"><a id="ae106f17a2b73445119c8eb039d3e102e" name="ae106f17a2b73445119c8eb039d3e102e"></a>
 <a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#ae106f17a2b73445119c8eb039d3e102e">rst</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">in</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memdesc:ae106f17a2b73445119c8eb039d3e102e"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronous reset. <br /></td></tr>
+<tr class="memdesc:ae106f17a2b73445119c8eb039d3e102e"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Asynchronous reset. <br /></td></tr>
 <tr class="memitem:a03cd1e146db3ec7916e23e09d19c9465"><td class="memItemLeft" align="right" valign="top"><a id="a03cd1e146db3ec7916e23e09d19c9465" name="a03cd1e146db3ec7916e23e09d19c9465"></a>
 <a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#a03cd1e146db3ec7916e23e09d19c9465">data_in</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">in</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
 <tr class="memdesc:a03cd1e146db3ec7916e23e09d19c9465"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Input signal. <br /></td></tr>
-<tr class="memitem:a39482a4aaf97f741115fff2b6eeb4349"><td class="memItemLeft" align="right" valign="top"><a id="a39482a4aaf97f741115fff2b6eeb4349" name="a39482a4aaf97f741115fff2b6eeb4349"></a>
-<a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#a39482a4aaf97f741115fff2b6eeb4349">n_edge</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memdesc:a39482a4aaf97f741115fff2b6eeb4349"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Falling edge strobe. <br /></td></tr>
-<tr class="memitem:a9db18e5f5a94a68fd8f2b58dae0624d1"><td class="memItemLeft" align="right" valign="top"><a id="a9db18e5f5a94a68fd8f2b58dae0624d1" name="a9db18e5f5a94a68fd8f2b58dae0624d1"></a>
-<a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#a9db18e5f5a94a68fd8f2b58dae0624d1">p_edge</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
-<tr class="memdesc:a9db18e5f5a94a68fd8f2b58dae0624d1"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Rising edge strobe. <br /></td></tr>
+<tr class="memitem:a7efa639ee152e07fd054bea43b02dc03"><td class="memItemLeft" align="right" valign="top"><a id="a7efa639ee152e07fd054bea43b02dc03" name="a7efa639ee152e07fd054bea43b02dc03"></a>
+<a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#a7efa639ee152e07fd054bea43b02dc03">p_f_edge</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
+<tr class="memdesc:a7efa639ee152e07fd054bea43b02dc03"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Falling edge strobe. <br /></td></tr>
+<tr class="memitem:aedfb9a5d76380a0d606b72255581460f"><td class="memItemLeft" align="right" valign="top"><a id="aedfb9a5d76380a0d606b72255581460f" name="aedfb9a5d76380a0d606b72255581460f"></a>
+<a class="el" href="class_e_d_g_e___d_e_t_e_c_t_o_r.html#aedfb9a5d76380a0d606b72255581460f">p_r_edge</a> &#160;</td><td class="memItemLeft" align="right" valign="top"> <b><b><span class="keywordflow">out</span><span class="vhdlchar"> </span></b></b>&#160;</td><td class="memItemRight" valign="bottom"> <b><span class="keywordtype">std_logic</span><span class="vhdlchar"> </span></b></td></tr>
+<tr class="memdesc:aedfb9a5d76380a0d606b72255581460f"><td class="mdescLeft">&#160;</td><td class="mdescLeft">&#160;</td><td class="mdescRight">Rising edge strobe. <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Edge detector for time or signal analysis. </p>
-<p >Module uses the system clock to sample the input signal and detects changes in it. The edges of the signal are flaged independently based on the type: rising or falling edge.</p>
-<p ><b>Latency: 2cyl</b> </p>
+<p >The module uses the system clock to sample the input signal and detects changes in it. The edges of the signal are flaged independently based on the type: rising or falling edges.</p>
+<p ><em><b>Latency: 2cyl</b></em> </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

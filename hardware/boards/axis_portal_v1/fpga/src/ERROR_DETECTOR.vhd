@@ -26,11 +26,11 @@
 --                      V4.00.00 naming convention. Change from synchronous
 --                      to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -41,7 +41,7 @@ use work.GOLDI_COMM_STANDARD.all;
 
 --! @brief List of user and system errors
 --! @details
---! Module uses sensor inputs and driver outputs to generate a list
+--! The module uses sensor inputs and driver outputs to generate a list
 --! of flags correspoinding to the possible user and system errors.
 entity ERROR_DETECTOR is 
     generic(
@@ -88,7 +88,7 @@ architecture RTL of ERROR_DETECTOR is
     alias z_out_neg         :   std_logic is p_sys_io_o(25).dat;
     
     --Memory
-    constant memory_length  :   natural := getMemoryLength(22);
+    constant memory_length  :   natural := getMemoryLength(23);
     constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
     signal reg_buff         :   data_word_vector(memory_length-1 downto 0);
     signal error_list       :   std_logic_vector(22 downto 0);

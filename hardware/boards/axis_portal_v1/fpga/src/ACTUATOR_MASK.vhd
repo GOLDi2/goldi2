@@ -24,11 +24,11 @@
 -- Additional Comments: Change to the port signal names to follow the
 --                      V4.00.00 naming convention
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -38,7 +38,7 @@ use work.GOLDI_COMM_STANDARD.all;
 
 --! @brief System protection module
 --! @details
---! Module uses sensor inputs and driver outputs to generate
+--! The module uses sensor inputs and driver outputs to generate
 --! a mask that blocks the driver signals in case of user error to 
 --! prevent damage to the physical model.
 entity ACTUATOR_MASK is
