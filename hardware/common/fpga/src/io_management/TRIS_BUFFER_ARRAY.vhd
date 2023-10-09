@@ -24,28 +24,29 @@
 --						to follow with the naming convention implemented
 --						in V4.00.00.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_IO_STANDARD.all;
 
 
 
 
---! @brief Array of Tri-state buffers
+--! @brief Array of tri-state buffers
 --! @details
---! Array of Tri-state buffers for a simplified instantiation and routing.
+--! Array of tri-state buffers TRIS_BUFFER for a simplified instantiation 
+--! and routing.
 entity TRIS_BUFFER_ARRAY is
     generic(
-        g_buff_number   :   natural := 10                                   --! Number of buffers
+        g_buff_number   :   natural := 10                                   --! Number of tri-state buffers
     );
     port(
         --General
         clk             : in    std_logic;                                  --! System clock
-        rst             : in    std_logic;                                  --! Sychronous clock
+        rst             : in    std_logic;                                  --! Asynchronous reset
         --System In/Out
         port_out        : in    io_o_vector(g_buff_number-1 downto 0);      --! System output data vector
         port_in_async   : out   io_i_vector(g_buff_number-1 downto 0);      --! System input asynchronous data vector

@@ -18,12 +18,12 @@
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
---! Use Lattice MachXO2 library
+--! Lattice MachXO2 library
 library machxo2;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -32,17 +32,18 @@ use work.GOLDI_IO_STANDARD.all;
 
 --! @brief Tri-state synchronizer buffer
 --! @details
---! Buffer transforms the tri-state signals of a FPGA into the io_o/io_i standard
---! used in the system. The incomming data is presented in to ways. A synchronizer 
---! samples the input data every rising edge of the main clock and a asyncrhonous
---! port shifts input data directly.
+--! The buffer transforms the tri-state signals of a FPGA pin into the io_o/io_i 
+--! standard defined in the GOLDI_IO_STANDARD and used internaly by the GOLDi system.
+--! The incomming data is presented in two ways. A SYNCHRONIZER samples the input data
+--! and synchronizes the input to the system clock to use in sequential logic, and an
+--! asynchronous port shifts the input data directly to use in combinatorial logic.
 --!
---! **Latency(sync input): 2cyl**
+--! ***Latency(sync input): 2cyl***
 entity TRIS_BUFFER is
     port(
         --General
         clk             : in    std_logic;      --! System clock
-        rst             : in    std_logic;      --! Synchronous reset
+        rst             : in    std_logic;      --! Asynchronous reset
         --System in/out interface
         port_out        : in    io_o;           --! System output data
         port_in_async   : out   io_i;           --! System input asynchronous data

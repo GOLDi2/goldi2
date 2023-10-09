@@ -24,7 +24,7 @@
 --						Change from synchronous to asynchronous reset.
 --                      Modification to the sampling process.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;

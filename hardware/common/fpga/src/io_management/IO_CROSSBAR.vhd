@@ -26,11 +26,11 @@
 --                      Introduction of "g_default_left_layout" parameter
 --                      to simplify the reset process
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -57,7 +57,7 @@ use work.GOLDI_CROSSBAR_STANDARD.all;
 --! in the range [0:g_right_port_length-1] and the equally the left pin number equals
 --! a value in the range [0:g_left_port_length-1]. The default layout of the crossbar
 --! after reset is given by the "g_default_left_layout" and the "g_default_right_layout"
---! parameters defined in the GOLDI_CORSSBAR_STANDARD package. 
+--! parameters defined in the GOLDI_CROSSBAR_STANDARD package. 
 --!
 --! The configuration of the crossbar i.e. the matices contents can be modified through
 --! a crossbar BUS structure. The BUS interface is the same as the GOLDi BUS standard,
@@ -89,7 +89,7 @@ entity IO_CROSSBAR is
         rst                     : in    std_logic;                                      --! Asynchronous reset
         --Communication
         cb_bus_i                : in    sbus_in;                                        --! Crossbar BUS input signals [stb,we,adr,dat,tag]
-        cb_bus_o                : out   sbus_out;                                       --! Crossbar BUS output signal [dat,tag]
+        cb_bus_o                : out   sbus_out;                                       --! Crossbar BUS output signal [dat,tag,mux]
         --Internal system io pin interface
         left_io_i_vector        : out   io_i_vector(g_left_port_length-1 downto 0);     --! Internal system input signals
         left_io_o_vector        : in    io_o_vector(g_left_port_length-1 downto 0);     --! Internal system output signals

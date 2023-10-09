@@ -3,7 +3,7 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
--- Design Name:		Double FF syncronization chain
+-- Design Name:		Flip Flop syncronization chain
 -- Module Name:		SYNCHRONIZER
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -23,25 +23,25 @@
 --						to follow with the naming convention implemented
 --						in V4.00.00.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 
 
---! @brief Multiple flip flop chain to avoid metastability issues
+--! @brief A chain of multiple flip flops to avoid metastability issues
 --! @details
---! Module takes an asynchronous input and uses a chain of multiple flip flops
---! to avoid metastability in case of violation of setup or hold time constrains.
---! The module outputs a signal synchronized with the system clock
+--! The module takes an asynchronous input and uses a chain of multiple flip flops
+--! to avoid metastability in case of a violation of setup or hold time constrains.
+--! The module outputs a signal synchronized with the FPGA's system clock
 entity SYNCHRONIZER is
 	generic (
 		g_stages	: natural := 2			--! Chain length
 	);
 	port (
 		clk			: in	std_logic;		--! System clock
-		rst			: in	std_logic;		--! Synchronous reset
+		rst			: in	std_logic;		--! Asynchronous reset
 		p_io_i		: in	std_logic;		--! Asynchonous input signal
 		p_io_sync	: out 	std_logic		--! Synchronous output signal
 	);
