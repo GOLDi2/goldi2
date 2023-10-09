@@ -32,11 +32,11 @@
 --                      to extend BUS flexibility. Change to generic and
 --                      port signal names to follow V4.00.00 naming convention
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 
@@ -50,34 +50,35 @@ use work.GOLDI_COMM_STANDARD.all;
 --! in the GOLDI_COMM_STANDARD package.
 --!
 --! The module allows the data interchange between the individual submodules 
---! in the GOLDi Board Models and the custom SPI master interface 
---! (GOLDI_SPI_SMODULE). The register counts with two independent ports: the
---! custom BUS port and the internal data port.
+--! in the GOLDi FPGA Models and the custom SPI master interface GOLDI_SPI_SMODULE.
+--! The register counts with two independent ports: the custom BUS port and the 
+--! internal data port.
 --!
 --! The custom BUS interface is an addressable port that can access one data word 
 --! at a time and perform exclusive write or read operations. 
 --! The data word accessed is defined by the address value presented in the input
 --! BUS signals. A read operation returns the data present in the "p_data_in" input
---! corresponding to the data word address; and a write operation overwrites the 
---! data present on the "p_data_out" output of the address. The custom BUS structure
---! and its corresponding signals are defined in the GOLDI_COMM_STANDARD package.
+--! port corresponding to the data word address; and a write operation overwrites the 
+--! data present on the "p_data_out" output port of the address. The custom BUS 
+--! structure and its corresponding signals are defined in the GOLDI_COMM_STANDARD 
+--! package.
 --!
 --! The internal data port can modify multiple "registers" at any moment and can
 --! perform simultaneous read and write operations. Additionaly the "p_read_stb" and
 --! "p_write_stb" flags indicate write and read operations performed by the BUS port
---! on the corresponding "register" allowing for data flow control.
+--! on the corresponding "register", allowing data flow control.
 --!
 --! The base address of the register table, the table length and the default values
 --! of the registers can be configured using generic parameters.
 --!
 --! Two architectures have been designed for the REGISTER_TABLE. The RTL architecture
---! uses a cascading principle and instantiates multiple REGISTER_UNITs to generate the
---! table. An "or" operation is used to return the data from the addressed regiseter. The 
---! BH architecture uses instead data word arrays to store the data. A decoder converts 
+--! uses a cascading principle and instantiates multiple REGISTER_UNIT modules to generate
+--! the table. An "or" operation is used to return the data from the addressed regiseter.
+--! The BH architecture uses instead data word arrays to store the data. A decoder converts 
 --! the address signal into the array index and allows the data to be accessed. This 
 --! reduces the timing of the output data routing.
 --!
---! **Latency: 1cyc**
+--! ***Latency: 1cyc***
 entity REGISTER_TABLE is
 	generic(
 		g_address		:	integer := 1;                                   --! Register table lowest address

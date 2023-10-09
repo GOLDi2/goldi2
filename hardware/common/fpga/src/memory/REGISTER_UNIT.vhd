@@ -23,11 +23,11 @@
 --                      to extend BUS flexibility. Change to generic and
 --                      port signal names to follow V4.00.00 naming convention
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 
@@ -41,29 +41,29 @@ use work.GOLDI_COMM_STANDARD.all;
 --! GOLDI_COMM_STANDARD package. 
 --!
 --! The module allows the data interchange between the individual submodules 
---! in the GOLDi Board Models and the custom SPI master interface 
---! (GOLDI_SPI_SMODULE).The register counts with two independent ports: the 
---! custom BUS port and the internal data port.
+--! in the GOLDi FPGA Models and the custom SPI master interface 
+--! (GOLDI_SPI_SMODULE).The register has two independent ports: the custom 
+--! GOLDi BUS port and the internal data port.
 --!
 --! The custom BUS interface is an addressable port that can perform exclusive
 --! write or read operations. A read operation returns the data present in the
---! "p_data_in" input and a write operation overwrites the data present on the 
---! "p_data_out" output. The custom BUS structure and its corresponding signals
---! are defined in the GOLDI_COMM_STANDARD package.
+--! "p_data_in" input port and a write operation overwrites the data present on
+--! the "p_data_out" output port. The custom BUS structure and its corresponding
+--! signals are defined in the GOLDI_COMM_STANDARD package.
 --!
 --! The internal data port can perform simultaneous read an write operations.
 --! Additionaly the "p_read_stb" and "p_write_stb" flags indicate write and read
---! operations performed by the BUS port when the transfer is validated allowing
+--! operations performed by the BUS port when the transfer is validated, allowing
 --! data flow control.
 --!
 --! The address and default values of the register can be configured using generic
 --! parameters.
 --!
---! **Latency: 1cyc**
+--! ***Latency: 1cyc***
 entity REGISTER_UNIT is
     generic(
         g_address   :   natural := 1;                   --! Register address 
-        g_def_value :   data_word := reg_unit_d_default --! Register reset value
+        g_def_value :   data_word := reg_unit_d_default --! Register default value after reset
     );
     port(
         --General
