@@ -15,7 +15,7 @@
 -- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -23,22 +23,28 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
+--! @brief I2C shift register structure / I2C reciever
 --! @detials
+--! The module acts as a shift-register that registers the incomming data
+--! on the "p_i2c_sda_i" port after a rising edge on the "p_i2c_scl" signal
+--! has been detected. The module generates the ACK condition after the 
+--! 8th data bit has been recived.
+--! To reset the module the enb signal must be driven low for a clock cycle.
 --!
+--! ***Latency: 1cyc***
 entity I2C_R_CONTROLLER is
     port(
         --General
-        clk         : in    std_logic;
-        rst         : in    std_logic;
-        enb         : in    std_logic;
+        clk         : in    std_logic;                      --! System clock
+        rst         : in    std_logic;                      --! Asynchronous reset
+        enb         : in    std_logic;                      --! Enable module 
         --Control interface
-        p_t_data    : out   std_logic_vector(7 downto 0);
-        p_t_valid   : out   std_logic;
+        p_t_data    : out   std_logic_vector(7 downto 0);   --! Shift register data
+        p_t_valid   : out   std_logic;                      --! Shift register data valid
         --I2C interface
-        p_i2c_scl   : in    std_logic;
-        p_i2c_sda_i : in    std_logic;
-        p_i2c_sda_o : out   std_logic
+        p_i2c_scl   : in    std_logic;                      --! I2C serial clock input
+        p_i2c_sda_i : in    std_logic;                      --! I2C serial data input
+        p_i2c_sda_o : out   std_logic                       --! I2C serial data output
     );
 end entity I2C_R_CONTROLLER;
 

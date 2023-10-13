@@ -23,9 +23,35 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
+--! @brief I2C Controller interface for communication with IC's
 --! @details
+--! The I2C_C_DRIVER is designed to be an I2C controller interface for use
+--! in single controller shared-bus configuration. The controller follows the
+--! protocol for standard-mode, fast-mode, and fast-mode plus I2C-bus by implementing
+--! the START and STOP conditions, Acknowledge, and 7-bit address features. The
+--! exact speed of the controller can be configured by the "g_scl_factor" parameter.
 --!
+--! A data transaction on the "p_tdword" and "p_rdword" ports occurs when both
+--! the "_tready" and "_tvalid" flags are asserted simultaneously.
+--! 
+--! The operation of the module is controlled by the data present in the p_tdword
+--! interface. A START condition/address-word initiates the operation of the module.
+--! To do so, the "p_tdword_tvalid" and "p_tdword_start" flags must be asserted. The
+--! data in the "p_tdword_tdata" is assumed to be the address-word and the read/write
+--! type operation is initiated. If no error occurs during the transmission of the data
+--! the module enters an hold state in which the I2C-bus remains engaged. To continue
+--! the I2C transaction the "p_tdword_tvalid" flag must be asserted. In the case of 
+--! a write-type operation the data in the "p_tdword_tdata" is transmitted. In the case
+--! of a read operation the module generates the clock signal to read the data from a 
+--! peripheral device. If no error is detected the module enters the hold state again.
+--! A new START condition/address-word will be initiated if both the "p_tdword_start" and
+--! "p_tdword_tvalid" flags are asserted.
+--!
+--! To exit the hold loop and finish the I2C transmission the "p_tdword_stop" and 
+--! "p_tdword_tvalid" flags must be asserted. At this point the module performs the last
+--! read/write operation and generates the stop condition. After the transaction has ended
+--! the module return to the idle state. 
+--! 
 entity I2C_C_DRIVER is
     generic(
         g_scl_factor    :   natural := 480                      --! SCL signal period as a multiple of the system clock

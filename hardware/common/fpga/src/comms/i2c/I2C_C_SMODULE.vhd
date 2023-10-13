@@ -29,9 +29,44 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 
---! @brief
+--! @brief I2C submodule controller interface for communication with IC's
 --! @details
+--! The I2C_C_SMODULE is designed to be an I2C controller interface for use
+--! in single controller shared-bus configuration. The controller follows the
+--! protocol for standard-mode, fast-mode, and fast-mode plus I2C-bus by implementing
+--! the START and STOP conditions, Acknowledge, and 7-bit address features. The
+--! exact speed of the controller can be configured by the "g_scl_factor" parameter.
+--! 
+--! The operation of the module is controlled by the data present in single tag-register
+--! of the module. A START-condition/address-word is initiated when a data word with the 
+--! START tag is stored in the register. The data in the data is assumed to be the 
+--! address-word and the read/write type operation is initiated. If no error occurs during
+--! the transmission of the data the module enters an hold state in which the I2C-bus remains
+--! engaged. To continue the I2C transaction a normal data word must be stored in the register.
+--! In the case of a write-type operation the data in the "p_tdword_tdata" is transmitted. In 
+--! the case of a read operation the module generates the clock signal to read the data from a 
+--! peripheral device. If no error is detected the module enters the hold state again.
+--! A new START condition/address-word will be initiated if a START tagged data word is stored
+--! again.
 --!
+--! To exit the hold loop and finish the I2C transmission data word with the STOP tag must be
+--! stored in the register. At this point the module performs the last read/write operation and
+--! generates the stop condition. After the transaction has ended the module return to the idle 
+--! state.
+--!
+--! The "p_i2c_sda" port controls the enable element of the io_o sinal allowing the switch between
+--! the input and ouput modes. It is important that the .lpf file of the top level is modified when
+--! the module is implemented in a design. The pins for the scl and sda signals must be configured
+--! as open-drain type to prevent damage to the FPGA.
+--!
+--! ### Register:
+--! 
+--! |   g_address   |   tag[1:0]    |           data                |
+--! |--------------:|:-------------:|:-----------------------------:|
+--! | +0            | 10 (START)    |   address-word                |
+--! | +0            | 00 (DATA)     |   read/write data             |
+--! | +0            | 01 (STOP)     |   read/write data             |
+--! 
 entity I2C_C_SMODULE is
     generic(
         g_address       :   natural := 1;       --! Module's base address

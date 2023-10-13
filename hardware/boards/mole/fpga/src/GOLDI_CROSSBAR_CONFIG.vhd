@@ -52,7 +52,7 @@ package GOLDI_CROSSBAR_CONFIG is
 
 
     --Layout of right side port of crossbar. Assignment of multiple 
-    --right side port lines to the same left side port line will provoque an operation error.
+    --left side port lines to the same right side port line will provoque an operation error.
     constant DEFAULT_R_CROSSBAR_LAYOUT  :   cb_right_port_ram(R_BANK_SIZE-1 downto 0) :=
     (
         0   => x"00",
@@ -65,7 +65,7 @@ package GOLDI_CROSSBAR_CONFIG is
         7   => x"07"
     );
 
-    --Layout of left side port of crossbar.
+    --Layout of left side port of crossbar. (inverted matrix + additional pin routing)
     constant DEFAULT_L_CROSSBAR_LAYOUT  :   cb_left_port_ram(L_BANK_SIZE-1 downto 0) := 
     (
         0   => to_unsigned(0,BUS_ADDRESS_WIDTH),

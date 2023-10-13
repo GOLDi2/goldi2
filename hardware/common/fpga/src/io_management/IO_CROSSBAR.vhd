@@ -42,13 +42,13 @@ use work.GOLDI_CROSSBAR_STANDARD.all;
 --! @brief Crossbar structure for GOLDi tri-state IO signals
 --! @details
 --! The crossbar structure for IO tri-state IO signals allows a GOLDi Board Model
---! to perform multiple functions for a selected subgrup of FPAG pins. The stucture
+--! to perform multiple functions for a selected subgroup of FPAG pins. The structure
 --! allows multiple GOLDi sub-modules to access the data present on a pin simultanously
 --! and also to drive the tri-state pin.
 --! 
 --! The crossbar works by storing two matrices containing the correspondance between
---! left and right ports. The first matrix, the "left_port_layout" contain the routing
---! of FPGA input data. The second matrix the "right_port_layout" contains the routing
+--! left and right ports. The first matrix, the "left_port_layout", contain the routing
+--! of FPGA input data. The second matrix, the "right_port_layout", contains the routing
 --! of the internal system output data.
 --!
 --! The dimensions of the crossbar structure are set by the "g_left_port_length" and 
@@ -59,7 +59,7 @@ use work.GOLDI_CROSSBAR_STANDARD.all;
 --! after reset is given by the "g_default_left_layout" and the "g_default_right_layout"
 --! parameters defined in the GOLDI_CROSSBAR_STANDARD package. 
 --!
---! The configuration of the crossbar i.e. the matices contents can be modified through
+--! The configuration of the crossbar i.e. the matrices contents can be modified through
 --! a crossbar BUS structure. The BUS interface is the same as the GOLDi BUS standard,
 --! however the data is interpreted differently. The crossbar BUS interprets the "adr"
 --! vector as the right pin number and the "dat" vector as the corresponding left pin
