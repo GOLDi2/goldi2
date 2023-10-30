@@ -4,6 +4,7 @@ import { ISaneDataCharSet } from "./sane-data.js";
 import { html } from "@polymer/polymer/lib/utils/html-tag.js";
 import { EventMixin } from "./eventlib.js";
 import { SaneMath } from "./sane-math-mixin.js";
+import expressionParser from "./sane-expression-parser.js";
 
 class SaneEquationInput extends SaneMath(EventMixin(AppLocalizeMixin())) {
 	static get template() {
@@ -131,7 +132,7 @@ class SaneEquationInput extends SaneMath(EventMixin(AppLocalizeMixin())) {
 		// parse input string to expression tree
 		let expTree: expressionTree;
 		try {
-			expTree = ((window as any).expressionParser.parse(userRawInput, {}, this.charSet)); // call parser in js file
+			expTree = expressionParser.parse(userRawInput, {}, this.charSet); // call parser in js file
 			// clear error text if parsing was successful
 			inputel.errorMessage = "";
 			this.dispatchEvent(new CustomEvent("sane-equation-input-changed", {

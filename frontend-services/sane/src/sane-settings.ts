@@ -235,27 +235,27 @@ class SaneSettings extends EventMixin(AppLocalizeMixin()) {
 						<h3>[[localize('settings-charset-info')]]</h3>
 						<div class="flex-wrap-container">
 							<paper-input id="andChar" label="[[localize('settings-charset-and')]]" maxlength="1" always-float-label placeholder="[[data.charSet.andChar]]"
-							auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+						 	error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 							<paper-input id="orChar" label="[[localize('settings-charset-or')]]" maxlength="1" always-float-label placeholder="[[data.charSet.orChar]]"
-							auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+						 	error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 							<paper-input id="notChar" label="[[localize('settings-charset-not')]]" maxlength="1" always-float-label placeholder="[[data.charSet.notChar]]"
-							auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+						 	error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 							<paper-input id="implyChar" label="[[localize('settings-charset-imply')]]" maxlength="1" always-float-label
-							placeholder="[[data.charSet.implyChar]]" auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+							placeholder="[[data.charSet.implyChar]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 							<paper-input id="equivChar" label="[[localize('settings-charset-equiv')]]" maxlength="1" always-float-label
-							placeholder="[[data.charSet.equivChar]]" auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+							placeholder="[[data.charSet.equivChar]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 							<paper-input id="antivalChar" label="[[localize('settings-charset-antival')]]" maxlength="1" always-float-label
-							placeholder="[[data.charSet.antivalChar]]" auto-validate pattern="[[validationPattern]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
+							placeholder="[[data.charSet.antivalChar]]" error-message="0-9,x,X,y,Y,g,(,),[,],? and used chars are forbidden!"
 							on-input="onCustomCharInput" on-click="computeValidationPattern">
 							</paper-input>
 						</div>
