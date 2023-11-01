@@ -1,16 +1,14 @@
 <!-- Header -->
 {% set
 navbar = [
+    {name: 'Admin',loggedIn: true, children: [
+            {name: 'Devices', href: '/'+language+'/admin/devices'},  
+            {name: 'Users', href: '/'+language+'/admin/users'},
+            {name: 'Roles', href: '/'+language+'/admin/roles'}
+    ]},
     {name: 'Documentation', horizontal: true, children: [
-        {name: 'Controller', children: [
-            {name: 'Manual Control', href: '/'+language+'/about'},
-            {name: 'Digital Demo-Board', href: '/'+language+'/about'},
-            {name: 'PSOC', href: '/'+language+'/about'},
-            {name: 'PLD', href: '/'+language+'/about'},
-            {name: 'Automaton Graph', href: '/'+language+'/about'}
-        ]},
         {name: 'Physische Systeme', children: [
-            {name: '3-Achs-Portal', href: '/'+language+'/about'},
+            {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
             {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
             {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
             {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
@@ -28,8 +26,7 @@ navbar = [
         {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php'},
         {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html'},
         {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/'},
-        {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true'},
-        {name: 'Admin', href: '/'+language+'/admin/index', loggedIn: true}
+        {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true'}
     ]},
     {divider: true},
     {name: 'Login', href: '/'+language+'/login.html', loggedIn: false},
@@ -44,16 +41,14 @@ navbar = [
 {% if language == 'de' %}
     {% set
     navbar = [
+        {name: 'Admin',loggedIn: true, children: [
+            {name: 'Devices', href: '/'+language+'/admin/devices'},  
+            {name: 'Users', href: '/'+language+'/admin/users'},
+            {name: 'Roles', href: '/'+language+'/admin/roles'}
+        ]},
         {name: 'Documentation', horizontal: true, children: [
-            {name: 'Controller', children: [
-                {name: 'Manual Control', href: '/'+language+'/about'},
-                {name: 'Digital Demo-Board', href: '/'+language+'/about'},
-                {name: 'PSOC', href: '/'+language+'/about'},
-                {name: 'PLD', href: '/'+language+'/about'},
-                {name: 'Automaton Graph', href: '/'+language+'/about'}
-            ]},
             {name: 'Physische Systeme', children: [
-                {name: '3-Achs-Portal', href: '/'+language+'/about'},
+                {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
                 {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
                 {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
                 {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
@@ -68,11 +63,10 @@ navbar = [
             {name: 'Reservation', href: '/'+language+'/about'}
         ]},
         {name: 'Tools', children: [
-            {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php'},
-            {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html'},
-            {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/'},
-            {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true'},
-             {name: 'Admin', href: '/'+language+'/admin/index', loggedIn: true}
+            {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php', newwindow:true},
+            {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html', newwindow:true},
+            {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/', newwindow:true},
+            {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true', newwindow:true}
         ]},
         {divider: true},
         {name: 'Login', href: '/'+language+'/login.html?redirect='+page, loggedIn: false},
@@ -85,13 +79,24 @@ navbar = [
     ] %}
 {% endif %}
 
-
+<!-- {name: 'Controller', children: [
+                {name: 'Manual Control', href: '/'+language+'/about'},
+                {name: 'Digital Demo-Board', href: '/'+language+'/about'},
+                {name: 'PSOC', href: '/'+language+'/about'},
+                {name: 'PLD', href: '/'+language+'/about'},
+                {name: 'Automaton Graph', href: '/'+language+'/about'}
+            ]}, -->
 
 {%- macro renderItemText(item) -%}
     <div class="px-5">
         {% if item.href %}
-            <a href="{{ item.href }}">
-            {% endif %}
+           {% if item.newwindow%}
+              <a href="{{ item.href }}" target="_blank">
+           {% else %}
+              <a href="{{ item.href }}">
+           {% endif %}
+        {% endif %}
+        
             <span class="hover:font-bold bold-width text-center" data-text="{{ item.name }}">
                 {% if item.icon %}
                     <span class="material-symbols-rounded align-middle">{{ item.icon }}</span>
@@ -104,6 +109,7 @@ navbar = [
         {% endif %}
     </div>
 {%- endmacro -%}
+s
 {%- macro renderItem(item) -%}
     {%- if item.divider %}
         <span class="bg-white w-px h-6 mr-2"></span>
@@ -145,4 +151,4 @@ navbar = [
         </div>
     </div>
 </header>
-<div class="mt-14"></div>
+<div class="mt-8"></div>

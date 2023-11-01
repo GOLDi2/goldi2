@@ -4,18 +4,44 @@
         {{ caller() }}
     </div>
 {% endmacro %}
+
 {% macro topbar(title) %}
-    <div class="h-12 p-1 bg-primary-50 shadow-l fixed flex flex-row justify-end right-0 left-72">
-        {{ caller() }}
+
+    <div class="h-12 p-1 bg-primary-600 shadow-l fixed flex flex-row text-left right-0 left-0">   
+        <div class=" text-ellipsis text-white text-4xl text-left h-12 w-80">
+            Admin
+        </div>   
+        <div class ="grow">
+
+        </div>
+
+        <div class="flex items-center px-10 text-primary-50 z-0">
+            <div class="hover:font-bold py-2 dropdown">
+                <div class="absolute w-max -z-10 -mt-10 font-normal">
+                    <div class=" rounded-xl flex flex-col pt-20">
+                        {{ caller() }}
+                        <span class="h-2"/>
+                    </div>
+                </div>
+                <div class="px-5">             
+                        <span class="hover:font-bold bold-width text-center">
+                            Add
+                        </span>      
+                </div>
+            </div>
+        </div>
+                   
     </div>
+    
 {% endmacro %}
 {% macro element(language, href) %}
     {% set href="/"+language+href %}
     {{ caller() }}
 {% endmacro %}
+
 {% macro content() %}
-    <div class="flex-grow flex flex-col mt-16 my-4 mb-4 items-center">
-        <div class="w-full">
+    <div class="flex-grow flex flex-col mt-16 my-4 mb-4 items-center">    
+            <div class="bg-primary-50 rounded-3xl p-5 lg:w-300 shadow-xl text-center">
         {{ caller() }}
         </div>
     </div>

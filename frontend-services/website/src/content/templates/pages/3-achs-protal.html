@@ -1,0 +1,107 @@
+{% import "components/elements.html" as elements %}
+{% set items = [{input_var: 'X-Achse: Kran ist rechts (Low-aktiv)'}, 
+                {input_var: 'X-Achse: Kran ist links (Low-Aktiv) 	'},
+                {input_var: 'X-Achse: Kran am Referenzpunkt (Low-Aktiv)'},
+                {input_var: 'Y-Achse: Kran ist hinten (Low-Aktiv)'},
+                {input_var: 'Y-Achse: Kran ist vorn (Low-Aktiv)'},
+                {input_var: 'Y-Achse: Kran am Referenzpunkt (Low-Aktiv)'},
+                {input_var: 'Z-Achse: Kran ist oben (Low-Aktiv)'},
+                {input_var: 'Z-Achse: Kran ist unten (Low-Aktiv)'},
+                {input_var: 'Näherungssensor (Hall-Sensor)'},
+                {input_var: 'Benutzerknopf'},
+                
+                {output_var: 'Kran nach +X (rechts) fahren'},
+                {output_var: 'Kran nach -X (links) fahren'},
+                {output_var: 'Kran nach +Y (hinten) fahren'},
+                {output_var: 'Kran nach -Y (vorn) fahren'},
+                {output_var: 'Kran nach +Z (oben) fahren'},
+                {output_var: 'Kran nach -Z (unten) fahren'},
+                {output_var: 'Elektromagneten ein-/ausschalten'}                  
+] %}
+
+{% set
+    text = {
+        heading: '3-Achs-Protal',
+        description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, neque voluptas. Iusto culpa nostrum mollitia possimus odio fugiat ratione perferendis maxime, nobis quo, ad cum sint, ipsam quam excepturi expedita!'
+   
+    } %}
+
+{% if language=='de' %}
+{% set
+    text = {
+        heading: '3-Achs-Protal',
+        description: 'Mit dem Model 3-Achs-Portal wird ein Roboter zur Weitergabe von Werkstücken 
+        im dreidimensionalen Raum simuliert. Der Portalroboter kann mit den 
+        drei translatorischen Bewegungsachsen und dem elektromagnetischen Greifer
+        metallische Werkstücke aufnehmen und in dem quaderförmigen Arbeitsbereich umsetzen. 
+        So können zum Beispiel Werkstücke von dem Werkstückmagazin zum Ablageplatz bewegt 
+        werden. Mithilfe der Software-Endschalter kann die Bewegung in die drei Richtungen 
+        begrenzt werden. Außerdem besitzt das Model auch Hardware-Endschalter um eine Beschädigung 
+        durch Programmierfehler zu verhindern. Wird einer von diesen betätigt, wird die Bewegung 
+        entlang der betreffenden Achse gestoppt und nur die Aktivierung in die Gegenrichtung 
+        ermöglicht. Der Greifer kann in +Z-Richtung bewegt werden und besitzt einen Elektromagneten 
+        mit dem die metallischen Werkstücke durch Aktivierung aufgenommen werden. Wenn nach den 
+        Bewegungen in X- und Y-Richtung der Greifer sich über der Zielposition befindet, kann er 
+        in -Z-Richtung abgesengt werden. Das Werkstück wird durch Deaktivierung des Elektromagneten 
+        abgelegt.',
+
+        pinout: 'Pinout',
+        input: 'Eingangsvariablen/Sensoren',
+        output: 'Ausgangsvariablen/Aktoren'
+
+   
+    } %}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+    <!-- 3-Achs-Portal Überschrift und kurze Vorstellung -->
+    <div class= "flex-grow flex flex-col mt-16 my-4 mb-4 items-center">
+        <div class="mx-auto flex justify-center">
+            <div class=" px-10 space-y-5 text-center">
+                <div class="text-4xl font-bold text-primary-700 text-left">
+                    {{ text.heading }}
+                </div>
+                <div class="h-line h-line my-5"></div>
+                <div class="bg-primary-50 rounded-3xl p-5 lg:w-300 shadow-xl text-justify">
+                    {{ text.description }}
+                </div>
+               
+                
+
+                <div class="text-2xl font-bold text-primary-700 text-left">
+                    {{text.pinout}}
+                </div>
+                <div class="bg-primary-50 rounded-3xl p-5 lg:w-300 shadow-xl grid md:grid-cols-2">
+                     
+                     <div>
+                        <div class="text-2xl font-bold text-primary-700 text-left">
+                            {{text.input}}
+                        </div>
+                        <ul class="list-inside  text-left">
+                            {% for item in items %}
+                               <li>{{ item.input_var }}</li>
+                            {% endfor %}
+                        </ul> 
+                     </div>
+                     <div>
+                        <div class="text-2xl font-bold text-primary-700 text-left">
+                            {{text.output}}
+                        </div>
+                        <ul class="list-inside  text-left ">
+                            {% for item in items %}
+                               <li>{{ item.output_var }}</li>
+                            {% endfor %}
+                        </ul> 
+                     </div>
+                </div>
+                    
+        
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex-grow"></div>
+{% endblock %}
