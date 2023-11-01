@@ -14,23 +14,34 @@ export function experiment_router(
   _logger: winston.Logger
 ) {
   async function experiment(req: Request, res: Response, _next: NextFunction) {
+    const templateUrl = req.query.template;
+
     // TODO: maybe check somewhere else and return a specific page experiment_401.html
     if (!req.user) {
       return renderPage("experiment", language, res, req.user);
     }
 
-    let experiment: Partial<ExperimentServiceTypes.Experiment<"request">> = {};
+    let experiment:
+      | Partial<ExperimentServiceTypes.Experiment<"request">>
+      | undefined;
+    if (typeof templateUrl === "string") {
+      experiment = {
+        ...(await req.apiClient.getTemplate(templateUrl)).configuration,
+        status: "running",
+      };
+    }
 
     if (req.method === "GET") {
       try {
-        experiment = await buildSimpleExperiment(req);
+        if (!experiment) experiment = await buildSimpleExperiment(req);
       } catch (e) {
         //ignore
       }
     }
 
     if (req.method === "POST") {
-      experiment = JSON.parse(req.body.experiment);
+      if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
+      if (!experiment) throw new Error("No experiment provided");
       experiment.status = "running";
       console.log(JSON.stringify(experiment, null, 2));
       const response = await req.apiClient.createExperiment(
@@ -65,8 +76,12 @@ export function experiment_router(
     async function getPspuBpuGroup() {
       const devices = await req.apiClient.listDevices();
       const deviceGroups = devices.filter((d) => d.type === "group");
-      const pspuGroupUrl = deviceGroups.find((d) => d.name === "pspu")?.url;
-      const bpuGroupUrl = deviceGroups.find((d) => d.name === "bpu")?.url;
+      const pspuGroupUrl = deviceGroups.find(
+        (d) => d.name.toLowerCase() === "pspu"
+      )?.url;
+      const bpuGroupUrl = deviceGroups.find(
+        (d) => d.name.toLowerCase() === "bpu"
+      )?.url;
       if (!pspuGroupUrl) {
         throw new Error("Could not find pspu group");
       }
@@ -92,6 +107,8 @@ export function experiment_router(
     _next: NextFunction,
     experiment: ExperimentServiceTypes.Experiment<"response">
   ) {
+    const display = req.query.display ?? "link";
+
     if (experiment.status !== "setup") {
       throw new Error("Experiment is not in setup phase");
     }
@@ -119,6 +136,7 @@ export function experiment_router(
     return renderPage("experiment-setup", language, res, req.user, {
       experiment,
       instances,
+      display
     });
   }
 

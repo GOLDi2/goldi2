@@ -1,7 +1,7 @@
 {
-  "name": "ecp",
-  "dockerName": "ecp",
-  "description": "Experiment Control Panel",
+  "name": "fsm-interpreter",
+  "dockerName": "fsm-interpreter",
+  "description": "Finite State Machine Interpreter",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",

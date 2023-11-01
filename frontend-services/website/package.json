@@ -13,8 +13,8 @@
   ],
   "scripts": {
     "start": "npm run start:prod",
-    "start:dev": "tsc-watch --onSuccess \"node app/index.js\"",
-    "start:prod": "node dist/index.js",
+    "start:dev": "tsc-watch --onSuccess \"node --inspect=9229 app/index.js\"",
+    "start:prod": "node app/index.js",
     "build": "npm run build:compile",
     "build:compile": "node build.js",
     "test": "mocha -r ts-node/register 'test/**/*.ts'",

@@ -57,9 +57,9 @@ def evaluateActuators(
         userError("XMotorLeft and XMotorRight are both high")
         hal.XMotor.set(0)
     elif isHigh(xMotorLeft):
-        hal.XMotor.set(-255)
-    elif isHigh(xMotorRight):
         hal.XMotor.set(255)
+    elif isHigh(xMotorRight):
+        hal.XMotor.set(-255)
     else:
         hal.XMotor.set(0)
 

@@ -114,7 +114,16 @@ async function handle_logout(req: Request, res: Response, _next: NextFunction) {
 app.use('/', asyncHandler(async (req: Request, res, next) => {
     req.apiClient = new APIClient(config.API_URL)
     req.user = undefined
-    if (req.cookies.token) {
+
+    // handle token query parameter
+    if (req.query.token && typeof req.query.token === "string") {
+        req.apiClient.accessToken = req.query.token;
+        res.cookie("token", req.query.token, {
+            secure: true,
+            httpOnly: true,
+        });
+        req.user = {...await req.apiClient.getIdentity(), token: req.query.token};
+    } else if (req.cookies.token) {
         try {
             req.apiClient.accessToken = req.cookies.token
             req.user = {

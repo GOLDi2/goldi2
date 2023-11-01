@@ -7,7 +7,7 @@ import { FileUpload } from "./file";
 import { Webcam } from "./webcam";
 
 let device_url = "";
-const client = new APIClient("https://api.goldi-labs.de");
+const client = new APIClient("https://api.dev.goldi-labs.de");
 const deviceHandler = new DeviceHandler();
 
 import style from "./styles.css";
@@ -60,8 +60,8 @@ export class App extends LitElement {
         }
       });
       // Send a message to the parent window
-      window.parent.postMessage("ecp-loaded", "*");
-      window.opener.postMessage("ecp-loaded", "*");
+      if (window.parent) window.parent.postMessage("ecp-loaded", "*");
+      if (window.opener) window.opener.postMessage("ecp-loaded", "*");
     }
   }
 
@@ -93,8 +93,8 @@ export class App extends LitElement {
 
     // Wait for a second
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    window.parent.postMessage("ecp-authorized", "*");
-    window.opener.postMessage("ecp-authorized", "*");
+    if (window.parent) window.parent.postMessage("ecp-authorized", "*");
+    if (window.opener) window.opener.postMessage("ecp-authorized", "*");
   }
 
   render() {
@@ -106,9 +106,9 @@ export class App extends LitElement {
         }}"
       >
         <div class="bg-primary-900 w-full h-12"></div>
-        <div class="grow flex w-full items-center">
-          <div class="flex-1">${this.webcam}</div>
-          <div class="flex-1 flex flex-col">
+        <div class="grow flex w-full items-center flex-wrap">
+          <div class="flex-1 shrink-0 basis-96">${this.webcam}</div>
+          <div class="flex-1 shrink-0 basis-96 flex flex-col">
             <div class="p-4">${this.file}</div>
             <div class="p-4">${this.electrical}</div>
           </div>
