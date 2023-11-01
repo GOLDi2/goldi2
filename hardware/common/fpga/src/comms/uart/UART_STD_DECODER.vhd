@@ -94,16 +94,16 @@ architecture RTL of UART_STD_DECODER is
     
     --****FUNCTION****
     function getParity(data :   std_logic_vector) return std_logic is
-        variable parity_bit :   std_logic := '0';
+        variable l_parity_bit :   std_logic := '0';
     begin
         for i in data'range loop
-            parity_bit := parity_bit xor data(i);
+            l_parity_bit := l_parity_bit xor data(i);
         end loop;
 
         if(g_even_pol) then
-            return parity_bit;
+            return l_parity_bit;
         else
-            return not parity_bit;
+            return not l_parity_bit;
         end if;
 
     end function;

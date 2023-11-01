@@ -54,7 +54,7 @@ architecture TB of I2C_C_DRIVER_TB is
             p_rdword_tready : in    std_logic;
             p_rdword_tvalid : out   std_logic;
             p_rdword_tdata  : out   std_logic_vector(7 downto 0);
-            p_i2c_scl       : out   std_logic;
+            p_i2c_scl_o     : out   std_logic;
             p_i2c_sda_i     : in    std_logic;
             p_i2c_sda_o     : out   std_logic
         );
@@ -77,7 +77,7 @@ architecture TB of I2C_C_DRIVER_TB is
     signal p_tdword_tdata   :   std_logic_vector(7 downto 0) := (others => '0');
     signal p_rdword_tvalid  :   std_logic := '0';
     signal p_rdword_tdata   :   std_logic_vector(7 downto 0) := (others => '0');
-    signal p_i2c_scl        :   std_logic := '0';
+    signal p_i2c_scl_o      :   std_logic := '0';
     signal p_i2c_sda_i      :   std_logic := '0';
     signal p_i2c_sda_o      :   std_logic := '0';
     --Testbench
@@ -108,7 +108,7 @@ begin
         p_rdword_tready => p_rdword_tready,
         p_rdword_tvalid => p_rdword_tvalid,
         p_rdword_tdata  => p_rdword_tdata,
-        p_i2c_scl       => p_i2c_scl,
+        p_i2c_scl_o     => p_i2c_scl_o,
         p_i2c_sda_i     => p_i2c_sda_i,
         p_i2c_sda_o     => p_i2c_sda_o
     );
@@ -150,8 +150,8 @@ begin
         assert(p_rdword_tdata = (p_rdword_tdata'range => '0'))
             report "ID04: Test reset - expecting p_rdword_tdata = x00"
             severity error;
-        assert(p_i2c_scl = '1')
-            report "ID05: Test reset - expecting p_i2c_scl = '1'"
+        assert(p_i2c_scl_o = '1')
+            report "ID05: Test reset - expecting p_i2c_scl_o = '1'"
             severity error;
         assert(p_i2c_sda_o = '1')
             report "ID06: Test reset - expecting p_i2c_sda_o = '1'"
@@ -304,8 +304,8 @@ begin
         assert(p_i2c_sda_o = '0')
             report "ID18: Test data transfer and stop - expecting p_i2c_sda_o = '0'"
             severity error;
-        assert(p_i2c_scl = '0')
-            report "ID19: Test data transfer and stop - epxecting p_i2c_scl = '0'";
+        assert(p_i2c_scl_o = '0')
+            report "ID19: Test data transfer and stop - epxecting p_i2c_scl_o = '0'";
         wait for post_hold;
         wait for 250*clk_period;
 

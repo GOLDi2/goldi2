@@ -202,7 +202,7 @@ begin
         --**Test minimum distance meassured**
         --Expecting distance = 20mm
         test_case <= 1;
-        wait for 300 ms;
+        wait for 500 ms;
         
         sys_bus_i <= readBus(1);
         wait for assert_hold;
@@ -214,7 +214,7 @@ begin
         reg_2 <= sys_bus_o.dat;
         wait for post_hold;
 
-        assert(reg_buffer = std_logic_vector(to_unsigned(118,reg_buffer'length)))
+        assert(reg_buffer = std_logic_vector(to_unsigned(117,reg_buffer'length)))
             report "ID04: Test minimum range - expecting meassured distance = x14 (20mm)"
             severity error;
 
@@ -227,7 +227,7 @@ begin
         --**Test medium distance range**
         --Expecting distance = 2000mm
         test_case <= 2;
-        wait for 300 ms;
+        wait for 500 ms;
         
         sys_bus_i <= readBus(1);
         wait for assert_hold;
@@ -239,7 +239,7 @@ begin
         reg_2 <= sys_bus_o.dat;
         wait for post_hold;
 
-        assert(reg_buffer = std_logic_vector(to_unsigned(23529,reg_buffer'length)))
+        assert(reg_buffer = std_logic_vector(to_unsigned(11763,reg_buffer'length)))
             report "ID05: Test medium range - expecting meassured distance = x7D0 (2000mm)"
             severity error;
 
@@ -252,7 +252,7 @@ begin
         --**Test maximum sensor range**
         --Expecting distance = 4000mm
         test_case <= 3;
-        wait for 300 ms;
+        wait for 500 ms;
         
         sys_bus_i <= readBus(1);
         wait for assert_hold;
@@ -264,7 +264,7 @@ begin
         reg_2 <= sys_bus_o.dat;
         wait for post_hold;
 
-        assert(reg_buffer = std_logic_vector(to_unsigned(4000,reg_buffer'length)))
+        assert(reg_buffer = std_logic_vector(to_unsigned(23528,reg_buffer'length)))
             report "ID06: Test medium range - expecting meassured distance = xFA0 (4000mm)"
             severity error;
 

@@ -70,18 +70,18 @@ architecture TB of COMMS_TB is
 
     component REGISTER_UNIT
         generic(
-            ADDRESS     :   natural := 1;
-            DEF_VALUE   :   data_word := reg_unit_d_default 
+            g_address   :   natural := 1;
+            g_def_value :   data_word := reg_unit_d_default 
         );
         port(
             clk         : in    std_logic;
             rst         : in    std_logic;
             sys_bus_i   : in    sbus_in;
             sys_bus_o   : out   sbus_out;
-            data_in     : in    data_word;
-            data_out    : out   data_word;
-            read_stb    : out   std_logic;
-            write_stb   : out   std_logic
+            p_data_in   : in    data_word;
+            p_data_out  : out   data_word;
+            p_read_stb  : out   std_logic;
+            p_write_stb : out   std_logic
         );
     end component;
 
@@ -97,12 +97,12 @@ architecture TB of COMMS_TB is
             rst             : in    std_logic;
             sys_bus_i       : in    sbus_in;
             sys_bus_o       : out   sbus_out;
-            data_in         : in    data_word;
-            tag_in          : in    tag_word;
-            data_out        : out   data_word;
-            tag_out         : out   tag_word;
-            read_stb        : out   std_logic;
-            write_stb       : out   std_logic
+            p_data_in       : in    data_word;
+            p_tag_in        : in    tag_word;
+            p_data_out      : out   data_word;
+            p_tag_out       : out   tag_word;
+            p_read_stb      : out   std_logic;
+            p_write_stb     : out   std_logic
         );
     end component;
 
@@ -160,18 +160,18 @@ begin
 
     DUT_MEMORY_1 : REGISTER_UNIT
     generic map(
-        ADDRESS         => 15,
-        DEF_VALUE       => std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH)) 
+        g_address       => 15,
+        g_def_value     => std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH)) 
     )
     port map(
         clk             => clock,
         rst             => reset,
         sys_bus_i       => master_bus_o,
         sys_bus_o       => sys_bus_o(0),
-        data_in         => data_in,
-        data_out        => data_out,
-        read_stb        => open,
-        write_stb       => open
+        p_data_in       => data_in,
+        p_data_out      => data_out,
+        p_read_stb      => open,
+        p_write_stb     => open
     );
 
 
@@ -186,12 +186,12 @@ begin
         rst             => reset,
         sys_bus_i       => master_bus_o,
         sys_bus_o       => sys_bus_o(1),
-        data_in         => tdata_in,
-        tag_in          => ttag_in,
-        data_out        => tdata_out,
-        tag_out         => ttag_out,
-        read_stb        => open,
-        write_stb       => open
+        p_data_in       => tdata_in,
+        p_tag_in        => ttag_in,
+        p_data_out      => tdata_out,
+        p_tag_out       => ttag_out,
+        p_read_stb      => open,
+        p_write_stb     => open
     );
 
     master_bus_i <= reduceBusVector(sys_bus_o);
