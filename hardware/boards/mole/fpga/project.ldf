@@ -6,31 +6,37 @@
         <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
+        <Source name="src/common/libraries/GOLDI_COMM_STANDARD.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
         <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/libraries/GOLDI_COMM_STANDARD.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/GOLDI_CROSSBAR_DEFAULT.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/GOLDI_CROSSBAR_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/SPI_TO_BUS.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/BUS_CONVERTER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/goldi_spi/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/PWM_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/LED_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/io_management/IO_CROSSBAR.vhd" type="VHDL" type_short="VHDL">
@@ -48,13 +54,10 @@
         <Source name="src/common/io_management/TRIS_BUFFER_ARRAY.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/GPIO_DRIVER_ARRAY.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/LED_DRIVER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/PWM_GENERATOR_UNIT.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="constraints.lpf" type="Logic Preference" type_short="LPF">

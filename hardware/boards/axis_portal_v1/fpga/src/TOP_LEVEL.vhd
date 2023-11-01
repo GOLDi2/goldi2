@@ -23,19 +23,25 @@
 -- Revision V1.01.00 - Reduction of model 
 -- Additional Comments: Redundant modules in the system are eliminated
 --                      to simplify the model
+--
+-- Revision V4.00.00 - Moduel refactor
+-- Additional Comments: Change to the entity names, generic and port signal 
+--                      names to follow the V4.00.00 naming convention. Use 
+--                      of the updated GOLDI SPI communication modules.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! MachX02 library
+library machxo2;
+use machxo2.all;
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
---! MachX02 library
-library machxo2;
-use machxo2.all;
+
 
 
 
@@ -48,11 +54,11 @@ use machxo2.all;
 entity TOP_LEVEL is
     port(
         --General
-        ClockFPGA   : in    std_logic;                                        --! External system clock
+        ClockFPGA   : in    std_logic;                                          --! External system clock
         FPGA_nReset : in    std_logic;                                          --! Active high reset
         --Communication
         --SPI
-        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock (max: system_clk/4)
+        SPI0_SCLK   : in    std_logic;                                          --! SPI - Serial clock
         SPI0_MOSI   : in    std_logic;                                          --! SPI - Master out / Slave in
         SPI0_MISO   : out   std_logic;                                          --! SPI - Master in / Slave out
         SPI0_nCE0   : in    std_logic;                                          --! SPI - Active low chip enable
@@ -64,9 +70,10 @@ end entity TOP_LEVEL;
 
 
 
+--! GOLDi Axis Portal V1 Top Level architecture
 architecture RTL of TOP_LEVEL is
     
---****INTRENAL SIGNALS****
+    --****INTRENAL SIGNALS****
     --General
     signal clk                  :   std_logic;
     signal rst                  :   std_logic;
@@ -75,7 +82,6 @@ architecture RTL of TOP_LEVEL is
     signal spi0_sclk_sync       :   std_logic;
     signal spi0_mosi_sync       :   std_logic;
     signal spi0_nce0_sync       :   std_logic;
-    signal spi0_ce0             :   std_logic;
     --System Internal communications
     signal master_bus_o         :   mbus_out;
     signal master_bus_i   	    :   mbus_in;
@@ -84,7 +90,8 @@ architecture RTL of TOP_LEVEL is
     --System memory
     constant ctrl_default       :   data_word :=  x"10";
     signal ctrl_data            :   data_word;
-        alias encoder_ref       :   std_logic is ctrl_data(0);
+        alias encoder_ref_x     :   std_logic is ctrl_data(0);
+        alias encoder_ref_y     :   std_logic is ctrl_data(1);
     --External data interface
     signal system_io_i        :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal system_io_o        :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
@@ -92,8 +99,8 @@ architecture RTL of TOP_LEVEL is
     --Sensor data
     signal sensor_data_vector   :   data_word_vector(1 downto 0);
     --Incremental Encoder 
-    signal x_encoder_ref        :   std_logic;
-    signal y_encoder_ref        :   std_logic;
+    signal x_encoder_rst        :   std_logic;
+    signal y_encoder_rst        :   std_logic;
 
 
 begin
@@ -122,54 +129,54 @@ begin
     --Synchronization of Reset input
     RESET_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => '0',
-        io_i    => FPGA_nReset,
-        io_sync => FPGA_nReset_sync
+        clk         => clk,
+        rst         => '0',
+        p_io_i      => FPGA_nReset,
+        p_io_sync   => FPGA_nReset_sync
     );
+    
+    --Reset routing for use in the models
     rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
-
+    --Reset routing for use in the test Breakoutboard
+    --rst <= not FPGA_nReset_sync;
 
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_SCLK,
-        io_sync => spi0_sclk_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_SCLK,
+        p_io_sync   => spi0_sclk_sync
     );
 
     MOSI_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_MOSI,
-        io_sync => spi0_mosi_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_MOSI,
+        p_io_sync   => spi0_mosi_sync
     );
 
     NCE0_SYNC : entity work.SYNCHRONIZER
     port map(
-        clk     => clk,
-        rst     => rst,
-        io_i    => SPI0_nCE0,
-        io_sync => spi0_nce0_sync
+        clk         => clk,
+        rst         => rst,
+        p_io_i      => SPI0_nCE0,
+        p_io_sync   => spi0_nce0_sync
     );
-    
-    --Negate nce for use in comm modules
-    spi0_ce0 <= not spi0_nce0_sync;
 
 
-    --SPI comm modules
-    SPI_BUS_COMMUNICATION : entity work.SPI_TO_BUS
+    --SPI communication adaptor
+    SPI_BUS_COMMUNICATION : entity work.GOLDI_SPI_SMODULE
     port map(
         clk             => clk,
         rst             => rst,
-        ce              => spi0_ce0,
-        sclk            => spi0_sclk_sync,
-        mosi            => spi0_mosi_sync,
-        miso            => SPI0_MISO,
-        master_bus_o    => master_bus_o,
-        master_bus_i    => master_bus_i
+        p_spi_nce       => spi0_nce0_sync,
+        p_spi_sclk      => spi0_sclk_sync,
+        p_spi_mosi      => spi0_mosi_sync,
+        p_spi_miso      => SPI0_MISO,
+        p_master_bus_o  => master_bus_o,
+        p_master_bus_i  => master_bus_i
     );
     -----------------------------------------------------------------------------------------------
 
@@ -180,18 +187,18 @@ begin
     --Register for configuration applications
     SYSTEM_CONFIG_REG : entity work.REGISTER_UNIT
     generic map(
-        ADDRESS         => CONFIG_REG_ADDRESS,
-        DEF_VALUE       => ctrl_default
+        g_address   => CONFIG_REG_ADDRESS,
+        g_def_value => ctrl_default
     )
     port map(
-        clk             => clk,
-        rst             => rst,
-        sys_bus_i       => master_bus_o,
-        sys_bus_o       => sys_bus_o(0),
-        data_in         => ctrl_data,
-        data_out        => ctrl_data,
-        read_stb        => open,
-        write_stb       => open
+        clk         => clk,
+        rst         => rst,
+        sys_bus_i   => master_bus_o,
+        sys_bus_o   => sys_bus_o(0),
+        p_data_in   => ctrl_data,
+        p_data_out  => ctrl_data,
+        p_read_stb  => open,
+        p_write_stb => open
     );
 
 
@@ -201,7 +208,7 @@ begin
     BUS_MUX : process(clk)
     begin
         if(rising_edge(clk)) then
-            master_bus_i <= reduceBusVector(sys_bus_o);
+            master_bus_i <= reduceBusVector2(sys_bus_o);
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -214,7 +221,7 @@ begin
     --Routing IO formatted data between FPGA Pins ([io_i,io_o] <-> inout std_logic)
     FPGA_PIN_INTERFACE : entity work.TRIS_BUFFER_ARRAY
     generic map(
-        BUFF_NUMBER     => PHYSICAL_PIN_NUMBER
+        g_buff_number   => PHYSICAL_PIN_NUMBER
     )
     port map(
         clk             => clk,
@@ -234,24 +241,24 @@ begin
     --output data.
     ERROR_LIST : entity work.ERROR_DETECTOR 
     generic map(
-        ADDRESS         => ERROR_LIST_ADDRESS
+        g_address       => ERROR_LIST_ADDRESS
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(1),
-        sys_io_i        => system_io_i,
-        sys_io_o        => system_io_o   
+        p_sys_io_i      => system_io_i,
+        p_sys_io_o      => system_io_o   
     );
 
 
     --Masking of actuation data to prevent damage to the physical system
     SYSTEM_PROTECTION : entity work.ACTUATOR_MASK
     port map(
-        sys_io_i    => system_io_i,
-        sys_io_o    => system_io_o,
-        safe_io_out => system_io_o_safe
+        p_sys_io_i      => system_io_i,
+        p_sys_io_o      => system_io_o,
+        p_safe_io_o     => system_io_o_safe
     );
     -----------------------------------------------------------------------------------------------
 
@@ -261,19 +268,19 @@ begin
     -----------------------------------------------------------------------------------------------
     SENSOR_REGISTER : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS		=> SENSOR_REG_ADDRESS,
-        NUMBER_REGISTERS	=> getMemoryLength(9),
-        REG_DEFAULT_VALUES	=> setMemory(SENSORS_DEFAULT) 
+        g_address       => SENSOR_REG_ADDRESS,
+        g_reg_number    => getMemoryLength(9),
+        g_def_values	=> setMemory(SENSORS_DEFAULT) 
     )
     port map(
-        clk				    => clk,
-        rst			        => rst,
-        sys_bus_i		    => sys_bus_i,
-        sys_bus_o		    => sys_bus_o(2),
-        data_in		        => sensor_data_vector,
-        data_out	        => open,
-        read_stb	        => open,
-        write_stb           => open
+        clk				=> clk,
+        rst			    => rst,
+        sys_bus_i		=> sys_bus_i,
+        sys_bus_o		=> sys_bus_o(2),
+        p_data_in		=> sensor_data_vector,
+        p_data_out	    => open,
+        p_read_stb	    => open,
+        p_write_stb     => open
     );
 
     --Recover memory data form io_vector
@@ -294,44 +301,44 @@ begin
 
     --****INCREMENTAL ENCODERS****
     -----------------------------------------------------------------------------------------------
-    X_ENCODER : entity work.INC_ENCODER
+    X_ENCODER : entity work.ENCODER_SMODULE
     generic map(
-        ADDRESS     => X_ENCODER_ADDRESS,
-        INDEX_RST   => X_ENCODER_RST_TYPE,
-        INVERT      => X_ENCODER_INVERT
+        g_address   => X_ENCODER_ADDRESS,
+        g_index_rst => X_ENCODER_RST_TYPE,
+        g_invert    => X_ENCODER_INVERT
     )
     port map(
         clk         => clk,
-        rst         => x_encoder_ref,
+        rst         => x_encoder_rst,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o(4),
-        channel_a   => system_io_i(11),
-        channel_b   => system_io_i(12),
-        channel_i   => system_io_i(13)
+        p_channel_a => system_io_i(11),
+        p_channel_b => system_io_i(12),
+        p_channel_i => system_io_i(13)
     );
     --User accessible rst to zero encoder acumulator
-    x_encoder_ref <= rst or encoder_ref;
+    x_encoder_rst <= rst or encoder_ref_x;
     --Ground io_o to ensure input configuration
     system_io_o(13 downto 11) <= (others => gnd_io_o);
 
 
-    Y_ENCODER : entity work.INC_ENCODER
+    Y_ENCODER : entity work.ENCODER_SMODULE
     generic map(
-        ADDRESS     => Y_ENCODER_ADDRESS,
-        INDEX_RST   => Y_ENCODER_RST_TYPE,
-        INVERT      => Y_ENCODER_INVERT
+        g_address   => Y_ENCODER_ADDRESS,
+        g_index_rst => Y_ENCODER_RST_TYPE,
+        g_invert    => Y_ENCODER_INVERT
     )
     port map(
         clk         => clk,
-        rst         => y_encoder_ref,
+        rst         => y_encoder_rst,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o(5),
-        channel_a   => system_io_i(14),
-        channel_b   => system_io_i(15),
-        channel_i   => system_io_i(16)
+        p_channel_a => system_io_i(14),
+        p_channel_b => system_io_i(15),
+        p_channel_i => system_io_i(16)
     );
     --User accesible rst to zero encoder acumulator
-    y_encoder_ref <= rst or encoder_ref;
+    y_encoder_rst <= rst or encoder_ref_y;
     --Ground io_o to ensure input configuration
     system_io_o(16 downto 14) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
@@ -340,83 +347,83 @@ begin
 
     --****MAIN ACTUATORS****
     -----------------------------------------------------------------------------------------------
-    GPIO_MANAGEMENT : entity work.GPIO_DRIVER_ARRAY
+    GPIO_MANAGEMENT : entity work.GPIO_SMODULE
     generic map(
-        ADDRESS         => GPIO_DRIVER_ADDRESS,
-        GPIO_NUMBER     => 2
+        g_address       => GPIO_DRIVER_ADDRESS,
+        g_gpio_number   => 2
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(3),
-        gpio_i_vector   => system_io_i(1 downto 0),
-        gpio_o_vector   => system_io_o(1 downto 0)
+        p_gpio_i_vector => system_io_i(1 downto 0),
+        p_gpio_o_vector => system_io_o(1 downto 0)
     );
 
 
-    X_AXIS_MOTOR : entity work.DC_MOTOR_DRIVER
+    X_AXIS_MOTOR : entity work.HBRIDGE_SMODULE
     generic map(
-        ADDRESS		=> X_MOTOR_ADDRESS,
-        CLK_FACTOR	=> X_MOTOR_FREQUENCY
+        g_address		=> X_MOTOR_ADDRESS,
+        g_clk_factor    => X_MOTOR_FREQUENCY
     )
     port map(
-        clk			=> clk,
-        rst			=> rst,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(6),
-        DC_enb		=> system_io_o(17),
-        DC_out_1	=> system_io_o(18),
-        DC_out_2	=> system_io_o(19)
+        clk			    => clk,
+        rst			    => rst,
+        sys_bus_i	    => sys_bus_i,
+        sys_bus_o	    => sys_bus_o(6),
+        p_hb_enb	    => system_io_o(17),
+        p_hb_out_1	    => system_io_o(18),
+        p_hb_out_2	    => system_io_o(19)
     );
 
 
-    Y_AXIS_MOTOR : entity work.DC_MOTOR_DRIVER
+    Y_AXIS_MOTOR : entity work.HBRIDGE_SMODULE
     generic map(
-        ADDRESS		=> Y_MOTOR_ADDRESS,
-        CLK_FACTOR	=> Y_MOTOR_FREQUENCY
+        g_address		=> Y_MOTOR_ADDRESS,
+        g_clk_factor	=> Y_MOTOR_FREQUENCY
     )
     port map(
-        clk			=> clk,
-        rst			=> rst,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(7),
-        DC_enb		=> system_io_o(20),
-        DC_out_1	=> system_io_o(22),
-        DC_out_2	=> system_io_o(21)
+        clk			    => clk,
+        rst			    => rst,
+        sys_bus_i	    => sys_bus_i,
+        sys_bus_o	    => sys_bus_o(7),
+        p_hb_enb		=> system_io_o(20),
+        p_hb_out_1	    => system_io_o(22),
+        p_hb_out_2	    => system_io_o(21)
     );
 
 
-    Z_AXIS_MOTOR : entity work.DC_MOTOR_DRIVER
+    Z_AXIS_MOTOR : entity work.HBRIDGE_SMODULE
     generic map(
-        ADDRESS		=> Z_MOTOR_ADDRESS,
-        CLK_FACTOR	=> Z_MOTOR_FREQUENCY
+        g_address		=> Z_MOTOR_ADDRESS,
+        g_clk_factor	=> Z_MOTOR_FREQUENCY
     )
     port map(
-        clk			=> clk,
-        rst			=> rst,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(8),
-        DC_enb		=> system_io_o(23),
-        DC_out_1	=> system_io_o(24),
-        DC_out_2	=> system_io_o(25)
+        clk			    => clk,
+        rst			    => rst,
+        sys_bus_i	    => sys_bus_i,
+        sys_bus_o	    => sys_bus_o(8),
+        p_hb_enb		=> system_io_o(23),
+        p_hb_out_1	    => system_io_o(24),
+        p_hb_out_2	    => system_io_o(25)
     );
 
 
-    CLAW_MAGNET : entity work.EMAGNET_DRIVER
+    CLAW_MAGNET : entity work.EMAGNET_SMODULE
     generic map(
-        ADDRESS		=> EMAG_ADDRESS,
-        MAGNET_TAO	=> 0,
-        DEMAG_TIME	=> 0
+        g_address		=> EMAG_ADDRESS,
+        g_magnet_tao	=> 0,
+        g_demag_time	=> 0
     )
     port map(
-        clk			=> clk,
-        rst			=> rst,
-        sys_bus_i	=> sys_bus_i,
-        sys_bus_o	=> sys_bus_o(9),
-        em_enb		=> system_io_o(26),
-        em_out_1    => system_io_o(27),
-        em_out_2	=> open
+        clk			    => clk,
+        rst			    => rst,
+        sys_bus_i	    => sys_bus_i,
+        sys_bus_o	    => sys_bus_o(9),
+        p_em_enb		=> system_io_o(26),
+        p_em_out_1      => system_io_o(27),
+        p_em_out_2	    => open
     );
     -----------------------------------------------------------------------------------------------
 
@@ -424,78 +431,78 @@ begin
 
     --****LED MANAGEMENT****
     -----------------------------------------------------------------------------------------------
-    POWER_RED : entity work.LED_DRIVER
+    POWER_RED : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => PR_LED_ADDRESS,
-        CLK_FREQUENCY   => PR_LED_FREQUENCY,
-        INVERTED        => PR_LED_INVERTED
+        g_address       => PR_LED_ADDRESS,
+        g_clk_frequency => PR_LED_FREQUENCY,
+        g_inverted      => PR_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(10),
-        led_output      => system_io_o(28)
+        p_led_output    => system_io_o(28)
     );
 
 
-    POWER_GREEN : entity work.LED_DRIVER
+    POWER_GREEN : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => PG_LED_ADDRESS,
-        CLK_FREQUENCY   => PG_LED_FREQUENCY,
-        INVERTED        => PG_LED_INVERTED
+        g_address       => PG_LED_ADDRESS,
+        g_clk_frequency => PG_LED_FREQUENCY,
+        g_inverted      => PG_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(11),
-        led_output      => system_io_o(29)
+        p_led_output    => system_io_o(29)
     );
 
 
-    ENVIRONMENT_RED : entity work.LED_DRIVER
+    ENVIRONMENT_RED : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => ER_LED_ADDRESS,
-        CLK_FREQUENCY   => ER_LED_FREQUENCY,
-        INVERTED        => ER_LED_INVERTED
+        g_address       => ER_LED_ADDRESS,
+        g_clk_frequency => ER_LED_FREQUENCY,
+        g_inverted      => ER_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(12),
-        led_output      => system_io_o(30)
+        p_led_output    => system_io_o(30)
     );
 
 
-    ENVIRONMENT_WHITE : entity work.LED_DRIVER
+    ENVIRONMENT_WHITE : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => EW_LED_ADDRESS,
-        CLK_FREQUENCY   => EW_LED_FREQUENCY,
-        INVERTED        => EW_LED_INVERTED
+        g_address       => EW_LED_ADDRESS,
+        g_clk_frequency => EW_LED_FREQUENCY,
+        g_inverted      => EW_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(13),
-        led_output      => system_io_o(31)
+        p_led_output    => system_io_o(31)
     );
 
 
-    ENVIRONMENT_GREEN : entity work.LED_DRIVER
+    ENVIRONMENT_GREEN : entity work.LED_SMODULE
     generic map(
-        ADDRESS         => EG_LED_ADDRESS,
-        CLK_FREQUENCY   => EG_LED_FREQUENCY,
-        INVERTED        => EG_LED_INVERTED
+        g_address       => EG_LED_ADDRESS,
+        g_clk_frequency => EG_LED_FREQUENCY,
+        g_inverted      => EG_LED_INVERTED
     )
     port map(
         clk             => clk,
         rst             => rst,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o(14),
-        led_output      => system_io_o(32)
+        p_led_output    => system_io_o(32)
     );
     -----------------------------------------------------------------------------------------------  
 
@@ -507,4 +514,4 @@ begin
 	-----------------------------------------------------------------------------------------------
 
 
-end architecture RTL;
+end architecture;

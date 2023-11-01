@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		00/00/2023
--- Design Name:		Board constants and configuration values -  
+-- Design Name:		Board constants and configuration values 
 -- Module Name:		GOLDI_MODUE_CONFIG
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -12,8 +12,11 @@
 -- Dependencies:	
 --
 -- Revisions:
--- Revision V0.00.00 - File Created
+-- Revision V1.00.00 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V4.00.00 - Change to PWM frequency
+-- Additional Comments: -
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -46,11 +49,11 @@ package GOLDI_MODULE_CONFIG is
 	--****MEMORY****
 	-----------------------------------------------------------------------------------------------
 	--Module Base Adderesses; Length based on a system_data_width = 8
-	constant CTRL_REG_ADDRESS		:	integer := 1;		 --Table length: 1
-    constant GPIO_BASE_ADDRESS      :   integer := 2;       --Table length: 64
-    constant PWM_BASE_ADDRESS       :   integer := 66;      --Table length: 10
-    constant PR_LED_ADDRESS         :   integer := 82;      --Table length: 1
-    constant PG_LED_ADDRESS         :   integer := 83;      --Table length: 1
+	constant CTRL_REG_ADDRESS		:	integer := 1;   --Table length: 1
+    constant GPIO_BASE_ADDRESS      :   integer := 2;   --Table length: 64
+    constant PWM_BASE_ADDRESS       :   integer := 66;  --Table length: 10
+    constant PR_LED_ADDRESS         :   integer := 82;  --Table length: 1
+    constant PG_LED_ADDRESS         :   integer := 83;  --Table length: 1
 	-----------------------------------------------------------------------------------------------
 
 
@@ -58,7 +61,7 @@ package GOLDI_MODULE_CONFIG is
     --****PWM DRIVERS****
     -----------------------------------------------------------------------------------------------
     --PWM Signal frequency in Hz
-    constant PWM_FREQUENCY          :   natural := 5000;
+    constant PWM_FREQUENCY          :   natural := 520;
     -----------------------------------------------------------------------------------------------
 
 
@@ -74,4 +77,4 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
 
     
-end package;
+end package GOLDI_MODULE_CONFIG;

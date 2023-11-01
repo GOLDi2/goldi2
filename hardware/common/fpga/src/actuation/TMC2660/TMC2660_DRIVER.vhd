@@ -3,7 +3,7 @@
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
--- Design Name:		TMC2660 Stepper motor driver control 
+-- Design Name:		TMC2660 Stepper motor driver control (legacy)
 -- Module Name:		TMC2660_DRIVER
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
@@ -15,7 +15,6 @@
 --                  -> REGISTER_TABLE.vhd
 --                  -> STREAM_FIFO.vhd
 --                  -> TMC2660_CONFIG_FIFO.vhd
---                  -> TMC2660_SD.vhd
 --                  -> TMC2660_SPI.vhd
 --
 -- Revisions:
@@ -25,11 +24,11 @@
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: -  
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -38,32 +37,64 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 
---! @brief
+--! @brief TMC2660 Stepper motor controller interface (V3.00.00)
 --! @details
+--! The TMC2660_SMODULE is a control interface for the stepper driver controller IC
+--! TMC2660. The IC integrates multiple features including a collision detection mechanism
+--! (StallGuard2), power consumption reduction system, micro-step interpolation, etc...
+--! 
+--! The TMC2660_SMODULE supplies the IC with the clock and enable signal needed to use the
+--! device. Additionaly, two interfaces used by the TMC2660 to communicate with external
+--! devices have been implemented; a SPI interface used to configure the device and a 
+--! step/direction interface to manage the step/mico-step cirtuitry driving the stepper motor.
+--!
+--! After reset or initialization the sub-module  loads the default configuration to the five 
+--! 20-bit registers of the driver using the SPI interface. The configuration data is set 
+--! through the "TMC2660_CONFIG" parameter formatted as 24-bit data words.
+--!
+--! After initialization the module is ready for normal operation. The first of 6 registers in the
+--! sub-module controls the movement direction. The second and third registers contain the 16-bit
+--! unsigned velocity value given in steps per second. These three registers control the
+--! step/direction interface.
+--!
+--! During operation the IC can be reconfigured or controlled through the SPI interface using the
+--! remaining 3 registers. The registers contain the data to be transfered to the IC and the response
+--! after a SPI communication cycle. The data is organized in the msbf format and the data transfer
+--! to the IC is initialized once if the register with the lowes data bits [8:0] is modified.
+--! 
+--! ### Register:
+--! | g_address | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+--! | +0		| enb	|		|		|		|		|	sg	|  dir1 |  dir0 |
+--! | +1        | speed_value [8:0]                                      ||||||||
+--! | +2        | speed_value [15:9]                                     ||||||||
+--! | +3        | spi_data[8:0]                                          ||||||||
+--! | +4        | spi_data[15:9]                                         ||||||||
+--! | +5        | spi_data[23:16]                                        ||||||||
 --!
 entity TMC2660_DRIVER is
     generic(
-        ADDRESS         :   natural := 1;
-        SCLK_FACTOR     :   natural := 8;
-        TMC2660_CONFIG  :   tmc2660_rom := (x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF")
+        ADDRESS         :   natural := 1;                                                       --! Module's base address
+        SCLK_FACTOR     :   natural := 8;                                                       --! SPI serial clock period as a factor of clk
+        TMC2660_CONFIG  :   tmc2660_rom := (x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF",x"0F00FF")  --! Default configuration of TMC2660
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk             : in    std_logic;                                                      --! System clock
+        rst             : in    std_logic;                                                      --! Asyncrhonous reset
         --BUS slave interface
-        sys_bus_i       : in    sbus_in;
-        sys_bus_o       : out   sbus_out;
+        sys_bus_i       : in    sbus_in;                                                        --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o       : out   sbus_out;                                                       --! BUS output signals [dat,tag,mux]
         --TMC2660 interface
-        tmc2660_clk     : out   io_o;
-        tmc2660_enn     : out   io_o;
-        tmc2660_sg      : in    io_i;
-        tmc2660_dir     : out   io_o;
-        tmc2660_step    : out   io_o;
-        tmc2660_sclk    : out   io_o;
-        tmc2660_ncs     : out   io_o;
-        tmc2660_mosi    : out   io_o;
-        tmc2660_miso    : in    io_i
+        tmc2660_clk     : out   io_o;                                                           --! TMC2660 external clock (sys_clock/2)
+        tmc2660_enn     : out   io_o;                                                           --! TMC2660 enable signal ('0'-on | '1'-off)
+        tmc2660_sg      : in    io_i;                                                           --! TMC2660 StallGuard2 input
+        tmc2660_dir     : out   io_o;                                                           --! TMC2660 direction signal
+        tmc2660_step    : out   io_o;                                                           --! TMC2660 step signal
+        tmc2660_sclk    : out   io_o;                                                           --! TMC2660 SPI serial clock
+        tmc2660_ncs     : out   io_o;                                                           --! TMC2660 SPI chip select 
+        tmc2660_mosi    : out   io_o;                                                           --! TMC2660 SPI master_out/slave-in
+        tmc2660_miso    : in    io_i                                                            --! TMC2660 SPI master-in/slave-out
     );
 end entity TMC2660_DRIVER;
 
@@ -136,14 +167,12 @@ begin
 
     --****CLOCKING****
     -----------------------------------------------------------------------------------------------
-    TMC2660_CLOCK_DRIVER : process(clk)
+    TMC2660_CLOCK_DRIVER : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                clock_buff <= (others => '0');
-            else
-                clock_buff <= clock_buff + 1;
-            end if;
+        if(rst = '1') then
+            clock_buff <= (others => '0');
+        elsif(rising_edge(clk)) then
+            clock_buff <= clock_buff + 1;
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -175,18 +204,18 @@ begin
 
     STREAM_QUEUE : entity work.STREAM_FIFO
     generic map(
-        FIFO_WIDTH      => 24,
-        FIFO_DEPTH      => 5
+        g_fifo_width    => 24,
+        g_fifo_depth    => 5
     )
     port map(
         clk             => clk,
         rst             => config_o_tvalid,
-        s_write_tready  => open,
-        s_write_tvalid  => reg_write_stb(3),
-        s_write_tdata   => reg_spi_data,
-        m_read_tready   => stream_o_tready,
-        m_read_tvalid   => stream_o_tvalid,
-        m_read_tdata    => stream_o_tdata       
+        p_write_tready  => open,
+        p_write_tvalid  => reg_write_stb(3),
+        p_write_tdata   => reg_spi_data,
+        p_read_tready   => stream_o_tready,
+        p_read_tvalid   => stream_o_tvalid,
+        p_read_tdata    => stream_o_tdata       
     );
 
 
@@ -292,28 +321,28 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS        => ADDRESS,
-        NUMBER_REGISTERS    => memory_length,
-        REG_DEFAULT_VALUES  => reg_default
+        g_address       => ADDRESS,
+        g_reg_number    => memory_length,
+        g_def_values    => reg_default
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o,
-        data_in             => reg_data_in,
-        data_out            => reg_data_out,
-        read_stb            => open,
-        write_stb           => reg_write_stb
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => reg_data_in,
+        p_data_out      => reg_data_out,
+        p_read_stb      => open,
+        p_write_stb     => reg_write_stb
     );
 
     --SPI read data - route into memory
     MISO_DATA_TRANSFER : process(clk)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1')  then
-                reg_data_in_buff(47 downto 24) <= (others => '0');
-            elsif(spi_i_tvalid = '1') then
+        if(rst = '1') then
+            reg_data_in_buff(47 downto 24) <= (others =>'0');
+        elsif(rising_edge(clk)) then
+            if(spi_i_tvalid = '1') then
                 reg_data_in_buff(47 downto 24) <= spi_i_tdata;
             else null;
             end if;
@@ -331,4 +360,4 @@ begin
     -----------------------------------------------------------------------------------------------
 
 
-end RTL;
+end architecture;

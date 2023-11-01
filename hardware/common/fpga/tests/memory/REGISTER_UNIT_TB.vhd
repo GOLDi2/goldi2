@@ -7,19 +7,23 @@
 -- Module Name:		REGISTER_UNIT_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
+-- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition  
 --
--- Dependencies:	-> REGISTER_UNIT.vhd
---                  -> GOLDI_COMM_STANDARD.vhd
+-- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
+--                  -> REGISTER_UNIT.vhd
 --
 -- Revisions:
--- Revision V3.00.02 - File Created
+-- Revision V4.00.00 - File Created
 -- Additional Comments: First commitment
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+--! Use standard library for simulation flow control and assertions
+library std;
+use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -40,36 +44,36 @@ architecture TB of REGISTER_UNIT_TB is
     --****DUT****
     component REGISTER_UNIT
         generic(
-            ADDRESS     :   natural := 1;
-            DEF_VALUE   :   data_word := (others => '0')
+            g_address   :   natural;
+            g_def_value :   data_word
         );
         port(
             clk         : in    std_logic;
             rst         : in    std_logic;
             sys_bus_i   : in    sbus_in;
             sys_bus_o   : out   sbus_out;
-            data_in     : in    data_word;
-            data_out    : out   data_word;
-            read_stb    : out   std_logic;
-            write_stb   : out   std_logic
+            p_data_in   : in    data_word;
+            p_data_out  : out   data_word;
+            p_read_stb  : out   std_logic;
+            p_write_stb : out   std_logic
         );
     end component;
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-    constant clk_period     :   time := 10 ns;
+    constant clk_period     :   time := 20 ns;
     signal reset            :   std_logic := '0';
     signal clock            :   std_logic := '0';
     signal run_sim          :   std_logic := '1';
     -- DUT IOs
-    constant reg_default    :   data_word := x"F0";
-    signal sys_bus_i        :   sbus_in;
-    signal sys_bus_o        :   sbus_out;
-    signal data_in          :   data_word := x"00";
-    signal data_out         :   data_word;
-    signal read_stb         :   std_logic;
-    signal write_stb        :   std_logic;
+    constant reg_default    :   data_word := std_logic_vector(to_unsigned(240,SYSTEM_DATA_WIDTH));
+    signal sys_bus_i        :   sbus_in   := gnd_sbus_i;
+    signal sys_bus_o        :   sbus_out  := gnd_sbus_o;
+    signal p_data_in        :   data_word := (others => '0');
+    signal p_data_out       :   data_word := (others => '0');
+    signal p_read_stb       :   std_logic := '0';
+    signal p_write_stb      :   std_logic := '0';
 
 
 begin
@@ -78,18 +82,18 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : REGISTER_UNIT
     generic map(
-        ADDRESS     => 1,
-        DEF_VALUE   => reg_default
+        g_address   => 1,
+        g_def_value => reg_default
     )
     port map(
         clk         => clock,
         rst         => reset,
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o,
-        data_in     => data_in,
-        data_out    => data_out,
-        read_stb    => read_stb,
-        write_stb   => write_stb
+        p_data_in   => p_data_in,
+        p_data_out  => p_data_out,
+        p_read_stb  => p_read_stb,
+        p_write_stb => p_write_stb
     );
     -----------------------------------------------------------------------------------------------
 
@@ -98,7 +102,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-    reset <= '1' after 5 ns, '0' after 15 ns;
+    reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -109,63 +113,100 @@ begin
         --Timing
         variable init_hold      :   time := 5*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := clk_period/2;
+        variable post_hold      :   time := 1*clk_period/2;
     begin
-        --Preset bus
-        sys_bus_i <= gnd_sbus_i;
-        --Wait for initial setup
+        --**Initial setup**
         wait for init_hold;
 
 
         --**Test reset conditions**
         wait for assert_hold;
-        assert(data_out = reg_default)
-            report "line(123): Test reset - expecting data_out = xF0" severity error;
-        assert(read_stb = '0')
-            report "line(125): Test reset - expecting read_stb = '0'" severity error;
-        assert(write_stb = '0')
-            report "line(127): Test reset - expecting write_stb = '0'" severity error;
+        assert(p_data_out = reg_default)
+            report "ID01: Test reset - expecting p_data_out = xF0" severity error;
+        assert(p_read_stb = '0')
+            report "ID02: Test reset - expecting p_read_stb = '0'" severity error;
+        assert(p_write_stb = '0')
+            report "ID03: Test reset - expecting p_write_stb = '0'" severity error;
+        assert(sys_bus_o = gnd_sbus_o)
+            report "ID04: Test reset - expecting sys_bus_o = gnd_sbus_o" severity error;
         wait for post_hold;
 
 
+
         wait for 5*clk_period;
+
 
 
         --**Test read bus**
-        data_in <= x"0A";
+        p_data_in <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
         wait for clk_period;
-        sys_bus_i <= readBus(1);
+        --Load address, write enable and data
+        sys_bus_i.we  <= '0';
+        sys_bus_i.adr <= std_logic_vector(to_unsigned(1,BUS_ADDRESS_WIDTH));
+        sys_bus_i.dat <= std_logic_vector(to_unsigned(15,SYSTEM_DATA_WIDTH));
         
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"0A")
-            report "line(141): Test bus read - expecting sys_bus_o.dat = x0A" severity error;
-        assert(sys_bus_o.val = '1')
-            report "line(143): Test bus read - expecting sys_bus_o.val = '1'" severity error;
-        assert(read_stb = '1')
-            report "line(145): Test bus read - expecting read_stb = '1'" severity error;
+        assert(sys_bus_o.dat = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
+            report "ID05: Test bus read - expecting sys_bus_o.dat = x0A" severity error;
+        assert(sys_bus_o.mux = '1')
+            report "ID06: Test bus read - expecting sys_bus_o.mux = '1'" severity error;
+        assert(p_read_stb = '0')
+            report "ID07: Test bus read - epxecting p_read_stb = '0'" severity error;
         wait for post_hold;
+
+        --Enable strobe signal
+        sys_bus_i.stb <= '1';        
+        wait for assert_hold;
+        assert(sys_bus_o.dat = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
+            report "ID08: Test bus read - expecting sys_bus_o.dat = x0A" severity error;
+        assert(sys_bus_o.mux = '1')
+            report "ID09: Test bus read - expecting sys_bus_o.mux = '1'" severity error;
+        assert(p_read_stb = '1')
+            report "ID10: Test bus read - expecting p_read_stb = '1'" severity error;
+        wait for post_hold;
+        sys_bus_i <= gnd_sbus_i;
+
 
 
         wait for 5*clk_period;
 
 
+
         --**Test write bus**
-        sys_bus_i <= writeBus(1,10);
-        
+        --Load address, write enable and data
+        sys_bus_i.we  <= '1';
+        sys_bus_i.adr <= std_logic_vector(to_unsigned(1,BUS_ADDRESS_WIDTH));
+        sys_bus_i.dat <= std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH));
+
         wait for assert_hold;
-        assert(sys_bus_o.dat = x"00")
-            report "line(156): Test bus write - expecting sys_bus_o.dat = x00" severity error;
-        assert(data_out = x"0A")
-            report "line(159): Test bus write - expecting data_out = x0A" severity error;
-        assert(write_stb = '1')
-            report "line(161): Test bus write - expecting write_stb = '1'" severity error;
+        assert(p_data_out = reg_default)
+            report "ID11: Test bus write - expecting p_data_out = reg_default" severity error;
+        assert(p_write_stb = '0')
+            report "ID12: Test bus write - expecting p_write_stb = '0'" severity error;
         wait for post_hold;
+
+        --Enable strobe signal
+        sys_bus_i.stb <= '1';
+        wait for assert_hold;
+        assert(sys_bus_o.dat = (sys_bus_o.dat'range => '0'))
+            report "ID13: Test bus write - expecting sys_bus_o = x00" severity error;
+        assert(p_data_out = std_logic_vector(to_unsigned(10,SYSTEM_DATA_WIDTH)))
+            report "ID14: Test bus write - expecting p_data_out = x0A" severity error;
+        assert(p_write_stb = '1')
+            report "ID15: Test bus write - expecting p_write_stb = '1'" severity error;
+        wait for post_hold;
+        sys_bus_i <= gnd_sbus_i;
+        
 
 
         --**End simulation**
         wait for 50 ns;
-        run_sim <= '0';
-        wait;
+        report "REGISTER_UNIT_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+        std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        --run_sim <= '0';
+        --wait;
 
     end process;
     -----------------------------------------------------------------------------------------------

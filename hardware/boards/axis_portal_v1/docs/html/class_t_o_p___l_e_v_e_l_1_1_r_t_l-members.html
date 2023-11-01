@@ -16,11 +16,6 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-  $(document).ready(function() { init_search(); });
-/* @license-end */
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -31,25 +26,10 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="download.png"/></td>
   <td id="projectalign">
-   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1.00.00</span>
+   <div id="projectname">GOLDi - Axis Portal<span id="projectnumber">&#160;V1</span>
    </div>
-   <div id="projectbrief">GOLDi FPGA system</div>
+   <div id="projectbrief">GOLDi FPGA Source Code</div>
   </td>
-    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
-        <span class="left">
-          <img id="MSearchSelect" src="search/mag_sel.svg"
-               onmouseover="return searchBox.OnSearchSelectShow()"
-               onmouseout="return searchBox.OnSearchSelectHide()"
-               alt=""/>
-          <input type="text" id="MSearchField" value="Search" accesskey="S"
-               onfocus="searchBox.OnSearchFieldFocus(true)" 
-               onblur="searchBox.OnSearchFieldFocus(false)" 
-               onkeyup="searchBox.OnSearchFieldChange(event)"/>
-          </span><span class="right">
-            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
-          </span>
-        </div>
-</td>
  </tr>
  </tbody>
 </table>
@@ -61,6 +41,17 @@
 var searchBox = new SearchBox("searchBox", "search",'Search','.html');
 /* @license-end */
 </script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
 </div><!-- top -->
 <div id="side-nav" class="ui-resizable side-nav-resizable">
   <div id="nav-tree">
@@ -99,31 +90,27 @@ $(document).ready(function(){initNavTree('class_t_o_p___l_e_v_e_l_1_1_r_t_l.html
 
 <p>This is the complete list of members for <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>cb_bus_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>cb_bus_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>clk</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>config_reg_data</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>encoder_ref</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Alias</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>external_io_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>external_io_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>external_io_o_safe</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>BUS_MUX</b>clk (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>clk</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>ctrl_data</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>ctrl_default</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Constant</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>encoder_ref_x</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Alias</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>encoder_ref_y</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Alias</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>FPGA_nReset_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>internal_io_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>internal_io_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
   <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>master_bus_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>master_bus_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>REG_CONFIG_DEFAULT</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Constant</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>rst</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>selected_bus</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Alias</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>rst</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>sensor_data_vector</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>spi0_ce0</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>spi0_mosi_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>spi0_nce0_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>spi0_sclk_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>sys_bus_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>sys_bus_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>x_encoder_ref</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>y_encoder_ref</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>spi0_mosi_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>spi0_nce0_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>spi0_sclk_sync</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>sys_bus_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>sys_bus_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>system_io_i</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>system_io_o</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>system_io_o_safe</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>x_encoder_rst</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>y_encoder_rst</b> (defined in <a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a>)</td><td class="entry"><a class="el" href="class_t_o_p___l_e_v_e_l_1_1_r_t_l.html">RTL</a></td><td class="entry"><span class="mlabel">Signal</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

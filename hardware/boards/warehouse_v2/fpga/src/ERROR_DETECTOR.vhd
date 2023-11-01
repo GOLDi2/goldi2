@@ -15,7 +15,7 @@
 --                  -> GOLDI_MODULE_CONFIG.vhd
 --                  -> VIRTUAL_SENSOR_ARRAY.vhd
 --                  -> REGISTER_TABLE.vhd
---                  -> IO_DEBOUNCE.vhd
+--                  -> HIGH_DEBOUNCE.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
@@ -24,14 +24,17 @@
 -- Revision V2.00.00 - First release
 -- Additional Comments:
 --
--- Revision V3.01.00 - Optimized error list
--- Additional Comments: Simplification of enityt and protection cases
+-- Revision V4.00.00 - Optimized error list
+-- Additional Comments: Simplification of enityt and protection cases.
+--                      Change to the generic and port signal names to follow
+--                      V4.00.00 naming convention. Correction of the 
+--                      instantiated entities.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -41,30 +44,30 @@ use work.GOLDI_MODULE_CONFIG.all;
 
 
 
---! @brief
+--! @brief List of user and system errors (V3.00.00)
 --! @details
---!
+--! Module uses sensor inputs and driver outputs to generate a list
+--! of flags correspoinding to the possible user and system errors.
 entity ERROR_DETECTOR is
     generic(
-        g_address       :   natural := 1;
-        g_enc_x_invert  :   boolean := false;
-        g_enc_z_invert  :   boolean := false;
-        g_x_box_margins :   sensor_limit_array(9 downto 0) := (others => (0,0));
-        g_z_box_margins :   sensor_limit_array(4 downto 0) := (others => (0,0))
+        g_address       :   natural := 1;                                           --! Module's base address
+        g_enc_x_invert  :   boolean := false;                                       --! Select x encoder positive direction [false -> CCW | true -> CC]
+        g_enc_z_invert  :   boolean := false;                                       --! Select z encoder positive direction [false -> CCW | true -> CC]
+        g_x_box_margins :   sensor_limit_array(9 downto 0) := (others => (0,0));    --! X-axis loading bays position values (GOLDI_MODULE_CONFIG)
+        g_z_box_margins :   sensor_limit_array(4 downto 0) := (others => (0,0))     --! Z-axis loading bays position values (GOLDI_MODULE_CONFIG)
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
-        --Flags
-        rst_x_encoder   : in    std_logic;
-        rst_z_encoder   : in    std_logic;
+        clk             : in    std_logic;                                          --! System clock
+        rst             : in    std_logic;                                          --! Asynchronous reset
+        ref_x_encoder   : in    std_logic;                                          --! Reset for x virtual sensor array
+        ref_z_encoder   : in    std_logic;                                          --! Reset for z virtual sensor array
         --Communication
-        sys_bus_i       : in    sbus_in;
-        sys_bus_o       : out   sbus_out;
+        sys_bus_i       : in    sbus_in;                                            --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o       : out   sbus_out;                                           --! BUS output signals [dat,tag,mux]
         --IOs
-        sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-        sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+        p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);        --! System synchronous input data (sensors)
+        p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)         --! System output data (drivers)
     );
 end entity ERROR_DETECTOR;
 
@@ -91,18 +94,18 @@ architecture RTL of ERROR_DETECTOR is
     alias limit_z_neg           :   std_logic is stable_sensors_i(4);
     alias limit_z_pos           :   std_logic is stable_sensors_i(5);
     --Incremental encoders
-    alias x_channel_a           :   std_logic is sys_io_i(9).dat;
-    alias x_channel_b           :   std_logic is sys_io_i(10).dat;
-    alias z_channel_a           :   std_logic is sys_io_i(12).dat;
-    alias z_channel_b           :   std_logic is sys_io_i(13).dat;
+    alias x_channel_a           :   std_logic is p_sys_io_i(9).dat;
+    alias x_channel_b           :   std_logic is p_sys_io_i(10).dat;
+    alias z_channel_a           :   std_logic is p_sys_io_i(12).dat;
+    alias z_channel_b           :   std_logic is p_sys_io_i(13).dat;
 	--Motor inputs
     signal motor_x_step         :   std_logic;
     signal motor_y_enb          :   std_logic;
     signal motor_z_step         :   std_logic;
-    alias  motor_x_dir          :   std_logic is sys_io_o(19).dat;
-    alias  motor_y_out_1        :   std_logic is sys_io_o(25).dat;
-    alias  motor_y_out_2        :   std_logic is sys_io_o(26).dat;
-    alias  motor_z_dir          :   std_logic is sys_io_o(31).dat;
+    alias  motor_x_dir          :   std_logic is p_sys_io_o(19).dat;
+    alias  motor_y_out_1        :   std_logic is p_sys_io_o(25).dat;
+    alias  motor_y_out_2        :   std_logic is p_sys_io_o(26).dat;
+    alias  motor_z_dir          :   std_logic is p_sys_io_o(31).dat;
     --Box margin signals
     signal box_x_rst            :   std_logic;
     signal box_z_rst            :   std_logic;
@@ -119,16 +122,16 @@ begin
     --Sensor debounce removes signal jitter by holding the signal until a logic low is detected
     --for at least 1ms (clk(48*10^6)/stages(4)*clk_factor(12000))
     STABILIZERS : for i in 0 to 5 generate
-        DEBOUNCE : entity work.IO_DEBOUNCE
+        DEBOUNCE : entity work.HIGH_DEBOUNCE
         generic map(
-            STAGES      => 4,
-            CLK_FACTOR  => 1200
+            g_stages        => 4,
+            g_clk_factor    => 1200
         )
         port map(
-            clk         => clk,
-            rst         => rst,
-            io_raw      => sys_io_i(i+2).dat,
-            io_stable   => stable_sensors_i(i)
+            clk             => clk,
+            rst             => rst,
+            p_io_raw        => p_sys_io_i(i+2).dat,
+            p_io_stable     => stable_sensors_i(i)
         );
     end generate;
     -----------------------------------------------------------------------------------------------
@@ -137,42 +140,42 @@ begin
 
     --****MOTOR ACTIVE DETECTION****
     -----------------------------------------------------------------------------------------------
-    X_MOTOR_ACTIVE : entity work.IO_DEBOUNCE
+    X_MOTOR_ACTIVE : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 4,
-        CLK_FACTOR  => 1200
+        g_stages        => 4,
+        g_clk_factor    => 1200
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => sys_io_o(18).dat,
-        io_stable   => motor_x_step
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => p_sys_io_o(18).dat,
+        p_io_stable     => motor_x_step
     );
 
 
-    Y_MOTOR_ACTIVE : entity work.IO_DEBOUNCE
+    Y_MOTOR_ACTIVE : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 4,
-        CLK_FACTOR  => 1200
+        g_stages        => 4,
+        g_clk_factor    => 1200
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => sys_io_o(24).dat,
-        io_stable   => motor_y_enb
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => p_sys_io_o(24).dat,
+        p_io_stable     => motor_y_enb
     );
 
 
-    Z_MOTOR_ACTIVE : entity work.IO_DEBOUNCE
+    Z_MOTOR_ACTIVE : entity work.HIGH_DEBOUNCE
     generic map(
-        STAGES      => 4,
-        CLK_FACTOR  => 1200
+        g_stages        => 4,
+        g_clk_factor    => 1200
     )
     port map(
-        clk         => clk,
-        rst         => rst,
-        io_raw      => sys_io_o(30).dat,
-        io_stable   => motor_z_step
+        clk             => clk,
+        rst             => rst,
+        p_io_raw        => p_sys_io_o(30).dat,
+        p_io_stable     => motor_z_step
     );
     -----------------------------------------------------------------------------------------------
 
@@ -180,37 +183,37 @@ begin
 
     --****VIRTUAL BOX MARGINS****
     -----------------------------------------------------------------------------------------------
-    box_x_rst <= rst or rst_x_encoder;
-    box_z_rst <= rst or rst_z_encoder;
+    box_x_rst <= rst or ref_x_encoder;
+    box_z_rst <= rst or ref_z_encoder;
 
     
     X_BOX_MARGINS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
-        INVERT          => g_enc_x_invert,
-        NUMBER_SENSORS  => 10,
-        SENSOR_LIMITS   => g_x_box_margins
+        g_invert            => g_enc_x_invert,
+        g_number_sensors    => 10,
+        g_sensor_limits     => g_x_box_margins
     )
     port map(
-        clk             => clk,
-        rst             => rst_x_encoder,
-        enc_channel_a   => x_channel_a,
-        enc_channel_b   => x_channel_b,
-        sensor_data_out => box_x_margins
+        clk                 => clk,
+        rst                 => box_x_rst,
+        p_channel_a         => x_channel_a,
+        p_channel_b         => x_channel_b,
+        p_sensor_data       => box_x_margins
     );
 
 
     Z_BOX_MARGINS : entity work.VIRTUAL_SENSOR_ARRAY
     generic map(
-        INVERT          => g_enc_z_invert,
-        NUMBER_SENSORS  => 5,
-        SENSOR_LIMITS   => g_z_box_margins
+        g_invert            => g_enc_z_invert,
+        g_number_sensors    => 5,
+        g_sensor_limits     => g_z_box_margins
     )
     port map(
-        clk             => clk,
-        rst             => rst_z_encoder,
-        enc_channel_a   => z_channel_a,
-        enc_channel_b   => z_channel_b,
-        sensor_data_out => box_z_margins
+        clk                 => clk,
+        rst                 => box_z_rst,
+        p_channel_a         => z_channel_a,
+        p_channel_b         => z_channel_b,
+        p_sensor_data       => box_z_margins
     );
 
 
@@ -264,19 +267,19 @@ begin
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS        => g_address,
-        NUMBER_REGISTERS    => memory_length,
-        REG_DEFAULT_VALUES  => reg_default
+        g_address       => g_address,
+        g_reg_number    => memory_length,
+        g_def_values    => reg_default
     )
     port map(
-        clk                 => clk,
-        rst                 => rst,
-        sys_bus_i           => sys_bus_i,
-        sys_bus_o           => sys_bus_o,
-        data_in             => reg_data_in,
-        data_out            => open,
-        read_stb            => open,
-        write_stb           => open
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => reg_data_in,
+        p_data_out      => open,
+        p_read_stb      => open,
+        p_write_stb     => open
     );
 
     reg_data_in <= setMemory(error_list);

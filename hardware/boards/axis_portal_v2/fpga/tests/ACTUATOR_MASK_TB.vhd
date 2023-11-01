@@ -17,14 +17,19 @@
 -- Revisions:
 -- Revision V3.00.01 - File Created
 -- Additional Comments: First commitment
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to control the simulation flow.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
@@ -47,9 +52,9 @@ architecture TB of ACTUATOR_MASK_TB is
     --****DUT****
     component ACTUATOR_MASK
         port(
-            sys_io_i    : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            sys_io_o    : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            safe_io_out : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
+            p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_safe_io_o : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)
         );
     end component;
 
@@ -87,9 +92,9 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : ACTUATOR_MASK
     port map(
-        sys_io_i    => sys_io_i,
-        sys_io_o    => sys_io_o,
-        safe_io_out => safe_io_out
+        p_sys_io_i  => sys_io_i,
+        p_sys_io_o  => sys_io_o,
+        p_safe_io_o => safe_io_out
     );
     -----------------------------------------------------------------------------------------------
 
@@ -160,9 +165,13 @@ begin
         end loop;
 
 
-        --End simulation
-        wait for 50 ns;
-        wait;
+        --**End simulation**
+		wait for 50 ns;
+        report "AP2: ACUTATOR_MASK_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- wait;
 
     end process;
     -----------------------------------------------------------------------------------------------
