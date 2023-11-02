@@ -52,7 +52,7 @@ architecture TB of ERROR_DETECTOR_TB is
     --****DUT****
     component ERROR_DETECTOR 
         generic(
-            ADDRESS         :   natural := 1
+            g_address       :   natural := 1
         );
         port(
             clk             : in    std_logic;

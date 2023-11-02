@@ -12,9 +12,11 @@ cd .ghdl
 ghdl -i --std=08 $(fd -L .vhd ../src)
 ghdl -i --std=08 $(fd -L .vhd ../mock_src)
 ghdl -i --std=08 $(fd -L .vhd ../tests)
+ghdl -i --work=machxo2 --std=08 -fsynopsys /usr/local/diamond/3.12/cae_library/simulation/vhdl/machxo2/src/MACHXO2_SEQ.vhd
 ghdl -i --work=machxo2 --std=08 -fsynopsys /usr/local/diamond/3.12/cae_library/simulation/vhdl/machxo2/src/MACHXO2_MEM.vhd
+ghdl -i --work=machxo2 --std=08 -fsynopsys /usr/local/diamond/3.12/cae_library/simulation/vhdl/machxo2/src/MACHXO2_IO.vhd
 ghdl -i --work=machxo2 --std=08 $GIT_ROOT/hardware/common/lattice-library/machxo2.vhd
-ghdl -i --work=machxo2 --std=08 $(fd -L impl.vhd $GIT_ROOT/hardware/common/lattice-library)
+#ghdl -i --work=machxo2 --std=08 $(fd -L impl.vhd $GIT_ROOT/hardware/common/lattice-library)
 set +e
 FAILED=false
 for file in $(fd -L .vhd ../tests); do

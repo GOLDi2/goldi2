@@ -216,7 +216,7 @@ async def main_async():
         )
 
         await deviceHandlerTask
-    
+
     exit(1)
 
 
