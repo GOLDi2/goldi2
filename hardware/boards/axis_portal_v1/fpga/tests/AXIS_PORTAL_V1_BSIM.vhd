@@ -122,7 +122,7 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         --Timing
-        variable init_hold      :   time := 13*clk_period/2;
+        variable init_hold      :   time := 30*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
         variable post_hold      :   time := 1*clk_period/2;
     begin

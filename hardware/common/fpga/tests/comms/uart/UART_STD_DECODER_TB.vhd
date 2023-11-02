@@ -83,7 +83,7 @@ begin
     generic map(
         g_encoded_length    => 11,
         g_data_width        => 8,
-        g_parity_bit        => true,         
+        g_parity_bit        => 1,         
         g_even_pol          => true
     )
     port map(

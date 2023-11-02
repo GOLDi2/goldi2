@@ -80,7 +80,7 @@ architecture TB of IO_CROSSBAR_TB is
 	signal run_sim			    :	std_logic := '1';
 	--DUT IOs
     signal cb_bus_i             :   sbus_in  := gnd_sbus_i;
-    signal cb_bus_o             :   sbus_out := gnd_mbus_o;
+    signal cb_bus_o             :   sbus_out := gnd_sbus_o;
     signal left_io_i_vector     :   io_i_vector(5 downto 0) := (others => gnd_io_i);
     signal left_io_o_vector     :   io_o_vector(5 downto 0) := (others => gnd_io_o);
     signal right_io_i_vector    :   io_i_vector(2 downto 0) := (others => gnd_io_i);

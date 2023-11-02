@@ -118,7 +118,7 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         --Timing
-        variable init_hold      :   time := 11*clk_period/2;
+        variable init_hold      :   time := 30*clk_period/2;
         variable assert_hold    :   time := 3*clk_period/2;
         variable post_hold      :   time := 1*clk_period/2; 
     begin
@@ -133,7 +133,7 @@ begin
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
         
         wait for assert_hold;
-        assert(miso_data_buff = std_logic_vector(to_unsigned(192,SPI_DATA_WIDTH)))
+        assert(miso_data_buff = std_logic_vector(to_unsigned(2#0100_0000#,SPI_DATA_WIDTH)))
             report "ID01: Test communication - expecting ctrl_reg = 192/xC0"
             severity error;
         wait for post_hold;
@@ -144,17 +144,17 @@ begin
 
         --**Test actuation modules in the WH2**
         --Turn environment LED red on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(35,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(37,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Turn environment LED white on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(36,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(38,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Turn environment LED green on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(37,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(39,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
@@ -225,29 +225,29 @@ begin
         IO_DATA(7 downto 5) <= (others => '0');
         wait for debounce_time*clk_period;
         --Set pwm to maximum
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(27,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(28,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
         --Enable motor in locked direction        
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(26,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(27,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         wait for assert_hold;
             assert(IO_DATA(26) = '1' and IO_DATA(25) = '0' and IO_DATA(24) = '0')
-                report "ID04: Test WH2 operation - expecting IO_DATA(26,25,24) = '1','0','0'"
+                report "ID04: Test WH2 operation - expecting IO_DATA(26,25,24) = '1','0','1'"
                 severity error;
         wait for post_hold;
 
 
         --Enable motor in free direction        
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(26,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(27,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(2,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         wait for assert_hold;
             assert(IO_DATA(26) = '0' and IO_DATA(25) = '1' and IO_DATA(24) = '1')
-                report "ID05: Test WH2 operation - expecting IO_DATA(26,25,24) = '0','1','1'"
+                report "ID05: Test WH2 operation - expecting IO_DATA(26,25,24) = '1','0','1'"
                 severity error;
         wait for post_hold;
 

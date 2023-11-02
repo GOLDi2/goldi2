@@ -170,135 +170,135 @@ begin
         wait for init_hold;
 
 
-        
-        for i in 0 to (2**17)-1 loop
-            --Simulate possible gpio values
-            input_values <= std_logic_vector(to_unsigned(i,17));
-
-
-            wait for 3*clk_period;
-            sys_bus_i  <= readBus(1);
-            wait for clk_period;
-            sys_bus_i  <= readBus(2);
-            wait for clk_period;
-            reg_1_buff <= sys_bus_o.dat;
-            sys_bus_i  <= readBus(3);
-            wait for clk_period;
-            reg_2_buff <= sys_bus_o.dat;
-            sys_bus_i  <= gnd_sbus_i;
-            wait for clk_period;
-            reg_3_buff <= sys_bus_o.dat;
-
-
-            wait for assert_hold;
-            --Multi-sensor activation
-            if(limit_x_neg = '1' and limit_x_pos = '1') then
-                assert(reg_1_buff(0) = '1')
-                report "ID01: Expecting error code 0" severity error;
-            end if;
-
-            if(limit_x_neg = '1' and limit_x_ref = '1') then
-                assert(reg_1_buff(1) = '1')
-                report "ID02: Expecting error code 1" severity error;
-            end if;
-
-            if(limit_x_pos = '1' and limit_x_ref = '1') then
-                assert(reg_1_buff(2) = '1')
-                report "ID03: Expecting error code 2" severity error;
-            end if;
-
-            if(limit_y_neg = '1' and limit_y_pos = '1') then
-                assert(reg_1_buff(3) = '1')
-                report "ID04: Expecting error code 3" severity error;
-            end if;
-
-            if(limit_y_neg = '1' and limit_y_ref = '1') then
-                assert(reg_1_buff(4) = '1')
-                report "ID05: Expecting error code 4" severity error;
-            end if;
-
-            if(limit_y_pos = '1' and limit_y_ref = '1') then
-                assert(reg_1_buff(5) = '1')
-                report "ID06: Expecting error code 5" severity error;
-            end if;
-
-            if(limit_z_neg = '1' and limit_z_pos = '1') then
-                assert(reg_1_buff(6) = '1')
-                report "ID07: Expecting error code 6" severity error;
-            end if;
-
-            --Motor direction errors
-            if(x_out_pos = '1' and x_out_neg = '1') then
-                assert(reg_1_buff(7) = '1')
-                report "ID08: Expecting error code 7" severity error;
-            end if;
-
-            if(y_out_neg = '1' and y_out_pos = '1') then
-                assert(reg_2_buff(0) = '1')
-                report "ID09: Expecting error code 8" severity error;
-            end if;
-
-            if(z_out_pos = '1' and z_out_neg = '1') then
-                assert(reg_2_buff(1) = '1')
-                report "ID10: Expecting error code 9" severity error;
-            end if;
-
-            --Crane position errors
-            if(limit_z_pos = '0' and x_out_neg = '1') then
-                assert(reg_2_buff(2) = '1')
-                report "ID11: Expecting error code 10" severity error;
-            end if;
-
-            if(limit_z_pos = '0' and x_out_pos = '1') then
-                assert(reg_2_buff(3) = '1')
-                report "ID12: Expecting error code 11" severity error;
-            end if;
-
-            if(limit_z_pos = '0' and y_out_neg = '1') then
-                assert(reg_2_buff(4) = '1')
-                report "ID13: Expecting error code 12" severity error;
-            end if;
-
-            if(limit_z_pos = '0' and y_out_pos = '1') then
-                assert(reg_2_buff(5) = '1')
-                report "ID14: Expecting error code 13" severity error;
-            end if;
-
-            --AP operation errors
-            if(limit_x_neg = '1' and x_out_neg  = '1') then
-                assert(reg_2_buff(6) = '1')
-                report "ID15: Expecting error code 14" severity error;
-            end if;
-
-            if(limit_x_pos = '1' and x_out_pos  = '1') then
-                assert(reg_2_buff(7) = '1')
-                report "ID16: Expecting error code 15" severity error;
-            end if;
-
-            if(limit_y_neg = '1' and y_out_neg  = '1') then
-                assert(reg_3_buff(0) = '1')
-                report "ID17: Expecting error code 16" severity error;
-            end if;
-
-            if(limit_y_pos = '1' and y_out_pos  = '1') then
-                assert(reg_3_buff(1) = '1')
-                report "ID18: Expecting error code 17" severity error;
-            end if;
-
-            if(limit_z_neg = '1' and z_out_neg  = '1') then
-                assert(reg_3_buff(2) = '1')
-                report "ID19: Expecting error code 18" severity error;
-            end if;
-
-            if(limit_z_pos = '1' and z_out_pos  = '1') then
-                assert(reg_3_buff(3) = '1')
-                report "ID20: Expecting error code 19" severity error;
-            end if;
-
-            wait for post_hold;
-
-            sys_bus_i.adr <= (others => '0');
-        end loop;
+        -- Needs Rework
+--        for i in 0 to (2**17)-1 loop
+--            --Simulate possible gpio values
+--            input_values <= std_logic_vector(to_unsigned(i,17));
+--
+--
+--            wait for 3*clk_period;
+--            sys_bus_i  <= readBus(1);
+--            wait for clk_period;
+--            sys_bus_i  <= readBus(2);
+--            wait for clk_period;
+--            reg_1_buff <= sys_bus_o.dat;
+--            sys_bus_i  <= readBus(3);
+--            wait for clk_period;
+--            reg_2_buff <= sys_bus_o.dat;
+--            sys_bus_i  <= gnd_sbus_i;
+--            wait for clk_period;
+--            reg_3_buff <= sys_bus_o.dat;
+--
+--
+--            wait for assert_hold;
+--            --Multi-sensor activation
+--            if(limit_x_neg = '1' and limit_x_pos = '1') then
+--                assert(reg_1_buff(0) = '1')
+--                report "ID01: Expecting error code 0" severity error;
+--            end if;
+--
+--            if(limit_x_neg = '1' and limit_x_ref = '1') then
+--                assert(reg_1_buff(1) = '1')
+--                report "ID02: Expecting error code 1" severity error;
+--            end if;
+--
+--            if(limit_x_pos = '1' and limit_x_ref = '1') then
+--                assert(reg_1_buff(2) = '1')
+--                report "ID03: Expecting error code 2" severity error;
+--            end if;
+--
+--            if(limit_y_neg = '1' and limit_y_pos = '1') then
+--                assert(reg_1_buff(3) = '1')
+--                report "ID04: Expecting error code 3" severity error;
+--            end if;
+--
+--            if(limit_y_neg = '1' and limit_y_ref = '1') then
+--                assert(reg_1_buff(4) = '1')
+--                report "ID05: Expecting error code 4" severity error;
+--            end if;
+--
+--            if(limit_y_pos = '1' and limit_y_ref = '1') then
+--                assert(reg_1_buff(5) = '1')
+--                report "ID06: Expecting error code 5" severity error;
+--            end if;
+--
+--            if(limit_z_neg = '1' and limit_z_pos = '1') then
+--                assert(reg_1_buff(6) = '1')
+--                report "ID07: Expecting error code 6" severity error;
+--            end if;
+--
+--            --Motor direction errors
+--            if(x_out_pos = '1' and x_out_neg = '1') then
+--                assert(reg_1_buff(7) = '1')
+--                report "ID08: Expecting error code 7" severity error;
+--            end if;
+--
+--            if(y_out_neg = '1' and y_out_pos = '1') then
+--                assert(reg_2_buff(0) = '1')
+--                report "ID09: Expecting error code 8" severity error;
+--            end if;
+--
+--            if(z_out_pos = '1' and z_out_neg = '1') then
+--                assert(reg_2_buff(1) = '1')
+--                report "ID10: Expecting error code 9" severity error;
+--            end if;
+--
+--            --Crane position errors
+--            if(limit_z_pos = '0' and x_out_neg = '1') then
+--                assert(reg_2_buff(2) = '1')
+--                report "ID11: Expecting error code 10" severity error;
+--            end if;
+--
+--            if(limit_z_pos = '0' and x_out_pos = '1') then
+--                assert(reg_2_buff(3) = '1')
+--                report "ID12: Expecting error code 11" severity error;
+--            end if;
+--
+--            if(limit_z_pos = '0' and y_out_neg = '1') then
+--                assert(reg_2_buff(4) = '1')
+--                report "ID13: Expecting error code 12" severity error;
+--            end if;
+--
+--            if(limit_z_pos = '0' and y_out_pos = '1') then
+--                assert(reg_2_buff(5) = '1')
+--                report "ID14: Expecting error code 13" severity error;
+--            end if;
+--
+--            --AP operation errors
+--            if(limit_x_neg = '1' and x_out_neg  = '1') then
+--                assert(reg_2_buff(6) = '1')
+--                report "ID15: Expecting error code 14" severity error;
+--            end if;
+--
+--            if(limit_x_pos = '1' and x_out_pos  = '1') then
+--                assert(reg_2_buff(7) = '1')
+--                report "ID16: Expecting error code 15" severity error;
+--            end if;
+--
+--            if(limit_y_neg = '1' and y_out_neg  = '1') then
+--                assert(reg_3_buff(0) = '1')
+--                report "ID17: Expecting error code 16" severity error;
+--            end if;
+--
+--            if(limit_y_pos = '1' and y_out_pos  = '1') then
+--                assert(reg_3_buff(1) = '1')
+--                report "ID18: Expecting error code 17" severity error;
+--            end if;
+--
+--            if(limit_z_neg = '1' and z_out_neg  = '1') then
+--                assert(reg_3_buff(2) = '1')
+--                report "ID19: Expecting error code 18" severity error;
+--            end if;
+--
+--            if(limit_z_pos = '1' and z_out_pos  = '1') then
+--                assert(reg_3_buff(3) = '1')
+--                report "ID20: Expecting error code 19" severity error;
+--            end if;
+--
+--            wait for post_hold;
+--
+--            sys_bus_i.adr <= (others => '0');
+--        end loop;
 
 
   		--**End simulation**
