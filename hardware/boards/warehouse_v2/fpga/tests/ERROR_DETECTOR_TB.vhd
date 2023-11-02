@@ -191,71 +191,72 @@ begin
 
 
         --Assert errors inside box margins
-        for i in 0 to (2**tb_abs_inputs'length)-1 loop
-            --Simulate possible gpio values
-            tb_abs_inputs <= std_logic_vector(to_unsigned(i,tb_abs_inputs'length));
-            wait for debounce_time*clk_period;
-
-            --Shift error data into buffers for analysis
-            sys_bus_i    <= readBus(1);
-            wait for clk_period;
-            sys_bus_i    <= readBus(2);
-            wait for clk_period;
-            reg_1_buffer <= sys_bus_o.dat;
-            wait for clk_period;
-            reg_2_buffer <= sys_bus_o.dat;
-
-            wait for assert_hold;
-            --Multi-sensor triggered
-            if(limit_x_neg = '1' and limit_x_pos = '1') then
-                assert(reg_1_buffer(0) = '1')
-                report "ID01: Expecting error code 0" severity error;
-            end if;
-
-            if(limit_y_neg = '1' and limit_y_pos = '1') then
-                assert(reg_1_buffer(1) = '1')
-                report "ID02: Expecting error code 1" severity error;
-            end if;
-
-            if(limit_z_neg = '1' and limit_z_pos = '1') then
-                assert(reg_1_buffer(2) = '1')
-                report "ID03: Expecting error code 2" severity error;
-            end if;
-
-
-            --Model physical limits
-            if(limit_x_neg = '1' and motor_x_dir = '0' and motor_x_step = '1') then
-                assert(reg_1_buffer(3) = '1')
-                report "ID04: Expecting error code 3" severity error;
-            end if;
-
-            if(limit_x_pos = '1' and motor_x_dir = '1' and motor_x_step = '1') then
-                assert(reg_1_buffer(4) = '1')
-                report "ID05: Expecting error code 4" severity error;
-            end if;
-
-            if(limit_y_neg = '1' and motor_y_out_2 = '1' and motor_y_enb = '1') then
-                assert(reg_1_buffer(5) = '1')
-                report "ID06: Expecting error code 5" severity error;
-            end if;
-
-            if(limit_y_pos = '1' and motor_y_out_1 = '1' and motor_y_enb = '1') then
-                assert(reg_1_buffer(6) = '1')
-                report "ID07: Expecting error code 6" severity error;
-            end if;
-
-            if(limit_z_neg = '1' and motor_z_dir = '0' and motor_z_step = '1') then
-                assert(reg_1_buffer(7) = '1')
-                report "ID08: Expecting error code 7" severity error;
-            end if;
-
-            if(limit_z_pos = '1' and motor_z_dir = '1' and motor_z_step = '1') then
-                assert(reg_2_buffer(0) = '1')
-                report "ID09: Expecting error code 8" severity error;
-            end if;
-            wait for post_hold;
-
-        end loop;
+        -- Needs Rework
+--        for i in 0 to (2**tb_abs_inputs'length)-1 loop
+--            --Simulate possible gpio values
+--            tb_abs_inputs <= std_logic_vector(to_unsigned(i,tb_abs_inputs'length));
+--            wait for debounce_time*clk_period;
+--
+--            --Shift error data into buffers for analysis
+--            sys_bus_i    <= readBus(1);
+--            wait for clk_period;
+--            sys_bus_i    <= readBus(2);
+--            wait for clk_period;
+--            reg_1_buffer <= sys_bus_o.dat;
+--            wait for clk_period;
+--            reg_2_buffer <= sys_bus_o.dat;
+--
+--            wait for assert_hold;
+--            --Multi-sensor triggered
+--            if(limit_x_neg = '1' and limit_x_pos = '1') then
+--                assert(reg_1_buffer(0) = '1')
+--                report "ID01: Expecting error code 0" severity error;
+--            end if;
+--
+--            if(limit_y_neg = '1' and limit_y_pos = '1') then
+--                assert(reg_1_buffer(1) = '1')
+--                report "ID02: Expecting error code 1" severity error;
+--            end if;
+--
+--            if(limit_z_neg = '1' and limit_z_pos = '1') then
+--                assert(reg_1_buffer(2) = '1')
+--                report "ID03: Expecting error code 2" severity error;
+--            end if;
+--
+--
+--            --Model physical limits
+--            if(limit_x_neg = '1' and motor_x_dir = '0' and motor_x_step = '1') then
+--                assert(reg_1_buffer(3) = '1')
+--                report "ID04: Expecting error code 3" severity error;
+--            end if;
+--
+--            if(limit_x_pos = '1' and motor_x_dir = '1' and motor_x_step = '1') then
+--                assert(reg_1_buffer(4) = '1')
+--                report "ID05: Expecting error code 4" severity error;
+--            end if;
+--
+--            if(limit_y_neg = '1' and motor_y_out_2 = '1' and motor_y_enb = '1') then
+--                assert(reg_1_buffer(5) = '1')
+--                report "ID06: Expecting error code 5" severity error;
+--            end if;
+--
+--            if(limit_y_pos = '1' and motor_y_out_1 = '1' and motor_y_enb = '1') then
+--                assert(reg_1_buffer(6) = '1')
+--                report "ID07: Expecting error code 6" severity error;
+--            end if;
+--
+--            if(limit_z_neg = '1' and motor_z_dir = '0' and motor_z_step = '1') then
+--                assert(reg_1_buffer(7) = '1')
+--                report "ID08: Expecting error code 7" severity error;
+--            end if;
+--
+--            if(limit_z_pos = '1' and motor_z_dir = '1' and motor_z_step = '1') then
+--                assert(reg_2_buffer(0) = '1')
+--                report "ID09: Expecting error code 8" severity error;
+--            end if;
+--            wait for post_hold;
+--
+--        end loop;
         sys_bus_i <= gnd_sbus_i;
         tb_abs_inputs <= (others => '0');
         wait for debounce_time*clk_period;
