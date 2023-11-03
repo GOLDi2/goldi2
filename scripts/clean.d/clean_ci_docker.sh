@@ -5,8 +5,8 @@ SERVER=admin@ci.goldi-labs.de
 
 ######################################################################################################
 
-ssh $SERVER "sudo docker save crosslab-devcontainer:build > crosslab-devcontainer.tar"
-ssh $SERVER "sudo docker save goldi-devcontainer:build > goldi-devcontainer.tar"
+ssh $SERVER "sudo docker save crosslab/devcontainer:latest > crosslab-devcontainer.tar"
+ssh $SERVER "sudo docker save goldi2/devcontainer:latest  > goldi-devcontainer.tar"
 ssh $SERVER "sudo docker system prune -a -f"
 ssh $SERVER "cat crosslab-devcontainer.tar | sudo docker load"
 ssh $SERVER "cat goldi-devcontainer.tar | sudo docker load"

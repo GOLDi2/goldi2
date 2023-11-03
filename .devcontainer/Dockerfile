@@ -38,3 +38,44 @@ RUN apt-get update \
 COPY diamond/lattice.dat /usr/local/diamond/3.12/license/license.dat
 
 RUN echo "sudo ip link add bond0 type dummy && sudo ifconfig bond0 hw ether 08:00:27:3a:52:9f || true" >> $DIAMOND_DIR/bin/lin64/diamond_env
+
+# YOCTO
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        gawk \
+        wget \
+        git-core \
+        subversion \
+        diffstat \
+        unzip \
+        sysstat \
+        texinfo \
+        build-essential \
+        chrpath \
+        socat \
+        python3 \
+        python3-pip \
+        python3-pexpect \
+        xz-utils  \
+        locales \
+        cpio \
+        screen \
+        tmux \
+        sudo \
+        iputils-ping \
+        python3-git \
+        python3-jinja2 \
+        libegl1-mesa \
+        libsdl1.2-dev \
+        pylint \
+        xterm \
+        iproute2 \
+        fluxbox \
+        tightvncserver \
+        lz4 \
+        zstd \
+        file
+
+RUN pip3 install kas
+
+USER vscode
