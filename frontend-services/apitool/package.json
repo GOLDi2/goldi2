@@ -1,29 +1,25 @@
 {
     "name": "crosslab-api",
+    "dockerName": "apitool",
+    "author": "Pierre Helbing",
+    "license": "UNLICENSED",
     "module": "src/index.ts",
     "type": "module",
     "devDependencies": {
         "@types/route-parser": "^0.1.6",
-        "bun-types": "latest",
-        "openapi-types": "^12.1.3",
         "tailwindcss": "^3.3.3",
-        "typescript": "^5.0.0"
+        "typescript": "^5.0.0",
+        "@web/dev-server": "^0.3.1",
+        "esbuild": "^0.19.2",
+        "npm-run-all": "^4.1.5",
+        "copyfiles": "^2.4.1",
+        "nodemon": "^3.0.1"
     },
     "dependencies": {
         "@cross-lab-project/api-client": "file:../../crosslab/clients/api/js/",
-        "@vaadin/router": "^1.7.5",
-        "@web/dev-server": "^0.3.1",
         "ace-builds": "^1.31.1",
-        "ajv": "^8.12.0",
-        "copyfiles": "^2.4.1",
         "dayjs": "^1.11.10",
-        "esbuild": "^0.19.2",
-        "esbuild-plugin-minify-html-literals": "^1.0.6",
-        "http-server": "^14.1.1",
-        "jsonschema": "^1.4.1",
         "lit": "^2.8.0",
-        "nodemon": "^3.0.1",
-        "npm-run-all": "^4.1.5",
         "route-parser": "^0.0.5"
     },
     "scripts": {
@@ -31,7 +27,7 @@
         "prepare:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./dist",
         "prepare:html": "copyfiles -f src/index.html dist",
         "build": "npm run prepare && esbuild ./src/index.ts --bundle --outfile=dist/bundle.js --loader:.css=text",
-        "watch": "nodemon -e ts,html,css --watch src --exec \"bun run build\" &",
+        "watch": "nodemon -e ts,html,css --watch src --exec \"npm run build\" &",
         "serve": "npm run watch && wds --watch --open --root-dir dist --app-index dist/index.html",
         "build:prod": "npm run prepare && esbuild ./src/index.ts --bundle --outfile=dist/bundle.js --loader:.css=text --minify"
     }

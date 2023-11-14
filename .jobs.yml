@@ -28,6 +28,11 @@ frontend-services/fsm-interpreter:
       - crosslab/clients/soa/js:build
       - crosslab/clients/soa_services/electricalConnection/js:build
 
+frontend-services/apitool:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+
 
 ################################################################################
 # Hardware #####################################################################
