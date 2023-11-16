@@ -24,11 +24,11 @@
     },
     "scripts": {
         "prepare": "npm-run-all prepare:*",
-        "prepare:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./dist",
-        "prepare:html": "copyfiles -f src/index.html dist",
-        "build": "npm run prepare && esbuild ./src/index.ts --bundle --outfile=dist/bundle.js --loader:.css=text",
+        "prepare:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./http-dist",
+        "prepare:html": "copyfiles -f src/index.html http-dist",
+        "build": "npm run prepare && esbuild ./src/index.ts --bundle --outfile='http-dist/bundle.js' --loader:.css=text",
         "watch": "nodemon -e ts,html,css --watch src --exec \"npm run build\" &",
-        "serve": "npm run watch && wds --watch --open --root-dir dist --app-index dist/index.html",
-        "build:prod": "npm run prepare && esbuild ./src/index.ts --bundle --outfile=dist/bundle.js --loader:.css=text --minify"
+        "serve": "npm run watch && wds --watch --open --root-dir 'http-dist' --app-index 'http-dist/index.html'",
+        "build:prod": "npm run prepare && esbuild ./src/index.ts --bundle --outfile='http-dist/bundle.js' --loader:.css=text --minify"
     }
 }

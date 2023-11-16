@@ -145,13 +145,11 @@ export class Calendar extends LitElement {
     private nextDay() {
         this.date = new Date(this.date.setDate(this.date.getDate() + 1));
         this.inputDate.value = parseDate(this.date, false);
-        this.container.scrollTop = 0;
     }
 
     private previousDay() {
         this.date = new Date(this.date.setDate(this.date.getDate() - 1));
         this.inputDate.value = parseDate(this.date, false);
-        this.container.scrollTop = 0;
     }
 
     private splitTimeslots() {
