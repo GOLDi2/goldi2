@@ -19,7 +19,7 @@ server {
         sub_filter_types *;
         sub_filter '/bundle' '/apitool/bundle';
         sub_filter '/stylesheet' '/apitool/stylesheet';
-        sub_filter '<head>' '<head><script>window.configuration={BASE_PATH: "$VIRTUAL_PATH"}</script>'
+        sub_filter '<head>' '<head><script>window.configuration={BASE_PATH: \"$VIRTUAL_PATH\"}</script>';
     }
 
     #error_page  404              /404.html;
