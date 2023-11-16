@@ -13,7 +13,7 @@ export class Header extends LitElement {
 
     protected render(): unknown {
         return html`<div
-            class="flex w-full h-16 bg-slate-800 items-center p-4 pt-[calc(1rem_+_env(safe-area-inset-top,_0px))]"
+            class="flex w-full h-[calc(4rem_+_env(safe-area-inset-top))] bg-slate-800 items-center p-4 pt-[calc(1rem_+_env(safe-area-inset-top))] pl-[calc(1rem_+_env(safe-area-inset-left))] pr-[calc(1rem_+_env(safe-area-inset-right))]"
         >
             <button class="lg:hidden pr-4" @click=${this.toggleSidebar}>
                 ${this.renderHamburgerMenu()}

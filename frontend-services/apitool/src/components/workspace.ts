@@ -228,7 +228,7 @@ export class Workspace extends LitElement {
             <apitool-sidebar
                 .isOpen=${this.isSidebarOpen}
                 @update-view=${this.viewUpdatedHandler}
-                class="lg:overflow-auto w-full lg:w-64 lg:opacity-100 lg:h-full h-[calc(100%_-_4rem)] lg:block lg:relative lg:flex-shrink-0 lg:z-0 ${this
+                class="lg:overflow-auto w-full lg:w-64 lg:opacity-100 lg:h-full h-[calc(100%_-_4rem_-_env(safe-area-inset-top))] lg:block lg:relative lg:flex-shrink-0 lg:z-0 ${this
                     .isSidebarOpen
                     ? 'z-10'
                     : '-z-10'} absolute"

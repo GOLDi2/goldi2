@@ -23,7 +23,7 @@ export class LoginPanel extends LitElement {
 
     protected render(): unknown {
         return html`<form
-            class="flex flex-col bg-slate-800 p-4 rounded-xl"
+            class="flex flex-col bg-slate-950 p-4 rounded-xl"
             autocomplete="on"
         >
             <label for="input-instance-url" class="text-white"

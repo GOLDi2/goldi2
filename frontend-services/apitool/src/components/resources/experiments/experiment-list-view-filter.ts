@@ -39,7 +39,7 @@ export class ExperimentListViewFilter extends LitElement {
     protected render(): unknown {
         return html`<apitool-collapsable-element
             .title=${'Filters'}
-            class="flex p-2 border-2 border-black rounded-lg bg-slate-300"
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-300 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             <div class="flex flex-col gap-2 w-full">
                 <input

@@ -75,7 +75,7 @@ export class DeviceEditor extends LitElement {
                     >
                     </apitool-auto-resize-textarea>
                 </div>
-                <div class="flex">
+                <div class="flex items-center">
                     <p class="w-28">Is Public:</p>
                     <input
                         id="input-is-public"

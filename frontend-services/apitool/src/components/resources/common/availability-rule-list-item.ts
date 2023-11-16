@@ -102,7 +102,7 @@ export class AvailabilityRuleListItem extends LitElement {
                 class="flex p-2 bg-white border rounded-lg w-full"
             >
                 <div class="flex flex-col gap-2">
-                    <div class="flex">
+                    <div class="flex items-center">
                         <p class="w-28 flex-shrink-0">Available:</p>
                         <input
                             id="checkbox-available"
@@ -112,7 +112,7 @@ export class AvailabilityRuleListItem extends LitElement {
                         />
                     </div>
                     <div class="flex flex-col">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <p class="w-28 flex-shrink-0">Start:</p>
                             <input
                                 id="checkbox-start"
@@ -134,7 +134,7 @@ export class AvailabilityRuleListItem extends LitElement {
                         />
                     </div>
                     <div class="flex flex-col">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <p class="w-28 flex-shrink-0">End:</p>
                             <input
                                 id="checkbox-end"
@@ -156,7 +156,7 @@ export class AvailabilityRuleListItem extends LitElement {
                         />
                     </div>
                     <div class="flex flex-col">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <p class="w-28 flex-shrink-0">Frequency:</p>
                             <input
                                 id="checkbox-frequency"
@@ -207,7 +207,7 @@ export class AvailabilityRuleListItem extends LitElement {
                         </select>
                     </div>
                     <div class="flex flex-col">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <p class="w-28 flex-shrink-0">Until:</p>
                             <input
                                 id="checkbox-until"
@@ -230,7 +230,7 @@ export class AvailabilityRuleListItem extends LitElement {
                         />
                     </div>
                     <div class="flex flex-col">
-                        <div class="flex">
+                        <div class="flex items-center">
                             <p class="w-28 flex-shrink-0">Count:</p>
                             <input
                                 id="checkbox-count"

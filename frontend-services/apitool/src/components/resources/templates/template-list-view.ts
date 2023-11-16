@@ -58,7 +58,7 @@ export class TemplateListView extends LitElement {
                             ></apitool-template-list-view-item>`
                     )} </div>
                     <div
-                        class="flex w-full justify-center p-2 sticky bottom-0 left-0 bg-white border-t border-black"
+                        class="flex w-full justify-center p-2 sticky bottom-0 left-0 bg-white border-t border-black pb-[calc(0.5rem_+_env(safe-area-inset-bottom))]"
                     >
                         <button class="bg-green-300 p-2 rounded-full" @click=${() =>
                             this.createTemplate()}>

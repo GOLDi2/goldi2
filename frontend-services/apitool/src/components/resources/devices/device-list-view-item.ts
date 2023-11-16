@@ -21,7 +21,7 @@ export class DeviceListViewItem extends LitElement {
         return html`<apitool-collapsable-element
             .title=${this.deviceOverview.name + ' : ' + this.deviceOverview.url}
             .titleAlign=${'left'}
-            class="flex p-2 border-2 border-black rounded-lg bg-slate-300"
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-300 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             ${this.renderTypeBadge()}
             <div class="bg-slate-100 rounded-lg w-full p-2">

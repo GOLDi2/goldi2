@@ -49,7 +49,7 @@ export class Application extends LitElement {
         return html`
             ${this.authenticated
                 ? html`<div
-                      class="w-full h-full flex flex-col relative pb-[env(safe-area-inset-bottom,_0px)]"
+                      class="w-full h-full flex flex-col relative bg-slate-800"
                   >
                       <apitool-header
                           @toggle-sidebar=${() =>
@@ -58,7 +58,7 @@ export class Application extends LitElement {
                           .user=${this.user}
                       ></apitool-header>
                       <apitool-workspace
-                          class="flex-grow overflow-auto"
+                          class="flex-grow overflow-auto bg-white"
                       ></apitool-workspace>
                       <apitool-footer
                           class="lg:sticky lg:block hidden"
@@ -67,7 +67,7 @@ export class Application extends LitElement {
                 : html`<login-panel
                       .url=${localStorage.getItem('url') ?? ''}
                       @login=${this.handleLogin}
-                      class="pt-[env(safe-area-inset-top,_0px)] pb-[env(safe-area-inset-bottom,_0px)] flex h-full w-full justify-center items-center bg-slate-600 ${!this
+                      class="flex h-full w-full justify-center items-center bg-slate-800 ${!this
                           .isReady
                           ? 'hidden'
                           : ''}"

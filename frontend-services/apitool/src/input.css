@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    min-height: calc(100% + env(safe-area-inset-top));
+}
+body {
+    min-height: calc(100% + env(safe-area-inset-top));
+}
+
 select {
     text-align: center;
     overflow: hidden;

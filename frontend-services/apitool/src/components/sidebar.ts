@@ -12,7 +12,7 @@ export class Sidebar extends LitElement {
 
     protected render(): unknown {
         return html` <div
-            class="w-full h-full overflow-auto border-r-2 border-black flex flex-col lg:flex ${this
+            class="w-full h-full overflow-auto lg:border-r-2 border-black flex flex-col lg:flex items-center ${this
                 .isOpen
                 ? ''
                 : 'hidden'}"
@@ -20,35 +20,35 @@ export class Sidebar extends LitElement {
             <a
                 @click=${this.openLink('/devices')}
                 href="${window.configuration.BASE_PATH ?? ''}/devices"
-                class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Devices
             </a>
             <a
                 @click=${this.openLink('/experiments')}
                 href="${window.configuration.BASE_PATH ?? ''}/experiments"
-                class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Experiments
             </a>
             <a
                 @click=${this.openLink('/peerconnections')}
                 href="${window.configuration.BASE_PATH ?? ''}/peerconnections"
-                class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Peerconnections
             </a>
             <a
                 @click=${this.openLink('/templates')}
                 href="${window.configuration.BASE_PATH ?? ''}/templates"
-                class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Templates
             </a>
             <a
                 @click=${this.openLink('/users')}
                 href="${window.configuration.BASE_PATH ?? ''}/users"
-                class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Users
             </a>
@@ -56,7 +56,7 @@ export class Sidebar extends LitElement {
                 @click=${() => {
                     this.dispatchEvent(new CustomEvent('toggle-open'));
                 }}
-                class="flex flex-grow bg-slate-400 lg:opacity-100 opacity-80"
+                class="w-full h-full absolute z-10 bg-slate-400 lg:opacity-100 opacity-80"
             ></div>
         </div>`;
     }

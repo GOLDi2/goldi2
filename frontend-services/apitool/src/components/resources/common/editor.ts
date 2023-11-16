@@ -19,7 +19,7 @@ export class Editor extends LitElement {
 
     protected render(): unknown {
         return html`<div
-            class="m-4 bg-slate-100 rounded-lg p-4 flex flex-col gap-2 border-2 border-black h-fit w-[60rem] max-w-[calc(100%_-_2rem)]"
+            class="m-4 bg-slate-100 rounded-lg p-4 flex flex-col gap-2 border-2 border-black h-fit w-[60rem] max-w-[calc(100%_-_2rem)] mb-[calc(1rem_+_env(safe-area-inset-bottom))] ml-[calc(1rem_+_env(safe-area-inset-left))] mr-[calc(1rem_+_env(safe-area-inset-right))]"
         >
             <slot></slot>
             <apitool-message-field .parent=${this}></apitool-message-field>

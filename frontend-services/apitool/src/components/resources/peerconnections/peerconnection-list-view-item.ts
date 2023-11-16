@@ -18,7 +18,7 @@ export class PeerconnectionListViewItem extends LitElement {
         return html`<apitool-collapsable-element
             .title=${this.peerconnectionOverview.url}
             .titleAlign=${'left'}
-            class="flex p-2 border-2 border-black rounded-lg bg-slate-300"
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-300 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             ${this.renderStatusBadge()}
             <div class="bg-slate-100 rounded-lg w-full p-2">
