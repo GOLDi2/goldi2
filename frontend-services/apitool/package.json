@@ -7,13 +7,14 @@
     "type": "module",
     "devDependencies": {
         "@types/route-parser": "^0.1.6",
-        "tailwindcss": "^3.3.3",
-        "typescript": "^5.0.0",
         "@web/dev-server": "^0.3.1",
-        "esbuild": "^0.19.2",
-        "npm-run-all": "^4.1.5",
         "copyfiles": "^2.4.1",
-        "nodemon": "^3.0.1"
+        "esbuild": "^0.19.2",
+        "nodemon": "^3.0.1",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^5.0.5",
+        "tailwindcss": "^3.3.3",
+        "typescript": "^5.0.0"
     },
     "dependencies": {
         "@cross-lab-project/api-client": "file:../../crosslab/clients/api/js/",
@@ -23,10 +24,10 @@
         "route-parser": "^0.0.5"
     },
     "scripts": {
-        "prepare": "npm-run-all prepare:*",
-        "prepare:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./http-dist",
-        "prepare:html": "copyfiles -f src/index.html http-dist",
-        "build": "npm run prepare && esbuild ./src/index.ts --bundle --outfile='http-dist/bundle.js' --loader:.css=text",
+        "prebuild": "rimraf http-dist/*.js && rimraf http-dist/*.css && npm-run-all prebuild:*",
+        "prebuild:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./http-dist",
+        "prebuild:html": "copyfiles -f src/index.html http-dist",
+        "build": "node build.js",
         "watch": "nodemon -e ts,html,css --watch src --exec \"npm run build\" &",
         "serve": "npm run watch && wds --watch --open --root-dir 'http-dist' --app-index 'http-dist/index.html'",
         "build:prod": "npm run prepare && esbuild ./src/index.ts --bundle --outfile='http-dist/bundle.js' --loader:.css=text --minify"

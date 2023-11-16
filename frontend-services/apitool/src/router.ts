@@ -10,9 +10,15 @@ export class Router {
         [k: string]: (data: { [k: string]: string }) => void | Promise<void>;
     }) {
         this.routes = [];
+        this.routes.push({
+            pattern: new Route(window.configuration.BASE_PATH ?? ''),
+            handler: () => undefined,
+        });
         for (const key in routes) {
             this.routes.push({
-                pattern: new Route(key),
+                pattern: new Route(
+                    (window.configuration.BASE_PATH ?? '') + key
+                ),
                 handler: routes[key],
             });
         }

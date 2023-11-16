@@ -6,14 +6,20 @@ server {
     #access_log  /var/log/nginx/host.access.log  main;
 
     root   /usr/share/nginx/html;
+
+    location ~*  \.(css|js)$ {
+        expires 30d;
+    }
+
     location / {
         try_files $uri $uri/ /index.html;
     }
 
     location = /index.html {
         sub_filter_types *;
-        sub_filter '/bundle.js' '/apitool/bundle.js';
-        sub_filter '/stylesheet.css' '/apitool/stylesheet.css';
+        sub_filter '/bundle' '/apitool/bundle';
+        sub_filter '/stylesheet' '/apitool/stylesheet';
+        sub_filter '<head>' '<head><script>window.configuration={BASE_PATH: "$VIRTUAL_PATH"}</script>'
     }
 
     #error_page  404              /404.html;

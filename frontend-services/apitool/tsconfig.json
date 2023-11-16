@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "lib": ["ES6", "DOM"],
-        "module": "ES6",
-        "target": "ES6",
+        "lib": ["ES2017", "DOM"],
+        "module": "ESNext",
+        "target": "ES2017",
         "moduleResolution": "Node",
         "allowImportingTsExtensions": true,
         "noEmit": true,
