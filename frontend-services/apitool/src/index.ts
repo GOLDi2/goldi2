@@ -48,7 +48,9 @@ export class Application extends LitElement {
     protected render(): unknown {
         return html`
             ${this.authenticated
-                ? html`<div class="w-full h-full flex flex-col relative">
+                ? html`<div
+                      class="w-full h-full flex flex-col relative pb-[env(safe-area-inset-bottom,_0px)]"
+                  >
                       <apitool-header
                           @toggle-sidebar=${() =>
                               this.workspace.toggleSidebar()}
@@ -65,7 +67,7 @@ export class Application extends LitElement {
                 : html`<login-panel
                       .url=${localStorage.getItem('url') ?? ''}
                       @login=${this.handleLogin}
-                      class="flex h-full w-full justify-center items-center bg-slate-600 ${!this
+                      class="pt-[env(safe-area-inset-top,_0px)] pb-[env(safe-area-inset-bottom,_0px)] flex h-full w-full justify-center items-center bg-slate-600 ${!this
                           .isReady
                           ? 'hidden'
                           : ''}"
