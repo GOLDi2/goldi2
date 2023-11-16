@@ -232,7 +232,9 @@ export class DeviceListItem extends LitElement {
     private renderButtons() {
         return html` <div class="flex gap-2 mt-2">
             <a
-                href=${'/devices/' + this.device.url.split('/').at(-1)}
+                href=${(window.configuration.BASE_PATH ?? '') +
+                '/devices/' +
+                this.device.url.split('/').at(-1)}
                 target="_blank"
                 class="text-center p-2 w-full rounded-lg bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-gray-50"
             >

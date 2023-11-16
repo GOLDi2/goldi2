@@ -213,7 +213,9 @@ export class Workspace extends LitElement {
     };
 
     private viewUpdatedHandler = (event: CustomEvent<string>) => {
-        this.router.resolve(event.detail);
+        this.router.resolve(
+            (window.configuration.BASE_PATH ?? '') + event.detail
+        );
         this.isSidebarOpen = false;
     };
 

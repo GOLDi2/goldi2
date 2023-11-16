@@ -18,31 +18,31 @@ export class Sidebar extends LitElement {
                 : 'hidden'}"
         >
             <a
-                href="/devices"
+                href="${window.configuration.BASE_PATH ?? ''}/devices"
                 class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Devices
             </a>
             <a
-                href="/experiments"
+                href="${window.configuration.BASE_PATH ?? ''}/experiments"
                 class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Experiments
             </a>
             <a
-                href="/peerconnections"
+                href="${window.configuration.BASE_PATH ?? ''}/peerconnections"
                 class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Peerconnections
             </a>
             <a
-                href="/templates"
+                href="${window.configuration.BASE_PATH ?? ''}/templates"
                 class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Templates
             </a>
             <a
-                href="/users"
+                href="${window.configuration.BASE_PATH ?? ''}/users"
                 class="text-center w-full p-2 border-black border-b-2 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
             >
                 Users

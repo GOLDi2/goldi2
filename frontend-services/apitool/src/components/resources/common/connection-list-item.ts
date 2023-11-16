@@ -84,7 +84,8 @@ export class ConnectionListItem extends LitElement {
                               class=${'my-2'}
                           ></apitool-device-list-item>
                           <a
-                              href=${'/peerconnections/' +
+                              href=${(window.configuration.BASE_PATH ?? '') +
+                              '/peerconnections/' +
                               this.resolvedConnection.url.split('/').at(-1)}
                               target="_blank"
                               class="text-center p-2 w-full rounded-lg bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-gray-50"
