@@ -92,12 +92,6 @@ export class ExperimentListViewItem extends LitElement {
     }
 
     private editExperiment() {
-        history.pushState(
-            {},
-            '',
-            '/experiments/' + this.experimentOverview.url.split('/').at(-1)
-        );
-
         const event = new CustomEvent<string>('update-view', {
             detail:
                 '/experiments/' + this.experimentOverview.url.split('/').at(-1),

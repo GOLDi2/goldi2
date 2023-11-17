@@ -67,8 +67,6 @@ export class UserCreator extends LitElement {
 
             const newUrl = '/users/' + createdUser.url.split('/').at(-1);
 
-            history.pushState({}, '', newUrl);
-
             const event = new CustomEvent<string>('update-view', {
                 detail: newUrl,
                 bubbles: true,
@@ -90,8 +88,6 @@ export class UserCreator extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/users');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/users',
             bubbles: true,

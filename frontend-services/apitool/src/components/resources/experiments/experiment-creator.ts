@@ -180,8 +180,6 @@ export class ExperimentCreator extends LitElement {
             const newUrl =
                 '/experiments/' + createdExperiment.url.split('/').at(-1);
 
-            history.pushState({}, '', newUrl);
-
             const event = new CustomEvent<string>('update-view', {
                 detail: newUrl,
                 bubbles: true,
@@ -203,8 +201,6 @@ export class ExperimentCreator extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/experiments');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/experiments',
             bubbles: true,

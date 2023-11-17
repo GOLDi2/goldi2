@@ -89,8 +89,6 @@ export class UserListView extends LitElement {
     }
 
     private createUser() {
-        history.pushState({}, '', '/user_creation');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/user_creation',
             bubbles: true,

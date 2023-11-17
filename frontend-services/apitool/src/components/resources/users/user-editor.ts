@@ -88,8 +88,6 @@ export class UserEditor extends LitElement {
         try {
             await apiClient.deleteUser(this.user.url);
 
-            history.pushState({}, '', '/users');
-
             const event = new CustomEvent<string>('update-view', {
                 detail: '/users',
                 bubbles: true,
@@ -112,8 +110,6 @@ export class UserEditor extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/users');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/users',
             bubbles: true,

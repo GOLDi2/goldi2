@@ -100,8 +100,6 @@ export class DeviceListView extends LitElement {
     }
 
     private createDevice() {
-        history.pushState({}, '', '/device_creation');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/device_creation',
             bubbles: true,

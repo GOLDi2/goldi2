@@ -67,12 +67,6 @@ export class TemplateListViewItem extends LitElement {
     }
 
     private async editTemplate() {
-        history.pushState(
-            {},
-            '',
-            '/templates/' + this.templateOverview.url.split('/').at(-1)
-        );
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/templates/' + this.templateOverview.url.split('/').at(-1),
             bubbles: true,

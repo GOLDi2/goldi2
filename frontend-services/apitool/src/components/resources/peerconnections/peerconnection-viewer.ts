@@ -66,8 +66,6 @@ export class PeerconnectionViewer extends LitElement {
         try {
             await apiClient.deletePeerconnection(this.peerconnection.url);
 
-            history.pushState({}, '', '/peerconnections');
-
             const event = new CustomEvent<string>('update-view', {
                 detail: '/peerconnections',
                 bubbles: true,
@@ -89,8 +87,6 @@ export class PeerconnectionViewer extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/peerconnections');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/peerconnections',
             bubbles: true,

@@ -110,12 +110,6 @@ export class DeviceListViewItem extends LitElement {
     }
 
     private async editDevice() {
-        history.pushState(
-            {},
-            '',
-            '/devices/' + this.deviceOverview.url.split('/').at(-1)
-        );
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/devices/' + this.deviceOverview.url.split('/').at(-1),
             bubbles: true,

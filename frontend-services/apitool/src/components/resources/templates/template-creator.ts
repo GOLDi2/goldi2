@@ -131,8 +131,6 @@ export class TemplateCreator extends LitElement {
             const newUrl =
                 '/templates/' + createdTemplate.url.split('/').at(-1);
 
-            history.pushState({}, '', newUrl);
-
             const event = new CustomEvent<string>('update-view', {
                 detail: newUrl,
                 bubbles: true,
@@ -154,8 +152,6 @@ export class TemplateCreator extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/templates');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/templates',
             bubbles: true,

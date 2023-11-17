@@ -136,8 +136,6 @@ export class TemplateEditor extends LitElement {
         try {
             await apiClient.deleteTemplate(this.template.url);
 
-            history.pushState({}, '', '/templates');
-
             const event = new CustomEvent<string>('update-view', {
                 detail: '/templates',
                 bubbles: true,
@@ -159,8 +157,6 @@ export class TemplateEditor extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/templates');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/templates',
             bubbles: true,

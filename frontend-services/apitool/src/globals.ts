@@ -11,3 +11,7 @@ declare global {
         configuration: Configuration;
     }
 }
+
+window.configuration ??= {
+    BASE_PATH: '',
+};

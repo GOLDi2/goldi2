@@ -62,8 +62,6 @@ export class UserListViewItem extends LitElement {
     }
 
     private async editUser() {
-        history.pushState({}, '', '/users/' + this.user.url.split('/').at(-1));
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/users/' + this.user.url.split('/').at(-1),
             bubbles: true,

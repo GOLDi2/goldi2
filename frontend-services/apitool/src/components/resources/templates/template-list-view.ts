@@ -87,8 +87,6 @@ export class TemplateListView extends LitElement {
     }
 
     private createTemplate() {
-        history.pushState({}, '', '/template_creation');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/template_creation',
             bubbles: true,

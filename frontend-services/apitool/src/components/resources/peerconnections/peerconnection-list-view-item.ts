@@ -78,13 +78,6 @@ export class PeerconnectionListViewItem extends LitElement {
     }
 
     private async viewPeerconnection() {
-        history.pushState(
-            {},
-            '',
-            '/peerconnections/' +
-                this.peerconnectionOverview.url.split('/').at(-1)
-        );
-
         const event = new CustomEvent<string>('update-view', {
             detail:
                 '/peerconnections/' +

@@ -237,8 +237,6 @@ export class ExperimentEditor extends LitElement {
         try {
             await apiClient.deleteExperiment(this.experiment.url);
 
-            history.pushState({}, '', '/experiments');
-
             const event = new CustomEvent<string>('update-view', {
                 detail: '/experiments',
                 bubbles: true,
@@ -260,8 +258,6 @@ export class ExperimentEditor extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/experiments');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/experiments',
             bubbles: true,

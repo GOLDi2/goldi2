@@ -84,8 +84,6 @@ export class ExperimentListView extends LitElement {
     }
 
     private createExperiment() {
-        history.pushState({}, '', '/experiment_creation');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/experiment_creation',
             bubbles: true,

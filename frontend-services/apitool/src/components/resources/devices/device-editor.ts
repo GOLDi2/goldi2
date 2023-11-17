@@ -165,8 +165,6 @@ export class DeviceEditor extends LitElement {
         try {
             await apiClient.deleteDevice(this.device.url);
 
-            history.pushState({}, '', '/devices');
-
             const event = new CustomEvent<string>('update-view', {
                 detail: '/devices',
                 bubbles: true,
@@ -188,8 +186,6 @@ export class DeviceEditor extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/devices');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/devices',
             bubbles: true,

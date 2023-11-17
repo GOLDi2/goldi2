@@ -206,8 +206,6 @@ export class DeviceCreator extends LitElement {
 
             const newUrl = '/devices/' + createdDevice.url.split('/').at(-1);
 
-            history.pushState({}, '', newUrl);
-
             const event = new CustomEvent<string>('update-view', {
                 detail: newUrl,
                 bubbles: true,
@@ -229,8 +227,6 @@ export class DeviceCreator extends LitElement {
     }
 
     private cancel() {
-        history.pushState({}, '', '/devices');
-
         const event = new CustomEvent<string>('update-view', {
             detail: '/devices',
             bubbles: true,
