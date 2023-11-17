@@ -19,7 +19,13 @@ server {
         sub_filter_types *;
         sub_filter '/bundle' '/apitool/bundle';
         sub_filter '/stylesheet' '/apitool/stylesheet';
+        sub_filter '/manifest' '/apitool/manifest';
         sub_filter '<head>' '<head><script>window.configuration={BASE_PATH: \"$VIRTUAL_PATH\"}</script>';
+    }
+
+    location = /manifest.json {
+        sub_filter_types *;
+        sub_filter '"start_url": "/"' '"start_url": "/apitool"';
     }
 
     #error_page  404              /404.html;

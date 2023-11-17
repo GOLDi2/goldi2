@@ -27,8 +27,10 @@
         "prebuild": "rimraf http-dist/*.js && rimraf http-dist/*.css && npm-run-all prebuild:*",
         "prebuild:css": "tailwindcss -i ./src/input.css -o ./src/stylesheet.css && copyfiles -f ./src/stylesheet.css ./http-dist",
         "prebuild:html": "copyfiles -f src/index.html http-dist",
+        "prebuild:manifest": "copyfiles -f manifest.json http-dist",
+        "prebuild:service-worker": "copyfiles -f src/service-worker.js http-dist",
         "build": "node build.js",
-        "watch": "nodemon -e ts,html,css --watch src --exec \"npm run build\" &",
+        "watch": "nodemon -e ts,html,css,js --watch src --exec \"npm run build\" &",
         "serve": "npm run watch && wds --watch --open --root-dir 'http-dist' --app-index 'http-dist/index.html'",
         "build:prod": "npm run prepare && esbuild ./src/index.ts --bundle --outfile='http-dist/bundle.js' --loader:.css=text --minify"
     }

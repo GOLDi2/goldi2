@@ -58,7 +58,9 @@ export class Application extends LitElement {
                       <apitool-workspace
                           class="flex-grow overflow-auto"
                       ></apitool-workspace>
-                      <apitool-footer class="sticky"></apitool-footer>
+                      <apitool-footer
+                          class="lg:sticky lg:block hidden"
+                      ></apitool-footer>
                   </div>`
                 : html`<login-panel
                       .url=${localStorage.getItem('url') ?? ''}
