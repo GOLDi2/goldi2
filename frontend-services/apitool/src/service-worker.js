@@ -1,6 +1,5 @@
 async function request(event) {
     try {
-        console.log(event);
         const response = await fetch(event.request.clone());
         return response;
     } catch (error) {
@@ -13,6 +12,5 @@ async function request(event) {
 
 self.addEventListener('fetch', (event) => {
     const response = request(event);
-    console.log(response);
     event.respondWith(response);
 });
