@@ -24,7 +24,9 @@ const registerServiceWorker = async () => {
                       ).replace(/\/\//g, '/')
                     : '/service-worker.js',
                 {
-                    scope: window.configuration.BASE_PATH ?? '/',
+                    scope: (
+                        (window.configuration.BASE_PATH ?? '') + '/'
+                    ).replace(/\/\//g, '/'),
                 }
             );
             if (registration.installing) {
