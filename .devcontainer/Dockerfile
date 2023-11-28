@@ -3,7 +3,8 @@ FROM crosslab/devcontainer:latest
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         alien \
-        rpm
+        rpm \
+        fakeroot
 
 # install Lattice Diamond
 COPY ./diamond/diamond-3-12-base_3.12-241_amd64.deb /tmp/diamond-3-12-base_3.12-241_amd64.deb
