@@ -23,11 +23,11 @@ else
     done
     read -p "Select board (0-$((index-1))): " INDEX
 
-    #if ping -c1 -w1 169.254.79.79 >/dev/null 2>&1; then
-    #    export IP=169.254.79.79
-    #else
+    if ping -c1 -w1 169.254.79.79 >/dev/null 2>&1; then
+        export IP=169.254.79.79
+    else
         export IP=$(cat boards.yml | yq -r '.boards['$INDEX'].ip')
-    #fi
+    fi
 fi
 
 export PASSWORD=$(cat boards.yml | yq -r '.boards['$INDEX'].password')
