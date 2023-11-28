@@ -201,7 +201,7 @@ async def main_async():
     deviceHandler.add_service(webcamService)
 
     def lightControl():
-        if len(deviceHandler._connections):
+        if len([c for c in deviceHandler._connections if deviceHandler._connections[c].state=="connected"]):
             hal.Light.set(True)
         else:
             hal.Light.set(False)
