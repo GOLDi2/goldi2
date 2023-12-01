@@ -79,4 +79,7 @@ RUN apt-get update \
 
 RUN pip3 install kas
 
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y wireguard pwgen rpiboot bmap-tools
+
 USER vscode

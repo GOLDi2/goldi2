@@ -4,9 +4,12 @@
 		"dockerfile": "Dockerfile",
 		"cacheFrom": "goldi2/devcontainer"
 	},
-	//"features": {
-	//	"./goldiFeature": {}
-	//},
+	// Activate for programming:
+	//"runArgs": [
+	//	"-v",
+    //    "/dev:/dev",
+	//	"--privileged"
+	//],
 	"customizations": {
 		"vscode": {
 			"extensions": [

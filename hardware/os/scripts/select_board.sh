@@ -17,6 +17,7 @@ if [[ $1 == 'auto' ]] && ping -c1 -w1 169.254.79.79 >/dev/null 2>&1; then
 else
     boards=$(cat boards.yml | yq -r '.boards[].name')
     index=0
+    IFS=$'\n'
     for board in $boards; do
         echo "$index) $board"
         index=$((index+1))
@@ -32,7 +33,7 @@ fi
 
 export PASSWORD=$(cat boards.yml | yq -r '.boards['$INDEX'].password')
 
-if sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$IP true 2>/dev/null; then
+if sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=1 root@$IP true 2>/dev/null ; then
     mac=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$IP "cat /sys/class/net/eth0/address" 2>/dev/null);
     wifiMac=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$IP "cat /sys/class/net/wlan0/address" 2>/dev/null);
     vpnConfig=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$IP "cat /boot/vpn-config" 2>/dev/null);
