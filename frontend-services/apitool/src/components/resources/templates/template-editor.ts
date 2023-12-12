@@ -1,4 +1,7 @@
-import { ExperimentServiceTypes } from '@cross-lab-project/api-client';
+import {
+    DeviceServiceTypes,
+    ExperimentServiceTypes,
+} from '@cross-lab-project/api-client';
 import { LitElement, html } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { apiClient } from '../../../globals';
@@ -68,9 +71,20 @@ export class TemplateEditor extends LitElement {
                 .parent=${this}
                 .possibleRoles=${[...this.template.configuration.roles]}
                 @update-devices=${(
-                    event: CustomEvent<ExperimentServiceTypes.Device[]>
+                    event: CustomEvent<
+                        (DeviceServiceTypes.DeviceReference & {
+                            role?: string;
+                        })[]
+                    >
                 ) => {
-                    this.template.configuration.devices = event.detail;
+                    this.template.configuration.devices = event.detail.map(
+                        (device) => {
+                            return {
+                                device: device.url,
+                                role: device.role ?? '',
+                            };
+                        }
+                    );
                     this.editor.messageField.removeAllSuccessMessages();
                     this.requestUpdate();
                 }}

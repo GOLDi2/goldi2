@@ -39,11 +39,44 @@ export class DeviceEditorConcreteDevice extends LitElement {
                       </p>`
                     : html`<button
                           @click=${async () => {
-                              const identity = await apiClient.getIdentity();
-                              this.token = await apiClient.createToken({
-                                  username: identity.username,
-                                  claims: { device_token: true },
-                              });
+                              let token;
+                              try {
+                                  const identity =
+                                      await apiClient.getIdentity();
+                                  token = await apiClient.createToken({
+                                      username: identity.username,
+                                      claims: { device_token: true },
+                                  });
+                              } catch (error) {
+                                  console.error(error);
+                              }
+
+                              // NOTE: temporary fallback for old way to get device token
+                              if (!token)
+                                  try {
+                                      const url = new URL(apiClient.url);
+                                      url.pathname =
+                                          '/device_authentication_token';
+                                      url.searchParams.append(
+                                          'device_url',
+                                          this.device.url
+                                      );
+                                      const response = await fetch(url, {
+                                          headers: [
+                                              [
+                                                  'Authorization',
+                                                  'Bearer ' +
+                                                      apiClient.accessToken,
+                                              ],
+                                          ],
+                                          method: 'post',
+                                      });
+                                      token = await response.text();
+                                  } catch (error) {
+                                      console.error(error);
+                                  }
+
+                              this.token = token;
                           }}
                           class="p-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-lg"
                       >
