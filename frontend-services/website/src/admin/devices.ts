@@ -67,10 +67,10 @@ export function device_router(language: string, renderPage: renderPageType, _log
 
     async function deviceToken(req: Request, res: Response, _next: NextFunction) {
         const url = req.query.url as string;
-        const token = await req.apiClient.createToken({
+        const token = req.user?.username ? await req.apiClient.createToken({
             username: req.user?.username,
             claims: { device_token: true },
-        });
+        }) : "";
         return renderPage('admin/devices/token', language, res, req.user, { token, url });
     }
 
