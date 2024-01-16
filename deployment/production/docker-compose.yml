@@ -35,6 +35,7 @@ x-config: &common-config
   DEVICE_SERVICE_DOMAIN: "device:3001"
   EXPERIMENT_SERVICE_DOMAIN: "experiment:3002"
   FEDERATION_SERVICE_DOMAIN: "federation:3003"
+  AUTHORIZATION_SERVICE_DOMAIN: "authorization:3010"
 
 networks:
   db:
