@@ -67,8 +67,9 @@ export class App extends LitElement {
 
   async start(accesstoken: string) {
     console.log({ accesstoken, device_url });
-    const { ws_endpoint, device_url: _device_url, token_endpoint } = derive_endpoints_from_url(device_url);
+    const { base_url ,ws_endpoint, device_url: _device_url, token_endpoint } = derive_endpoints_from_url(device_url);
 
+    client.url = base_url
     client.accessToken = accesstoken;
     const token = await client.createWebsocketToken(token_endpoint);
 

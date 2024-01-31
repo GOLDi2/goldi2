@@ -107,6 +107,9 @@ else
   echo "Loading Experiment Control Panel"
   # echo "$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp:latest/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
+   echo "Loading Experiment Control Panel (TI Lab)"
+  # echo "$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")"
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ti-lab-ecp:latest/image: '$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")'/g')
   echo "Loading Finite State Machine Interpreter"
   # echo "$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")"
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: fsm-interpreter:latest/image: '$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")'/g')

@@ -10,7 +10,7 @@ const config = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "http-dist"),
-    publicPath: "/ecp/",
+    publicPath: "/ti-lab-ecp/",
     devtoolModuleFilenameTemplate: "file:///[absolute-resource-path]",
   },
   devtool: "source-map",
