@@ -33,7 +33,6 @@ x-config: &common-config
   EXPERIMENT_SERVICE_URL: "http://experiment:3002"
   FEDERATION_SERVICE_URL: "http://federation:3003"
   AUTH_SERVICE_DOMAIN: "authentication:3000"
-  AUTHORIZATION_SERVICE_DOMAIN: "authorization:3010"
   DEVICE_SERVICE_DOMAIN: "device:3001"
   EXPERIMENT_SERVICE_DOMAIN: "experiment:3002"
   FEDERATION_SERVICE_DOMAIN: "federation:3003"

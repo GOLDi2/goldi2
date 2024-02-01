@@ -71,54 +71,75 @@ else
   scp -r -o StrictHostKeyChecking=no deployment/production/config "$HOST:$DIR/$VARIANT/config"
 
   function load_docker_image(){
-    cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | tail -1 | grep -Eo "[^ ]+$"
+    IMAGE=$(cat $1 | docker load | tail -1 | grep -Eo "[^ ]+$")
+    LOCAL_ID=$(docker inspect --format='{{.Id}}' $IMAGE)
+    REMOTE_ID=$(ssh -o StrictHostKeyChecking=no "$HOST" "docker inspect --format='{{.Id}}' $IMAGE")
+    if [ "$LOCAL_ID" = "$REMOTE_ID" ]; then
+      echo "$IMAGE"
+    else
+      cat $1 | ssh -o StrictHostKeyChecking=no "$HOST" "cat - | docker load" | tail -1 | grep -Eo "[^ ]+$"
+    fi
   }
 
   # Specify the exact version in the compose file
   COMPOSE=$(cat deployment/production/docker-compose.yml)
-  echo "Loading Gateway-Service"
-  # echo "$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: gateway-service:latest/image: '$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")'/g')
-  echo "Loading Authentication-Service"
-  # echo "$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: auth-service:latest/image: '$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")'/g')
-  echo "Loading Authorization-Service"
-  # echo "$(load_docker_image "crosslab/services/authorization/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: authorization-service:latest/image: '$(load_docker_image "crosslab/services/authorization/dist/docker-image.tar")'/g')
-  echo "Loading Device-Service"
-  # echo "$(load_docker_image "crosslab/services/device/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: device-service:latest/image: '$(load_docker_image "crosslab/services/device/dist/docker-image.tar")'/g')
-  echo "Loading Experiment-Service"
-  # echo "$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: experiment-service:latest/image: '$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")'/g')
-  echo "Loading Federation-Service"
-  # echo "$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: federation-service:latest/image: '$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")'/g')
-  echo "Loading LTI-Service"
-  # echo "$(load_docker_image "crosslab/services/lti/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: lti-service:latest/image: '$(load_docker_image "crosslab/services/lti/dist/docker-image.tar")'/g')
-  echo "Loading Update-Service"
-  # echo "$(load_docker_image "crosslab/services/update/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: update-service:latest/image: '$(load_docker_image "crosslab/services/update/dist/docker-image.tar")'/g')
 
-  echo "Loading Config Tool"
-  # echo "$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")"
-  # COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp:latest/image: '$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")'/g')
+  echo "Loading Gateway-Service"
+  IMAGE=$(load_docker_image "crosslab/services/gateway/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: gateway-service:latest/image: '$IMAGE'/g')
+
+  echo "Loading Authentication-Service"
+  IMAGE=$(load_docker_image "crosslab/services/auth/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: auth-service:latest/image: '$IMAGE'/g')
+  
+  echo "Loading Authorization-Service"
+  IMAGE=$(load_docker_image "crosslab/services/authorization/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: authorization-service:latest/image: '$IMAGE'/g')
+  
+  echo "Loading Device-Service"
+  IMAGE=$(load_docker_image "crosslab/services/device/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: device-service:latest/image: '$IMAGE'/g')
+  
+  echo "Loading Experiment-Service"
+  IMAGE=$(load_docker_image "crosslab/services/experiment/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: experiment-service:latest/image: '$IMAGE'/g')
+  
+  echo "Loading Federation-Service"
+  IMAGE=$(load_docker_image "crosslab/services/federation/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: federation-service:latest/image: '$IMAGE'/g')
+  
+  echo "Loading LTI-Service"
+  IMAGE=$(load_docker_image "crosslab/services/lti/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: lti-service:latest/image: '$IMAGE'/g')
+  
+  # echo "Loading Update-Service"
+  # IMAGE=$(load_docker_image "crosslab/services/update/dist/docker-image.tar")
+  # COMPOSE=$(echo "$COMPOSE" | sed 's/image: update-service:latest/image: '$IMAGE'/g')
+
+
+  # echo "Loading Config Tool"
+  # IMAGE=$(load_docker_image "frontend-services/config-tool/dist/docker-image.tar")
+  # COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp:latest/image: '$IMAGE'/g')
+  
   echo "Loading Experiment Control Panel"
-  # echo "$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp:latest/image: '$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")'/g')
-   echo "Loading Experiment Control Panel (TI Lab)"
-  # echo "$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ti-lab-ecp:latest/image: '$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")'/g')
+  IMAGE=$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp:latest/image: '$IMAGE'/g')
+  
+  echo "Loading Experiment Control Panel (TI Lab)"
+  IMAGE=$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: ti-lab-ecp:latest/image: '$IMAGE'/g')
+
   echo "Loading Finite State Machine Interpreter"
-  # echo "$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: fsm-interpreter:latest/image: '$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")'/g')
+  IMAGE=$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: fsm-interpreter:latest/image: '$IMAGE'/g')
+  
   echo "Loading API-Tool"
-  # echo "$(load_docker_image "frontend-services/apitool/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: apitool:latest/image: '$(load_docker_image "frontend-services/apitool/dist/docker-image.tar")'/g')
+  IMAGE=$(load_docker_image "frontend-services/apitool/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: apitool:latest/image: '$IMAGE'/g')
+  
   echo "Loading Website"
-  # echo "$(load_docker_image "frontend-services/website/dist/docker-image.tar")"
-  COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend:latest/image: '$(load_docker_image "frontend-services/website/dist/docker-image.tar")'/g')
+  IMAGE=$(load_docker_image "frontend-services/website/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: frontend:latest/image: '$IMAGE'/g')
 
   echo "$COMPOSE" | ssh -o StrictHostKeyChecking=no "$HOST" "source $DIR/$VARIANT.secrets; cat - | envsubst > $DIR/$VARIANT/docker-compose.yml"
   ssh -o StrictHostKeyChecking=no "$HOST" "cd $DIR/$VARIANT; docker-compose up -d"
