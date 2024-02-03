@@ -1,19 +1,21 @@
-import { AuthenticationServiceTypes } from '@cross-lab-project/api-client';
+import {
+    AuthenticationServiceTypes,
+    Require,
+} from '@cross-lab-project/api-client';
 import { LitElement, html } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { apiClient } from '../../../globals';
 import { Editor } from '../common';
 
 @customElement('apitool-user-editor')
 export class UserEditor extends LitElement {
     @property({ type: Object })
-    user!: AuthenticationServiceTypes.User<'response'>;
-
-    @query('#input-password')
-    inputPassword!: HTMLInputElement;
+    user!: Require<AuthenticationServiceTypes.User<'response'>, 'url'>;
 
     @query('apitool-editor')
     editor!: Editor;
+
+    changes: AuthenticationServiceTypes.User<'request'> = {};
 
     protected createRenderRoot(): Element | ShadowRoot {
         return this;
@@ -51,21 +53,35 @@ export class UserEditor extends LitElement {
                     type="password"
                     autocomplete="new-password"
                     class="w-full p-2 resize-none border rounded-lg"
-                    @input=${() => {
-                        this.user.password = this.inputPassword.value;
+                    @input=${(e: any) => {
+                        this.user.password = this.changes.password =
+                            e.target.value;
                         this.editor.messageField.removeAllSuccessMessages();
                     }}
                 />
             </div>
+            <div class="flex items-center">
+                <p class="w-28">Is Admin:</p>
+                <input
+                    id="input-is-admin"
+                    type="checkbox"
+                    ?checked=${this.user.admin}
+                    @change=${(e: any) => {
+                        this.user.admin = this.changes.admin = e.target.checked;
+                    }}
+                />
+            </div>
+        </div>
         </apitool-editor>`;
     }
 
     private async updateUser() {
         console.log('trying to update user:', this.user);
         try {
-            const updatedUser = await apiClient.updateUser(this.user.url, {
-                password: this.inputPassword.value,
-            });
+            const updatedUser = await apiClient.updateUser(
+                this.user.url,
+                this.changes
+            );
 
             this.editor.messageField.addMessage(
                 'success',

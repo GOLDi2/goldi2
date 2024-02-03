@@ -1,11 +1,14 @@
-import { AuthenticationServiceTypes } from '@cross-lab-project/api-client';
+import {
+    AuthenticationServiceTypes,
+    Require,
+} from '@cross-lab-project/api-client';
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 @customElement('apitool-user-list-view-item')
 export class UserListViewItem extends LitElement {
     @property({ type: Object })
-    user!: AuthenticationServiceTypes.User<'response'>;
+    user!: Require<AuthenticationServiceTypes.User<'response'>, 'url'>;
 
     @state()
     isOpen: boolean = false;
@@ -57,6 +60,10 @@ export class UserListViewItem extends LitElement {
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.user.username}
                 </p>
+            </div>
+            <div class="flex">
+                <p class="w-28 flex-shrink-0">Is Admin:</p>
+                <p>${this.user.admin}</p>
             </div>
         </div>`;
     }

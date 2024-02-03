@@ -13,33 +13,3 @@ declare global {
 }
 
 window.configuration ??= {};
-
-const registerServiceWorker = async () => {
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register(
-                window.configuration.BASE_PATH
-                    ? (
-                          window.configuration.BASE_PATH + '/service-worker.js'
-                      ).replace(/\/\//g, '/')
-                    : '/service-worker.js',
-                {
-                    scope: (
-                        (window.configuration.BASE_PATH ?? '') + '/'
-                    ).replace(/\/\//g, '/'),
-                }
-            );
-            if (registration.installing) {
-                console.log('Service worker installing');
-            } else if (registration.waiting) {
-                console.log('Service worker installed');
-            } else if (registration.active) {
-                console.log('Service worker active');
-            }
-        } catch (error) {
-            console.error(`Registration failed with ${error}`);
-        }
-    }
-};
-
-registerServiceWorker();
