@@ -1,7 +1,7 @@
 {
-  "name": "fsm-interpreter",
-  "dockerName": "fsm-interpreter",
-  "description": "Finite State Machine Interpreter",
+  "name": "ecp",
+  "dockerName": "ecp",
+  "description": "Experiment Control Panel",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
@@ -14,9 +14,12 @@
   "author": "Johannes Nau",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@cross-lab-project/api-client": "file:../../crosslab/clients/api/js",
-    "@cross-lab-project/soa-client": "file:../../crosslab/clients/soa/js",
-    "@cross-lab-project/soa-service-electrical": "file:../../crosslab/clients/soa_services/electricalConnection/js",
+    "@cross-lab-project/api-client": "file:../../../crosslab/clients/api/js",
+    "@cross-lab-project/soa-client": "file:../../../crosslab/clients/soa/js",
+    "@cross-lab-project/soa-service-electrical": "file:../../../crosslab/clients/soa_services/electricalConnection/js",
+    "@cross-lab-project/soa-service-file": "file:../../../crosslab/clients/soa_services/file/js",
+    "@cross-lab-project/soa-service-webcam": "file:../../../crosslab/clients/soa_services/webcam/js",
+    "@cross-lab-project/soa-service-message": "file:../../../crosslab/clients/soa_services/message/js",
     "isomorphic-ws": "5.0.0",
     "autoprefixer": "^10.4.11",
     "cross-fetch": "^3.1.5",
