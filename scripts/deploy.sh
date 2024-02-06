@@ -132,6 +132,10 @@ else
   echo "Loading Finite State Machine Interpreter"
   IMAGE=$(load_docker_image "frontend-services/edge_devices/fsm-interpreter/dist/docker-image.tar")
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: fsm-interpreter:latest/image: '$IMAGE'/g')
+
+  echo "Loading Virtual PSPU"
+  IMAGE=$(load_docker_image "frontend-services/edge_devices/virtual-pspu/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: virtual-pspu:latest/image: '$IMAGE'/g')
   
   echo "Loading API-Tool"
   IMAGE=$(load_docker_image "frontend-services/apitool/dist/docker-image.tar")
