@@ -18,3 +18,5 @@ export * from './service-list';
 export * from './service-list-item';
 export * from './service-configuration-list';
 export * from './service-configuration-list-item';
+export * from './user-list';
+export * from './user-list-item';

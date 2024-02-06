@@ -26,7 +26,7 @@ export class DeviceList extends LitElement {
     parent!: LitElement;
 
     @property({ type: Array })
-    possibleRoles: ExperimentServiceTypes.Role[] = [];
+    possibleRoles?: ExperimentServiceTypes.Role[] = undefined;
 
     @property({ type: Boolean })
     editable: boolean = true;

@@ -3,7 +3,7 @@ import {
     ExperimentServiceTypes,
     UnsuccessfulRequestError,
 } from '@cross-lab-project/api-client';
-import { LitElement, PropertyValueMap, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
 import { renderLoadingScreen } from '../helper';

@@ -44,7 +44,7 @@ export class DeviceEditorConcreteDevice extends LitElement {
                                   const identity =
                                       await apiClient.getIdentity();
                                   token = await apiClient.createToken({
-                                      username: identity.username,
+                                      username: identity.username!,
                                       claims: { device_token: true },
                                   });
                               } catch (error) {
