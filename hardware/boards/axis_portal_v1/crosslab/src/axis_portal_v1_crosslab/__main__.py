@@ -2,20 +2,20 @@
 
 import argparse
 import asyncio
+import os
 from json import JSONDecoder
 from typing import Dict, Optional
+
 from axis_portal_v1_crosslab.hal import HAL
 from axis_portal_v1_crosslab.model_logic import evaluateActuators
-import os
-
 from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
-from crosslab.soa_services.webcam import WebcamService__Producer, GstTrack
 from crosslab.soa_services.electrical import ElectricalConnectionService
 from crosslab.soa_services.electrical.signal_interfaces.gpio import (
-    GPIOInterface,
     ConstractableGPIOInterface,
+    GPIOInterface,
 )
+from crosslab.soa_services.webcam import GstTrack, WebcamService__Producer
 
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
@@ -201,10 +201,17 @@ async def main_async():
     deviceHandler.add_service(webcamService)
 
     def lightControl():
-        if len([c for c in deviceHandler._connections if deviceHandler._connections[c].state=="connected"]):
+        if len(
+            [
+                c
+                for c in deviceHandler._connections
+                if deviceHandler._connections[c].state == "connected"
+            ]
+        ):
             hal.Light.set(True)
         else:
             hal.Light.set(False)
+
     deviceHandler.on("connectionsChanged", lightControl)
 
     async with APIClient(url) as client:

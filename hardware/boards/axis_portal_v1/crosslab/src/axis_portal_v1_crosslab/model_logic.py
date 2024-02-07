@@ -1,8 +1,9 @@
 from typing import Callable, Dict
-from axis_portal_v1_crosslab.hal import HAL
 
-from crosslab.soa_services.electrical.signal_interfaces.gpio import GPIOInterface
+from axis_portal_v1_crosslab.hal import HAL
 from crosslab.soa_services.electrical.messages import State
+from crosslab.soa_services.electrical.signal_interfaces.gpio import \
+    GPIOInterface
 
 
 def isHigh(value: State):
