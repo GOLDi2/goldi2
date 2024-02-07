@@ -9,11 +9,6 @@
     "experimentalDecorators": true,
     "sourceMap": true,
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "http-dist"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "http-dist"]
 }

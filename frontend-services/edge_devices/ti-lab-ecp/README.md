@@ -1,10 +1,10 @@
-## Build the docker image ##
+## Build the docker image
 
 ```
 docker build . -t goldi2/ecp
 ```
 
-## Publish the docker image ##
+## Publish the docker image
 
 ```
 docker login -u goldi2
