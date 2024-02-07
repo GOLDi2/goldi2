@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -26,48 +27,101 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 0,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 7,
+        "w": 24,
         "x": 0,
         "y": 0
       },
       "id": 2,
+      "links": [],
+      "maxDataPoints": 100,
       "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "editorMode": "builder",
-          "expr": "{service=\"gateway\"} |= `requestID` |= `$requestID` | json | line_format `{{.requestID}} {{.request}} {{.status}} in {{.request_time}}`",
+          "editorMode": "code",
+          "expr": "count_over_time({project=\"crosslab\"} |= `$requestID` | drop source,service,project [$__interval])",
+          "hide": false,
+          "legendFormat": "{{level}}",
           "queryType": "range",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "builder",
-          "expr": "{service=\"gateway\"} != `requestID` |= `$requestID`",
-          "hide": false,
-          "queryType": "range",
-          "refId": "B"
         }
       ],
-      "title": "Gateway Service",
-      "type": "logs"
+      "title": "Log Volume",
+      "transformations": [],
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -75,12 +129,13 @@
         "uid": "P8E80F9AEF21F6940"
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 12,
-        "y": 0
+        "h": 24,
+        "w": 24,
+        "x": 0,
+        "y": 7
       },
       "id": 1,
+      "links": [],
       "maxDataPoints": 625,
       "options": {
         "dedupStrategy": "none",
@@ -92,6 +147,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
+      "pluginVersion": "10.1.1",
       "targets": [
         {
           "datasource": {
@@ -99,7 +155,9 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{service=\"authentication\"} |= `$requestID` |~ `^\\{` | json | line_format `{{.message}}`",
+          "expr": "{project=\"crosslab\"} |= `$requestID` |~ `^\\{` | json | line_format `{{ printf \"%-36s\" .requestID }} {{ printf \"%-20s\" .service }} {{.message}}{{.msg}}`",
+          "hide": false,
+          "legendFormat": "",
           "queryType": "range",
           "refId": "A"
         },
@@ -109,210 +167,14 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{service=\"authentication\"} |= `$requestID` !~ `^\\{`",
+          "expr": "{project=\"crosslab\"} |= `$requestID` !~ `^\\{` | line_format `{{ printf \"%-36s\" \"\" }} {{ printf \"%-20s\" .service }} {{ __line__ }}`",
           "hide": false,
+          "legendFormat": "",
           "queryType": "range",
           "refId": "B"
         }
       ],
-      "title": "Authentication Service",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 18,
-        "y": 0
-      },
-      "id": 4,
-      "maxDataPoints": 625,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "builder",
-          "expr": "{service=\"authorization\"} |= `$requestID` | json | line_format `{{.message}}`",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Authorization Service",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 9
-      },
-      "id": 3,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "code",
-          "expr": "{service=\"device\"} |= `$requestID` |~ `^\\{` | json | line_format `{{.message}}`",
-          "queryType": "range",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "code",
-          "expr": "{service=\"device\"} |= `$requestID` !~ `^\\{`",
-          "hide": false,
-          "queryType": "range",
-          "refId": "B"
-        }
-      ],
-      "title": "Device Service",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 9
-      },
-      "id": 6,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "builder",
-          "expr": "{service=\"federation\"} |= `$requestID` | json | line_format `{{.message}}`",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Federation Service",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 0,
-        "y": 19
-      },
-      "id": 5,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "builder",
-          "expr": "{service=\"experiment\"} |= `$requestID` | json | line_format `{{.message}}`",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Experiment Service",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 19
-      },
-      "id": 7,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "editorMode": "builder",
-          "expr": "{service=\"authorization\"} |=\"$requestID\"  | json | line_format \"{{.message}}\" ",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "title": "Booking Service",
+      "title": "Log Details",
       "type": "logs"
     }
   ],
@@ -345,13 +207,13 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Log Overview",
-  "uid": "fd0eae3e-285c-4a88-89ac-035d6f6ff085",
-  "version": 2,
+  "title": "Log Overview Copy",
+  "uid": "a1aefa2b-cc20-4c0e-9310-582eb8c27135",
+  "version": 1,
   "weekStart": ""
 }
