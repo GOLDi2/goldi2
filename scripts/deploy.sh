@@ -122,16 +122,20 @@ else
   # COMPOSE=$(echo "$COMPOSE" | sed 's/image: esp:latest/image: '$IMAGE'/g')
   
   echo "Loading Experiment Control Panel"
-  IMAGE=$(load_docker_image "frontend-services/experiment-control-panel/dist/docker-image.tar")
+  IMAGE=$(load_docker_image "frontend-services/edge_devices/experiment-control-panel/dist/docker-image.tar")
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ecp:latest/image: '$IMAGE'/g')
   
   echo "Loading Experiment Control Panel (TI Lab)"
-  IMAGE=$(load_docker_image "frontend-services/ti-lab-ecp/dist/docker-image.tar")
+  IMAGE=$(load_docker_image "frontend-services/edge_devices/ti-lab-ecp/dist/docker-image.tar")
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: ti-lab-ecp:latest/image: '$IMAGE'/g')
 
   echo "Loading Finite State Machine Interpreter"
-  IMAGE=$(load_docker_image "frontend-services/fsm-interpreter/dist/docker-image.tar")
+  IMAGE=$(load_docker_image "frontend-services/edge_devices/fsm-interpreter/dist/docker-image.tar")
   COMPOSE=$(echo "$COMPOSE" | sed 's/image: fsm-interpreter:latest/image: '$IMAGE'/g')
+
+  echo "Loading Virtual PSPU"
+  IMAGE=$(load_docker_image "frontend-services/edge_devices/virtual-pspu/dist/docker-image.tar")
+  COMPOSE=$(echo "$COMPOSE" | sed 's/image: virtual-pspu:latest/image: '$IMAGE'/g')
   
   echo "Loading API-Tool"
   IMAGE=$(load_docker_image "frontend-services/apitool/dist/docker-image.tar")

@@ -1,6 +1,8 @@
 version: "3"
 
 # docker plugin install grafana/loki-docker-driver:2.8.2 --alias loki --grant-all-permissions
+# docker network create global_default
+# docker run --name nginx-proxy -p 80:80 --network global_default -v /var/run/docker.sock:/tmp/docker.sock:ro nginxproxy/nginx-proxy:1.4
 
 x-loki: &loki-logging
   driver: loki
@@ -262,6 +264,19 @@ services:
       - VIRTUAL_HOST=www.${DOMAIN}
       - VIRTUAL_PORT=80
       - VIRTUAL_PATH=/fsm
+      - VIRTUAL_DEST=/
+      - LETSENCRYPT_HOST=www.${DOMAIN}
+    networks:
+      global_default:
+    restart: on-failure
+    logging: *loki-logging
+
+  virtual-pspu:
+    image: virtual-pspu:latest
+    environment:
+      - VIRTUAL_HOST=www.${DOMAIN}
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PATH=/vpspu
       - VIRTUAL_DEST=/
       - LETSENCRYPT_HOST=www.${DOMAIN}
     networks:

@@ -12,7 +12,7 @@ frontend-services/website:
 #     dependencies:
 #       - crosslab/clients/api/js:build
 
-frontend-services/experiment-control-panel:
+frontend-services/edge_devices/experiment-control-panel:
   - script: build
     dependencies:
       - crosslab/clients/api/js:build
@@ -21,7 +21,14 @@ frontend-services/experiment-control-panel:
       - crosslab/clients/soa_services/webcam/js:build
       - crosslab/clients/soa_services/file/js:build
 
-frontend-services/fsm-interpreter:
+frontend-services/edge_devices/fsm-interpreter:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
+frontend-services/edge_devices/virtual-pspu:
   - script: build
     dependencies:
       - crosslab/clients/api/js:build
