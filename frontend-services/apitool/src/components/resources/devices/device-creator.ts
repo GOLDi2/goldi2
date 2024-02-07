@@ -1,4 +1,8 @@
-import { DeviceServiceTypes } from '@cross-lab-project/api-client';
+import {
+    AuthenticationServiceTypes,
+    DeviceServiceTypes,
+    Require,
+} from '@cross-lab-project/api-client';
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { AutoResizeTextArea, Editor } from '../common';
@@ -110,6 +114,44 @@ export class DeviceCreator extends LitElement {
                         }}
                     />
                 </div>
+                <apitool-user-list
+                    .title=${'Owners'}
+                    .editable=${true}
+                    .parent=${this}
+                    .users=${this.device.owner ?? []}
+                    @update-users=${(
+                        event: CustomEvent<
+                            (
+                                | Require<
+                                      AuthenticationServiceTypes.User<'response'>,
+                                      'url'
+                                  >
+                                | { url: string }
+                            )[]
+                        >
+                    ) => {
+                        this.device.owner = event.detail;
+                    }}
+                ></apitool-user-list>
+                <apitool-user-list
+                    .title=${'Viewers'}
+                    .editable=${true}
+                    .parent=${this}
+                    .users=${this.device.viewer ?? []}
+                    @update-users=${(
+                        event: CustomEvent<
+                            (
+                                | Require<
+                                      AuthenticationServiceTypes.User<'response'>,
+                                      'url'
+                                  >
+                                | { url: string }
+                            )[]
+                        >
+                    ) => {
+                        this.device.viewer = event.detail;
+                    }}
+                ></apitool-user-list>
             </div>
             ${this.renderDevice()}
             <apitool-message-field .parent=${this}></apitool-message-field>

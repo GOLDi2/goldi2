@@ -107,14 +107,7 @@ export class DeviceEditor extends LitElement {
                     .title=${'Viewers'}
                     .editable=${true}
                     .parent=${this}
-                    .users=${this.device.viewer ?? [
-                        {
-                            url: 'https://api.dev.goldi-labs.de/users/f18278be-fs67-4d3c-92b1-33f53e236715',
-                        },
-                        {
-                            url: 'https://api.dev.goldi-labs.de/users/f18278be-ff67-4d3c-92b1-33f53e236715',
-                        },
-                    ]}
+                    .users=${this.device.viewer ?? []}
                     @update-users=${(
                         event: CustomEvent<
                             (
