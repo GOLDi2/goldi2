@@ -35,6 +35,14 @@ frontend-services/edge_devices/virtual-pspu:
       - crosslab/clients/soa/js:build
       - crosslab/clients/soa_services/electricalConnection/js:build
 
+frontend-services/edge_devices/ti-lab-ecp:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
+
 frontend-services/apitool:
   - script: build
     dependencies:
