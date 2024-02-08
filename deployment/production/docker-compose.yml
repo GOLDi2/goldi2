@@ -135,6 +135,8 @@ services:
     image: authorization-service:latest
     environment:
       <<: *common-config
+      DB_USERNAME: authorization
+      DB_DATABASE: authorization
       JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
