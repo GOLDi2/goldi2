@@ -1,9 +1,12 @@
 var searchData=
 [
   ['edge_5fdetector_0',['EDGE_DETECTOR',['../class_e_d_g_e___d_e_t_e_c_t_o_r.html',1,'']]],
-  ['em_5fenb_1',['em_enb',['../class_e_m_a_g_n_e_t___d_r_i_v_e_r.html#ae4997eb840dfe11106bade933fcad5bd',1,'EMAGNET_DRIVER']]],
-  ['em_5fout_5f1_2',['em_out_1',['../class_e_m_a_g_n_e_t___d_r_i_v_e_r.html#ab9debf9478064e0ee9076516f2f79721',1,'EMAGNET_DRIVER']]],
-  ['em_5fout_5f2_3',['em_out_2',['../class_e_m_a_g_n_e_t___d_r_i_v_e_r.html#adff953da839b3cf29caf82b5d43e34be',1,'EMAGNET_DRIVER']]],
-  ['emagnet_5fdriver_4',['EMAGNET_DRIVER',['../class_e_m_a_g_n_e_t___d_r_i_v_e_r.html',1,'']]],
-  ['error_5fdetector_5',['ERROR_DETECTOR',['../class_e_r_r_o_r___d_e_t_e_c_t_o_r.html',1,'']]]
+  ['eg_5fled_5faddress_1',['EG_LED_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#a55c0a3cbbe39011b87f57ea8cb2079e2',1,'GOLDI_MODULE_CONFIG']]],
+  ['emag_5faddress_2',['EMAG_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#a434bfffb3b46ca2fd573c3873d879c84',1,'GOLDI_MODULE_CONFIG']]],
+  ['emagnet_5fsmodule_3',['EMAGNET_SMODULE',['../class_e_m_a_g_n_e_t___s_m_o_d_u_l_e.html',1,'']]],
+  ['encoder_5fsmodule_4',['ENCODER_SMODULE',['../class_e_n_c_o_d_e_r___s_m_o_d_u_l_e.html',1,'']]],
+  ['er_5fled_5faddress_5',['ER_LED_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#a325082d3802c5e914c032719d046942d',1,'GOLDI_MODULE_CONFIG']]],
+  ['error_5fdetector_6',['ERROR_DETECTOR',['../class_e_r_r_o_r___d_e_t_e_c_t_o_r.html',1,'']]],
+  ['error_5flist_5faddress_7',['ERROR_LIST_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#ace23cbea42145643c7176c4432b835bc',1,'GOLDI_MODULE_CONFIG']]],
+  ['ew_5fled_5faddress_8',['EW_LED_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#abb0a1f5a4586738e92080230472b15fe',1,'GOLDI_MODULE_CONFIG']]]
 ];

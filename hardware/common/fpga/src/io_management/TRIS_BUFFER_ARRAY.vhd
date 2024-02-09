@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -18,36 +18,44 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V4.00.00 - Modification to the entity signal names
+-- Additional Comments: Changes to the generic and port signal names
+--						to follow with the naming convention implemented
+--						in V4.00.00.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_IO_STANDARD.all;
 
 
---! @brief Array of Tri-state buffers
+
+
+--! @brief Array of tri-state buffers
 --! @details
---! Array of Tri-state buffers for a simplified instantiation
+--! Array of tri-state buffers TRIS_BUFFER for a simplified instantiation 
 --! and routing.
 entity TRIS_BUFFER_ARRAY is
     generic(
-        BUFF_NUMBER :   natural := 10                                       --! Number of buffers
+        g_buff_number   :   natural := 10                                   --! Number of tri-state buffers
     );
     port(
         --General
         clk             : in    std_logic;                                  --! System clock
-        rst             : in    std_logic;                                  --! Sychronous clock
+        rst             : in    std_logic;                                  --! Asynchronous reset
         --System In/Out
-        port_out        : in    io_o_vector(BUFF_NUMBER-1 downto 0);        --! System output data vector
-        port_in_async   : out    io_i_vector(BUFF_NUMBER-1 downto 0);       --! System input asynchronous data vector
-        port_in_sync    : out    io_i_vector(BUFF_NUMBER-1 downto 0);       --! System input synchronous data vector
+        port_out        : in    io_o_vector(g_buff_number-1 downto 0);      --! System output data vector
+        port_in_async   : out   io_i_vector(g_buff_number-1 downto 0);      --! System input asynchronous data vector
+        port_in_sync    : out   io_i_vector(g_buff_number-1 downto 0);      --! System input synchronous data vector
         --FPGA IO
-        io_vector       : inout std_logic_vector(BUFF_NUMBER-1 downto 0)    --! FPGA Pins
+        io_vector       : inout std_logic_vector(g_buff_number-1 downto 0)  --! FPGA Pins
     );
 end entity TRIS_BUFFER_ARRAY;
+
 
 
 
@@ -55,7 +63,7 @@ end entity TRIS_BUFFER_ARRAY;
 architecture RTL of TRIS_BUFFER_ARRAY is
 begin
 
-    BUFF_ARRAY : for i in 0 to BUFF_NUMBER-1 generate
+    BUFF_ARRAY : for i in 0 to g_buff_number-1 generate
         BUFF : entity work.TRIS_BUFFER
         port map(
             clk             => clk,
@@ -68,4 +76,4 @@ begin
     end generate; 
 
 
-end RTL;
+end architecture;

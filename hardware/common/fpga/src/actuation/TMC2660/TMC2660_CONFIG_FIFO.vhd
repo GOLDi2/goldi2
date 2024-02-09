@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
@@ -9,7 +9,7 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
--- Dependencies:	none
+-- Dependencies:	-> GOLDI_DATA_TYPES.vhd
 --
 -- Revisions:
 -- Revision V1.00.00 - File Created
@@ -18,32 +18,41 @@
 -- Revision V2.00.00 - Default module version for release 2.00.00
 -- Additional Comments: -  
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_DATA_TYPES.all;
 
 
 
 
---! @brief
+--! @brief Configuration loading module for initialization of TMC2660 (V3.00.00)
 --! @details
+--! The TMC2660_CONFIG_FIFO is used to load the default configuration of the TMC2660
+--! after reset or initialization. The default configuration is set through the "ROM"
+--! parameter, which consists of a list of 24-bit data words formatted as register
+--! data (see TMC2660 datasheet).
 --!
+--! After the reset signal has been asserted the module enables the valid flag. A
+--! ready/valid handsake is needed for the data to be transfered. Once the list is
+--! empty the valid flag is grounded until a new reset occurs.
+--!
+--! ***Latency: 1cyc***
 entity TMC2660_CONFIG_FIFO is
     generic(
-        ROM             :   tmc2660_rom := (x"00000F",x"00000F",x"00000F")
+        ROM             :   tmc2660_rom := (x"00000F",x"00000F",x"00000F")  --! TMC2660 default configuration
     );
     port(
         --General
-        clk             : in    std_logic;
-        rst             : in    std_logic;
+        clk             : in    std_logic;                                  --! System clock
+        rst             : in    std_logic;                                  --! Synchronous reset
         --Data
-        m_read_tready   : in    std_logic;
-        m_read_tvalid   : out   std_logic;
-        m_read_tdata    : out   std_logic_vector(23 downto 0)       
+        m_read_tready   : in    std_logic;                                  --! Configuration data - ready flag
+        m_read_tvalid   : out   std_logic;                                  --! Configuration data - valid flag
+        m_read_tdata    : out   std_logic_vector(23 downto 0)               --! Configuration data - data
     );
 end entity TMC2660_CONFIG_FIFO;
 

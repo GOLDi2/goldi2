@@ -3,11 +3,6 @@
 
 {% block main %}
     {% call sidebar.container() %}
-        {% call sidebar.sidebar(title="ADMIN") %}
-            {% call sidebar.element(language, href="/admin/devices") %}devices{% endcall %}
-            {% call sidebar.element(language, href="/admin/users") %}users{% endcall %}
-            {% call sidebar.element(language, href="/admin/roles") %}roles{% endcall %}
-        {% endcall %}
         {% call sidebar.content() %}
             {% block content %}{% endblock %}
         {% endcall %}

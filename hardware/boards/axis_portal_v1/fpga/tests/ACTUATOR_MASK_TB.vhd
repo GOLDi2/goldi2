@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/12/2022
@@ -9,7 +9,10 @@
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
 --
--- Dependencies: 	none
+-- Dependencies: 	-> GODLI_MODULE_CONFIG.vhd
+--                  -> GOLDI_COMM_STANDARD.vhd
+--                  -> GOLDI_IO_STANDARD.vhd
+--                  -> ACTUATOR_MASK.vhd
 --
 -- Revisions:
 -- Revision V0.01.03 - File Created
@@ -17,12 +20,23 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: -
+--
+-- Revision V3.00.01 - Standarization of testbenches
+-- Additional Comments: Modification to message format and test cases
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to control simulation flow.
+--                      Changes to the DUT entity and the port signal names. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom libraries
+--! Use standard library for simulation flow control and assertions
+library std;
+use std.standard.all;
+use std.env.all;
+--! Use custom packages
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_COMM_STANDARD.all;
@@ -36,33 +50,34 @@ end entity ACTUATOR_MASK_TB;
 
 
 
+
 --! Simulation architecture
 architecture TB of ACTUATOR_MASK_TB is
 
-    --CUT
+    --****DUT****
     component ACTUATOR_MASK
         port(
-            sys_io_i    : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            sys_io_o    : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-            safe_io_out : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0) 
+            p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+            p_safe_io_o : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0) 
         );
     end component;
 
 
-    --Intermediate Signals
-	--DUT i/o
-    signal sys_io_i         :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal sys_io_o         :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-    signal safe_io_out      :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
-        alias x_enable_s    :   std_logic is safe_io_out(17).dat;
-        alias x_out_1_s     :   std_logic is safe_io_out(18).dat;
-        alias x_out_2_s     :   std_logic is safe_io_out(19).dat;
-        alias y_enable_s    :   std_logic is safe_io_out(20).dat;
-        alias y_out_1_s     :   std_logic is safe_io_out(21).dat;
-        alias y_out_2_s     :   std_logic is safe_io_out(22).dat;
-        alias z_enable_s    :   std_logic is safe_io_out(23).dat;
-        alias z_out_1_s     :   std_logic is safe_io_out(24).dat;
-        alias z_out_2_s     :   std_logic is safe_io_out(25).dat;
+    --****INTERNAL SIGNALS****
+	--DUT IOs
+    signal p_sys_io_i       :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_i);
+    signal p_sys_io_o       :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0) := (others => gnd_io_o);
+    signal p_safe_io_o      :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
+        alias x_enable_s    :   std_logic is p_safe_io_o(17).dat;
+        alias x_out_pos_s   :   std_logic is p_safe_io_o(18).dat;
+        alias x_out_neg_s   :   std_logic is p_safe_io_o(19).dat;
+        alias y_enable_s    :   std_logic is p_safe_io_o(20).dat;
+        alias y_out_neg_s   :   std_logic is p_safe_io_o(21).dat;
+        alias y_out_pos_s   :   std_logic is p_safe_io_o(22).dat;
+        alias z_enable_s    :   std_logic is p_safe_io_o(23).dat;
+        alias z_out_pos_s   :   std_logic is p_safe_io_o(24).dat;
+        alias z_out_neg_s   :   std_logic is p_safe_io_o(25).dat;
     
     signal input_values     :   std_logic_vector(16 downto 0);
         alias limit_x_neg   :   std_logic is input_values(0);
@@ -74,48 +89,57 @@ architecture TB of ACTUATOR_MASK_TB is
         alias limit_z_neg   :   std_logic is input_values(6);
         alias limit_z_pos   :   std_logic is input_values(7);
         alias x_enable      :   std_logic is input_values(8);
-        alias x_out_1       :   std_logic is input_values(9);
-        alias x_out_2       :   std_logic is input_values(10);
+        alias x_out_pos     :   std_logic is input_values(9);
+        alias x_out_neg     :   std_logic is input_values(10);
         alias y_enable      :   std_logic is input_values(11);
-        alias y_out_1       :   std_logic is input_values(12);
-        alias y_out_2       :   std_logic is input_values(13);
+        alias y_out_pos     :   std_logic is input_values(12);
+        alias y_out_neg     :   std_logic is input_values(13);
         alias z_enable      :   std_logic is input_values(14);
-        alias z_out_1       :   std_logic is input_values(15);
-        alias z_out_2       :   std_logic is input_values(16);
+        alias z_out_pos     :   std_logic is input_values(15);
+        alias z_out_neg     :   std_logic is input_values(16);
 
 
 begin
 
+    --****COMPONENT****
+    -----------------------------------------------------------------------------------------------
     DUT : ACTUATOR_MASK
     port map(
-        sys_io_i    => sys_io_i,
-        sys_io_o    => sys_io_o,
-        safe_io_out => safe_io_out
+        p_sys_io_i  => p_sys_io_i,
+        p_sys_io_o  => p_sys_io_o,
+        p_safe_io_o => p_safe_io_o
     );
+    -----------------------------------------------------------------------------------------------
+
 
     
+    --****SIGNAL ASSIGNMENT****
+    -----------------------------------------------------------------------------------------------
     --Sensors
-    sys_io_i(2).dat <= limit_x_neg;
-    sys_io_i(3).dat <= limit_x_pos;
-    sys_io_i(4).dat <= limit_x_ref;
-    sys_io_i(5).dat <= limit_y_neg;
-    sys_io_i(6).dat <= limit_y_pos;
-    sys_io_i(7).dat <= limit_y_ref;
-    sys_io_i(8).dat <= limit_z_neg;
-    sys_io_i(9).dat <= limit_z_pos;
+    p_sys_io_i(2).dat <= limit_x_neg;
+    p_sys_io_i(3).dat <= limit_x_pos;
+    p_sys_io_i(4).dat <= limit_x_ref;
+    p_sys_io_i(5).dat <= limit_y_neg;
+    p_sys_io_i(6).dat <= limit_y_pos;
+    p_sys_io_i(7).dat <= limit_y_ref;
+    p_sys_io_i(8).dat <= limit_z_neg;
+    p_sys_io_i(9).dat <= limit_z_pos;
     --Actuators
-    sys_io_o(17).dat <= x_enable;
-    sys_io_o(18).dat <= x_out_1;
-    sys_io_o(19).dat <= x_out_2;
-    sys_io_o(20).dat <= y_enable;
-    sys_io_o(21).dat <= y_out_1;
-    sys_io_o(22).dat <= y_out_2;
-    sys_io_o(23).dat <= z_enable;
-    sys_io_o(24).dat <= z_out_1;
-    sys_io_o(25).dat <= z_out_2;
+    p_sys_io_o(17).dat <= x_enable;
+    p_sys_io_o(18).dat <= x_out_pos;
+    p_sys_io_o(19).dat <= x_out_neg;
+    p_sys_io_o(20).dat <= y_enable;
+    p_sys_io_o(21).dat <= y_out_neg;
+    p_sys_io_o(22).dat <= y_out_pos;
+    p_sys_io_o(23).dat <= z_enable;
+    p_sys_io_o(24).dat <= z_out_pos;
+    p_sys_io_o(25).dat <= z_out_neg;
+    -----------------------------------------------------------------------------------------------
 
 
 
+    --****TEST****
+    -----------------------------------------------------------------------------------------------
     TEST : process
         variable assert_hold    :   time := 5 ns;
         variable post_hold      :   time := 5 ns;
@@ -127,84 +151,106 @@ begin
 
             wait for assert_hold;
             --Mask tests
-            if((limit_x_neg = '1' and limit_x_pos = '1') or (limit_x_neg = '1' and limit_x_ref = '1') or
-               (limit_x_pos = '1' and limit_x_ref = '1') or (x_out_1 = '1'and x_out_2 = '1') or
-               (limit_z_pos = '0' and x_enable = '1'))   then
+            --X_Enable channel
+            if((limit_x_neg = '1' and limit_x_pos = '1')  or 
+               (limit_x_neg = '1' and limit_x_ref = '1')  or
+               (limit_x_pos = '1' and limit_x_ref = '1')  or 
+               (x_out_pos   = '1' and x_out_neg   = '1')  or
+               (limit_z_pos = '0' and x_enable    = '1')) then
                 
-                assert(safe_io_out(17).dat = '0') 
-                    report "line(135): Expecting safe_io_out(0) disabled" severity error;
+                assert(p_safe_io_o(17).dat = '0') 
+                    report "ID01: Expecting p_safe_io_o(0) disabled" severity error;
             end if;
 
-            if((limit_x_neg = '1' and limit_x_pos = '1') or (limit_x_neg = '1' and limit_x_ref = '1') or
-               (limit_x_pos = '1' and limit_x_ref = '1') or (x_out_1 = '1'     and x_out_2 = '1')     or
-               (limit_z_pos = '0' and x_enable = '1')    or (limit_x_neg = '1' and x_out_1 = '1'))    then
+            --X_Out_Pos Channel
+            if((limit_x_pos = '1'                      )  or 
+               (limit_x_neg = '1' and limit_x_ref = '1')  or 
+               (x_out_pos   = '1' and x_out_neg   = '1')  or
+               (limit_z_pos = '0'                      )) then
 
-                assert(safe_io_out(18).dat = '0')
-                    report "line(143): Expecting safe_io_out(1) disabled" severity error;
+                assert(p_safe_io_o(18).dat = '0')
+                    report "ID02: Expecting p_safe_io_o(1) disabled" severity error;
             end if;
 
-            if((limit_x_neg = '1' and limit_x_pos = '1') or (limit_x_neg = '1' and limit_x_ref = '1') or
-               (limit_x_pos = '1' and limit_x_ref = '1') or (x_out_1 = '1'     and x_out_2 = '1')     or
-               (limit_z_pos = '0' and x_enable = '1')    or (limit_x_pos = '1' and x_out_2 = '1'))    then
+            --X_Out_Neg Channel
+            if((limit_x_neg = '1'                      )  or 
+               (limit_x_pos = '1' and limit_x_ref = '1')  or 
+               (x_out_pos   = '1' and x_out_neg   = '1')  or
+               (limit_z_pos = '0'                      )) then
             
-                assert(safe_io_out(19).dat = '0')
-                    report "line(151): Expecting safe_io_out(2) disabled" severity error;
+                assert(p_safe_io_o(19).dat = '0')
+                    report "ID03: Expecting p_safe_io_o(2) disabled" severity error;
             end if;
 
-            if((limit_y_neg = '1' and limit_y_pos = '1') or (limit_y_neg = '1' and limit_y_ref = '1') or
-               (limit_y_pos = '1' and limit_y_ref = '1') or (y_out_1 = '1'     and y_out_2     = '1') or
-               (limit_z_pos = '0' and y_enable = '1'))   then
+            --Y_Enable Channel
+            if((limit_y_neg = '1' and limit_y_pos = '1')  or 
+               (limit_y_neg = '1' and limit_y_ref = '1')  or
+               (limit_y_pos = '1' and limit_y_ref = '1')  or 
+               (y_out_pos   = '1' and y_out_neg   = '1')  or
+               (limit_z_pos = '0'                      )) then
             
-                assert(safe_io_out(20).dat = '0')
-                    report "line(159): Expecting safe_io_out(3) disabled" severity error;
+                assert(p_safe_io_o(20).dat = '0')
+                    report "ID04: Expecting p_safe_io_o(3) disabled" severity error;
             end if;
 
-            if((limit_y_neg = '1' and limit_y_pos = '1') or (limit_y_neg = '1' and limit_y_ref = '1') or
-               (limit_y_pos = '1' and limit_y_ref = '1') or (y_out_1 = '1'     and y_out_2     = '1') or
-               (limit_z_pos = '0' and y_enable = '1')    or (limit_y_neg = '1' and y_out_1 = '1'))    then
+            --Y_Out_Neg Channel
+            if((limit_y_neg = '1'                      )  or 
+               (limit_y_pos = '1' and limit_y_ref = '1')  or 
+               (y_out_pos   = '1' and y_out_neg   = '1')  or
+               (limit_z_pos = '0'                      )) then
 
-                assert(safe_io_out(21).dat = '0')
-                    report "line(167): Expecting safe_io_out(4) disabled" severity error;
+                assert(p_safe_io_o(21).dat = '0')
+                    report "ID05: Expecting p_safe_io_o(4) disabled" severity error;
             end if; 
 
-            if((limit_y_neg = '1' and limit_y_pos = '1') or (limit_y_neg = '1' and limit_y_ref = '1') or
-               (limit_y_pos = '1' and limit_y_ref = '1') or (y_out_1 = '1'     and y_out_2     = '1') or
-               (limit_z_pos = '0' and y_enable = '1')    or (limit_y_pos = '1' and y_out_2 = '1'))    then
+            --Y_Out_Pos Channel
+            if((limit_y_pos = '1'                      )  or 
+               (limit_y_neg = '1' and limit_y_ref = '1')  or
+               (y_out_pos   = '1' and y_out_neg   = '1')  or
+               (limit_z_pos = '0'                      )) then
             
-                assert(safe_io_out(22).dat = '0')
-                    report "line(175): Expecting safe_io_out(5) disabled" severity error;
+                assert(p_safe_io_o(22).dat = '0')
+                    report "ID06: Expecting p_safe_io_o(5) disabled" severity error;
             end if;
 
-            if((limit_z_neg = '1' and limit_z_pos = '1') or (z_out_1 = '1'     and z_out_2 = '1'))    then
+            --Z_Enable Channel
+            if((limit_z_neg = '1' and limit_z_pos = '1')  or 
+               (z_out_pos   = '1' and z_out_neg   = '1')) then
                 
-                assert(safe_io_out(23).dat = '0')
-                    report "line(181): Expecting safe_io_out(6) disabled" severity error;
+                assert(p_safe_io_o(23).dat = '0')
+                    report "ID07: Expecting p_safe_io_o(6) disabled" severity error;
             end if;
 
-            if((limit_z_neg = '1' and limit_z_pos = '1') or (z_out_1 = '1'     and z_out_2 = '1')     or
-               (limit_z_neg = '1' and z_out_1 = '1')) then
+            --Z_Out_Pos Channel
+            if((limit_z_pos = '1'                      )  or 
+               (z_out_pos   = '1' and z_out_neg   = '1')) then
             
-                assert(safe_io_out(24).dat = '0')
-                    report "line(188): Expecting safe_io_out(7) disabled" severity error;
+                assert(p_safe_io_o(24).dat = '0')
+                    report "ID07: Expecting p_safe_io_o(7) disabled" severity error;
             end if;
 
-            if((limit_z_neg = '1' and limit_z_pos = '1') or (z_out_1 = '1'     and z_out_2 = '1')     or
-               (limit_z_pos = '1' and z_out_2 = '1')) then
+            --Z_Out_Neg Channel
+            if((limit_z_neg = '1'                      )  or 
+               (z_out_pos   = '1' and z_out_neg   = '1')) then
             
-                assert(safe_io_out(25).dat = '0')
-                    report "line(195): Expecting safe_io_out(8) disabled" severity error;
+                assert(p_safe_io_o(25).dat = '0')
+                    report "ID08: Expecting p_safe_io_o(8) disabled" severity error;
             end if;
-
 
             wait for post_hold;
         end loop;
 
 
-        --End simulation
-        wait for 50 ns;
-        wait;
-
+  		--**End simulation**
+		wait for 50 ns;
+        report "AP1: ACUTATOR_MASK_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- wait;
+		
     end process;
+    -----------------------------------------------------------------------------------------------
 
 
-end TB;
+end architecture;

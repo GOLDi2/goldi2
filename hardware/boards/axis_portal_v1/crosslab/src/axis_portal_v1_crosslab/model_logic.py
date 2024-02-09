@@ -1,8 +1,9 @@
 from typing import Callable, Dict
-from axis_portal_v1_crosslab.hal import HAL
 
-from crosslab.soa_services.electrical.signal_interfaces.gpio import GPIOInterface
+from axis_portal_v1_crosslab.hal import HAL
 from crosslab.soa_services.electrical.messages import State
+from crosslab.soa_services.electrical.signal_interfaces.gpio import \
+    GPIOInterface
 
 
 def isHigh(value: State):
@@ -57,9 +58,9 @@ def evaluateActuators(
         userError("XMotorLeft and XMotorRight are both high")
         hal.XMotor.set(0)
     elif isHigh(xMotorLeft):
-        hal.XMotor.set(-255)
-    elif isHigh(xMotorRight):
         hal.XMotor.set(255)
+    elif isHigh(xMotorRight):
+        hal.XMotor.set(-255)
     else:
         hal.XMotor.set(0)
 

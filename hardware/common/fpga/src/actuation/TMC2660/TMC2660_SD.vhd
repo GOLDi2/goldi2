@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universit�t Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -26,9 +26,7 @@ use IEEE.numeric_std.all;
 
 
 
---! @brief
---! @details
---!
+
 entity TMC2660_SD is
     generic(
         SPEED_FACTOR            : natural := 100
@@ -60,7 +58,7 @@ architecture RTL of TMC2660_SD is
     signal nominal_frequency_buff   :   std_logic_vector(7 downto 0);
     signal operation_frequency_buff :   natural range 0 to 256;
     --Counters
-    signal step_period              :   natural range SPEED_FACTOR to SPEED_FACTOR*256;
+    signal step_period              :   natural range 0 to SPEED_FACTOR*256;
     signal step_period_counter      :   natural;
     --Flags
     signal configuration_valid      :   std_logic;

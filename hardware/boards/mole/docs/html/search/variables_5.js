@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['g_5faddress_0',['g_address',['../class_g_p_i_o___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'GPIO_SMODULE.g_address()'],['../class_l_e_d___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'LED_SMODULE.g_address()'],['../class_p_w_m___s_m_o_d_u_l_e.html#abdd428974acbf08b924bc0481b45450b',1,'PWM_SMODULE.g_address()'],['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#abdd428974acbf08b924bc0481b45450b',1,'REGISTER_TABLE.g_address()'],['../class_r_e_g_i_s_t_e_r___u_n_i_t.html#a49573c8e2f2c29fa7c29b897c375901b',1,'REGISTER_UNIT.g_address()']]],
+  ['g_5fbuff_5fnumber_1',['g_buff_number',['../class_t_r_i_s___b_u_f_f_e_r___a_r_r_a_y.html#a2af526057d9eb11b29c1deab567b4c28',1,'TRIS_BUFFER_ARRAY']]],
+  ['g_5fclk_5ffrequency_2',['g_clk_frequency',['../class_l_e_d___s_m_o_d_u_l_e.html#ac535544f58379d2f1c5553fe3a318ba6',1,'LED_SMODULE']]],
+  ['g_5fdef_5fvalue_3',['g_def_value',['../class_r_e_g_i_s_t_e_r___u_n_i_t.html#aa5100226aca565be04d3e8f2ea2debc3',1,'REGISTER_UNIT']]],
+  ['g_5fdef_5fvalues_4',['g_def_values',['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#addc1c2fe3d1a292375dfe31594566145',1,'REGISTER_TABLE']]],
+  ['g_5fdefault_5fleft_5flayout_5',['g_default_left_layout',['../class_i_o___c_r_o_s_s_b_a_r.html#a8c4669d9d13231929c1e9f371ac325c5',1,'IO_CROSSBAR']]],
+  ['g_5fdefault_5fright_5flayout_6',['g_default_right_layout',['../class_i_o___c_r_o_s_s_b_a_r.html#a99e0379d3ff6eafe6cf81ebef34ddb8b',1,'IO_CROSSBAR']]],
+  ['g_5fgpio_5fnumber_7',['g_gpio_number',['../class_g_p_i_o___s_m_o_d_u_l_e.html#ad8b80e3cef2865b47fbb4d243435570b',1,'GPIO_SMODULE']]],
+  ['g_5finverted_8',['g_inverted',['../class_l_e_d___s_m_o_d_u_l_e.html#a95974a688bcaf6e73382c62cc91b86a7',1,'LED_SMODULE']]],
+  ['g_5fleft_5fport_5flength_9',['g_left_port_length',['../class_i_o___c_r_o_s_s_b_a_r.html#a9c4f38625d61065c8aadceb8524b738a',1,'IO_CROSSBAR']]],
+  ['g_5fpwm_5ffreq_10',['g_pwm_freq',['../class_p_w_m___s_m_o_d_u_l_e.html#ad5c82b9cdd8decd5a78f16597cb49ec2',1,'PWM_SMODULE']]],
+  ['g_5freg_5fnumber_11',['g_reg_number',['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#a8313eda8dfdbc1883fd54680f1fb76b6',1,'REGISTER_TABLE']]],
+  ['g_5fright_5fport_5flength_12',['g_right_port_length',['../class_i_o___c_r_o_s_s_b_a_r.html#ab7c5d163356065669aaed4a1223a8ed5',1,'IO_CROSSBAR']]],
+  ['g_5fstages_13',['g_stages',['../class_s_y_n_c_h_r_o_n_i_z_e_r.html#aba0fd1e5dffdcf50510245e0000e125e',1,'SYNCHRONIZER']]],
+  ['g_5fsys_5ffreq_14',['g_sys_freq',['../class_p_w_m___s_m_o_d_u_l_e.html#a9241040ab3e007f2a1fa0801fad0a734',1,'PWM_SMODULE']]],
+  ['g_5fword_5flength_15',['g_word_length',['../class_s_p___c_o_n_v_e_r_t_e_r.html#aaf53bafb9b39ad0786cf180774659d2e',1,'SP_CONVERTER']]]
+];

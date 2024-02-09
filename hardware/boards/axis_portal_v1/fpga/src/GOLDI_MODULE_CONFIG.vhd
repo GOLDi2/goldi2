@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -124,4 +124,4 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     
 
-end package;
+end package GOLDI_MODULE_CONFIG;

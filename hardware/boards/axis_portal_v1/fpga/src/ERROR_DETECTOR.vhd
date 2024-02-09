@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		15/04/2023
@@ -12,6 +12,7 @@
 -- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
 --                  -> GOLDI_COMM_STANDARD.vhd
+--                  -> EDGE_DETECTOR.vhd
 --
 -- Revisions:
 -- Revision V0.01.00 - File Created
@@ -19,12 +20,17 @@
 --
 -- Revision V1.00.00 - Default module version for release 1.00.00
 -- Additional Comments: Release for Axis Portal V1 (AP1)
+--
+-- Revision V4.00.00 - Change to the port signal names and reset type
+-- Additional Comments: Change to the port signal names to follow the
+--                      V4.00.00 naming convention. Change from synchronous
+--                      to asynchronous reset.
 -------------------------------------------------------------------------------
---! Use standard library
+--! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
+--! Custom packages
 library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
@@ -35,22 +41,22 @@ use work.GOLDI_COMM_STANDARD.all;
 
 --! @brief List of user and system errors
 --! @details
---! Module uses sensor inputs and driver outputs to generate a list
+--! The module uses sensor inputs and driver outputs to generate a list
 --! of flags correspoinding to the possible user and system errors.
 entity ERROR_DETECTOR is 
     generic(
-        ADDRESS         :   natural := 1                                        --! Module's base address
+        g_address   :   natural := 1                                        --! Module's base address
     );
     port(
         --General
-        clk             : in    std_logic;                                      --! System clock
-        rst             : in    std_logic;                                      --! Synchronous reset
+        clk         : in    std_logic;                                      --! System clock
+        rst         : in    std_logic;                                      --! Asynchronous reset
         --Communication
-        sys_bus_i       : in    sbus_in;                                        --! BUS slave input signals [we,adr,dat]
-        sys_bus_o       : out   sbus_out;                                       --! BUS slave output signals [dat,val]
+        sys_bus_i   : in    sbus_in;                                        --! BUS slave input signals [stb,we,adr,dat,tag]
+        sys_bus_o   : out   sbus_out;                                       --! BUS slave output signals [dat,tag,mux]
         --IO's 
-        sys_io_i        : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
-        sys_io_o        : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! System output data (drivers)
+        p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
+        p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! System output data (drivers)
     );
 end entity ERROR_DETECTOR;
 
@@ -62,27 +68,27 @@ architecture RTL of ERROR_DETECTOR is
 
     --****INTERNAL SIGNALS****
     --Sensor aliases
-    alias limit_x_neg       :   std_logic is sys_io_i(2).dat;
-    alias limit_x_pos       :   std_logic is sys_io_i(3).dat;
-    alias limit_x_ref       :   std_logic is sys_io_i(4).dat;
-    alias limit_y_neg       :   std_logic is sys_io_i(5).dat;
-    alias limit_y_pos       :   std_logic is sys_io_i(6).dat;
-    alias limit_y_ref       :   std_logic is sys_io_i(7).dat;
-    alias limit_z_neg       :   std_logic is sys_io_i(8).dat;
-    alias limit_z_pos       :   std_logic is sys_io_i(9).dat;
+    alias limit_x_neg       :   std_logic is p_sys_io_i(2).dat;
+    alias limit_x_pos       :   std_logic is p_sys_io_i(3).dat;
+    alias limit_x_ref       :   std_logic is p_sys_io_i(4).dat;
+    alias limit_y_neg       :   std_logic is p_sys_io_i(5).dat;
+    alias limit_y_pos       :   std_logic is p_sys_io_i(6).dat;
+    alias limit_y_ref       :   std_logic is p_sys_io_i(7).dat;
+    alias limit_z_neg       :   std_logic is p_sys_io_i(8).dat;
+    alias limit_z_pos       :   std_logic is p_sys_io_i(9).dat;
     --Actuator aliases
-    alias x_enable          :   std_logic is sys_io_o(17).dat;
-    alias x_out_pos         :   std_logic is sys_io_o(18).dat;
-    alias x_out_neg         :   std_logic is sys_io_o(19).dat;
-    alias y_enable          :   std_logic is sys_io_o(20).dat;
-    alias y_out_pos         :   std_logic is sys_io_o(22).dat;
-    alias y_out_neg         :   std_logic is sys_io_o(21).dat;
-    alias z_enable          :   std_logic is sys_io_o(23).dat;
-    alias z_out_pos         :   std_logic is sys_io_o(24).dat;
-    alias z_out_neg         :   std_logic is sys_io_o(25).dat;
+    alias x_enable          :   std_logic is p_sys_io_o(17).dat;
+    alias x_out_pos         :   std_logic is p_sys_io_o(18).dat;
+    alias x_out_neg         :   std_logic is p_sys_io_o(19).dat;
+    alias y_enable          :   std_logic is p_sys_io_o(20).dat;
+    alias y_out_pos         :   std_logic is p_sys_io_o(22).dat;
+    alias y_out_neg         :   std_logic is p_sys_io_o(21).dat;
+    alias z_enable          :   std_logic is p_sys_io_o(23).dat;
+    alias z_out_pos         :   std_logic is p_sys_io_o(24).dat;
+    alias z_out_neg         :   std_logic is p_sys_io_o(25).dat;
     
     --Memory
-    constant memory_length  :   natural := getMemoryLength(22);
+    constant memory_length  :   natural := getMemoryLength(23);
     constant reg_default    :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
     signal reg_buff         :   data_word_vector(memory_length-1 downto 0);
     signal error_list       :   std_logic_vector(22 downto 0);
@@ -90,9 +96,9 @@ architecture RTL of ERROR_DETECTOR is
     signal x_limits         :   std_logic;
     signal y_limits         :   std_logic;
     signal z_limits         :   std_logic;
-    signal x_p_edge         :   std_logic;
-    signal y_p_edge         :   std_logic;
-    signal z_p_edge         :   std_logic;
+    signal x_r_edge         :   std_logic;
+    signal y_r_edge         :   std_logic;
+    signal z_r_edge         :   std_logic;
     --Actuator buffers
     signal x_out_neg_buff   :   std_logic;
     signal x_out_pos_buff   :   std_logic;
@@ -110,23 +116,23 @@ begin
 
     X_SENSORS_EDGES : entity work.EDGE_DETECTOR
     port map(
-        clk     => clk,
-        rst     => rst,
-        data_in => x_limits,
-        n_edge  => open,
-        p_edge  => x_p_edge
+        clk         => clk,
+        rst         => rst,
+        data_in     => x_limits,
+        p_f_edge    => open,
+        p_r_edge    => x_r_edge
     );
 
 
-    X_DIRECTION_DETECTOR : process(clk)
+    X_DIRECTION_DETECTOR : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                x_out_neg_buff <= '0';
-                x_out_pos_buff <= '0';
-            
+        if(rst = '1') then
+            x_out_neg_buff <= '0';
+            x_out_pos_buff <= '0';
+        
+        elsif(rising_edge(clk)) then
             --Record movement direction when a sensor rising edge is detected
-            elsif(x_p_edge = '1') then
+            if(x_r_edge = '1') then
                 x_out_neg_buff <= x_out_neg;
                 x_out_pos_buff <= x_out_pos;
 
@@ -137,6 +143,7 @@ begin
             
             else null;
             end if;
+
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -149,23 +156,23 @@ begin
 
     Y_SENSORS_EDGES : entity work.EDGE_DETECTOR
     port map(
-        clk     => clk,
-        rst     => rst,
-        data_in => y_limits,
-        n_edge  => open,
-        p_edge  => y_p_edge
+        clk         => clk,
+        rst         => rst,
+        data_in     => y_limits,
+        p_f_edge    => open,
+        p_r_edge    => y_r_edge
     );
 
 
-    Y_DIRECTION_DETECTOR : process(clk)
+    Y_DIRECTION_DETECTOR : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                y_out_neg_buff <= '0';
-                y_out_pos_buff <= '0';
-            
+        if(rst = '1') then
+            y_out_neg_buff <= '0';
+            y_out_pos_buff <= '0';
+
+        elsif(rising_edge(clk)) then     
             --Record movement direction when a sensor rising edge is detected
-            elsif(y_p_edge = '1') then
+            if(y_r_edge = '1') then
                 y_out_neg_buff <= y_out_neg;
                 y_out_pos_buff <= y_out_pos;
 
@@ -176,6 +183,7 @@ begin
             
             else null;
             end if;
+
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -188,23 +196,23 @@ begin
 
     Z_SENSOR_EDGES : entity work.EDGE_DETECTOR
     port map(
-        clk     => clk,
-        rst     => rst,
-        data_in => z_limits,
-        n_edge  => open,
-        p_edge  => z_p_edge
+        clk         => clk,
+        rst         => rst,
+        data_in     => z_limits,
+        p_f_edge    => open,
+        p_r_edge    => z_r_edge
     );
 
 
-    Z_DIRECTION_DETECTOR : process(clk)
+    Z_DIRECTION_DETECTOR : process(clk,rst)
     begin
-        if(rising_edge(clk)) then
-            if(rst = '1') then
-                z_out_neg_buff <= '0';
-                z_out_pos_buff <= '0';
-            
+        if(rst = '1') then
+            z_out_neg_buff <= '0';
+            z_out_pos_buff <= '0';
+        
+        elsif(rising_edge(clk)) then            
             --Record movement direction when a sensor rising edge is detected
-            elsif(z_p_edge = '1') then
+            if(z_r_edge = '1') then
                 z_out_neg_buff <= z_out_neg;
                 z_out_pos_buff <= z_out_pos;
 
@@ -215,6 +223,7 @@ begin
             
             else null;
             end if;
+            
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
@@ -297,19 +306,19 @@ begin
 
     MEMORY : entity work.REGISTER_TABLE
     generic map(
-        BASE_ADDRESS		=> ADDRESS,
-        NUMBER_REGISTERS	=> memory_length,
-        REG_DEFAULT_VALUES	=> reg_default
+        g_address		=> g_address,
+        g_reg_number	=> memory_length,
+        g_def_values    => reg_default
     )
     port map(
-        clk				    => clk,
-        rst				    => rst,
-        sys_bus_i		    => sys_bus_i,
-        sys_bus_o		    => sys_bus_o,
-        data_in		        => reg_buff,
-        data_out	        => open,
-        read_stb	        => open,
-        write_stb           => open
+        clk				=> clk,
+        rst				=> rst,
+        sys_bus_i		=> sys_bus_i,
+        sys_bus_o		=> sys_bus_o,
+        p_data_in		=> reg_buff,
+        p_data_out	    => open,
+        p_read_stb	    => open,
+        p_write_stb     => open
     );
     -----------------------------------------------------------------------------------------------
 

@@ -1,12 +1,20 @@
 <!doctype html>
-{% set
+{%- set
+    navbar = [
+        {name: 'Network Settings', href: '/network'},
+        {name: 'Wireless Settings', href: '/wireless'}
+    ]
+-%}
+{%- if authorized -%}
+{%- set
     navbar = [
         {name: 'Crosslab Settings', href: '/crosslab'},
-        {name: 'Manual Control', href: '/manual_control'},
         {name: 'Firmware Upload', href: '/upload_firmware'},
-        {name: 'Network Settings', href: '/network'}
+        {name: 'Network Settings', href: '/network'},
+        {name: 'Wireless Settings', href: '/wireless'}
     ]
- %}
+-%}
+{%- endif -%}
 <html lang="en">
 
 <head>
@@ -39,6 +47,11 @@
                 <img class="h-14 w-20 mr-3 select-none pointer-events-none" src="/img/goldi2.svg" alt="Logo">
                 <span class="font-bold text-2xl text-black">Configuration Interface</span>
             </a>
+            {% if not authorized %}
+            <a href='?login=true' class="flex items-center">
+                <span class="font-bold text-black">Login</span>
+            </a>
+            {% endif %}
     </nav>    
 
     <div class="mt-16 flex flex-row">

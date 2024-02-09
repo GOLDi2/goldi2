@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['edge_5fdetector_0',['EDGE_DETECTOR',['../class_e_d_g_e___d_e_t_e_c_t_o_r.html',1,'']]],
-  ['emagnet_5fdriver_1',['EMAGNET_DRIVER',['../class_e_m_a_g_n_e_t___d_r_i_v_e_r.html',1,'']]],
-  ['error_5fdetector_2',['ERROR_DETECTOR',['../class_e_r_r_o_r___d_e_t_e_c_t_o_r.html',1,'']]]
+  ['goldi_5fcomm_5fstandard_0',['GOLDI_COMM_STANDARD',['../class_g_o_l_d_i___c_o_m_m___s_t_a_n_d_a_r_d.html',1,'']]],
+  ['goldi_5fio_5fstandard_1',['GOLDI_IO_STANDARD',['../class_g_o_l_d_i___i_o___s_t_a_n_d_a_r_d.html',1,'']]],
+  ['goldi_5fmodule_5fconfig_2',['GOLDI_MODULE_CONFIG',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html',1,'']]],
+  ['goldi_5fspi_5fsmodule_3',['GOLDI_SPI_SMODULE',['../class_g_o_l_d_i___s_p_i___s_m_o_d_u_l_e.html',1,'']]],
+  ['gpio_5fsmodule_4',['GPIO_SMODULE',['../class_g_p_i_o___s_m_o_d_u_l_e.html',1,'']]]
 ];

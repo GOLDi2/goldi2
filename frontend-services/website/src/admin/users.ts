@@ -22,7 +22,7 @@ export function user_router(language: string, renderPage: renderPageType, _logge
             return;
         }
         const users = type === 'group' ? (await req.apiClient.listUsers()) : undefined
-        const roles = await req.apiClient.listRoles()
+        const roles: any = []//await req.apiClient.listRoles()
         return renderPage('admin/users/details', language, res, req.user, { users, roles, create: true, type });
     }
 
@@ -31,17 +31,17 @@ export function user_router(language: string, renderPage: renderPageType, _logge
             if (req.body.password === '') {
                 delete req.body.password
             }
-            const user = await req.apiClient.updateUser(req.query.url as string, req.body)
+            /*const user = await req.apiClient.updateUser(req.query.url as string, req.body)
             const userRoles = await req.apiClient.getRolesOfUser(user.id)
             const rolesToDelete = userRoles.filter((ur) => !req.body.roles.find((r: string) => r === ur.id))
             await req.apiClient.addRolesToUser(req.body.roles, user.id)
-            await req.apiClient.removeRolesFromUser(rolesToDelete.map(r => r.id), user.id)
+            await req.apiClient.removeRolesFromUser(rolesToDelete.map(r => r.id), user.id)*/
         }
         const user = await req.apiClient.getUser(req.query.url as string);
-        const userRoles = await req.apiClient.getRolesOfUser(user.id)
-        const roles = await req.apiClient.listRoles()
-        const includedRoles = roles.filter((r) => userRoles.find((ur) => ur.url === r.url))
-        const excludedRoles = roles.filter((r) => !userRoles.find((ur) => ur.url === r.url))
+        //const userRoles: any = [];//await req.apiClient.getRolesOfUser(user.id)
+        //const roles: any = [] //await req.apiClient.listRoles()
+        const includedRoles: any  = []//roles.filter((r) => userRoles.find((ur) => ur.url === r.url))
+        const excludedRoles: any  = [] //roles.filter((r) => !userRoles.find((ur) => ur.url === r.url))
 
         return renderPage('admin/users/details', language, res, req.user, { user, includedRoles, excludedRoles });
     }

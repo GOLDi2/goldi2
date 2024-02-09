@@ -25,6 +25,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+--! @brief Vietzke Engineering
 entity StepperControl_v1_00 is                
     Port        (   pClock                  : in    STD_LOGIC;                                          --! 
                     pReset                  : in    STD_LOGIC;                                          --! 

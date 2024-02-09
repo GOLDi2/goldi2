@@ -1,0 +1,28 @@
+{% import "components/elements.html" as elements %}
+{% extends "layout.html" %}
+{% block main %}
+
+<div class="p-3 font-body">
+    <div class="max-w-xs w-2/3 mx-auto">
+        {% for thk in thks %}
+        {% if thk.connected %}
+        <div class="bg-primary-100 p-5 rounded-3xl out-shadow-section my-10">
+            {{thk.name}}: Online
+        </div>
+        {% else %}
+        <div class="bg-secondary-800 p-5 rounded-3xl out-shadow-section my-10">
+            {{thk.name}}: Offline
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="flex-grow"></div>
+
+<script>
+    setTimeout(function() {
+        window.location.reload();
+    }, 10000);
+</script>
+{% endblock %}

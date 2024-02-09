@@ -1,0 +1,8 @@
+node_modules
+dist
+http-dist
+chrome-user-data
+.npmrc
+.packages
+.http-dist
+package.resolved.json

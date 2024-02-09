@@ -18,7 +18,11 @@
 -- Additional Comments: First commitment
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: Release for warehouse_v2  
+-- Additional Comments: Release for warehouse_v2 
+--
+-- Revision V4.00.00 - Addition of new constants
+-- Additional Comments: New constants for the improved modules introduced
+--                      in the V4.00.00. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -49,20 +53,37 @@ package GOLDI_MODULE_CONFIG is
     --****MEMORY ALLOCATION****
     -----------------------------------------------------------------------------------------------
     --Module Base Addresses. Length based on system_data_width = 8
+    -- constant CTRL_REGISTER_ADDRESS  :   natural := 1;       --Table length: 1
+    -- constant SENSOR_ARRAY_ADDRESS   :   natural := 2;       --Table length: 3
+    -- constant ERROR_LIST_ADDRESS     :   natural := 5;       --Table length: 2
+    -- constant GPIO_DRIVER_ADDRESS    :   natural := 7;       --Table length: 2
+    -- constant X_ENCODER_ADDRESS      :   natural := 9;       --Table length: 2
+    -- constant Z_ENCODER_ADDRESS      :   natural := 11;      --Table length: 2
+    -- constant X_MOTOR_ADDRESS        :   natural := 13;      --Table length: 6
+    -- constant Y_MOTOR_ADDRESS        :   natural := 19;      --Table length: 2
+    -- constant Z_MOTOR_ADDRESS        :   natural := 21;      --Table length: 6
+    -- constant PR_LED_ADDRESS         :   natural := 27;      --Table length: 1
+    -- constant PG_LED_ADDRESS         :   natural := 28;      --Table length: 1
+    -- constant ER_LED_ADDRESS         :   natural := 29;      --Table length: 1
+    -- constant EW_LED_ADDRESS         :   natural := 30;      --Table length: 1
+    -- constant EG_LED_ADDRESS         :   natural := 31;      --Table length: 1
+
+
     constant CTRL_REGISTER_ADDRESS  :   natural := 1;       --Table length: 1
     constant SENSOR_ARRAY_ADDRESS   :   natural := 2;       --Table length: 3
-    constant ERROR_LIST_ADDRESS     :   natural := 5;       --Table length: 2
-    constant GPIO_DRIVER_ADDRESS    :   natural := 7;       --Table length: 2
-    constant X_ENCODER_ADDRESS      :   natural := 9;       --Table length: 2
-    constant Z_ENCODER_ADDRESS      :   natural := 11;      --Table length: 2
-    constant X_MOTOR_ADDRESS        :   natural := 13;      --Table length: 6
-    constant Y_MOTOR_ADDRESS        :   natural := 19;      --Table length: 2
-    constant Z_MOTOR_ADDRESS        :   natural := 21;      --Table length: 6
-    constant PR_LED_ADDRESS         :   natural := 27;      --Table length: 1
-    constant PG_LED_ADDRESS         :   natural := 28;      --Table length: 1
-    constant ER_LED_ADDRESS         :   natural := 29;      --Table length: 1
-    constant EW_LED_ADDRESS         :   natural := 30;      --Table length: 1
-    constant EG_LED_ADDRESS         :   natural := 31;      --Table length: 1
+    constant ACTUATOR_MASK_ADDRESS  :   natural := 5;       --Table length: 8
+    constant ERROR_LIST_ADDRESS     :   natural := 13;      --Table length: 2
+    constant GPIO_DRIVER_ADDRESS    :   natural := 15;      --Table length: 2
+    constant X_ENCODER_ADDRESS      :   natural := 17;      --Table length: 2
+    constant Z_ENCODER_ADDRESS      :   natural := 19;      --Table length: 2
+    constant X_MOTOR_ADDRESS        :   natural := 21;      --Table length: 6
+    constant Y_MOTOR_ADDRESS        :   natural := 27;      --Table length: 2
+    constant Z_MOTOR_ADDRESS        :   natural := 29;      --Table length: 6
+    constant PR_LED_ADDRESS         :   natural := 35;      --Table length: 1
+    constant PG_LED_ADDRESS         :   natural := 36;      --Table length: 1
+    constant ER_LED_ADDRESS         :   natural := 37;      --Table length: 1
+    constant EW_LED_ADDRESS         :   natural := 38;      --Table length: 1
+    constant EG_LED_ADDRESS         :   natural := 39;      --Table length: 1
     -----------------------------------------------------------------------------------------------
 
 
@@ -121,11 +142,11 @@ package GOLDI_MODULE_CONFIG is
 
     --Z Axis (6 sensors):
     constant Z_SENSOR_LIMITS        :   sensor_limit_array(4 downto 0) := (
-        0 => (  894,1490),
-        1 => (11324,1490),
-        2 => (21754,1490),
-        3 => (32184,1490),
-		4 => (42614,1490)
+        0 => (  894,1485),
+        1 => (11324,1485),
+        2 => (21754,1485),
+        3 => (32184,1485),
+		4 => (42614,1485)
     );
     -----------------------------------------------------------------------------------------------
 
@@ -208,6 +229,22 @@ package GOLDI_MODULE_CONFIG is
         --[3:0]     Reserved -> '0'
         5 => x"0E0070" 	--x"E0070"
     );
+
+    --Reset delay for TMC2660 to recognize the input clock signal
+    constant X_MOTOR_RST_DELAY  :   natural := 48;
+
+    --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
+    --blocks for the ROM16XN_FIFO module
+    constant X_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+        0 => x"0004",
+        1 => x"5700",
+        2 => x"0945",
+        3 => x"0000",
+        4 => x"0F0A",
+        5 => x"0C04",
+        6 => x"0070",
+        7 => x"000E"
+    );
     -----------------------------------------------------------------------------------------------
 
 
@@ -284,6 +321,22 @@ package GOLDI_MODULE_CONFIG is
         --[5:4]     Select value for read out
         --[3:0]     Reserved -> '0'
         5 => x"0E0070" 	--x"E0070"
+    );
+
+    --Reset delay for TMC2660 to recognize the input clock signal
+    constant Z_MOTOR_RST_DELAY  :   natural := 48;
+
+    --The same data as the Z_MOTOR_CONFIGURATION constant but formatted into 16 bit
+    --blocks for the ROM16XN_FIFO module
+    constant Z_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+        0 => x"0004",
+        1 => x"5700",
+        2 => x"0945",
+        3 => x"0000",
+        4 => x"0F0A",
+        5 => x"0C04",
+        6 => x"0070",
+        7 => x"000E"
     );
     -----------------------------------------------------------------------------------------------
 

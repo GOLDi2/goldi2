@@ -25,13 +25,17 @@
 var NAVTREE =
 [
   [ "GOLDi - Axis Portal", "index.html", [
+    [ "Packages", "namespaces.html", [
+      [ "Package List", "namespaces.html", "namespaces_dup" ]
+    ] ],
     [ "Design Unit List", "annotated.html", [
       [ "Design Unit List", "annotated.html", "annotated_dup" ],
       [ "Design Units", "classes.html", null ],
       [ "Design Unit Hierarchy", "hierarchy.html", null ],
       [ "Design Unit Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Functions/Procedures/Processes", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ]
       ] ]
     ] ]
   ] ]

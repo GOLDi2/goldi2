@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		25/05/2023
@@ -17,6 +17,10 @@
 --
 -- Revision V3.00.00 - Default module version for release 3.00.00
 -- Additional Comments: Release for Axis Portal V2 (AP2)
+--
+-- Revision V4.00.00 - Addition of new constants
+-- Additional Comments: New constants for the improved modules introduced
+--                      in the V4.00.00. 
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
@@ -53,8 +57,8 @@ package GOLDI_MODULE_CONFIG is
 	constant GPIO_DRIVER_ADDRESS	:	natural := 5;		--Table length: 2
 	constant X_ENCODER_ADDRESS		:	natural := 7;		--Table length: 2
 	constant Y_ENCODER_ADDRESS		:	natural := 9;		--Table length: 2
-	constant X_MOTOR_ADDRESS		:	natural := 11;		--Table length: 2
-	constant Y_MOTOR_ADDRESS		:	natural := 17;		--Table length: 2
+	constant X_MOTOR_ADDRESS		:	natural := 11;		--Table length: 6
+	constant Y_MOTOR_ADDRESS		:	natural := 17;		--Table length: 6
 	constant Z_MOTOR_ADDRESS		:	natural := 23;		--Table length: 2
 	constant EMAG_ADDRESS			:	natural := 25;		--Table length: 1
 	constant PR_LED_ADDRESS			:	natural := 26;		--Table length: 1
@@ -151,6 +155,23 @@ package GOLDI_MODULE_CONFIG is
         --[3:0]     Reserved -> '0'
         4 => x"0E0060" --x"E0060"
     );
+
+
+    --Reset delay for TMC2660 to recognize the input clock signal
+    constant X_MOTOR_RST_DELAY  :   natural := 48;
+
+    --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
+    --blocks for the ROM16XN_FIFO module
+    constant X_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+        0 => x"0004",
+        1 => x"5700",
+        2 => x"0945",
+        3 => x"0000",
+        4 => x"0F0A",
+        5 => x"0C04",
+        6 => x"0070",
+        7 => x"000E"
+    );
     -----------------------------------------------------------------------------------------------
 
 
@@ -221,6 +242,23 @@ package GOLDI_MODULE_CONFIG is
         --[3:0]     Reserved -> '0'
         5 => x"0E0070" --x"E0070"
     );
+
+    
+    --Reset delay for TMC2660 to recognize the input clock signal
+    constant Y_MOTOR_RST_DELAY  :   natural := 48;
+
+    --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
+    --blocks for the ROM16XN_FIFO module
+    constant Y_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+        0 => x"0004",
+        1 => x"5700",
+        2 => x"0945",
+        3 => x"0000",
+        4 => x"0F0A",
+        5 => x"0C04",
+        6 => x"0070",
+        7 => x"000E"
+    );
     -----------------------------------------------------------------------------------------------
 
 
@@ -247,6 +285,9 @@ package GOLDI_MODULE_CONFIG is
     --magnet is powered off. To disable function use a value of 0
     constant EMAG_DEMAG_FACTOR      :   natural := 50000;
 
+    --Inital pulse width for demagnetization process
+    constant EMAG_PULSE_WIDTH       :   natural := 500000;
+    
     --Pulse reduction constant. Demagnetization pulse reduced from the starting value in the 
     --register (reg_data*1000) by the given factor. Signal returns to idel when the pulse
     --width is smaller than the reduction factor
@@ -280,4 +321,4 @@ package GOLDI_MODULE_CONFIG is
     -----------------------------------------------------------------------------------------------
     
 
-end package;
+end package GOLDI_MODULE_CONFIG;

@@ -6,6 +6,7 @@
   - [1]: TMC2660 driver  
   - [2]: Memory units
 - (1) Common code
+  - [0]: Testbenches and simulations
   - [1]: General features added to libaries
   - [2]: Actuation modules
   - [3]: DSP modules
@@ -13,14 +14,19 @@
   - [5]: IO management modules
   - [6]: Memory modules
 - (2) Axis Portal V1
+  -[0]: Testbenches and simulations 
   -[1]: General corrections to the AP1
 - (3) Axis Portal V2
-- (4) Microcontroller
-- (5) IO board
+  -[0]: Testbenches and simulations
+  -[1]: General corrections to the AP2
+- (4) -
+- (5) -
 - (6) Warehouse_2
   - [0]: Board construction
-- (7) Control Unit Mobile {control_unit_v1}
-  - [0]: Board construction 
+  - [1]: Testbenches and simulations
+- (7) Mobile Control Unit {mole_v1}
+  - [0]: Board construction
+  - [1]: Testbenches and simulations 
 
 
 ## Release structure: [V]

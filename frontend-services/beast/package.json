@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/.bin/webpack --config webpack.config.js",
-    "build": "rimraf dist && tsc || node build.js"
+    "build": "rimraf dist && tsc || node build.js",
+    "format": "prettier . --write",
+    "lint": "eslint ."
   },
   "keywords": [
     "circiut",

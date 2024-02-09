@@ -44,7 +44,7 @@ MACHINE=goldi1
 if [ "$WORLD" = true ] ; then
   kas shell world.yml -c "\
     bitbake -k -c build world \
-    && bitbake package-index \
+    ; bitbake package-index \
   "
 else
   kas shell $VARIANT.yml -c "\

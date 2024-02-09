@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
+-- Company:			Technische Universitaet Ilmenau
 -- Engineer:		JP_CC <josepablo.chew@gmail.com>
 --
 -- Create Date:		30/04/2023
@@ -19,15 +19,19 @@
 -- Additional Comments: First commitment
 --
 -- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments:
+-- Additional Comments:-
+--
+-- Revision V4.00.00 - Module refactoring
+-- Additional Comments: Use of env library to stop simulation.
 -------------------------------------------------------------------------------
 --! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use assert library for simulation
+--! Use standard library for simulation flow control and assertions
 library std;
 use std.standard.all;
+use std.env.all;
 --! Use custom packages
 library work;
 use work.GOLDI_COMM_STANDARD.all;
@@ -51,19 +55,14 @@ architecture TB of TMC2660_DRIVER_TB is
     component TMC2660_DRIVER
         generic(
             ADDRESS         :   natural := 1;
-            SD_FACTOR       :   natural := 100;
             SCLK_FACTOR     :   natural := 8;
-            TMC2660_CONFIG  :   tmc2660_rom := (x"F00FF",x"F00FF")
+            TMC2660_CONFIG  :   tmc2660_rom := (x"FF00FF",x"FF00FF")
         );
         port(
-            --General
             clk             : in    std_logic;
             rst             : in    std_logic;
-            clk_16MHz       : in    std_logic;
-            --BUS slave interface
             sys_bus_i       : in    sbus_in;
             sys_bus_o       : out   sbus_out;
-            --TMC2660 interface
             tmc2660_clk     : out   io_o;
             tmc2660_enn     : out   io_o;
             tmc2660_sg      : in    io_i;
@@ -79,21 +78,21 @@ architecture TB of TMC2660_DRIVER_TB is
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period	    :	time := 10 ns;
+	constant clk_period	    :	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:   std_logic := '1';
     --DUT IOs
-    signal sys_bus_i        :   sbus_in;
-    signal sys_bus_o        :   sbus_out;
-    signal tmc2660_clk      :   io_o;
-    signal tmc2660_enn      :   io_o;
-    signal tmc2660_sg       :   io_i;
-    signal tmc2660_dir      :   io_o;
-    signal tmc2660_step     :   io_o;
-    signal tmc2660_sclk     :   io_o;
-    signal tmc2660_ncs      :   io_o;
-    signal tmc2660_mosi     :   io_o;
+    signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
+    signal sys_bus_o        :   sbus_out := gnd_sbus_o;
+    signal tmc2660_clk      :   io_o := low_io_o;
+    signal tmc2660_enn      :   io_o := low_io_o;
+    signal tmc2660_sg       :   io_i := low_io_i;
+    signal tmc2660_dir      :   io_o := low_io_o;
+    signal tmc2660_step     :   io_o := low_io_o;
+    signal tmc2660_sclk     :   io_o := low_io_o;
+    signal tmc2660_ncs      :   io_o := low_io_o;
+    signal tmc2660_mosi     :   io_o := low_io_o;
 
 
 begin
@@ -104,14 +103,12 @@ begin
     DUT : entity work.TMC2660_DRIVER
     generic map(
         ADDRESS         => 1,
-        SD_FACTOR       => 10,
         SCLK_FACTOR     => 10,
-        TMC2660_CONFIG  => (x"F00FF",x"F00FF")
+        TMC2660_CONFIG  => (x"FF00FF",x"FF00FF")
     )
     port map(
         clk             => clock,
         rst             => reset,
-        clk_16MHz       => '0',
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
         tmc2660_clk     => tmc2660_clk,
@@ -131,7 +128,7 @@ begin
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
-    reset <= '1' after 5 ns, '0' after 15 ns;
+    reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
 
@@ -141,31 +138,35 @@ begin
     TEST : process
         variable init_hold  :   time := 5*clk_period/2;
     begin
-        --Preset signals
-        sys_bus_i <= gnd_sbus_i;
+        --**Initial Setup**
         wait for init_hold;
 
         wait for 7 us;
 
 
         --Test stream data
-        sys_bus_i <= writeBus(x"03",x"FF");
+        sys_bus_i <= writeBus(3,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(x"04",x"00");
+        sys_bus_i <= writeBus(4,0);
         wait for clk_period;
-        sys_bus_i <= writeBus(x"05",x"08");
+        sys_bus_i <= writeBus(5,8);
         wait for clk_period;
         sys_bus_i <= gnd_sbus_i;
 
         wait for 3 us;
 
 
+        --**End simulation**
+		wait for 50 ns;
+        report "TMC2660_DRIVER_TB - testbench completed";
+        --Simulation end usign vhdl2008 env library (Pipeline use)
+       	std.env.finish;
+        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
+        -- run_sim <= '0';
+        -- wait;
 
-        wait for 50 ns;
-        run_sim <= '0';
-        wait;
     end process;
     -----------------------------------------------------------------------------------------------
 
 
-end TB;
+end architecture;

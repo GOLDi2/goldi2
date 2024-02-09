@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start_mon": "cls && nodemon ./bin/www"
+    "start_mon": "cls && nodemon ./bin/www",
+    "format": "prettier . --write",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@types/file-saver": "^2.0.1",

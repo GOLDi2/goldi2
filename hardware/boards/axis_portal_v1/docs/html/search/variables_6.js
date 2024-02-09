@@ -1,6 +1,19 @@
 var searchData=
 [
-  ['gpio_5fi_5fvector_0',['gpio_i_vector',['../class_g_p_i_o___d_r_i_v_e_r___a_r_r_a_y.html#ad9052faee6149c7dd1fe820e3e4d3e41',1,'GPIO_DRIVER_ARRAY']]],
-  ['gpio_5fnumber_1',['GPIO_NUMBER',['../class_g_p_i_o___d_r_i_v_e_r___a_r_r_a_y.html#a71e457ed26d562630da9c048be29f4ba',1,'GPIO_DRIVER_ARRAY']]],
-  ['gpio_5fo_5fvector_2',['gpio_o_vector',['../class_g_p_i_o___d_r_i_v_e_r___a_r_r_a_y.html#a059c54eb554f3c3b4b64818376376f1e',1,'GPIO_DRIVER_ARRAY']]]
+  ['g_5faddress_0',['g_address',['../class_e_m_a_g_n_e_t___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'EMAGNET_SMODULE.g_address()'],['../class_e_n_c_o_d_e_r___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'ENCODER_SMODULE.g_address()'],['../class_e_r_r_o_r___d_e_t_e_c_t_o_r.html#a49573c8e2f2c29fa7c29b897c375901b',1,'ERROR_DETECTOR.g_address()'],['../class_g_p_i_o___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'GPIO_SMODULE.g_address()'],['../class_h_b_r_i_d_g_e___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'HBRIDGE_SMODULE.g_address()'],['../class_l_e_d___s_m_o_d_u_l_e.html#a49573c8e2f2c29fa7c29b897c375901b',1,'LED_SMODULE.g_address()'],['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#abdd428974acbf08b924bc0481b45450b',1,'REGISTER_TABLE.g_address()'],['../class_r_e_g_i_s_t_e_r___u_n_i_t.html#a49573c8e2f2c29fa7c29b897c375901b',1,'REGISTER_UNIT.g_address()']]],
+  ['g_5fbuff_5fnumber_1',['g_buff_number',['../class_t_r_i_s___b_u_f_f_e_r___a_r_r_a_y.html#a2af526057d9eb11b29c1deab567b4c28',1,'TRIS_BUFFER_ARRAY']]],
+  ['g_5fclk_5ffactor_2',['g_clk_factor',['../class_h_b_r_i_d_g_e___s_m_o_d_u_l_e.html#a72d6031d3e8fbb1f910116840d3b8c5a',1,'HBRIDGE_SMODULE']]],
+  ['g_5fclk_5ffrequency_3',['g_clk_frequency',['../class_l_e_d___s_m_o_d_u_l_e.html#ac535544f58379d2f1c5553fe3a318ba6',1,'LED_SMODULE']]],
+  ['g_5fdef_5fvalue_4',['g_def_value',['../class_r_e_g_i_s_t_e_r___u_n_i_t.html#aa5100226aca565be04d3e8f2ea2debc3',1,'REGISTER_UNIT']]],
+  ['g_5fdef_5fvalues_5',['g_def_values',['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#addc1c2fe3d1a292375dfe31594566145',1,'REGISTER_TABLE']]],
+  ['g_5fdemag_5ftime_6',['g_demag_time',['../class_e_m_a_g_n_e_t___s_m_o_d_u_l_e.html#ae239df15d25ca45150ab8f54d0404f72',1,'EMAGNET_SMODULE']]],
+  ['g_5fgpio_5fnumber_7',['g_gpio_number',['../class_g_p_i_o___s_m_o_d_u_l_e.html#ad8b80e3cef2865b47fbb4d243435570b',1,'GPIO_SMODULE']]],
+  ['g_5findex_5frst_8',['g_index_rst',['../class_e_n_c_o_d_e_r___s_m_o_d_u_l_e.html#a716ec7efc43a0b15d1218645d4ac6a66',1,'ENCODER_SMODULE']]],
+  ['g_5finvert_9',['g_invert',['../class_e_n_c_o_d_e_r___s_m_o_d_u_l_e.html#a4a5d74e15813725257fee53a97b778bf',1,'ENCODER_SMODULE']]],
+  ['g_5finverted_10',['g_inverted',['../class_l_e_d___s_m_o_d_u_l_e.html#a95974a688bcaf6e73382c62cc91b86a7',1,'LED_SMODULE']]],
+  ['g_5fmagnet_5ftao_11',['g_magnet_tao',['../class_e_m_a_g_n_e_t___s_m_o_d_u_l_e.html#a288f9cc4d212860b6ce173db044fa2cc',1,'EMAGNET_SMODULE']]],
+  ['g_5freg_5fnumber_12',['g_reg_number',['../class_r_e_g_i_s_t_e_r___t_a_b_l_e.html#a8313eda8dfdbc1883fd54680f1fb76b6',1,'REGISTER_TABLE']]],
+  ['g_5fstages_13',['g_stages',['../class_s_y_n_c_h_r_o_n_i_z_e_r.html#aba0fd1e5dffdcf50510245e0000e125e',1,'SYNCHRONIZER']]],
+  ['g_5fword_5flength_14',['g_word_length',['../class_s_p___c_o_n_v_e_r_t_e_r.html#aaf53bafb9b39ad0786cf180774659d2e',1,'SP_CONVERTER']]],
+  ['gpio_5fdriver_5faddress_15',['GPIO_DRIVER_ADDRESS',['../class_g_o_l_d_i___m_o_d_u_l_e___c_o_n_f_i_g.html#a4fa203e3eb51e0bdedbf53e711c7795f',1,'GOLDI_MODULE_CONFIG']]]
 ];

@@ -1,0 +1,58 @@
+{% set page_title = 'Wireless Settings' %}
+{% extends "layout.html" %}
+{% block main %}
+
+Scanned Networks
+<table>
+    <thead>
+        <tr><th>SSID</th><th>Flags</th></tr>
+    </thead>
+    <tbody>
+        {% for item in scanned_networks %}
+        <tr><td>{{ item.ssid }}</td><td>{{ item.flags }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+
+<style>
+    .none>.none{
+        display: block;
+    }
+    .personal>.personal{
+        display: block;
+    }
+    .enterprise>.enterprise{
+        display: block;
+    }
+</style>
+
+<form method="post" enctype="multipart/form-data" class="{{ security }}">
+    <label class="w-72 inline-block" for="security">Security:</label><select class="mt-1 border-2" name="security" id="security" oninput="this.parentElement.className=this.value" value="{{ security }}">
+        <option value="none"{{ ' selected' if security=='none' }}>None</option>
+        <option value="personal"{{ ' selected' if security=='personal' }}>WEP / WPA / WPA2</option>
+        <option value="enterprise"{{ ' selected' if security=='enterprise' }}>WPA2 Enterprise</option>
+    </select><br>
+    <div class="none hidden">
+        <label class="w-72 inline-block" for="none_ssid">SSID:</label><input class="mt-1 border-2" type="text" id="none_ssid" name="none_ssid" value="{{ssid}}"><br>
+    </div>
+    <div class="personal hidden">
+        <label class="w-72 inline-block" for="personal_ssid">SSID:</label><input class="mt-1 border-2" type="text" id="personal_ssid" name="personal_ssid" value="{{ssid}}"><br>
+        <label class="w-72 inline-block" for="personal_password">Password:</label><input class="mt-1 border-2" type="password" id="personal_password" name="personal_password" value="{{password}}"><br>
+    </div>
+    <div class="enterprise hidden">
+        <label class="w-72 inline-block" for="enterprise_ssid">SSID:</label><input class="mt-1 border-2" type="text" id="enterprise_ssid" name="enterprise_ssid" value="{{ssid}}"><br>
+        <label class="w-72 inline-block" for="enterprise_eap">EAP Method:</label><input class="mt-1 border-2" type="text" id="enterprise_eap" name="enterprise_eap" value="PEAP"><br>
+        <label class="w-72 inline-block" for="enterprise_phase2">Phase 2:</label><input class="mt-1 border-2" type="text" id="enterprise_phase2" name="enterprise_phase2" value="auth=MSCHAPV2"><br>
+        <label class="w-72 inline-block" for="enterprise_identity">Identity:</label><input class="mt-1 border-2" type="text" id="enterprise_identity" name="enterprise_identity" value="{{identity}}"><br>
+        <label class="w-72 inline-block" for="enterprise_anonymous_identity">Anonyme Identity:</label><input class="mt-1 border-2" type="text" id="enterprise_anonymous_identity" name="enterprise_anonymous_identity" value="{{anonymous_identity}}"><br>
+        <label class="w-72 inline-block" for="enterprise_password">Password:</label><input class="mt-1 border-2" type="password" id="enterprise_password" name="enterprise_password" value="{{password}}"><br>
+    </div>
+    <label class="w-72 inline-block" for="dhcp">DHCP:</label><input class="mt-1 border-2" type="checkbox" id="dhcp" name="dhcp" {{ 'checked' if dhcp }}><br>
+    <label class="w-72 inline-block" for="address">Address (use /xx syntax):</label><input class="mt-1 border-2" type="text" id="address" name="address" value="{{address}}"><br>
+    <label class="w-72 inline-block" for="gateway">Gateway:</label><input class="mt-1 border-2" type="text" id="gateway" name="gateway" value="{{gateway}}"><br>
+    <label class="w-72 inline-block" for="dns">DNS (use ; to seperate entries):</label><input class="mt-1 border-2" type="text" id="dns" name="dns" value="{{dns}}"><br>
+    <button class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
+</form>
+
+{% endblock %}

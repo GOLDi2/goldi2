@@ -1,15 +1,4 @@
 ################################################################################
-# Build Development Container ##################################################
-################################################################################
-
-helper/goldi-development-container:
-  - script: build
-    dependencies:
-      - crosslab/helper/development-container:build
-    tags:
-      - environment
-
-################################################################################
 # Frontend Services ############################################################
 ################################################################################
 
@@ -18,12 +7,12 @@ frontend-services/website:
     dependencies:
       - crosslab/clients/api/js:build
 
-frontend-services/config-tool:
-  - script: build
-    dependencies:
-      - crosslab/clients/api/js:build
+# frontend-services/config-tool:
+#   - script: build
+#     dependencies:
+#       - crosslab/clients/api/js:build
 
-frontend-services/experiment-control-panel:
+frontend-services/edge_devices/experiment-control-panel:
   - script: build
     dependencies:
       - crosslab/clients/api/js:build
@@ -32,12 +21,40 @@ frontend-services/experiment-control-panel:
       - crosslab/clients/soa_services/webcam/js:build
       - crosslab/clients/soa_services/file/js:build
 
+frontend-services/edge_devices/fsm-interpreter:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
+frontend-services/edge_devices/virtual-pspu:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
+frontend-services/edge_devices/ti-lab-ecp:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+      - crosslab/clients/soa/js:build
+      - crosslab/clients/soa_services/electricalConnection/js:build
+
+
+frontend-services/apitool:
+  - script: build
+    dependencies:
+      - crosslab/clients/api/js:build
+
+
 ################################################################################
 # Hardware #####################################################################
 ################################################################################
 
-#hardware/common/fpga:
-#  - script: test
+hardware/common/fpga:
+  - script: test
 
 hardware/common/config-interface:
   - script: build
@@ -57,7 +74,9 @@ hardware/common/spi-driver:
 
 hardware/boards/axis_portal_v1/fpga:
   - script: build
-#  - script: test
+    dependencies:
+      - hardware/common/fpga:test
+  - script: test
 
 hardware/boards/axis_portal_v1/crosslab:
   - script: build
@@ -69,7 +88,9 @@ hardware/boards/axis_portal_v1/crosslab:
 
 hardware/boards/warehouse_v2/fpga:
   - script: build
-#  - script: test
+    dependencies:
+      - hardware/common/fpga:test
+  - script: test
 
 hardware/boards/warehouse_v2/crosslab:
   - script: build
@@ -81,6 +102,8 @@ hardware/boards/warehouse_v2/crosslab:
 
 hardware/boards/axis_portal_v2/fpga:
   - script: build
+    dependencies:
+      - hardware/common/fpga:test
   - script: test
 
 hardware/boards/axis_portal_v2/crosslab:
