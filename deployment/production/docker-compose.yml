@@ -43,6 +43,7 @@ x-config: &common-config
 networks:
   db:
   loki:
+  backend:
   global_default:
     external: true
 
@@ -56,6 +57,8 @@ volumes:
       device: ./data
 
 services:
+  # Reverse Proxy:
+
   # Databases
   db:
     image: mariadb
@@ -116,6 +119,7 @@ services:
     networks:
       loki:
       global_default:
+      backend:
     logging: *loki-logging
     restart: on-failure
   authentication:
@@ -127,7 +131,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -140,7 +144,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -152,7 +156,7 @@ services:
       DB_DATABASE: device
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -164,7 +168,7 @@ services:
       DB_DATABASE: experiment
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -180,7 +184,7 @@ services:
       API_TOKEN: ${FEDERATION_API_KEY}
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -203,6 +207,7 @@ services:
     networks:
       loki:
       global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
