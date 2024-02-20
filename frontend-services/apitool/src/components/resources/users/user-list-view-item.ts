@@ -32,6 +32,7 @@ export class UserListViewItem extends LitElement {
                         Edit
                     </button>
                     <button
+                        @click=${() => this.deleteUser()}
                         class="w-full justify-center bg-red-600 text-gray-50 p-2 rounded-lg ml-auto flex hover:cursor-pointer hover:bg-red-700 active:bg-red-800"
                     >
                         Delete
@@ -71,6 +72,15 @@ export class UserListViewItem extends LitElement {
     private async editUser() {
         const event = new CustomEvent<string>('update-view', {
             detail: '/users/' + this.user.url.split('/').at(-1),
+            bubbles: true,
+        });
+
+        this.dispatchEvent(event);
+    }
+
+    private async deleteUser() {
+        const event = new CustomEvent<string>('delete-user', {
+            detail: this.user.url,
             bubbles: true,
         });
 
