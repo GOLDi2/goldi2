@@ -46,12 +46,15 @@ export class DeviceHandler extends SoaDeviceHandler {
         if (statusUpdate.status === "failed") {
           this.error = statusUpdate.message;
           this.state = "failed";
+          this.onStateChange && this.onStateChange();
         }
         if (statusUpdate.status === "running") {
           this.state = "running";
+          this.onStateChange && this.onStateChange();
         }
         if (statusUpdate.status === "closed") {
           this.state = "closed";
+          this.onStateChange && this.onStateChange();
         }
       }
     });
