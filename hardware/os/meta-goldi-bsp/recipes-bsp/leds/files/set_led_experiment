@@ -1,5 +1,8 @@
 #!/bin/sh
+
+# green active led
 /bin/echo none > /sys/class/leds/red\:active/trigger
-/bin/echo none > /sys/class/leds/green\:active/trigger
 /bin/echo 0 > /sys/class/leds/red\:active/brightness
+
+/bin/echo none > /sys/class/leds/green\:active/trigger
 /bin/echo 255 > /sys/class/leds/green\:active/brightness

@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+from spi_driver import SpiRegisters
+
+registers = SpiRegisters()
+registers.spi.xfer2([0x80, 82, 0x80])
