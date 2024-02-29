@@ -131,7 +131,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       AUTH_local_TYPE: local
       AUTH_tui_TYPE: ldap
-      AUTH_tui_URL: ${TUI_LDAP_URL:?}
+      AUTH_tui_URL: ${TUI_LDAP_URL}
     networks:
       loki:
       backend:
