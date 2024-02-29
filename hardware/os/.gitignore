@@ -9,3 +9,4 @@ poky
 local.yml
 boards.yml
 *.pem
+wpa_supplicant.conf
