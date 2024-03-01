@@ -35,6 +35,7 @@ const config = {
     ],
   },
   resolve: {
+    symlinks: false,
     extensions: [".ts", ".js"],
     fallback: {
       url: false,

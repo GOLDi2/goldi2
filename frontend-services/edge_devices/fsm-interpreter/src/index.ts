@@ -1,18 +1,18 @@
-import { APIClient } from "@cross-lab-project/api-client";
-import { DeviceHandler } from "@cross-lab-project/soa-client";
 import { adoptStyles, html, LitElement, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-let device_url = "";
-const client = new APIClient("https://api.dev.goldi-labs.de");
+import { DeviceHandler } from "./components/deviceHandler";
+import "./components/dialog";
+import "./components/progress";
+
 const deviceHandler = new DeviceHandler();
 
-import style from "./styles.css";
-import { parse_and_compile_eqation } from "./equation_parsing";
 import {
   ElectricalConnectionService,
   GPIO,
 } from "@cross-lab-project/soa-service-electrical";
+import { parse_and_compile_eqation } from "./equation_parsing";
+import style from "./styles.css";
 
 type Equation = {
   raw: string;
@@ -46,21 +46,6 @@ export class App extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
     adoptStyles(this.shadowRoot, [stylesheet]);
-
-    // check if instanceUrl and deviceToken are in query params
-    const urlParams = new URLSearchParams(window.location.search);
-    const instanceUrl = urlParams.get("instanceUrl");
-    const deviceToken = urlParams.get("deviceToken");
-    if (instanceUrl && deviceToken) {
-      device_url = instanceUrl;
-      this.start(deviceToken);
-    }
-  }
-
-  async start(accesstoken: string) {
-    console.log({ accesstoken, device_url });
-    client.accessToken = accesstoken;
-    const token = await client.createWebsocketToken(device_url);
 
     const input_service = new ElectricalConnectionService("input", []);
     input_service.addInterface(new GPIO.ConstructableGPIOInterface([]));
@@ -96,11 +81,7 @@ export class App extends LitElement {
     });
     deviceHandler.addService(output_service);
 
-    await deviceHandler.connect({
-      endpoint: "wss://api.dev.goldi-labs.de/devices/websocket",
-      id: device_url,
-      token,
-    });
+    deviceHandler.connect();
   }
 
   changeEquation(key: "z" | "y", idx: number, value: string) {

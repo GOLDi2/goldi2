@@ -48,15 +48,6 @@
         {% endfor %}
         </div>
     </div>
-    <div class="flex flex-column">
-        <div class="p-10">
-            <span class="text-6xl">2.</span>
-        </div>
-        <div class="p-10">
-            Run the experiment by clicking the following link:<br>
-            <a class="primary-button" href="/{{ language }}/run-experiment?url={{ experiment.url }}">Run experiment</a>
-        </div>
-    </div>
     
     Eperiment Status:
     <div class="w-full flex-grow flex" style="white-space: pre-wrap;"> {{ experiment | dump(2 )}}</div>
