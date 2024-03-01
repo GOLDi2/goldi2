@@ -1,9 +1,17 @@
 #!/bin/sh
-/bin/echo timer > /sys/class/leds/red\:cloud/trigger
+
+# cloud led blinking red
 /bin/echo none > /sys/class/leds/green\:cloud/trigger
-/bin/echo 255 > /sys/class/leds/red\:cloud/brightness
 /bin/echo 0 > /sys/class/leds/green\:cloud/brightness
+
+/bin/echo timer > /sys/class/leds/red\:cloud/trigger
+/bin/echo 100 > /sys/class/leds/red\:cloud/delay_on
+/bin/echo 100 > /sys/class/leds/red\:cloud/delay_off
+/bin/echo 255 > /sys/class/leds/red\:cloud/brightness
+
+# disable active led
 /bin/echo none > /sys/class/leds/red\:active/trigger
-/bin/echo none > /sys/class/leds/green\:active/trigger
 /bin/echo 0 > /sys/class/leds/red\:active/brightness
+
+/bin/echo none > /sys/class/leds/green\:active/trigger
 /bin/echo 0 > /sys/class/leds/green\:active/brightness
