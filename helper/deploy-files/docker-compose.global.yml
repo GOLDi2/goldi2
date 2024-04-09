@@ -56,17 +56,17 @@ services:
     network_mode: "host"
 
 # Logging #########################################################################################
-  logs:
-    image: amir20/dozzle
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    environment:
-      - VIRTUAL_HOST=logs.$DOMAIN
-      - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=logs.$DOMAIN
-      - DOZZLE_USERNAME=$DOZZLE_USERNAME
-      - DOZZLE_PASSWORD=$DOZZLE_PASSWORD
-    restart: on-failure
+#  logs:
+#    image: amir20/dozzle
+#    volumes:
+#      - "/var/run/docker.sock:/var/run/docker.sock"
+#    environment:
+#      - VIRTUAL_HOST=logs.$DOMAIN
+#      - VIRTUAL_PORT=8080
+#      - LETSENCRYPT_HOST=logs.$DOMAIN
+#      - DOZZLE_USERNAME=$DOZZLE_USERNAME
+#      - DOZZLE_PASSWORD=$DOZZLE_PASSWORD
+#    restart: on-failure
 
 volumes:
   conf:

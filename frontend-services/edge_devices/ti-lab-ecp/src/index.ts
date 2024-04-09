@@ -19,6 +19,8 @@ export class App extends LitElement {
   @state()
   private solved: boolean = false;
   @state()
+  private notSolved: boolean = false;
+  @state()
   private checking: boolean = false;
   @state()
   private error: boolean = false;
@@ -104,6 +106,8 @@ export class App extends LitElement {
         setTimeout(() => (this.error = false), 3000);
       }
       this.solved = true;
+    } else {
+      this.notSolved = true;
     }
     this.checking = false;
   }
@@ -157,6 +161,24 @@ export class App extends LitElement {
           >Aufgabe erfolgreich gelöst. Sie können dieses Fenster nun
           schließen.</span
         >
+      </div>`;
+    }
+    if (this.notSolved) {
+      return html`<div
+        class="absolute top-0 left-0 w-full h-full bg-[#961818] bg-opacity-50 flex items-center justify-center"
+      >
+        <span class="p-4 rounded bg-white"
+          >Schaltung inkorrekt. Bitte überprüfen Sie Ihrer Lösung und versurchen
+          Sie es erneut.</span
+        >
+        <button
+          @click=${() => {
+            this.notSolved = false;
+          }}
+          class="bg-primary text-white rounded-lg p-3"
+        >
+          Ok
+        </button>
       </div>`;
     }
     if (this.error) {

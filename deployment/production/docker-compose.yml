@@ -128,14 +128,15 @@ services:
       <<: *common-config
       DB_USERNAME: authentication
       DB_DATABASE: authentication
-      JWT_SECRET: ${JWT_SECRET}
-      AUTH_local_TYPE: local
       AUTH_tui_TYPE: ldap
-      AUTH_tui_URL: ${TUI_LDAP_URL}
+      AUTH_tui_URL: ldaps://ldapauth.tu-ilmenau.de:636
+      AUTH_local_TYPE: local
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
       backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   authorization:
@@ -161,6 +162,7 @@ services:
       loki:
       backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   experiment:
@@ -173,6 +175,7 @@ services:
       loki:
       backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   federation:
@@ -189,6 +192,7 @@ services:
       loki:
       backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   lti:

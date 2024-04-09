@@ -83,6 +83,30 @@ export class DeviceHandler extends SoaDeviceHandler {
 
       this.state = "connected";
       this.onStateChange && this.onStateChange();
+      super.on("experimentStatusChanged", async (statusUpdate) => {
+        if (
+          statusUpdate.message &&
+          statusUpdate.message.startsWith(
+            "The following devices did not connect in time: "
+          )
+        ) {
+          const devicesStrings = statusUpdate.message
+            .split("The following devices did not connect in time: ")[1]
+            .split(", ");
+          const deviceUrls = devicesStrings.map((deviceString) =>
+            deviceString.replace(/"/g, "").trim()
+          );
+          const devices = await Promise.all(
+            deviceUrls.map((url) => this.client.getDevice(url))
+          );
+
+          this.state = "failed";
+          this.error = `The following devices did not connect in time: ${devices
+            .map((device) => device.name)
+            .join(", ")}`;
+          this.onStateChange && this.onStateChange();
+        }
+      });
       await super.connect({
         endpoint: ws_endpoint,
         id: _device_url,
