@@ -65,7 +65,9 @@ export class AxisPortal extends LitElement {
       }
       for (const [s, x] of SensorMap) {
         this.serviceInterface.setOutput(x, this.simulation.sensors[s]);
-        this.simulation.sensors_emitter.on(s, (value) => console.log(value));
+        this.simulation.sensors_emitter.on(s, (value) => {
+          this.serviceInterface.setOutput(x, value);
+        });
       }
 
       this.serviceInterface.on("inputChanged", (event) => {
