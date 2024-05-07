@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.10
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# Hardware Support ################################################################################
+  vpn-server:
+    image: goldi2/vpn-server
+    volumes:
+      - "/lib/modules:/lib/modules"
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    network_mode: "host"
+    environment:
+      - PEERS=$VPN_PEERS
+      - KEY=$VPN_KEY
+    restart: on-failure
+
+# Coturn ##########################################################################################
+  coturn:
+    image: coturn/coturn
+    command: "--user=$COTURN_USERNAME:$COTURN_PASSWORD --lt-cred-mech --fingerprint --external-ip=$COTURN_IP --realm=$DOMAIN --log-file=stdout"
+    network_mode: "host"

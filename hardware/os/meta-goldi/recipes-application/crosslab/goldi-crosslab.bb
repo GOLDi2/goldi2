@@ -21,6 +21,6 @@ do_compile:prepend() {
 
 PEP517_SOURCE_PATH = "${WORKDIR}/goldi-crosslab"
 
-RDEPENDS:${PN} = "python3 python3-crosslab-api-client python3-crosslab-soa-client python3-spi-driver python3-crosslab-soa-service-electrical python3-crosslab-soa-service-webcam led-control-scripts gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad"
+RDEPENDS:${PN} = "python3 python3-crosslab-api-client python3-crosslab-soa-client python3-spi-driver python3-crosslab-soa-service-electrical python3-crosslab-soa-service-webcam set-led-power-service led-control-scripts gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad"
 
 inherit python_setuptools_build_meta

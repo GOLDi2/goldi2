@@ -3,7 +3,7 @@ Description=GOLDi2 Crosslab Client
 After=network.target load-fpga-firmware.service
 
 [Service]
-Restart=on-failure
+Restart=always
 ExecStartPre=/usr/bin/set_led_connecting
 ExecStart=crosslab_client
 ExecStopPost=/usr/bin/set_led_connection_lost

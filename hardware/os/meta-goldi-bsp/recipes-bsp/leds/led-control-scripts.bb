@@ -10,6 +10,7 @@ SRC_URI = " \
     file://set_led_experiment \
     file://set_led_no_experiment \
     file://set_led_uploading \
+    file://set_led_power \
 "
 
 do_install() {
@@ -20,6 +21,7 @@ do_install() {
     install -m 0755 ${WORKDIR}/set_led_experiment ${D}/usr/bin/set_led_experiment
     install -m 0755 ${WORKDIR}/set_led_no_experiment ${D}/usr/bin/set_led_no_experiment
     install -m 0755 ${WORKDIR}/set_led_uploading ${D}/usr/bin/set_led_uploading
+    install -m 0755 ${WORKDIR}/set_led_power ${D}/usr/bin/set_led_power
 }
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

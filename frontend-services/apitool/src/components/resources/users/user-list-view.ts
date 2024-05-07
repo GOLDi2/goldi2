@@ -53,6 +53,7 @@ export class UserListView extends LitElement {
                     ${this.filteredUsers.map(
                         (user) =>
                             html`<apitool-user-list-view-item
+                                @delete-device=${this.deleteUser}
                                 .user=${user}
                             ></apitool-user-list-view-item>`
                     )}
@@ -95,5 +96,13 @@ export class UserListView extends LitElement {
         });
 
         this.dispatchEvent(event);
+    }
+
+    private async deleteUser(event: CustomEvent<string>) {
+        await apiClient.deleteUser(event.detail);
+        this.users = this.users.filter((user) => user.url !== event.detail);
+        this.filteredUsers = this.filteredUsers.filter(
+            (user) => user.url !== event.detail
+        );
     }
 }

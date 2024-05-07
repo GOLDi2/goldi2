@@ -1,0 +1,10 @@
+[Unit]
+Description=Sets the "set the Power LED"
+After=load-fpga-firmware.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/set_led_power
+
+[Install]
+WantedBy=multi-user.target

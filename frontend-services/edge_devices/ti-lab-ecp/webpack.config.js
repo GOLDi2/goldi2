@@ -32,6 +32,10 @@ const config = {
         use: ["css-loader", "postcss-loader"],
         exclude: /node_modules/,
       },
+      {
+        test: /\.svg$/,
+        type: 'asset/source',
+      },
     ],
   },
   resolve: {

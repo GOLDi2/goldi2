@@ -26,28 +26,28 @@
 		target = <&leds>;
 		__overlay__ {
 			compatible = "gpio-leds";
-			red_active {
-				label = "red:active";
-				linux,default-trigger = "default-on";
-				gpios = <&gpio 26 1>;
-			};
-
-            green_active {
+			green_active {
 				label = "green:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 13 1>;
+				gpios = <&gpio 26 0>;
 			};
 
-            red_cloud {
-				label = "red:cloud";
+            red_active {
+				label = "red:active";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 6 1>;
+				gpios = <&gpio 13 0>;
 			};
 
             green_cloud {
 				label = "green:cloud";
 				linux,default-trigger = "default-on";
-				gpios = <&gpio 5 1>;
+				gpios = <&gpio 6 0>;
+			};
+
+            red_cloud {
+				label = "red:cloud";
+				linux,default-trigger = "default-on";
+				gpios = <&gpio 5 0>;
 			};
 		};
 	};

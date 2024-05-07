@@ -2,8 +2,8 @@
 import { spawn, spawnSync } from "child_process";
 import express from "express";
 import fs from "fs";
-import https from "https";
 import http from "http";
+import https from "https";
 import ini from "ini";
 import multer from "multer";
 import { AddressInfo } from "net";
@@ -14,6 +14,7 @@ import { pam_auth } from "./auth";
 import { config } from "./config";
 import { createProcessInterface } from "./process_interface";
 import { createSSLCertificate, renderPageInit } from "./utils";
+import { WpaSupplicantConfig } from "./wpa_supplicant_config";
 
 const app = express();
 
@@ -107,10 +108,9 @@ router.all("/network", multipart.none(), async (req, res) => {
   });
 });
 
-const wpa_network_regex = /^network={(.*?)}$/gms;
 const scan_result_regex =
   /^\w\w(?::\w\w)+[\t ]+[^\s]+[\t ]+[^\s]+[\t ]+([^\s]+)[\t ]+(.*?)$/gm;
-const security_key_mgmt_map = new Map([
+const security_key_mgmt_map = new Map<string, "NONE" | "WPA-PSK" | "WPA-EAP">([
   ["none", "NONE"],
   ["personal", "WPA-PSK"],
   ["enterprise", "WPA-EAP"],
@@ -128,18 +128,7 @@ router.all("/wireless", multipart.none(), async (req, res) => {
       .replace(/DNS=/g, "DNS[]=")
   );
 
-  const wpa_file_content = fs.readFileSync(
-    config.WPA_SUPPLICANT_CONFIG_FILE,
-    "utf-8"
-  );
-  const wpa_network_raw = wpa_network_regex.exec(wpa_file_content);
-  let wpa_network: { [key: string]: string | undefined } = {};
-  if (wpa_network_raw) {
-    const _wpa_network = ini.parse(wpa_network_raw[1]);
-    if (_wpa_network.ssid !== "GOLDi Config Interface") {
-      wpa_network = _wpa_network;
-    }
-  }
+  const wpaConfig = new WpaSupplicantConfig();
 
   const scan_string = spawnSync(
     "wpa_cli scan > /dev/null && wpa_cli scan_results",
@@ -162,7 +151,8 @@ router.all("/wireless", multipart.none(), async (req, res) => {
         DNS: req.body.dns.split(";"),
       },
     };
-    wpa_network = {
+    console.log(req.body);
+    wpaConfig.network = {
       ssid: req.body[req.body.security + "_ssid"],
       eap: req.body[req.body.security + "_eap"],
       phase2: req.body[req.body.security + "_phase2"],
@@ -187,38 +177,7 @@ router.all("/wireless", multipart.none(), async (req, res) => {
         .replace(/^.*=\n/gm, "")
     );
 
-    let stringified_wpa_network = "";
-    if (wpa_network.ssid) {
-      stringified_wpa_network = `\nnetwork={\n    ssid="${wpa_network.ssid}"\n`;
-
-      if (wpa_network.key_mgmt)
-        stringified_wpa_network += `    key_mgmt=${wpa_network.key_mgmt}\n`;
-      if (wpa_network.eap)
-        stringified_wpa_network += `    eap=${wpa_network.eap}\n`;
-      if (wpa_network.phase2)
-        stringified_wpa_network += `    phase2="${wpa_network.phase2}"\n`;
-      if (wpa_network.identity)
-        stringified_wpa_network += `    identity="${wpa_network.identity}"\n`;
-      if (wpa_network.anonymous_identity)
-        stringified_wpa_network += `    anonymous_identity="${wpa_network.anonymous_identity}"\n`;
-      if (wpa_network.password)
-        stringified_wpa_network += `    password="${wpa_network.password}"\n`;
-      if (wpa_network.psk)
-        stringified_wpa_network += `    psk="${wpa_network.password}"\n`;
-
-      stringified_wpa_network += "}\n";
-    }
-
-    const stringified_wpa_conf = `ctrl_interface=/var/run/wpa_supplicant
-ctrl_interface_group=0
-${stringified_wpa_network}
-network={
-    frequency=2437
-    ssid="GOLDi Config Interface"
-    mode=2
-    key_mgmt=NONE
-}`;
-    fs.writeFileSync(config.WPA_SUPPLICANT_CONFIG_FILE, stringified_wpa_conf);
+    wpaConfig.write();
 
     if (config.NODE_ENV !== "development") {
       spawnSync(
@@ -230,12 +189,12 @@ network={
 
   await renderPage(req.path, req.language, res, {
     scanned_networks: scan_result,
-    ssid: wpa_network.ssid,
-    eap: wpa_network.eap,
-    phase2: wpa_network.phase2,
-    identity: wpa_network.identity,
-    anonymous_identity: wpa_network.anonymous_identity,
-    password: wpa_network.password ?? wpa_network.psk,
+    ssid: wpaConfig.network.ssid,
+    eap: wpaConfig.network.eap,
+    phase2: wpaConfig.network.phase2,
+    identity: wpaConfig.network.identity,
+    anonymous_identity: wpaConfig.network.anonymous_identity,
+    password: wpaConfig.network.password ?? wpaConfig.network.psk,
     dhcp: network_settings.Network.DHCP == "yes",
     address: network_settings.Network.Address
       ? network_settings.Network.Address.join(";")
@@ -245,7 +204,7 @@ network={
       ? network_settings.Network.DNS.join(";")
       : "",
     authorized: req.authorized,
-    security: key_mgmt_security_map.get(wpa_network.key_mgmt ?? ""),
+    security: key_mgmt_security_map.get(wpaConfig.network.key_mgmt ?? ""),
   });
 });
 
@@ -337,8 +296,10 @@ if (config.NODE_ENV === "development") {
     .createServer(createSSLCertificate("/data/certificates/"), app)
     .listen(config.PORT);
 
-  http.createServer((_req, res)=>{
-    res.writeHead(302, { "Location": "https://goldi1.local/" });
-    res.end();
-  }).listen(80);
+  http
+    .createServer((_req, res) => {
+      res.writeHead(302, { Location: "https://goldi1.local/" });
+      res.end();
+    })
+    .listen(80);
 }

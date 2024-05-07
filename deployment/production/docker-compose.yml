@@ -43,6 +43,7 @@ x-config: &common-config
 networks:
   db:
   loki:
+  backend:
   global_default:
     external: true
 
@@ -56,6 +57,8 @@ volumes:
       device: ./data
 
 services:
+  # Reverse Proxy:
+
   # Databases
   db:
     image: mariadb
@@ -116,6 +119,7 @@ services:
     networks:
       loki:
       global_default:
+      backend:
     logging: *loki-logging
     restart: on-failure
   authentication:
@@ -124,11 +128,15 @@ services:
       <<: *common-config
       DB_USERNAME: authentication
       DB_DATABASE: authentication
+      AUTH_tui_TYPE: ldap
+      AUTH_tui_URL: ldaps://ldapauth.tu-ilmenau.de:636
+      AUTH_local_TYPE: local
       JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
-      global_default:
+      backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   authorization:
@@ -140,7 +148,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     networks:
       loki:
-      global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
@@ -152,8 +160,9 @@ services:
       DB_DATABASE: device
     networks:
       loki:
-      global_default:
+      backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   experiment:
@@ -164,8 +173,9 @@ services:
       DB_DATABASE: experiment
     networks:
       loki:
-      global_default:
+      backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   federation:
@@ -180,8 +190,9 @@ services:
       API_TOKEN: ${FEDERATION_API_KEY}
     networks:
       loki:
-      global_default:
+      backend:
       db:
+      global_default:
     logging: *loki-logging
     restart: on-failure
   lti:
@@ -203,6 +214,7 @@ services:
     networks:
       loki:
       global_default:
+      backend:
       db:
     logging: *loki-logging
     restart: on-failure
