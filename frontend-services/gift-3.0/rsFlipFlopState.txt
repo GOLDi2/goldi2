@@ -1,0 +1,1469 @@
+{
+    appState: {
+      normalizedEditorState: {
+        viewState: 'STATEDIAGRAM',
+        inputSubState: {
+          inputIDs: [
+            0,
+            1,
+            2,
+            3
+          ],
+          assignments: {
+            '0': {
+              id: 0,
+              assignment: false
+            },
+            '1': {
+              id: 1,
+              assignment: false
+            },
+            '2': {
+              id: 2,
+              assignment: false
+            },
+            '3': {
+              id: 3,
+              assignment: false
+            }
+          },
+          customNames: {
+            '0': {
+              id: 0,
+              customName: {
+                validName: 'x0'
+              }
+            },
+            '1': {
+              id: 1,
+              customName: {
+                validName: 'x1'
+              }
+            },
+            '2': {
+              id: 2,
+              customName: {
+                validName: 'x2'
+              }
+            },
+            '3': {
+              id: 3,
+              customName: {
+                validName: 'x3'
+              }
+            }
+          }
+        },
+        outputSubState: {
+          outputIDs: [],
+          customNames: {}
+        },
+        automatonSubState: {
+          automatonFrameWorks: {
+            automatonIDs: [
+              0
+            ],
+            nodeLists: {
+              '0': {
+                id: 0,
+                nodeIds: [
+                  0,
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            transitionLists: {
+              '0': {
+                id: 0,
+                transitionIds: [
+                  3,
+                  4,
+                  6,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15
+                ]
+              }
+            },
+            uiAutomatonData: {
+              '0': {
+                id: 0,
+                name: {
+                  validName: 'automaton0'
+                },
+                info: 'automaton0',
+                isActive: true,
+                initialStateNumber: {
+                  validNumber: 0
+                }
+              }
+            },
+            fusionStatePositions: {
+              '0': {
+                id: 0,
+                nodePositions: []
+              }
+            },
+            fusionTransitionPositions: {
+              '0': {
+                id: 0,
+                transitionPosition: []
+              }
+            },
+            hardwareStatePositions: {
+              '0': {
+                id: 0,
+                nodePositions: []
+              }
+            },
+            hardwareTransitionPositions: {
+              '0': {
+                id: 0,
+                transitionPosition: []
+              }
+            },
+            currentStates: {
+              '0': {
+                id: 0,
+                currentState: 3
+              }
+            },
+            controlSignalLists: {
+              '0': {
+                id: 0,
+                controlSignalIds: []
+              }
+            },
+            controlSignalNameLists: {
+              '0': {
+                id: 0,
+                nameList: {}
+              }
+            }
+          },
+          nodeSubState: {
+            nodeIds: [
+              0,
+              1,
+              2,
+              3
+            ],
+            logicInformation: {
+              '0': {
+                id: 0,
+                customStateNumber: {
+                  validNumber: 0
+                },
+                outputAssignment: [],
+                controlSignalAssignment: []
+              },
+              '1': {
+                id: 1,
+                customStateNumber: {
+                  validNumber: 1
+                },
+                outputAssignment: [],
+                controlSignalAssignment: []
+              },
+              '2': {
+                id: 2,
+                customStateNumber: {
+                  validNumber: 2
+                },
+                outputAssignment: [],
+                controlSignalAssignment: []
+              },
+              '3': {
+                id: 3,
+                customStateNumber: {
+                  validNumber: 3
+                },
+                outputAssignment: [],
+                controlSignalAssignment: []
+              }
+            },
+            nodePositions: {
+              '0': {
+                id: 0,
+                position: {
+                  xCord: 508,
+                  yCord: 774
+                },
+                radius: 50,
+                isActive: false
+              },
+              '1': {
+                id: 1,
+                position: {
+                  xCord: 968,
+                  yCord: 148
+                },
+                radius: 50,
+                isActive: false
+              },
+              '2': {
+                id: 2,
+                position: {
+                  xCord: 130,
+                  yCord: 150
+                },
+                radius: 50,
+                isActive: false
+              },
+              '3': {
+                id: 3,
+                position: {
+                  xCord: 505,
+                  yCord: 162
+                },
+                radius: 50,
+                isActive: false
+              }
+            },
+            names: {
+              '0': {
+                id: 0,
+                customName: {
+                  validName: 'z0'
+                }
+              },
+              '1': {
+                id: 1,
+                customName: {
+                  validName: 'z1'
+                }
+              },
+              '2': {
+                id: 2,
+                customName: {
+                  validName: 'z2'
+                }
+              },
+              '3': {
+                id: 3,
+                customName: {
+                  validName: 'z3'
+                }
+              }
+            }
+          },
+          transitionSubState: {
+            transitionIds: [
+              3,
+              4,
+              6,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ],
+            logicInformation: {
+              '3': {
+                id: 3,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'CONSTANT_ONE',
+                      stringRepresentation: '1'
+                    }
+                  }
+                }
+              },
+              '4': {
+                id: 4,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      variable: {
+                        number: 1,
+                        customName: {
+                          validName: 'x1'
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '6': {
+                id: 6,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'NOT_OPERATOR',
+                      operatorSymbol: '/',
+                      child: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 1,
+                          customName: {
+                            validName: 'x1'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '10': {
+                id: 10,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'NOT_OPERATOR',
+                      operatorSymbol: '/',
+                      child: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 0,
+                          customName: {
+                            validName: 'x0'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '11': {
+                id: 11,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      variable: {
+                        number: 0,
+                        customName: {
+                          validName: 'x0'
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '12': {
+                id: 12,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'AND_OPERATOR',
+                      operatorSymbol: '&',
+                      leftChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        type: 'NOT_OPERATOR',
+                        operatorSymbol: '/',
+                        child: {
+                          bracketCounter: 0,
+                          zIndicator: false,
+                          controlSignalIndicator: false,
+                          variable: {
+                            number: 1,
+                            customName: {
+                              validName: 'x1'
+                            }
+                          }
+                        }
+                      },
+                      rightChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        type: 'NOT_OPERATOR',
+                        operatorSymbol: '/',
+                        child: {
+                          bracketCounter: 0,
+                          zIndicator: false,
+                          controlSignalIndicator: false,
+                          variable: {
+                            number: 0,
+                            customName: {
+                              validName: 'x0'
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '13': {
+                id: 13,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'AND_OPERATOR',
+                      operatorSymbol: '&',
+                      leftChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        type: 'NOT_OPERATOR',
+                        operatorSymbol: '/',
+                        child: {
+                          bracketCounter: 0,
+                          zIndicator: false,
+                          controlSignalIndicator: false,
+                          variable: {
+                            number: 1,
+                            customName: {
+                              validName: 'x1'
+                            }
+                          }
+                        }
+                      },
+                      rightChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 0,
+                          customName: {
+                            validName: 'x0'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '14': {
+                id: 14,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'AND_OPERATOR',
+                      operatorSymbol: '&',
+                      leftChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 1,
+                          customName: {
+                            validName: 'x1'
+                          }
+                        }
+                      },
+                      rightChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        type: 'NOT_OPERATOR',
+                        operatorSymbol: '/',
+                        child: {
+                          bracketCounter: 0,
+                          zIndicator: false,
+                          controlSignalIndicator: false,
+                          variable: {
+                            number: 0,
+                            customName: {
+                              validName: 'x0'
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              '15': {
+                id: 15,
+                condition: {
+                  validExpression: {
+                    tree: {
+                      bracketCounter: 0,
+                      zIndicator: false,
+                      controlSignalIndicator: false,
+                      type: 'AND_OPERATOR',
+                      operatorSymbol: '&',
+                      leftChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 0,
+                          customName: {
+                            validName: 'x0'
+                          }
+                        }
+                      },
+                      rightChild: {
+                        bracketCounter: 0,
+                        zIndicator: false,
+                        controlSignalIndicator: false,
+                        variable: {
+                          number: 1,
+                          customName: {
+                            validName: 'x1'
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            transitionNodeData: {
+              '3': {
+                fromNodeId: 0,
+                toNodeId: 3,
+                id: 3
+              },
+              '4': {
+                fromNodeId: 1,
+                toNodeId: 3,
+                id: 4
+              },
+              '6': {
+                fromNodeId: 1,
+                toNodeId: 1,
+                id: 6
+              },
+              '10': {
+                fromNodeId: 2,
+                toNodeId: 2,
+                id: 10
+              },
+              '11': {
+                fromNodeId: 2,
+                toNodeId: 3,
+                id: 11
+              },
+              '12': {
+                fromNodeId: 3,
+                toNodeId: 0,
+                id: 12
+              },
+              '13': {
+                fromNodeId: 3,
+                toNodeId: 1,
+                id: 13
+              },
+              '14': {
+                fromNodeId: 3,
+                toNodeId: 2,
+                id: 14
+              },
+              '15': {
+                fromNodeId: 3,
+                toNodeId: 3,
+                id: 15
+              }
+            },
+            transitionPositions: {
+              '3': {
+                id: 3,
+                bezier: {
+                  startPoint: {
+                    xCord: -0.24509509451146805,
+                    yCord: -49.999399280337826
+                  },
+                  endPoint: {
+                    xCord: 0.24509509451146805,
+                    yCord: 49.999399280337826
+                  },
+                  supportPoint: {
+                    xCord: 0.5,
+                    yCord: 0.04453296015240595
+                  }
+                }
+              },
+              '4': {
+                id: 4,
+                bezier: {
+                  startPoint: {
+                    xCord: -49.977157879805134,
+                    yCord: 1.5111883592165616
+                  },
+                  endPoint: {
+                    xCord: 49.977157879805134,
+                    yCord: -1.5111883592165616
+                  },
+                  supportPoint: {
+                    xCord: 0.5395869165996164,
+                    yCord: -0.15960773677294018
+                  }
+                }
+              },
+              '6': {
+                id: 6,
+                bezier: {
+                  startPoint: {
+                    xCord: -50,
+                    yCord: 6.123233995736766e-15
+                  },
+                  endPoint: {
+                    xCord: -25.00000000000002,
+                    yCord: -43.301270189221924
+                  },
+                  supportPoint: {
+                    xCord: 1.9981535329954587,
+                    yCord: 1.500044641670906
+                  }
+                }
+              },
+              '10': {
+                id: 10,
+                bezier: {
+                  startPoint: {
+                    xCord: -50,
+                    yCord: 6.123233995736766e-15
+                  },
+                  endPoint: {
+                    xCord: -25.00000000000002,
+                    yCord: -43.301270189221924
+                  },
+                  supportPoint: {
+                    xCord: 0.4017175976009678,
+                    yCord: 2.264204710660613
+                  }
+                }
+              },
+              '11': {
+                id: 11,
+                bezier: {
+                  startPoint: {
+                    xCord: 49.9744196440378,
+                    yCord: 1.5991814286092099
+                  },
+                  endPoint: {
+                    xCord: -49.9744196440378,
+                    yCord: -1.5991814286092099
+                  },
+                  supportPoint: {
+                    xCord: 0.49855380689731826,
+                    yCord: 0.07954619822516702
+                  }
+                }
+              },
+              '12': {
+                id: 12,
+                bezier: {
+                  startPoint: {
+                    xCord: 0.24509509451146305,
+                    yCord: 49.999399280337826
+                  },
+                  endPoint: {
+                    xCord: -0.24509509451146305,
+                    yCord: -49.999399280337826
+                  },
+                  supportPoint: {
+                    xCord: 0.4169269373827447,
+                    yCord: 0.03224321199830379
+                  }
+                }
+              },
+              '13': {
+                id: 13,
+                bezier: {
+                  startPoint: {
+                    xCord: 49.977157879805134,
+                    yCord: -1.51118835921657
+                  },
+                  endPoint: {
+                    xCord: -49.977157879805134,
+                    yCord: 1.51118835921657
+                  },
+                  supportPoint: {
+                    xCord: 0.44648198072340695,
+                    yCord: -0.20933807096131546
+                  }
+                }
+              },
+              '14': {
+                id: 14,
+                bezier: {
+                  startPoint: {
+                    xCord: -49.9744196440378,
+                    yCord: -1.599181428609205
+                  },
+                  endPoint: {
+                    xCord: 49.9744196440378,
+                    yCord: 1.599181428609205
+                  },
+                  supportPoint: {
+                    xCord: 0.5,
+                    yCord: 0.06016822201046152
+                  }
+                }
+              },
+              '15': {
+                id: 15,
+                bezier: {
+                  startPoint: {
+                    xCord: 43.64717410686319,
+                    yCord: -24.391067883247104
+                  },
+                  endPoint: {
+                    xCord: -25.00000000000002,
+                    yCord: -43.301270189221924
+                  },
+                  supportPoint: {
+                    xCord: 0.857352913060632,
+                    yCord: -1.6845327288664065
+                  }
+                }
+              }
+            }
+          }
+        },
+        globalInputDontCare: {
+          validExpression: {
+            tree: {
+              bracketCounter: 0,
+              zIndicator: false,
+              controlSignalIndicator: false,
+              type: 'CONSTANT_ONE',
+              stringRepresentation: '1'
+            }
+          }
+        },
+        operators: {
+          customOrOperator: {
+            validName: '+'
+          },
+          customAndOperator: {
+            validName: '&'
+          },
+          customExclusivOrOperator: {
+            validName: '*'
+          },
+          customNotOperator: {
+            validName: '/'
+          },
+          defaultLogicOne: '1',
+          defaultLogicZero: '0'
+        }
+      },
+      viewState: {
+        automatonViewConfig: {
+          showZeroTransitions: true,
+          showZeroOutputs: true,
+          onlyShowActiveAutomatons: true
+        },
+        equationViewConfig: {
+          minimizationLevel: 'UNMINIMIZED'
+        },
+        mergedAutomatonViewConfig: {
+          highlightIncompleteStates: true,
+          highlightSelfContradictoryStates: true,
+          minimizeExpressions: false
+        }
+      }
+    },
+    versionHistory: [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'inputSubState',
+              'assignments',
+              '1',
+              'assignment'
+            ],
+            value: false
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'inputSubState',
+              'assignments',
+              '1',
+              'assignment'
+            ],
+            value: true
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 0
+            }
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 3
+            }
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 3
+            }
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 0
+            }
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 0
+            }
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 3
+            }
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 3
+            }
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'automatonSubState',
+              'automatonFrameWorks',
+              'currentStates',
+              '0'
+            ],
+            value: {
+              id: 0,
+              currentState: 0
+            }
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'SIMULATION'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'MINIMIZED'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'UNMINIMIZED'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'UNMINIMIZED'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'MINIMIZED'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'globalInputDontCare'
+            ],
+            value: {
+              validExpression: {
+                tree: {
+                  bracketCounter: 0,
+                  zIndicator: false,
+                  controlSignalIndicator: false,
+                  type: 'CONSTANT_ONE',
+                  stringRepresentation: '1'
+                }
+              }
+            }
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'globalInputDontCare'
+            ],
+            value: {
+              validExpression: {
+                tree: {
+                  bracketCounter: 0,
+                  zIndicator: false,
+                  controlSignalIndicator: false,
+                  type: 'CONSTANT_ZERO',
+                  stringRepresentation: '0'
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'HStarMinimized'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'UNMINIMIZED'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'UNMINIMIZED'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'viewState',
+              'equationViewConfig',
+              'minimizationLevel'
+            ],
+            value: 'HStarMinimized'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ]
+      },
+      {
+        redoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'STATEDIAGRAM'
+          }
+        ],
+        undoPatches: [
+          {
+            op: 'replace',
+            path: [
+              'normalizedEditorState',
+              'viewState'
+            ],
+            value: 'ZEQUATIONS'
+          }
+        ]
+      }
+    ],
+    currentVersion: 172,
+    canRedo: false,
+    canUndo: true
+  }
