@@ -48,7 +48,10 @@ frontend-services/apitool:
       - crosslab/clients/api/js:build
 
 frontend-services/gift-3.0:
+  - script: build
   - script: build-docker
+    dependencies:
+      - frontend-services/gift-3.0:build
 
 
 ################################################################################
