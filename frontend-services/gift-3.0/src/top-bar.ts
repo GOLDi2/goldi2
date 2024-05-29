@@ -93,7 +93,7 @@ export class TopBarElement extends connect(store)(LitElement) {
     registerTranslateConfig({
       loader: async (lang: LanguageIdentifier): Promise<Strings> => {
         this.language = lang;
-        return fetch(`/lang/${lang}.json`).then(
+        return fetch(`lang/${lang}.json`).then(
           async (res: Response): Promise<Strings> => {
             return res.json();
           },

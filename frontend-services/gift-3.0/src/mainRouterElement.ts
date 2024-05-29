@@ -1,13 +1,20 @@
-import { LitElement, html, property, customElement, TemplateResult, PropertyValues } from "lit-element";
+import {
+  LitElement,
+  html,
+  property,
+  customElement,
+  TemplateResult,
+  PropertyValues,
+} from "lit-element";
 
 import { connect } from "pwa-helpers";
-import { store } from './store/configureStore';
+import { store } from "./store/configureStore";
 import "@material/mwc-top-app-bar-fixed";
 import "@material/mwc-tab-bar";
 import "@material/mwc-tab";
-import "./external/logic-visualizer/iFrameComponent/component/logic_visualizer"
+import "./external/logic-visualizer/iFrameComponent/component/logic_visualizer";
 
-import { DEFAULT_NODE_RADIUS } from './types/Node';
+import { DEFAULT_NODE_RADIUS } from "./types/Node";
 import { getViewState } from "./selectors/normalizedEditorStateSelectors";
 import Mousetrap from "mousetrap";
 import { AppState } from "./types/NormalizedState/AppState";
@@ -16,17 +23,21 @@ import { Redo, Undo } from "./actioncreator/metaState";
 
 import "@material/mwc-icon-button";
 
-import 'regenerator-runtime/runtime'
+import "regenerator-runtime/runtime";
 
-
-import { LanguageIdentifier, registerTranslateConfig, Strings, use,translate } from 'lit-translate';
+import {
+  LanguageIdentifier,
+  registerTranslateConfig,
+  Strings,
+  use,
+  translate,
+} from "lit-translate";
 
 @customElement("main-router-element")
 export class MainRouterElement extends connect(store)(LitElement) {
   constructor() {
     super();
-    this.currentView = "working-automaton"
-    
+    this.currentView = "working-automaton";
 
     // let automButton = this.shadowRoot;
     // Mousetrap.bind('ctrl+i', function (e, combo) {
@@ -43,26 +54,24 @@ export class MainRouterElement extends connect(store)(LitElement) {
     // });
   }
 
-    
-
-  public connectedCallback () {
+  public connectedCallback() {
     registerTranslateConfig({
-        loader: async (lang: LanguageIdentifier): Promise<Strings> => {
-            return fetch(`/lang/${lang}.json`).then(
-                async (res: Response): Promise<Strings> => {
-                    return res.json();
-                },
-            );
-        },
+      loader: async (lang: LanguageIdentifier): Promise<Strings> => {
+        return fetch(`lang/${lang}.json`).then(
+          async (res: Response): Promise<Strings> => {
+            return res.json();
+          }
+        );
+      },
     });
-    use('ger');
-        this.langLoaded = true;
-        super.connectedCallback()
-}
+    use("ger");
+    this.langLoaded = true;
+    super.connectedCallback();
+  }
 
-protected shouldUpdate (changedProperties: PropertyValues): boolean {
-  return this.langLoaded && super.shouldUpdate(changedProperties);
-}
+  protected shouldUpdate(changedProperties: PropertyValues): boolean {
+    return this.langLoaded && super.shouldUpdate(changedProperties);
+  }
 
   /**
    * Der aktuelle Anzeigetab
@@ -71,126 +80,150 @@ protected shouldUpdate (changedProperties: PropertyValues): boolean {
   @property({ type: String }) currentView: string;
   @property({ type: Number }) leftBarSetting: number = 74;
 
+  @property({ type: Boolean })
+  private langLoaded: boolean = false;
 
   @property({ type: Boolean })
-    private langLoaded: boolean = false;
-
-    @property({ type: Boolean })
-    private errorWindowOpen: boolean = false;
-
+  private errorWindowOpen: boolean = false;
 
   stateChanged(state: MetaState) {
     this.currentTab = getViewState(state.appState);
-    
   }
 
   render(): TemplateResult {
-    
-    return html`
-    
-    ${this.mapRout(this.currentTab, this.currentView)}
-      `}
+    return html` ${this.mapRout(this.currentTab, this.currentView)} `;
+  }
 
   /**
    * Entscheidet welches HTML verwendet wird in Abhängigkeit von dem ausgewaehlten Tab
    * @param currentTab Der aktuelle Tab
    */
   mapRout(currentTab: string, currentView: string): TemplateResult {
-    
-    
     switch (currentTab) {
       case "STATEDIAGRAM": {
         switch (currentView) {
           case "working-automaton": {
             // console.log("O1")
-            return html` 
-          
-            
+            return html`
+              <!-- <my-element></my-element> -->
 
-            <!-- <my-element></my-element> -->
-            
-            <automaton-button id="automButton" style="visibility:hidden; height:0px; padding:0px;padding-left: ${this.leftBarSetting+6}px;">
-                
-            </automaton-button>
+              <automaton-button
+                id="automButton"
+                style="visibility:hidden; height:0px; padding:0px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </automaton-button>
 
-            <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>
-            
-            <graph-viewer currentAutomView="working-automaton" leftSpace=${this.leftBarSetting-44} style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this.leftBarSetting+6}px;" >
-            
-            </graph-viewer>
+              <error-window
+                class="errorWindow"
+                .openWindow=${this.errorWindowOpen}
+                style="padding-left: ${this.leftBarSetting + 6}px;"
+              ></error-window>
 
+              <graph-viewer
+                currentAutomView="working-automaton"
+                leftSpace=${this.leftBarSetting - 44}
+                style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </graph-viewer>
             `;
           }
           case "merged-automaton": {
             // console.log("O2")
-            return html` 
+            return html`
+              <!-- <my-element></my-element> -->
 
-            
-            <!-- <my-element></my-element> -->
-            
-            <automaton-button id="automButton" style="visibility:hidden; height:0px; padding:0px;padding-left: ${this.leftBarSetting+6}px;">
-                
-            </automaton-button>
+              <automaton-button
+                id="automButton"
+                style="visibility:hidden; height:0px; padding:0px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </automaton-button>
 
-            <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>
-            
-            <graph-viewer currentAutomView="merged-automaton" leftSpace=${this.leftBarSetting-44} style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this.leftBarSetting+6}px;" >
-            
-            </graph-viewer>
+              <error-window
+                class="errorWindow"
+                .openWindow=${this.errorWindowOpen}
+                style="padding-left: ${this.leftBarSetting + 6}px;"
+              ></error-window>
 
-
+              <graph-viewer
+                currentAutomView="merged-automaton"
+                leftSpace=${this.leftBarSetting - 44}
+                style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </graph-viewer>
             `;
           }
           case "hardware-automaton": {
             // console.log("O3")
-            return html` 
+            return html`
+              <!-- <my-element></my-element> -->
 
-            
-            <!-- <my-element></my-element> -->
-            
-            <automaton-button id="automButton" style="visibility:hidden; height:0px; padding:0px;padding-left: ${this.leftBarSetting+6}px;">
-                
-            </automaton-button>
+              <automaton-button
+                id="automButton"
+                style="visibility:hidden; height:0px; padding:0px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </automaton-button>
 
-            <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>
-            
-            <graph-viewer currentAutomView="hardware-automaton" leftSpace=${this.leftBarSetting-44} style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this.leftBarSetting+6}px;" >
-            
-            </graph-viewer>
+              <error-window
+                class="errorWindow"
+                .openWindow=${this.errorWindowOpen}
+                style="padding-left: ${this.leftBarSetting + 6}px;"
+              ></error-window>
 
-
-
+              <graph-viewer
+                currentAutomView="hardware-automaton"
+                leftSpace=${this.leftBarSetting - 44}
+                style="padding: ${DEFAULT_NODE_RADIUS}px;padding-left: ${this
+                  .leftBarSetting + 6}px;"
+              >
+              </graph-viewer>
             `;
           }
         }
       }
       case "TRANSITIONMATRIX": {
-        return html` 
-        <transition-matrix  style="padding-left: ${this.leftBarSetting}px;"></transition-matrix>
-        <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>
-            
+        return html`
+          <transition-matrix
+            style="padding-left: ${this.leftBarSetting}px;"
+          ></transition-matrix>
+          <error-window
+            class="errorWindow"
+            .openWindow=${this.errorWindowOpen}
+            style="padding-left: ${this.leftBarSetting + 6}px;"
+          ></error-window>
         `;
       }
       case "ZEQUATIONS": {
-        return html` <equation-element  style="padding-left: ${this.leftBarSetting}px;"></equation-element>
-        <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>`;
-        
+        return html` <equation-element
+            style="padding-left: ${this.leftBarSetting}px;"
+          ></equation-element>
+          <error-window
+            class="errorWindow"
+            .openWindow=${this.errorWindowOpen}
+            style="padding-left: ${this.leftBarSetting + 6}px;"
+          ></error-window>`;
       }
       case "SIMULATION": {
-        return html` <simulation-element style="padding-left: ${this.leftBarSetting}px;"></simulation-element>
-        <error-window class="errorWindow" .openWindow=${this.errorWindowOpen} style="padding-left: ${this.leftBarSetting+6}px;"></error-window>`;
+        return html` <simulation-element
+            style="padding-left: ${this.leftBarSetting}px;"
+          ></simulation-element>
+          <error-window
+            class="errorWindow"
+            .openWindow=${this.errorWindowOpen}
+            style="padding-left: ${this.leftBarSetting + 6}px;"
+          ></error-window>`;
       }
     }
-    return html`<div>grober fehler</div>`
+    return html`<div>grober fehler</div>`;
   }
-
-
-
 }
-
 
 declare global {
   interface HTMLElementTagNameMap {
-    'main-router-element': MainRouterElement;
+    "main-router-element": MainRouterElement;
   }
 }
