@@ -48,6 +48,19 @@ frontend-services/apitool:
     dependencies:
       - crosslab/clients/api/js:build
 
+frontend-services/update:
+  - script: build
+    dependencies:
+      - crosslab/services/common:build
+  - script: build-docker
+    dependencies:
+      - frontend-services/update:build
+  - script: lint
+    dependencies:
+      - frontend-services/update:build
+    tags:
+      - test
+
 
 ################################################################################
 # Hardware #####################################################################
