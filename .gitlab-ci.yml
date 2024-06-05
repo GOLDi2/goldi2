@@ -61,9 +61,8 @@ build-weekly:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
       when: always
       variables:
-        DEPLOY: '--deploy dev'
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH --weekly $DEPLOY $RELEASE
+    - ./scripts/ci.sh --upload --branch $BRANCH --weekly $RELEASE
