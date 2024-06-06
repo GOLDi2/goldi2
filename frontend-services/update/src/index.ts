@@ -98,7 +98,7 @@ app.get('/updates/:id', async (req, res, next) => {
     if (current_version) device.current_version = current_version as string;
     await ApplicationDataSource.manager.save(DeviceModel, device);
     if (current_version === device.target_version) res.status(204).send();
-    else if (device.target_url) res.redirect(303, device.target_url);
+    else if (device.target_url) res.status(303).location(device.target_url).send();
     else res.status(204).send();
   } catch (e) {
     next(e);
