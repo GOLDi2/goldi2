@@ -36,27 +36,9 @@ build:
   script:
     - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily --skip-tag weekly $RELEASE
 
-build-daily:
-  timeout: 6h
-  image: goldi2/devcontainer:latest
-  tags:
-    - large-disk
-  rules:
-    - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "daily"'
-      when: always
-      variables:
-        DEPLOY: '--deploy dev'
-        BRANCH: $CI_COMMIT_BRANCH
-        RELEASE: ''
-  stage: build
-  script:
-    - ./scripts/ci.sh --upload --branch $BRANCH  --daily $DEPLOY $RELEASE
-
 build-weekly:
-  timeout: 48h
+  timeout: 72h
   image: goldi2/devcontainer:latest
-  tags:
-    - large-disk
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
       when: always
