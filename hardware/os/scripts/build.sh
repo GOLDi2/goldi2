@@ -56,10 +56,7 @@ if [ "$WORLD" = true ] ; then
 else
   mv "kas.yml" "kas.yml.bak"
   cat "kas.yml.bak" | sed "s/MACHINE_VERSION = "'.*'"/MACHINE_VERSION = \"$VERSION\"/" > "kas.yml"
-  kas shell $VARIANT.yml -c "\
-    bitbake -c cleanall goldi-crosslab fpga-firmware goldi-config-interface python3-spi-driver python3-crosslab-api-client python3-crosslab-soa-client python3-crosslab-soa-service-electrical python3-crosslab-soa-service-webcam \
-    && bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle \
-  "
+  kas shell $VARIANT.yml -c "bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle"
   mv "kas.yml.bak" "kas.yml"
 fi
 

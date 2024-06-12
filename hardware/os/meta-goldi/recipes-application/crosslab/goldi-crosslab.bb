@@ -11,6 +11,7 @@ SRC_URI = " \
     file://${GIT_DIR}/hardware/boards/${MACHINE_VARIANT}/crosslab/dist/python-latest.tar.gz \
 "
 
+PV = "${MACHINE_VERSION}"
 
 S = "${WORKDIR}"
 

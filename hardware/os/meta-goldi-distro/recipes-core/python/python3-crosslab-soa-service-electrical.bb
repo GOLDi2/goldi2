@@ -8,6 +8,8 @@ SRC_URI = " \
     file://${GIT_DIR}/crosslab/clients/soa_services/electricalConnection/python/dist/python-latest.tar.gz \
 "
 
+PV = "${MACHINE_VERSION}"
+
 S = "${WORKDIR}"
 
 do_compile:prepend() {

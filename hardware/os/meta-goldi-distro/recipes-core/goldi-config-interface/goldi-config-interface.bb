@@ -13,6 +13,8 @@ SRC_URI = " \
     file://goldi-config-interface.service \
 "
 
+PV = "${MACHINE_VERSION}"
+
 S = "${WORKDIR}"
 
 do_compile(){
