@@ -53,6 +53,18 @@ frontend-services/gift-3.0:
     dependencies:
       - frontend-services/gift-3.0:build
 
+frontend-services/update:
+  - script: build
+    dependencies:
+      - crosslab/services/common:build
+  - script: build-docker
+    dependencies:
+      - frontend-services/update:build
+  - script: lint
+    dependencies:
+      - frontend-services/update:build
+    tags:
+      - test
 
 ################################################################################
 # Hardware #####################################################################
@@ -142,29 +154,21 @@ hardware/os:
       - hardware/common/spi-driver:build
       - hardware/boards/axis_portal_v1/fpga:build
       - hardware/boards/axis_portal_v1/crosslab:build
-    tags:
-      - daily
   - script: build_warehouse_v2
     dependencies:
       - hardware/common/config-interface:build
       - hardware/common/spi-driver:build
       - hardware/boards/warehouse_v2/fpga:build
       - hardware/boards/warehouse_v2/crosslab:build
-    tags:
-      - daily
   - script: build_axis_portal_v2
     dependencies:
       - hardware/common/config-interface:build
       - hardware/common/spi-driver:build
       - hardware/boards/axis_portal_v2/fpga:build
       - hardware/boards/axis_portal_v2/crosslab:build
-    tags:
-      - daily
   - script: build_mole
     dependencies:
       - hardware/common/config-interface:build
       - hardware/common/spi-driver:build
       - hardware/boards/mole/fpga:build
       - hardware/boards/mole/crosslab:build
-    tags:
-      - daily

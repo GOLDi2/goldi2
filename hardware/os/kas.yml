@@ -6,6 +6,8 @@ local_conf_header:
   bb: |
     BB_SIGNATURE_HANDLER = "OEBasicHash"
     BB_HASHSERVE = ""
+
+    MACHINE_VERSION = ""
 machine: goldi1
 distro: goldi-distro
 target:
