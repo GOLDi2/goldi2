@@ -1,0 +1,21 @@
+{
+  "langName": "Deutsch",
+  "sequentialStepButton": "Takt",
+  "MCEStepNumber": "Taktanzahl",
+  "MCEPeriod": "Periode (ms)",
+  "MCEGoButton": "Los!",
+  "MCEStopButton": "Stop",
+  "ResetButton": "Zurücksetzen",
+  "ImportButton": "Importieren...",
+  "ExportButton": "Exportieren...",
+  "exportWaveJSON": "als WaveJSON",
+  "exportSVG": "als SVG",
+  "exportPNG": "als PNG",
+  "combinatorialStepButton": "Berechne",
+  "VisibilityButton": "Sichtbarkeit...",
+
+  "Clock": "Takt",
+  "Inputs": "Eingaben",
+  "States": "Zustände",
+  "Outputs": "Ausgänge"
+}

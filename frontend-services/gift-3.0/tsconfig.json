@@ -1,0 +1,22 @@
+  {
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "lib": ["es2020", "dom"],
+    "strict": true,
+    "esModuleInterop": true, //war false
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": false, // neu
+    "emitDecoratorMetadata": true, //neu
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "outDir": "out-tsc",
+    "sourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true, //neu
+    "rootDir": "./"
+  },
+  "include": ["**/*.ts"]
+}

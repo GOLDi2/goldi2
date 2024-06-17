@@ -1,0 +1,1239 @@
+{
+    "appState": {
+        "normalizedEditorState": {
+            "viewState": "STATEDIAGRAM",
+            "inputSubState": {
+                "inputIDs": [],
+                "assignments": {},
+                "customNames": {}
+            },
+            "outputSubState": {
+                "customNames": {},
+                "outputIDs": []
+            },
+            "automatonSubState": {
+                "automatonFrameWorks": {
+                    "automatonIDs": [
+                        0
+                    ],
+                    "nodeLists": {
+                        "0": {
+                            "id": 0,
+                            "nodeIds": [
+                                0,
+                                1,
+                                2
+                            ]
+                        }
+                    },
+                    "transitionLists": {
+                        "0": {
+                            "id": 0,
+                            "transitionIds": []
+                        }
+                    },
+                    "uiAutomatonData": {
+                        "0": {
+                            "id": 0,
+                            "name": {
+                                "validName": "automaton0",
+                                "error": {
+                                    "invalidName": ""
+                                }
+                            },
+                            "info": "automaton0",
+                            "isActive": true,
+                            "initialStateNumber": {
+                                "validNumber": 0
+                            }
+                        }
+                    },
+                    "fusionStatePositions": {
+                        "0": {
+                            "id": 0,
+                            "nodePositions": []
+                        }
+                    },
+                    "fusionTransitionPositions": {
+                        "0": {
+                            "id": 0,
+                            "transitionPosition": []
+                        }
+                    },
+                    "hardwareStatePositions": {
+                        "0": {
+                            "id": 0,
+                            "nodePositions": []
+                        }
+                    },
+                    "hardwareTransitionPositions": {
+                        "0": {
+                            "id": 0,
+                            "transitionPosition": []
+                        }
+                    },
+                    "currentStates": {
+                        "0": {
+                            "id": 0,
+                            "currentState": 0
+                        }
+                    },
+                    "controlSignalLists": {
+                        "0": {
+                            "id": 0,
+                            "controlSignalIds": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    "controlSignalNameLists": {
+                        "0": {
+                            "id": 0,
+                            "nameList": {
+                                "0": {
+                                    "id": 0,
+                                    "customName": {
+                                        "validName": "s0"
+                                    }
+                                },
+                                "1": {
+                                    "id": 1,
+                                    "customName": {
+                                        "validName": "s1"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "nodeSubState": {
+                    "nodeIds": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "logicInformation": {
+                        "0": {
+                            "id": 0,
+                            "customStateNumber": {
+                                "validNumber": 0
+                            },
+                            "outputAssignment": [],
+                            "controlSignalAssignment": []
+                        },
+                        "1": {
+                            "id": 1,
+                            "customStateNumber": {
+                                "validNumber": 1
+                            },
+                            "outputAssignment": [],
+                            "controlSignalAssignment": []
+                        },
+                        "2": {
+                            "id": 2,
+                            "customStateNumber": {
+                                "validNumber": 2
+                            },
+                            "outputAssignment": [],
+                            "controlSignalAssignment": []
+                        }
+                    },
+                    "nodePositions": {
+                        "0": {
+                            "id": 0,
+                            "position": {
+                                "xCord": 200,
+                                "yCord": 200
+                            },
+                            "radius": 50,
+                            "isActive": false
+                        },
+                        "1": {
+                            "id": 1,
+                            "position": {
+                                "xCord": 500,
+                                "yCord": 200
+                            },
+                            "radius": 50,
+                            "isActive": false
+                        },
+                        "2": {
+                            "id": 2,
+                            "position": {
+                                "xCord": 402.0944533000791,
+                                "yCord": 495.4423259036624
+                            },
+                            "radius": 50,
+                            "isActive": false
+                        }
+                    },
+                    "names": {
+                        "0": {
+                            "id": 0,
+                            "customName": {
+                                "validName": "z0"
+                            }
+                        },
+                        "1": {
+                            "id": 1,
+                            "customName": {
+                                "validName": "z1"
+                            }
+                        },
+                        "2": {
+                            "id": 2,
+                            "customName": {
+                                "validName": "z2"
+                            }
+                        }
+                    }
+                },
+                "transitionSubState": {
+                    "transitionIds": [],
+                    "logicInformation": {},
+                    "transitionNodeData": {},
+                    "transitionPositions": {}
+                }
+            },
+            "globalInputDontCare": {
+                "validExpression": {
+                    "tree": {
+                        "bracketCounter": 0,
+                        "zIndicator": false,
+                        "controlSignalIndicator": false,
+                        "type": "CONSTANT_ZERO",
+                        "stringRepresentation": "0"
+                    }
+                }
+            },
+            "operators": {
+                "customOrOperator": {
+                    "validName": "+"
+                },
+                "customAndOperator": {
+                    "validName": "&"
+                },
+                "customExclusivOrOperator": {
+                    "validName": "*"
+                },
+                "customNotOperator": {
+                    "validName": "/"
+                },
+                "defaultLogicOne": "1",
+                "defaultLogicZero": "0"
+            }
+        },
+        "viewState": {
+            "automatonViewConfig": {
+                "showZeroOutputs": true,
+                "showZeroTransitions": true,
+                "onlyShowActiveAutomatons": true
+            },
+            "equationViewConfig": {
+                "minimizationLevel": "UNMINIMIZED"
+            },
+            "mergedAutomatonViewConfig": {
+                "highlightIncompleteStates": true,
+                "highlightSelfContradictoryStates": true,
+                "minimizeExpressions": false
+            }
+        }
+    },
+    "versionHistory": {
+        "0": {
+            "redoPatches": [],
+            "undoPatches": []
+        },
+        "1": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "automatonIDs",
+                        0
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "nodeIds": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "transitionLists",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "transitionIds": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "uiAutomatonData",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "name": {
+                            "validName": "automaton0",
+                            "error": {
+                                "invalidName": ""
+                            }
+                        },
+                        "info": "automaton0",
+                        "isActive": false,
+                        "initialStateNumber": {
+                            "validNumber": 0
+                        }
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "nodePositions": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionTransitionPositions",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "transitionPosition": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "nodePositions": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareTransitionPositions",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "transitionPosition": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "currentStates",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "currentState": 0
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "controlSignalIds": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "nameList": {}
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "automatonIDs",
+                        "length"
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "transitionLists",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "uiAutomatonData",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionTransitionPositions",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareTransitionPositions",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "currentStates",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0"
+                    ]
+                }
+            ]
+        },
+        "2": {
+            "redoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "uiAutomatonData",
+                        "0",
+                        "isActive"
+                    ],
+                    "value": true
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "uiAutomatonData",
+                        "0",
+                        "isActive"
+                    ],
+                    "value": false
+                }
+            ]
+        },
+        "3": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0",
+                        "controlSignalIds",
+                        0
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0",
+                        "nameList",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "customName": {
+                            "validName": "s0"
+                        }
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0",
+                        "controlSignalIds",
+                        "length"
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0",
+                        "nameList",
+                        "0"
+                    ]
+                }
+            ]
+        },
+        "4": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0",
+                        "controlSignalIds",
+                        1
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0",
+                        "nameList",
+                        "1"
+                    ],
+                    "value": {
+                        "id": 1,
+                        "customName": {
+                            "validName": "s1"
+                        }
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalLists",
+                        "0",
+                        "controlSignalIds",
+                        "length"
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "controlSignalNameLists",
+                        "0",
+                        "nameList",
+                        "1"
+                    ]
+                }
+            ]
+        },
+        "5": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        0
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        0
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "customStateNumber": {
+                            "validNumber": 0
+                        },
+                        "outputAssignment": [],
+                        "controlSignalAssignment": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "position": {
+                            "xCord": 200,
+                            "yCord": 200
+                        },
+                        "radius": 50,
+                        "isActive": false
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "0"
+                    ],
+                    "value": {
+                        "id": 0,
+                        "customName": {
+                            "validName": "z0"
+                        }
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 0
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "0"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "0"
+                    ]
+                }
+            ]
+        },
+        "6": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        1
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        1
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "1"
+                    ],
+                    "value": {
+                        "id": 1,
+                        "customStateNumber": {
+                            "validNumber": 1
+                        },
+                        "outputAssignment": [],
+                        "controlSignalAssignment": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "1"
+                    ],
+                    "value": {
+                        "id": 1,
+                        "position": {
+                            "xCord": 500,
+                            "yCord": 200
+                        },
+                        "radius": 50,
+                        "isActive": false
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "1"
+                    ],
+                    "value": {
+                        "id": 1,
+                        "customName": {
+                            "validName": "z1"
+                        }
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 1
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "1"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "1"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "1"
+                    ]
+                }
+            ]
+        },
+        "7": {
+            "redoPatches": [
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        2
+                    ],
+                    "value": 2
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        2
+                    ],
+                    "value": 2
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "2"
+                    ],
+                    "value": {
+                        "id": 2,
+                        "customStateNumber": {
+                            "validNumber": 2
+                        },
+                        "outputAssignment": [],
+                        "controlSignalAssignment": []
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "2"
+                    ],
+                    "value": {
+                        "id": 2,
+                        "position": {
+                            "xCord": 402.0944533000791,
+                            "yCord": 495.4423259036624
+                        },
+                        "radius": 50,
+                        "isActive": false
+                    }
+                },
+                {
+                    "op": "add",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "2"
+                    ],
+                    "value": {
+                        "id": 2,
+                        "customName": {
+                            "validName": "z2"
+                        }
+                    }
+                }
+            ],
+            "undoPatches": [
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "nodeLists",
+                        "0",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 2
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "fusionStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "automatonFrameWorks",
+                        "hardwareStatePositions",
+                        "0",
+                        "nodePositions"
+                    ],
+                    "value": []
+                },
+                {
+                    "op": "replace",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodeIds",
+                        "length"
+                    ],
+                    "value": 2
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "logicInformation",
+                        "2"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "nodePositions",
+                        "2"
+                    ]
+                },
+                {
+                    "op": "remove",
+                    "path": [
+                        "normalizedEditorState",
+                        "automatonSubState",
+                        "nodeSubState",
+                        "names",
+                        "2"
+                    ]
+                }
+            ]
+        }
+    },
+    "currentVersion": 7,
+    "canRedo": false,
+    "canUndo": true
+}
