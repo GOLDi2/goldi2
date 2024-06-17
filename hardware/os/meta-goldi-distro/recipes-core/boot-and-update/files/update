@@ -5,7 +5,7 @@ ID=${MAC//:}
 
 url=https://api.goldi-labs.de/updates/$ID?current_version=$VERSION_ID
 
-response=$(curl -H 'Cache-Control: no-cache' -s -i -k --max-time 2 --write-out '%{http_code} %{redirect_url}' "$url")
+response=$(curl -H 'Cache-Control: no-cache' -s -i -k --max-time 2 --output /dev/null --write-out '%{http_code} %{redirect_url}' "$url")
 read -r http_code redirect_url < <(tail -n1 <<<"$response")
 
 if [ "$http_code" -eq "303" ]; then

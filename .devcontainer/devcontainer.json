@@ -5,11 +5,12 @@
 		"cacheFrom": "goldi2/devcontainer"
 	},
 	// Activate for programming:
-	//"runArgs": [
-	//	"-v",
-    //    "/dev:/dev",
-	//	"--privileged"
-	//],
+	"runArgs": [
+		"-v",
+        "/dev:/dev",
+		"--privileged",
+		"--net=host"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [

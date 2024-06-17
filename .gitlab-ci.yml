@@ -20,11 +20,11 @@ default:
       variables:
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
-#   - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
-#     variables:
-#       PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
-#       BRANCH: CI_COMMIT_TAG
-#       RELEASE: '--release'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
+      variables:
+        PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
+        BRANCH: CI_COMMIT_TAG
+        RELEASE: '--release'
 
 build:
   image: goldi2/devcontainer:latest
@@ -36,34 +36,17 @@ build:
   script:
     - ./scripts/ci.sh --upload --branch $BRANCH --skip-tag daily --skip-tag weekly $RELEASE
 
-build-daily:
-  timeout: 6h
-  image: goldi2/devcontainer:latest
-  tags:
-    - large-disk
-  rules:
-    - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "daily"'
-      when: always
-      variables:
-        DEPLOY: '--deploy dev'
-        BRANCH: $CI_COMMIT_BRANCH
-        RELEASE: ''
-  stage: build
-  script:
-    - ./scripts/ci.sh --upload --branch $BRANCH  --daily $DEPLOY $RELEASE
-
 build-weekly:
-  timeout: 48h
+  timeout: 72h
   image: goldi2/devcontainer:latest
-  tags:
-    - large-disk
   rules:
     - if : '$CI_PIPELINE_SOURCE == "schedule" && $CI_SCHEDULE == "weekly"'
       when: always
       variables:
-        DEPLOY: '--deploy dev'
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
   stage: build
   script:
-    - ./scripts/ci.sh --upload --branch $BRANCH --weekly $DEPLOY $RELEASE
+    - ./scripts/clean.d/clean_remote_cache.sh
+    - (cd crosslab && ./scripts/clean_remote_cache.sh)
+    - ./scripts/ci.sh --upload --branch $BRANCH --weekly $RELEASE

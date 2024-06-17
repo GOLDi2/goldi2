@@ -1,0 +1,134 @@
+{% extends "layout.html" %} {% block content %}
+<script>
+  function debounce(func, timeout = 500) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
+  }
+  const set_name = debounce((id, name) => {
+    fetch('/name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        name,
+      }),
+    });
+  });
+  const add = () => {
+    const id = document.querySelector('#add-id').textContent;
+    const name = document.querySelector('#add-name').textContent;
+    fetch('/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+        name,
+      }),
+    }).then(() => document.location.reload());
+  };
+  const del = id => {
+    fetch('/delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }).then(() => document.location.reload());
+  };
+  const update = () => {
+    const url = document.querySelector('#update_url').value;
+    const ids = Array.from(document.querySelectorAll('input:checked').values()).map(
+      e => e.value,
+    );
+    fetch('/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url,
+        ids,
+      }),
+    }).then(() => document.location.reload());
+  };
+</script>
+<div class="max-w-6xl w-full mx-auto pt-16 font-body">
+  <div class="mx-auto flex justify-center">
+    <div class="px-10 space-y-5 text-center">
+      <table class="table-auto">
+        <tr>
+          <th class="px-8"></th>
+          <th class="w-52 px-8">ID</th>
+          <th class="w-52 px-8">Name</th>
+          <th class="w-52 px-8">Letzter Kontakt</th>
+          <th class="w-52 px-8">Version</th>
+          <th class="w-52 px-8">Ziel Version</th>
+          <th class="w-52 px-8"></th>
+        </tr>
+        {% for device in devices %}
+        <tr>
+          <td><input type="checkbox" value="{{device.id}}" /></td>
+          <td>{{device.id}}</td>
+          <td contenteditable oninput="set_name('{{device.id}}',this.textContent)">
+            {{device.name}}
+          </td>
+          <td>
+            {% if device.last_contact %}{{device.last_contact.toLocaleString()}}{% endif
+            %}
+          </td>
+          <td>{{device.current_version}}</td>
+          <td><a href="{{device.target_url}}">{{device.target_version}}</a></td>
+          <td>
+            <button
+              class="bg-transparent hover:bg-primary-500 font-semibold hover:text-white py-0 px-4 border rounded"
+              onclick="del('{{device.id}}')">
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+          <td colspan="7">Neues Gerät hinzufügen</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td contenteditable class="border" id="add-id"></td>
+          <td contenteditable class="border" id="add-name"></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <button
+              class="bg-transparent hover:bg-primary-500 font-semibold hover:text-white py-0 px-4 border rounded"
+              onclick="add()">
+              Add
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div class="flex">
+        <span>Update Url:</span
+        ><input id="update_url" class="border rounded grow mx-2" />
+        <button
+          class="bg-transparent hover:bg-primary-500 font-semibold hover:text-white py-0 px-4 border rounded"
+          onclick="update()">
+          Set
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
