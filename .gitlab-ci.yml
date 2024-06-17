@@ -20,11 +20,11 @@ default:
       variables:
         BRANCH: $CI_COMMIT_BRANCH
         RELEASE: ''
-#   - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
-#     variables:
-#       PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
-#       BRANCH: CI_COMMIT_TAG
-#       RELEASE: '--release'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
+      variables:
+        PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
+        BRANCH: CI_COMMIT_TAG
+        RELEASE: '--release'
 
 build:
   image: goldi2/devcontainer:latest
@@ -47,4 +47,6 @@ build-weekly:
         RELEASE: ''
   stage: build
   script:
+    - ./scripts/clean.d/clean_remote_cache.sh
+    - (cd crosslab && ./scripts/clean_remote_cache.sh)
     - ./scripts/ci.sh --upload --branch $BRANCH --weekly $RELEASE
