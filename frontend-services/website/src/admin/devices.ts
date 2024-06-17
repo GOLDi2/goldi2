@@ -26,7 +26,7 @@ export function device_router(language: string, renderPage: renderPageType, _log
             req.body.isPublic = req.body.isPublic === 'Yes'
             console.log(req.body)
             try{
-                const device = await req.apiClient.createDevice(req.body)
+                const device = await req.apiClient.createDevice({...req.body, isPublic: true})
             res.redirect(303, '/' + language + '/admin/devices/details?url=' + encodeURIComponent(device.url))
             } catch (e){
                 console.log(e)

@@ -1,0 +1,1 @@
+../../../crosslab/common/docker/scripts/build-node.sh

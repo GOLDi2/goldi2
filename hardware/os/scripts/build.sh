@@ -5,6 +5,7 @@ set -e
 CLEAN=false
 VARIANT="kas"
 WORLD=false
+VERSION=0.0.0-dev.$(git rev-parse --short HEAD)
 
 # Read the commands
 while [[ $# -gt 0 ]]; do
@@ -27,6 +28,12 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       ;;
 
+    --version)
+      VERSION="$2"
+      shift # past argument
+      shift # past value
+      ;;    
+
     *) # unknown option
       shift # past argument
     ;;
@@ -47,10 +54,10 @@ if [ "$WORLD" = true ] ; then
     ; bitbake package-index \
   "
 else
-  kas shell $VARIANT.yml -c "\
-    bitbake -c cleanall goldi-crosslab fpga-firmware goldi-config-interface python3-spi-driver python3-crosslab-api-client python3-crosslab-soa-client python3-crosslab-soa-service-electrical python3-crosslab-soa-service-webcam \
-    && bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle \
-  "
+  mv "kas.yml" "kas.yml.bak"
+  cat "kas.yml.bak" | sed "s/MACHINE_VERSION = "'.*'"/MACHINE_VERSION = \"$VERSION\"/" > "kas.yml"
+  kas shell $VARIANT.yml -c "bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle"
+  mv "kas.yml.bak" "kas.yml"
 fi
 
 mkdir -p ./dist

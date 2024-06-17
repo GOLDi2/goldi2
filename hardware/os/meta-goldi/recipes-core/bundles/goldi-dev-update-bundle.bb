@@ -4,4 +4,5 @@ MULTIMACH_TARGET_SYS = "${MACHINE_VARIANT}-${PACKAGE_ARCH}${TARGET_VENDOR}-${TAR
 
 RAUC_SLOT_rootfs = "goldi-dev-image"
 RAUC_SLOT_rootfs[file] = "${MACHINE_VARIANT}-dev-${MACHINE}.ext4"
+RAUC_BUNDLE_DESCRIPTION = "${MACHINE_VARIANT}-${MACHINE}-dev version ${MACHINE_VERSION}"
 include update-bundle.inc

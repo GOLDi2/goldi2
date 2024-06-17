@@ -16,6 +16,7 @@ SRC_URI = " \
     file://bitstream.svf \
 "
 
+PV = "${MACHINE_VERSION}"
 
 do_install() {
     install -d ${D}/lib/firmware/lattice/

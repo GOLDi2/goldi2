@@ -10,6 +10,7 @@ npx --yes http-server -p 8003 -s &
 ID=$!
 
 sleep 2
+sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} date -s @$(date -u +"%s")
 sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -R 8003:127.0.0.1:8003 root@${IP} "rauc install http://localhost:8003/${VARIANT}-dev-goldi1.raucb"
 
 if [ $? -eq 0 ]; then

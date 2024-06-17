@@ -3,18 +3,12 @@
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 cd $SCRIPT_DIR/..
 
+rm -rf ./backup
+mkdir backup
 # Backup password and vpn-config from boot partition
-passwordBackup=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} cat /boot/password 2>/dev/null)
-vpnBackup=$(sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} cat /boot/vpn-config 2>/dev/null)
-
-if [ -z "$passwordBackup" ]; then
-    echo "No password found"
-    exit 1
-fi
-if [ -z "$vpnBackup" ]; then
-    echo "No vpn-config found"
-    exit 1
-fi
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP}:/boot/password ./backup/password
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP}:/boot/vpn-config ./backup/vpn-config
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP}:/boot/uboot.env ./backup/uboot.env
 
 # if dist ${VARIANT}-dev-goldi1.wic does not exist
 bzip2 -dk dist/${VARIANT}-dev-goldi1.wic.bz2
@@ -27,12 +21,10 @@ sudo dd if=/dev/loop1p1 status=progress | sshpass -p $PASSWORD ssh -o StrictHost
 sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "mount /dev/mmcblk0p1 /boot"
 
 # restore password and vpn-config
-if [ ! -z "$passwordBackup" ]; then
-    sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "echo '$passwordBackup' > /boot/password" 2>/dev/null
-fi
-if [ ! -z "$vpnBackup" ]; then
-    sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} "echo '$vpnBackup' > /boot/vpn-config" 2>/dev/null
-fi
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ./backup/password root@${IP}:/boot/password
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ./backup/vpn-config root@${IP}:/boot/vpn-config
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ./backup/uboot.env root@${IP}:/boot/uboot.env
+rm -rf ./backup
 
 # remove loop device
 sudo losetup -d /dev/loop1
