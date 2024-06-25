@@ -57,9 +57,9 @@ button_register: 'Benutzerkonto einrichten'
         <input class="primary-button" type="submit" value="Generate Experiment Description">
     </form>
 </div>
-<form method="POST" class="w-2/3 mx-auto">
-<textarea name="experiment" class="w-full h-96 border-2">
-    {{ experiment | dump(2) }}
+<form method="POST" class="w-2/3 mx-auto flex flex-col gap-2 items-center">
+<textarea name="experiment" class="w-full h-96 border-2 font-mono">
+{{ experiment | dump(2) }}
 </textarea><br>
 <input class="primary-button" type="submit" value="Start Experiment">
 </form>
