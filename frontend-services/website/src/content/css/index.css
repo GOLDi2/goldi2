@@ -1,12 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.bold-width{
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #fff;
+  border-bottom-color: #fd9f3e;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.bold-width {
   text-align: center;
 }
 
@@ -25,8 +45,9 @@
   @apply w-full h-0.5 bg-secondary;
 }
 
-input[type=text], input[type=password] {
-  @apply inline-block w-full bg-white h-8 rounded-lg p-2 out-shadow-input
+input[type="text"],
+input[type="password"] {
+  @apply inline-block w-full bg-white h-8 rounded-lg p-2 out-shadow-input;
 }
 
 .section {
@@ -41,21 +62,20 @@ input[type=text], input[type=password] {
   @apply bg-primary-50 p-5 my-5 rounded-3xl inner-shadow-section;
 }
 
-
 .simple > h2 {
   @apply text-primary-700 text-xl;
 }
 
 .inner-shadow-section {
-  box-shadow: 2px 2px 4px #CCCCCC inset;
+  box-shadow: 2px 2px 4px #cccccc inset;
 }
 
 .out-shadow-section {
-  box-shadow: 0 4px 6px -2px #CCCCCC;
+  box-shadow: 0 4px 6px -2px #cccccc;
 }
 
 .out-shadow-input {
-  box-shadow: 0px 1px 3px 0px #CCCCCC;
+  box-shadow: 0px 1px 3px 0px #cccccc;
 }
 
 @layer base {
@@ -72,6 +92,14 @@ input[type=text], input[type=password] {
   @apply bg-secondary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-secondary-800 duration-300;
 }
 
+.primary-button-full {
+  @apply bg-primary rounded-3xl px-8 py-1 w-full text-primary-50 text-xl hover:bg-primary-700 duration-300;
+}
+
+.secondary-button-full {
+  @apply bg-secondary rounded-3xl px-8 py-1 w-full text-primary-50 text-xl hover:bg-secondary-800 duration-300;
+}
+
 /*------------Header------------*/
 
 /*--Normaler Dropdown--*/
@@ -84,7 +112,7 @@ input[type=text], input[type=password] {
   display: none;
   position: absolute;
   min-width: 80px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   padding-top: 5px;
   border-radius: 0px 0px 10px 10px;
@@ -138,7 +166,7 @@ h5 {
 }
 
 .dropdown .dropbtn {
-  font-size: 16px;  
+  font-size: 16px;
   color: white;
   padding: 5px;
   margin: 0;
@@ -150,7 +178,7 @@ h5 {
   background-color: #06152a;
   width: 50%;
   align-content: flex-end;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 0px 0px 10px 10px;
 }
@@ -203,7 +231,8 @@ h5 {
   @apply bg-primary-100 p-5 rounded-3xl out-shadow-section;
 }
 
-.faq > section:hover, .faq > section:active {
+.faq > section:hover,
+.faq > section:active {
   background-color: #d7e4f0;
   transition-duration: 500ms;
 }

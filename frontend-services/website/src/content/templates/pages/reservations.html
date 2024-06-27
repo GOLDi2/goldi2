@@ -1,0 +1,137 @@
+<!--Momentan tritt hier noch ein Error auf. Wir müssten beim nächsten Mal besprechen, was die Ursache hierfür ist.
+Der Fehler liegt irgendwo in der Definition der Variablen.
+"[Line 4, Column 12] parseAggregate: expected comma after expression"
+Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
+
+{% set
+text = {
+headline: 'Experiment',
+description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+sadipscing elitr.',
+login_prompt: 'You need an activated user account for this action.',
+account_setup_prompt: 'You don\'t have a user account yet?',
+button_login: 'Login',
+button_register: 'Create user account',
+button_start: 'Start',
+button_delete: 'Delete',
+button_book: 'Book Experiment',
+label_devices: 'Devices',
+label_start_time: 'Start Time',
+label_end_time: 'End Time',
+label_no_reservations: 'You don\'t have any reservations!',
+label_as: 'as'
+}
+%}
+
+{% if language=='de' %}
+{% set
+text = {
+headline: 'Experiment',
+description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+sadipscing elitr.',
+login_prompt: 'Für diese Aktion benötigen Sie ein aktiviertes Benutzerkonto.',
+account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
+button_login: 'Login',
+button_register: 'Benutzerkonto einrichten',
+button_start: 'Starten',
+button_delete: 'Löschen',
+button_book: 'Experiment buchen',
+label_devices: 'Geräte',
+label_start_time: 'Beginn',
+label_end_time: 'Ende',
+label_no_reservations: 'Sie haben keine gebuchten Experimente!',
+label_as: 'als'
+}
+%}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+
+{% if isLoggedIn %}
+<div class="max-w-6xl mx-auto w-full py-16 font-body flex flex-grow justify-center">
+    <div class="flex flex-col gap-4 w-full">
+        {% for experiment in experiments %}
+        <div id="experiment-{{ experiment.url }}" class="border-2 rounded-lg text-center p-2 gap-2 flex flex-col items-center relative">
+            <div>
+                <p class="font-bold">{{ text.label_devices }}</p>
+                {% for device in experiment.devices %}
+                <p>{{ device.name }} {{ text.label_as }} {{ device.role }}</p>
+                {% endfor %}
+            </div>
+            <div>
+                <p class="font-bold">{{ text.label_start_time }}</p>
+                <p id="time-start-{{ experiment.url }}">{{ experiment.bookingTime.startTime }}</p>
+            </div>
+            <div>
+                <p class="font-bold">{{ text.label_end_time }}</p>
+                <p id="time-end-{{ experiment.url }}">{{ experiment.bookingTime.endTime }}</p>
+            </div>
+            {% if experiment.isStartable %}
+            <form method="post" class="w-full">
+                <input hidden name="url" value="{{ experiment.url }}">
+                <input type="submit" class="primary-button-full" value="{{ text.button_start }}">
+            </form>
+            {% endif %}
+            <button class="secondary-button-full" onclick="deleteExperiment('{{ experiment.url }}')">{{ text.button_delete }}</button>
+            <div id="overlay-{{ experiment.url }}" class="absolute bg-primary-100 w-full h-full top-0 hidden items-center justify-center opacity-50" hidden>
+                <div class="loader"></div>
+            </div>
+        </div>
+        {% endfor %}
+        <div id="dialog-no-reservations" class="{{ 'hidden' if experiments | length > 0 else 'flex' }} justify-center items-center flex-grow">
+            <div class="flex flex-col border-2 p-8 rounded-lg gap-4">
+                <p class="text-xl">{{ text.label_no_reservations }}</p>
+                <a href="/{{ language }}/book-experiment" class="primary-button-full text-center">{{ text.button_book }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll('[id^="time-"]').forEach(element => {
+        element.innerText = new Date(element.innerText).toLocaleString("{{ language }}")
+    })
+    async function deleteExperiment(experimentUrl) {
+        const overlayElement = document.getElementById(`overlay-${experimentUrl}`)
+        overlayElement.style.display = "flex"
+        const experimentElement = document.getElementById(`experiment-${experimentUrl}`)
+        const result = await fetch("/experiment?experimentUrl=" + experimentUrl, {method: "DELETE"})
+        if (result.status === 204) {
+            experimentElement.parentElement.removeChild(experimentElement)
+        } else {
+            overlayElement.style.display = "none"
+        }
+        const experimentCount = document.querySelectorAll('[id^="experiment-"]').length;
+        if (experimentCount === 0) {
+            document.getElementById("dialog-no-reservations").style.display = "flex"
+        }
+    }
+</script>
+{% else %}
+<div class="max-w-6xl mx-auto w-full py-16 font-body">
+    <div class="mx-auto flex flex-wrap-reverse justify-center gap-5">
+        <div class="max-w-md px-10 space-y-5">
+            <div class="text-4xl font-bold text-primary-700">{{text.headline}}</div>
+            <div>{{text.description}}</div>
+            <div>{{text.login_prompt}}</div>
+            <a href="login.html?redirect={{page}}"
+                class="bg-primary rounded-3xl px-8 py-1 w-fit text-primary-50 text-l hover:bg-secondary-primary-hover duration-300">
+                {{text.button_login}}
+            </a>
+            <div>{{text.account_setup_prompt}}</div>
+            <button
+                class="bg-primary-100-middle rounded-3xl px-8 py-1 w-fit text-primary-50 text-l hover:bg-primary-100-middle-hover duration-300">
+                {{text.button_register}}
+            </button>
+        </div>
+        <div class="max-w-lg">
+            <img class="mt-10" src="/img/experiment1.jpg" alt="Logo">
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -4,6 +4,7 @@ import { renderPageType } from "./utils";
 import winston from "winston";
 import asyncHandler from "express-async-handler";
 import {
+  APIClient,
   DeviceServiceTypes,
   ExperimentServiceTypes,
 } from "@cross-lab-project/api-client";
@@ -53,7 +54,7 @@ export function experiment_router(
     }
 
     try {
-      const { pspuGroup, bpuGroup } = await getPspuBpuGroup();
+      const { pspuGroup, bpuGroup } = await getPspuBpuGroup(req.apiClient);
       const pspus = await Promise.all(
         pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
       );
@@ -71,33 +72,6 @@ export function experiment_router(
         pspus: [],
         bpus: [],
       });
-    }
-
-    async function getPspuBpuGroup() {
-      const devices = await req.apiClient.listDevices();
-      const deviceGroups = devices.filter((d) => d.type === "group");
-      const pspuGroupUrl = deviceGroups.find(
-        (d) => d.name.toLowerCase() === "pspu"
-      )?.url;
-      const bpuGroupUrl = deviceGroups.find(
-        (d) => d.name.toLowerCase() === "bpu"
-      )?.url;
-      if (!pspuGroupUrl) {
-        throw new Error("Could not find pspu group");
-      }
-      if (!bpuGroupUrl) {
-        throw new Error("Could not find bpu group");
-      }
-      const pspuGroup = await req.apiClient.getDevice(pspuGroupUrl);
-      if (pspuGroup.type !== "group") {
-        throw new Error("Device is not a group");
-      }
-
-      const bpuGroup = await req.apiClient.getDevice(bpuGroupUrl);
-      if (bpuGroup.type !== "group") {
-        throw new Error("Device is not a group");
-      }
-      return { pspuGroup, bpuGroup };
     }
   }
 
@@ -136,7 +110,7 @@ export function experiment_router(
     return renderPage("experiment-setup", language, res, req.user, {
       experiment,
       instances,
-      display
+      display,
     });
   }
 
@@ -152,10 +126,142 @@ export function experiment_router(
     //res.redirect(303, '/' + language + '/index.html');
   }
 
+  async function bookExperiment(
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ) {
+    if (!req.user) {
+      return renderPage("experiment-reservation", language, res, req.user);
+    }
+
+    let experiment:
+      | Partial<ExperimentServiceTypes.Experiment<"request">>
+      | undefined;
+    if (req.method === "GET") {
+      try {
+        if (!experiment) experiment = await buildSimpleExperiment(req);
+      } catch (e) {
+        //ignore
+      }
+    }
+
+    if (req.method === "POST") {
+      if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
+      if (!experiment) throw new Error("No experiment provided");
+      console.log(req.body);
+      experiment.status = "booked";
+      experiment.bookingTime = {
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
+      };
+      const response = await req.apiClient.createExperiment(
+        experiment as ExperimentServiceTypes.Experiment<"request">
+      );
+      if (response.status === "booked" && response.url) {
+        return res.redirect(`/${language}/reservations`);
+      }
+    }
+
+    try {
+      const { pspuGroup, bpuGroup } = await getPspuBpuGroup(req.apiClient);
+      const pspus = await Promise.all(
+        pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
+      );
+      const bpus = await Promise.all(
+        bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
+      );
+      return renderPage("experiment-reservation", language, res, req.user, {
+        experiment,
+        pspus,
+        bpus,
+      });
+    } catch {
+      return renderPage("experiment-reservation", language, res, req.user, {
+        experiment,
+        pspus: [],
+        bpus: [],
+      });
+    }
+  }
+
+  async function experimentReservations(
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ) {
+    if (!req.user) {
+      return renderPage("reservations", language, res, req.user);
+    }
+
+    if (req.method === "POST") {
+      if (!req.body.url) throw new Error("No experiment url provided!");
+      const response = await req.apiClient.updateExperiment(req.body.url, {
+        status: "running",
+      });
+      if (response.status === "setup" && response.url) {
+        return experimentSetup(req, res, _next, response);
+      }
+    }
+
+    const experiments = await Promise.all(
+      (
+        await req.apiClient.listExperiments({
+          experimentStatus: "booked",
+        })
+      )
+        .filter((experimentOverview) => experimentOverview.status === "booked")
+        .map(async (experimentOverview) => {
+          const experiment = await req.apiClient.getExperiment(
+            experimentOverview.url
+          );
+          const devices = await Promise.all(
+            experiment.devices.map(async (device) => {
+              return {
+                ...(await req.apiClient.getDevice(device.device)),
+                role: device.role,
+              };
+            })
+          );
+          const experimentData = {
+            ...experiment,
+            bookingTime: {
+              startTime: new Date(
+                experiment.bookingTime?.startTime!
+              ).toISOString(),
+              endTime: new Date(experiment.bookingTime?.endTime!).toISOString(),
+            },
+            devices,
+            isStartable:
+              Date.now() > Date.parse(experiment.bookingTime?.startTime!) &&
+              Date.now() < Date.parse(experiment.bookingTime?.endTime!),
+          };
+          return experimentData;
+        })
+    );
+    return renderPage("reservations", language, res, req.user, { experiments });
+  }
+
+  async function deleteExperiment(
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ) {
+    const experimentUrl = req.query["experimentUrl"]?.toString();
+    if (!experimentUrl) return res.status(400).send();
+    await req.apiClient.deleteExperiment(experimentUrl);
+    return res.status(204).send();
+  }
+
   const router = Router();
   router.get("/experiment", asyncHandler(experiment));
   router.post("/experiment", asyncHandler(experiment));
+  router.delete("/experiment", deleteExperiment);
+  router.get("/book-experiment", asyncHandler(bookExperiment));
+  router.post("/book-experiment", asyncHandler(bookExperiment));
   router.get("/run-experiment", asyncHandler(runExperiment));
+  router.get("/reservations", asyncHandler(experimentReservations));
+  router.post("/reservations", asyncHandler(experimentReservations));
   return router;
 }
 
@@ -363,4 +469,31 @@ async function buildSimpleExperiment(
   }
 
   return { status: "created", devices, roles, serviceConfigurations };
+}
+
+async function getPspuBpuGroup(apiClient: APIClient) {
+  const devices = await apiClient.listDevices();
+  const deviceGroups = devices.filter((d) => d.type === "group");
+  const pspuGroupUrl = deviceGroups.find(
+    (d) => d.name.toLowerCase() === "pspu"
+  )?.url;
+  const bpuGroupUrl = deviceGroups.find(
+    (d) => d.name.toLowerCase() === "bpu"
+  )?.url;
+  if (!pspuGroupUrl) {
+    throw new Error("Could not find pspu group");
+  }
+  if (!bpuGroupUrl) {
+    throw new Error("Could not find bpu group");
+  }
+  const pspuGroup = await apiClient.getDevice(pspuGroupUrl);
+  if (pspuGroup.type !== "group") {
+    throw new Error("Device is not a group");
+  }
+
+  const bpuGroup = await apiClient.getDevice(bpuGroupUrl);
+  if (bpuGroup.type !== "group") {
+    throw new Error("Device is not a group");
+  }
+  return { pspuGroup, bpuGroup };
 }

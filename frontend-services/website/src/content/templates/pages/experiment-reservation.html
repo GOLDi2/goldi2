@@ -14,10 +14,12 @@ login_prompt: 'You need an activated user account for this action.',
 account_setup_prompt: 'You don\'t have a user account yet?',
 button_login: 'Login',
 button_register: 'Create user account',
-button_start_experiment: 'Start Experiment',
+button_book_experiment: 'Book Experiment',
 button_generate_experiment_description: 'Generate Experiment Description',
 label_choose_system: 'Choose a System to Control',
 label_choose_controller: 'Choose a Controller',
+label_start_time: 'Start Time',
+label_end_time: 'End Time',
 option_none: 'None'
 }
 %}
@@ -34,10 +36,12 @@ login_prompt: 'Für diese Aktion benötigen Sie ein aktiviertes Benutzerkonto.',
 account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
 button_login: 'Login',
 button_register: 'Benutzerkonto einrichten',
-button_start_experiment: 'Experiment starten',
+button_book_experiment: 'Experiment buchen',
 button_generate_experiment_description: 'Experimentbeschreibung generieren',
 label_choose_system: 'Wähle ein zu steuerndes System',
 label_choose_controller: 'Wähle einen Controller',
+label_start_time: 'Beginn',
+label_end_time: 'Ende',
 option_none: 'Nicht ausgewählt'
 }
 %}
@@ -47,6 +51,25 @@ option_none: 'Nicht ausgewählt'
 {% block main %}
 
 {% if isLoggedIn %}
+<script>
+    function handleSubmit() {
+        const startTimeInput = document.getElementById("start-time-input")
+        const endTimeInput = document.getElementById("end-time-input")
+        const startTimeInputISO = document.getElementById("start-time-input-iso")
+        const endTimeInputISO = document.getElementById("end-time-input-iso")
+
+        startTimeInputISO.value = 
+            (startTimeInput.value 
+                ? new Date(startTimeInput.value) 
+                : new Date()).toISOString()
+        endTimeInputISO.value = 
+            (endTimeInput.value 
+                ? new Date(endTimeInput.value) 
+                : new Date(Date.parse(startTimeInputISO) + 60 * 60 * 1000)).toISOString() 
+
+        return true
+    }
+</script>
 <div class="mx-auto p-8">
     <form method="GET" class="flex flex-col gap-4 items-center">
         <div class="flex gap-2">
@@ -72,12 +95,45 @@ option_none: 'Nicht ausgewählt'
         <input class="primary-button" type="submit" value="{{ text.button_generate_experiment_description }}">
     </form>
 </div>
-<form method="POST" class="w-2/3 mx-auto flex flex-col gap-2 items-center">
+<form method="POST" class="w-2/3 mx-auto flex flex-col gap-8 items-center" onsubmit="handleSubmit()">
 <textarea name="experiment" class="w-full h-96 border-2 font-mono">
 {{ experiment | dump(2) }}
-</textarea><br>
-<input class="primary-button mt-4" type="submit" value="{{ text.button_start_experiment }}">
+</textarea>
+<div class="flex flex-col gap-2">
+    <div class="flex w-full items-center">
+        <label for="start-time-input" class="mr-2">{{ text.label_start_time }}:</label>
+        <input id="start-time-input" type="datetime-local" class="ml-auto border-2 rounded-lg p-2">
+        <input id="start-time-input-iso" name="startTime" type="text" class="!hidden">
+    </div>
+    <div class="flex w-full items-center">
+        <label for="end-time-input" class="mr-2">{{ text.label_end_time }}:</label>
+        <input id="end-time-input" type="datetime-local" class="ml-auto border-2 rounded-lg p-2">
+        <input id="end-time-input-iso" name="endTime" type="text" class="!hidden">
+    </div>
+</div>
+<input class="primary-button" type="submit" value="{{ text.button_book_experiment }}">
 </form>
+<script>
+    const start = new Date()
+    const end = new Date(start)
+    end.setTime(end.getTime() + 60 * 60 * 1000)
+    const startData = {
+        year: start.getFullYear(),
+        month: start.getMonth().toString().length === 1 ? "0" + (start.getMonth() + 1) : (start.getMonth() + 1),
+        date: start.getDate().toString().length === 1 ? "0" + start.getDate() : start.getDate(),
+        hours: start.getHours().toString().length === 1 ? "0" + start.getHours() : start.getHours(),
+        minutes: start.getMinutes().toString().length === 1 ? "0" + start.getMinutes() : start.getMinutes(),
+    }
+    const endData = {
+        year: end.getFullYear(),
+        month: end.getMonth().toString().length === 1 ? "0" + (end.getMonth() + 1) : (end.getMonth() + 1),
+        date: end.getDate().toString().length === 1 ? "0" + end.getDate() : end.getDate(),
+        hours: end.getHours().toString().length === 1 ? "0" + end.getHours() : end.getHours(),
+        minutes: end.getMinutes().toString().length === 1 ? "0" + end.getMinutes() : end.getMinutes(),
+    }
+    document.getElementById("start-time-input").value = `${startData.year}-${(startData.month)}-${startData.date}T${startData.hours}:${startData.minutes}`
+    document.getElementById("end-time-input").value = `${endData.year}-${(endData.month)}-${endData.date}T${endData.hours}:${endData.minutes}`
+</script>
 
 {% else %}
 <div class="max-w-6xl mx-auto w-full py-16 font-body">
