@@ -4,13 +4,13 @@
 		"dockerfile": "Dockerfile",
 		"cacheFrom": "goldi2/devcontainer"
 	},
-	// Activate for programming:
+	/* Activate for programming:
 	"runArgs": [
 		"-v",
-        "/dev:/dev",
+		"/dev:/dev",
 		"--privileged",
 		"--net=host"
-	],
+	],*/
 	"customizations": {
 		"vscode": {
 			"extensions": [
