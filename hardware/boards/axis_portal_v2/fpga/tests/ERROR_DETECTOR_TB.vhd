@@ -37,28 +37,9 @@ use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
 
 
--- procedure p_spiTransaction(
---     constant settling_delay : in   time;
---     signal i_mosi_data      : in   std_logic_vector(SPI_DATA_WIDTH-1 downto 0);
--- ) is
--- begin         
---     wait for settling_delay*clk_period;
---     wait for 3*clk_period;
---     sys_bus_i  <= readBus(1);
---     wait for clk_period;
---     sys_bus_i  <= readBus(2);
---     wait for clk_period;
---     reg_1_buff <= sys_bus_o.dat;
---     wait for clk_period;
---     reg_2_buff <= sys_bus_o.dat;
---     wait for assert_hold;
--- end procedure;
-
 --! Functionality simulation 
 entity ERROR_DETECTOR_TB is
 end entity ERROR_DETECTOR_TB;
-
-
 
 
 --! Simulation architecture
@@ -83,7 +64,8 @@ architecture TB of ERROR_DETECTOR_TB is
     --****INTERNAL SIGNALS****
     --Simulation timing
     constant clk_period     :   time := 10 ns;
-    constant settling_delay :   integer := 5*19200;
+    -- constant settling_delay :   integer := 5*19200;
+    constant settling_delay :   integer := 10;
     signal clock            :   std_logic := '0';
     signal reset            :   std_logic := '0';
     signal run_sim          :   std_logic := '1';
@@ -113,6 +95,30 @@ architecture TB of ERROR_DETECTOR_TB is
         alias motor_z_neg   :   std_logic is input_values(11);
         alias motor_z_pos   :   std_logic is input_values(12);
 
+    -----------------------------------------------------------------------------------------------
+
+    --****READ DATA PROCEDURE****
+    -----------------------------------------------------------------------------------------------
+    --! @brief Procedure for reading errors from the bus and storing the values in reg_buff_1 and 
+    --! reg_buff_2
+    procedure readData(
+        signal bus_i        :   out sbus_in;
+        signal bus_o        :   in  sbus_out;
+        signal reg_buff_1   :   out std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
+        signal reg_buff_2   :   out std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0)
+    ) is
+    begin
+        wait for settling_delay*clk_period;
+        wait for 3*clk_period;
+        bus_i  <= readBus(1);
+        wait for clk_period;
+        bus_i  <= readBus(2);
+        wait for clk_period;
+        reg_buff_1 <= bus_o.dat;
+        wait for clk_period;
+        reg_buff_2 <= bus_o.dat;
+    end readData;
+
 
 begin
 
@@ -132,15 +138,11 @@ begin
     );
     -----------------------------------------------------------------------------------------------
 
-
-
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
     clock <= run_sim and (not clock) after clk_period/2;
     reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
-
-
 
     --****SIGNAL ASSGNMENT****
     -----------------------------------------------------------------------------------------------
@@ -177,15 +179,7 @@ begin
         limit_x_neg <= '1';
         limit_x_pos <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(0) = '1')
@@ -197,15 +191,7 @@ begin
         limit_y_neg <= '1';
         limit_y_pos <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(1) = '1')
@@ -217,15 +203,7 @@ begin
         limit_z_neg <= '0';
         limit_z_pos <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(2) = '1')
@@ -238,16 +216,9 @@ begin
         motor_x_dir <= '0';
         motor_x_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
+        
 
         assert(reg_1_buff(3) = '1')
         report "ID04: Expecting error code 3" severity error;
@@ -259,15 +230,7 @@ begin
         motor_x_dir <= '1';
         motor_x_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(4) = '1')
@@ -280,15 +243,7 @@ begin
         motor_y_dir <= '0';
         motor_y_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(5) = '1')
@@ -301,15 +256,7 @@ begin
         motor_y_dir <= '1';
         motor_y_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(6) = '1')
@@ -322,15 +269,7 @@ begin
         motor_x_dir <= '0';
         motor_x_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_1_buff(7) = '1')
@@ -343,15 +282,7 @@ begin
         motor_x_dir <= '1';
         motor_x_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_2_buff(0) = '1')
@@ -364,15 +295,7 @@ begin
         motor_y_dir <= '1';
         motor_y_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_2_buff(1) = '1')
@@ -385,15 +308,7 @@ begin
         motor_y_dir <= '0';
         motor_y_step <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_2_buff(2) = '1')
@@ -406,15 +321,7 @@ begin
         motor_z_neg <= '1';
         motor_z_enb <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_2_buff(3) = '1')
@@ -427,15 +334,7 @@ begin
         motor_z_pos <= '1';
         motor_z_enb <= '1';
 
-        wait for settling_delay*clk_period;
-        wait for 3*clk_period;
-        sys_bus_i  <= readBus(1);
-        wait for clk_period;
-        sys_bus_i  <= readBus(2);
-        wait for clk_period;
-        reg_1_buff <= sys_bus_o.dat;
-        wait for clk_period;
-        reg_2_buff <= sys_bus_o.dat;
+        readData(sys_bus_i, sys_bus_o, reg_1_buff, reg_2_buff);
         wait for assert_hold;
 
         assert(reg_2_buff(4) = '1')
