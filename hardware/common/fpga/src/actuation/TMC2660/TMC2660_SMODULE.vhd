@@ -224,7 +224,7 @@ begin
         g_clk_factor        => g_sclk_factor,
         g_word_length       => 24,
         g_cpol              => '1',
-        g_cpha              => '0',
+        g_cpha              => '1',
         g_msbf              => true    
     )
     port map(
