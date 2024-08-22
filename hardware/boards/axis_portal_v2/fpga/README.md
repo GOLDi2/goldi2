@@ -8,6 +8,11 @@ sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/
 ```
 
 ```
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null dist/bitstream.svf root@10.79.0.34:/lib/firmware/lattice/firmware.svf 
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@10.79.0.34 "systemctl start load-fpga-firmware"
+```
+
+```
 import spidev
 spi = spidev.SpiDev()
 spi.open(0, 0)
@@ -16,5 +21,5 @@ spi.mode=3
 ```
 
 ```
-'{0:b}'.format(spi.xfer2([3,0])[1])
+'{0:b}'.format(spi.xfer2([128,3,0])[2])
 ```
