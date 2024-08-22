@@ -486,38 +486,38 @@ begin
     );
 
 
-    CLAW_MAGNET : entity work.EMAGNET_SMODULE
-    generic map(
-        g_address		=> EMAG_ADDRESS,
-        g_magnet_tao	=> EMAG_TAO,
-        g_demag_time    => EMAG_DEMAG_FACTOR
-    )
-    port map(
-        clk			    => clk,
-        rst			    => rst,
-        sys_bus_i	    => sys_bus_i,
-        sys_bus_o	    => sys_bus_o(9),
-        p_em_enb		=> system_io_o(34),
-        p_em_out_1      => system_io_o(35),
-        p_em_out_2	    => system_io_o(36)
-    );
-
-    -- CLAW_MAGNET : entity work.EMAGNET_SMODULE_2
+    -- CLAW_MAGNET : entity work.EMAGNET_SMODULE
     -- generic map(
-    --     g_addess            => EMAG_ADDRESS,
-    --     g_magnet_tao        => EMAG_TAO,
-    --     g_pulse_width       => EMAG_PULSE_WIDTH,
-    --     g_pulse_reduction   => EMAG_PULSE_REDUCTION
+    --     g_address		=> EMAG_ADDRESS,
+    --     g_magnet_tao	=> EMAG_TAO,
+    --     g_demag_time    => EMAG_DEMAG_FACTOR
     -- )
     -- port map(
-    --     clk                 => clk,
-    --     rst                 => rst,
-    --     sys_bus_i           => sys_bus_i,
-    --     sys_bus_o           => sys_bus_o(9),
-    --     p_em_enb            => system_io_o(34),
-    --     p_em_out_1          => system_io_o(35),
-    --     p_em_out_2          => system_io_o(36)
+    --     clk			    => clk,
+    --     rst			    => rst,
+    --     sys_bus_i	    => sys_bus_i,
+    --     sys_bus_o	    => sys_bus_o(9),
+    --     p_em_enb		=> system_io_o(34),
+    --     p_em_out_1      => system_io_o(35),
+    --     p_em_out_2	    => system_io_o(36)
     -- );
+
+    CLAW_MAGNET : entity work.EMAGNET_SMODULE_2
+    generic map(
+        g_address            => EMAG_ADDRESS,
+        g_magnet_tao        => EMAG_TAO,
+        g_pulse_width       => EMAG_PULSE_WIDTH,
+        g_pulse_reduction   => EMAG_PULSE_REDUCTION
+    )
+    port map(
+        clk                 => clk,
+        rst                 => rst,
+        sys_bus_i           => sys_bus_i,
+        sys_bus_o           => sys_bus_o(9),
+        p_em_enb            => system_io_o(34),
+        p_em_out_1          => system_io_o(35),
+        p_em_out_2          => system_io_o(36)
+    );
     -----------------------------------------------------------------------------------------------
 
 

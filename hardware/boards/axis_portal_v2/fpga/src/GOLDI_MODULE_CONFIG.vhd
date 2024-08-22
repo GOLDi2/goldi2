@@ -283,7 +283,7 @@ package GOLDI_MODULE_CONFIG is
 
     --Depolarization pulse duration in clk cycles. Used to reduce remanent polarization when the
     --magnet is powered off. To disable function use a value of 0
-    constant EMAG_DEMAG_FACTOR      :   natural := 50000;
+    --constant EMAG_DEMAG_FACTOR      :   natural := 50000;
 
     --Inital pulse width for demagnetization process
     constant EMAG_PULSE_WIDTH       :   natural := 500000;
@@ -291,7 +291,7 @@ package GOLDI_MODULE_CONFIG is
     --Pulse reduction constant. Demagnetization pulse reduced from the starting value in the 
     --register (reg_data*1000) by the given factor. Signal returns to idel when the pulse
     --width is smaller than the reduction factor
-    constant EMAG_PULSE_REDUCTION   :   integer := 5000;
+    constant EMAG_PULSE_REDUCTION   :   integer := 50000;
     -----------------------------------------------------------------------------------------------
 
 
