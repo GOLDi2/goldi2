@@ -281,10 +281,6 @@ package GOLDI_MODULE_CONFIG is
     --drop on the unprotected H-Bridge inputs when the depolarization pulse in generated.
     constant EMAG_TAO               :   natural := 5000;
 
-    --Depolarization pulse duration in clk cycles. Used to reduce remanent polarization when the
-    --magnet is powered off. To disable function use a value of 0
-    --constant EMAG_DEMAG_FACTOR      :   natural := 50000;
-
     --Inital pulse width for demagnetization process
     constant EMAG_PULSE_WIDTH       :   natural := 500000;
     

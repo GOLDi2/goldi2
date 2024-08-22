@@ -356,33 +356,6 @@ begin
         p_gpio_i_vector => system_io_i(1 downto 0),
         p_gpio_o_vector => system_io_o(1 downto 0)
     );
-
-
-    --#########################################################################
-    -- OLD
-    --#########################################################################
-    -- X_AXIS_MOTOR : entity work.TMC2660_DRIVER
-    -- generic map(
-    --     ADDRESS         => X_MOTOR_ADDRESS,
-    --     SCLK_FACTOR     => X_MOTOR_SCLK_FACTOR,
-    --     TMC2660_CONFIG  => X_MOTOR_CONFIGURATION
-    -- )
-    -- port map(
-    --     clk             => clk,
-    --     rst             => rst,
-    --     sys_bus_i       => sys_bus_i,
-    --     sys_bus_o       => sys_bus_o(6),
-    --     tmc2660_clk     => system_io_o(13),
-    --     tmc2660_enn     => system_io_o(14),
-    --     tmc2660_sg      => system_io_i(15),
-    --     tmc2660_dir     => system_io_o(17),
-    --     tmc2660_step    => system_io_o(16),
-    --     tmc2660_sclk    => system_io_o(18),
-    --     tmc2660_ncs     => system_io_o(19),
-    --     tmc2660_mosi    => system_io_o(20),
-    --     tmc2660_miso    => system_io_i(21)
-    -- );
-    --#########################################################################
     
 
     X_AXIS_MOTOR : entity work.TMC2660_SMODULE
@@ -411,34 +384,6 @@ begin
     --Configure io to input mode
     system_io_o(15) <= gnd_io_o;
     system_io_o(21) <= gnd_io_o;
-
-
-
-    --#########################################################################
-    -- OLD
-    --#########################################################################
-    -- Y_AXIS_MOTOR : entity work.TMC2660_DRIVER
-    -- generic map(
-    --     ADDRESS         => Y_MOTOR_ADDRESS,
-    --     SCLK_FACTOR     => Y_MOTOR_SCLK_FACTOR,
-    --     TMC2660_CONFIG  => Y_MOTOR_CONFIGURATION
-    -- )
-    -- port map(
-    --     clk             => clk,
-    --     rst             => rst,
-    --     sys_bus_i       => sys_bus_i,
-    --     sys_bus_o       => sys_bus_o(7),
-    --     tmc2660_clk     => system_io_o(22),
-    --     tmc2660_enn     => system_io_o(23),
-    --     tmc2660_sg      => system_io_i(24),
-    --     tmc2660_dir     => system_io_o(26),
-    --     tmc2660_step    => system_io_o(25),
-    --     tmc2660_sclk    => system_io_o(27),
-    --     tmc2660_ncs     => system_io_o(28),
-    --     tmc2660_mosi    => system_io_o(29),
-    --     tmc2660_miso    => system_io_i(30)
-    -- );
-    --#########################################################################
     
 
     Y_AXIS_MOTOR : entity work.TMC2660_SMODULE
@@ -485,26 +430,9 @@ begin
         p_hb_out_2	    => system_io_o(33)
     );
 
-
-    -- CLAW_MAGNET : entity work.EMAGNET_SMODULE
-    -- generic map(
-    --     g_address		=> EMAG_ADDRESS,
-    --     g_magnet_tao	=> EMAG_TAO,
-    --     g_demag_time    => EMAG_DEMAG_FACTOR
-    -- )
-    -- port map(
-    --     clk			    => clk,
-    --     rst			    => rst,
-    --     sys_bus_i	    => sys_bus_i,
-    --     sys_bus_o	    => sys_bus_o(9),
-    --     p_em_enb		=> system_io_o(34),
-    --     p_em_out_1      => system_io_o(35),
-    --     p_em_out_2	    => system_io_o(36)
-    -- );
-
-    CLAW_MAGNET : entity work.EMAGNET_SMODULE_2
+    CLAW_MAGNET : entity work.EMAGNET_SMODULE
     generic map(
-        g_address            => EMAG_ADDRESS,
+        g_address           => EMAG_ADDRESS,
         g_magnet_tao        => EMAG_TAO,
         g_pulse_width       => EMAG_PULSE_WIDTH,
         g_pulse_reduction   => EMAG_PULSE_REDUCTION
