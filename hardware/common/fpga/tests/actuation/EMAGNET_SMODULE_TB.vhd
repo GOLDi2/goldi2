@@ -4,14 +4,14 @@
 --
 -- Create Date:		26/05/2023
 -- Design Name:		Electromagnet driver testbench
--- Module Name:		EMAGNET_SMODULE_2_TB
+-- Module Name:		EMAGNET_SMODULE_TB
 -- Project Name:	GOLDi_FPGA_SRC
 -- Target Devices:	LCMXO2-7000HC-4TG144C
 -- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
 --
 -- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
 --                  -> GOLDI_IO_STANDARD.vhd
---                  -> EMAGNET_SMODULE_2.vhd
+--                  -> EMAGNET_SMODULE.vhd
 --
 -- Revisions:
 -- Revision V3.00.01 - File Created
@@ -40,17 +40,17 @@ use work.GOLDI_IO_STANDARD.all;
 
 
 --! Functionality simulation
-entity EMAGNET_SMODULE_2_TB is
-end entity EMAGNET_SMODULE_2_TB;
+entity EMAGNET_SMODULE_TB is
+end entity EMAGNET_SMODULE_TB;
 
 
 
 
 --! Simulation architecture
-architecture TB of EMAGNET_SMODULE_2_TB is
+architecture TB of EMAGNET_SMODULE_TB is
 
     --****DUT****
-    component EMAGNET_SMODULE_2
+    component EMAGNET_SMODULE
         generic(
             g_address           :   integer;
             g_magnet_tao        :   integer;
@@ -87,7 +87,7 @@ begin
 
     --****COMPONENT****
     -----------------------------------------------------------------------------------------------
-    DUT : EMAGNET_SMODULE_2
+    DUT : EMAGNET_SMODULE
     generic map(
         g_address           => 1,
         g_magnet_tao        => 1000,
@@ -232,7 +232,7 @@ begin
 
 		--**End simulation**
 		wait for 500 ns;
-        report "EMAGNET_SMODULE_2_TB - testbench completed";
+        report "EMAGNET_SMODULE_TB - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
        	std.env.finish;
         --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
