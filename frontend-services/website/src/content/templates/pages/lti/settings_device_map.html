@@ -1,0 +1,52 @@
+{% extends "embedded_layout.html" %}
+{% block main %}
+
+<!-- Students are in th format {name: string, external_id: string, role_mapping: {[role: string]: string}-->
+<form action="/{{ language }}/lti/settings_device_map" method="post" id="submit">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>External ID</th>
+            {% for role in roles %}
+                <th>{{ role.role }}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for Name.."></th>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for id.."></th>
+            {% for role in roles %}<th></th>{% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <input type="hidden" name="student_uri_{{student.external_id}}" value="{{student.uri}}" />
+            <td>{{ student.name }}</td>
+            <td>{{ student.external_id }}</td>
+            {% for role in roles %}
+                <td>
+                    <select name="student_{{student.external_id}}_{{role.role}}">
+                        <option value="GROUP">Any</option>
+                        {% for device in role.devices %}
+                        <option value="{{device}}" {% if student.role_mapping[role.role]==device %}selected{% endif %}>{{devices[device].name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</form>
+<div class="flex justify-evenly">
+    <button type="submit" form="submit" class="secondary-button">Submit</button>
+    <form action="/{{ language }}/lti/settings" method="post">
+        <input type="hidden" name="lti_session" />
+        <input type="hidden" name="token" />
+        <button type="submit" name="submit" class="primary-button">Cancle</button>
+    </form>
+</div>
+{% endblock %}

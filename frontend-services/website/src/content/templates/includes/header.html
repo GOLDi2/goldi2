@@ -6,16 +6,8 @@ navbar = [
             {name: 'Users', href: '/'+language+'/admin/users'},
             {name: 'Roles', href: '/'+language+'/admin/roles'}
     ]},
-    {name: 'Documentation', horizontal: true, children: [
-        {name: 'Physische Systeme', children: [
-            {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
-            {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
-            {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
-            {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
-            {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
-            {name: 'Hochregallager', href: '/'+language+'/about'},
-            {name: 'Füllstandregelung', href: '/'+language+'/about'}
-        ]}
+    {name: 'Lti',loggedIn: true, children: [
+        {name: 'LMS Platforms', href: '/'+language+'/lti/platforms'}
     ]},
     {name: 'Experiment', children: [
         {name: 'Instruction', href: '/'+language+'/about'},
@@ -43,19 +35,10 @@ navbar = [
     navbar = [
         {name: 'Admin',loggedIn: true, children: [
             {name: 'Devices', href: '/'+language+'/admin/devices'},  
-            {name: 'Users', href: '/'+language+'/admin/users'},
-            {name: 'Roles', href: '/'+language+'/admin/roles'}
+            {name: 'Users', href: '/'+language+'/admin/users'}
         ]},
-        {name: 'Documentation', horizontal: true, children: [
-            {name: 'Physische Systeme', children: [
-                {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
-                {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
-                {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
-                {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
-                {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
-                {name: 'Hochregallager', href: '/'+language+'/about'},
-                {name: 'Füllstandregelung', href: '/'+language+'/about'}
-            ]}
+        {name: 'Lti',loggedIn: true, children: [
+            {name: 'LMS Platforms', href: '/'+language+'/lti/platforms'}
         ]},
         {name: 'Experiment', children: [
             {name: 'Instruction', href: '/'+language+'/about'},
@@ -79,7 +62,31 @@ navbar = [
     ] %}
 {% endif %}
 
-<!-- {name: 'Controller', children: [
+<!--
+    {name: 'Documentation', horizontal: true, children: [
+        {name: 'Physische Systeme', children: [
+            {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
+            {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
+            {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
+            {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
+            {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
+            {name: 'Hochregallager', href: '/'+language+'/about'},
+            {name: 'Füllstandregelung', href: '/'+language+'/about'}
+        ]}
+    ]},
+
+
+{name: 'Documentation', horizontal: true, children: [
+{name: 'Physische Systeme', children: [
+    {name: '3-Achs-Portal', href: '/'+language+'/3-achs-protal'},
+    {name: 'Aufzug A (3 Etagen)', href: '/'+language+'/about'},
+    {name: 'Aufzug B (4 Etagen)', href: '/'+language+'/about'},
+    {name: 'Aufzug C (4 Etagen)', href: '/'+language+'/about'},
+    {name: 'Bearbeitungseinheit', href: '/'+language+'/about'},
+    {name: 'Hochregallager', href: '/'+language+'/about'},
+    {name: 'Füllstandregelung', href: '/'+language+'/about'}
+]}
+]}, {name: 'Controller', children: [
                 {name: 'Manual Control', href: '/'+language+'/about'},
                 {name: 'Digital Demo-Board', href: '/'+language+'/about'},
                 {name: 'PSOC', href: '/'+language+'/about'},

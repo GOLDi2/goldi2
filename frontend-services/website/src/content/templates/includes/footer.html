@@ -16,13 +16,13 @@
 {% set
     links = {
         first_line: [
-            {name: 'Über uns', href: '/about.html'},
-            {name: 'FAQ', href: '/faq.html'},
-            {name: 'Kontakt', href: '/contact.html'}
+            {name: 'Über uns', href: '/'+language+'/about.html'},
+            {name: 'FAQ', href: '/'+language+'/faq.html'},
+            {name: 'Kontakt', href: '/'+language+'/contact.html'}
         ],
         second_line: [
             {name: 'Impressum', href: 'https://www.tu-ilmenau.de/impressum'},
-            {name: 'Datenschutz', href: '/privacy.html'}
+            {name: 'Datenschutz', href: '/'+language+'/privacy.html'}
         ]
     }
  %}
@@ -39,12 +39,12 @@
         <div class="flex flex-col gap-3 w-64">
             <div class="flex justify-between gap-10">
                 {% for item in links.first_line %}
-                <a href="/{{language}}{{ item.href }}">{{ item.name }}</a>
+                <a href="{{ item.href }}">{{ item.name }}</a>
                 {% endfor %}
             </div>
             <div class="flex justify-center gap-10">
                 {% for item in links.second_line %}
-                <a href="/{{language}}{{ item.href }}">{{ item.name }}</a>
+                <a href="{{ item.href }}">{{ item.name }}</a>
                 {% endfor %}
             </div>
         </div>

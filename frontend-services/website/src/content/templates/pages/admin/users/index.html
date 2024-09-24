@@ -1,34 +1,39 @@
-{% extends "admin_layout.html" %}
-{% import "components/topbar.html" as topbar %}
-{% import "components/elements.html" as elements %}
-{% block content %}
-    {% call topbar.container() %}
-    {% call topbar.topbar() %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/users/create", icon="add") %}Add User{% endcall %}{% endcall %}
-    {% endcall %}
-    {% call topbar.content() %}
-    <div class="flex ml-4">
-        <div class="text-ellipsis w-52">
-            Username
-        </div>
-        <div class="w-52"></div>
-    </div>
-    
-    <hr class="w-30 h-px my-2 bg-black border-0">
+{% extends "simple.html" %}
+{% set title = "Users" %}
 
-    {% for user in users %}
-        <div class="flex flex-col hover:bg-primary-100 ml-4">
-            <div class="flex flex-row">
-                <div class="text-ellipsis w-52">
-                    {{ user.username }}
-                </div>
-                <div class="w-52">
-                    <a href="users/details?url={{ user.url }}" class="material-symbols-rounded">edit</a>
-                    <a href="users/delete?url={{ user.url }}" class="material-symbols-rounded">delete</a>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-    {% endcall %}
-    {% endcall %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>URI</th>
+            <th>Username</th>
+            <th>Admin</th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for uri.."></th>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for names.."></th>
+            <th>
+                <select onchange="filter_table(this)">
+                    <option value="">All</option>
+                    <option value="true">true</option>
+                    <option value="false">false</option>
+                </select>
+            </th>
+            <th><a href="users/create" class="material-symbols-rounded p-2">add</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td class="max-w-0 copy-on-click">{{ user.url }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.admin }}</td>
+            <td class=" text-center">
+                <a href="users/details?url={{ user.url }}" class="material-symbols-rounded p-2">edit</a>
+                <a href="users/delete?url={{ user.url }}" class="material-symbols-rounded p-2 bg-red-500" onclick="return confirm('Are you sure you want to delete the user?')">delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+</table>
 {% endblock %}

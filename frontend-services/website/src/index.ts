@@ -1,29 +1,23 @@
 #!/usr/bin/env node
 
-import {
-  APIClient,
-  AuthenticationServiceTypes,
-} from "@cross-lab-project/api-client";
+import { error, logging } from "@crosslab/service-common";
+import { logger } from "@crosslab/service-common/logging";
 import cookieParser from "cookie-parser";
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import asyncHandler from "express-async-handler";
-import expressWinston from "express-winston";
 import { AddressInfo } from "net";
 import nunjucks from "nunjucks";
 import path from "path";
-import winston from "winston";
 import { admin_router } from "./admin";
+import { auth_router, handle_login, handle_logout } from "./auth";
 import { config } from "./config";
 import { experiment_router } from "./experiment";
+import { lti_router } from "./lti";
 import { thk_router } from "./thk";
 import { renderPageInit } from "./utils";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    apiClient: APIClient;
-    user?: AuthenticationServiceTypes.User<"response">;
-  }
-}
+
+logging.init();
 
 const content_path =
   config.NODE_ENV === "development"
@@ -39,14 +33,6 @@ const renderPage = renderPageInit(content_path, config.DEFAULT_LANGUAGE);
 
 const app = express();
 
-const logger = winston.createLogger({
-  transports: [new winston.transports.Console()],
-  format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.simple()
-  ),
-});
-
 app.set("etag", config.NODE_ENV !== "development");
 app.use((_req, res, next) => {
   res.removeHeader("X-Powered-By");
@@ -61,6 +47,7 @@ nunjucks.configure(content_path + "/templates", {
 });
 
 app.use("/img", express.static(path.join(content_path, "img")));
+app.use("/js", express.static(path.join(content_path, "js")));
 if (config.NODE_ENV === "development") {
   // When developing, we dynamically transform the css files with postcss
   const { postcss_transform } = require("./debug_utils");
@@ -70,98 +57,7 @@ if (config.NODE_ENV === "development") {
   app.use("/css", express.static(path.join(content_path, "css")));
 }
 
-app.use(
-  expressWinston.logger({
-    winstonInstance: logger,
-    meta: true, // optional: control whether you want to log the meta data about the request (default to true)
-    msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-    expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-    colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-    ignoreRoute: function () {
-      return false;
-    }, // optional: allows to skip some log messages based on request and/or response
-  })
-);
-
-async function handle_login(req: Request, res: Response, next: NextFunction) {
-  let loggedIn = false;
-  for (const method of ["tui", "local"] as const) {
-    try {
-      await req.apiClient.login(req.body.username, req.body.password, {
-        method,
-      });
-      res.cookie("token", req.apiClient.accessToken, {
-        secure: true,
-        httpOnly: true,
-        sameSite: "strict",
-      });
-      loggedIn = true;
-      break;
-    } catch (error) {
-      logger.log("info", `Could not login with method '${method}`);
-    }
-  }
-  if (loggedIn) {
-    try {
-      req.user = await req.apiClient.getIdentity();
-      if (req.query.redirect) {
-        res.redirect(303, req.query.redirect as string);
-      } else {
-        res.redirect(303, "index.html" as string);
-      }
-    } catch (e) {
-      logger.warn(e);
-      res.clearCookie("token");
-      next();
-    }
-  } else {
-    res.clearCookie("token");
-    logger.warn("user could not be logged in!");
-    next();
-  }
-}
-
-async function handle_logout(req: Request, res: Response, _next: NextFunction) {
-  res.clearCookie("token");
-  if (req.query.redirect) {
-    res.redirect(303, req.query.redirect as string);
-  } else {
-    res.redirect(303, "/index.html" as string);
-  }
-}
-
-app.use(
-  "/",
-  asyncHandler(async (req: Request, res, next) => {
-    req.apiClient = new APIClient(config.API_URL);
-    req.user = undefined;
-
-    // handle token query parameter
-    if (req.query.token && typeof req.query.token === "string") {
-      req.apiClient.accessToken = req.query.token;
-      res.cookie("token", req.query.token, {
-        secure: true,
-        httpOnly: true,
-      });
-      req.user = {
-        ...(await req.apiClient.getIdentity()),
-        token: req.query.token,
-      };
-    } else if (req.cookies.token) {
-      try {
-        req.apiClient.accessToken = req.cookies.token;
-        req.user = {
-          ...(await req.apiClient.getIdentity()),
-          token: req.cookies.token,
-        };
-      } catch (e) {
-        logger.info(e);
-        res.clearCookie("token");
-      }
-    }
-    next();
-  })
-);
+app.use(auth_router())
 
 for (const language of languages) {
   app.post("/" + language + "/login.html", asyncHandler(handle_login));
@@ -175,6 +71,7 @@ for (const language of languages) {
     experiment_router(language, renderPage, logger)
   );
   app.use("/" + language + "/", thk_router(language, renderPage, logger));
+  app.use("/" + language + "/", lti_router(language, renderPage));
   app.get(
     "/" + language + "/",
     asyncHandler(async (req, res) => {
@@ -195,7 +92,7 @@ app.use("/", function (req, res) {
   res.redirect(307, "/" + selected_language + req.originalUrl);
 });
 
-app.use(expressWinston.errorLogger({ winstonInstance: logger }));
+app.use(error.middleware);
 
 if (config.NODE_ENV === "development") {
   // When developing, we start a browserSync server after listen

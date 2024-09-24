@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import postcss from 'postcss';
-import path from 'path';
-import fs from 'fs';
 import browserSync from 'browser-sync';
+import { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
+import postcss from 'postcss';
 import { config } from './config';
 
 const postcssConfig: any = require('../postcss.config');
