@@ -6,7 +6,7 @@
     <input type="hidden" name="token" />
     <select name="experiment_template_uri">
         {% for template in experiment_templates %}
-        <option value="{{{ template.url }}" {% if template.url == experiment_template.url %}selected{% endif %}>{{ template.name }}</option>
+        <option value="{{ template.url }}" {% if template.url == experiment_template.url %}selected{% endif %}>{{ template.name }}</option>
         {% endfor %}
     </select>
 </form>
