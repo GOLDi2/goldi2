@@ -25,7 +25,7 @@
             <tr><td>Icon URL</td><td class="copy-on-click">{{ tool.icon_url }}</td>
     </table>
     <p>To complete the registration, open the tool in a moodle course. This site will automatically redirect you to the platform page once the registration is complete.</p>
-    <p>If the registration is not completed in the next 3 days, the platform registration process will be cancled.</p>
+    <p>If the registration is not completed in the next 3 days, the platform registration process will be canceled.</p>
     <script>
         setInterval(function() {
             fetch('registration/status?platform={{platform.uri}}').then(response => response.text()).then(response => {

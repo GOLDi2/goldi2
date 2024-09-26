@@ -1,26 +1,25 @@
 {% extends "embedded_layout.html" %}
 {% block main %}
 
-<form action="/{{ language }}/lti/settings" method="post">
+<form action="/{{ language }}/lti/settings_experiment" method="post" id="submit">
     <input type="hidden" name="lti_session" />
     <input type="hidden" name="token" />
-    <button type="submit">Back</button>
+    <select name="experiment_template_uri">
+        {% for template in experiment_templates %}
+        <option value="{{{ template.url }}" {% if template.url == experiment_template.url %}selected{% endif %}>{{ template.name }}</option>
+        {% endfor %}
+    </select>
 </form>
 
-{{experiment_template | dump}}
-
-Currently Selected: {{ experiment_template.name }}
-
-{% for template in experiment_templates %}
-{% if template.url != experiment_template.url %}
-    <form action="/{{ language }}/lti/settings_experiment" method="post">
+<div class="flex justify-evenly">
+    <button type="submit" form="submit" class="secondary-button">Submit</button>
+    <form action="/{{ language }}/lti/settings" method="post">
         <input type="hidden" name="lti_session" />
         <input type="hidden" name="token" />
-        <input type="hidden" name="experiment_template_uri" value="{{ template.url }}" />
-        <button type="submit">{{ template.name }}</button>
+        <button type="submit" name="submit" class="primary-button">Cancel</button>
     </form>
-{% endif %}
-{% endfor %}
+</div>
+
 <script>
     document.getElementsByName("lti_session").forEach(e=>e.value=sessionStorage.getItem("lti_session"));
     document.getElementsByName("token").forEach(e=>e.value=sessionStorage.getItem("token"));
