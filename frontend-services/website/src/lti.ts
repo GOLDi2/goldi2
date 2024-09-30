@@ -64,6 +64,7 @@ export function lti_router(language: string, renderPage: renderPageType) {
   router.post(
     "/lti/login",
     asyncHandler(async (req, res) => {
+      req.body.target_link_uri = config.BASE_URL + req.url.replaceAll("login", "launch"); // fix the target_link_uri to point to the launch endpoint
       const login = await req.apiClient.ltiLogin(
         req.query.api as string,
         req.body
