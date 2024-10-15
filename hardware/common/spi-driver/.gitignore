@@ -1,9 +1,10 @@
 .*_cache
 .tox
-.coverage
+.coverage*
 .coverage.xml
 dist
 __pycache__
 venv
 /**/*.egg-info
 coverage.xml
+build
