@@ -4,7 +4,7 @@ Description=Updates the system
 [Service]
 Type=simple
 Restart=always
-RestartSec=60s
+RestartSec=120s
 ExecStart=/usr/bin/update
 
 [Install]
