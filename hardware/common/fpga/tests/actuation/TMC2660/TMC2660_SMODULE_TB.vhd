@@ -51,36 +51,10 @@ end entity TMC2660_SMODULE_TB;
 --! Simulation architecture
 architecture TB of TMC2660_SMODULE_TB is
 
-    --****DUT****
-    component TMC2660_SMODULE
-        generic(
-            g_address         :   natural := 1;
-            g_sclk_factor     :   natural := 8;
-            g_rst_delay       :   natural := 100;
-            g_tmc2660_config  :   array_16_bit := (x"0000",x"0000")
-
-        );
-        port(
-            clk             : in    std_logic;
-            rst             : in    std_logic;
-            sys_bus_i       : in    sbus_in;
-            sys_bus_o       : out   sbus_out;
-            p_tmc2660_clk     : out   io_o;
-            p_tmc2660_enn     : out   io_o;
-            p_tmc2660_sg      : in    io_i;
-            p_tmc2660_dir     : out   io_o;
-            p_tmc2660_step    : out   io_o;
-            p_tmc2660_sclk    : out   io_o;
-            p_tmc2660_ncs     : out   io_o;
-            p_tmc2660_mosi    : out   io_o;
-            p_tmc2660_miso    : in    io_i
-        );
-    end component;
-
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period	    :	time := 20 ns;
+	constant clk_period	    :	time := 25 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:   std_logic := '1';
@@ -104,9 +78,12 @@ begin
     -----------------------------------------------------------------------------------------------
     DUT : entity work.TMC2660_SMODULE
     generic map(
-        g_address         => 1,
-        g_sclk_factor     => 10,
-        g_tmc2660_config  => (x"0000",x"0000")
+        g_address                   => 0,
+        g_sclk_factor               => 10,
+        g_tmc2660_config            => (x"0000",x"0000"),
+        g_acceleration              => 20,
+        g_stepperDivideFactor       => 400,
+        g_accelerationDivideFactor  => 1
     )
     port map(
         clk             => clock,
@@ -145,17 +122,15 @@ begin
 
         wait for 7 us;
 
-
-        --Test stream data
-        sys_bus_i <= writeBus(3,255);
+        sys_bus_i <= writeBus(1,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(4,0);
+        sys_bus_i <= writeBus(2,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(5,8);
+        sys_bus_i <= writeBus(0,1);
         wait for clk_period;
-        sys_bus_i <= gnd_sbus_i;
-
-        wait for 3 us;
+        wait for 50 ms;
+        sys_bus_i <= writeBus(0,0);
+        wait for 2 ms;
 
 
         --**End simulation**
