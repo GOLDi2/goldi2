@@ -360,10 +360,13 @@ begin
 
     X_AXIS_MOTOR : entity work.TMC2660_SMODULE
     generic map(
-        g_address           => X_MOTOR_ADDRESS,
-        g_sclk_factor       => X_MOTOR_SCLK_FACTOR,
-        g_rst_delay         => X_MOTOR_RST_DELAY,
-        g_tmc2660_config    => X_MOTOR_CONFIG_16BIT
+        g_address                   => X_MOTOR_ADDRESS,
+        g_sclk_factor               => X_MOTOR_SCLK_FACTOR,
+        g_rst_delay                 => X_MOTOR_RST_DELAY,
+        g_tmc2660_config            => X_MOTOR_CONFIG_16BIT,
+        g_acceleration              => X_MOTOR_ACCELERATION,
+        g_accelerationDivideFactor  => X_MOTOR_ACCELERATION_DIVIDEFACTOR,
+        g_stepperDivideFactor       => X_MOTOR_SPEED_DIVIDEFACTOR
     )
     port map(
         clk                 => clk,
@@ -388,10 +391,13 @@ begin
 
     Y_AXIS_MOTOR : entity work.TMC2660_SMODULE
     generic map(
-        g_address           => Y_MOTOR_ADDRESS,
-        g_sclk_factor       => Y_MOTOR_SCLK_FACTOR,
-        g_rst_delay         => Y_MOTOR_RST_DELAY,
-        g_tmc2660_config    => Y_MOTOR_CONFIG_16BIT
+        g_address                   => Y_MOTOR_ADDRESS,
+        g_sclk_factor               => Y_MOTOR_SCLK_FACTOR,
+        g_rst_delay                 => Y_MOTOR_RST_DELAY,
+        g_tmc2660_config            => Y_MOTOR_CONFIG_16BIT,
+        g_acceleration              => Y_MOTOR_ACCELERATION,
+        g_accelerationDivideFactor  => Y_MOTOR_ACCELERATION_DIVIDEFACTOR,
+        g_stepperDivideFactor       => Y_MOTOR_SPEED_DIVIDEFACTOR
     )
     port map(
         clk                 => clk,

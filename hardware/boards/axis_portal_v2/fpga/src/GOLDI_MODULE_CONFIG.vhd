@@ -172,6 +172,10 @@ package GOLDI_MODULE_CONFIG is
         6 => x"0070",
         7 => x"000E"
     );
+
+    constant X_MOTOR_ACCELERATION               :   natural := 1;
+    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
+    constant X_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
     -----------------------------------------------------------------------------------------------
 
 
@@ -183,65 +187,65 @@ package GOLDI_MODULE_CONFIG is
     constant Y_MOTOR_SCLK_FACTOR    :   natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
-    constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
-        0 => x"000000",
+    -- constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
+    --     0 => x"000000",
 
-        --**Driver Control Register STEP/DIR mode (DRVCTRL)**
-        --[19:18]   Address = 00
-        --[17:10]   Reserved -> '0'
-        --[9]       Enable STEP interpolation 
-        --[8]       Enable double edge STEP pulses
-        --[7:4]     Reserved -> '0'
-        --[3:0]     Microstep resolution for STEP/DIR mode
-        1 => x"000004",   --x"00004"
+    --     --**Driver Control Register STEP/DIR mode (DRVCTRL)**
+    --     --[19:18]   Address = 00
+    --     --[17:10]   Reserved -> '0'
+    --     --[9]       Enable STEP interpolation 
+    --     --[8]       Enable double edge STEP pulses
+    --     --[7:4]     Reserved -> '0'
+    --     --[3:0]     Microstep resolution for STEP/DIR mode
+    --     1 => x"000004",   --x"00004"
 
-        --**Chopper Control Register (CHOPCONF)**
-        --[19:17]   Address = 100
-        --[16:15]   Blanking time
-        --[14]      Chopper mode
-        --[13]      Random Toff time
-        --[12:11]   Hysteresis decrement interval
-        --[10:7]    Hysteresis end value (low)
-        --[6:4]     Hysteresis start value 
-        --[3:0]     Off time MOSFET disable  
-        2 => x"094557",   --x"94557"
+    --     --**Chopper Control Register (CHOPCONF)**
+    --     --[19:17]   Address = 100
+    --     --[16:15]   Blanking time
+    --     --[14]      Chopper mode
+    --     --[13]      Random Toff time
+    --     --[12:11]   Hysteresis decrement interval
+    --     --[10:7]    Hysteresis end value (low)
+    --     --[6:4]     Hysteresis start value 
+    --     --[3:0]     Off time MOSFET disable  
+    --     2 => x"094557",   --x"94557"
       
-        --**Coolstep Control Register (SMARTEN)**
-        --[19:17]   Address = 101
-        --[16]      Reserved -> '0'
-        --[15]      Minimum coolStep current
-        --[14:13]   Current decrement speed
-        --[12]      Reserved -> '0'
-        --[11:8]    Upper coolStep threshold SEMAX
-        --[7]       Reserved -> '0'
-        --[6:5]     Current increment size
-        --[4]       Reserved -> '0'
-        --[3:0]     Lower coolStep threshold SEMIN
-        3 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
+    --     --**Coolstep Control Register (SMARTEN)**
+    --     --[19:17]   Address = 101
+    --     --[16]      Reserved -> '0'
+    --     --[15]      Minimum coolStep current
+    --     --[14:13]   Current decrement speed
+    --     --[12]      Reserved -> '0'
+    --     --[11:8]    Upper coolStep threshold SEMAX
+    --     --[7]       Reserved -> '0'
+    --     --[6:5]     Current increment size
+    --     --[4]       Reserved -> '0'
+    --     --[3:0]     Lower coolStep threshold SEMIN
+    --     3 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
 
-        --**StallGuard2 Control Register (SGCSCONF)**
-        --[19:17]   Address = 110
-        --[16]      StallGuard2 filter enable
-        --[15]      Reserved -> '0'
-        --[14:8]    StallGuard2 threshold value
-        --[7:5]     Reserved -> '0'
-        --[4:0]     Current scale  
-        4 => x"0C040F",   --x"C040F"
+    --     --**StallGuard2 Control Register (SGCSCONF)**
+    --     --[19:17]   Address = 110
+    --     --[16]      StallGuard2 filter enable
+    --     --[15]      Reserved -> '0'
+    --     --[14:8]    StallGuard2 threshold value
+    --     --[7:5]     Reserved -> '0'
+    --     --[4:0]     Current scale  
+    --     4 => x"0C040F",   --x"C040F"
         
-        --**Driver Control Register (DRVCONF)**
-        --[19:17]   Address = 111
-        --[16]      Test Mode - reserved -> '0'
-        --[15:14]   Slope control, high side
-        --[13:12]   Slope control, low side
-        --[11]      Reserved -> '0'
-        --[10]      Short to GND protection disable
-        --[9:8]     Short to GND detection timer
-        --[7]       STEP/DIR interface disable 
-        --[6]       Sense resistor voltage-based current scaling
-        --[5:4]     Select value for read out
-        --[3:0]     Reserved -> '0'
-        5 => x"0E0070" --x"E0070"
-    );
+    --     --**Driver Control Register (DRVCONF)**
+    --     --[19:17]   Address = 111
+    --     --[16]      Test Mode - reserved -> '0'
+    --     --[15:14]   Slope control, high side
+    --     --[13:12]   Slope control, low side
+    --     --[11]      Reserved -> '0'
+    --     --[10]      Short to GND protection disable
+    --     --[9:8]     Short to GND detection timer
+    --     --[7]       STEP/DIR interface disable 
+    --     --[6]       Sense resistor voltage-based current scaling
+    --     --[5:4]     Select value for read out
+    --     --[3:0]     Reserved -> '0'
+    --     5 => x"0E0070" --x"E0070"
+    -- );
 
     
     --Reset delay for TMC2660 to recognize the input clock signal
@@ -259,6 +263,10 @@ package GOLDI_MODULE_CONFIG is
         6 => x"0070",
         7 => x"000E"
     );
+
+    constant Y_MOTOR_ACCELERATION               :   natural := 1;
+    constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
+    constant Y_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
     -----------------------------------------------------------------------------------------------
 
 

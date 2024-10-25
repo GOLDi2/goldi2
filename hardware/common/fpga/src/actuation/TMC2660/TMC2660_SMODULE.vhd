@@ -73,9 +73,9 @@ entity TMC2660_SMODULE is
         g_sclk_factor               :   natural := 8;                       --! SPI serial clock period as a factor of clk
         g_rst_delay                 :   natural := 100;                     --! Initial delay after reset given in clk cycles
         g_tmc2660_config            :   array_16_bit := (x"0000",x"0000");  --! Default configuration of TMC2660
-        g_acceleration              :   natural := 1;                       --! Constant Acceleration Value
-        g_stepperDivideFactor       :   natural := 1024;                     --! clk divider factor for complete stepper module
-        g_accelerationDivideFactor  :   natural := 128                   --! clk divider factor for acceleration in stepper module
+        g_acceleration              :   natural := 1;                       --! Constant Acceleration Value (sets acceleration)
+        g_stepperDivideFactor       :   natural := 1024;                    --! clk divider factor for stepper control (sets max and min speed)
+        g_accelerationDivideFactor  :   natural := 128                      --! clk divider factor for acceleration counter (sets acceleration)
     );
     port(
         --General
