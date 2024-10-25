@@ -42,9 +42,9 @@ architecture TB of CLOCK_DIVIDER_TB is
 	signal clock			:	std_logic := '0';
 	signal run_sim			:   std_logic := '1';
     --DUT IOs
-    signal p_clk_out_1      :   std_logic := '0';
-    signal p_clk_out_2      :   std_logic := '0';
-    signal p_clk_out_4      :   std_logic := '0';
+    signal p_clk_enb_out_1      :   std_logic := '0';
+    signal p_clk_enb_out_2      :   std_logic := '0';
+    signal p_clk_enb_out_4      :   std_logic := '0';
 
 begin
 
@@ -58,7 +58,7 @@ begin
     port map(
         clk             => clock,
         reset           => reset,
-        clock_out       => p_clk_out_1
+        clock_enb_out   => p_clk_enb_out_1
     );
 
     DUT_2 : entity work.Clock_Divider
@@ -68,7 +68,7 @@ begin
     port map(
         clk             => clock,
         reset           => reset,
-        clock_out       => p_clk_out_2
+        clk_enb_out     => p_clk_enb_out_2
     );
 
     DUT_4 : entity work.Clock_Divider
@@ -78,7 +78,7 @@ begin
     port map(
         clk             => clock,
         reset           => reset,
-        clock_out       => p_clk_out_4
+        clk_enb_out     => p_clk_enb_out_4
     );
     -----------------------------------------------------------------------------------------------
 
