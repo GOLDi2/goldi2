@@ -5,6 +5,7 @@ import { DeviceHandler } from "./components/deviceHandler";
 import "./components/dialog";
 import "./components/progress";
 import "./manual";
+import "./truthTable";
 
 const deviceHandler = new DeviceHandler();
 
@@ -113,7 +114,7 @@ export class App extends LitElement {
   }
 
   render() {
-    //return html`
+    //return (html`
     return deviceHandler.dialogWrap(html`
       <div class="h-full flex flex-col items-center justify-center gap-3 p-10">
         ${this.renderInteractions()}
@@ -142,6 +143,13 @@ export class App extends LitElement {
         class="w-full flex-grow h-0"
         .serviceInterface=${this.sequenceCheckerService}
       ></manual-interaction>`;
+    }
+    if (this.interaction === "table") {
+      return html`<truth-table
+      .inputs=${this.inputs}
+      .outputs=${this.outputs}
+      .serviceInterface=${this.sequenceCheckerService}
+      ></sequence-table>`;
     }
   }
 
