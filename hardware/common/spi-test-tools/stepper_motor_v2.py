@@ -125,8 +125,11 @@ class StepperMotor(AsyncIOEventEmitter):
         encoder_division = self._get_encoder_division()
         acceleration = self._get_acceleration()
 
-        max_speed_squared = min((self._control_speed * self._max_speed * 0xFFFF)**2, acceleration * distance / encoder_division )
-        slow_down_distance = max_speed_squared / (2 * acceleration) * encoder_division
+        try:
+            max_speed_squared = min((self._control_speed * self._max_speed * 0xFFFF)**2, acceleration * distance / encoder_division )
+            slow_down_distance = max_speed_squared / (2 * acceleration) * encoder_division
+        except ZeroDivisionError:
+            slow_down_distance = 0
         if distance < 0:
             slow_down_postion = stop_position + slow_down_distance
         else:
@@ -242,9 +245,19 @@ async def output_coroutine():
             print("Press m to switch to speed control   ")
             print("Press s to drive to target position; Press a/A to decrease target position; Press d/D to increase target position")
         print()
+
+        des=["CTRL",
+             "SPEED[0]", "SPEED[1]",
+             "SPI[0]", "SPI[1]", "SPI[2]",
+             "ENC_DIVISION[0]", "ENC_DIVISION[1]",
+             "ACCELERATION[0]", "ACCELERATION[1]",
+             "POSITION_STOP[0]", "POSITION_STOP[1]",
+             "POSITION_SD[0]", "POSITION_SD[1]",
+             "POSITION[0]", "POSITION[1]"]
         for r in range(start_address, start_address+16):
-            print("Register "+str(r)+" = 0b", end="")
-            print("{0:b}".format(registers[r]).zfill(8))
+            print("Register " + str(r).rjust(3) + " = 0b", end="")
+            print("{0:b} ".format(registers[r]).zfill(9), end="")
+            print(des[r-start_address])
 
 async def main_async():
     global xMotor
