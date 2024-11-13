@@ -87,17 +87,16 @@ architecture RTL of TOP_LEVEL is
     --System memory
     constant ctrl_default       :   data_word :=  x"20";
     signal ctrl_data            :   data_word;
-        alias encoder_ref_x     :   std_logic is ctrl_data(0);
-        alias encoder_ref_y     :   std_logic is ctrl_data(1);
+        alias ref_enc_x         :   std_logic is ctrl_data(0);
+        alias ref_enc_y         :   std_logic is ctrl_data(1);
     --External data interface
     signal system_io_i          :   io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal system_io_o          :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     signal system_io_o_safe     :   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);
     --Sensor data
     signal sensor_data_vector   :   data_word;
-    --Incremental Encoder 
-    signal x_encoder_ref        :   std_logic;
-    signal y_encoder_ref        :   std_logic;
+    signal res_enc_x            :   std_logic;
+    signal res_enc_y            :   std_logic;
 
 
 begin
@@ -211,8 +210,6 @@ begin
     end process;
     -----------------------------------------------------------------------------------------------
     
-    
-    
 
     --****IO DATA MANAGEMENT****
     -----------------------------------------------------------------------------------------------
@@ -231,7 +228,6 @@ begin
     );
     -----------------------------------------------------------------------------------------------
 
-    
 
     --****SYSTEM PROTECTION****
     -----------------------------------------------------------------------------------------------
@@ -254,12 +250,13 @@ begin
     --Masking of actuation data to prevent damage to the physical system
     SYSTEM_PROTECTION : entity work.ACTUATOR_MASK
     port map(
-        p_sys_io_i  => system_io_i,
-        p_sys_io_o  => system_io_o,
-        p_safe_io_o => system_io_o_safe
+        p_sys_io_i      => system_io_i,
+        p_sys_io_o      => system_io_o,
+        p_safe_io_o     => system_io_o_safe,
+        p_limit_x_neg   => res_enc_x,
+        p_limit_y_neg   => res_enc_y
     );
     -----------------------------------------------------------------------------------------------
-
 
 
     --****SENSOR DATA MANAGEMENT****
@@ -292,55 +289,10 @@ begin
 	--Configure to input mode
 	system_io_o(8 downto 2) <= (others => gnd_io_o);
     -----------------------------------------------------------------------------------------------
-	
+	-- Set encoders to input mode: 
+    system_io_o(12 downto 9) <= (others => gnd_io_o);
 
-
-    --****INCREMENTAL ENCODERS****
-    -----------------------------------------------------------------------------------------------
-    X_ENCODER : entity work.ENCODER_SMODULE
-    generic map(
-        g_address       => X_ENCODER_ADDRESS,
-        g_index_rst     => X_ENCODER_RST_TYPE,
-        g_invert        => X_ENCODER_INVERT
-    )
-    port map(
-        clk             => clk,
-        rst             => x_encoder_ref,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o(4),
-        p_channel_a     => system_io_i(9),
-        p_channel_b     => system_io_i(10),
-        p_channel_i     => gnd_io_i
-    );
-    --User accessible rst to zero encoder acumulator
-    x_encoder_ref <= rst or encoder_ref_x;
-    --Ground io_o to ensure input configuration
-    system_io_o(10 downto 9) <= (others => gnd_io_o);
-
-
-    Y_ENCODER : entity work.ENCODER_SMODULE
-    generic map(
-        g_address       => Y_ENCODER_ADDRESS,
-        g_index_rst     => Y_ENCODER_RST_TYPE,
-        g_invert        => Y_ENCODER_INVERT
-    )
-    port map(
-        clk             => clk,
-        rst             => y_encoder_ref,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o(5),
-        p_channel_a     => system_io_i(11),
-        p_channel_b     => system_io_i(12),
-        p_channel_i     => gnd_io_i
-    );
-    --User accesible rst to zero encoder acumulator
-    y_encoder_ref <= rst or encoder_ref_y;
-    --Ground io_o to ensure input configuration
-    system_io_o(12 downto 11) <= (others => gnd_io_o);
-    -----------------------------------------------------------------------------------------------
-
-    
-
+ 
     --****MAIN ACTUATORS****
     -----------------------------------------------------------------------------------------------
     GPIO_MANAGEMENT : entity work.GPIO_SMODULE
@@ -366,7 +318,13 @@ begin
         g_tmc2660_config            => X_MOTOR_CONFIG_16BIT,
         g_acceleration              => X_MOTOR_ACCELERATION,
         g_accelerationDivideFactor  => X_MOTOR_ACCELERATION_DIVIDEFACTOR,
-        g_stepperDivideFactor       => X_MOTOR_SPEED_DIVIDEFACTOR
+        g_stepperDivideFactor       => X_MOTOR_SPEED_DIVIDEFACTOR,
+        g_acceleration_ratio        => X_MOTOR_ACCELERATION_RATIO,
+        g_enc_index_rst             => X_ENCODER_RST_TYPE,
+        g_enc_invert                => X_ENCODER_INVERT,
+        g_enc_internal_bit          => X_ENCODER_INTERNAL_BIT,
+        g_enc_ratio                 => X_ENCODER_RATIO
+        
     )
     port map(
         clk                 => clk,
@@ -381,7 +339,10 @@ begin
         p_tmc2660_ncs       => system_io_o(19),
         p_tmc2660_sclk      => system_io_o(18),
         p_tmc2660_mosi      => system_io_o(20),
-        p_tmc2660_miso      => system_io_i(21)
+        p_tmc2660_miso      => system_io_i(21),
+        p_enc_res           => res_enc_x,
+        p_enc_a             => system_io_i(9),
+        p_enc_b             => system_io_i(10)
     );
     
     --Configure io to input mode
@@ -397,7 +358,12 @@ begin
         g_tmc2660_config            => Y_MOTOR_CONFIG_16BIT,
         g_acceleration              => Y_MOTOR_ACCELERATION,
         g_accelerationDivideFactor  => Y_MOTOR_ACCELERATION_DIVIDEFACTOR,
-        g_stepperDivideFactor       => Y_MOTOR_SPEED_DIVIDEFACTOR
+        g_stepperDivideFactor       => Y_MOTOR_SPEED_DIVIDEFACTOR,
+        g_acceleration_ratio        => Y_MOTOR_ACCELERATION_RATIO,
+        g_enc_index_rst             => Y_ENCODER_RST_TYPE,
+        g_enc_invert                => Y_ENCODER_INVERT,
+        g_enc_internal_bit          => Y_ENCODER_INTERNAL_BIT,
+        g_enc_ratio                 => Y_ENCODER_RATIO
     )
     port map(
         clk                 => clk,
@@ -412,7 +378,10 @@ begin
         p_tmc2660_ncs       => system_io_o(28),
         p_tmc2660_sclk      => system_io_o(27),
         p_tmc2660_mosi      => system_io_o(29),
-        p_tmc2660_miso      => system_io_i(30)
+        p_tmc2660_miso      => system_io_i(30),
+        p_enc_res           => res_enc_y,
+        p_enc_a             => system_io_i(11),
+        p_enc_b             => system_io_i(12)
     );
 
     --Configure io to input mode
@@ -472,7 +441,6 @@ begin
         p_led_output    => system_io_o(37)
     );
 
-
     POWER_GREEN : entity work.LED_SMODULE
     generic map(
         g_address       => PG_LED_ADDRESS,
@@ -486,7 +454,6 @@ begin
         sys_bus_o       => sys_bus_o(11),
         p_led_output    => system_io_o(38)
     );
-
 
     ENVIRONMENT_RED : entity work.LED_SMODULE
     generic map(
@@ -502,7 +469,6 @@ begin
         p_led_output    => system_io_o(39)
     );
 
-
     ENVIRONMENT_WHITE : entity work.LED_SMODULE
     generic map(
         g_address       => EW_LED_ADDRESS,
@@ -516,7 +482,6 @@ begin
         sys_bus_o       => sys_bus_o(13),
         p_led_output    => system_io_o(40)
     );
-
 
     ENVIRONMENT_GREEN : entity work.LED_SMODULE
     generic map(

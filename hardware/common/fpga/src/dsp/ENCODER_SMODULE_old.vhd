@@ -24,11 +24,6 @@
 -- Additional Comments: Renaming of module to follow V4.00.00 conventions.
 --                      (INC_ENCODER.vhd -> ENCODER_SMODULE.vhd)
 --						Change from synchronous to asynchronous reset.
---
--- Revision V5.00.00 - Module rework
--- Additional Comments: Make Encoder part of the TMC2660_SModule. Registers 
---                      will be written only there. This is used for target 
---                      encoder position control 
 -------------------------------------------------------------------------------
 --! Standard library
 library IEEE;
@@ -39,14 +34,19 @@ library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
+
+
+
 --! @brief Incremental encoder dsp module 
 --! @details
 --! An incremental encoder processing unit for 3 or 2 channel sensor. The module
 --! reacts to the data of the a channel providing an impulse counts for 
 --! "p_channel_a" edges using the "p_channel_b" to determine the movement 
 --! direction. The counter value is stored in a unsigned 16 bit data word and 
---! then stored in the internal registers. The data will be accessed from 
---! TMC2660_SMODULE and written on the bus from there.
+--! then stored in the internal registers. The data can be accessed through 
+--! the GOLDi BUS interface. The parameter "g_address" is the base address of 
+--! the module i.e. the address of the data word or, in the case of a 
+--! SYSTEM_DATA_WIDTH value smaller than 16, the lower bits of the unsigned word.
 --!
 --! The parameter "g_invert" selects the direction of the positive axis of
 --! rotation. By setting the parameter to true the moduel increases the counter
@@ -74,38 +74,58 @@ use work.GOLDI_IO_STANDARD.all;
 --! in an idle state that holds until the index signal is asserted to restart 
 --! the normal operation of the module. This provides a fix reference point.
 --!
-entity ENCODER_SMODULE is
+--!
+--! ### Registers: 
+--!
+--! **SYSTEM_DATA_WIDTH = 8**
+--!
+--! | Address	| Bit 7	| Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+--! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+--!	| +0 		| VALUE [7:0]                                            ||||||||
+--! | +1		| VALUE [15:8]                                           ||||||||
+--!
+--!
+--! ***Latency:3***
+entity ENCODER_SMODULE_OLD is
 	generic(
-		g_index_rst	        :	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
-        g_invert            :   boolean := false;        --! Select positive direction [false -> CCW | true -> CC]
-        g_enc_internal_bit  :   natural := 16       
+		g_address	:	natural := 1;			--! Module's base address
+		g_index_rst	:	boolean := false;		--! Reset mode [true -> 3 channels, false -> 2 channels]
+        g_invert    :   boolean := false        --! Select positive direction [false -> CCW | true -> CC]
     );
 	port(
 		--General
 		clk			: in	std_logic;			--! System clock
 		rst			: in	std_logic;			--! Asynchronous reset
+		--BUS slave interface
+		sys_bus_i	: in	sbus_in;			--! BUS input signals [stb,we,adr,dat,tag]
+		sys_bus_o	: out	sbus_out;			--! BUS output signals [dat,tag,mux]
 		--3 Channel encoder signals
-		p_channel_a	: in	io_i;				                --! Channel_a input
-		p_channel_b	: in	io_i;				                --! Channel_b input
-		p_channel_i	: in	io_i;				                --! Channel_i input
-        p_counter   : out   STD_LOGIC_VECTOR(15 downto  0)      --! counter value output
+		p_channel_a	: in	io_i;				--! Channel_a input
+		p_channel_b	: in	io_i;				--! Channel_b input
+		p_channel_i	: in	io_i				--! Channel_i input
 	);
-end entity ENCODER_SMODULE;
+end entity ENCODER_SMODULE_OLD;
+
+
 
 
 --! General architecture
-architecture RTL of ENCODER_SMODULE is 
+architecture RTL of ENCODER_SMODULE_OLD is 
 
     --****INTERNAL SIGNALS****
+    --Memory
+    constant memory_length  :   natural := getMemoryLength(16);
+    constant c_reg_default  :   data_word_vector(memory_length-1 downto 0) := (others => (others => '0'));
+    signal reg_data_in      :   data_word_vector(memory_length-1 downto 0);
+    signal reg_data_buff    :   std_logic_vector(15 downto 0);
     --Arithmetic
-    signal enc_counter      :   unsigned(g_enc_internal_bit-1 downto 0);
+    signal enc_counter      :   unsigned(15 downto 0);
     signal enc_signal_a     :   std_logic_vector(1 downto 0);
     signal enc_signal_b     :   std_logic;
     signal enc_block        :   std_logic;
 
-begin
 
-    p_counter <= std_logic_vector(enc_counter(g_enc_internal_bit-1 downto g_enc_internal_bit-16));
+begin
 
     --****DECODER****
     -----------------------------------------------------------------------------------------------
@@ -156,8 +176,10 @@ begin
             end if;
         end if;
     end process;
-
     -----------------------------------------------------------------------------------------------
+
+
+
     --***RESET CONTROL****
     -----------------------------------------------------------------------------------------------
     RST_MODE_SELECTION : process(clk,rst)
@@ -175,5 +197,32 @@ begin
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
+
+
+
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    --Typecast data
+    reg_data_buff <= std_logic_vector(enc_counter);
+    reg_data_in   <= setMemory(reg_data_buff);
+    
+    MEMROY : entity work.REGISTER_TABLE
+    generic map(
+        g_address       => g_address,
+        g_reg_number    => memory_length,
+        g_def_values    => c_reg_default
+    )
+    port map(
+        clk             => clk,
+        rst             => rst,
+        sys_bus_i       => sys_bus_i,
+        sys_bus_o       => sys_bus_o,
+        p_data_in       => reg_data_in,
+        p_data_out      => open,
+        p_read_stb      => open,
+        p_write_stb     => open
+    );
+    -----------------------------------------------------------------------------------------------
+
 
 end RTL;

@@ -44,12 +44,6 @@
         <Source name="src/common/actuation/TMC2660/TMC2660_SPI.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/TMC2660/StepperControl_v1_00.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/TMC2660_SMODULE_old.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/actuation/TMC2660/TMC2660_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -59,7 +53,7 @@
         <Source name="src/common/actuation/EMAGNET_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/MOTORCONTROL_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/MOTORCONTROL_SMODULE_old.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
@@ -119,9 +113,6 @@
         <Source name="src/common/dsp/ENCODER_DRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/dsp/FREQUENCY_ANALYSER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -141,6 +132,12 @@
             <Options/>
         </Source>
         <Source name="src/common/dsp/CLOCK_DIVIDER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/ENCODER_SMODULE_old.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/io_management/HIGH_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">

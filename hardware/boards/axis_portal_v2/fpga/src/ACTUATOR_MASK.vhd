@@ -44,10 +44,12 @@ use work.GOLDI_COMM_STANDARD.all;
 entity ACTUATOR_MASK is
     port(
         --System raw data
-        p_sys_io_i  : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
-        p_sys_io_o  : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System output data (drivers)
+        p_sys_io_i      : in    io_i_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System synchronous input data (sensors)
+        p_sys_io_o      : in    io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! System output data (drivers)
         --Masked data
-        p_safe_io_o : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0)     --! Safe output data (drivers)
+        p_safe_io_o     : out   io_o_vector(PHYSICAL_PIN_NUMBER-1 downto 0);    --! Safe output data (drivers)
+        p_limit_x_neg   : out   std_logic;
+        p_limit_y_neg   : out   std_logic
     );
 end entity ACTUATOR_MASK;
 
@@ -79,6 +81,8 @@ architecture RTL of ACTUATOR_MASK is
     
 
 begin
+    p_limit_x_neg <= limit_x_neg;
+    p_limit_y_neg <= limit_y_neg;
 
     --****ACTUATOR MASK GENERATION****
     -----------------------------------------------------------------------------------------------

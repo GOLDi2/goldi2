@@ -129,28 +129,21 @@ begin
         wait for init_hold;
 
         --Set speed low
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(12,BUS_ADDRESS_WIDTH));
-        mosi_data   <= std_logic_vector(to_unsigned(0,SYSTEM_DATA_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(8,BUS_ADDRESS_WIDTH));
+        mosi_data   <= std_logic_vector(to_unsigned(4,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Set speed high
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(13,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(9,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Set motor to run
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(11,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(7,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
-        wait for 100 ms;
-
-        --Set motor to stop
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(11,BUS_ADDRESS_WIDTH));
-        mosi_data   <= std_logic_vector(to_unsigned(0,SYSTEM_DATA_WIDTH));
-        p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
-
-        wait for 100 ms;
+        wait for 20 ms;
 
       --**End simulation**
         wait for 50 ns;

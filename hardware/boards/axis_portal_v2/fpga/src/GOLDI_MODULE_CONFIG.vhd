@@ -55,17 +55,15 @@ package GOLDI_MODULE_CONFIG is
 	constant SENSOR_REG_ADDRESS		:	natural := 2;		--Table length: 1
 	constant ERROR_LIST_ADDRESS		:	natural := 3;		--Table length: 2
 	constant GPIO_DRIVER_ADDRESS	:	natural := 5;		--Table length: 2
-	constant X_ENCODER_ADDRESS		:	natural := 7;		--Table length: 2
-	constant Y_ENCODER_ADDRESS		:	natural := 9;		--Table length: 2
-	constant X_MOTOR_ADDRESS		:	natural := 11;		--Table length: 6
-	constant Y_MOTOR_ADDRESS		:	natural := 17;		--Table length: 6
-	constant Z_MOTOR_ADDRESS		:	natural := 23;		--Table length: 2
-	constant EMAG_ADDRESS			:	natural := 25;		--Table length: 1
-	constant PR_LED_ADDRESS			:	natural := 26;		--Table length: 1
-	constant PG_LED_ADDRESS			:	natural := 27;		--Table length: 1
-	constant ER_LED_ADDRESS			:	natural := 28;		--Table length: 1
-	constant EW_LED_ADDRESS			:	natural := 29;		--Table length: 1
-	constant EG_LED_ADDRESS			:	natural := 30; 		--Table length: 1
+	constant X_MOTOR_ADDRESS		:	natural := 7;		--Table length: 16
+	constant Y_MOTOR_ADDRESS		:	natural := 23;		--Table length: 16
+	constant Z_MOTOR_ADDRESS		:	natural := 39;		--Table length: 2
+	constant EMAG_ADDRESS			:	natural := 40;		--Table length: 1
+	constant PR_LED_ADDRESS			:	natural := 41;		--Table length: 1
+	constant PG_LED_ADDRESS			:	natural := 42;		--Table length: 1
+	constant ER_LED_ADDRESS			:	natural := 43;		--Table length: 1
+	constant EW_LED_ADDRESS			:	natural := 44;		--Table length: 1
+	constant EG_LED_ADDRESS			:	natural := 45; 		--Table length: 1
 	-----------------------------------------------------------------------------------------------
 
     
@@ -85,6 +83,13 @@ package GOLDI_MODULE_CONFIG is
     --Select positive direction [false -> CCW | true -> CC]
     constant X_ENCODER_INVERT   :   boolean := false;
     constant Y_ENCODER_INVERT   :   boolean := false;
+    --ENCONDER 
+    constant X_ENCODER_INTERNAL_BIT :   natural := 18;
+    constant Y_ENCODER_INTERNAL_BIT :   natural := 16;
+    -- ENCODER ratio: Encoder steps / Motor Steps as float16
+    constant X_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3D00#, 16)); -- ratio: (1000/4)/200 = 1.25
+    --constant X_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(129, 16)); --test
+    constant Y_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3E00#, 16)); -- ratio: 600/400 = 1,5
     -----------------------------------------------------------------------------------------------
 
 
@@ -176,6 +181,10 @@ package GOLDI_MODULE_CONFIG is
     constant X_MOTOR_ACCELERATION               :   natural := 1;
     constant X_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
     constant X_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
+
+    -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
+    constant X_MOTOR_ACCELERATION_RATIO         :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
+    
     -----------------------------------------------------------------------------------------------
 
 
@@ -267,6 +276,9 @@ package GOLDI_MODULE_CONFIG is
     constant Y_MOTOR_ACCELERATION               :   natural := 1;
     constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
     constant Y_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
+
+    -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
+    constant Y_MOTOR_ACCELERATION_RATIO         :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
     -----------------------------------------------------------------------------------------------
 
 
