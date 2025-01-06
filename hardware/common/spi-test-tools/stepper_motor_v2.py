@@ -6,6 +6,7 @@ import tty
 #from fake_registers import SpiRegisters
 from spi_driver import SpiRegisters
 import sys
+from math import sqrt
 
 from pyee.asyncio import AsyncIOEventEmitter
 
@@ -21,7 +22,10 @@ class StepperMotor(AsyncIOEventEmitter):
         self._target_position = 0
         self._control_mode = "speed"
         self._control_speed = 0
+        self.max_speed = 0
+        self.slow_down_distance = 0
 
+        self._registers.add_register(self._address, self._calculatePostitionRegisters)
         for r in range(self._address+6, self._address+16):
             self._registers.add_register(r, self._calculatePostitionRegisters)
 
@@ -83,7 +87,7 @@ class StepperMotor(AsyncIOEventEmitter):
         self._target_position = value
         self._control_speed = speed
 
-        self._calculatePostitionRegisters()
+        self._calculatePostitionRegisters(self._registers, True)
 
     def getPosition(self):
         return self._registers[self._address+14] + (self._registers[self._address + 15] << 8)
@@ -91,8 +95,11 @@ class StepperMotor(AsyncIOEventEmitter):
     def getMode(self):
         return self._control_mode
 
-    def _calculatePostitionRegisters(self):
+    def _calculatePostitionRegisters(self, registers: SpiRegisters, force=False):
         if self._control_mode == "speed":
+            return
+        
+        if ((self._registers[self._address] >> 4) & 0b1) == 0 and not force:
             return
         
         position = self.getPosition()
@@ -105,14 +112,14 @@ class StepperMotor(AsyncIOEventEmitter):
             # pos_ctl --------------------------,    ||
             # stop ----------------------------,|    ||
             #                                  ||    ||
-            self._registers[self._address] = 0b01000001
+            self._registers[self._address] = 0b01000010
         elif distance < 0:
             # dir0 -----------------------------------,
             # dir1 ----------------------------------,|
             # pos_ctl --------------------------,    ||
             # stop ----------------------------,|    ||
             #                                  ||    ||
-            self._registers[self._address] = 0b010000010
+            self._registers[self._address] = 0b01000001
         else:
             # dir0 -----------------------------------,
             # dir1 ----------------------------------,|
@@ -123,11 +130,13 @@ class StepperMotor(AsyncIOEventEmitter):
         self._set_speed_register(self._control_speed)
 
         encoder_division = self._get_encoder_division()
-        acceleration = self._get_acceleration()
+        acceleration = 1024/2048
 
         try:
-            max_speed_squared = min((self._control_speed * self._max_speed * 0xFFFF)**2, acceleration * distance / encoder_division )
+            max_speed_squared = min((self._control_speed * self._max_speed * 0xFFFF)**2, acceleration * abs(distance) / encoder_division )
             slow_down_distance = max_speed_squared / (2 * acceleration) * encoder_division
+            self.slow_down_distance = slow_down_distance
+            self.max_speed = sqrt(max_speed_squared)
         except ZeroDivisionError:
             slow_down_distance = 0
         if distance < 0:
@@ -232,6 +241,8 @@ async def output_coroutine():
         print("Mode:", mode,"      ")
         print("Position:", xMotor.getPosition(),"      ")
         print("Speed:", int(speed*100),"%      ")
+        print("Max Speed:", int(xMotor.max_speed),"       ")
+        print("Slow Down Distance:", int(xMotor.slow_down_distance),"       ")
         if mode == "speed":
             print("Direction:", dir,"      ")
             print()
