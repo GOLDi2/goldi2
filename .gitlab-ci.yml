@@ -9,7 +9,7 @@ default:
   before_script:
     - sudo chown -R $(whoami) .
     - mkdir -p ~/.ssh/ && cp "$CI_SSH_KEY" ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-    - mkdir -p ./helper/goldi-development-container/licenses && cp "$LATTICE_LICENSE" ./helper/goldi-development-container/licenses/lattice.dat
+    - mkdir -p ./helper/goldi-development-container/licenses && sudo cp "$LATTICE_LICENSE" /usr/local/diamond/3.12/license/license.dat
     - cp "$LOCAL_YML" ./hardware/os/local.yml
     - cp "$DEV_CRT" ./hardware/os/signing.crt.pem
     - cp "$DEV_KEY" ./hardware/os/signing.key.pem
@@ -23,7 +23,7 @@ default:
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG!=null'
       variables:
         PIPELINE_NAME: 'Branch pipeline: $CI_COMMIT_BRANCH'
-        BRANCH: CI_COMMIT_TAG
+        BRANCH: $CI_COMMIT_TAG
         RELEASE: '--release'
 
 build:
