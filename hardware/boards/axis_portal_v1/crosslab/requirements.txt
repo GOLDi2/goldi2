@@ -1,8 +1,10 @@
 -e ../../../../crosslab/clients/api/python
 -e ../../../../crosslab/clients/soa/python
 -e ../../../../crosslab/clients/soa_services/electricalConnection/python
+-e ../../../../crosslab/clients/soa_services/webcam/python
 -e ../../../common/spi-driver
 -e ./
+git+https://github.com/doceme/py-spidev
 pytest
 pytest-asyncio
 pytest-aiohttp

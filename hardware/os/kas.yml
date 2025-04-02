@@ -8,6 +8,8 @@ local_conf_header:
     BB_HASHSERVE = ""
 
     MACHINE_VERSION = ""
+
+    PACKAGECONFIG:append:pn-ffmpeg = " x264 gpl"
 machine: goldi1
 distro: goldi-distro
 target:
