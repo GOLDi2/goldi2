@@ -45,10 +45,13 @@ export class App extends LitElement {
     this.message.register(deviceHandler);
 
     deviceHandler.connect();
+    deviceHandler.onStateChange = () => {
+      this.requestUpdate();
+    };
   }
 
   render() {
-    return html`
+    return deviceHandler.dialogWrap(html`
       <div
         class="h-full flex flex-col"
         @webcam="${() => {
@@ -73,6 +76,6 @@ export class App extends LitElement {
             Loading...
           </div>`
         : html``}
-    `;
+    `);
   }
 }
