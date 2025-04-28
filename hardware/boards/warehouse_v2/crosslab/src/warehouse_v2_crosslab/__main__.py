@@ -69,7 +69,7 @@ def userError(message: str):
 
 
 def newActuatorInterface(interface):
-    global hal
+    global hal  # noqa: F824
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
@@ -138,7 +138,7 @@ def virtualZSensor(value: int, position: int):
 
 
 def newSensorInterface(interface):
-    global hal
+    global hal  # noqa: F824
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
