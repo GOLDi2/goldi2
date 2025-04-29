@@ -1,78 +1,42 @@
+{% extends "simple.html" %}
+{% set title = "Devices" %}
 
-{% extends "admin_layout.html" %}
-{% import "components/topbar.html" as topbar %}
-{% import "components/elements.html" as elements %}
+
 {% block content %}
-    {% call topbar.container() %}
-    {% call topbar.topbar() %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=edge instantiable") %}Edge Device{% endcall %}{% endcall %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create?type=group") %}Group{% endcall %}{% endcall %}
-    {% call topbar.element() %}{% call elements.button(language, href="/admin/devices/create") %}Device{% endcall %}{% endcall %}
-    {% endcall %}
-    {% call topbar.content() %}
-    <div class="flex">
-        <div class="text-center w-32">
-            type
-        </div>
-        <div class="text-center w-6"></div>
-        <div class="text-ellipsis w-52 ml-4">
-            Name
-        </div>
-        <div class="text-ellipsis w-72">
-            Description
-        </div>
-        <div class="text-ellipsis w-52">
-            Username
-        </div>
-        <div class="w-52"></div>
-    </div>
-    
-    <hr class="w-30 h-px my-2 bg-black border-0">
-
-    {% for device in devices %}
-        <div class="flex flex-col hover:bg-primary-100 justify-center">
-            <div class="flex flex-row">
-                <div class="text-sm text-center w-32">{{ device.type }}</div>
-                {% if deviceDetailsMap[device.url].connected %}
-                    <span class="material-symbols-rounded align-middle">link</span>
-                {% else %}
-                    <span class="material-symbols-rounded align-middle">link_off</span>
-                {% endif %}
-                <div class="text-ellipsis w-52 ml-4">
-                    {{ device.name }}
-                </div>
-                <details class="text-ellipsis w-72">
-                    <summary>Description</summary>
-                    <p>{{ device.description }}</p>
-                </details>
-                <div class="text-ellipsis w-52">
-                    {{ userMap[device.owner].username }}
-                </div>
-                <div class="w-52">
-                    <a href="devices/details?url={{ device.url }}" class="material-symbols-rounded">edit</a>
-                    <a href="devices/delete?url={{ device.url }}" class="material-symbols-rounded">delete</a>
-                </div>
-            </div>
-            {% if deviceDetailsMap[device.url].devices %}
-                {% for device in deviceDetailsMap[device.url].devices %}
-                    <div class="flex flex-row">
-                        <div class="text-sm text-center w-32 ml-6">{{ device.type }}</div>
-                        <div class="text-ellipsis w-52 ml-4">
-                            {{ device.name }}
-                        </div>
-                        <details class="text-ellipsis w-96">
-                            <summary>Description</summary>
-                            <p>{{ device.description }}</p>
-                        </details>
-                        <div class="text-ellipsis w-52">
-                            {{ userMap[device.owner].username }}
-                        </div>
-                        <div class="w-52"></div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    {% endfor %}
-    {% endcall %}
-    {% endcall %}
+<table>
+    <thead>
+        <tr>
+            <th>URI</th>
+            <th>Type</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        <tr>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for uri.."></th>
+            <th>
+                <select onchange="filter_table(this)">
+                    <option value="">All</option>
+                    <option value="device">Device</option>
+                    <option value="group">Group</option>
+                    <option value="edge instantiable">Edge</option>
+                    <option value="cloud instantiable">Cloud</option>
+                </select>
+            </th>
+            <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for names.."></th>
+            <th><a href="devices/create" class="material-symbols-rounded p-2">add</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for device in devices %}
+        <tr>
+            <td class="max-w-0 copy-on-click">{{ device.url }}</td>
+            <td>{{ device.type }}</td>
+            <td>{{ device.name }}</td>
+            <td class=" text-center">
+                <a href="devices/details?url={{ device.url }}" class="material-symbols-rounded p-2">edit</a>
+                <a href="devices/delete?url={{ device.url }}" class="material-symbols-rounded p-2 bg-red-500" onclick="return confirm('Are you sure you want to delete the device?')">delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+</table>
 {% endblock %}

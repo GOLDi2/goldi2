@@ -33,10 +33,20 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
-    {% include "includes/header.html" %}
-    {% block main %}<div class="flex-grow"></div>{% endblock %}
-
-    {% include "includes/footer.html" %}
+    <header class="bg-primary-900 w-full p-2 font-body flex flex-row fixed z-50">
+        <img class="h-8 w-8 mr-3 select-none pointer-events-none" src="/img/GOLDi_Logo.png" alt="Logo"/>
+        <span class="text-2xl text-secondary w-max">Experiment Configuration</span>
+    </header>
+    <div class="mt-8"></div>
+    <div class="p-10 font-body">
+        <div class="simple max-w-6xl w-full mx-auto space-y-10">
+            {% block main %}{% endblock %}
+        </div>
+    </div>
+    <script>
+        document.getElementsByName("lti_session").forEach(e=>e.value=sessionStorage.getItem("lti_session"));
+        document.getElementsByName("token").forEach(e=>e.value=sessionStorage.getItem("token"));
+    </script>
 </body>
 
 </html>

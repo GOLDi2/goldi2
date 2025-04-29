@@ -1,0 +1,50 @@
+{% extends "embedded_layout.html" %}
+{% block main %}
+<form action="/{{ language }}/lti/settings" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <button type="submit">Back</button>
+</form>
+
+<!-- role_mapping: {[role: string]: string} -->
+<form action="/{{ language }}/lti/experiment_select" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <input type="hidden" name="action" value="start" />
+Impersonate as: <select name="impersonate">
+    <option value=""></option>
+    {% for student in students %}
+    <option value="{{student.uri}}">{{student.name}}</option>
+    {% endfor %}
+</select>
+<table>
+    <thead>
+        <tr>
+            {% for role in roles %}
+                <th>{{ role.role }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for role in roles %}
+                <td>
+                    <select name="role_{{role.role}}">
+                        <option value="GROUP">Any</option>
+                        {% for device in role.devices %}
+                        <option value="{{device}}" {% if role_mapping[role.role]==device %}selected{% endif %}>{{devices[device].name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+<button type="submit">Start</button>
+</form>
+
+<script>
+    document.getElementsByName("lti_session").forEach(e=>e.value=sessionStorage.getItem("lti_session"));
+    document.getElementsByName("token").forEach(e=>e.value=sessionStorage.getItem("token"));
+</script>
+{% endblock %}

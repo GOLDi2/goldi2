@@ -1,0 +1,42 @@
+{% import "components/login_wall.html" as login_wall %}
+    
+{% extends "simple.html" %}
+{% set title = "LTI 1.3 Tool Integrations" %}
+
+{% block content %}
+    {% call login_wall.wrapper(isLoggedIn) %}
+        <table>
+            <thead>
+                <tr>
+                    <th>URI</th>
+                    <th>Issuer</th>
+                    <th>Client Id</th>
+                    <th>Deployment Id</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for uri.."></th>
+                    <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for issuer.."></th>
+                    <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for client id.."></th>
+                    <th><input type="text" onkeyup="filter_table(this)" placeholder="Search for deployment id.."></th>
+                    <th><form class="space-y-2" method="POST" action="registration">
+                        <button type="submit" name="submit" class="material-symbols-rounded p-2">add</button>
+                    </form>
+                </tr>
+            </thead>
+            <tbody>
+                {% for platform in platforms %}
+                <tr>
+                    <td class="max-w-0 copy-on-click">{{ platform.uri }}</td>
+                    <td>{{ platform.issuer }}</td>
+                    <td>{{ platform.client_id }}</td>
+                    <td>{{ platform.deployment_id }}</td>
+                    <td class=" text-center">
+                        <a href="devices/details?url={{ device.url }}" class="material-symbols-rounded p-2">edit</a>
+                        <a href="devices/delete?url={{ device.url }}" class="material-symbols-rounded p-2 bg-red-500" onclick="return confirm('Are you sure you want to delete the device?')">delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+    {% endcall %}
+{% endblock %}

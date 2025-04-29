@@ -1,0 +1,30 @@
+{% extends "embedded_layout.html" %}
+{% block main %}
+{% if req.lti.session.experiment_uri %}
+<form action="/{{ language }}/lti/experiment" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <button class="secondary-button m-2 w-full" type="submit">Start Experiment</button>
+</form>
+
+<form action="/{{ language }}/lti/experiment_select" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <button class="primary-button m-2 w-full" type="submit">Configure and Start Experiment</button>
+</form>
+{% endif %}
+
+<form action="/{{ language }}/lti/settings_experiment" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <button class="primary-button m-2 w-full" type="submit">Select Experiment Template</button>
+</form>
+
+{% if req.lti.session.experiment_uri %}
+<form action="/{{ language }}/lti/settings_device_map" method="post">
+    <input type="hidden" name="lti_session" />
+    <input type="hidden" name="token" />
+    <button class="primary-button m-2 w-full" type="submit">Manage Device-User Mapping</button>
+</form>
+{% endif %}
+{% endblock %}

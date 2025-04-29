@@ -64,11 +64,11 @@ input[type=text], input[type=password] {
 }
 
 .primary-button {
-  @apply bg-primary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-primary-700 duration-300;
+  @apply bg-primary rounded-3xl px-8 py-1 text-primary-50 text-xl hover:bg-primary-700 duration-300;
 }
 
 .secondary-button {
-  @apply bg-secondary rounded-3xl px-8 py-1 w-fit text-primary-50 text-xl hover:bg-secondary-800 duration-300;
+  @apply bg-secondary rounded-3xl px-8 py-1 text-primary-50 text-xl hover:bg-secondary-800 duration-300;
 }
 
 /*------------Header------------*/
@@ -222,4 +222,39 @@ h5 {
   padding: 10px;
   display: none;
   overflow: hidden;
+}
+
+/* Table */
+table {
+  @apply mx-auto overflow-hidden rounded drop-shadow;
+}
+table > thead {
+  @apply text-xs uppercase bg-primary-200 shadow-inset;
+}
+table > thead > tr > th {
+  @apply px-6 py-2;
+}
+table > tbody > tr {
+  @apply odd:bg-primary-50 even:bg-primary-100;
+}
+table > tbody > tr > td{
+  @apply px-6 text-ellipsis overflow-hidden whitespace-nowrap;
+}
+
+/* Copy on Click */
+.copy-on-click {
+  @apply cursor-pointer relative select-none transition-colors duration-200;
+}
+
+.copy-on-click:active {
+  @apply duration-0 bg-secondary-200;
+}
+
+.copy-on-click:after{
+  @apply text-xs  absolute top-0 right-0 p-2 rounded-bl bg-secondary-200 hidden;
+  content: "Copy";
+}
+
+.copy-on-click:hover:after{
+  @apply block;
 }
