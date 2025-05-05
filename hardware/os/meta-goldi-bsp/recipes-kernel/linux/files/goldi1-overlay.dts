@@ -105,4 +105,13 @@
 			status = "okay";
 		};
 	};
+
+	/* Disable onBoard Wifi */
+
+	fragment@8 {
+		target = <&mmcnr>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
 };

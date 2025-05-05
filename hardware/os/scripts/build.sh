@@ -56,10 +56,10 @@ if [ "$WORLD" = true ] ; then
 else
   mv "kas.yml" "kas.yml.bak"
   cat "kas.yml.bak" | sed "s/MACHINE_VERSION = "'.*'"/MACHINE_VERSION = \"$VERSION\"/" > "kas.yml"
-  kas shell $VARIANT.yml -c "bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-image goldi-update-bundle"
+  kas shell $VARIANT.yml -c "bitbake -k -c build goldi-dev-image goldi-dev-update-bundle goldi-dev-update-bundle-legacy goldi-image goldi-update-bundle"
   mv "kas.yml.bak" "kas.yml"
 fi
 
 mkdir -p ./dist
 shopt -s extglob
-cp $(ls ./build/tmp/deploy/images/$MACHINE/$VARIANT-?(dev-)$MACHINE@(.raucb|.wic*) | sort) ./dist/
+cp $(ls ./build/tmp/deploy/images/$MACHINE/$VARIANT-?(dev-)?(legacy-)$MACHINE@(.raucb|.wic*) | sort) ./dist/
