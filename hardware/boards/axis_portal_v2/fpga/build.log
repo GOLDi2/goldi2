@@ -1,0 +1,1636 @@
+
+synthesis -f "Project_impl1_lattice.synproj"
+synthesis:  version Diamond (64-bit) 3.12.0.240.2
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+Fri Sep 27 09:38:29 2024
+
+
+Command Line:  synthesis -f Project_impl1_lattice.synproj 
+
+INFO - synthesis: Lattice Synthesis Engine Launched.
+Synthesis options:
+The -a option is MachXO2.
+The -s option is 4.
+The -t option is TQFP144.
+The -d option is LCMXO2-7000HC.
+Using package TQFP144.
+Using performance grade 4.
+                                                          
+
+##########################################################
+
+### Lattice Family : MachXO2
+
+### Device  : LCMXO2-7000HC
+
+### Package : TQFP144
+
+### Speed   : 4
+
+##########################################################
+
+                                                          
+
+INFO - synthesis: User-Selected Strategy Settings
+Optimization goal = Balanced
+Top-level module name = top_level.
+Target frequency = 54.000000 MHz.
+Maximum fanout = 1000.
+Timing path count = 3
+BRAM utilization = 100.000000 %
+DSP usage = true
+DSP utilization = 100.000000 %
+fsm_encoding_style = auto
+resolve_mixed_drivers = 0
+fix_gated_clocks = 1
+
+Mux style = Auto
+Use Carry Chain = true
+carry_chain_length = 0
+Loop Limit = 1950.
+Use IO Insertion = TRUE
+Use IO Reg = AUTO
+
+Resource Sharing = TRUE
+Propagate Constants = TRUE
+Remove Duplicate Registers = TRUE
+force_gsr = auto
+ROM style = auto
+RAM style = auto
+The -comp option is FALSE.
+The -syn option is FALSE.
+-p /usr/local/diamond/3.12/ispfpga/xo2c00/data (searchpath added)
+-p /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/build (searchpath added)
+-p /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga (searchpath added)
+VHDL library = work
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ACTUATOR_MASK.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ERROR_DETECTOR.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/GOLDI_MODULE_CONFIG.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/GPIO_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/HBRIDGE_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/LED_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/PWM_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SD.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SPI.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl_v1_00.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE_old.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/EMAGNET_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/MOTORCONTROL_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/BUS_ADAPTOR.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/SP_CONVERTER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_DIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_R_CONTROLLER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_T_CONTROLLER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_R_DRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_T_DRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_D_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_DDRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_SDRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_DECODER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_ENCODER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_S_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_DDRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_SDRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/EDGE_DETECTOR.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_DRIVER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/FREQUENCY_ANALYSER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/MAVG_2N_FILTER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/PWM_ANALYSER_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/US_SENSOR_SMODULE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/CLOCK_DIVIDER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/HIGH_DEBOUNCE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/IO_CROSSBAR.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/LOW_DEBOUNCE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER_ARRAY.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER_ARRAY.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_COMM_STANDARD.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_DATA_TYPES.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_IO_STANDARD.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_TABLE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_TABLE.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_UNIT.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_UNIT.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/ROM16XN_FIFO.vhd
+VHDL design file = /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/STREAM_FIFO.vhd
+NGD file = Project_impl1.ngd
+-sdc option: SDC file input not used.
+-lpf option: Output file option is ON.
+-vh2008
+
+Hardtimer checking is enabled (default). The -dt option is not used.
+The -r option is OFF. [ Remove LOC Properties is OFF. ]
+Technology check ok...
+
+Analyzing Verilog file /usr/local/diamond/3.12/ispfpga/userware/unix/SYNTHESIS_HEADERS/machxo2.v. VERI-1482
+Compile design.
+Compile Design Begin
+INFO - synthesis: The default VHDL library search path is now "/workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/build". VHDL-1504
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_COMM_STANDARD.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_COMM_STANDARD.vhd(39): analyzing package goldi_comm_standard. VHDL-1014
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_COMM_STANDARD.vhd(255): analyzing package body goldi_comm_standard. VHDL-1013
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_IO_STANDARD.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_IO_STANDARD.vhd(32): analyzing package goldi_io_standard. VHDL-1014
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_DATA_TYPES.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_DATA_TYPES.vhd(32): analyzing package goldi_data_types. VHDL-1014
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/GOLDI_MODULE_CONFIG.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/GOLDI_MODULE_CONFIG.vhd(38): analyzing package goldi_module_config. VHDL-1014
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ACTUATOR_MASK.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ACTUATOR_MASK.vhd(44): analyzing entity actuator_mask. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ACTUATOR_MASK.vhd(58): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/HIGH_DEBOUNCE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/HIGH_DEBOUNCE.vhd(42): analyzing entity high_debounce. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/HIGH_DEBOUNCE.vhd(61): analyzing architecture bh. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_UNIT.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_UNIT.vhd(63): analyzing entity register_unit. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_UNIT.vhd(87): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_TABLE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_TABLE.vhd(82): analyzing entity register_table. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_TABLE.vhd(107): analyzing architecture bh. VHDL-1010
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_TABLE.vhd(196): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ERROR_DETECTOR.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ERROR_DETECTOR.vhd(44): analyzing entity error_detector. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/ERROR_DETECTOR.vhd(65): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER.vhd(38): analyzing entity synchronizer. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER.vhd(54): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/SP_CONVERTER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/SP_CONVERTER.vhd(47): analyzing entity sp_converter. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/SP_CONVERTER.vhd(71): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/BUS_ADAPTOR.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/BUS_ADAPTOR.vhd(75): analyzing entity bus_adaptor. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/BUS_ADAPTOR.vhd(96): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd(77): analyzing entity goldi_spi_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/goldi_spi/GOLDI_SPI_SMODULE.vhd(97): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER.vhd(42): analyzing entity tris_buffer. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER.vhd(60): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER_ARRAY.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER_ARRAY.vhd(42): analyzing entity tris_buffer_array. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/TRIS_BUFFER_ARRAY.vhd(63): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_SMODULE.vhd(89): analyzing entity encoder_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_SMODULE.vhd(113): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/GPIO_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/GPIO_SMODULE.vhd(60): analyzing entity gpio_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/GPIO_SMODULE.vhd(82): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/CLOCK_DIVIDER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/CLOCK_DIVIDER.vhd(5): analyzing entity clock_divider. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/CLOCK_DIVIDER.vhd(16): analyzing architecture bhv. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/ROM16XN_FIFO.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/ROM16XN_FIFO.vhd(56): analyzing entity rom16xn_fifo. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/ROM16XN_FIFO.vhd(78): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/STREAM_FIFO.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/STREAM_FIFO.vhd(51): analyzing entity stream_fifo. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/STREAM_FIFO.vhd(74): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_T_DRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_T_DRIVER.vhd(64): analyzing entity spi_t_driver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_T_DRIVER.vhd(95): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl.vhd(29): analyzing entity steppercontrol. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl.vhd(43): analyzing architecture behavioral. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE.vhd(70): analyzing entity tmc2660_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE.vhd(102): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/HBRIDGE_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/HBRIDGE_SMODULE.vhd(71): analyzing entity hbridge_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/HBRIDGE_SMODULE.vhd(94): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/EMAGNET_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/EMAGNET_SMODULE.vhd(64): analyzing entity emagnet_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/EMAGNET_SMODULE.vhd(89): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/LED_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/LED_SMODULE.vhd(71): analyzing entity led_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/LED_SMODULE.vhd(93): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd(51): analyzing entity top_level. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd(71): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/PWM_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/PWM_SMODULE.vhd(49): analyzing entity pwm_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/PWM_SMODULE.vhd(71): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd(30): analyzing entity divider1miobyx_v1_00. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd(41): analyzing architecture behavioral. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd(44): analyzing entity tmc2660_config_fifo. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd(63): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SD.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SD.vhd(30): analyzing entity tmc2660_sd. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SD.vhd(54): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SPI.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SPI.vhd(41): analyzing entity tmc2660_spi. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SPI.vhd(67): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl_v1_00.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl_v1_00.vhd(29): analyzing entity steppercontrol_v1_00. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl_v1_00.vhd(45): analyzing architecture behavioral. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE_old.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE_old.vhd(74): analyzing entity tmc2660_smodule_old. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/TMC2660_SMODULE_old.vhd(105): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/MOTORCONTROL_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/MOTORCONTROL_SMODULE.vhd(45): analyzing entity navigation_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/MOTORCONTROL_SMODULE.vhd(64): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_T_CONTROLLER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_T_CONTROLLER.vhd(37): analyzing entity i2c_t_controller. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_T_CONTROLLER.vhd(58): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_R_CONTROLLER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_R_CONTROLLER.vhd(35): analyzing entity i2c_r_controller. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_R_CONTROLLER.vhd(55): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_DIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_DIVER.vhd(55): analyzing entity i2c_c_driver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_DIVER.vhd(84): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_UNIT.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_UNIT.vhd(56): analyzing entity register_t_unit. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_UNIT.vhd(83): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_SMODULE.vhd(70): analyzing entity i2c_c_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/i2c/I2C_C_SMODULE.vhd(98): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_R_DRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_R_DRIVER.vhd(67): analyzing entity spi_r_driver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/spi/SPI_R_DRIVER.vhd(96): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_ENCODER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_ENCODER.vhd(51): analyzing entity uart_std_encoder. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_ENCODER.vhd(76): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_DDRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_DDRIVER.vhd(52): analyzing entity uart_tx_ddriver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_DDRIVER.vhd(79): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_DDRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_DDRIVER.vhd(54): analyzing entity uart_rx_ddriver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_DDRIVER.vhd(81): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_DECODER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_DECODER.vhd(50): analyzing entity uart_std_decoder. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_STD_DECODER.vhd(77): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_D_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_D_SMODULE.vhd(89): analyzing entity uart_d_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_D_SMODULE.vhd(119): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_SDRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_SDRIVER.vhd(38): analyzing entity uart_rx_sdriver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_RX_SDRIVER.vhd(62): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_SDRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_SDRIVER.vhd(36): analyzing entity uart_tx_sdriver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_TX_SDRIVER.vhd(60): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_S_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_S_SMODULE.vhd(72): analyzing entity uart_s_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/comms/uart/UART_S_SMODULE.vhd(103): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/EDGE_DETECTOR.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/EDGE_DETECTOR.vhd(40): analyzing entity edge_detector. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/EDGE_DETECTOR.vhd(56): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_DRIVER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_DRIVER.vhd(56): analyzing entity encoder_driver. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_DRIVER.vhd(76): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/FREQUENCY_ANALYSER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/FREQUENCY_ANALYSER.vhd(33): analyzing entity frequency_analyser. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/FREQUENCY_ANALYSER.vhd(51): analyzing architecture bh. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/MAVG_2N_FILTER.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/MAVG_2N_FILTER.vhd(34): analyzing entity mavg_2n_filter. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/MAVG_2N_FILTER.vhd(55): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/PWM_ANALYSER_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/PWM_ANALYSER_SMODULE.vhd(55): analyzing entity pwm_analyser_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/PWM_ANALYSER_SMODULE.vhd(76): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/US_SENSOR_SMODULE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/US_SENSOR_SMODULE.vhd(57): analyzing entity us_sensor_smodule. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/US_SENSOR_SMODULE.vhd(79): analyzing architecture bh. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd(70): analyzing entity virtual_limit_array. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd(95): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd(61): analyzing entity virtual_sensor_array. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd(83): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd(40): analyzing package goldi_crossbar_standard. VHDL-1014
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/IO_CROSSBAR.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/IO_CROSSBAR.vhd(79): analyzing entity io_crossbar. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/IO_CROSSBAR.vhd(106): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/LOW_DEBOUNCE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/LOW_DEBOUNCE.vhd(33): analyzing entity low_debounce. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/LOW_DEBOUNCE.vhd(52): analyzing architecture bh. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER_ARRAY.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER_ARRAY.vhd(38): analyzing entity synchronizer_array. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/io_management/SYNCHRONIZER_ARRAY.vhd(55): analyzing architecture rtl. VHDL-1010
+Analyzing VHDL file /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_TABLE.vhd. VHDL-1481
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_TABLE.vhd(62): analyzing entity register_t_table. VHDL-1012
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_TABLE.vhd(91): analyzing architecture bh. VHDL-1010
+INFO - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/REGISTER_T_TABLE.vhd(178): analyzing architecture rtl. VHDL-1010
+unit top_level is not yet analyzed. VHDL-1485
+/workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd(51): executing TOP_LEVEL(RTL)
+
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd(65): replacing existing netlist TOP_LEVEL(RTL). VHDL-1205
+Top module name (VHDL): TOP_LEVEL
+Last elaborated design is TOP_LEVEL(RTL)
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/xo2c00a/data/xo2alib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/xo2c00/data/xo2clib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/mg5g00/data/mg5glib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/or5g00/data/orc5glib.ngl'...
+Loading device for application map from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+Package Status:                     Final          Version 1.39.
+Top-level module name = TOP_LEVEL.
+@Inferred core reset on ram net :memory
+
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/TOP_LEVEL.vhd(94): net system_io_o[29].enb does not have a driver. VDB-1002
+######## Missing driver on net system_io_o[29].enb. Patching with GND.
+######## Missing driver on net system_io_o[28].enb. Patching with GND.
+######## Missing driver on net system_io_o[27].enb. Patching with GND.
+######## Missing driver on net system_io_o[20].enb. Patching with GND.
+######## Missing driver on net system_io_o[19].enb. Patching with GND.
+######## Missing driver on net system_io_o[18].enb. Patching with GND.
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/dsp/ENCODER_SMODULE.vhd(197): Register \X_ENCODER/enc_block_37 is stuck at Zero. VDB-5013
+INFO - synthesis: Extracted state machine for register '\X_AXIS_MOTOR/s_currentState' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00 -> 0001
+
+ 01 -> 0010
+
+ 10 -> 0100
+
+ 11 -> 1000
+
+INFO - synthesis: Extracted state machine for register '\Y_AXIS_MOTOR/s_currentState' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00 -> 0001
+
+ 01 -> 0010
+
+ 10 -> 0100
+
+ 11 -> 1000
+
+INFO - synthesis: Extracted state machine for register '\CLAW_MAGNET/ps_magnet' with gray encoding
+original encoding -> new encoding (gray encoding)
+
+ 00 -> 00
+
+ 01 -> 01
+
+ 10 -> 11
+
+INFO - synthesis: Extracted state machine for register '\SPI_BUS_COMMUNICATION/BUS_INTERFACE/ps_mbus' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 000 -> 00001
+
+ 001 -> 00010
+
+ 010 -> 00100
+
+ 011 -> 01000
+
+ 100 -> 10000
+
+INFO - synthesis: Extracted state machine for register '\X_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00 -> 0001
+
+ 01 -> 0010
+
+ 10 -> 0100
+
+ 11 -> 1000
+
+INFO - synthesis: Extracted state machine for register '\X_AXIS_MOTOR/SPI_INTERFACE/ps_spi' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 000 -> 00001
+
+ 001 -> 00010
+
+ 010 -> 00100
+
+ 011 -> 01000
+
+ 100 -> 10000
+
+INFO - synthesis: Extracted state machine for register '\Y_AXIS_MOTOR/CONFIGURATION_FIFO/data_bit_counter' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00000 -> 00000000000000000000000000000001
+
+ 00001 -> 00000000000000000000000000000010
+
+ 00010 -> 00000000000000000000000000000100
+
+ 00011 -> 00000000000000000000000000001000
+
+ 00100 -> 00000000000000000000000000010000
+
+ 00101 -> 00000000000000000000000000100000
+
+ 00110 -> 00000000000000000000000001000000
+
+ 00111 -> 00000000000000000000000010000000
+
+ 01000 -> 00000000000000000000000100000000
+
+ 01001 -> 00000000000000000000001000000000
+
+ 01010 -> 00000000000000000000010000000000
+
+ 01011 -> 00000000000000000000100000000000
+
+ 01100 -> 00000000000000000001000000000000
+
+ 01101 -> 00000000000000000010000000000000
+
+ 01110 -> 00000000000000000100000000000000
+
+ 01111 -> 00000000000000001000000000000000
+
+ 10000 -> 00000000000000010000000000000000
+
+ 10001 -> 00000000000000100000000000000000
+
+ 10010 -> 00000000000001000000000000000000
+
+ 10011 -> 00000000000010000000000000000000
+
+ 10100 -> 00000000000100000000000000000000
+
+ 10101 -> 00000000001000000000000000000000
+
+ 10110 -> 00000000010000000000000000000000
+
+ 10111 -> 00000000100000000000000000000000
+
+ 11000 -> 00000001000000000000000000000000
+
+ 11001 -> 00000010000000000000000000000000
+
+ 11010 -> 00000100000000000000000000000000
+
+ 11011 -> 00001000000000000000000000000000
+
+ 11100 -> 00010000000000000000000000000000
+
+ 11101 -> 00100000000000000000000000000000
+
+ 11110 -> 01000000000000000000000000000000
+
+ 11111 -> 10000000000000000000000000000000
+
+INFO - synthesis: Extracted state machine for register '\Y_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00 -> 0001
+
+ 01 -> 0010
+
+ 10 -> 0100
+
+ 11 -> 1000
+
+INFO - synthesis: Extracted state machine for register '\Y_AXIS_MOTOR/SPI_INTERFACE/ps_spi' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 000 -> 00001
+
+ 001 -> 00010
+
+ 010 -> 00100
+
+ 011 -> 01000
+
+ 100 -> 10000
+
+INFO - synthesis: Extracted state machine for register '\X_AXIS_MOTOR/CONFIGURATION_FIFO/data_bit_counter' with one-hot encoding
+original encoding -> new encoding (one-hot encoding)
+
+ 00000 -> 00000000000000000000000000000001
+
+ 00001 -> 00000000000000000000000000000010
+
+ 00010 -> 00000000000000000000000000000100
+
+ 00011 -> 00000000000000000000000000001000
+
+ 00100 -> 00000000000000000000000000010000
+
+ 00101 -> 00000000000000000000000000100000
+
+ 00110 -> 00000000000000000000000001000000
+
+ 00111 -> 00000000000000000000000010000000
+
+ 01000 -> 00000000000000000000000100000000
+
+ 01001 -> 00000000000000000000001000000000
+
+ 01010 -> 00000000000000000000010000000000
+
+ 01011 -> 00000000000000000000100000000000
+
+ 01100 -> 00000000000000000001000000000000
+
+ 01101 -> 00000000000000000010000000000000
+
+ 01110 -> 00000000000000000100000000000000
+
+ 01111 -> 00000000000000001000000000000000
+
+ 10000 -> 00000000000000010000000000000000
+
+ 10001 -> 00000000000000100000000000000000
+
+ 10010 -> 00000000000001000000000000000000
+
+ 10011 -> 00000000000010000000000000000000
+
+ 10100 -> 00000000000100000000000000000000
+
+ 10101 -> 00000000001000000000000000000000
+
+ 10110 -> 00000000010000000000000000000000
+
+ 10111 -> 00000000100000000000000000000000
+
+ 11000 -> 00000001000000000000000000000000
+
+ 11001 -> 00000010000000000000000000000000
+
+ 11010 -> 00000100000000000000000000000000
+
+ 11011 -> 00001000000000000000000000000000
+
+ 11100 -> 00010000000000000000000000000000
+
+ 11101 -> 00100000000000000000000000000000
+
+ 11110 -> 01000000000000000000000000000000
+
+ 11111 -> 10000000000000000000000000000000
+
+
+
+
+WARNING - synthesis: Bit 0 of Register \SENSOR_REGISTER/sys_bus_o.dat is stuck at Zero
+WARNING - synthesis: Bit 0 of Register \ERROR_LIST/MEMORY/REGISTERS[1].REG/sys_bus_o.dat is stuck at Zero
+WARNING - synthesis: Bit 1 of Register \ERROR_LIST/MEMORY/REGISTERS[1].REG/sys_bus_o.dat is stuck at Zero
+WARNING - synthesis: Bit 2 of Register \ERROR_LIST/MEMORY/REGISTERS[1].REG/sys_bus_o.dat is stuck at Zero
+######## Pruned 1 high address bits on RAM Instance : \X_AXIS_MOTOR/STREAM_FIFO/clk_write_port_12 on net : \X_AXIS_MOTOR/STREAM_FIFO/memory
+
+######## Pruned 1 high address bits on RAM Instance : \X_AXIS_MOTOR/STREAM_FIFO/rd_pointer_2__N_1001_2__I_0 on net : \X_AXIS_MOTOR/STREAM_FIFO/memory
+
+######## Pruned 1 high address bits on RAM Instance : \Y_AXIS_MOTOR/STREAM_FIFO/rd_pointer_2__N_1001_2__I_0 on net : \Y_AXIS_MOTOR/STREAM_FIFO/memory
+
+######## Pruned 1 high address bits on RAM Instance : \Y_AXIS_MOTOR/STREAM_FIFO/clk_write_port_12 on net : \Y_AXIS_MOTOR/STREAM_FIFO/memory
+
+Core reset RAM implemented for net n4589.
+Core reset RAM implemented for net n4590.
+######## Found 2 RTL RAMs in the design.
+######## Mapping RTL RAM n4589 to 6 Distributed blocks in PSEUDO_DUAL_PORT Mode
+
+######## Mapping RTL RAM n4590 to 6 Distributed blocks in PSEUDO_DUAL_PORT Mode
+
+WARNING - synthesis: Register creset_1951 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1947 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1939 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1968 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1943 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1959 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1955 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_1935 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2028 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2024 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2020 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2016 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2012 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2008 is stuck at Zero. VDB-5013
+WARNING - synthesis: Register creset_2004 is stuck at Zero. VDB-5013
+WARNING - synthesis: Skipping pad insertion on IO_DATA[41] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[40] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[39] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[38] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[37] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[36] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[35] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[34] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[33] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[32] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[31] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[30] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[29] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[28] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[27] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[26] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[25] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[24] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[23] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[22] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[21] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[20] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[19] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[18] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[17] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[16] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[15] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[14] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[13] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[12] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[11] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[10] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[9] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[8] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[7] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[6] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[5] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[4] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[3] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[2] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[1] due to black_box_pad_pin attribute.
+WARNING - synthesis: Skipping pad insertion on IO_DATA[0] due to black_box_pad_pin attribute.
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/TMC2660/StepperControl.vhd(105): Register \X_AXIS_MOTOR/StepperControl/s_velocityCurrent__i1 is stuck at Zero. VDB-5013
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/memory/ROM16XN_FIFO.vhd(273): Register \X_AXIS_MOTOR/CONFIGURATION_FIFO/data_bit_counter_FSM_i24 is stuck at Zero. VDB-5013
+WARNING - synthesis: /workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/src/common/actuation/EMAGNET_SMODULE.vhd(174): Register \CLAW_MAGNET/pulse_width_i0 is stuck at Zero. VDB-5013
+Optimized async. reset : rst on data cone feeding flop : 
+
+
+ \X_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i1
+
+
+ \X_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i3
+
+
+ \X_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i4
+
+
+Optimized async. reset : rst on data cone feeding flop : 
+
+
+ \Y_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i1
+
+
+ \Y_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i3
+
+
+ \Y_AXIS_MOTOR/CONFIGURATION_FIFO/ps_fifo_FSM_i4
+
+
+GSR instance connected to net n7669.
+Applying 54.000000 MHz constraint to all clocks
+
+WARNING - synthesis: No user .sdc file.
+Results of NGD DRC are available in TOP_LEVEL_drc.log.
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/xo2c00a/data/xo2alib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/xo2c00/data/xo2clib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/mg5g00/data/mg5glib.ngl'...
+Loading NGL library '/usr/local/diamond/3.12/ispfpga/or5g00/data/orc5glib.ngl'...
+
+
+Running DRC...
+
+WARNING - synthesis: logical net 'port_in_async_13_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_14_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_16_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_17_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_18_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_19_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_20_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_22_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_23_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_25_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_26_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_27_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_28_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_29_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_31_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_32_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_33_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_34_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_35_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_36_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_37_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_38_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_39_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_40_.dat' has no load.
+WARNING - synthesis: logical net 'port_in_async_41_.dat' has no load.
+WARNING - synthesis: DRC complete with 25 warnings.
+
+Design Results:
+   3372 blocks expanded
+completed the first expansion
+All blocks are expanded and NGD expansion is successful.
+Writing NGD file Project_impl1.ngd.
+
+################### Begin Area Report (TOP_LEVEL)######################
+Number of register bits => 1545 of 7209 (21 % )
+BB => 42
+CCU2D => 366
+DPR16X4C => 12
+FD1P3AX => 432
+FD1P3AY => 15
+FD1P3DX => 60
+FD1P3IX => 271
+FD1P3JX => 8
+FD1S3AX => 236
+FD1S3AY => 17
+FD1S3DX => 104
+FD1S3IX => 396
+FD1S3JX => 6
+GSR => 1
+IB => 5
+L6MUX21 => 4
+LUT4 => 1325
+MUX21 => 5
+OB => 1
+PFUMX => 47
+ROM16X1A => 16
+################### End Area Report ##################
+
+################### Begin BlackBox Report ######################
+TSALL => 1
+################### End BlackBox Report ##################
+
+################### Begin Clock Report ######################
+Clock Nets
+Number of Clocks: 1
+  Net : ClockFPGA_c, loads : 1557
+Clock Enable Nets
+Number of Clock Enables: 200
+Top 10 highest fanout Clock Enables:
+  Net : CLAW_MAGNET/ps_pulse_1, loads : 30
+  Net : Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_336, loads : 27
+  Net : X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_125, loads : 27
+  Net : X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_495, loads : 24
+  Net : Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_493, loads : 24
+  Net : X_AXIS_MOTOR/CONFIGURATION_FIFO/ClockFPGA_c_enable_407, loads : 23
+  Net : Y_AXIS_MOTOR/CONFIGURATION_FIFO/ClockFPGA_c_enable_282, loads : 23
+  Net : Y_ENCODER/ClockFPGA_c_enable_449, loads : 16
+  Net : X_ENCODER/ClockFPGA_c_enable_464, loads : 16
+  Net : Y_AXIS_MOTOR/StepperControl/ClockFPGA_c_enable_357, loads : 14
+Highest fanout non-clock nets
+Top 10 highest fanout non-clock nets:
+  Net : SPI_BUS_COMMUNICATION/BUS_INTERFACE/master_bus_o.adr_0, loads : 65
+  Net : SPI_BUS_COMMUNICATION/BUS_INTERFACE/master_bus_o.adr_3, loads : 61
+  Net : SPI_BUS_COMMUNICATION/BUS_INTERFACE/master_bus_o.we, loads : 58
+  Net : X_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_952, loads : 54
+  Net : Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_952, loads : 54
+  Net : Y_AXIS_MOTOR/n17115, loads : 52
+  Net : RESET_SYNC/n17797, loads : 51
+  Net : X_AXIS_MOTOR/n17132, loads : 47
+  Net : RESET_SYNC/ClockFPGA_c_enable_508, loads : 45
+  Net : SPI_BUS_COMMUNICATION/BUS_INTERFACE/n7, loads : 38
+################### End Clock Report ##################
+
+Timing Report Summary
+--------------
+--------------------------------------------------------------------------------
+Constraint                              |   Constraint|       Actual|Levels
+--------------------------------------------------------------------------------
+                                        |             |             |
+create_clock -period 18.518519 -name    |             |             |
+clk0 [get_nets ClockFPGA_c]             |   54.001 MHz|   61.569 MHz|    37  
+                                        |             |             |
+--------------------------------------------------------------------------------
+
+
+All constraints were met.
+
+
+Peak Memory Usage: 270.301  MB
+
+--------------------------------------------------------------
+Elapsed CPU time for LSE flow : 3.585  secs
+--------------------------------------------------------------
+Nothing is executed for the "Translate" process
+
+map -a "MachXO2" -p LCMXO2-7000HC -t TQFP144 -s 4 -oc Commercial   "Project_impl1.ngd" -o "Project_impl1_map.ncd" -pr "Project_impl1.prf" -mp "Project_impl1.mrp" -lpf "/workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/build/Project_impl1.lpf" -lpf "/workspaces/goldi2/hardware/boards/axis_portal_v2/fpga/constraints.lpf"  -c 0           
+map:  version Diamond (64-bit) 3.12.0.240.2
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+   Process the file: Project_impl1.ngd
+   Picdevice="LCMXO2-7000HC"
+
+   Pictype="TQFP144"
+
+   Picspeed=4
+
+   Remove unused logic
+
+   Do not produce over sized NCDs.
+
+Part used: LCMXO2-7000HCTQFP144, Performance used: 4.
+
+Loading device for application map from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+Package Status:                     Final          Version 1.39.
+
+Running general design DRC...
+
+Removing unused logic...
+
+Optimizing...
+
+
+
+
+Design Summary:
+   Number of registers:   1545 out of  7209 (21%)
+      PFU registers:         1545 out of  6864 (23%)
+      PIO registers:            0 out of   345 (0%)
+   Number of SLICEs:      1104 out of  3432 (32%)
+      SLICEs as Logic/ROM:   1068 out of  3432 (31%)
+      SLICEs as RAM:           36 out of  2574 (1%)
+      SLICEs as Carry:        366 out of  3432 (11%)
+   Number of LUT4s:        2156 out of  6864 (31%)
+      Number used as logic LUTs:        1352
+      Number used as distributed RAM:    72
+      Number used as ripple logic:      732
+      Number used as shift registers:     0
+   Number of PIO sites used: 48 + 4(JTAG) out of 115 (45%)
+   Number of block RAMs:  0 out of 26 (0%)
+   Number of GSRs:        1 out of 1 (100%)
+   EFB used :        No
+   JTAG used :       No
+   Readback used :   No
+   Oscillator used : No
+   Startup used :    No
+   POR :             On
+   Bandgap :         On
+   Number of Power Controller:  0 out of 1 (0%)
+   Number of Dynamic Bank Controller (BCINRD):  0 out of 6 (0%)
+   Number of Dynamic Bank Controller (BCLVDSO):  0 out of 1 (0%)
+   Number of DCCA:  0 out of 8 (0%)
+   Number of DCMA:  0 out of 2 (0%)
+   Number of PLLs:  0 out of 2 (0%)
+   Number of DQSDLLs:  0 out of 2 (0%)
+   Number of CLKDIVC:  0 out of 4 (0%)
+   Number of ECLKSYNCA:  0 out of 4 (0%)
+   Number of ECLKBRIDGECS:  0 out of 2 (0%)
+   Notes:-
+      1. Total number of LUT4s = (Number of logic LUT4s) + 2*(Number of distributed RAMs) + 2*(Number of ripple logic)
+      2. Number of logic LUT4s does not include count of distributed RAM and ripple logic.
+   Number of clocks:  1
+     Net ClockFPGA_c: 967 loads, 967 rising, 0 falling (Driver: PIO ClockFPGA )
+   Number of Clock Enables:  200
+     Net ClockFPGA_c_enable_8: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_198: 3 loads, 3 LSLICEs
+     Net ClockFPGA_c_enable_466: 2 loads, 2 LSLICEs
+     Net ClockFPGA_c_enable_178: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_65: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_78: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_123: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_134: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_136: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_138: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_84: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_157: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_141: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_50: 2 loads, 2 LSLICEs
+     Net ClockFPGA_c_enable_211: 3 loads, 3 LSLICEs
+     Net ClockFPGA_c_enable_408: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_161: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_431: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_143: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_144: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_410: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_411: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_412: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_413: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_414: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_415: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_416: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_417: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_418: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_419: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_420: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_421: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_422: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_423: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_424: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_425: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_426: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_427: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_428: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_429: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_430: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_146: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_147: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_148: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_149: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_158: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_177: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_125: 12 loads, 12 LSLICEs
+     Net ClockFPGA_c_enable_336: 12 loads, 12 LSLICEs
+     Net ClockFPGA_c_enable_339: 2 loads, 2 LSLICEs
+     Net ClockFPGA_c_enable_176: 1 loads, 1 LSLICEs
+     Net rst: 24 loads, 24 LSLICEs
+     Net ClockFPGA_c_enable_237: 5 loads, 5 LSLICEs
+     Net GPIO_MANAGEMENT/MEMORY/ClockFPGA_c_enable_156: 5 loads, 5 LSLICEs
+     Net ClockFPGA_c_enable_509: 9 loads, 9 LSLICEs
+     Net ClockFPGA_c_enable_6: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_175: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_478: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_477: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_474: 1 loads, 1 LSLICEs
+     Net ERROR_LIST/Z_STEPPER_ON/shift_reg_4__N_290: 2 loads, 2 LSLICEs
+     Net ERROR_LIST/Y_STEPPER_ON/shift_reg_4__N_290: 2 loads, 2 LSLICEs
+     Net ERROR_LIST/X_STEPPER_ON/shift_reg_4__N_290: 2 loads, 2 LSLICEs
+     Net p_data_out_7__N_231: 4 loads, 4 LSLICEs
+     Net POWER_RED/blink_counter_enb: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_2227: 4 loads, 4 LSLICEs
+     Net SPI_BUS_COMMUNICATION/ClockFPGA_c_enable_289: 4 loads, 4 LSLICEs
+     Net SPI_BUS_COMMUNICATION/ClockFPGA_c_enable_200: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/ClockFPGA_c_enable_204: 3 loads, 3 LSLICEs
+     Net SPI_BUS_COMMUNICATION/ClockFPGA_c_enable_137: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/ClockFPGA_c_enable_247: 3 loads, 3 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/ClockFPGA_c_enable_475: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/ClockFPGA_c_enable_479: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/ClockFPGA_c_enable_480: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/ClockFPGA_c_enable_476: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_66: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_165: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_166: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_167: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_168: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_242: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_243: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_245: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_256: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_258: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_290: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/CONFIGURATION_SP_CONVERTER/ClockFPGA_c_enable_383: 1 loads, 1 LSLICEs
+     Net p_data_out_7__N_1506: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1539: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1811: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1778: 4 loads, 4 LSLICEs
+     Net SPI_BUS_COMMUNICATION/BUS_INTERFACE/ClockFPGA_c_enable_501: 6 loads, 6 LSLICEs
+     Net p_data_out_7__N_2533: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_2431: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1941: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1844: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1908: 5 loads, 5 LSLICEs
+     Net p_data_out_7__N_2635: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1679: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1572: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1440: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1473: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1407: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1712: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_1745: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_2125: 4 loads, 4 LSLICEs
+     Net p_data_out_7__N_2329: 4 loads, 4 LSLICEs
+     Net Z_AXIS_MOTOR/ClockFPGA_c_enable_69: 1 loads, 1 LSLICEs
+     Net Z_AXIS_MOTOR/ClockFPGA_c_enable_255: 4 loads, 4 LSLICEs
+     Net Y_ENCODER/ClockFPGA_c_enable_449: 9 loads, 9 LSLICEs
+     Net Y_AXIS_MOTOR/spi_r_tvalid: 12 loads, 12 LSLICEs
+     Net Y_AXIS_MOTOR/ClockFPGA_c_enable_359: 2 loads, 2 LSLICEs
+     Net Y_AXIS_MOTOR/StepperControl/ClockFPGA_c_enable_357: 7 loads, 7 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_343: 2 loads, 2 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_493: 13 loads, 13 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_169: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_205: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_206: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_207: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_208: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_212: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_213: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_214: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_215: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_216: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_217: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_218: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_219: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_220: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_498: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_472: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_500: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_491: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_470: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_492: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_471: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_494: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_473: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_499: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/CONFIGURATION_FIFO/ClockFPGA_c_enable_282: 12 loads, 12 LSLICEs
+     Net X_ENCODER/ClockFPGA_c_enable_464: 9 loads, 9 LSLICEs
+     Net ClockFPGA_c_enable_54: 2 loads, 2 LSLICEs
+     Net ENVIRONMENT_RED/blink_counter_enb: 4 loads, 4 LSLICEs
+     Net ENVIRONMENT_GREEN/blink_counter_enb: 4 loads, 4 LSLICEs
+     Net CLAW_MAGNET/ClockFPGA_c_enable_139: 5 loads, 5 LSLICEs
+     Net CLAW_MAGNET/ClockFPGA_c_enable_230: 1 loads, 1 LSLICEs
+     Net CLAW_MAGNET/ps_pulse_1: 12 loads, 12 LSLICEs
+     Net ClockFPGA_c_enable_174: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_172: 3 loads, 3 LSLICEs
+     Net ClockFPGA_c_enable_193: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_194: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_195: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_192: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_191: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_190: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_189: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_188: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_187: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_186: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_185: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_184: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_183: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_182: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_173: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_181: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_180: 1 loads, 1 LSLICEs
+     Net ENVIRONMENT_WHITE/blink_counter_enb: 4 loads, 4 LSLICEs
+     Net X_AXIS_MOTOR/spi_r_tvalid: 12 loads, 12 LSLICEs
+     Net X_AXIS_MOTOR/ClockFPGA_c_enable_127: 2 loads, 2 LSLICEs
+     Net X_AXIS_MOTOR/ClockFPGA_c_enable_507: 9 loads, 9 LSLICEs
+     Net X_AXIS_MOTOR/StepperControl/ClockFPGA_c_enable_46: 7 loads, 7 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_1: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_2: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_3: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_4: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_5: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_7: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_9: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_11: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_13: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_14: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_15: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_16: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_229: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_241: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_495: 13 loads, 13 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_221: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_222: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_223: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_226: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_227: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_228: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_238: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_239: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_240: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/ClockFPGA_c_enable_496: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/CONFIGURATION_FIFO/ClockFPGA_c_enable_140: 1 loads, 1 LSLICEs
+     Net ClockFPGA_c_enable_179: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/CONFIGURATION_FIFO/ClockFPGA_c_enable_407: 12 loads, 12 LSLICEs
+     Net POWER_GREEN/blink_counter_enb: 4 loads, 4 LSLICEs
+   Number of LSRs:  70
+     Net n17132: 28 loads, 28 LSLICEs
+     Net master_bus_i.dat_7__N_22: 5 loads, 5 LSLICEs
+     Net n17115: 29 loads, 29 LSLICEs
+     Net miso_buffer_i_23__N_1216: 1 loads, 1 LSLICEs
+     Net miso_buffer_i_23__N_1216_adj_2967: 1 loads, 1 LSLICEs
+     Net x_encoder_ref: 27 loads, 27 LSLICEs
+     Net y_encoder_ref: 27 loads, 27 LSLICEs
+     Net GPIO_MANAGEMENT/MEMORY/n8115: 5 loads, 5 LSLICEs
+     Net n8217: 9 loads, 9 LSLICEs
+     Net n8095: 9 loads, 9 LSLICEs
+     Net n17072: 13 loads, 13 LSLICEs
+     Net ERROR_LIST/Z_STEPPER_ON/n8092: 8 loads, 8 LSLICEs
+     Net ERROR_LIST/Y_STEPPER_ON/n8109: 8 loads, 8 LSLICEs
+     Net ERROR_LIST/X_STEPPER_ON/n8295: 8 loads, 8 LSLICEs
+     Net n8129: 3 loads, 3 LSLICEs
+     Net n8143: 5 loads, 5 LSLICEs
+     Net n8091: 4 loads, 4 LSLICEs
+     Net POWER_RED/led_counter_21__N_2189: 12 loads, 12 LSLICEs
+     Net n8124: 4 loads, 4 LSLICEs
+     Net SPI_BUS_COMMUNICATION/p_master_bus_o.adr_9__N_192: 11 loads, 11 LSLICEs
+     Net SPI_BUS_COMMUNICATION/n17106: 16 loads, 16 LSLICEs
+     Net SPI_BUS_COMMUNICATION/n6109: 1 loads, 1 LSLICEs
+     Net SPI_BUS_COMMUNICATION/DATA_SP_CONVERTER/n6112: 1 loads, 1 LSLICEs
+     Net n8131: 4 loads, 4 LSLICEs
+     Net n8133: 4 loads, 4 LSLICEs
+     Net n8128: 4 loads, 4 LSLICEs
+     Net n8141: 4 loads, 4 LSLICEs
+     Net n8120: 4 loads, 4 LSLICEs
+     Net n8127: 4 loads, 4 LSLICEs
+     Net n8136: 4 loads, 4 LSLICEs
+     Net n8140: 4 loads, 4 LSLICEs
+     Net n8126: 4 loads, 4 LSLICEs
+     Net n8139: 4 loads, 4 LSLICEs
+     Net n8142: 4 loads, 4 LSLICEs
+     Net n8146: 4 loads, 4 LSLICEs
+     Net n8135: 4 loads, 4 LSLICEs
+     Net n8144: 4 loads, 4 LSLICEs
+     Net n8138: 4 loads, 4 LSLICEs
+     Net n8132: 4 loads, 4 LSLICEs
+     Net n8145: 4 loads, 4 LSLICEs
+     Net n8125: 4 loads, 4 LSLICEs
+     Net Z_AXIS_MOTOR/n2830: 3 loads, 3 LSLICEs
+     Net Z_AXIS_MOTOR/n2833: 5 loads, 5 LSLICEs
+     Net n8090: 4 loads, 4 LSLICEs
+     Net n8137: 4 loads, 4 LSLICEs
+     Net Y_AXIS_MOTOR/p_tdword_tready_N_1240: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/n4212: 4 loads, 4 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/n2949: 3 loads, 3 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/n16990: 3 loads, 3 LSLICEs
+     Net Y_AXIS_MOTOR/SPI_INTERFACE/n8123: 1 loads, 1 LSLICEs
+     Net Y_AXIS_MOTOR/CONFIGURATION_FIFO/n2931: 4 loads, 4 LSLICEs
+     Net Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_951: 18 loads, 18 LSLICEs
+     Net Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950: 24 loads, 24 LSLICEs
+     Net ENVIRONMENT_RED/led_counter_21__N_2393: 12 loads, 12 LSLICEs
+     Net ENVIRONMENT_GREEN/led_counter_21__N_2597: 12 loads, 12 LSLICEs
+     Net CLAW_MAGNET/ClockFPGA_c_enable_139: 1 loads, 1 LSLICEs
+     Net CLAW_MAGNET/n2840: 10 loads, 10 LSLICEs
+     Net CLAW_MAGNET/ps_magnet_0: 1 loads, 1 LSLICEs
+     Net CLAW_MAGNET/n17128: 18 loads, 18 LSLICEs
+     Net CLAW_MAGNET/n2845: 7 loads, 7 LSLICEs
+     Net ENVIRONMENT_WHITE/led_counter_21__N_2495: 12 loads, 12 LSLICEs
+     Net X_AXIS_MOTOR/p_tdword_tready_N_1240: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/n16988: 3 loads, 3 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/n8119: 1 loads, 1 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/n4214: 4 loads, 4 LSLICEs
+     Net X_AXIS_MOTOR/SPI_INTERFACE/n2924: 3 loads, 3 LSLICEs
+     Net X_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_951: 18 loads, 18 LSLICEs
+     Net X_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950: 24 loads, 24 LSLICEs
+     Net X_AXIS_MOTOR/CONFIGURATION_FIFO/n2906: 4 loads, 4 LSLICEs
+     Net POWER_GREEN/led_counter_21__N_2291: 12 loads, 12 LSLICEs
+   Number of nets driven by tri-state buffers:  0
+   Top 10 highest fanout non-clock nets:
+     Net master_bus_o.adr_0: 67 loads
+     Net master_bus_o.adr_3: 63 loads
+     Net master_bus_o.we: 60 loads
+     Net p_cword_tdata_23__N_952: 56 loads
+     Net p_cword_tdata_23__N_952_adj_2935: 56 loads
+     Net n17797: 52 loads
+     Net rd_pointer_2_N_1001_2: 48 loads
+     Net rd_pointer_2_N_1001_2_adj_2939: 48 loads
+     Net n7_adj_2931: 40 loads
+     Net master_bus_o.adr_2: 39 loads
+ 
+
+   Number of warnings:  0
+   Number of errors:    0
+
+
+
+Total CPU Time: 0 secs  
+Total REAL Time: 0 secs  
+Peak Memory Usage: 201 MB
+
+Dumping design to file Project_impl1_map.ncd.
+
+ncd2vdb "Project_impl1_map.ncd" ".vdbs/Project_impl1_map.vdb"
+
+Loading device for application ncd2vdb from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+
+mpartrce -p "Project_impl1.p2t" -f "Project_impl1.p3t" -tf "Project_impl1.pt" "Project_impl1_map.ncd" "Project_impl1.ncd"
+
+---- MParTrce Tool ----
+Removing old design directory at request of -rem command line option to this program.
+Running par. Please wait . . .
+
+Lattice Place and Route Report for Design "Project_impl1_map.ncd"
+Fri Sep 27 09:38:33 2024
+
+PAR: Place And Route Diamond (64-bit) 3.12.0.240.2.
+Command Line: par -w -l 5 -i 6 -t 1 -c 0 -e 0 -exp parUseNBR=1:parCDP=0:parCDR=0:parPathBased=OFF:parASE=1 Project_impl1_map.ncd Project_impl1.dir/5_1.ncd Project_impl1.prf
+Preference file: Project_impl1.prf.
+Placement level-cost: 5-1.
+Routing Iterations: 6
+
+Loading design for application par from file Project_impl1_map.ncd.
+Design name: TOP_LEVEL
+NCD version: 3.3
+Vendor:      LATTICE
+Device:      LCMXO2-7000HC
+Package:     TQFP144
+Performance: 4
+Loading device for application par from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+Package Status:                     Final          Version 1.39.
+Performance Hardware Data Status:   Final          Version 34.4.
+License checked out.
+
+
+Ignore Preference Error(s):  True
+Device utilization summary:
+
+   PIO (prelim)   48+4(JTAG)/336     15% used
+                  48+4(JTAG)/115     45% bonded
+
+   SLICE           1104/3432         32% used
+
+   GSR                1/1           100% used
+
+
+Number of Signals: 3890
+Number of Connections: 10229
+
+Pin Constraint Summary:
+   48 out of 48 pins locked (100% locked).
+
+The following 1 signal is selected to use the primary clock routing resources:
+    ClockFPGA_c (driver: ClockFPGA, clk load #: 967)
+
+
+The following 8 signals are selected to use the secondary clock routing resources:
+    n17115 (driver: Y_AXIS_MOTOR/SLICE_816, clk load #: 0, sr load #: 29, ce load #: 0)
+    n17132 (driver: X_AXIS_MOTOR/SLICE_1327, clk load #: 0, sr load #: 28, ce load #: 0)
+    x_encoder_ref (driver: SLICE_792, clk load #: 0, sr load #: 27, ce load #: 0)
+    y_encoder_ref (driver: SLICE_615, clk load #: 0, sr load #: 27, ce load #: 0)
+    rst (driver: SLICE_38, clk load #: 0, sr load #: 0, ce load #: 24)
+    Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950 (driver: SLICE_1066, clk load #: 0, sr load #: 24, ce load #: 0)
+    X_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950 (driver: X_AXIS_MOTOR/CONFIGURATION_FIFO/SLICE_1005, clk load #: 0, sr load #: 24, ce load #: 0)
+    Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_951 (driver: Y_AXIS_MOTOR/CONFIGURATION_FIFO/SLICE_731, clk load #: 0, sr load #: 18, ce load #: 0)
+
+Signal rst is selected as Global Set/Reset.
+Starting Placer Phase 0.
+..........
+Finished Placer Phase 0.  REAL time: 3 secs 
+
+Starting Placer Phase 1.
+......................
+Placer score = 628157.
+Finished Placer Phase 1.  REAL time: 9 secs 
+
+Starting Placer Phase 2.
+.
+Placer score =  621088
+Finished Placer Phase 2.  REAL time: 9 secs 
+
+
+------------------ Clock Report ------------------
+
+Global Clock Resources:
+  CLK_PIN    : 1 out of 8 (12%)
+  PLL        : 0 out of 2 (0%)
+  DCM        : 0 out of 2 (0%)
+  DCC        : 0 out of 8 (0%)
+
+Global Clocks:
+  PRIMARY "ClockFPGA_c" from comp "ClockFPGA" on CLK_PIN site "128 (PT18A)", clk load = 967
+  SECONDARY "n17115" from F1 on comp "Y_AXIS_MOTOR/SLICE_816" on site "R14C20D", clk load = 0, ce load = 0, sr load = 29
+  SECONDARY "n17132" from F0 on comp "X_AXIS_MOTOR/SLICE_1327" on site "R14C20B", clk load = 0, ce load = 0, sr load = 28
+  SECONDARY "x_encoder_ref" from F1 on comp "SLICE_792" on site "R14C20A", clk load = 0, ce load = 0, sr load = 27
+  SECONDARY "y_encoder_ref" from F1 on comp "SLICE_615" on site "R14C20C", clk load = 0, ce load = 0, sr load = 27
+  SECONDARY "rst" from Q1 on comp "SLICE_38" on site "R14C17D", clk load = 0, ce load = 24, sr load = 0
+  SECONDARY "Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950" from F1 on comp "SLICE_1066" on site "R16C40C", clk load = 0, ce load = 0, sr load = 24
+  SECONDARY "X_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_950" from F1 on comp "X_AXIS_MOTOR/CONFIGURATION_FIFO/SLICE_1005" on site "R21C20B", clk load = 0, ce load = 0, sr load = 24
+  SECONDARY "Y_AXIS_MOTOR/CONFIGURATION_FIFO/p_cword_tdata_23__N_951" from Q0 on comp "Y_AXIS_MOTOR/CONFIGURATION_FIFO/SLICE_731" on site "R21C20A", clk load = 0, ce load = 0, sr load = 18
+
+  PRIMARY  : 1 out of 8 (12%)
+  SECONDARY: 8 out of 8 (100%)
+
+Edge Clocks:
+  No edge clock selected.
+
+--------------- End of Clock Report ---------------
+
+
+I/O Usage Summary (final):
+   48 + 4(JTAG) out of 336 (15.5%) PIO sites used.
+   48 + 4(JTAG) out of 115 (45.2%) bonded PIO sites used.
+   Number of PIO comps: 48; differential: 0.
+   Number of Vref pins used: 0.
+
+I/O Bank Usage Summary:
++----------+----------------+------------+-----------+
+| I/O Bank | Usage          | Bank Vccio | Bank Vref |
++----------+----------------+------------+-----------+
+| 0        | 10 / 28 ( 35%) | 3.3V       | -         |
+| 1        | 26 / 29 ( 89%) | 3.3V       | -         |
+| 2        | 1 / 29 (  3%)  | 3.3V       | -         |
+| 3        | 3 / 9 ( 33%)   | 3.3V       | -         |
+| 4        | 4 / 10 ( 40%)  | 3.3V       | -         |
+| 5        | 4 / 10 ( 40%)  | 3.3V       | -         |
++----------+----------------+------------+-----------+
+
+Total placer CPU time: 8 secs 
+
+Dumping design to file Project_impl1.dir/5_1.ncd.
+
+0 connections routed; 10229 unrouted.
+Starting router resource preassignment
+
+Completed router resource preassignment. Real time: 11 secs 
+
+Start NBR router at Fri Sep 27 09:38:44 UTC 2024
+
+*****************************************************************
+Info: NBR allows conflicts(one node used by more than one signal)
+      in the earlier iterations. In each iteration, it tries to  
+      solve the conflicts while keeping the critical connections 
+      routed as short as possible. The routing process is said to
+      be completed when no conflicts exist and all connections   
+      are routed.                                                
+Note: NBR uses a different method to calculate timing slacks. The
+      worst slack and total negative slack may not be the same as
+      that in TRCE report. You should always run TRCE to verify  
+      your design.                                               
+*****************************************************************
+
+Start NBR special constraint process at Fri Sep 27 09:38:44 UTC 2024
+
+Start NBR section for initial routing at Fri Sep 27 09:38:44 UTC 2024
+Level 1, iteration 1
+0(0.00%) conflict; 7680(75.08%) untouched conns; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.779ns/0.000ns; real time: 11 secs 
+Level 2, iteration 1
+3(0.00%) conflicts; 7677(75.05%) untouched conns; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 3.090ns/0.000ns; real time: 11 secs 
+Level 3, iteration 1
+4(0.00%) conflicts; 7584(74.14%) untouched conns; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 3.142ns/0.000ns; real time: 11 secs 
+Level 4, iteration 1
+395(0.10%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.771ns/0.000ns; real time: 12 secs 
+
+Info: Initial congestion level at 75% usage is 0
+Info: Initial congestion area  at 75% usage is 15 (1.50%)
+
+Start NBR section for normal routing at Fri Sep 27 09:38:45 UTC 2024
+Level 1, iteration 1
+0(0.00%) conflict; 473(4.62%) untouched conns; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.771ns/0.000ns; real time: 12 secs 
+Level 4, iteration 1
+246(0.07%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 3.205ns/0.000ns; real time: 13 secs 
+Level 4, iteration 2
+140(0.04%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.713ns/0.000ns; real time: 13 secs 
+Level 4, iteration 3
+76(0.02%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.771ns/0.000ns; real time: 13 secs 
+Level 4, iteration 4
+31(0.01%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.771ns/0.000ns; real time: 13 secs 
+Level 4, iteration 5
+16(0.00%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.713ns/0.000ns; real time: 13 secs 
+Level 4, iteration 6
+15(0.00%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.713ns/0.000ns; real time: 13 secs 
+Level 4, iteration 7
+7(0.00%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.811ns/0.000ns; real time: 13 secs 
+Level 4, iteration 8
+3(0.00%) conflicts; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.811ns/0.000ns; real time: 13 secs 
+Level 4, iteration 9
+0(0.00%) conflict; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.639ns/0.000ns; real time: 13 secs 
+
+Start NBR section for setup/hold timing optimization with effort level 3 at Fri Sep 27 09:38:46 UTC 2024
+
+Start NBR section for re-routing at Fri Sep 27 09:38:47 UTC 2024
+Level 4, iteration 1
+0(0.00%) conflict; 0(0.00%) untouched conn; 0 (nbr) score; 
+Estimated worst slack/total negative slack<setup>: 2.639ns/0.000ns; real time: 14 secs 
+
+Start NBR section for post-routing at Fri Sep 27 09:38:47 UTC 2024
+
+End NBR router with 0 unrouted connection
+
+NBR Summary
+-----------
+  Number of unrouted connections : 0 (0.00%)
+  Number of connections with timing violations : 0 (0.00%)
+  Estimated worst slack<setup> : 2.639ns
+  Timing score<setup> : 0
+-----------
+Notes: The timing info is calculated for SETUP only and all PAR_ADJs are ignored.
+
+
+
+Total CPU time 14 secs 
+Total REAL time: 15 secs 
+Completely routed.
+End of route.  10229 routed (100.00%); 0 unrouted.
+
+Hold time timing score: 0, hold timing errors: 0
+
+Timing score: 0 
+
+Dumping design to file Project_impl1.dir/5_1.ncd.
+
+
+PAR_SUMMARY::Run status = Completed
+PAR_SUMMARY::Number of unrouted conns = 0
+PAR_SUMMARY::Worst  slack<setup/<ns>> = 2.639
+PAR_SUMMARY::Timing score<setup/<ns>> = 0.000
+PAR_SUMMARY::Worst  slack<hold /<ns>> = 0.136
+PAR_SUMMARY::Timing score<hold /<ns>> = 0.000
+PAR_SUMMARY::Number of errors = 0
+
+Total CPU  time to completion: 14 secs 
+Total REAL time to completion: 15 secs 
+
+par done!
+
+Note: user must run 'Trace' for timing closure signoff.
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+Exiting par with exit code 0
+Exiting mpartrce with exit code 0
+
+trce -f "Project_impl1.pt" -o "Project_impl1.twr" "Project_impl1.ncd" "Project_impl1.prf"
+trce:  version Diamond (64-bit) 3.12.0.240.2
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+
+Loading design for application trce from file Project_impl1.ncd.
+Design name: TOP_LEVEL
+NCD version: 3.3
+Vendor:      LATTICE
+Device:      LCMXO2-7000HC
+Package:     TQFP144
+Performance: 4
+Loading device for application trce from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+Package Status:                     Final          Version 1.39.
+Performance Hardware Data Status:   Final          Version 34.4.
+Setup and Hold Report
+
+--------------------------------------------------------------------------------
+Lattice TRACE Report - Setup, Version Diamond (64-bit) 3.12.0.240.2
+Fri Sep 27 09:38:49 2024
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+
+Report Information
+------------------
+Command line:    trce -v 10 -gt -sethld -sp 4 -sphld m -o Project_impl1.twr Project_impl1.ncd Project_impl1.prf 
+Design file:     Project_impl1.ncd
+Preference file: Project_impl1.prf
+Device,speed:    LCMXO2-7000HC,4
+Report level:    verbose report, limited to 10 items per preference
+--------------------------------------------------------------------------------
+
+BLOCK ASYNCPATHS
+BLOCK RESETPATHS
+--------------------------------------------------------------------------------
+
+
+
+Timing summary (Setup):
+---------------
+
+Timing errors: 0  Score: 0
+Cumulative negative slack: 0
+
+Constraints cover 237176 paths, 1 nets, and 10133 connections (99.06% coverage)
+
+--------------------------------------------------------------------------------
+Lattice TRACE Report - Hold, Version Diamond (64-bit) 3.12.0.240.2
+Fri Sep 27 09:38:49 2024
+
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+
+Report Information
+------------------
+Command line:    trce -v 10 -gt -sethld -sp 4 -sphld m -o Project_impl1.twr Project_impl1.ncd Project_impl1.prf 
+Design file:     Project_impl1.ncd
+Preference file: Project_impl1.prf
+Device,speed:    LCMXO2-7000HC,m
+Report level:    verbose report, limited to 10 items per preference
+--------------------------------------------------------------------------------
+
+BLOCK ASYNCPATHS
+BLOCK RESETPATHS
+--------------------------------------------------------------------------------
+
+
+
+Timing summary (Hold):
+---------------
+
+Timing errors: 0  Score: 0
+Cumulative negative slack: 0
+
+Constraints cover 237176 paths, 1 nets, and 10133 connections (99.06% coverage)
+
+
+
+Timing summary (Setup and Hold):
+---------------
+
+Timing errors: 0 (setup), 0 (hold)
+Score: 0 (setup), 0 (hold)
+Cumulative negative slack: 0 (0+0)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+
+Total CPU Time: 0 secs 
+Total REAL Time: 0 secs 
+Peak Memory Usage: 166 MB
+
+Nothing is executed for the "PAR - PARTrace" process
+
+tmcheck -par "Project_impl1.par" 
+
+bitgen -f "Project_impl1.t2b" -w "Project_impl1.ncd"  "Project_impl1.prf"
+
+
+BITGEN: Bitstream Generator Diamond (64-bit) 3.12.0.240.2
+Copyright (c) 1991-1994 by NeoCAD Inc. All rights reserved.
+Copyright (c) 1995 AT&T Corp.   All rights reserved.
+Copyright (c) 1995-2001 Lucent Technologies Inc.  All rights reserved.
+Copyright (c) 2001 Agere Systems   All rights reserved.
+Copyright (c) 2002-2020 Lattice Semiconductor Corporation,  All rights reserved.
+
+
+Loading design for application Bitgen from file Project_impl1.ncd.
+Design name: TOP_LEVEL
+NCD version: 3.3
+Vendor:      LATTICE
+Device:      LCMXO2-7000HC
+Package:     TQFP144
+Performance: 4
+Loading device for application Bitgen from file 'xo2c7000.nph' in environment: /usr/local/diamond/3.12/ispfpga.
+Package Status:                     Final          Version 1.39.
+Performance Hardware Data Status:   Final          Version 34.4.
+
+Running DRC.
+DRC detected 0 errors and 0 warnings.
+Reading Preference File from Project_impl1.prf.
+
+Preference Summary:
++---------------------------------+---------------------------------+
+|  Preference                     |  Current Setting                |
++---------------------------------+---------------------------------+
+|                         RamCfg  |                        Reset**  |
++---------------------------------+---------------------------------+
+|                     MCCLK_FREQ  |                         2.08**  |
++---------------------------------+---------------------------------+
+|                  CONFIG_SECURE  |                          OFF**  |
++---------------------------------+---------------------------------+
+|                          INBUF  |                           ON**  |
++---------------------------------+---------------------------------+
+|                      JTAG_PORT  |                       ENABLE**  |
++---------------------------------+---------------------------------+
+|                       SDM_PORT  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|                 SLAVE_SPI_PORT  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|                MASTER_SPI_PORT  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|                       I2C_PORT  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|        MUX_CONFIGURATION_PORTS  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|                  CONFIGURATION  |                          CFG**  |
++---------------------------------+---------------------------------+
+|                COMPRESS_CONFIG  |                           ON**  |
++---------------------------------+---------------------------------+
+|                        MY_ASSP  |                          OFF**  |
++---------------------------------+---------------------------------+
+|               ONE_TIME_PROGRAM  |                          OFF**  |
++---------------------------------+---------------------------------+
+|                 ENABLE_TRANSFR  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|                  SHAREDEBRINIT  |                      DISABLE**  |
++---------------------------------+---------------------------------+
+|            BACKGROUND_RECONFIG  |                          OFF**  |
++---------------------------------+---------------------------------+
+ *  Default setting.
+ ** The specified setting matches the default setting.
+
+
+Creating bit map...
+ 
+Bitstream Status: Final           Version 1.95.
+ 
+Saving bit stream in "Project_impl1.bit".
+Total CPU Time: 1 secs 
+Total REAL Time: 2 secs 
+Peak Memory Usage: 433 MB
+Lattice Diamond Deployment Tool 3.12 Command Line
+
+Loading Programmer Device Database...
+
+Generating SVF.....
+Reading Input File: build/Project_impl1.bit
+Output File: dist/bitstream.svf
+Generate Single SVF file: Start
+
+Device 1 LCMXO2-7000HC:SRAM Erase,Program,Verify
+
+Build SVF File Operation: Successful.
+
+Lattice Diamond Deployment Tool has exited successfully.
+

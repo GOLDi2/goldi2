@@ -42,57 +42,33 @@ use work.GOLDI_DATA_TYPES.all;
 
 
 --! Functionality simulation
-entity TMC2660_DRIVER_TB is
-end entity TMC2660_DRIVER_TB;
+entity TMC2660_SMODULE_TB is
+end entity TMC2660_SMODULE_TB;
 
 
 
 
 --! Simulation architecture
-architecture TB of TMC2660_DRIVER_TB is
-
-    --****DUT****
-    component TMC2660_DRIVER
-        generic(
-            ADDRESS         :   natural := 1;
-            SCLK_FACTOR     :   natural := 8;
-            TMC2660_CONFIG  :   tmc2660_rom := (x"FF00FF",x"FF00FF")
-        );
-        port(
-            clk             : in    std_logic;
-            rst             : in    std_logic;
-            sys_bus_i       : in    sbus_in;
-            sys_bus_o       : out   sbus_out;
-            tmc2660_clk     : out   io_o;
-            tmc2660_enn     : out   io_o;
-            tmc2660_sg      : in    io_i;
-            tmc2660_dir     : out   io_o;
-            tmc2660_step    : out   io_o;
-            tmc2660_sclk    : out   io_o;
-            tmc2660_ncs     : out   io_o;
-            tmc2660_mosi    : out   io_o;
-            tmc2660_miso    : in    io_i
-        );
-    end component;
+architecture TB of TMC2660_SMODULE_TB is
 
 
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period	    :	time := 20 ns;
+	constant clk_period	    :	time := 25 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
 	signal run_sim			:   std_logic := '1';
     --DUT IOs
     signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
     signal sys_bus_o        :   sbus_out := gnd_sbus_o;
-    signal tmc2660_clk      :   io_o := low_io_o;
-    signal tmc2660_enn      :   io_o := low_io_o;
-    signal tmc2660_sg       :   io_i := low_io_i;
-    signal tmc2660_dir      :   io_o := low_io_o;
-    signal tmc2660_step     :   io_o := low_io_o;
-    signal tmc2660_sclk     :   io_o := low_io_o;
-    signal tmc2660_ncs      :   io_o := low_io_o;
-    signal tmc2660_mosi     :   io_o := low_io_o;
+    signal p_tmc2660_clk    :   io_o := low_io_o;
+    signal p_tmc2660_enn    :   io_o := low_io_o;
+    signal p_tmc2660_sg     :   io_i := low_io_i;
+    signal p_tmc2660_dir    :   io_o := low_io_o;
+    signal p_tmc2660_step   :   io_o := low_io_o;
+    signal p_tmc2660_sclk   :   io_o := low_io_o;
+    signal p_tmc2660_ncs    :   io_o := low_io_o;
+    signal p_tmc2660_mosi   :   io_o := low_io_o;
 
 
 begin
@@ -100,26 +76,29 @@ begin
 
     --****COMPONENT****
     -----------------------------------------------------------------------------------------------
-    DUT : entity work.TMC2660_DRIVER
+    DUT : entity work.TMC2660_SMODULE
     generic map(
-        ADDRESS         => 1,
-        SCLK_FACTOR     => 10,
-        TMC2660_CONFIG  => (x"FF00FF",x"FF00FF")
+        g_address                   => 0,
+        g_sclk_factor               => 10,
+        g_tmc2660_config            => (x"0000",x"0000"),
+        g_acceleration              => 20,
+        g_stepperDivideFactor       => 400,
+        g_accelerationDivideFactor  => 1
     )
     port map(
         clk             => clock,
         rst             => reset,
         sys_bus_i       => sys_bus_i,
         sys_bus_o       => sys_bus_o,
-        tmc2660_clk     => tmc2660_clk,
-        tmc2660_enn     => tmc2660_enn,
-        tmc2660_sg      => (dat => '1'),
-        tmc2660_dir     => tmc2660_dir,
-        tmc2660_step    => tmc2660_step,
-        tmc2660_sclk    => tmc2660_sclk,
-        tmc2660_ncs     => tmc2660_ncs,
-        tmc2660_mosi    => tmc2660_mosi,
-        tmc2660_miso    => (dat => '1')
+        p_tmc2660_clk   => p_tmc2660_clk,
+        p_tmc2660_enn   => p_tmc2660_enn,
+        p_tmc2660_sg    => (dat => '1'),
+        p_tmc2660_dir   => p_tmc2660_dir,
+        p_tmc2660_step  => p_tmc2660_step,
+        p_tmc2660_sclk  => p_tmc2660_sclk,
+        p_tmc2660_ncs   => p_tmc2660_ncs,
+        p_tmc2660_mosi  => p_tmc2660_mosi,
+        p_tmc2660_miso  => (dat => '1')
     );
     -----------------------------------------------------------------------------------------------
 
@@ -143,17 +122,15 @@ begin
 
         wait for 7 us;
 
-
-        --Test stream data
-        sys_bus_i <= writeBus(3,255);
+        sys_bus_i <= writeBus(1,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(4,0);
+        sys_bus_i <= writeBus(2,255);
         wait for clk_period;
-        sys_bus_i <= writeBus(5,8);
+        sys_bus_i <= writeBus(0,1);
         wait for clk_period;
-        sys_bus_i <= gnd_sbus_i;
-
-        wait for 3 us;
+        wait for 50 ms;
+        sys_bus_i <= writeBus(0,0);
+        wait for 2 ms;
 
 
         --**End simulation**

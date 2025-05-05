@@ -5,7 +5,7 @@ SCRIPT_DIR=$(dirname "$0")
 
 source $DIAMOND_DIR/bin/lin64/diamond_env
 
-#$SCRIPT_DIR/generate_project.sh
+$SCRIPT_DIR/generate_project.sh
 rm -rf build
 
 mkdir -p build

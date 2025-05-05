@@ -412,9 +412,10 @@ begin
 
     CLAW_MAGNET : entity work.EMAGNET_SMODULE
     generic map(
-        g_address		=> EMAG_ADDRESS,
-        g_magnet_tao	=> 0,
-        g_demag_time	=> 0
+        g_address		    => EMAG_ADDRESS,
+        g_magnet_tao	    => 0,
+        g_pulse_width       => 0,
+        g_pulse_reduction   => 0
     )
     port map(
         clk			    => clk,
