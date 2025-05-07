@@ -1,149 +1,81 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		TMC2660 Stepper driver testbench 
--- Module Name:		TMC2660_DRIVER_TB
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> TMC2660_DRIVER.vhd
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments:-
---
--- Revision V4.00.00 - Module refactoring
--- Additional Comments: Use of env library to stop simulation.
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation flow control and assertions
-library std;
 use std.standard.all;
 use std.env.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
-
-
-
 
 --! Functionality simulation
 entity TMC2660_SMODULE_TB is
 end entity TMC2660_SMODULE_TB;
 
-
-
-
 --! Simulation architecture
 architecture TB of TMC2660_SMODULE_TB is
 
-
     --****INTERNAL SIGNALS****
     --Simulation timing
-	constant clk_period	    :	time := 25 ns;
-	signal reset			:	std_logic := '0';
-	signal clock			:	std_logic := '0';
-	signal run_sim			:   std_logic := '1';
+    constant clk_period   : time      := 25 ns;
+    signal reset          : std_logic := '0';
+    signal clock          : std_logic := '0';
+    signal run_sim        : std_logic := '1';
     --DUT IOs
-    signal sys_bus_i        :   sbus_in  := gnd_sbus_i;
-    signal sys_bus_o        :   sbus_out := gnd_sbus_o;
-    signal p_tmc2660_clk    :   io_o := low_io_o;
-    signal p_tmc2660_enn    :   io_o := low_io_o;
-    signal p_tmc2660_sg     :   io_i := low_io_i;
-    signal p_tmc2660_dir    :   io_o := low_io_o;
-    signal p_tmc2660_step   :   io_o := low_io_o;
-    signal p_tmc2660_sclk   :   io_o := low_io_o;
-    signal p_tmc2660_ncs    :   io_o := low_io_o;
-    signal p_tmc2660_mosi   :   io_o := low_io_o;
-
+    signal sys_bus_i      : sbus_in   := gnd_sbus_i;
+    signal sys_bus_o      : sbus_out  := gnd_sbus_o;
+    signal p_tmc2660_clk  : io_o      := low_io_o;
+    signal p_tmc2660_enn  : io_o      := low_io_o;
+    signal p_tmc2660_sg   : io_i      := low_io_i;
+    signal p_tmc2660_dir  : io_o      := low_io_o;
+    signal p_tmc2660_step : io_o      := low_io_o;
+    signal p_tmc2660_sclk : io_o      := low_io_o;
+    signal p_tmc2660_ncs  : io_o      := low_io_o;
+    signal p_tmc2660_mosi : io_o      := low_io_o;
 
 begin
-
-
-    --****COMPONENT****
-    -----------------------------------------------------------------------------------------------
     DUT : entity work.TMC2660_SMODULE
-    generic map(
-        g_address                   => 0,
-        g_sclk_factor               => 10,
-        g_tmc2660_config            => (x"0000",x"0000"),
-        g_acceleration              => 20,
-        g_stepperDivideFactor       => 400,
-        g_accelerationDivideFactor  => 1
-    )
-    port map(
-        clk             => clock,
-        rst             => reset,
-        sys_bus_i       => sys_bus_i,
-        sys_bus_o       => sys_bus_o,
-        p_tmc2660_clk   => p_tmc2660_clk,
-        p_tmc2660_enn   => p_tmc2660_enn,
-        p_tmc2660_sg    => (dat => '1'),
-        p_tmc2660_dir   => p_tmc2660_dir,
-        p_tmc2660_step  => p_tmc2660_step,
-        p_tmc2660_sclk  => p_tmc2660_sclk,
-        p_tmc2660_ncs   => p_tmc2660_ncs,
-        p_tmc2660_mosi  => p_tmc2660_mosi,
-        p_tmc2660_miso  => (dat => '1')
-    );
-    -----------------------------------------------------------------------------------------------
+        generic map(
+            g_address                  => 0,
+            g_sclk_factor              => 10,
+            g_tmc2660_config           => (x"0000", x"0000"),
+            g_acceleration             => 20,
+            g_stepperDivideFactor      => 400,
+            g_accelerationDivideFactor => 1
+        )
+        port map(
+            clk            => clock,
+            rst            => reset,
+            sys_bus_i      => sys_bus_i,
+            sys_bus_o      => sys_bus_o,
+            p_tmc2660_clk  => p_tmc2660_clk,
+            p_tmc2660_enn  => p_tmc2660_enn,
+            p_tmc2660_sg   => (dat => '1'),
+            p_tmc2660_dir  => p_tmc2660_dir,
+            p_tmc2660_step => p_tmc2660_step,
+            p_tmc2660_sclk => p_tmc2660_sclk,
+            p_tmc2660_ncs  => p_tmc2660_ncs,
+            p_tmc2660_mosi => p_tmc2660_mosi,
+            p_tmc2660_miso => (dat => '1'),
+            p_enc_res      => '0',
+            p_enc_a        => (dat => '0'),
+            p_enc_b        => (dat => '0')
+        );
 
-
-
-    --****SIMULATION TIMING****
-    -----------------------------------------------------------------------------------------------
-    clock <= run_sim and (not clock) after clk_period/2;
+    clock <= not clock after clk_period / 2;
     reset <= '1' after 10 ns, '0' after 30 ns;
-    -----------------------------------------------------------------------------------------------
 
-
-
-    --****TEST****
-    -----------------------------------------------------------------------------------------------
     TEST : process
-        variable init_hold  :   time := 5*clk_period/2;
     begin
-        --**Initial Setup**
-        wait for init_hold;
-
-        wait for 7 us;
-
-        sys_bus_i <= writeBus(1,255);
+        sys_bus_i <= writeBus(1, 255);
         wait for clk_period;
-        sys_bus_i <= writeBus(2,255);
+        sys_bus_i <= writeBus(2, 255);
         wait for clk_period;
-        sys_bus_i <= writeBus(0,1);
+        sys_bus_i <= writeBus(0, 1);
         wait for clk_period;
-        wait for 50 ms;
-        sys_bus_i <= writeBus(0,0);
+        sys_bus_i <= writeBus(0, 0);
         wait for 2 ms;
 
-
-        --**End simulation**
-		wait for 50 ns;
-        report "TMC2660_DRIVER_TB - testbench completed";
-        --Simulation end usign vhdl2008 env library (Pipeline use)
-       	std.env.finish;
-        --Simulation end for local use in lattice diamond software (VHDL2008 libraries supported)
-        -- run_sim <= '0';
-        -- wait;
-
+        std.env.finish;
     end process;
-    -----------------------------------------------------------------------------------------------
-
 
 end architecture;

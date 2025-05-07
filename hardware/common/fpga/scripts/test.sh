@@ -19,16 +19,14 @@ ghdl -i --work=machxo2 --std=08 $GIT_ROOT/hardware/common/lattice-library/machxo
 #ghdl -i --work=machxo2 --std=08 $(fd -L impl.vhd $GIT_ROOT/hardware/common/lattice-library)
 set +e
 FAILED=false
-#for file in $(fd -L .vhd ../tests/actuation/TMC2660/Test/); do
-for file in $(fd -L .vhd ../tests/); do
-#for file in "../tests/acuation/TMC2660/TMC2660_SMODULE_TB_old.vhd"; do
+for file in $(fd -L .vhd$ ../tests/); do
     name=${file##*/}
     base=${name%.vhd}
     out=${file%.vhd}.ghw
     echo "Testing $file"
     ghdl -m --std=08 -fsynopsys -frelaxed-rules $base
-    ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --wave=$out --assert-level=error
-    #ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --assert-level=error
+    #ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --wave=$out --assert-level=error --backtrace-severity=warning --ieee-asserts=disable-at-0
+    ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --assert-level=error --backtrace-severity=warning --ieee-asserts=disable-at-0
     if [ $? -ne 0 ]; then
         echo "... failed"
         FAILED=true
