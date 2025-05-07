@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="Description" content="Put your description here.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- <link href="main-style.css" rel="stylesheet"> -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  // HACK(keanulee): The Redux package assumes `process` exists - mock it here before
+  // the module is loaded.
+  window.process = {
+    env: {
+      NODE_ENV: 'production'
+    }
+  };
+  // https://ask.csdn.net/questions/3079207
+  (()=>{
+      const _define = window.customElements.define.bind(window.customElements)
+      let rippleDefined = false;
+      window.customElements.define = ((tagName, klass) => {
+        // console.log('define custom element', tagName, klass)
+        if (tagName == 'mwc-ripple') { 
+          if (rippleDefined) {
+            return 
+          }
+          else {
+            rippleDefined = true;
+          }
+        }
+        return _define(tagName, klass)
+      }).bind(window.customElements)
+    })()
+</script>
+<script src="main.ts"></script>
+</link>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: transparent;
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media print {
+      body {
+        zoom:50%;
+        overflow: hidden;
+      }
+    }
+  </style>
+  <title>GIFT</title>
+</head>
+
+<body>
+  
+
+<top-bar-element>
+  
+</top-bar-element>
+
+<side-bar-element></side-bar-element>
+
+<main-router-element class="main-router"></main-router-element>
+
+
+</body>
+
+
+
+</html>

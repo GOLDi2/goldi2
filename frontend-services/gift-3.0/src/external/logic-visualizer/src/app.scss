@@ -1,0 +1,104 @@
+@use "../node_modules/@material/theme" with (
+  $primary: #ddd,
+  $secondary: #41ab74,
+  $on-primary: #ddd,
+  $on-surface: #ddd,
+);
+@use "../node_modules/@material/button/mdc-button";
+@use "../node_modules/@material/button";
+@use "../node_modules/@material/textfield/mdc-text-field";
+@use "../node_modules/@material/textfield";
+@use "../node_modules/@material/list/mdc-list";
+@use "../node_modules/@material/menu-surface/mdc-menu-surface";
+@use "../node_modules/@material/menu/mdc-menu";
+@use "../node_modules/@material/form-field/mdc-form-field";
+@use "../node_modules/@material/checkbox/mdc-checkbox";
+
+$tui-green: #4f5d6e;
+$bright-bg: #eee;
+$legend-button-width: 35px;
+
+#lv-box {
+  font-family: 'Helvetica Neue',Helvetica,Arial;
+  background-color: darken($tui-green,10%);
+  padding-left: 2px;
+
+
+
+}
+
+.lv-button {
+  text-transform: none !important;
+  font-family: "Helvetica Neue", Helvetica, Arial !important;
+  margin-bottom: 4px;
+}
+
+.lv-text-field, .lv-text-field:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  background-color: transparent !important;
+  @include textfield.height(40px);
+  padding-bottom: 0 !important;
+}
+
+.lv-text-field-label {
+  display: inline-block !important;
+  margin-top: -2px;
+}
+
+lv-menu {
+
+}
+
+lv-legend {
+  background-color: $tui-green;
+  text-align: right;
+  color: theme.$primary;
+  padding-left: 3px;
+  padding-top: 3px;
+  padding-right: 3px;
+}
+
+lv-diagram {
+  background-color: $bright-bg;
+}
+
+// a lane is 30px, -1 for space in between buttons =29px
+
+// buttons that display the current value of a lane
+.lv-display-button {
+  @include button.height(29px);
+  background-color: theme.$secondary !important;
+  @include button.horizontal-padding(0px);
+  min-width: $legend-button-width;
+  font-size: larger;
+  font-weight: 700;
+  padding-left: 3px;
+}
+
+.lv-legend-spacer {
+  height: 29px;
+  line-height: 29px;
+}
+
+.lv-state-input-container {
+  width: $legend-button-width;
+  @include textfield.outlined-height(29px);
+}
+
+.lv-state-input {
+  padding: 0 0 0 5px;
+}
+
+.mdc-menu-surface {
+  background-color: $tui-green;
+}
+
+.mdc-list-item, .mdc-form-field {
+  color: theme.$primary;
+}
+
+.lv-menu-divider {
+  background-color: darken($tui-green, 10%);
+  height: 2px;
+  width: 90%;
+  margin-left: 5%;
+}

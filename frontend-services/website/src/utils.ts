@@ -1,8 +1,8 @@
-import path from "path";
 import fs from "fs";
+import path from "path";
 
-import { Response } from "express";
 import { AuthenticationServiceTypes } from "@cross-lab-project/api-client";
+import { Response } from "express";
 
 export function template_resolution(base_path: string, sub_path: string, default_language: string) {
     return async (filename: string, language?: string) => {
@@ -43,6 +43,7 @@ export function renderPageInit(content_path: string, default_language: string): 
             res.render(page_template, { language, page, isLoggedIn, user, ...properties });
         } catch (e) {
             const page_template = await page_resolution("404", language);
+            res.status(404);
             res.render(page_template, { language, page, isLoggedIn, user });
         }
     }

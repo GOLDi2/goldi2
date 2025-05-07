@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <script>
+        sessionStorage.setItem('lti_session', '{{ req.lti.session | dump | safe }}');
+        sessionStorage.setItem('token', '{{ req.lti.token }}');
+    </script>
+</head>
+<body>
+    {% if req.lti.isInstructor %}
+    <form id="form" action="/{{ language }}/lti/settings" method="post">
+    {% else %}
+    <form id="form" action="/{{ language }}/lti/experiment" method="post">
+    {% endif %}
+        <input type="hidden" id="lti_session" name="lti_session" />
+        <input type="hidden" id="token" name="token" />
+    </form>
+    <script>
+        document.getElementById("lti_session").value=sessionStorage.getItem("lti_session");
+        document.getElementById("token").value=sessionStorage.getItem("token");
+        document.getElementById("form").submit()
+    </script>
+</body>
+</html>

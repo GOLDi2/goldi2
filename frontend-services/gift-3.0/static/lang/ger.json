@@ -1,0 +1,143 @@
+{
+    "topBar": {
+        "tab1": "Automatengraph",
+        "tab2": "Transitionsmatrix",
+        "tab3": "Z-Gleichungen",
+        "tab4": "Simulation",
+        "undo": "Rückgängig machen",
+        "redo": "Wiederholen",
+        "save": "Projekt Speichern",
+        "load": "Projekt Laden",
+        "changelang": "Sprache Ändern",
+        "changeops": "Operator Symbole Ändern",
+        "signals": "Signale Hinzufügen",
+        "equations": {
+            "minimized": "Minimierte Gleichungen",
+            "unminimized": "Unminimierte Gleichungen",
+            "hstar": "H*-Minimierte Gleichungen"
+        },
+        "0outsh": "0 Ausgaben Verbergen",
+        "0edgeh": "0 Kanten Verbergen",
+        "0outss": "0 Ausgaben Anzeigen",
+        "0edges": "0 Kanten Anzeigen",
+        "file": "Datei",
+        "edit": "Bearbeiten",
+        "view": "Ansicht",
+        "settings": "Einstellungen",
+        "equationsHead": "Gleichungen",
+        "statediagram": {
+            "work": "Arbeits-Automat",
+            "hardware": "Hardware-Automat",
+            "merged": "Kombinierter-Automat"
+        },
+        "hdots": "Gelenke Verbergen",
+        "sdots": "Gelenke Zeigen"
+    },
+    "sideBar":{
+        "addButton": "Neuer Automat",
+        "matrix": {
+            "name": "Knotenname",
+            "number": "Knotennummer",
+            "newName": "Neuer Knotenname",
+            "newNumber": "Neue Knotennummer",
+            "signalName": "Signalname",
+            "newSignalName": "Neuer Signalname"
+        }
+    },
+    "equations": {
+        "z-eq": "Z-Gleichungen",
+        "ctrl-sigs": "Steuersignale",
+        "no-ctrl-sigs": "Dieser Automat enthält keinerlei Steuersignale",
+        "outputs": "Outputs",
+        "no-outputs": "Dieser Automat hat keinerlei Ausgaben"
+    },
+    "matrix": {
+        "from": "von",
+        "to": "zu",
+        "add": "Knoten hinzufuegen",
+        "sub": "Letzten Knoten entfernen",
+        "tmatrix": "Transitionsmatrix",
+        "omatrix": "Outputmatrix",
+        "cmatrix": "Kontrollsignalmatrix"
+    },
+    "pop-ups": {
+        "accept": "Akzeptieren",
+        "close": "Schließen",
+        "undo": "Rückgängig",
+        "operators": {
+            "header": "Operator Symbole bearbeiten:",
+            "and-op": "UND-Operator",
+            "or-op": "ODER-Operator",
+            "not-op": "NICHT-Operator",
+            "xor-op": "Exklusives-Oder-Operator"
+        },
+        "nodes": {
+            "header": "Neuen Knoten hinzufügen:",
+            "automaton": "Automaten auswählen:",
+            "number": "Nummer des Knotens:"
+        },
+        "automaton": {
+            "header-add": "Neuen Automaten hinzufügen",
+            "header-edit": "Bearbeiten des Automaten",
+            "name": "Name des Automaten:",
+            "description": "Beschreibung des Automaten:",
+            "nodes": "Knoten bearbeiten:"
+        },
+        "signals": {
+            "header": "Signale bearbeiten:",
+            "control-signals":{
+                "name": "Name des neuen Steuersignals",
+                "add-header": "Steuersignale erstellen:",
+                "add": "Steuersignal hinzufügen",
+                "edit-header": "Steuersignale bearbeiten:",
+                "del-name": "Name des zu löschenden Signals",
+                "del": "Steuersignal löschen",
+                "old-name": "Alter Name des Signals",
+                "new-name": "Neuer Name des Signals",
+                "rename": "Steuersignal umbenennen"
+            },
+            "inputs":{
+                "inputs": "Input Variablen",
+                "name": "Name des neuen Inputs",
+                "add": "Input hinzufügen",
+                "edit-header": "Inputs bearbeiten:",
+                "add-header": "Inputs erstellen:",
+                "del-name": "Name des zu löschenden Inputs",
+                "del": "Input löschen",
+                "old-name": "Alter Name des Inputs",
+                "new-name": "Neuer Name des Inputs",
+                "rename": "Input umbenennen"
+            },
+            "outputs":{
+                "outputs": "Output Variablen",
+                "name": "Name des neuen Outputs",
+                "add": "Output hinzufügen",
+                "edit-header": "Outputs bearbeiten:",
+                "add-header": "Outputs erstellen:",
+                "del-name": "Name des zu löschenden Outputs",
+                "del": "Output löschen",
+                "old-name": "Alter Name des Outputs",
+                "new-name": "Neuer Name des Outputs",
+                "rename": "Output umbenennen"
+            }
+        },
+        "node-edit":{
+            "header": "Bearbeiten des Knoten",
+            "initial": "Initialer Knoten",
+            "number": "Neue Knotennummer",
+            "num-change": "Knotennummer ändern",
+            "name": "Neuer Knotenname",
+            "name-change": "Knotenname ändern",
+            "transition-add": "Transition hinzufügen",
+            "signal": "Signal",
+            "equation": "Belegung"
+        },
+        "settings":{
+            "header": "Einstellungen:"
+        },
+        "error":{
+            "choseNew": "Um diesen Fehler zu beheben, geben Sie bitte etwas neues ein:",
+            "choseUndo": "Oder klicken Sie auf 'Rückgängig', um zum letzten korrekten Wert zurückzukehren."
+        }
+    }
+}

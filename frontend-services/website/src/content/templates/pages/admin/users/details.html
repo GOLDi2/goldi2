@@ -14,21 +14,7 @@
                 <input type="hidden" name="username" value="{{ user.username }}" />
                 <span> Username: {{ user.username }}</span><br/>
             {% endif %}
-            {% if user.username.startsWith('local:') or create %}
-                <input type="text" name="password" placeholder="Password" />
-            {% endif %}
-            {% for role in includedRoles %}
-                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}" checked/>
-                <label for="{{ role.id }}">{{ role.name }}</label><br/>
-            {% endfor %}
-            {% for role in excludedRoles %}
-                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}"/>
-                <label for="{{ role.id }}">{{ role.name }}</label><br/>
-            {% endfor %}
-            {% for role in roles %}
-                <input id="{{ role.id }}" type="checkbox" name="roles[]" value="{{ role.id }}"/>
-                <label for="{{ role.id }}">{{ role.name }}</label><br/>
-            {% endfor %}
+            <input type="text" name="password" placeholder="Password" />
             {% if create %}
                 <input class="primary-button" type="submit" value="Create"/>
             {% else %}

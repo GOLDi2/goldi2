@@ -101,6 +101,7 @@ module.exports = {
     colors: {
       black: colors.black,
       white: colors.white,
+      red: colors.red,
       primary: {
         DEFAULT: '#06152A', // 900
         '900': '#06152A',

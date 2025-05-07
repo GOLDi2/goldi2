@@ -2,6 +2,7 @@
 Der Fehler liegt irgendwo in der Definition der Variablen.
 "[Line 4, Column 12] parseAggregate: expected comma after expression"
 Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
+{% import "components/login_wall.html" as login_wall %}
 
 {% set
 text = {
@@ -9,11 +10,7 @@ headline: 'Experiment',
 description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
 et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
 kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-sadipscing elitr.',
-login_prompt: 'You need an activated user account for this action.',
-account_setup_prompt: 'You don\'t have a user account yet?',
-button_login: 'Login',
-button_register: 'Create user account'
+sadipscing elitr.'
 }
 %}
 
@@ -24,68 +21,40 @@ headline: 'Experiment',
 description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
 et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
 kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-sadipscing elitr.',
-login_prompt: 'Für diese Aktion benötigen Sie ein aktiviertes Benutzerkonto.',
-account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
-button_login: 'Login',
-button_register: 'Benutzerkonto einrichten'
+sadipscing elitr.'
 }
 %}
 {% endif %}
 
 {% extends "layout.html" %}
 {% block main %}
-
-{% if isLoggedIn %}
-<div class="mx-auto p-10">
-    <form method="GET">
-        <label for="pspu">Choose a System to control:</label>
-        <select name="pspu" id="pspu">
-            <option value="">None</option>
-            {% for system in pspus %}
-            <option value="{{system.url}}">{{system.name}}</option>
-            {% endfor %}
-        </select><br>
-        <label for="bpu">Choose a Controller:</label>
-        <select name="bpu" id="bpu">
-            <option value="">None</option>
-            {% for system in bpus %}
-            <option value="{{system.url}}">{{system.name}}</option>
-            {% endfor %}
-        </select>
-        <br><br>
-        <input class="primary-button" type="submit" value="Generate Experiment Description">
-    </form>
-</div>
-<form method="POST" class="w-2/3 mx-auto">
-<textarea name="experiment" class="w-full h-96 border-2">
-    {{ experiment | dump(2) }}
-</textarea><br>
-<input class="primary-button" type="submit" value="Start Experiment">
-</form>
-
-{% else %}
-<div class="max-w-6xl mx-auto w-full py-16 font-body">
-    <div class="mx-auto flex flex-wrap-reverse justify-center gap-5">
-        <div class="max-w-md px-10 space-y-5">
-            <div class="text-4xl font-bold text-primary-700">{{text.headline}}</div>
-            <div>{{text.description}}</div>
-            <div>{{text.login_prompt}}</div>
-            <a href="login.html?redirect={{page}}"
-                class="bg-primary rounded-3xl px-8 py-1 w-fit text-primary-50 text-l hover:bg-secondary-primary-hover duration-300">
-                {{text.button_login}}
-            </a>
-            <div>{{text.account_setup_prompt}}</div>
-            <button
-                class="bg-primary-100-middle rounded-3xl px-8 py-1 w-fit text-primary-50 text-l hover:bg-primary-100-middle-hover duration-300">
-                {{text.button_register}}
-            </button>
+    {% call login_wall.wrapper(isLoggedIn) %}
+        <div class="mx-auto p-10">
+            <form method="GET">
+                <label for="pspu">Choose a System to control:</label>
+                <select name="pspu" id="pspu">
+                    <option value="">None</option>
+                    {% for system in pspus %}
+                    <option value="{{system.url}}">{{system.name}}</option>
+                    {% endfor %}
+                </select><br>
+                <label for="bpu">Choose a Controller:</label>
+                <select name="bpu" id="bpu">
+                    <option value="">None</option>
+                    {% for system in bpus %}
+                    <option value="{{system.url}}">{{system.name}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <input class="primary-button" type="submit" value="Generate Experiment Description">
+            </form>
         </div>
-        <div class="max-w-lg">
-            <img class="mt-10" src="/img/experiment1.jpg" alt="Logo">
-        </div>
-    </div>
-</div>
-{% endif %}
-<div class="flex-grow"></div>
+        <form method="POST" class="w-2/3 mx-auto">
+        <textarea name="experiment" class="w-full h-96 border-2">
+            {{ experiment | dump(2) }}
+        </textarea><br>
+        <input class="primary-button" type="submit" value="Start Experiment">
+        </form>
+    {% endcall %}
+    <div class="flex-grow"></div>
 {% endblock %}

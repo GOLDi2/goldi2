@@ -12,10 +12,8 @@ from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
 from crosslab.soa_services.electrical import ElectricalConnectionService
 from crosslab.soa_services.electrical.signal_interfaces.gpio import (
-    ConstractableGPIOInterface,
-    GPIOInterface,
-)
-from crosslab.soa_services.webcam import GstTrack, WebcamService__Producer
+    ConstractableGPIOInterface, GPIOInterface)
+from crosslab.soa_services.webcam import WebcamService__Producer, WebcamTrack
 
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
@@ -50,7 +48,7 @@ def userError(message: str):
 
 
 def newActuatorInterface(interface):
-    global hal
+    global hal  # noqa: F824
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
@@ -71,7 +69,7 @@ def newActuatorInterface(interface):
 
 
 def newSensorInterface(interface):
-    global hal
+    global hal  # noqa: F824
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
         isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
@@ -184,20 +182,7 @@ async def main_async():
     actuators_service.on("newInterface", newActuatorInterface)
     deviceHandler.add_service(actuators_service)
 
-    webcamService = WebcamService__Producer(
-        GstTrack(
-            (" ! ").join(
-                [
-                    "v4l2src device=/dev/video0",
-                    "'image/jpeg,width=640,height=480,framerate=30/1'",
-                    "v4l2jpegdec",
-                    "v4l2h264enc",
-                    "'video/x-h264,level=(string)4'",
-                ]
-            ),
-        ),
-        "webcam",
-    )
+    webcamService = WebcamService__Producer(WebcamTrack(), "webcam")
     deviceHandler.add_service(webcamService)
 
     def lightControl():

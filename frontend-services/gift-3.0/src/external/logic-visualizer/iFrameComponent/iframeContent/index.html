@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="module" src="dist/main.js"></script>
+    </head>
+    <body style="margin: 0;">
+        <logic-visualizer style="height: 100vh;"></logic-visualizer>
+        <script>
+            function transmitToParent(e) {
+                if (window.parent !== window){
+                    window.parent.postMessage({type: e.type, args:e.args},"*");(e)   
+                }
+            }
+            document.addEventListener('lv-user-change', transmitToParent, false)
+            document.addEventListener('lv-clock', transmitToParent, false)
+            document.addEventListener('lv-reset', transmitToParent, false)
+
+            function receiveMessage(e) {
+                let event = new CustomEvent( e.data.type );
+                event[ "args" ] = e.data.args;
+                document.dispatchEvent(event);
+            }
+            window.addEventListener("message", receiveMessage, false);
+        </script>
+    </body>
+</html>

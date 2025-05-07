@@ -1,0 +1,21 @@
+{
+  "langName": "English",
+  "sequentialStepButton": "Clock",
+  "MCEStepNumber": "Number of clocks",
+  "MCEPeriod": "Period (ms)",
+  "MCEGoButton": "Go!",
+  "MCEStopButton": "Stop",
+  "ResetButton": "Reset",
+  "ImportButton": "Import...",
+  "ExportButton": "Export...",
+  "exportWaveJSON": "as WaveJSON",
+  "exportSVG": "as SVG",
+  "exportPNG": "as PNG",
+  "combinatorialStepButton": "Calculate",
+  "VisibilityButton": "Visibility...",
+
+  "Clock": "Clock",
+  "Inputs": "Inputs",
+  "States": "States",
+  "Outputs": "Outputs"
+}

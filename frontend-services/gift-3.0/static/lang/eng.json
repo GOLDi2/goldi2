@@ -1,0 +1,144 @@
+{
+    "topBar": {
+        "tab1": "State Diagram",
+        "tab2": "Transition Matrix",
+        "tab3": "Z-Equations",
+        "tab4": "Simulation",
+        "undo": "Undo",
+        "redo": "Redo",
+        "save": "Save Project",
+        "load": "Load Project",
+        "changelang": "Change Language",
+        "changeops": "Change Operator Symbols",
+        "signals": "Add Signals",
+        "equations": {
+            "minimized": "Minimized Equations",
+            "unminimized": "Unminimized Equations",
+            "hstar": "H*-Minimized Equations"
+        },
+        "0outsh": "Hide 0 Outputs",
+        "0edgeh": "Hide 0 Edges",
+        "0outss": "Show 0 Outputs",
+        "0edges": "Show 0 Edges",
+        "file": "File",
+        "edit": "Edit",
+        "view": "View",
+        "settings": "Settings",
+        "equationsHead": "Equations",
+        "statediagram": {
+            "work": "Working-Automaton",
+            "hardware": "Hardware-Automaton",
+            "merged": "Merged-Automaton"
+        },
+        "hdots": "Hide Dots",
+        "sdots": "Show Dots"
+    },
+    "sideBar":{
+        "addButton": "Add Automaton",
+        "matrix": {
+            "name": "Node Name",
+            "number": "Node Number",
+            "newName": "New Node Name",
+            "newNumber": "New Node Number",
+            "signalName": "Signal Name",
+            "newSignalName": "New Signal Name"
+        }
+    },
+    "equations": {
+        "z-eq": "Z-Equations:",
+        "ctrl-sigs": "Control Signals:",
+        "no-ctrl-sigs": "This automaton does not contain any Control Signals",
+        "outputs": "Outputs:",
+        "no-outputs": "There are no outputs on this automaton"
+    },
+    "matrix": {
+        "from": "from",
+        "to": "to",
+        "add": "Add New Node",
+        "sub": "Remove Last Node",
+        "tmatrix": "Transition Matrix",
+        "omatrix": "Output Matrix",
+        "cmatrix": "Control Signal Matrix"
+    },
+    "pop-ups": {
+        "accept": "Accept",
+        "close": "Close",
+        "undo": "Undo",
+        "operators": {
+            "header": "Change Operators:",
+            "and-op": "AND-Operator",
+            "or-op": "OR-Operator",
+            "not-op": "NOT-Operator",
+            "xor-op": "Exclusive-Or-Operator"
+        },
+        "nodes": {
+            "header": "Add new Node:",
+            "automaton": "Chose automaton:",
+            "number": "Number of node:"
+        },
+        "automaton": {
+            "header-add": "Add new automaton:",
+            "header-edit": "Edit automaton",
+            "name": "Name of automaton:",
+            "description": "Description of Automaton:",
+            "nodes": "Edit Nodes:"
+        },
+        "signals": {
+            "header": "Edit Signals:",
+            "control-signals":{
+                "name": "New Control Signal name",
+                "add": "Add Control Signal",
+                "edit-header": "Edit Control Signals:",
+                "add-header": "Create Control Signals:",
+                "del-name": "Name of Signal to delete",
+                "del": "Delete Control Signal",
+                "old-name": "Old name of Signal",
+                "new-name": "New name of Signal",
+                "rename": "Rename Control Signal"
+            },
+            "inputs":{
+                "inputs": "Input Variables",
+                "name": "New input name",
+                "add": "Add input",
+                "edit-header": "Edit Inputs:",
+                "add-header": "Create Inputs:",
+                "del-name": "Name of input to delete",
+                "del": "Delete input",
+                "old-name": "Old name of input",
+                "new-name": "New name of input",
+                "rename": "Rename input"
+            },
+            "outputs":{
+                "outputs": "Output Variables",
+                "name": "New output name",
+                "add": "Add output",
+                "edit-header": "Edit Outputs:",
+                "add-header": "Create Outputs:",
+                "del-name": "Name of output to delete",
+                "del": "Delete output",
+                "old-name": "Old name of output",
+                "new-name": "New name of output",
+                "rename": "Rename output"
+            }
+        },
+        "node-edit":{
+            "header": "Edit Node",
+            "initial": "Initial Node",
+            "number": "New node number",
+            "num-change": "Change node number",
+            "name": "New node name",
+            "name-change": "Change node name",
+            "transition-add": "Add transition",
+            "signal": "Signal",
+            "equation": "Equation"
+        },
+        "settings":{
+            "header": "Settings:"
+        },
+        "error":{
+            "choseNew": "To fix this error please choose something new:",
+            "choseUndo": "or click 'undo' to keep the last correct value."
+        }
+
+    }
+}

@@ -1,17 +1,13 @@
-import { Request, Response, NextFunction, Router } from "express"
+import { NextFunction, Request, Response, Router } from "express";
 
-import { renderPageType } from "../utils";
-import winston from "winston";
 import asyncHandler from 'express-async-handler';
+import winston from "winston";
+import { renderPageType } from "../utils";
 
 export function device_router(language: string, renderPage: renderPageType, _logger: winston.Logger) {
     async function devices(req: Request, res: Response, _next: NextFunction) {
         const devices = await req.apiClient.listDevices()
-        const users = await req.apiClient.listUsers()
-        const userMap = Object.fromEntries(users.map(user => [user.url, user]))
-        const deviceDetails = await Promise.all(devices.map(device => req.apiClient.getDevice(device.url)))
-        const deviceDetailsMap = Object.fromEntries(deviceDetails.map(device => [device.url, device]))
-        return renderPage('admin/devices/index', language, res, req.user, { devices, users, userMap, deviceDetailsMap });
+        return renderPage('admin/devices/index', language, res, req.user, { devices });
     }
 
     async function createDevice(req: Request, res: Response, _next: NextFunction) {

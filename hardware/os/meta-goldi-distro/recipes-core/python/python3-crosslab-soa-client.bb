@@ -19,6 +19,6 @@ do_compile:prepend() {
 
 PEP517_SOURCE_PATH = "${WORKDIR}/crosslab_soa_client"
 
-RDEPENDS:${PN} = "python3-crosslab-api-client python3-crosslab-aiortc"
+RDEPENDS:${PN} = "python3-crosslab-api-client python3-aiortc"
 
 inherit python_setuptools_build_meta

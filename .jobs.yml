@@ -42,11 +42,16 @@ frontend-services/edge_devices/ti-lab-ecp:
       - crosslab/clients/soa/js:build
       - crosslab/clients/soa_services/electricalConnection/js:build
 
-
 frontend-services/apitool:
   - script: build
     dependencies:
       - crosslab/clients/api/js:build
+
+frontend-services/gift-3.0:
+  - script: build
+  - script: build-docker
+    dependencies:
+      - frontend-services/gift-3.0:build
 
 frontend-services/update:
   - script: build
@@ -60,7 +65,6 @@ frontend-services/update:
       - frontend-services/update:build
     tags:
       - test
-
 
 ################################################################################
 # Hardware #####################################################################
