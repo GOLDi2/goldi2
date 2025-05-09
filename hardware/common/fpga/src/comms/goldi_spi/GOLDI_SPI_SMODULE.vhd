@@ -1,38 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		SPI to GOLDi BUS adaptor
--- Module Name:		GOLDI_SPI_SMODULE
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---					-> SP_CONVERTER.vhd
---					-> BUS_ADAPTOR.vhd
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commit
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V4.00.00 - Extension of BUS protocol and renaming
--- Additional Comments: Introduction of "stb" signal to the GOLDi BUS master
---                      interface to prevent continuous read and write 
---                      operations. Addition of tags to the BUS interfaces
---                      to extend BUS flexibility. Renaming form SPI_TO_BUS
---                      to GOLDI_SPI_SMODULE.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 
 
@@ -126,8 +94,6 @@ begin
             when s_data   => if(p_spi_nce /= '0') then ps_module <= s_config;
                              else ps_module <= s_data;
                              end if;
-
-            when others   => ps_module <= s_config;
             end case;
         end if;
     end process;

@@ -1,43 +1,8 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Top Level - Test project 
--- Module Name:		TOP_LEVEL
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
---                  -> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---
--- Revisions:
--- Revision V0.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V1.01.00 - Reduction of model 
--- Additional Comments: Redundant modules in the system are eliminated
---                      to simplify the model
---
--- Revision V4.00.00 - Moduel refactor
--- Additional Comments: Change to the entity names, generic and port signal 
---                      names to follow the V4.00.00 naming convention. Use 
---                      of the updated GOLDI SPI communication modules.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! MachX02 library
 library machxo2;
 use machxo2.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
@@ -49,8 +14,6 @@ use work.GOLDI_MODULE_CONFIG.all;
 --! @details
 --! The top module contains the drivers for the sensors and actuators 
 --! of the GOLDI Axis Portal V1 system.
---!
---! <https://www.goldi-labs.net/>
 entity TOP_LEVEL is
     port(
         --General
@@ -104,30 +67,15 @@ architecture RTL of TOP_LEVEL is
 
 
 begin
-	
-   --****CLOCKING****
-    -----------------------------------------------------------------------------------------------
-    --External 48 MHz clock
     clk <= ClockFPGA;
-    
-    --Test 53.2 MHz clock
-    -- INTERNAL_CLOCK : component machxo2.components.OSCH
-    -- generic map(
-    --     NOM_FREQ => "53.2"
-    -- )
-    -- port map(
-    --     STDBY    => '0',
-    --     OSC      => clk,
-    --     SEDSTDBY => open
-    -- );
-    -----------------------------------------------------------------------------------------------
-
-
 
     --****MICROCONTROLLER INTERFACE****
     -----------------------------------------------------------------------------------------------
     --Synchronization of Reset input
     RESET_SYNC : entity work.SYNCHRONIZER
+    generic map(
+    	g_stages => 2
+    )
     port map(
         clk         => clk,
         rst         => '0',
@@ -135,13 +83,13 @@ begin
         p_io_sync   => FPGA_nReset_sync
     );
     
-    --Reset routing for use in the models
-    rst <= FPGA_nReset_sync;    --Incorrect name for signal FPGA_nReset -> Signal active high
-    --Reset routing for use in the test Breakoutboard
-    --rst <= not FPGA_nReset_sync;
+    rst <= FPGA_nReset_sync;
 
     --SPI communication
     SCLK_SYNC : entity work.SYNCHRONIZER
+    generic map(
+    	g_stages => 2
+    )
     port map(
         clk         => clk,
         rst         => rst,
@@ -150,6 +98,9 @@ begin
     );
 
     MOSI_SYNC : entity work.SYNCHRONIZER
+    generic map(
+    	g_stages => 2
+    )
     port map(
         clk         => clk,
         rst         => rst,
@@ -158,6 +109,9 @@ begin
     );
 
     NCE0_SYNC : entity work.SYNCHRONIZER
+    generic map(
+    	g_stages => 2
+    )
     port map(
         clk         => clk,
         rst         => rst,
@@ -304,7 +258,6 @@ begin
     X_ENCODER : entity work.ENCODER_SMODULE
     generic map(
         g_address   => X_ENCODER_ADDRESS,
-        g_index_rst => X_ENCODER_RST_TYPE,
         g_invert    => X_ENCODER_INVERT
     )
     port map(
@@ -313,8 +266,7 @@ begin
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o(4),
         p_channel_a => system_io_i(11),
-        p_channel_b => system_io_i(12),
-        p_channel_i => system_io_i(13)
+        p_channel_b => system_io_i(12)
     );
     --User accessible rst to zero encoder acumulator
     x_encoder_rst <= rst or encoder_ref_x;
@@ -325,7 +277,6 @@ begin
     Y_ENCODER : entity work.ENCODER_SMODULE
     generic map(
         g_address   => Y_ENCODER_ADDRESS,
-        g_index_rst => Y_ENCODER_RST_TYPE,
         g_invert    => Y_ENCODER_INVERT
     )
     port map(
@@ -334,8 +285,7 @@ begin
         sys_bus_i   => sys_bus_i,
         sys_bus_o   => sys_bus_o(5),
         p_channel_a => system_io_i(14),
-        p_channel_b => system_io_i(15),
-        p_channel_i => system_io_i(16)
+        p_channel_b => system_io_i(15)
     );
     --User accesible rst to zero encoder acumulator
     y_encoder_rst <= rst or encoder_ref_y;
@@ -513,6 +463,5 @@ begin
 	-----------------------------------------------------------------------------------------------
 	system_io_o(40 downto 33) <= (others => gnd_io_o);
 	-----------------------------------------------------------------------------------------------
-
 
 end architecture;

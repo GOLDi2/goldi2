@@ -320,7 +320,6 @@ begin
         g_accelerationDivideFactor  => X_MOTOR_ACCELERATION_DIVIDEFACTOR,
         g_stepperDivideFactor       => X_MOTOR_SPEED_DIVIDEFACTOR,
         g_acceleration_ratio        => X_MOTOR_ACCELERATION_RATIO,
-        g_enc_index_rst             => X_ENCODER_RST_TYPE,
         g_enc_invert                => X_ENCODER_INVERT,
         g_enc_internal_bit          => X_ENCODER_INTERNAL_BIT,
         g_enc_ratio                 => X_ENCODER_RATIO
@@ -360,7 +359,6 @@ begin
         g_accelerationDivideFactor  => Y_MOTOR_ACCELERATION_DIVIDEFACTOR,
         g_stepperDivideFactor       => Y_MOTOR_SPEED_DIVIDEFACTOR,
         g_acceleration_ratio        => Y_MOTOR_ACCELERATION_RATIO,
-        g_enc_index_rst             => Y_ENCODER_RST_TYPE,
         g_enc_invert                => Y_ENCODER_INVERT,
         g_enc_internal_bit          => Y_ENCODER_INTERNAL_BIT,
         g_enc_ratio                 => Y_ENCODER_RATIO

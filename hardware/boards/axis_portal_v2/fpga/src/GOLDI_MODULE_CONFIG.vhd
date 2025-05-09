@@ -77,9 +77,6 @@ package GOLDI_MODULE_CONFIG is
 	
     --****INCREMENTAL ENCODERS****
     ----------------------------------------------------------------------------------------------
-    --Activate the use of Channel_I for reference after reset
-    constant X_ENCODER_RST_TYPE :   boolean := false;
-    constant Y_ENCODER_RST_TYPE :   boolean := false;
     --Select positive direction [false -> CCW | true -> CC]
     constant X_ENCODER_INVERT   :   boolean := false;
     constant Y_ENCODER_INVERT   :   boolean := false;

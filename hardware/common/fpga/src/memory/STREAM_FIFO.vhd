@@ -1,35 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		Dynamic FIFO Structure for data stream queuing 
--- Module Name:		STREAM_FIFO
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
---
--- Dependencies:    none
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: -  
---
--- Revision V4.00.00 - Modifications to the generic and port signal and rst type
--- Additional Comments: Changes to the module's generic and port signals to
---                      follow V4.00.00 naming convention. Change from
---                      synchronous to asynchronous reset.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
-
-
-
 
 --! @brief FIFO structure for temporary storage of stream data 
 --! @details
@@ -50,53 +21,49 @@ use IEEE.numeric_std.all;
 --! ***Latency: 1cyc***
 entity STREAM_FIFO is
     generic(
-        g_fifo_width    :   natural := 16;                                  --! Memory width, width of the data word vector
-        g_fifo_depth    :   natural := 16                                   --! Memory depth, number of data words that can be stored
+        g_fifo_width : natural := 16;   --! Memory width, width of the data word vector
+        g_fifo_depth : natural := 16    --! Memory depth, number of data words that can be stored
     );
     port(
         --General
-        clk             : in    std_logic;                                  --! System clock
-        rst             : in    std_logic;                                  --! Synchronous reset
+        clk            : in  std_logic; --! System clock
+        rst            : in  std_logic; --! Synchronous reset
         --Data
-        p_write_tready  : out   std_logic;                                  --! Input ready flag, fifo ready for transfer (!queue_full)
-        p_write_tvalid  : in    std_logic;                                  --! Input valid flag, data transmitter ready for transfer
-        p_write_tdata   : in    std_logic_vector(g_fifo_width-1 downto 0);  --! Input data      
-        p_read_tready   : in    std_logic;                                  --! Output ready flag, data recipient redy for transfer
-        p_read_tvalid   : out   std_logic;                                  --! Output valid flag, fifo ready for transfer (!queue_empty)
-        p_read_tdata    : out   std_logic_vector(g_fifo_width-1 downto 0)   --! Output data
+        p_write_tready : out std_logic; --! Input ready flag, fifo ready for transfer (!queue_full)
+        p_write_tvalid : in  std_logic; --! Input valid flag, data transmitter ready for transfer
+        p_write_tdata  : in  std_logic_vector(g_fifo_width - 1 downto 0); --! Input data      
+        p_read_tready  : in  std_logic; --! Output ready flag, data recipient redy for transfer
+        p_read_tvalid  : out std_logic; --! Output valid flag, fifo ready for transfer (!queue_empty)
+        p_read_tdata   : out std_logic_vector(g_fifo_width - 1 downto 0) --! Output data
     );
 end entity STREAM_FIFO;
-
-
-
 
 --! General architecture
 architecture RTL of STREAM_FIFO is
 
     --****INTERNAL SIGNALS****
     --Memory
-    type ram_type is array(g_fifo_depth-1 downto 0) of std_logic_vector(g_fifo_width-1 downto 0);
-    signal memory       :   ram_type;
+    type ram_type is array (g_fifo_depth - 1 downto 0) of std_logic_vector(g_fifo_width - 1 downto 0);
+    signal memory           : ram_type;
     --Memory pointers
-    signal wr_pointer       :   natural range 0 to g_fifo_depth-1;
-    signal rd_pointer       :   natural range 0 to g_fifo_depth-1;
-    signal memory_count     :   natural range 0 to g_fifo_depth;
-    signal memory_count_1   :   natural range 0 to g_fifo_depth;
+    signal wr_pointer       : natural range 0 to g_fifo_depth - 1;
+    signal rd_pointer       : natural range 0 to g_fifo_depth - 1;
+    signal memory_count     : natural range 0 to g_fifo_depth;
+    signal memory_count_1   : natural range 0 to g_fifo_depth;
     --Flags
-    signal write_ready_i    :   std_logic;
-    signal read_valid_i     :   std_logic;
-    signal read_write_valid :   std_logic;
-
+    signal write_ready_i    : std_logic;
+    signal read_valid_i     : std_logic;
+    signal read_write_valid : std_logic;
 
     --****Functions****
     function getIndex(
-        index   :   natural;
-        ready   :   std_logic;
-        valid   :   std_logic
+        index : natural;
+        ready : std_logic;
+        valid : std_logic
     ) return natural is
     begin
-        if(ready = '1' and valid = '1') then
-            if(index = g_fifo_depth-1) then
+        if (ready = '1' and valid = '1') then
+            if (index = g_fifo_depth - 1) then
                 return 0;
             else
                 return index + 1;
@@ -106,55 +73,52 @@ architecture RTL of STREAM_FIFO is
         return index;
     end function;
 
-
 begin
 
     --****RAM****
     -----------------------------------------------------------------------------------------------
-    FIFO_RAM : process(clk,rst)
+    FIFO_RAM : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             memory       <= (others => (others => '0'));
             p_read_tdata <= (others => '0');
-        elsif(rising_edge(clk)) then
-            if(write_ready_i = '1' and p_write_tvalid = '1') then
+        elsif (rising_edge(clk)) then
+            if (write_ready_i = '1' and p_write_tvalid = '1') then
                 memory(wr_pointer) <= p_write_tdata;
-            else null;
+            else
+                null;
             end if;
 
-            p_read_tdata <= memory(getIndex(rd_pointer,p_read_tready,read_valid_i));
+            p_read_tdata <= memory(getIndex(rd_pointer, p_read_tready, read_valid_i));
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
-
-
 
     --****FIFO control****
     -----------------------------------------------------------------------------------------------
     --Update write and read pointers to output input/output data to ram
-    POINTER_CONTROL : process(clk,rst)
+    POINTER_CONTROL : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             rd_pointer <= 0;
             wr_pointer <= 0;
-        elsif(rising_edge(clk)) then
-            wr_pointer <= getIndex(wr_pointer,write_ready_i,p_write_tvalid);
-            rd_pointer <= getIndex(rd_pointer,p_read_tready,read_valid_i);
+        elsif (rising_edge(clk)) then
+            wr_pointer <= getIndex(wr_pointer, write_ready_i, p_write_tvalid);
+            rd_pointer <= getIndex(rd_pointer, p_read_tready, read_valid_i);
         end if;
     end process;
 
-
-    MEMORY_COUNTER : process(clk,rst)
-        variable counter    :   natural range 0 to g_fifo_depth;
+    MEMORY_COUNTER : process(clk, rst)
+        variable counter : natural range 0 to g_fifo_depth;
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             counter := 0;
-        elsif(rising_edge(clk)) then
-            if(write_ready_i = '1' and p_write_tvalid = '1') then
+        elsif (rising_edge(clk)) then
+            if (write_ready_i = '1' and p_write_tvalid = '1') then
                 counter := counter + 1;
             end if;
 
-            if(p_read_tready = '1' and read_valid_i = '1') then
+            if (p_read_tready = '1' and read_valid_i = '1') then
                 counter := counter - 1;
             end if;
         end if;
@@ -162,24 +126,21 @@ begin
         memory_count <= counter;
     end process;
 
-
-    MEMORY_COUTER_DELAY : process(clk,rst)
+    MEMORY_COUTER_DELAY : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             memory_count_1 <= 0;
-        elsif(rising_edge(clk)) then
+        elsif (rising_edge(clk)) then
             memory_count_1 <= memory_count;
         end if;
     end process;
 
-
-    READ_WRITE_FLAG : process(clk,rst)
+    READ_WRITE_FLAG : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             read_write_valid <= '0';
-        elsif(rising_edge(clk)) then
-            if(write_ready_i = '1' and p_write_tvalid = '1' and
-               p_read_tready = '1' and read_valid_i = '1')  then
+        elsif (rising_edge(clk)) then
+            if (write_ready_i = '1' and p_write_tvalid = '1' and p_read_tready = '1' and read_valid_i = '1') then
                 read_write_valid <= '1';
             else
                 read_write_valid <= '0';
@@ -188,37 +149,32 @@ begin
     end process;
     -----------------------------------------------------------------------------------------------
 
-
-
     --****Flag management****
     -----------------------------------------------------------------------------------------------
-    WRITE_READY_FLAG : process(rst,memory_count)
+    WRITE_READY_FLAG : process(rst, memory_count)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             write_ready_i <= '0';
-        elsif(memory_count < g_fifo_depth) then
+        elsif (memory_count < g_fifo_depth) then
             write_ready_i <= '1';
         else
             write_ready_i <= '0';
         end if;
     end process;
 
-
-    READ_VALID_FLAG : process(memory_count,memory_count_1,read_write_valid)
+    READ_VALID_FLAG : process(memory_count, memory_count_1, read_write_valid)
     begin
-        if(memory_count = 0 or memory_count_1 = 0) then
+        if (memory_count = 0 or memory_count_1 = 0) then
             read_valid_i <= '0';
-        elsif(memory_count_1 = 1 and read_write_valid = '1') then
+        elsif (memory_count_1 = 1 and read_write_valid = '1') then
             read_valid_i <= '0';
         else
             read_valid_i <= '1';
         end if;
     end process;
 
-    
     p_write_tready <= write_ready_i;
-    p_read_tvalid <= read_valid_i;
+    p_read_tvalid  <= read_valid_i;
     -----------------------------------------------------------------------------------------------
-
 
 end architecture;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>common</name>
+	<name>axis_portal_v1</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,7 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
 	<linkedResources>
-		<link>
+		<link>hardware/sigasi/high_bay_warehouse
 			<name>Common Libraries</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -24,12 +24,12 @@
 		<link>
 			<name>src</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/common/fpga/src</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/boards/axis_portal_v1/fpga/src</locationURI>
 		</link>
 		<link>
 			<name>tests</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/common/fpga/tests</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/boards/axis_portal_v1/fpga/tests</locationURI>
 		</link>
 		<link>
 			<name>Common Libraries/IEEE</name>
@@ -49,7 +49,7 @@
 		<link>
 			<name>Common Libraries/lattice-library</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lattice-library</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/common/lattice-library</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

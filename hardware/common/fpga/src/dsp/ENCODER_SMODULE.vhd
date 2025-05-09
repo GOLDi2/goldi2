@@ -74,7 +74,8 @@ architecture RTL of ENCODER_SMODULE is
 begin
     ENCODER : entity work.ENCODER
         generic map(
-            g_invert_dir => g_invert
+            g_invert_dir => g_invert,
+            g_enc_internal_bit => 16
         )
         port map(
             clk         => clk,

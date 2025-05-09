@@ -1,30 +1,7 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		20/08/2023
--- Design Name:		Basic memory unit with tagged data
--- Module Name:		REGISTER_T_UNIT
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---
--- Revisions:
--- Revision V4.00.00 - File Created
--- Additional Comments: First commitment
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
-
-
-
 
 --! @brief Custom dual port single data word register with tagged data
 --! @details
@@ -55,52 +32,49 @@ use work.GOLDI_COMM_STANDARD.all;
 --! **Latency: 1cyc**
 entity REGISTER_T_UNIT is
     generic(
-        g_address       :   natural   := 1;                     --! Register address
-        g_def_dvalue    :   data_word := reg_unit_d_default;    --! Register data reset value
-        g_def_tvalue    :   tag_word  := reg_unit_t_default     --! Register tag reset value
+        g_address    : natural   := 1;  --! Register address
+        g_def_dvalue : data_word := reg_unit_d_default; --! Register data reset value
+        g_def_tvalue : tag_word  := reg_unit_t_default --! Register tag reset value
     );
     port(
         --General
-        clk             : in    std_logic;                      --! System clock
-        rst             : in    std_logic;                      --! Asynchronous reset
+        clk         : in  std_logic;    --! System clock
+        rst         : in  std_logic;    --! Asynchronous reset
         --BUS interface
-        sys_bus_i       : in    sbus_in;                        --! BUS port input signals [stb,we,adr,dat,tag]
-        sys_bus_o       : out   sbus_out;                       --! BUS port output signals [dat,tag,mux]
+        sys_bus_i   : in  sbus_in;      --! BUS port input signals [stb,we,adr,dat,tag]
+        sys_bus_o   : out sbus_out;     --! BUS port output signals [dat,tag,mux]
         --Data interface
-        p_data_in       : in    data_word;                      --! Data port write data - BUS port read data
-        p_tag_in        : in    tag_word;                       --! Data port write tag  - BUS port read tag
-        p_data_out      : out   data_word;                      --! Data port read data - BUS port write data
-        p_tag_out       : out   tag_word;                       --! Data port read tag  - BUS port write tag
-        p_read_stb      : out   std_logic;                      --! Read strobe signal indicates a valid read operation by the BUS port
-        p_write_stb     : out   std_logic                       --! Write strobe signal indicates a valid write operation by the BUS port
+        p_data_in   : in  data_word;    --! Data port write data - BUS port read data
+        p_tag_in    : in  tag_word;     --! Data port write tag  - BUS port read tag
+        p_data_out  : out data_word := g_def_dvalue; --! Data port read data - BUS port write data
+        p_tag_out   : out tag_word  := g_def_tvalue; --! Data port read tag  - BUS port write tag
+        p_read_stb  : out std_logic;    --! Read strobe signal indicates a valid read operation by the BUS port
+        p_write_stb : out std_logic     --! Write strobe signal indicates a valid write operation by the BUS port
     );
 end entity REGISTER_T_UNIT;
-
-
-
 
 --! General architecture
 architecture RTL of REGISTER_T_UNIT is
 begin
 
-    READ_OPERATION : process(clk,rst)
-        variable bus_address    :   integer;
+    READ_OPERATION : process(clk, rst)
+        variable bus_address : integer range 0 to 2 ** BUS_ADDRESS_WIDTH - 1;
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             sys_bus_o  <= gnd_sbus_o;
             p_read_stb <= '0';
 
-        elsif(rising_edge(clk)) then
+        elsif (rising_edge(clk)) then
             --Typecast bus address to decode
             bus_address := to_integer(unsigned(sys_bus_i.adr));
 
             --Decode master bus interface and drive response
-            if(sys_bus_i.we = '0' and sys_bus_i.stb = '1' and bus_address = g_address) then
+            if (sys_bus_i.we = '0' and sys_bus_i.stb = '1' and bus_address = g_address) then
                 sys_bus_o.dat <= p_data_in;
                 sys_bus_o.tag <= p_tag_in;
                 sys_bus_o.mux <= '1';
                 p_read_stb    <= '1';
-            elsif(sys_bus_i.we = '0' and bus_address = g_address) then
+            elsif (sys_bus_i.we = '0' and bus_address = g_address) then
                 sys_bus_o.dat <= p_data_in;
                 sys_bus_o.tag <= p_tag_in;
                 sys_bus_o.mux <= '1';
@@ -112,22 +86,20 @@ begin
         end if;
     end process;
 
-
-
-    WRITE_OPERATION : process(clk,rst)
-        variable bus_address    :   integer;
+    WRITE_OPERATION : process(clk, rst)
+        variable bus_address : integer range 0 to 2 ** BUS_ADDRESS_WIDTH - 1;
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             p_data_out  <= g_def_dvalue;
             p_tag_out   <= g_def_tvalue;
             p_write_stb <= '1';
-        
-        elsif(rising_edge(clk)) then
+
+        elsif (rising_edge(clk)) then
             --Typecast bus address to decode
             bus_address := to_integer(unsigned(sys_bus_i.adr));
 
             --Decode master bus interface and drive response
-            if(sys_bus_i.we = '1' and sys_bus_i.stb = '1' and bus_address = g_address) then
+            if (sys_bus_i.we = '1' and sys_bus_i.stb = '1' and bus_address = g_address) then
                 p_data_out  <= sys_bus_i.dat;
                 p_tag_out   <= sys_bus_i.tag;
                 p_write_stb <= '1';
@@ -137,6 +109,5 @@ begin
 
         end if;
     end process;
-
 
 end architecture;

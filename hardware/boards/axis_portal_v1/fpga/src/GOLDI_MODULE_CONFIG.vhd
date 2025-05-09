@@ -1,29 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Configuration parameters for 3_axis_portal_v1
--- Module Name:		GOLDI_MODULE_CONFIG
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Dependencies: 	none
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom package
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 

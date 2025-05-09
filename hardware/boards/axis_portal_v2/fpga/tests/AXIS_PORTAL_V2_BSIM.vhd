@@ -150,17 +150,17 @@ begin
 
         --**Test actuation modules in the AP2**
         --Turn environment LED red on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(28,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(43,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Turn environment LED white on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(29,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(44,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
         --Turn environment LED green on
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(30,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(45,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(128,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
@@ -198,11 +198,11 @@ begin
         IO_DATA(7) <= '1';
         IO_DATA(8) <= '0';
         --Set pwm to maximum
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(24,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(40,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(255,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
         --Enable motor in locked direction        
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(23,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(39,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
@@ -214,7 +214,7 @@ begin
 
 
         --Enable motor in free direction        
-        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(23,BUS_ADDRESS_WIDTH));
+        mosi_config <= "10" & std_logic_vector(to_unsigned(0,BUS_TAG_BITS)) & std_logic_vector(to_unsigned(39,BUS_ADDRESS_WIDTH));
         mosi_data   <= std_logic_vector(to_unsigned(2,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 

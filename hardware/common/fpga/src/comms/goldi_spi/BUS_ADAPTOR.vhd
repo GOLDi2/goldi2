@@ -1,36 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Custom GOLDi BUS adaptor - BUS Master interface
--- Module Name:		BUS_ADAPTOR
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commit
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V4.00.00 - Extension of BUS protocol and renaming
--- Additional Comments: Introduction of "stb" signal to the GOLDi BUS master
---                      interface to prevent continuous read and write 
---                      operations. Addition of tags to the BUS interfaces
---                      to extend BUS flexibility. Renaming form BUS_CONVERTER
---                      to BUS_ADAPTOR.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 
 
@@ -97,7 +67,7 @@ architecture RTL of BUS_ADAPTOR is
 
     --****INTERNAL SIGNALS****
     --Buffers
-    signal config_buffer        :   std_logic_vector(CONFIGURATION_WORD-1 downto 0);
+    signal config_buffer        :   std_logic_vector(CONFIGURATION_WORD-1 downto 0) := (others => '0');
         alias we_buffer         :   std_logic is config_buffer(CONFIGURATION_WORD-1);
         alias se_buffer         :   std_logic is config_buffer(CONFIGURATION_WORD-2);
         alias tag_buffer        :   tag_word  is config_buffer(CONFIGURATION_WORD-3 downto BUS_ADDRESS_WIDTH);

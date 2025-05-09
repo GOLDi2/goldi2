@@ -10,7 +10,9 @@ mkdir -p .ghdl
 cd .ghdl
 
 ghdl -i --std=08 $(fd -L .vhd ../src)
-ghdl -i --std=08 $(fd -L .vhd ../mock_src)
+if [ -d "../mock_src" ]; then
+    ghdl -i --std=08 $(fd -L .vhd ../mock_src)
+fi
 ghdl -i --std=08 $(fd -L .vhd ../tests)
 ghdl -i --work=machxo2 --std=08 -fsynopsys /usr/local/diamond/3.12/cae_library/simulation/vhdl/machxo2/src/MACHXO2_SEQ.vhd
 ghdl -i --work=machxo2 --std=08 -fsynopsys /usr/local/diamond/3.12/cae_library/simulation/vhdl/machxo2/src/MACHXO2_MEM.vhd
@@ -24,7 +26,7 @@ for file in $(fd -L .vhd$ ../tests/); do
     base=${name%.vhd}
     out=${file%.vhd}.ghw
     echo "Testing $file"
-    ghdl -m --std=08 -fsynopsys -frelaxed-rules $base
+    ghdl -m --std=08 -fsynopsys -frelaxed-rules -Wno-hide $base
     #ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --wave=$out --assert-level=error --backtrace-severity=warning --ieee-asserts=disable-at-0
     ghdl --elab-run --std=08 -fsynopsys -frelaxed-rules $base --assert-level=error --backtrace-severity=warning --ieee-asserts=disable-at-0
     if [ $? -ne 0 ]; then

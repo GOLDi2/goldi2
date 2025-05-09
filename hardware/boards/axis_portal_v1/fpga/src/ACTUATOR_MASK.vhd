@@ -1,40 +1,9 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Error protection module
--- Module Name:		ACTUATOR_MASK
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Dependencies: 	-> GOLDI_MODULE_CONFIG.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_COMM_STANDARD.vhd
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V4.00.00 - Change to the port signal names
--- Additional Comments: Change to the port signal names to follow the
---                      V4.00.00 naming convention
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_COMM_STANDARD.all;
-
-
 
 --! @brief System protection module
 --! @details
@@ -68,13 +37,13 @@ architecture RTL of ACTUATOR_MASK is
     alias limit_z_neg       :   std_logic is p_sys_io_i(8).dat;
     alias limit_z_pos       :   std_logic is p_sys_io_i(9).dat;
     --Actuator aliases
-    alias x_enable          :   std_logic is p_sys_io_o(17).dat;
+    alias x_enable          :   std_logic is p_sys_io_o(17).dat; -- @suppress "Unused declaration"
     alias x_out_pos         :   std_logic is p_sys_io_o(18).dat;
     alias x_out_neg         :   std_logic is p_sys_io_o(19).dat;
-    alias y_enable          :   std_logic is p_sys_io_o(20).dat;
+    alias y_enable          :   std_logic is p_sys_io_o(20).dat; -- @suppress "Unused declaration"
     alias y_out_pos         :   std_logic is p_sys_io_o(22).dat;
     alias y_out_neg         :   std_logic is p_sys_io_o(21).dat;
-    alias z_enable          :   std_logic is p_sys_io_o(23).dat;
+    alias z_enable          :   std_logic is p_sys_io_o(23).dat; -- @suppress "Unused declaration"
     alias z_out_pos         :   std_logic is p_sys_io_o(24).dat;
     alias z_out_neg         :   std_logic is p_sys_io_o(25).dat;
     

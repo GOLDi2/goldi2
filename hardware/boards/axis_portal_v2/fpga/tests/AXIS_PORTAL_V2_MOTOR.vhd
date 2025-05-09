@@ -143,10 +143,10 @@ begin
         mosi_data   <= std_logic_vector(to_unsigned(1,SYSTEM_DATA_WIDTH));
         p_spiTransaction(sclk_period,mosi_data_buff,miso_data_buff,SPI0_nCE0,SPI0_SCLK,SPI0_MOSI,SPI0_MISO);
 
-        wait for 20 ms;
+        --wait for 20 ms;
 
       --**End simulation**
-        wait for 50 ns;
+        -- wait for 50 ns;
         report "AXIS_PORTAL_V2_MOTOR - testbench completed";
         --Simulation end usign vhdl2008 env library (Pipeline use)
        	std.env.finish;
