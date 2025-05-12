@@ -1,31 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		TMC2660 Stepper motor driver control 
--- Module Name:		TMC2660_SMODULE
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> REGISTER_TABLE.vhd
---                  -> STREAM_FIFO.vhd
---                  -> ROM16XN_FIFO.vhd
---                  -> SPI_T_DRIVER.vhd
---
--- Revisions:
--- Revision V4.00.00 - File Created
--- Additional Comments: First commitment 
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
@@ -121,13 +96,13 @@ architecture RTL of TMC2660_SMODULE is
 
     --****INTERNAL SIGNALS****
     --Memory
-    constant memory_length       : natural                                      := getMemoryLength(128);
-    constant c_reg_default       : data_word_vector(memory_length - 1 downto 0) := (x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"09", x"C4", x"00"); --(x"00",x"C4",x"09",x"00",x"00",x"00")
-    signal reg_data_in           : data_word_vector(memory_length - 1 downto 0);
-    signal reg_data_out          : data_word_vector(memory_length - 1 downto 0);
+    constant memory_length       : natural                       := getMemoryLength(128);
+    constant c_reg_default       : data_word_vector(15 downto 0) := (x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"09", x"C4", x"00"); --(x"00",x"C4",x"09",x"00",x"00",x"00")
+    signal reg_data_in           : data_word_vector(15 downto 0);
+    signal reg_data_out          : data_word_vector(15 downto 0);
     signal reg_data_in_buff      : std_logic_vector(127 downto 0);
-    alias reg_enc_ratio          : std_logic_vector(15 downto 0) is reg_data_in_buff(63 downto 48);
-    alias reg_acceleration_ratio : std_logic_vector(15 downto 0) is reg_data_in_buff(79 downto 64);
+    alias reg_enc_ratio          : std_logic_vector(15 downto 0) is reg_data_in_buff(63 downto 48); -- @suppress "Unused declaration"
+    alias reg_acceleration_ratio : std_logic_vector(15 downto 0) is reg_data_in_buff(79 downto 64); -- @suppress "Unused declaration"
     alias reg_pos_now            : std_logic_vector(15 downto 0) is reg_data_in_buff(127 downto 112);
     signal reg_data_out_buff     : std_logic_vector(127 downto 0);
     alias reg_driveDir0          : std_logic is reg_data_out_buff(0);
@@ -136,10 +111,10 @@ architecture RTL of TMC2660_SMODULE is
     alias reg_enn                : std_logic is reg_data_out_buff(7);
     alias reg_speed              : std_logic_vector(15 downto 0) is reg_data_out_buff(23 downto 8);
     alias reg_spi_data           : std_logic_vector(23 downto 0) is reg_data_out_buff(47 downto 24);
-    alias reg_pos_stop           : std_logic_vector(15 downto 0) is reg_data_out_buff(95 downto 80);
+    alias reg_pos_stop           : std_logic_vector(15 downto 0) is reg_data_out_buff(95 downto 80); -- @suppress "Unused declaration"
     alias reg_pos_slowdown       : std_logic_vector(15 downto 0) is reg_data_out_buff(111 downto 96);
 
-    signal reg_write_stb            : std_logic_vector(memory_length - 1 downto 0);
+    signal reg_write_stb            : std_logic_vector(15 downto 0);
     --Clocking
     -- signal clock_buffer         :   unsigned(1 downto 0);
     signal s_clk_enb_tmc2660        : std_logic;
@@ -170,14 +145,17 @@ architecture RTL of TMC2660_SMODULE is
     signal rst_enc                  : std_logic;
     signal s_enc_counter            : std_logic_vector(15 downto 0);
     signal s_init                   : std_logic := '0';
+    signal tmc2660_clk              : std_logic;
 
 begin
+
+    assert memory_length = 16 severity error;
 
     --****GENERAL****
     -----------------------------------------------------------------------------------------------
     p_tmc2660_clk.enb <= '1';
     --p_tmc2660_clk.dat <= clock_buffer(1);
-    p_tmc2660_clk.dat <= s_clk_enb_tmc2660 and clk;
+    p_tmc2660_clk.dat <= tmc2660_clk;
 
     p_tmc2660_enn.enb <= '1';
     p_tmc2660_enn.dat <= reg_enn and not s_moving;
@@ -188,13 +166,26 @@ begin
     -----------------------------------------------------------------------------------------------
     TMC2660_CLOCK_DRIVER : entity work.Clock_Divider
         generic map(
-            gDivideFactor => 4
+            gDivideFactor => 2
         )
         port map(
             clk         => clk,
             reset       => rst,
             clk_enb_out => s_clk_enb_tmc2660
         );
+
+    TMC2660_CLK_TOGGLE : process(clk, rst) is
+    begin
+        if rst = '1' then
+            tmc2660_clk <= '0';
+        elsif rising_edge(clk) then
+            if s_clk_enb_tmc2660 then
+                tmc2660_clk <= not tmc2660_clk;
+            else
+                tmc2660_clk <= tmc2660_clk;
+            end if;
+        end if;
+    end process TMC2660_CLK_TOGGLE;
 
     StepperControl_CLOCK_DRIVER : entity work.Clock_Divider
         generic map(
@@ -366,7 +357,7 @@ begin
     MEMORY : entity work.REGISTER_TABLE
         generic map(
             g_address    => g_address,
-            g_reg_number => memory_length,
+            g_reg_number => 16,
             g_def_values => c_reg_default
         )
         port map(

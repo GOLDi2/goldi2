@@ -19,7 +19,6 @@ architecture TB of TMC2660_SMODULE_TB is
     constant clk_period   : time      := 25 ns;
     signal reset          : std_logic := '0';
     signal clock          : std_logic := '0';
-    signal run_sim        : std_logic := '1';
     --DUT IOs
     signal sys_bus_i      : sbus_in   := gnd_sbus_i;
     signal sys_bus_o      : sbus_out  := gnd_sbus_o;

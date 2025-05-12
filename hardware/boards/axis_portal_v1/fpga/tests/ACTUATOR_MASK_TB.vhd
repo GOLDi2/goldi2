@@ -3,7 +3,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use std.standard.all;
 use std.env.all;
---! Use custom packages
 use work.GOLDI_MODULE_CONFIG.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_COMM_STANDARD.all;

@@ -1,35 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Incremental encoder dsp 
--- Module Name:		INC_ENCODER
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---					-> GOLDI_IO_STANDARD.vhd
---					-> REGISTER_TABLE.vhd
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V4.00.00 - Module renaming and change of reset type
--- Additional Comments: Renaming of module to follow V4.00.00 conventions.
---                      (INC_ENCODER.vhd -> ENCODER_SMODULE.vhd)
---						Change from synchronous to asynchronous reset.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
@@ -74,7 +45,7 @@ architecture RTL of ENCODER_SMODULE is
 begin
     ENCODER : entity work.ENCODER
         generic map(
-            g_invert_dir => g_invert,
+            g_invert_dir       => g_invert,
             g_enc_internal_bit => 16
         )
         port map(

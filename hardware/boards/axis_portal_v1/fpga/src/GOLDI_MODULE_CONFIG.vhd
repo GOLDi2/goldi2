@@ -4,62 +4,51 @@ use IEEE.numeric_std.all;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 
-
-
-
 package GOLDI_MODULE_CONFIG is
-    
+
     --****BOARD PINS****
     -----------------------------------------------------------------------------------------------
     --Model pins
     --Number of physical FPGA pins that are available for IO functions
-    constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 41;
+    constant PHYSICAL_PIN_NUMBER : natural range 1 to (2 ** BUS_ADDRESS_WIDTH) - 3 := 41;
     --Number of IO pins needed for the system modules
     --constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
     -----------------------------------------------------------------------------------------------
- 
-    
-	
-	--****MEMORY****
-	-----------------------------------------------------------------------------------------------
-	--Module Base Adderesses; Length based on a system_data_width = 8
-	constant CONFIG_REG_ADDRESS		:	natural := 1;		--Table length: 1
-	constant SENSOR_REG_ADDRESS		:	natural := 2;		--Table length: 2
-	constant ERROR_LIST_ADDRESS		:	natural := 4;		--Table length: 3
-	constant GPIO_DRIVER_ADDRESS	:	natural := 7;		--Table length: 2
-	constant X_ENCODER_ADDRESS		:	natural := 9;		--Table length: 2
-	constant Y_ENCODER_ADDRESS		:	natural := 11;		--Table length: 2
-	constant X_MOTOR_ADDRESS		:	natural := 13;		--Table length: 2
-	constant Y_MOTOR_ADDRESS		:	natural := 15;		--Table length: 2
-	constant Z_MOTOR_ADDRESS		:	natural := 17;		--Table length: 2
-	constant EMAG_ADDRESS			:	natural := 19;		--Table length: 1
-	constant PR_LED_ADDRESS			:	natural := 20;		--Table length: 1
-	constant PG_LED_ADDRESS			:	natural := 21;		--Table length: 1
-	constant ER_LED_ADDRESS			:	natural := 22;		--Table length: 1
-	constant EW_LED_ADDRESS			:	natural := 23;		--Table length: 1
-	constant EG_LED_ADDRESS			:	natural := 24; 		--Table length: 1
-	-----------------------------------------------------------------------------------------------
 
-    
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    --Module Base Adderesses; Length based on a system_data_width = 8
+    constant CONFIG_REG_ADDRESS  : natural := 1; --Table length: 1
+    constant SENSOR_REG_ADDRESS  : natural := 2; --Table length: 2
+    constant ERROR_LIST_ADDRESS  : natural := 4; --Table length: 3
+    constant GPIO_DRIVER_ADDRESS : natural := 7; --Table length: 2
+    constant X_ENCODER_ADDRESS   : natural := 9; --Table length: 2
+    constant Y_ENCODER_ADDRESS   : natural := 11; --Table length: 2
+    constant X_MOTOR_ADDRESS     : natural := 13; --Table length: 2
+    constant Y_MOTOR_ADDRESS     : natural := 15; --Table length: 2
+    constant Z_MOTOR_ADDRESS     : natural := 17; --Table length: 2
+    constant EMAG_ADDRESS        : natural := 19; --Table length: 1
+    constant PR_LED_ADDRESS      : natural := 20; --Table length: 1
+    constant PG_LED_ADDRESS      : natural := 21; --Table length: 1
+    constant ER_LED_ADDRESS      : natural := 22; --Table length: 1
+    constant EW_LED_ADDRESS      : natural := 23; --Table length: 1
+    constant EG_LED_ADDRESS      : natural := 24; --Table length: 1
+    -----------------------------------------------------------------------------------------------
 
-	--****SENSOR DATA MANAGEMENT****
-	-----------------------------------------------------------------------------------------------
-	constant SENSORS_DEFAULT	    :	std_logic_vector(9 downto 0) := (others => '0');
-	-----------------------------------------------------------------------------------------------
-	
-	
-	
+    --****SENSOR DATA MANAGEMENT****
+    -----------------------------------------------------------------------------------------------
+    constant SENSORS_DEFAULT : std_logic_vector(9 downto 0) := (others => '0');
+    -----------------------------------------------------------------------------------------------
+
     --****INCREMENTAL ENCODERS****
     ----------------------------------------------------------------------------------------------
     --Activate the use of Channel_I for reference after reset
-    constant X_ENCODER_RST_TYPE :   boolean := false;
-    constant Y_ENCODER_RST_TYPE :   boolean := false;
+    constant X_ENCODER_RST_TYPE : boolean := false;
+    constant Y_ENCODER_RST_TYPE : boolean := false;
     --Select positive direction [false -> CCW | true -> CC]
-    constant X_ENCODER_INVERT   :   boolean := false;
-    constant Y_ENCODER_INVERT   :   boolean := true;
+    constant X_ENCODER_INVERT   : boolean := false;
+    constant Y_ENCODER_INVERT   : boolean := true;
     -----------------------------------------------------------------------------------------------
-
-
 
     --****ACTUATORS****
     -----------------------------------------------------------------------------------------------
@@ -69,12 +58,10 @@ package GOLDI_MODULE_CONFIG is
     -- f_clk - system clock
     -- f_pwm - desired frequency of pwm signals
 
-    constant X_MOTOR_FREQUENCY  :   natural := 27;
-    constant Y_MOTOR_FREQUENCY  :   natural := 27;
-    constant Z_MOTOR_FREQUENCY  :   natural := 27;
+    constant X_MOTOR_FREQUENCY : natural := 27;
+    constant Y_MOTOR_FREQUENCY : natural := 27;
+    constant Z_MOTOR_FREQUENCY : natural := 27;
     -----------------------------------------------------------------------------------------------
-    
-
 
     --****LED****
     -----------------------------------------------------------------------------------------------
@@ -82,23 +69,22 @@ package GOLDI_MODULE_CONFIG is
     --           and on/off ratio is a divided into two configureable frequency/16 segments
     --
     --Invert:    Invert on/off behaviour
-    
+
     --Power LED Red
-    constant PR_LED_FREQUENCY   :   natural := 50000000;
-    constant PR_LED_INVERTED    :   boolean := false;
+    constant PR_LED_FREQUENCY : natural := 50000000;
+    constant PR_LED_INVERTED  : boolean := false;
     --Power LED Green
-    constant PG_LED_FREQUENCY   :   natural := 50000000;
-    constant PG_LED_INVERTED    :   boolean := false;
+    constant PG_LED_FREQUENCY : natural := 50000000;
+    constant PG_LED_INVERTED  : boolean := false;
     --Environment LED Red
-    constant ER_LED_FREQUENCY   :   natural := 50000000;
-    constant ER_LED_INVERTED    :   boolean := false;
+    constant ER_LED_FREQUENCY : natural := 50000000;
+    constant ER_LED_INVERTED  : boolean := false;
     --Environment LED White
-    constant EW_LED_FREQUENCY   :   natural := 50000000;
-    constant EW_LED_INVERTED    :   boolean := false;
+    constant EW_LED_FREQUENCY : natural := 50000000;
+    constant EW_LED_INVERTED  : boolean := false;
     --Environment LED Green
-    constant EG_LED_FREQUENCY   :   natural := 50000000;
-    constant EG_LED_INVERTED    :   boolean := false;
+    constant EG_LED_FREQUENCY : natural := 50000000;
+    constant EG_LED_INVERTED  : boolean := false;
     -----------------------------------------------------------------------------------------------
-    
 
 end package GOLDI_MODULE_CONFIG;

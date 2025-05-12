@@ -1,36 +1,8 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Mobile control unit [MOLE] - Board Simulation 
--- Module Name:		MOLE_V1_BSIM
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Revisions:
--- Revision V3.00.01 - File Created
--- Additional Comments: First commitment
---
--- Revision V4.00.00 - Refactoring of testbench and renaming of module
--- Additional Comments: Modification to communication process to account for 
---                      new SPI protocol. Extension of test cases to verify
---                      model. Use of "env" library for control of the 
---                      simulation flow. Renaming of module to follow V4.00.00 
---                      naming conventions.
---                      (CONTROL_UNIT_V1_MOLE.vhd -> MOLE_V1_BSIM.vhd)
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation flow control and assertions
-library std;
 use std.standard.all;
 use std.env.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
@@ -104,7 +76,7 @@ begin
 
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
-    clock <= run_sim and (not clock) after clk_period/2;
+    clock <= not clock after clk_period/2;
     reset <= '1' after 10 ns, '0' after 50 ns;
     -----------------------------------------------------------------------------------------------
 

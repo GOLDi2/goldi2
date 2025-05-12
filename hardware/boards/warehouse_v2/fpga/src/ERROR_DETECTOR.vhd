@@ -1,41 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		Error list for high-bay warehouse
--- Module Name:		ERROR_DETECTOR
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> VIRTUAL_SENSOR_ARRAY.vhd
---                  -> REGISTER_TABLE.vhd
---                  -> HIGH_DEBOUNCE.vhd
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V2.00.00 - First release
--- Additional Comments:
---
--- Revision V4.00.00 - Optimized error list
--- Additional Comments: Simplification of enityt and protection cases.
---                      Change to the generic and port signal names to follow
---                      V4.00.00 naming convention. Correction of the 
---                      instantiated entities.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;

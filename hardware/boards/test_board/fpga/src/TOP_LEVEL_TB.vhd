@@ -1,29 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universität Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		Test design for Breakout-board
--- Module Name:		TOP_LEVEL Simulation
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;

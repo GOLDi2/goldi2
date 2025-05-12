@@ -1,40 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		Actuator mask for damage prevention 
--- Module Name:		ACTUATOR_MASK
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> HIGH_DEBOUNCE.vhd
---                  -> VIRTUAL_LIMIT_ARRAY.vhd
---                  -> VIRTUAL_SENSOR_ARRAY.vhd
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V2.00.00 - Default module version for release 2.00.00
--- Additional Comments: Release for Warehouse_V2
---
--- Revision V4.00.00 - Optimized mask and general refactoring
--- Additional Comments: Simplification of entity and protection cases.
---                      Change to the generic and port signal names to follow
---                      V4.00.00 naming convention. Correction of the 
---                      instantiated entities.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
 use work.GOLDI_MODULE_CONFIG.all;

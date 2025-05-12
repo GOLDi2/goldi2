@@ -1,105 +1,67 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		25/05/2023
--- Design Name:		Configuration parameters for 3_axis_portal_v2
--- Module Name:		GOLDI_MODULE_CONFIG
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Dependencies: 	none
---
--- Revisions:
--- Revision V2.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V3.00.00 - Default module version for release 3.00.00
--- Additional Comments: Release for Axis Portal V2 (AP2)
---
--- Revision V4.00.00 - Addition of new constants
--- Additional Comments: New constants for the improved modules introduced
---                      in the V4.00.00. 
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom package
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
 
-
-
-
 package GOLDI_MODULE_CONFIG is
-    
+
     --****BOARD PINS****
     -----------------------------------------------------------------------------------------------
     --Model pins
     --Number of physical FPGA pins that are available for IO functions
-    constant PHYSICAL_PIN_NUMBER    :   natural range 1 to (2**BUS_ADDRESS_WIDTH)-3 := 42;
+    constant PHYSICAL_PIN_NUMBER : natural range 1 to (2 ** BUS_ADDRESS_WIDTH) - 3 := 42;
     --Number of IO pins needed for the system modules
     --constant VIRTUAL_PIN_NUMBER     :   natural range 1 to (2**SYSTEM_DATA_WIDTH)-1 := 41;
     -----------------------------------------------------------------------------------------------
- 
-    
-	
-	--****MEMORY****
-	-----------------------------------------------------------------------------------------------
-	--Module Base Adderesses; Length based on a system_data_width = 8
-	constant CTRL_REG_ADDRESS		:	natural := 1;		--Table length: 1
-	constant SENSOR_REG_ADDRESS		:	natural := 2;		--Table length: 1
-	constant ERROR_LIST_ADDRESS		:	natural := 3;		--Table length: 2
-	constant GPIO_DRIVER_ADDRESS	:	natural := 5;		--Table length: 2
-	constant X_MOTOR_ADDRESS		:	natural := 7;		--Table length: 16
-	constant Y_MOTOR_ADDRESS		:	natural := 23;		--Table length: 16
-	constant Z_MOTOR_ADDRESS		:	natural := 39;		--Table length: 2
-	constant EMAG_ADDRESS			:	natural := 40;		--Table length: 1
-	constant PR_LED_ADDRESS			:	natural := 41;		--Table length: 1
-	constant PG_LED_ADDRESS			:	natural := 42;		--Table length: 1
-	constant ER_LED_ADDRESS			:	natural := 43;		--Table length: 1
-	constant EW_LED_ADDRESS			:	natural := 44;		--Table length: 1
-	constant EG_LED_ADDRESS			:	natural := 45; 		--Table length: 1
-	-----------------------------------------------------------------------------------------------
 
-    
+    --****MEMORY****
+    -----------------------------------------------------------------------------------------------
+    --Module Base Adderesses; Length based on a system_data_width = 8
+    constant CTRL_REG_ADDRESS    : natural := 1; --Table length: 1
+    constant SENSOR_REG_ADDRESS  : natural := 2; --Table length: 1
+    constant ERROR_LIST_ADDRESS  : natural := 3; --Table length: 2
+    constant GPIO_DRIVER_ADDRESS : natural := 5; --Table length: 2
+    constant X_MOTOR_ADDRESS     : natural := 7; --Table length: 16
+    constant Y_MOTOR_ADDRESS     : natural := 23; --Table length: 16
+    constant Z_MOTOR_ADDRESS     : natural := 39; --Table length: 2
+    constant EMAG_ADDRESS        : natural := 40; --Table length: 1
+    constant PR_LED_ADDRESS      : natural := 41; --Table length: 1
+    constant PG_LED_ADDRESS      : natural := 42; --Table length: 1
+    constant ER_LED_ADDRESS      : natural := 43; --Table length: 1
+    constant EW_LED_ADDRESS      : natural := 44; --Table length: 1
+    constant EG_LED_ADDRESS      : natural := 45; --Table length: 1
+    -----------------------------------------------------------------------------------------------
 
-	--****SENSOR DATA MANAGEMENT****
-	-----------------------------------------------------------------------------------------------
-	constant SENSORS_DEFAULT	    :	std_logic_vector(6 downto 0) := (others => '0');
-	-----------------------------------------------------------------------------------------------
-	
-	
-	
+    --****SENSOR DATA MANAGEMENT****
+    -----------------------------------------------------------------------------------------------
+    constant SENSORS_DEFAULT : std_logic_vector(6 downto 0) := (others => '0');
+    -----------------------------------------------------------------------------------------------
+
     --****INCREMENTAL ENCODERS****
     ----------------------------------------------------------------------------------------------
     --Select positive direction [false -> CCW | true -> CC]
-    constant X_ENCODER_INVERT   :   boolean := false;
-    constant Y_ENCODER_INVERT   :   boolean := false;
+    constant X_ENCODER_INVERT       : boolean                       := false;
+    constant Y_ENCODER_INVERT       : boolean                       := false;
     --ENCONDER 
-    constant X_ENCODER_INTERNAL_BIT :   natural := 18;
-    constant Y_ENCODER_INTERNAL_BIT :   natural := 16;
+    constant X_ENCODER_INTERNAL_BIT : natural                       := 18;
+    constant Y_ENCODER_INTERNAL_BIT : natural                       := 16;
     -- ENCODER ratio: Encoder steps / Motor Steps as float16
-    constant X_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3D00#, 16)); -- ratio: (1000/4)/200 = 1.25
+    constant X_ENCODER_RATIO        : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3D00#, 16)); -- ratio: (1000/4)/200 = 1.25
     --constant X_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(129, 16)); --test
-    constant Y_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3E00#, 16)); -- ratio: 600/400 = 1,5
+    constant Y_ENCODER_RATIO        : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3E00#, 16)); -- ratio: 600/400 = 1,5
     -----------------------------------------------------------------------------------------------
-
-
 
     --****X AXIS STEPPER MOTOR****
     -----------------------------------------------------------------------------------------------
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant X_MOTOR_SCLK_FACTOR    :   natural := 48;
+    constant X_MOTOR_SCLK_FACTOR : natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
     -- constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
-
 
     --     --**Driver Control Register STEP/DIR mode (DRVCTRL)**
     --     --[19:18]   Address = 00
@@ -120,7 +82,7 @@ package GOLDI_MODULE_CONFIG is
     --     --[6:4]     Hysteresis start value 
     --     --[3:0]     Off time MOSFET disable  
     --     1 => x"094557",   --x"94557"
-      
+
     --     --**Coolstep Control Register (SMARTEN)**
     --     --[19:17]   Address = 101
     --     --[16]      Reserved -> '0'
@@ -142,7 +104,7 @@ package GOLDI_MODULE_CONFIG is
     --     --[7:5]     Reserved -> '0'
     --     --[4:0]     Current scale  
     --     3 => x"0D0A0F",   --x"C041E"
-        
+
     --     --**Driver Control Register (DRVCONF)**
     --     --[19:17]   Address = 111
     --     --[16]      Test Mode - reserved -> '0'
@@ -158,13 +120,12 @@ package GOLDI_MODULE_CONFIG is
     --     4 => x"0E0060" --x"E0060"
     -- );
 
-
     --Reset delay for TMC2660 to recognize the input clock signal
-    constant X_MOTOR_RST_DELAY  :   natural := 48;
+    constant X_MOTOR_RST_DELAY : natural := 48;
 
     --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
     --blocks for the ROM16XN_FIFO module
-    constant X_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+    constant X_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) := (
         0 => x"0004",
         1 => x"5700",
         2 => x"0945",
@@ -175,22 +136,20 @@ package GOLDI_MODULE_CONFIG is
         7 => x"000E"
     );
 
-    constant X_MOTOR_ACCELERATION               :   natural := 1;
-    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
-    constant X_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
+    constant X_MOTOR_ACCELERATION              : natural := 1;
+    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 128;
+    constant X_MOTOR_SPEED_DIVIDEFACTOR        : natural := 1024;
 
     -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
-    constant X_MOTOR_ACCELERATION_RATIO         :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
-    
+    constant X_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
+
     -----------------------------------------------------------------------------------------------
-
-
 
     --****Y AXIS STEPPER MOTOR****
     -----------------------------------------------------------------------------------------------
     --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
     --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant Y_MOTOR_SCLK_FACTOR    :   natural := 48;
+    constant Y_MOTOR_SCLK_FACTOR : natural := 48;
 
     --Initial configuration of the TMC2660 Stepper driver
     -- constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
@@ -215,7 +174,7 @@ package GOLDI_MODULE_CONFIG is
     --     --[6:4]     Hysteresis start value 
     --     --[3:0]     Off time MOSFET disable  
     --     2 => x"094557",   --x"94557"
-      
+
     --     --**Coolstep Control Register (SMARTEN)**
     --     --[19:17]   Address = 101
     --     --[16]      Reserved -> '0'
@@ -237,7 +196,7 @@ package GOLDI_MODULE_CONFIG is
     --     --[7:5]     Reserved -> '0'
     --     --[4:0]     Current scale  
     --     4 => x"0C040F",   --x"C040F"
-        
+
     --     --**Driver Control Register (DRVCONF)**
     --     --[19:17]   Address = 111
     --     --[16]      Test Mode - reserved -> '0'
@@ -253,13 +212,12 @@ package GOLDI_MODULE_CONFIG is
     --     5 => x"0E0070" --x"E0070"
     -- );
 
-    
     --Reset delay for TMC2660 to recognize the input clock signal
-    constant Y_MOTOR_RST_DELAY  :   natural := 48;
+    constant Y_MOTOR_RST_DELAY : natural := 48;
 
     --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
     --blocks for the ROM16XN_FIFO module
-    constant Y_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) :=(
+    constant Y_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) := (
         0 => x"0004",
         1 => x"5700",
         2 => x"0945",
@@ -270,15 +228,13 @@ package GOLDI_MODULE_CONFIG is
         7 => x"000E"
     );
 
-    constant Y_MOTOR_ACCELERATION               :   natural := 1;
-    constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR  :   natural := 128;
-    constant Y_MOTOR_SPEED_DIVIDEFACTOR         :   natural := 1024;
+    constant Y_MOTOR_ACCELERATION              : natural := 1;
+    constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 128;
+    constant Y_MOTOR_SPEED_DIVIDEFACTOR        : natural := 1024;
 
     -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
-    constant Y_MOTOR_ACCELERATION_RATIO         :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
+    constant Y_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
     -----------------------------------------------------------------------------------------------
-
-
 
     --****Z AXIS DC MOTOR****
     -----------------------------------------------------------------------------------------------
@@ -287,27 +243,23 @@ package GOLDI_MODULE_CONFIG is
     -- F     - frequency factor
     -- f_clk - system clock
     -- f_pwm - desired frequency of pwm signals
-    constant Z_MOTOR_FREQUENCY  :   natural := 27;
+    constant Z_MOTOR_FREQUENCY : natural := 27;
     -----------------------------------------------------------------------------------------------
-    
-
 
     --****ELECTROMAGNET TIME CONSTANTS****
     -----------------------------------------------------------------------------------------------
     --Electromagnet time constant in clk cycles. Used as a wait time to avoid an imediate voltage 
     --drop on the unprotected H-Bridge inputs when the depolarization pulse in generated.
-    constant EMAG_TAO               :   natural := 5000;
+    constant EMAG_TAO : natural := 5000;
 
     --Inital pulse width for demagnetization process
-    constant EMAG_PULSE_WIDTH       :   natural := 500000;
-    
+    constant EMAG_PULSE_WIDTH : natural := 500000;
+
     --Pulse reduction constant. Demagnetization pulse reduced from the starting value in the 
     --register (reg_data*1000) by the given factor. Signal returns to idel when the pulse
     --width is smaller than the reduction factor
-    constant EMAG_PULSE_REDUCTION   :   integer := 50000;
+    constant EMAG_PULSE_REDUCTION : integer := 50000;
     -----------------------------------------------------------------------------------------------
-
-
 
     --****LED****
     -----------------------------------------------------------------------------------------------
@@ -315,23 +267,22 @@ package GOLDI_MODULE_CONFIG is
     --           and on/off ratio is a divided into two configureable frequency/16 segments
     --
     --Invert:    Invert on/off behaviour
-    
+
     --Power LED Red
-    constant PR_LED_FREQUENCY   :   natural := 50000000;
-    constant PR_LED_INVERTED    :   boolean := false;
+    constant PR_LED_FREQUENCY : natural := 50000000;
+    constant PR_LED_INVERTED  : boolean := false;
     --Power LED Green
-    constant PG_LED_FREQUENCY   :   natural := 50000000;
-    constant PG_LED_INVERTED    :   boolean := false;
+    constant PG_LED_FREQUENCY : natural := 50000000;
+    constant PG_LED_INVERTED  : boolean := false;
     --Environment LED Red
-    constant ER_LED_FREQUENCY   :   natural := 50000000;
-    constant ER_LED_INVERTED    :   boolean := false;
+    constant ER_LED_FREQUENCY : natural := 50000000;
+    constant ER_LED_INVERTED  : boolean := false;
     --Environment LED White
-    constant EW_LED_FREQUENCY   :   natural := 50000000;
-    constant EW_LED_INVERTED    :   boolean := false;
+    constant EW_LED_FREQUENCY : natural := 50000000;
+    constant EW_LED_INVERTED  : boolean := false;
     --Environment LED Green
-    constant EG_LED_FREQUENCY   :   natural := 50000000;
-    constant EG_LED_INVERTED    :   boolean := false;
+    constant EG_LED_FREQUENCY : natural := 50000000;
+    constant EG_LED_INVERTED  : boolean := false;
     -----------------------------------------------------------------------------------------------
-    
 
 end package GOLDI_MODULE_CONFIG;

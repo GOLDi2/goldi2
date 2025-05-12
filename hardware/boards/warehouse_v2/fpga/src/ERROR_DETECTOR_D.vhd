@@ -1,32 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		01/09/2023
--- Design Name:		Error list for warehouse (dynamic)
--- Module Name:		ERROR_DETECTOR_D
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> ENCODER_DRIVER.vhd
---                  -> REGISTER_TABLE.vhd
---                  -> HIGH_DEBOUNCE.vhd
---
--- Revisions:
--- Revision V4.00.00 - File Created
--- Additional Comments: First commitment
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;

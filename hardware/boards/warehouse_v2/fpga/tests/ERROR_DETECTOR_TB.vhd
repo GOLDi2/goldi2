@@ -1,34 +1,8 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		30/04/2023
--- Design Name:		Error list for high-bay warehouse
--- Module Name:		ERROR_DETECTOR_TB
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> ERROR_DETECTOR.vhd
---
--- Revisions:
--- Revision V4.00.00 - File Created
--- Additional Comments: First commitment
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation flow control and assertions
-library std;
 use std.standard.all;
 use std.env.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_DATA_TYPES.all;
@@ -74,7 +48,6 @@ architecture TB of ERROR_DETECTOR_TB is
 	constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
-	signal run_sim			:	std_logic := '1';
     --DUT IOs
     constant tb_x_margins   :   sensor_limit_array(9 downto 0) := (others => (0,10));
     constant tb_z_margins   :   sensor_limit_array(4 downto 0) := (others => (0,10));
@@ -140,7 +113,7 @@ begin
 
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
-    clock <= run_sim and (not clock) after clk_period/2;
+    clock <= not clock after clk_period/2;
 	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 
@@ -182,9 +155,9 @@ begin
     -----------------------------------------------------------------------------------------------
     TEST : process
         --Timing
-        variable init_hold      :   time := 5*clk_period/2;
-        variable assert_hold    :   time := 3*clk_period/2;
-        variable post_hold      :   time := 1*clk_period/2;
+        constant init_hold      :   time := 5*clk_period/2;
+        constant assert_hold    :   time := 3*clk_period/2;
+        constant post_hold      :   time := 1*clk_period/2;
     begin
         --**Initial setup**
         wait for init_hold;

@@ -1,36 +1,6 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		00/00/2023
--- Design Name:		Crossbar default configuration
--- Module Name:		GOLDI_CROSSBAR_CONFIG
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_CROSSBAR_STANDARD.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V4.00.00 - Modification to the package function
--- Additional Comments: In the release V4.00.00 the GOLDI_CROSSBAR_CONFIG
---                      package is no longer used to define the data types
---                      needed to run the crossbar. Insted it only defines
---                      the particular configuration.
---                      (GOLDI_CROSSBAR_DEFAULT.vhd -> GOLDI_CROSSBAR_CONFIG.vhd)
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_CROSSBAR_STANDARD.all;

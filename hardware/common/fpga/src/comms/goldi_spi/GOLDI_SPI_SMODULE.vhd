@@ -3,9 +3,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.GOLDI_COMM_STANDARD.all;
 
-
-
-
 --! @brief SPI to custom GOLDi BUS protocol 
 --! @details
 --! The module acts as the main SPI slave interface and the GOLDi BUS master
@@ -45,124 +42,117 @@ use work.GOLDI_COMM_STANDARD.all;
 entity GOLDI_SPI_SMODULE is
     port(
         --General
-        clk             : in    std_logic;      --! System clock
-        rst             : in    std_logic;      --! Asynchronous clock
+        clk            : in  std_logic; --! System clock
+        rst            : in  std_logic; --! Asynchronous clock
         --SPI slave interface
-        p_spi_nce       : in    std_logic;      --! SPI Chip enable signal - logic low
-        p_spi_sclk      : in    std_logic;      --! SPI Serial clock input signal
-        p_spi_mosi      : in    std_logic;      --! SPI Master out / Slave in data
-        p_spi_miso      : out   std_logic;      --! SPI Mastter in / Slave out data
+        p_spi_nce      : in  std_logic; --! SPI Chip enable signal - logic low
+        p_spi_sclk     : in  std_logic; --! SPI Serial clock input signal
+        p_spi_mosi     : in  std_logic; --! SPI Master out / Slave in data
+        p_spi_miso     : out std_logic; --! SPI Mastter in / Slave out data
         --BUS master interface
-        p_master_bus_o  : out   mbus_out;       --! BUS master interface output signals [stb,we,adr,dat,tag]
-        p_master_bus_i  : in    mbus_in         --! BUS master interface input signals [dat,tag,mux]
+        p_master_bus_o : out mbus_out;  --! BUS master interface output signals [stb,we,adr,dat,tag]
+        p_master_bus_i : in  mbus_in    --! BUS master interface input signals [dat,tag,mux]
     );
 end entity GOLDI_SPI_SMODULE;
-
-
-
 
 --! General architecture
 architecture RTL of GOLDI_SPI_SMODULE is
 
     --****INTERNAL SIGNALS****
-    signal config_word_i    :   std_logic_vector(CONFIGURATION_WORD-1 downto 0);
-    signal data_word_in     :   std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-    signal data_word_out    :   std_logic_vector(SYSTEM_DATA_WIDTH-1 downto 0);
-    signal nce_demux_i      :   std_logic_vector(1 downto 0);
-    signal sp_valid_i       :   std_logic_vector(1 downto 0);
-    signal word_valid_i     :   std_logic;
+    signal config_word_i : std_logic_vector(CONFIGURATION_WORD - 1 downto 0);
+    signal data_word_in  : std_logic_vector(SYSTEM_DATA_WIDTH - 1 downto 0);
+    signal data_word_out : std_logic_vector(SYSTEM_DATA_WIDTH - 1 downto 0);
+    signal nce_demux_i   : std_logic_vector(1 downto 0);
+    signal sp_valid_i    : std_logic_vector(1 downto 0);
+    signal word_valid_i  : std_logic;
     --State machine
-    type module_state is (s_config,s_data);
-    signal ps_module    :   module_state;
-
+    type module_state is (s_config, s_data);
+    signal ps_module     : module_state;
 
 begin
 
     --****SP SELECTOR****
     -----------------------------------------------------------------------------------------------
-    SP_CONTROL : process(clk,rst)
+    SP_CONTROL : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             ps_module <= s_config;
-        elsif(rising_edge(clk)) then
+        elsif (rising_edge(clk)) then
             case ps_module is
-            when s_config => if(p_spi_nce /= '0') then ps_module <= s_config;
-                             elsif(sp_valid_i(0) = '1') then ps_module <= s_data;
-                             else ps_module <= s_config;
-                             end if;
+                when s_config => if (p_spi_nce /= '0') then
+                        ps_module <= s_config;
+                    elsif (sp_valid_i(0) = '1') then
+                        ps_module <= s_data;
+                    else
+                        ps_module <= s_config;
+                    end if;
 
-            when s_data   => if(p_spi_nce /= '0') then ps_module <= s_config;
-                             else ps_module <= s_data;
-                             end if;
+                when s_data => if (p_spi_nce /= '0') then
+                        ps_module <= s_config;
+                    else
+                        ps_module <= s_data;
+                    end if;
             end case;
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
 
-
-
     --****SIGNAL ROUTING****
     -----------------------------------------------------------------------------------------------
-    nce_demux_i(0) <= p_spi_nce when(ps_module = s_config) else '1';
-    nce_demux_i(1) <= p_spi_nce when(ps_module = s_data)   else '1';
-    word_valid_i   <= sp_valid_i(1) or sp_valid_i(0); 
+    nce_demux_i(0) <= p_spi_nce when (ps_module = s_config) else '1';
+    nce_demux_i(1) <= p_spi_nce when (ps_module = s_data) else '1';
+    word_valid_i   <= sp_valid_i(1) or sp_valid_i(0);
     -----------------------------------------------------------------------------------------------
-
-
 
     --****SERIAL PARALLEL CONVERSION****
     -----------------------------------------------------------------------------------------------
     CONFIGURATION_SP_CONVERTER : entity work.SP_CONVERTER
-    generic map(
-        g_word_length   => CONFIGURATION_WORD 
-    )
-    port map(
-        clk             => clk,
-        rst             => rst,
-        p_spi_nce       => nce_demux_i(0),
-        p_spi_sclk      => p_spi_sclk,
-        p_spi_mosi      => p_spi_mosi,
-        p_spi_miso      => open,
-        p_word_val      => sp_valid_i(0),
-        p_data_out      => config_word_i,
-        p_data_in       => (others => '0')
-    );
-
+        generic map(
+            g_word_length => CONFIGURATION_WORD
+        )
+        port map(
+            clk        => clk,
+            rst        => rst,
+            p_spi_nce  => nce_demux_i(0),
+            p_spi_sclk => p_spi_sclk,
+            p_spi_mosi => p_spi_mosi,
+            p_spi_miso => open,
+            p_word_val => sp_valid_i(0),
+            p_data_out => config_word_i,
+            p_data_in  => (others => '0')
+        );
 
     DATA_SP_CONVERTER : entity work.SP_CONVERTER
-    generic map(
-        g_word_length   => SYSTEM_DATA_WIDTH 
-    )
-    port map(
-        clk             => clk,
-        rst             => rst,
-        p_spi_nce       => nce_demux_i(1),
-        p_spi_sclk      => p_spi_sclk,
-        p_spi_mosi      => p_spi_mosi,
-        p_spi_miso      => p_spi_miso,
-        p_word_val      => sp_valid_i(1),
-        p_data_out      => data_word_out,
-        p_data_in       => data_word_in
-    );
+        generic map(
+            g_word_length => SYSTEM_DATA_WIDTH
+        )
+        port map(
+            clk        => clk,
+            rst        => rst,
+            p_spi_nce  => nce_demux_i(1),
+            p_spi_sclk => p_spi_sclk,
+            p_spi_mosi => p_spi_mosi,
+            p_spi_miso => p_spi_miso,
+            p_word_val => sp_valid_i(1),
+            p_data_out => data_word_out,
+            p_data_in  => data_word_in
+        );
     -----------------------------------------------------------------------------------------------
-
-
 
     --****BUS MASTER INTERFACE****
     -----------------------------------------------------------------------------------------------
     BUS_INTERFACE : entity work.BUS_ADAPTOR
-    port map(
-        clk             => clk,
-        rst             => rst,
-        p_nce           => p_spi_nce,
-        p_word_val      => word_valid_i,
-        p_config_word_i => config_word_i,
-        p_data_word_i   => data_word_out,
-        p_data_word_o   => data_word_in,
-        p_master_bus_o  => p_master_bus_o,
-        p_master_bus_i  => p_master_bus_i
-    );
+        port map(
+            clk             => clk,
+            rst             => rst,
+            p_nce           => p_spi_nce,
+            p_word_val      => word_valid_i,
+            p_config_word_i => config_word_i,
+            p_data_word_i   => data_word_out,
+            p_data_word_o   => data_word_in,
+            p_master_bus_o  => p_master_bus_o,
+            p_master_bus_i  => p_master_bus_i
+        );
     -----------------------------------------------------------------------------------------------
-
 
 end architecture;

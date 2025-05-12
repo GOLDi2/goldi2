@@ -1,34 +1,8 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		01/09/2023
--- Design Name:		Dynamic error list for "Warehouse" testbench
--- Module Name:		ERROR_DETECTOR_D_TB
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd
---                  -> GOLDI_IO_STANDARD.vhd
---                  -> GOLDI_DATA_TYPES.vhd
---                  -> GOLDI_MODULE_CONFIG.vhd
---                  -> ERROR_DETECTOR_D.vhd
---
--- Revisions:
--- Revision V4.00.00 - File Created
--- Additional Comments: First commitment
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Use standard library for simulation flow control and assertions
-library std;
 use std.standard.all;
 use std.env.all;
---! Use custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_MODULE_CONFIG.all;
@@ -71,7 +45,6 @@ architecture TB of ERROR_DETECTOR_D_TB is
     constant clk_period		:	time := 20 ns;
 	signal reset			:	std_logic := '0';
 	signal clock			:	std_logic := '0';
-	signal run_sim			:	std_logic := '1';
     --DUT IOs
     signal ref_x_encoder    :   std_logic := '0';
     signal ref_z_encoder    :   std_logic := '0';
@@ -131,7 +104,7 @@ begin
     
     --****SIMULATION TIMING****
     -----------------------------------------------------------------------------------------------
-    clock <= run_sim and (not clock) after clk_period/2;
+    clock <= not clock after clk_period/2;
 	reset <= '1' after 10 ns, '0' after 30 ns;
     -----------------------------------------------------------------------------------------------
 

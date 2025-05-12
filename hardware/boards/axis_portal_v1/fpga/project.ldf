@@ -17,10 +17,67 @@
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/ENCODER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/dsp/CLOCK_DIVIDER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/IO_CROSSBAR.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/TRIS_BUFFER_ARRAY.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/SYNCHRONIZER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/HIGH_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/SYNCHRONIZER_ARRAY.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/TRIS_BUFFER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/io_management/LOW_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/libraries/GOLDI_DATA_TYPES.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/libraries/GOLDI_COMM_STANDARD.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/TMC2660_SPI.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/StepperControl.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/TMC2660_SD.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/actuation/TMC2660/TMC2660_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/actuation/HBRIDGE_SMODULE.vhd" type="VHDL" type_short="VHDL">
@@ -29,31 +86,28 @@
         <Source name="src/common/actuation/LED_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/PWM_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/StepperControl_v1_00.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/TMC2660_CONFIG_FIFO.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/TMC2660_SD.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/TMC2660_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/TMC2660_SPI.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/actuation/EMAGNET_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/NAVIGATION_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/actuation/PWM_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/i2c/I2C_C_SMODULE.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/i2c/I2C_C_DIVER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/i2c/I2C_T_CONTROLLER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/i2c/I2C_R_CONTROLLER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/spi/SPI_R_DRIVER.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="src/common/comms/spi/SPI_T_DRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/comms/goldi_spi/BUS_ADAPTOR.vhd" type="VHDL" type_short="VHDL">
@@ -65,22 +119,22 @@
         <Source name="src/common/comms/goldi_spi/SP_CONVERTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/i2c/I2C_C_DIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_TX_SDRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/i2c/I2C_C_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_S_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/i2c/I2C_R_CONTROLLER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_STD_DECODER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/i2c/I2C_T_CONTROLLER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_TX_DDRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/spi/SPI_R_DRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_STD_ENCODER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/spi/SPI_T_DRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/comms/uart/UART_RX_SDRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/comms/uart/UART_D_SMODULE.vhd" type="VHDL" type_short="VHDL">
@@ -89,82 +143,10 @@
         <Source name="src/common/comms/uart/UART_RX_DDRIVER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/uart/UART_RX_SDRIVER.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/memory/STREAM_FIFO.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/comms/uart/UART_STD_DECODER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/comms/uart/UART_STD_ENCODER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/comms/uart/UART_S_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/comms/uart/UART_TX_DDRIVER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/comms/uart/UART_TX_SDRIVER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/ENCODER_DRIVER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/FREQUENCY_ANALYSER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/MAVG_2N_FILTER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/PWM_ANALYSER_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/US_SENSOR_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/HIGH_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/IO_CROSSBAR.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/LOW_DEBOUNCE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/SYNCHRONIZER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/SYNCHRONIZER_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/TRIS_BUFFER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/io_management/TRIS_BUFFER_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/libraries/GOLDI_COMM_STANDARD.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/libraries/GOLDI_DATA_TYPES.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/libraries/GOLDI_IO_STANDARD.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/memory/REGISTER_TABLE.vhd" type="VHDL" type_short="VHDL">
@@ -176,13 +158,10 @@
         <Source name="src/common/memory/REGISTER_T_UNIT.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/memory/REGISTER_UNIT.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/memory/ROM16XN_FIFO.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/memory/STREAM_FIFO.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/TOP_LEVEL.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
     </Implementation>

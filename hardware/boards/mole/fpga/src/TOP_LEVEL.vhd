@@ -1,36 +1,9 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		15/04/2023
--- Design Name:		Top Level - Mobile control unit [MOLE] 
--- Module Name:		TOP_LEVEL
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition 
---
--- Revisions:
--- Revision V2.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V3.00.00 - First stable release
--- Additional Comments: Release for Mobile Control Unit [MOLE]
---
--- Revision V4.00.00 - Moduel refactor
--- Additional Comments: Change to the entity names, generic and port signal 
---                      names to follow the V4.00.00 naming convention. Use 
---                      of the updated GOLDI SPI communication modules.
---                      Update to crossbar design.
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! MachX02 library
 library machxo2;
 use machxo2.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_CROSSBAR_STANDARD.all;

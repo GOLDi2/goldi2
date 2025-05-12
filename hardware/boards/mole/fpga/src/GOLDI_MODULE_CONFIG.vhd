@@ -1,29 +1,7 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmail.com>
---
--- Create Date:		00/00/2023
--- Design Name:		Board constants and configuration values 
--- Module Name:		GOLDI_MODUE_CONFIG
--- Project Name:	GOLDi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition,  
---
--- Dependencies:	
---
--- Revisions:
--- Revision V1.00.00 - File Created
--- Additional Comments: First commitment
---
--- Revision V4.00.00 - Change to PWM frequency
--- Additional Comments: -
--------------------------------------------------------------------------------
---! Use standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 --! Use custom package
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 

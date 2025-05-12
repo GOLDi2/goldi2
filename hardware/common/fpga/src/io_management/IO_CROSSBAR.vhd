@@ -1,43 +1,9 @@
--------------------------------------------------------------------------------
--- Company:			Technische Universitaet Ilmenau
--- Engineer:		JP_CC <josepablo.chew@gmai.com>
---
--- Create Date:		15/04/2023
--- Design Name:		IO Crossbar Structure
--- Module Name:		IO_CROSSBAR
--- Project Name:	GOLDIi_FPGA_SRC
--- Target Devices:	LCMXO2-7000HC-4TG144C
--- Tool versions:	Lattice Diamond 3.12, Modelsim Lattice Edition
---
--- Dependencies:	-> GOLDI_COMM_STANDARD.vhd;
---                  -> GOLDI_IO_STANDARD.vhd; 
---                  -> GOLDI_CROSSBAR_DEFAULT.vhd
---
--- Revisions:
--- Revision V0.01.00 - File Created
--- Additional Comments: First commit
---
--- Revision V1.00.00 - Default module version for release 1.00.00
--- Additional Comments: Release for Axis Portal V1 (AP1)
---
--- Revision V4.00.00 - Modification to reset type and process
--- Additional Comments: Change from synchronous to asynchronous reset.
---                      Changes to the generic ana port signal names.
---                      Introduction of "g_default_left_layout" parameter
---                      to simplify the reset process
--------------------------------------------------------------------------------
---! Standard library
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
---! Custom packages
-library work;
 use work.GOLDI_COMM_STANDARD.all;
 use work.GOLDI_IO_STANDARD.all;
 use work.GOLDI_CROSSBAR_STANDARD.all;
-
-
-
 
 --! @brief Crossbar structure for GOLDi tri-state IO signals
 --! @details
@@ -78,76 +44,63 @@ use work.GOLDI_CROSSBAR_STANDARD.all;
 --! |1      |2                      |2                      |
 entity IO_CROSSBAR is
     generic(
-        g_left_port_length      :   natural := TB_CB_LEFT_SIZE;                         --! Length of the crossbar's left side port
-        g_right_port_length     :   natural := TB_CB_RIGHT_SIZE;                        --! Length of the crossbar's right side port
-        g_default_left_layout   :   cb_left_port_ram  := TB_DEFAULT_LEFT_CB_LAYOUT;     --! Default layout for input data
-        g_default_right_layout  :   cb_right_port_ram := TB_DEFAULT_RIGHT_CB_LAYOUT     --! Defualt layout for output data
+        g_left_port_length     : natural           := TB_CB_LEFT_SIZE; --! Length of the crossbar's left side port
+        g_right_port_length    : natural           := TB_CB_RIGHT_SIZE; --! Length of the crossbar's right side port
+        g_default_left_layout  : cb_left_port_ram  := TB_DEFAULT_LEFT_CB_LAYOUT; --! Default layout for input data
+        g_default_right_layout : cb_right_port_ram := TB_DEFAULT_RIGHT_CB_LAYOUT --! Defualt layout for output data
     );
     port(
         --General
-        clk                     : in    std_logic;                                      --! System clock
-        rst                     : in    std_logic;                                      --! Asynchronous reset
+        clk               : in  std_logic; --! System clock
+        rst               : in  std_logic; --! Asynchronous reset
         --Communication
-        cb_bus_i                : in    sbus_in;                                        --! Crossbar BUS input signals [stb,we,adr,dat,tag]
-        cb_bus_o                : out   sbus_out;                                       --! Crossbar BUS output signal [dat,tag,mux]
+        cb_bus_i          : in  sbus_in; --! Crossbar BUS input signals [stb,we,adr,dat,tag]
+        cb_bus_o          : out sbus_out; --! Crossbar BUS output signal [dat,tag,mux]
         --Internal system io pin interface
-        left_io_i_vector        : out   io_i_vector(g_left_port_length-1 downto 0);     --! Internal system input signals
-        left_io_o_vector        : in    io_o_vector(g_left_port_length-1 downto 0);     --! Internal system output signals
+        left_io_i_vector  : out io_i_vector(g_left_port_length - 1 downto 0); --! Internal system input signals
+        left_io_o_vector  : in  io_o_vector(g_left_port_length - 1 downto 0); --! Internal system output signals
         --FPGA pin interface
-        right_io_i_vector       : in    io_i_vector(g_right_port_length-1 downto 0);    --! FPGA pin input signals 
-        right_io_o_vector       : out   io_o_vector(g_right_port_length-1 downto 0)     --! FPGA pin output signals
+        right_io_i_vector : in  io_i_vector(g_right_port_length - 1 downto 0); --! FPGA pin input signals 
+        right_io_o_vector : out io_o_vector(g_right_port_length - 1 downto 0) --! FPGA pin output signals
     );
 end entity IO_CROSSBAR;
-
-
-
 
 --! General architecture
 architecture RTL of IO_CROSSBAR is
 
     --****INTERNAL SIGNALS****
     --RAM Address
-    constant c_min_adr  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0) := 
-        to_unsigned(2,BUS_ADDRESS_WIDTH);
-    constant c_max_adr  :   unsigned(BUS_ADDRESS_WIDTH-1 downto 0) := 
-        to_unsigned(g_right_port_length+2,BUS_ADDRESS_WIDTH);
+    constant c_min_adr           : unsigned(BUS_ADDRESS_WIDTH - 1 downto 0) := to_unsigned(2, BUS_ADDRESS_WIDTH);
+    constant c_max_adr           : unsigned(BUS_ADDRESS_WIDTH - 1 downto 0) := to_unsigned(g_right_port_length + 2, BUS_ADDRESS_WIDTH);
     --Crossbar Matrix
-    signal ram_left_port_layout     :   cb_left_port_ram(g_left_port_length-1 downto 0);
-    signal ram_right_port_layout    :   cb_right_port_ram(g_right_port_length-1 downto 0);
-
+    signal ram_left_port_layout  : cb_left_port_ram(g_left_port_length - 1 downto 0);
+    signal ram_right_port_layout : cb_right_port_ram(g_right_port_length - 1 downto 0);
 
 begin
 
     --****CROSSBAR ROUTING****
     -----------------------------------------------------------------------------------------------
-    LEFT_PORT_ROUTING : for i in 0 to g_left_port_length-1 generate
+    LEFT_PORT_ROUTING : for i in 0 to g_left_port_length - 1 generate
         left_io_i_vector(i) <= right_io_i_vector(to_integer(ram_left_port_layout(i)));
     end generate;
 
-    RIGHT_PORT_ROUTING : for i in 0 to g_right_port_length-1 generate
+    RIGHT_PORT_ROUTING : for i in 0 to g_right_port_length - 1 generate
         right_io_o_vector(i) <= left_io_o_vector(to_integer(ram_right_port_layout(i)));
     end generate;
     -----------------------------------------------------------------------------------------------
 
-
-
     --****LAYOUT MODIFICATION CONTROL****
     -----------------------------------------------------------------------------------------------
-    READ_LAYOUT : process(clk,rst)
-        variable index  :   integer;
+    READ_LAYOUT : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             cb_bus_o <= gnd_sbus_o;
 
-        elsif(rising_edge(clk)) then
-            if((c_min_adr <= unsigned(cb_bus_i.adr))  and 
-               (unsigned(cb_bus_i.adr) < c_max_adr)   and
-               (cb_bus_i.we = '0'))                 then
+        elsif (rising_edge(clk)) then
+            if ((c_min_adr <= unsigned(cb_bus_i.adr)) and (unsigned(cb_bus_i.adr) < c_max_adr) and (cb_bus_i.we = '0')) then
 
-                --Decode BUS address
-                index := to_integer(unsigned(cb_bus_i.adr))-2;
                 --Return the configuration of the FPGA Pin interface
-                cb_bus_o.dat <= std_logic_vector(ram_right_port_layout(index));
+                cb_bus_o.dat <= std_logic_vector(ram_right_port_layout(to_integer(unsigned(cb_bus_i.adr)) - 2));
                 cb_bus_o.tag <= (others => '0');
                 cb_bus_o.mux <= '1';
 
@@ -158,32 +111,25 @@ begin
         end if;
     end process;
 
-
-    WRITE_LAYOUT : process(clk,rst)
-        variable index  :   integer;
+    WRITE_LAYOUT : process(clk, rst)
     begin
-        if(rst = '1') then
+        if (rst = '1') then
             ram_left_port_layout  <= g_default_left_layout;
             ram_right_port_layout <= g_default_right_layout;
 
-        elsif(rising_edge(clk)) then
-            if((c_min_adr <= unsigned(cb_bus_i.adr))  and
-               (unsigned(cb_bus_i.adr) < c_max_adr)   and
-               (cb_bus_i.we = '1')                    and
-               (cb_bus_i.stb = '1'))                  then
-            
-                --Decode BUS address
-                index := to_integer(unsigned(cb_bus_i.adr))-2;
+        elsif (rising_edge(clk)) then
+            if ((c_min_adr <= unsigned(cb_bus_i.adr)) and (unsigned(cb_bus_i.adr) < c_max_adr) and (cb_bus_i.we = '1') and (cb_bus_i.stb = '1')) then
+
                 --Write BUS "dat" to right port configuration and "adr" to left port configuration
-                ram_right_port_layout(index) <= unsigned(cb_bus_i.dat);
-                ram_left_port_layout(to_integer(unsigned(cb_bus_i.dat))) <= unsigned(cb_bus_i.adr)-2;
-        
-            else null;
+                ram_right_port_layout(to_integer(unsigned(cb_bus_i.adr)) - 2) <= unsigned(cb_bus_i.dat);
+                ram_left_port_layout(to_integer(unsigned(cb_bus_i.dat)))      <= unsigned(cb_bus_i.adr) - 2;
+
+            else
+                null;
             end if;
 
         end if;
     end process;
     -----------------------------------------------------------------------------------------------
-
 
 end architecture;

@@ -17,34 +17,13 @@
         <Source name="src/GOLDI_MODULE_CONFIG.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/VIRTUAL_SENSOR_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/FREQUENCY_ANALYSER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/dsp/ENCODER_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/ENCODER_SMODULE_old.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/PWM_ANALYSER_SMODULE.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/MAVG_2N_FILTER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/dsp/EDGE_DETECTOR.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/dsp/ENCODER_DRIVER.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/VIRTUAL_LIMIT_ARRAY.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/dsp/US_SENSOR_SMODULE.vhd" type="VHDL" type_short="VHDL">
+        <Source name="src/common/dsp/ENCODER.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/dsp/CLOCK_DIVIDER.vhd" type="VHDL" type_short="VHDL">
@@ -83,9 +62,6 @@
         <Source name="src/common/libraries/GOLDI_CROSSBAR_STANDARD.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
-        <Source name="src/common/actuation/MOTORCONTROL_SMODULE_old.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
         <Source name="src/common/actuation/GPIO_SMODULE.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
@@ -93,9 +69,6 @@
             <Options/>
         </Source>
         <Source name="src/common/actuation/TMC2660/StepperControl.vhd" type="VHDL" type_short="VHDL">
-            <Options/>
-        </Source>
-        <Source name="src/common/actuation/TMC2660/Divider1MioByX_v1_00.vhd" type="VHDL" type_short="VHDL">
             <Options/>
         </Source>
         <Source name="src/common/actuation/TMC2660/TMC2660_SD.vhd" type="VHDL" type_short="VHDL">
