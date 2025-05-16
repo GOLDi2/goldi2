@@ -3,6 +3,7 @@ import asyncio
 import struct
 import sys
 import termios
+import time
 import tty
 from math import sqrt
 
@@ -10,10 +11,12 @@ from pyee.asyncio import AsyncIOEventEmitter
 #from fake_registers import SpiRegisters
 from spi_driver import SpiRegisters
 
-
+clk_frequency=48*10**6
+velocity_scaling = 2**25
+acceleration_scaling = 1
 class StepperMotor(AsyncIOEventEmitter):
     def __init__(
-        self, registers: SpiRegisters, address: int, max_speed: int=0xffff, max_acceleration: int=0xffff,
+        self, registers: SpiRegisters, address: int, max_speed: float=50000, max_acceleration: float=1000000
     ):
         super().__init__()
         self._registers = registers
@@ -22,46 +25,78 @@ class StepperMotor(AsyncIOEventEmitter):
         self._max_acceleration= max_acceleration
         self._target_position = 0
         self._control_mode = "speed"
-        self._control_speed = 0
         self.max_speed = 0
         self.slow_down_distance = 0
         self.positions = []
 
-        self._registers.add_register(self._address, self._calculatePostitionRegisters)
-        for r in range(self._address+6, self._address+13):
-            self._registers.add_register(r, self._calculatePostitionRegisters)
+        #self._registers.add_register(self._address, self._calculatePostitionRegisters)
+        #for r in range(self._address, self._address+8+1):
+        #    self._registers.add_register(r, self._calculatePostitionRegisters)
 
     def _get_encoder_division(self):
-        raw_division = self._registers[self._address+1] + (self._registers[self._address + 2] << 8)
-        return struct.unpack('e', struct.pack('H',raw_division))[0] # convert short to float
+        return 1.25/8
     
     def getPosition(self):
-        return self._registers[self._address+3] + (self._registers[self._address + 4] << 8)
+        return (self._registers[self._address+3] + (self._registers[self._address + 4] << 8)) / self._get_encoder_division()
+    
+    @property
+    def velocity(self):
+        """
+        The velocity of the motor in steps/s.
+        """
+        velocity_register =self._registers[self._address+5] + (self._registers[self._address + 6] << 8)
+        return velocity_register * clk_frequency / velocity_scaling
+    @velocity.setter
+    def velocity(self, value: float):
+        reg = int(value * velocity_scaling / clk_frequency)
+        self._registers[self._address + 5] = reg & 0xFF
+        self._registers[self._address + 6] = (reg >> 8) & 0xFF
 
-    def _set_speed_register(self, speed: float):
-        speed = int(abs(speed) * self._max_speed)
-        self._registers[self._address + 5] = speed & 0xFF
-        self._registers[self._address + 6] = (speed >> 8) & 0xFF
+    @property
+    def acceleration_register(self) -> int:
+        return self._registers[self._address+7] + (self._registers[self._address + 8] << 8) + 1
+    @acceleration_register.setter
+    def acceleration_register(self, value: int):
+        self._registers[self._address + 7] = (value -1 ) & 0xFF
+        self._registers[self._address + 8] = ((value - 1) >> 8) & 0xFF
 
-    def set_acceleration(self, acceleration: float):
-        acceleration = int(abs(acceleration) * self._max_acceleration)
-        self._registers[self._address + 7] = acceleration & 0xFF
-        self._registers[self._address + 8] = (acceleration >> 8) & 0xFF
+
+    @property
+    def acceleration(self) -> float:
+        """
+        The acceleration of the motor in steps/s^2.
+        """
+        return 1/self.acceleration_register*(clk_frequency**2) / (acceleration_scaling * velocity_scaling)
+    @acceleration.setter
+    def acceleration(self, value: float):
+        self.acceleration_register = int(clk_frequency**2 / (max(value,1)*acceleration_scaling * velocity_scaling))
+
+    @property
+    def min_velocity(self):
+        """
+        The velocity of the motor in steps/s.
+        """
+        velocity_register = self._registers[self._address+9] + (self._registers[self._address + 10] << 8)
+        return velocity_register * clk_frequency / velocity_scaling
+    @min_velocity.setter
+    def min_velocity(self, value: float):
+        reg = int(value * velocity_scaling / clk_frequency)
+        self._registers[self._address + 9] = reg & 0xFF
+        self._registers[self._address + 10] = (reg >> 8) & 0xFF
 
     def _set_position_stop_register(self, position: int):
-        self._registers[self._address + 9] = position & 0xFF
-        self._registers[self._address + 10] = (position >> 8) & 0xFF
-
-    def _set_position_slow_down_register(self, position: int):
+        position = int(self._get_encoder_division()*position)
         self._registers[self._address + 11] = position & 0xFF
         self._registers[self._address + 12] = (position >> 8) & 0xFF
 
-
+    def _set_position_slow_down_register(self, position: int):
+        position = int(self._get_encoder_division()*position)
+        self._registers[self._address + 13] = position & 0xFF
+        self._registers[self._address + 14] = (position >> 8) & 0xFF
 
     def setSpeed(self, value: float):
+        value = value * self._max_speed
         self._control_mode = "speed"
-        if value < -1 or value > 1:
-            raise ValueError("value must be between -1 and 1")
         if value > 0:
             # dir0 -----------------------------------,
             # dir1 ----------------------------------,|
@@ -84,17 +119,18 @@ class StepperMotor(AsyncIOEventEmitter):
             #                                  ||    ||
             self._registers[self._address] = 0b10000000
 
-        self._set_speed_register(value)
+        self.target_velocity = abs(value)
+        self.velocity = self.target_velocity
 
-    def getSpeed(self):
-        self._control_mode = "position"
-        return (self._registers[self._address+1] + (self._registers[self._address + 2] << 8)) / (self._max_speed * 0xFFFF)
+    def setAcceleration(self, value: float):
+        value= value * self._max_acceleration
+        self.acceleration = value
 
     def setPostion(self, value: int, speed: float=1):
         self._control_mode = "position"
         self._target_position = value
-        self._control_speed = speed
-
+        self.target_velocity = abs(speed* self._max_speed)
+        self.velocity = self.target_velocity
         self._calculatePostitionRegisters(self._registers, True)
 
     
@@ -102,17 +138,13 @@ class StepperMotor(AsyncIOEventEmitter):
         return self._control_mode
 
     def _calculatePostitionRegisters(self, registers: SpiRegisters, force=False):
-        if self._control_mode == "speed":
-            return
-        
-        if ((self._registers[self._address] >> 4) & 0b1) == 0 and not force:
-            return
-        
         position = self.getPosition()
         stop_position = self._target_position
         distance = stop_position - position
+        self.positions=[*self.positions, distance][-20:]
 
-        self.positions.append(distance)
+        if self._control_mode == "speed":
+            return
 
         if distance > 0:
             # dir0 -----------------------------------,
@@ -135,24 +167,15 @@ class StepperMotor(AsyncIOEventEmitter):
             # stop ----------------------------,|    ||
             #                                  ||    ||
             self._registers[self._address] = 0b11000000
-        self._set_speed_register(self._control_speed)
 
-        encoder_division = self._get_encoder_division()
-        #acceleration = self._get_acceleration()
-        #acceleration=2**16*128/2048*2**12
-        #acceleration=6.21359407407407*10**6
-        acceleration = 1024/2048
+        max_velocity = self.target_velocity * velocity_scaling / clk_frequency
+        acceleration = self.acceleration_register
+        #slow_down_distance = ((max_velocity-1)*max_velocity*acceleration*acceleration_scaling / 2+max_velocity)/velocity_scaling
+        slow_down_distance = ((max_velocity-1)*max_velocity*acceleration*acceleration_scaling / 2 + max_velocity)/velocity_scaling
+        if slow_down_distance > abs(distance)/2:
+            slow_down_distance = abs(distance)/2
+        self.slow_down_distance = slow_down_distance
 
-        try:
-            max_speed_squared = min((self._control_speed * self._max_speed * 0xFFFF)**2, acceleration * abs(distance) / encoder_division )
-            #max_speed_squared = (self._control_speed * self._max_speed * 0xFFFF)**2
-            max_speed = sqrt(max_speed_squared)
-            #slow_down_distance = (max_speed_squared + max_speed) / (2 * acceleration) * encoder_division
-            slow_down_distance = max_speed_squared / (2 * acceleration) * encoder_division
-            self.slow_down_distance = slow_down_distance
-            self.max_speed = max_speed
-        except ZeroDivisionError:
-            slow_down_distance = 0
         if distance < 0:
             slow_down_postion = stop_position + slow_down_distance
         else:
@@ -160,6 +183,7 @@ class StepperMotor(AsyncIOEventEmitter):
 
         self._set_position_stop_register(int(stop_position))
         self._set_position_slow_down_register(int(slow_down_postion))
+        #self._set_position_slow_down_register(int(stop_position))
 
 
 
@@ -168,8 +192,8 @@ class StepperMotor(AsyncIOEventEmitter):
 registers: SpiRegisters
 xMotor: StepperMotor
 start_address: int
-speed: float = 0
-acceleration: float = 0
+speed: float = 0.8
+acceleration: float = 0.9
 dir = "stop"
 mode = "speed"
 target_pos = 0
@@ -213,7 +237,7 @@ async def input_coroutine():
         if acceleration > 1:
             acceleration = 1
 
-        xMotor.set_acceleration(acceleration)
+        xMotor.setAcceleration(acceleration)
 
         if char == b's':
             if mode == "position":
@@ -272,8 +296,8 @@ async def output_coroutine():
         print("\x1b[H", end="")
         print("Mode:", mode,"      ")
         print("Position:", xMotor.getPosition(),"      ")
-        print("Speed:", int(speed*100),"%      ")
-        print("Acceleration:", int(acceleration*100),"%      ")
+        print("Speed:", int(speed*100),"%      ", int(speed*xMotor._max_speed * velocity_scaling / clk_frequency), "           ")
+        print("Acceleration:", int(acceleration*100),"%      ",  int(clk_frequency**2 / (max(acceleration*xMotor._max_acceleration,1)*acceleration_scaling * velocity_scaling)),"           ")
         print("Max Speed:", int(xMotor.max_speed),"       ")
         print("Slow Down Distance:", int(xMotor.slow_down_distance),"       ")
         print("Distances:", xMotor.positions[-10:], "\x1b[K")
@@ -298,10 +322,11 @@ async def output_coroutine():
              "POSITION[0]", "POSITION[1]",
              "SPEED[0]", "SPEED[1]",
              "ACCELERATION[0]", "ACCELERATION[1]",
+             "MIN_SPEED[0]", "MIN_SPEED[1]",
              "POSITION_STOP[0]", "POSITION_STOP[1]",
              "POSITION_SD[0]", "POSITION_SD[1]",
              ]
-        for r in range(start_address, start_address+13):
+        for r in range(start_address, start_address+15):
             print("Register " + str(r).rjust(3) + " = 0b", end="")
             print("{0:b} ".format(registers[r]).zfill(9), end="")
             print(des[r-start_address])
@@ -325,10 +350,11 @@ async def main_async():
     #registers[start_address+9]=0x48
     #registers.communicate()
 
-    xMotor = StepperMotor(registers, start_address)
+    xMotor = StepperMotor(registers, start_address, max_speed=50000, max_acceleration=1000000)
     for i in range(start_address, start_address+16):
         registers.add_register(i)
     asyncio.create_task(registers.communicate_coroutine())
+
     asyncio.create_task(output_coroutine())
     await asyncio.create_task(input_coroutine())
 

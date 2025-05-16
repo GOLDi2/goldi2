@@ -35,36 +35,30 @@ use work.GOLDI_DATA_TYPES.all;
 --! | g_address | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 --! | +0		| enb	|pos_ctl|		|		|  init |	sg	|  dir1 |  dir0 |
---! | +1        | speed_value [7:0]                                      ||||||||
---! | +2        | speed_value [15:8]                                     ||||||||
---! | +3        | spi_data[8:0]                                          ||||||||
---! | +4        | spi_data[15:9]                                         ||||||||
---! | +5        | spi_data[23:16]                                        ||||||||
---! | +6        | enc_ratio[7:0]                                         ||||||||
---! | +7        | enc_ratio[15:8]                                        ||||||||
---! | +8        | enc_acceleration_ratio[7:0]                            ||||||||
---! | +9        | enc_acceleration_ratio[15:8]                           ||||||||
---! | +10       | pos_stop[7:0]                                          ||||||||
---! | +11       | pos_stop[15:8]                                         ||||||||
---! | +12       | pos_slowdown[7:0]                                      ||||||||
---! | +13       | pos_slowdown[15:8]                                     ||||||||
---! | +14       | pos_now[7:0]                                           ||||||||
---! | +15       | pos_now[15:8]                                          ||||||||
+--! | +1        | enc_ratio[7:0]                                         ||||||||
+--! | +2        | enc_ratio[15:8]                                        ||||||||
+--! | +3        | pos_now[7:0]                                           ||||||||
+--! | +4        | pos_now[15:8]                                          ||||||||
+--! | +5        | speed_value [7:0]                                      ||||||||
+--! | +6        | speed_value [15:8]                                     ||||||||
+--! | +7        | acceleration[7:0]                                      ||||||||
+--! | +8        | acceleration[15:8]                                     ||||||||
+--! | +9        | min_speed_value [7:0]                                  ||||||||
+--! | +10       | min_speed_value [15:8]                                 ||||||||
+--! | +11       | pos_stop[7:0]                                          ||||||||
+--! | +12       | pos_stop[15:8]                                         ||||||||
+--! | +13       | pos_slowdown[7:0]                                      ||||||||
+--! | +14       | pos_slowdown[15:8]                                     ||||||||
 --!
 entity TMC2660_SMODULE is
     generic(
-        g_address                  : natural                       := 1; --! Module's base address
-        g_sclk_factor              : natural                       := 8; --! SPI serial clock period as a factor of clk
-        g_rst_delay                : natural                       := 100; --! Initial delay after reset given in clk cycles
-        g_tmc2660_config           : array_16_bit                  := (x"0000", x"0000"); --! Default configuration of TMC2660
-        g_acceleration             : natural                       := 1; --! Constant Acceleration Value (sets acceleration)
-        g_accelerationDivideFactor : natural                       := 128; --! clk divider factor for acceleration counter (sets acceleration)
-        g_stepperDivideFactor      : natural                       := 1024; --! clk divider factor for stepper control (sets max and min speed)
-        g_acceleration_ratio       : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16));
-        --g_acceleration_ratio        :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#1#, 16);
-        g_enc_invert               : boolean                       := false;
-        g_enc_internal_bit         : natural                       := 16;
-        g_enc_ratio                : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3C00#, 16))
+        g_address          : natural                       := 1; --! Module's base address
+        g_sclk_factor      : natural                       := 8; --! SPI serial clock period as a factor of clk
+        g_rst_delay        : natural                       := 100; --! Initial delay after reset given in clk cycles
+        g_tmc2660_config   : array_16_bit                  := (x"0000", x"0000"); --! Default configuration of TMC2660
+        g_enc_invert       : boolean                       := false;
+        g_enc_internal_bit : natural                       := 16;
+        g_enc_ratio        : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3C00#, 16))
     );
     port(
         --General
@@ -95,62 +89,53 @@ end entity TMC2660_SMODULE;
 architecture RTL of TMC2660_SMODULE is
 
     --****INTERNAL SIGNALS****
-    --Memory
-    constant memory_length       : natural                       := getMemoryLength(128);
-    constant c_reg_default       : data_word_vector(15 downto 0) := (x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"09", x"C4", x"00"); --(x"00",x"C4",x"09",x"00",x"00",x"00")
-    signal reg_data_in           : data_word_vector(15 downto 0);
-    signal reg_data_out          : data_word_vector(15 downto 0);
-    signal reg_data_in_buff      : std_logic_vector(127 downto 0);
-    alias reg_enc_ratio          : std_logic_vector(15 downto 0) is reg_data_in_buff(63 downto 48); -- @suppress "Unused declaration"
-    alias reg_acceleration_ratio : std_logic_vector(15 downto 0) is reg_data_in_buff(79 downto 64); -- @suppress "Unused declaration"
-    alias reg_pos_now            : std_logic_vector(15 downto 0) is reg_data_in_buff(127 downto 112);
-    signal reg_data_out_buff     : std_logic_vector(127 downto 0);
-    alias reg_driveDir0          : std_logic is reg_data_out_buff(0);
-    alias reg_driveDir1          : std_logic is reg_data_out_buff(1);
-    alias reg_pos_ctl            : std_logic is reg_data_out_buff(6);
-    alias reg_enn                : std_logic is reg_data_out_buff(7);
-    alias reg_speed              : std_logic_vector(15 downto 0) is reg_data_out_buff(23 downto 8);
-    alias reg_spi_data           : std_logic_vector(23 downto 0) is reg_data_out_buff(47 downto 24);
-    alias reg_pos_stop           : std_logic_vector(15 downto 0) is reg_data_out_buff(95 downto 80); -- @suppress "Unused declaration"
-    alias reg_pos_slowdown       : std_logic_vector(15 downto 0) is reg_data_out_buff(111 downto 96);
+    signal reg_data_in         : data_word_vector(14 downto 0);
+    signal reg_data_out        : data_word_vector(14 downto 0);
+    signal reg_data_in_buff    : std_logic_vector(8 * (14 + 1) - 1 downto 0);
+    alias reg_driveDir0_in     : std_logic is reg_data_in_buff(0);
+    alias reg_driveDir1_in     : std_logic is reg_data_in_buff(1);
+    alias reg_sg_in            : std_logic is reg_data_in_buff(2);
+    alias reg_init_in          : std_logic is reg_data_in_buff(3);
+    alias reg_pos_ctl_in       : std_logic is reg_data_in_buff(6);
+    alias reg_enn_in           : std_logic is reg_data_in_buff(7);
+    alias reg_enc_ratio_in     : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (2 + 1) - 1 downto 8 * 1);
+    alias reg_pos_now_in       : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (4 + 1) - 1 downto 8 * 3);
+    alias reg_speed_in         : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (6 + 1) - 1 downto 8 * 5);
+    alias reg_acceleration_in  : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (8 + 1) - 1 downto 8 * 7);
+    alias reg_min_speed_in        : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (10 + 1) - 1 downto 8 * 9);
+    alias reg_pos_stop_in      : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (12 + 1) - 1 downto 8 * 11);
+    alias reg_pos_slowdown_in  : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (14 + 1) - 1 downto 8 * 13);
+    signal reg_data_out_buff   : std_logic_vector(8 * (14 + 1) - 1 downto 0);
+    alias reg_driveDir0_out    : std_logic is reg_data_out_buff(0);
+    alias reg_driveDir1_out    : std_logic is reg_data_out_buff(1);
+    alias reg_pos_ctl_out      : std_logic is reg_data_out_buff(6);
+    alias reg_enn_out          : std_logic is reg_data_out_buff(7);
+    alias reg_speed_out        : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (6 + 1) - 1 downto 8 * 5);
+    alias reg_acceleration_out : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (8 + 1) - 1 downto 8 * 7);
+    alias reg_min_speed_out        : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (10 + 1) - 1 downto 8 * 9);
+    alias reg_pos_stop_out     : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (12 + 1) - 1 downto 8 * 11);
+    alias reg_pos_slowdown_out : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (14 + 1) - 1 downto 8 * 13);
 
-    signal reg_write_stb            : std_logic_vector(15 downto 0);
     --Clocking
     -- signal clock_buffer         :   unsigned(1 downto 0);
-    signal s_clk_enb_tmc2660        : std_logic;
-    signal s_clk_enb_stepperControl : std_logic;
+    signal s_clk_enb_tmc2660  : std_logic;
     --Configuration data
-    signal config_word_tready       : std_logic;
-    signal config_word_tvalid       : std_logic;
-    signal config_word_tdata        : std_logic_vector(23 downto 0);
-    signal config_fifo_empty        : std_logic;
-    --Stream data
-    signal stream_rst               : std_logic;
-    signal stream_word_tready       : std_logic;
-    signal stream_word_tvalid       : std_logic;
-    signal stream_word_tdata        : std_logic_vector(23 downto 0);
+    signal config_word_tvalid : std_logic;
+    signal config_word_tdata  : std_logic_vector(23 downto 0);
     --SPI interface
-    signal spi_t_tready             : std_logic;
-    signal spi_t_tvalid             : std_logic;
-    signal spi_t_tdata              : std_logic_vector(23 downto 0);
-    signal spi_r_tvalid             : std_logic;
-    signal spi_r_tdata              : std_logic_vector(23 downto 0);
+    signal spi_t_tready       : std_logic;
     -- States
     type tState is (z_stop1, z_stop2, z_dir1, z_dir2);
-    signal s_currentState           : tState;
-    signal s_moving                 : std_logic;
-    signal s_velocityTarget         : std_logic_vector(15 downto 0);
-    --signal s_driveDir0          :   std_logic;
-    --signal s_driveDir1          :   std_logic;
-    signal rst_enc                  : std_logic;
-    signal s_enc_counter            : std_logic_vector(15 downto 0);
-    signal s_init                   : std_logic := '0';
-    signal tmc2660_clk              : std_logic;
+    signal s_currentState     : tState;
+    signal s_moving           : std_logic;
+    signal s_velocityTarget   : std_logic_vector(15 downto 0);
+    signal rst_enc            : std_logic;
+    signal s_enc_counter      : std_logic_vector(15 downto 0);
+    signal tmc2660_clk        : std_logic;
+    signal s_init             : std_logic;
+    signal s_speed : std_logic_vector(15 downto 0);
 
 begin
-
-    assert memory_length = 16 severity error;
-
     --****GENERAL****
     -----------------------------------------------------------------------------------------------
     p_tmc2660_clk.enb <= '1';
@@ -158,9 +143,18 @@ begin
     p_tmc2660_clk.dat <= tmc2660_clk;
 
     p_tmc2660_enn.enb <= '1';
-    p_tmc2660_enn.dat <= reg_enn and not s_moving;
+    p_tmc2660_enn.dat <= not s_moving;
 
-    s_init <= '1' when p_enc_res;
+    InitProcess : process(clk, rst) is
+    begin
+        if rst = '1' then
+            s_init <= '0';
+        elsif rising_edge(clk) then
+            if p_enc_res then
+                s_init <= '1';
+            end if;
+        end if;
+    end process InitProcess;
 
     --****CLOCKING****
     -----------------------------------------------------------------------------------------------
@@ -187,24 +181,8 @@ begin
         end if;
     end process TMC2660_CLK_TOGGLE;
 
-    StepperControl_CLOCK_DRIVER : entity work.Clock_Divider
-        generic map(
-            gDivideFactor => g_stepperDivideFactor
-        )
-        port map(
-            clk         => clk,
-            reset       => rst,
-            clk_enb_out => s_clk_enb_stepperControl
-        );
-
     --****TMC2660 SPI COMMUNICATION****
     -----------------------------------------------------------------------------------------------
-    --Multiplexing configuration data and stream data
-    config_word_tready <= spi_t_tready when (config_fifo_empty = '0') else '0';
-    stream_word_tready <= spi_t_tready when (config_fifo_empty = '1') else '0';
-    spi_t_tvalid       <= config_word_tvalid when (config_fifo_empty = '0') else stream_word_tvalid;
-    spi_t_tdata        <= config_word_tdata when (config_fifo_empty = '0') else stream_word_tdata;
-
     CONFIGURATION_FIFO : entity work.ROM16XN_FIFO
         generic map(
             g_data_width  => 24,
@@ -214,31 +192,11 @@ begin
         port map(
             clk            => clk,
             rst            => rst,
-            p_fifo_empty   => config_fifo_empty,
-            p_cword_tready => config_word_tready,
+            p_fifo_empty   => open,
+            p_cword_tready => spi_t_tready,
             p_cword_tvalid => config_word_tvalid,
             p_cword_tdata  => config_word_tdata
         );
-
-    --Reset stream fifo to prevent auto-loading from the register
-    stream_rst <= rst or (not config_fifo_empty);
-
-    STREAM_FIFO : entity work.STREAM_FIFO
-        generic map(
-            g_fifo_width => 24,
-            g_fifo_depth => 5
-        )
-        port map(
-            clk            => clk,
-            rst            => stream_rst,
-            p_write_tready => open,
-            p_write_tvalid => reg_write_stb(3),
-            p_write_tdata  => reg_spi_data,
-            p_read_tready  => stream_word_tready,
-            p_read_tvalid  => stream_word_tvalid,
-            p_read_tdata   => stream_word_tdata
-        );
-
     SPI_INTERFACE : entity work.SPI_T_DRIVER
         generic map(
             g_clk_factor  => g_sclk_factor,
@@ -252,10 +210,10 @@ begin
             rst             => rst,
             p_stream_enb    => '0',
             p_tdword_tready => spi_t_tready,
-            p_tdword_tvalid => spi_t_tvalid,
-            p_tdword_tdata  => spi_t_tdata,
-            p_rdword_tvalid => spi_r_tvalid,
-            p_rdword_tdata  => spi_r_tdata,
+            p_tdword_tvalid => config_word_tvalid,
+            p_tdword_tdata  => config_word_tdata,
+            p_rdword_tvalid => open,
+            p_rdword_tdata  => open,
             p_spi_ncs       => p_tmc2660_ncs.dat,
             p_spi_sclk      => p_tmc2660_sclk.dat,
             p_spi_mosi      => p_tmc2660_mosi.dat,
@@ -271,15 +229,16 @@ begin
     -----------------------------------------------------------------------------------------------
     StepperControl : entity work.StepperControl
         generic map(
-            g_accelerationDivideFactor => g_accelerationDivideFactor
+            velocity_scaling     => 2 ** 25,
+            acceleration_scaling => 1
         )
         port map(
             clk              => clk,
-            clk_enb          => s_clk_enb_stepperControl,
             rst              => rst,
             p_step           => p_tmc2660_step.dat,
             p_velocityTarget => s_velocityTarget,
-            p_acceleration   => std_logic_vector(to_unsigned(g_acceleration, 16)),
+            p_velocity => s_speed,
+            p_acceleration   => reg_acceleration_out,
             p_busyMoving     => s_moving
         );
 
@@ -287,12 +246,38 @@ begin
     p_tmc2660_step.enb <= '1';
     p_tmc2660_dir.enb  <= '1';
 
-    -- -- Drive signals of StepperControl
-    --s_driveDir0 <= '1' when (reg_pos_ctl = '1' and reg_pos_now < reg_pos_stop and reg_enn = '0') else reg_driveDir0;
-    --s_driveDir1 <= '1' when (reg_pos_ctl = '1' and reg_pos_now > reg_pos_stop and reg_enn = '0') else reg_driveDir1;
-
-    s_velocityTarget <= reg_speed when (reg_pos_ctl = '0' and s_currentState = z_dir1 and reg_driveDir0 = '1' and reg_enn = '0') or (reg_pos_ctl = '0' and s_currentState = z_dir2 and reg_driveDir1 = '1' and reg_enn = '0') or (reg_pos_ctl = '1' and s_currentState = z_dir1 and reg_pos_now > reg_pos_slowdown and reg_enn = '0') or (reg_pos_ctl = '1' and s_currentState = z_dir2 and reg_pos_now < reg_pos_slowdown and reg_enn = '0') else
-                        (others => '0');
+    velocity : process(reg_data_in_buff, reg_data_out_buff, s_currentState) is
+    begin
+        if reg_pos_ctl_out = '0' then
+            if reg_enn_out = '0' then
+                -- speed control
+                if (s_currentState = z_dir1 and reg_driveDir0_out = '1') or (s_currentState = z_dir2 and reg_driveDir1_out = '1') then
+                    s_velocityTarget <= reg_speed_out;
+                else
+                    s_velocityTarget <= (others => '0');
+                end if;
+            else
+                s_velocityTarget <= (others => '0');
+            end if;
+        else
+            -- position control
+            if (s_currentState = z_dir1) then
+                if reg_pos_now_in > reg_pos_slowdown_out then
+                    s_velocityTarget <= reg_speed_out;
+                else
+                    s_velocityTarget <= (others => '0');
+                end if;
+            elsif (s_currentState = z_dir2) then
+                if reg_pos_now_in < reg_pos_slowdown_out then
+                    s_velocityTarget <= reg_speed_out;
+                else
+                    s_velocityTarget <= (others => '0');
+                end if;
+            else
+                s_velocityTarget <= (others => '0');
+            end if;
+        end if;        
+    end process velocity;
 
     p_tmc2660_dir.dat <= '1' when s_currentState = z_dir2 or s_currentState = z_stop2 else '0';
 
@@ -303,27 +288,31 @@ begin
             s_currentState <= z_stop1;
         elsif (rising_edge(clk)) then
             case s_currentState is
-                when z_stop1 => if (reg_driveDir0 = '0' and reg_driveDir1 = '1') then
+                when z_stop1 =>
+                    if (reg_driveDir0_out = '0' and reg_driveDir1_out = '1') then
                         s_currentState <= z_stop2;
-                    elsif (reg_driveDir0 = '1' and reg_enn = '0') then
+                    elsif (reg_driveDir0_out = '1' and reg_enn_out = '0') then
                         s_currentState <= z_dir1;
                     else
                         s_currentState <= z_stop1;
                     end if;
 
-                when z_dir1 => if ((reg_driveDir0 /= '1' or reg_enn = '1') and s_moving = '0') then
+                when z_dir1 =>
+                    if ((reg_driveDir0_out /= '1' or reg_enn_out = '1') and s_moving = '0') then
                         s_currentState <= z_stop1;
                     else
                         s_currentState <= z_dir1;
                     end if;
 
-                when z_stop2 => if (reg_driveDir0 = '1' and reg_driveDir1 = '0') then
+                when z_stop2 =>
+                    if (reg_driveDir0_out = '1' and reg_driveDir1_out = '0') then
                         s_currentState <= z_stop1;
-                    elsif (reg_driveDir1 = '1' and reg_enn = '0') then
+                    elsif (reg_driveDir1_out = '1' and reg_enn_out = '0') then
                         s_currentState <= z_dir2;
                     end if;
 
-                when z_dir2 => if ((reg_driveDir1 /= '1' or reg_enn = '1') and s_moving = '0') then
+                when z_dir2 =>
+                    if ((reg_driveDir1_out /= '1' or reg_enn_out = '1') and s_moving = '0') then
                         s_currentState <= z_stop2;
                     else
                         s_currentState <= z_dir2;
@@ -349,16 +338,13 @@ begin
     --User accessible rst to zero encoder acumulator
     rst_enc <= rst or p_enc_res;
 
-    --****Position Control****
-    -----------------------------------------------------------------------------------------------
-
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
         generic map(
             g_address    => g_address,
-            g_reg_number => 16,
-            g_def_values => c_reg_default
+            g_reg_number => 15,
+            g_def_values => (others => (others => '0'))
         )
         port map(
             clk         => clk,
@@ -368,36 +354,28 @@ begin
             p_data_in   => reg_data_in,
             p_data_out  => reg_data_out,
             p_read_stb  => open,
-            p_write_stb => reg_write_stb
+            p_write_stb => open
         );
-
-    --SPI read data - route into memory
-    MISO_DATA_TRANSFER : process(clk, rst)
-    begin
-        if (rst = '1') then
-            reg_data_in_buff(47 downto 24) <= (others => '0');
-        elsif (rising_edge(clk)) then
-            if (spi_r_tvalid = '1') then
-                reg_data_in_buff(47 downto 24) <= spi_r_tdata;
-            else
-                null;
-            end if;
-        end if;
-    end process;
 
     --Recover memory from register tabel and typecast it to std_logic_vector
     reg_data_out_buff <= getMemory(reg_data_out);
 
     --Route outputs
-    reg_data_in_buff(1 downto 0)     <= reg_data_out_buff(1 downto 0);
-    reg_data_in_buff(2)              <= p_tmc2660_sg.dat;
-    reg_data_in_buff(3)              <= s_init;
-    reg_data_in_buff(4)              <= s_moving;
-    reg_data_in_buff(23 downto 5)    <= reg_data_out_buff(23 downto 5);
-    reg_data_in_buff(63 downto 48)   <= g_enc_ratio; --reg_enc_ratio
-    reg_data_in_buff(79 downto 64)   <= g_acceleration_ratio; --reg_acceleration_ratio
-    reg_data_in_buff(111 downto 80)  <= reg_data_out_buff(111 downto 80);
-    reg_data_in_buff(127 downto 112) <= s_enc_counter; --reg_enc_encoder
+    reg_driveDir0_in    <= reg_driveDir0_out;
+    reg_driveDir1_in    <= reg_driveDir1_out;
+    reg_data_in_buff(5) <= '1' when s_currentState = z_dir2 else '0';
+    reg_data_in_buff(4) <= '1' when s_currentState = z_dir1 else '0';
+    reg_sg_in           <= p_tmc2660_sg.dat;
+    reg_init_in         <= s_init;
+    reg_pos_ctl_in      <= reg_pos_ctl_out;
+    reg_enn_in          <= reg_enn_out;
+    reg_enc_ratio_in    <= g_enc_ratio;
+    reg_pos_now_in      <= s_enc_counter;
+    reg_speed_in        <= s_speed;
+    reg_acceleration_in <= reg_acceleration_out;
+    reg_min_speed_in <= s_velocityTarget;
+    reg_pos_stop_in     <= reg_pos_stop_out;
+    reg_pos_slowdown_in <= reg_pos_slowdown_out;
 
     reg_data_in <= setMemory(reg_data_in_buff);
 

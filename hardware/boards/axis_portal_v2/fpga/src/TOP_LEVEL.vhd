@@ -276,10 +276,6 @@ begin
             g_sclk_factor              => X_MOTOR_SCLK_FACTOR,
             g_rst_delay                => X_MOTOR_RST_DELAY,
             g_tmc2660_config           => X_MOTOR_CONFIG_16BIT,
-            g_acceleration             => X_MOTOR_ACCELERATION,
-            g_accelerationDivideFactor => X_MOTOR_ACCELERATION_DIVIDEFACTOR,
-            g_stepperDivideFactor      => X_MOTOR_SPEED_DIVIDEFACTOR,
-            g_acceleration_ratio       => X_MOTOR_ACCELERATION_RATIO,
             g_enc_invert               => X_ENCODER_INVERT,
             g_enc_internal_bit         => X_ENCODER_INTERNAL_BIT,
             g_enc_ratio                => X_ENCODER_RATIO
@@ -313,10 +309,6 @@ begin
             g_sclk_factor              => Y_MOTOR_SCLK_FACTOR,
             g_rst_delay                => Y_MOTOR_RST_DELAY,
             g_tmc2660_config           => Y_MOTOR_CONFIG_16BIT,
-            g_acceleration             => Y_MOTOR_ACCELERATION,
-            g_accelerationDivideFactor => Y_MOTOR_ACCELERATION_DIVIDEFACTOR,
-            g_stepperDivideFactor      => Y_MOTOR_SPEED_DIVIDEFACTOR,
-            g_acceleration_ratio       => Y_MOTOR_ACCELERATION_RATIO,
             g_enc_invert               => Y_ENCODER_INVERT,
             g_enc_internal_bit         => Y_ENCODER_INTERNAL_BIT,
             g_enc_ratio                => Y_ENCODER_RATIO

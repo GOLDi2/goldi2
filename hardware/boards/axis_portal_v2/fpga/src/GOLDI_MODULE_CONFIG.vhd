@@ -24,8 +24,8 @@ package GOLDI_MODULE_CONFIG is
     constant SENSOR_REG_ADDRESS  : natural := 2; --Table length: 1
     constant ERROR_LIST_ADDRESS  : natural := 3; --Table length: 2
     constant GPIO_DRIVER_ADDRESS : natural := 5; --Table length: 2
-    constant X_MOTOR_ADDRESS     : natural := 7; --Table length: 16
-    constant Y_MOTOR_ADDRESS     : natural := 23; --Table length: 16
+    constant X_MOTOR_ADDRESS     : natural := 7; --Table length: 13
+    constant Y_MOTOR_ADDRESS     : natural := 23; --Table length: 13
     constant Z_MOTOR_ADDRESS     : natural := 39; --Table length: 2
     constant EMAG_ADDRESS        : natural := 40; --Table length: 1
     constant PR_LED_ADDRESS      : natural := 41; --Table length: 1
@@ -136,12 +136,11 @@ package GOLDI_MODULE_CONFIG is
         7 => x"000E"
     );
 
-    constant X_MOTOR_ACCELERATION              : natural := 1;
-    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 128;
-    constant X_MOTOR_SPEED_DIVIDEFACTOR        : natural := 1024;
+    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 400000;
 
     -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
-    constant X_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
+    constant X_MOTOR_MAX_VELOCITY : natural := 512;
+    constant X_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4400#, 16)); -- ratio: 512/(128/1) = 4
 
     -----------------------------------------------------------------------------------------------
 
@@ -228,9 +227,9 @@ package GOLDI_MODULE_CONFIG is
         7 => x"000E"
     );
 
-    constant Y_MOTOR_ACCELERATION              : natural := 1;
     constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 128;
-    constant Y_MOTOR_SPEED_DIVIDEFACTOR        : natural := 1024;
+
+    constant Y_MOTOR_MAX_VELOCITY : natural := 511;
 
     -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
     constant Y_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
