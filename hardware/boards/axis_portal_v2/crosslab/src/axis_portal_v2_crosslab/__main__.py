@@ -170,22 +170,8 @@ async def main_async():
 
     await asyncio.sleep(0.2)
 
-    # Init Model:
-    # hal.XMotor.set(-50)
-    # hal.YMotor.set(-50)
-    # hal.ZMotor.set(150)
-    # while hal.LimitXLeft.value():
-    #    await asyncio.sleep(0.1)
-    # while hal.LimitYBack.value():
-    #    await asyncio.sleep(0.1)
-    # hal.XMotor.set(50)
-    # hal.ZMotor.set(50)
-    # while not hal.LimitXLeft.value():
-    #    await asyncio.sleep(0.1)
-    # while not hal.LimitYBack.value():
-    #    await asyncio.sleep(0.1)
-    hal.XMotor.set(0)
-    hal.YMotor.set(0)
+    hal.XMotor.setSpeed(0)
+    hal.YMotor.setSpeed(0)
     hal.ZMotor.set(0)
 
     deviceHandler = DeviceHandler()

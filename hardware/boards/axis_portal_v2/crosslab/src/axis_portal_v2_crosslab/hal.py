@@ -1,6 +1,7 @@
 import asyncio
+
 from spi_driver import SpiRegisters
-from spi_driver.modules import Bit, Motor, Numeric, StepperMotor
+from spi_driver.modules import Bit, Motor, StepperMotor
 
 
 class HAL:
@@ -14,11 +15,11 @@ class HAL:
         self.LimitYBack = Bit(registers, 2, 2)
         self.LimitXRight = Bit(registers, 2, 1)
         self.LimitXLeft = Bit(registers, 2, 0)
-        self.XEncoder = Numeric(registers, 7, 16, "little")
-        self.YEncoder = Numeric(registers, 9, 16, "little")
-        self.XMotor = StepperMotor(registers, 11, 12)
-        self.YMotor = StepperMotor(registers, 17, 18)
-        self.ZMotor = Motor(registers, 23, 24)
-        self.Magnet = Bit(registers, 25, 0)
+        self.XMotor = StepperMotor(registers, 7)
+        self.YMotor = StepperMotor(registers, 16)
+        self.ZMotor = Motor(registers, 25, 26)
+        self.Magnet = Bit(registers, 27, 0)
 
+        self.XMotor.acceleration=200000
+        self.YMotor.acceleration=150000
         asyncio.create_task(registers.communicate_coroutine())
