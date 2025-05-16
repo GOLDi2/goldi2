@@ -24,107 +24,22 @@ package GOLDI_MODULE_CONFIG is
     constant SENSOR_REG_ADDRESS  : natural := 2; --Table length: 1
     constant ERROR_LIST_ADDRESS  : natural := 3; --Table length: 2
     constant GPIO_DRIVER_ADDRESS : natural := 5; --Table length: 2
-    constant X_MOTOR_ADDRESS     : natural := 7; --Table length: 13
-    constant Y_MOTOR_ADDRESS     : natural := 23; --Table length: 13
-    constant Z_MOTOR_ADDRESS     : natural := 39; --Table length: 2
-    constant EMAG_ADDRESS        : natural := 40; --Table length: 1
-    constant PR_LED_ADDRESS      : natural := 41; --Table length: 1
-    constant PG_LED_ADDRESS      : natural := 42; --Table length: 1
-    constant ER_LED_ADDRESS      : natural := 43; --Table length: 1
-    constant EW_LED_ADDRESS      : natural := 44; --Table length: 1
-    constant EG_LED_ADDRESS      : natural := 45; --Table length: 1
+    constant X_MOTOR_ADDRESS     : natural := 7; --Table length: 9
+    constant Y_MOTOR_ADDRESS     : natural := 16; --Table length: 9
+    constant Z_MOTOR_ADDRESS     : natural := 25; --Table length: 2
+    constant EMAG_ADDRESS        : natural := 27; --Table length: 1
+    constant PR_LED_ADDRESS      : natural := 28; --Table length: 1
+    constant PG_LED_ADDRESS      : natural := 29; --Table length: 1
+    constant ER_LED_ADDRESS      : natural := 30; --Table length: 1
+    constant EW_LED_ADDRESS      : natural := 31; --Table length: 1
+    constant EG_LED_ADDRESS      : natural := 32; --Table length: 1
     -----------------------------------------------------------------------------------------------
-
-    --****SENSOR DATA MANAGEMENT****
+    
     -----------------------------------------------------------------------------------------------
-    constant SENSORS_DEFAULT : std_logic_vector(6 downto 0) := (others => '0');
+    --****X AXIS ****
     -----------------------------------------------------------------------------------------------
-
-    --****INCREMENTAL ENCODERS****
-    ----------------------------------------------------------------------------------------------
-    --Select positive direction [false -> CCW | true -> CC]
     constant X_ENCODER_INVERT       : boolean                       := false;
-    constant Y_ENCODER_INVERT       : boolean                       := false;
-    --ENCONDER 
     constant X_ENCODER_INTERNAL_BIT : natural                       := 18;
-    constant Y_ENCODER_INTERNAL_BIT : natural                       := 16;
-    -- ENCODER ratio: Encoder steps / Motor Steps as float16
-    constant X_ENCODER_RATIO        : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3D00#, 16)); -- ratio: (1000/4)/200 = 1.25
-    --constant X_ENCODER_RATIO    :   std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(129, 16)); --test
-    constant Y_ENCODER_RATIO        : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#3E00#, 16)); -- ratio: 600/400 = 1,5
-    -----------------------------------------------------------------------------------------------
-
-    --****X AXIS STEPPER MOTOR****
-    -----------------------------------------------------------------------------------------------
-    --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
-    --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant X_MOTOR_SCLK_FACTOR : natural := 48;
-
-    --Initial configuration of the TMC2660 Stepper driver
-    -- constant X_MOTOR_CONFIGURATION  :   tmc2660_rom(4 downto 0) :=(
-
-    --     --**Driver Control Register STEP/DIR mode (DRVCTRL)**
-    --     --[19:18]   Address = 00
-    --     --[17:10]   Reserved -> '0'
-    --     --[9]       Enable STEP interpolation 
-    --     --[8]       Enable double edge STEP pulses
-    --     --[7:4]     Reserved -> '0'
-    --     --[3:0]     Microstep resolution for STEP/DIR mode
-    --     0 => x"000004",   --x"00008"
-
-    --     --**Chopper Control Register (CHOPCONF)**
-    --     --[19:17]   Address = 100
-    --     --[16:15]   Blanking time
-    --     --[14]      Chopper mode
-    --     --[13]      Random Toff time
-    --     --[12:11]   Hysteresis decrement interval
-    --     --[10:7]    Hysteresis end value (low)
-    --     --[6:4]     Hysteresis start value 
-    --     --[3:0]     Off time MOSFET disable  
-    --     1 => x"094557",   --x"94557"
-
-    --     --**Coolstep Control Register (SMARTEN)**
-    --     --[19:17]   Address = 101
-    --     --[16]      Reserved -> '0'
-    --     --[15]      Minimum coolStep current
-    --     --[14:13]   Current decrement speed
-    --     --[12]      Reserved -> '0'
-    --     --[11:8]    Upper coolStep threshold SEMAX
-    --     --[7]       Reserved -> '0'
-    --     --[6:5]     Current increment size
-    --     --[4]       Reserved -> '0'
-    --     --[3:0]     Lower coolStep threshold SEMIN
-    --     2 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
-
-    --     --**StallGuard2 Control Register (SGCSCONF)**
-    --     --[19:17]   Address = 110
-    --     --[16]      StallGuard2 filter enable -> '1'
-    --     --[15]      Reserved -> '0'
-    --     --[14:8]    StallGuard2 threshold value
-    --     --[7:5]     Reserved -> '0'
-    --     --[4:0]     Current scale  
-    --     3 => x"0D0A0F",   --x"C041E"
-
-    --     --**Driver Control Register (DRVCONF)**
-    --     --[19:17]   Address = 111
-    --     --[16]      Test Mode - reserved -> '0'
-    --     --[15:14]   Slope control, high side
-    --     --[13:12]   Slope control, low side
-    --     --[11]      Reserved -> '0'
-    --     --[10]      Short to GND protection disable
-    --     --[9:8]     Short to GND detection timer
-    --     --[7]       STEP/DIR interface disable 
-    --     --[6]       Sense resistor voltage-based current scaling
-    --     --[5:4]     Select value for read out
-    --     --[3:0]     Reserved -> '0'
-    --     4 => x"0E0060" --x"E0060"
-    -- );
-
-    --Reset delay for TMC2660 to recognize the input clock signal
-    constant X_MOTOR_RST_DELAY : natural := 48;
-
-    --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
-    --blocks for the ROM16XN_FIFO module
     constant X_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) := (
         0 => x"0004",
         1 => x"5700",
@@ -135,87 +50,12 @@ package GOLDI_MODULE_CONFIG is
         6 => x"0070",
         7 => x"000E"
     );
-
-    constant X_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 400000;
-
-    -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
-    constant X_MOTOR_MAX_VELOCITY : natural := 512;
-    constant X_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4400#, 16)); -- ratio: 512/(128/1) = 4
-
+    
     -----------------------------------------------------------------------------------------------
-
-    --****Y AXIS STEPPER MOTOR****
+    --****Y AXIS ****
     -----------------------------------------------------------------------------------------------
-    --Serial clock divider value. Sets the frequency of the serial clock in relationship to the
-    --system clock. It is recomended to use an even value to get a 50% duty cycle
-    constant Y_MOTOR_SCLK_FACTOR : natural := 48;
-
-    --Initial configuration of the TMC2660 Stepper driver
-    -- constant Y_MOTOR_CONFIGURATION  :   tmc2660_rom(5 downto 0) :=(
-    --     0 => x"000000",
-
-    --     --**Driver Control Register STEP/DIR mode (DRVCTRL)**
-    --     --[19:18]   Address = 00
-    --     --[17:10]   Reserved -> '0'
-    --     --[9]       Enable STEP interpolation 
-    --     --[8]       Enable double edge STEP pulses
-    --     --[7:4]     Reserved -> '0'
-    --     --[3:0]     Microstep resolution for STEP/DIR mode
-    --     1 => x"000004",   --x"00004"
-
-    --     --**Chopper Control Register (CHOPCONF)**
-    --     --[19:17]   Address = 100
-    --     --[16:15]   Blanking time
-    --     --[14]      Chopper mode
-    --     --[13]      Random Toff time
-    --     --[12:11]   Hysteresis decrement interval
-    --     --[10:7]    Hysteresis end value (low)
-    --     --[6:4]     Hysteresis start value 
-    --     --[3:0]     Off time MOSFET disable  
-    --     2 => x"094557",   --x"94557"
-
-    --     --**Coolstep Control Register (SMARTEN)**
-    --     --[19:17]   Address = 101
-    --     --[16]      Reserved -> '0'
-    --     --[15]      Minimum coolStep current
-    --     --[14:13]   Current decrement speed
-    --     --[12]      Reserved -> '0'
-    --     --[11:8]    Upper coolStep threshold SEMAX
-    --     --[7]       Reserved -> '0'
-    --     --[6:5]     Current increment size
-    --     --[4]       Reserved -> '0'
-    --     --[3:0]     Lower coolStep threshold SEMIN
-    --     3 => x"0A0000",   --x"A0000" --CoolStep disabled[SEMIN=0]
-
-    --     --**StallGuard2 Control Register (SGCSCONF)**
-    --     --[19:17]   Address = 110
-    --     --[16]      StallGuard2 filter enable
-    --     --[15]      Reserved -> '0'
-    --     --[14:8]    StallGuard2 threshold value
-    --     --[7:5]     Reserved -> '0'
-    --     --[4:0]     Current scale  
-    --     4 => x"0C040F",   --x"C040F"
-
-    --     --**Driver Control Register (DRVCONF)**
-    --     --[19:17]   Address = 111
-    --     --[16]      Test Mode - reserved -> '0'
-    --     --[15:14]   Slope control, high side
-    --     --[13:12]   Slope control, low side
-    --     --[11]      Reserved -> '0'
-    --     --[10]      Short to GND protection disable
-    --     --[9:8]     Short to GND detection timer
-    --     --[7]       STEP/DIR interface disable 
-    --     --[6]       Sense resistor voltage-based current scaling
-    --     --[5:4]     Select value for read out
-    --     --[3:0]     Reserved -> '0'
-    --     5 => x"0E0070" --x"E0070"
-    -- );
-
-    --Reset delay for TMC2660 to recognize the input clock signal
-    constant Y_MOTOR_RST_DELAY : natural := 48;
-
-    --The same data as the X_MOTOR_CONFIGURATION constant but formatted into 16 bit
-    --blocks for the ROM16XN_FIFO module
+    constant Y_ENCODER_INVERT       : boolean                       := false;
+    constant Y_ENCODER_INTERNAL_BIT : natural                       := 16;
     constant Y_MOTOR_CONFIG_16BIT : array_16_bit(7 downto 0) := (
         0 => x"0004",
         1 => x"5700",
@@ -227,21 +67,11 @@ package GOLDI_MODULE_CONFIG is
         7 => x"000E"
     );
 
-    constant Y_MOTOR_ACCELERATION_DIVIDEFACTOR : natural := 128;
-
-    constant Y_MOTOR_MAX_VELOCITY : natural := 511;
-
-    -- Ratio of X_MOTOR_SPEED_DIVIDEFACTOR / (X_MOTOR_ACCELERATION_DIVIDEFACTOR / X_MOTOR_ACCELERATION) as float16 to calc pos_slowdown from python
-    constant Y_MOTOR_ACCELERATION_RATIO : std_logic_vector(15 downto 0) := std_logic_vector(to_unsigned(16#4800#, 16)); -- ratio: 1024/(128/1) = 8
     -----------------------------------------------------------------------------------------------
-
     --****Z AXIS DC MOTOR****
     -----------------------------------------------------------------------------------------------
     --Frequency of PWM signal
     --Frequency factor calculated by [F = (f_clk/f_pwm*255)] with
-    -- F     - frequency factor
-    -- f_clk - system clock
-    -- f_pwm - desired frequency of pwm signals
     constant Z_MOTOR_FREQUENCY : natural := 27;
     -----------------------------------------------------------------------------------------------
 

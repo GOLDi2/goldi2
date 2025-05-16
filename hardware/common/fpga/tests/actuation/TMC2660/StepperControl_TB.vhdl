@@ -21,15 +21,10 @@ architecture TB of StepperControl_TB is
     signal clk              : std_logic := '0';
     signal p_step           : STD_LOGIC;
     signal p_velocityTarget : STD_LOGIC_VECTOR(15 downto 0);
-    signal p_busyMoving     : STD_LOGIC;
     signal p_acceleration   : STD_LOGIC_VECTOR(15 downto 0);
     --DUT IOs
     signal position         : natural   := 0;
     signal p_velocity : std_logic_vector(15 downto 0);
-
-    signal s_cycles : integer := 0;
-    signal s_expected_velocity : integer := 0;
-    signal s_expected_position : integer := 0;
 begin
     DUT : entity work.StepperControl
         generic map(
@@ -43,7 +38,7 @@ begin
             p_velocityTarget => p_velocityTarget,
             p_velocity => p_velocity,
             p_acceleration   => p_acceleration,
-            p_busyMoving     => p_busyMoving
+            p_busyMoving     => open
         );
 
     clk <= not clk after clk_period / 2;
@@ -67,10 +62,6 @@ begin
             cycles := cycles +1;
             expected_position := expected_position + expected_velocity;
             expected_velocity := cycles / ((to_integer(unsigned(p_acceleration))+1) * acceleration_scaling);
-
-            s_cycles <= cycles;
-            s_expected_velocity <= expected_velocity;
-            s_expected_position <= expected_position;
             
             assert p_velocity = std_logic_vector(to_unsigned(expected_velocity, 16))
             report integer'image(cycles) & " cycles: expected velocity to be " & integer'image(expected_velocity) & " but was " & integer'image(to_integer(unsigned(p_velocity))) severity error;
@@ -87,10 +78,6 @@ begin
             cycles := cycles +1;
             expected_position := expected_position + expected_velocity;
             expected_velocity := expected_max_velocity - cycles / ((to_integer(unsigned(p_acceleration))+1) * acceleration_scaling);
-
-            s_cycles <= cycles;
-            s_expected_velocity <= expected_velocity;
-            s_expected_position <= expected_position;
             
             assert p_velocity = std_logic_vector(to_unsigned(expected_velocity, 16))
             report integer'image(cycles) & " cycles: expected velocity to be " & integer'image(expected_velocity) & " but was " & integer'image(to_integer(unsigned(p_velocity))) severity error;
@@ -98,6 +85,9 @@ begin
             report integer'image(cycles) & " cycles: expected position to be " & integer'image(expected_position / velocity_scaling) & " but was " & integer'image(position) severity error;
         end loop;
 
+        assert position = expected_end_position / velocity_scaling
+        report "expected end position to be " & integer'image(expected_position / velocity_scaling) & " but was " & integer'image(position) severity error;
+        
         std.env.finish;
     end process;
 

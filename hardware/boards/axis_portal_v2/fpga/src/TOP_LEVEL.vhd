@@ -273,12 +273,11 @@ begin
     X_AXIS_MOTOR : entity work.TMC2660_SMODULE
         generic map(
             g_address                  => X_MOTOR_ADDRESS,
-            g_sclk_factor              => X_MOTOR_SCLK_FACTOR,
-            g_rst_delay                => X_MOTOR_RST_DELAY,
+            g_sclk_factor              => 48,
+            g_rst_delay                => 48,
             g_tmc2660_config           => X_MOTOR_CONFIG_16BIT,
             g_enc_invert               => X_ENCODER_INVERT,
-            g_enc_internal_bit         => X_ENCODER_INTERNAL_BIT,
-            g_enc_ratio                => X_ENCODER_RATIO
+            g_enc_internal_bit         => X_ENCODER_INTERNAL_BIT
         )
         port map(
             clk            => clk,
@@ -306,12 +305,11 @@ begin
     Y_AXIS_MOTOR : entity work.TMC2660_SMODULE
         generic map(
             g_address                  => Y_MOTOR_ADDRESS,
-            g_sclk_factor              => Y_MOTOR_SCLK_FACTOR,
-            g_rst_delay                => Y_MOTOR_RST_DELAY,
+            g_sclk_factor              => 48,
+            g_rst_delay                => 48,
             g_tmc2660_config           => Y_MOTOR_CONFIG_16BIT,
             g_enc_invert               => Y_ENCODER_INVERT,
-            g_enc_internal_bit         => Y_ENCODER_INTERNAL_BIT,
-            g_enc_ratio                => Y_ENCODER_RATIO
+            g_enc_internal_bit         => Y_ENCODER_INTERNAL_BIT
         )
         port map(
             clk            => clk,
