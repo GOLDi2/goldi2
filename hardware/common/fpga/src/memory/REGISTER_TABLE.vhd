@@ -43,7 +43,7 @@ entity REGISTER_TABLE is
 	generic(
 		g_address    : integer := 1;    --! Register table lowest address
 		g_reg_number : integer := 3;    --! Length of register table
-		g_def_values : data_word_vector --! Reset default values for registers
+		g_def_values : data_word_vector(g_reg_number - 1 downto 0) --! Reset default values for registers
 	);
 	port(
 		--General
