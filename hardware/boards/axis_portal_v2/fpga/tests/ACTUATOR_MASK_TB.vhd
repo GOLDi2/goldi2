@@ -47,9 +47,7 @@ begin
         port map(
             p_sys_io_i    => sys_io_i,
             p_sys_io_o    => sys_io_o,
-            p_safe_io_o   => safe_io_out,
-            p_limit_x_neg => open,
-            p_limit_y_neg => open
+            p_safe_io_o   => safe_io_out
         );
     -----------------------------------------------------------------------------------------------
 

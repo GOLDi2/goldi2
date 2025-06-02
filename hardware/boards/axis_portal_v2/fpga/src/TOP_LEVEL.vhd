@@ -57,9 +57,6 @@ architecture RTL of TOP_LEVEL is
     signal system_io_o_safe   : io_o_vector(PHYSICAL_PIN_NUMBER - 1 downto 0);
     --Sensor data
     signal sensor_data_vector : data_word;
-    signal res_enc_x          : std_logic;
-    signal res_enc_y          : std_logic;
-
 begin
 
     --****CLOCKING****
@@ -215,9 +212,7 @@ begin
         port map(
             p_sys_io_i    => system_io_i,
             p_sys_io_o    => system_io_o,
-            p_safe_io_o   => system_io_o_safe,
-            p_limit_x_neg => res_enc_x,
-            p_limit_y_neg => res_enc_y
+            p_safe_io_o   => system_io_o_safe
         );
     -----------------------------------------------------------------------------------------------
 
@@ -270,7 +265,7 @@ begin
             p_gpio_o_vector => system_io_o(1 downto 0)
         );
 
-    X_AXIS_MOTOR : entity work.TMC2660_SMODULE
+    X_AXIS_MOTOR : entity work.TMC2660_SMODULE_ENCODER
         generic map(
             g_address                  => X_MOTOR_ADDRESS,
             g_sclk_factor              => 48,
@@ -293,7 +288,6 @@ begin
             p_tmc2660_sclk => system_io_o(18),
             p_tmc2660_mosi => system_io_o(20),
             p_tmc2660_miso => system_io_i(21),
-            p_enc_res      => res_enc_x,
             p_enc_a        => system_io_i(9),
             p_enc_b        => system_io_i(10)
         );
@@ -302,7 +296,7 @@ begin
     system_io_o(15) <= gnd_io_o;
     system_io_o(21) <= gnd_io_o;
 
-    Y_AXIS_MOTOR : entity work.TMC2660_SMODULE
+    Y_AXIS_MOTOR : entity work.TMC2660_SMODULE_ENCODER
         generic map(
             g_address                  => Y_MOTOR_ADDRESS,
             g_sclk_factor              => 48,
@@ -325,7 +319,6 @@ begin
             p_tmc2660_sclk => system_io_o(27),
             p_tmc2660_mosi => system_io_o(29),
             p_tmc2660_miso => system_io_i(30),
-            p_enc_res      => res_enc_y,
             p_enc_a        => system_io_i(11),
             p_enc_b        => system_io_i(12)
         );

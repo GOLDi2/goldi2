@@ -34,7 +34,7 @@ use work.GOLDI_DATA_TYPES.all;
 --! ### Register:
 --! | g_address | Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
 --! |----------:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
---! | +0		|       |       |       |moving	|  sg   |pos_ctl|  dir1 |  dir0 |
+--! | +0		|       |       | init  |moving	|  sg   |pos_ctl|  dir1 |  dir0 |
 --! | +1        | position[7:0]                                          ||||||||
 --! | +2        | position[15:8]                                         ||||||||
 --! | +3        | velocity [7:0]                                         ||||||||
@@ -49,32 +49,30 @@ entity TMC2660_SMODULE is
         g_address          : natural      := 1; --! Module's base address
         g_sclk_factor      : natural      := 8; --! SPI serial clock period as a factor of clk
         g_rst_delay        : natural      := 100; --! Initial delay after reset given in clk cycles
-        g_tmc2660_config   : array_16_bit := (x"0000", x"0000"); --! Default configuration of TMC2660
-        g_enc_invert       : boolean      := false;
-        g_enc_internal_bit : natural      := 16
+        g_tmc2660_config   : array_16_bit := (x"0000", x"0000") --! Default configuration of TMC2660
     );
     port(
         --General
-        clk            : in  std_logic; --! System clock
-        rst            : in  std_logic; --! Asyncrhonous reset
+        clk               : in  std_logic; --! System clock
+        rst               : in  std_logic; --! Asyncrhonous reset
 
         --BUS slave interface
-        sys_bus_i      : in  sbus_in;   --! BUS input signals [stb,we,adr,dat,tag]
-        sys_bus_o      : out sbus_out;  --! BUS output signals [dat,tag,mux]
+        sys_bus_i         : in  sbus_in; --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o         : out sbus_out; --! BUS output signals [dat,tag,mux]
         --TMC2660 interface
-        p_tmc2660_clk  : out io_o;      --! TMC2660 external clock (sys_clock/2)
-        p_tmc2660_enn  : out io_o;      --! TMC2660 enable signal ('0'-on | '1'-off)
-        p_tmc2660_sg   : in  io_i;      --! TMC2660 StallGuard2 input
-        p_tmc2660_dir  : out io_o;      --! TMC2660 direction signal
-        p_tmc2660_step : out io_o;      --! TMC2660 step signal
-        p_tmc2660_ncs  : out io_o;      --! TMC2660 SPI chip select 
-        p_tmc2660_sclk : out io_o;      --! TMC2660 SPI serial clock
-        p_tmc2660_mosi : out io_o;      --! TMC2660 SPI master_out/slave-in
-        p_tmc2660_miso : in  io_i;      --! TMC2660 SPI master-in/slave-out
+        p_tmc2660_clk     : out io_o;   --! TMC2660 external clock (sys_clock/2)
+        p_tmc2660_enn     : out io_o;   --! TMC2660 enable signal ('0'-on | '1'-off)
+        p_tmc2660_sg      : in  io_i;   --! TMC2660 StallGuard2 input
+        p_tmc2660_dir     : out io_o;   --! TMC2660 direction signal
+        p_tmc2660_step    : out io_o;   --! TMC2660 step signal
+        p_tmc2660_ncs     : out io_o;   --! TMC2660 SPI chip select 
+        p_tmc2660_sclk    : out io_o;   --! TMC2660 SPI serial clock
+        p_tmc2660_mosi    : out io_o;   --! TMC2660 SPI master_out/slave-in
+        p_tmc2660_miso    : in  io_i;   --! TMC2660 SPI master-in/slave-out
         --ENCODER interface
-        p_enc_res      : in  std_logic; --! ENCODER reset counter
-        p_enc_a        : in  io_i;      --! ENCODER channel a
-        p_enc_b        : in  io_i       --! ENCODER channel b
+        p_enc_initialized : out std_logic;
+        p_enc_reference   : out std_logic;
+        p_enc_counter     : in  std_logic_vector(15 downto 0)
     );
 end entity TMC2660_SMODULE;
 
@@ -90,6 +88,7 @@ architecture RTL of TMC2660_SMODULE is
     alias reg_ctrl_pos_ctl_in        : std_logic is reg_data_in_buff(2);
     alias reg_ctrl_sg_in             : std_logic is reg_data_in_buff(3);
     alias reg_ctrl_moving_in         : std_logic is reg_data_in_buff(4);
+    alias reg_ctrl_init_in           : std_logic is reg_data_in_buff(5);
     alias reg_position_in            : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (2 + 1) - 1 downto 8 * 1);
     alias reg_velocity_in            : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (4 + 1) - 1 downto 8 * 3);
     alias reg_acceleration_in        : std_logic_vector(15 downto 0) is reg_data_in_buff(8 * (6 + 1) - 1 downto 8 * 5);
@@ -98,6 +97,7 @@ architecture RTL of TMC2660_SMODULE is
     alias reg_ctrl_driveDir0_out     : std_logic is reg_data_out_buff(0);
     alias reg_ctrl_driveDir1_out     : std_logic is reg_data_out_buff(1);
     alias reg_ctrl_pos_ctl_out       : std_logic is reg_data_out_buff(2);
+    alias reg_ctrl_init_out          : std_logic is reg_data_out_buff(5);
     alias reg_velocity_out           : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (4 + 1) - 1 downto 8 * 3);
     alias reg_acceleration_out       : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (6 + 1) - 1 downto 8 * 5);
     alias reg_position_slow_down_out : std_logic_vector(15 downto 0) is reg_data_out_buff(8 * (8 + 1) - 1 downto 8 * 7);
@@ -115,10 +115,9 @@ architecture RTL of TMC2660_SMODULE is
     signal s_currentState     : tState;
     signal s_moving           : std_logic;
     signal s_velocityTarget   : std_logic_vector(15 downto 0);
-    signal rst_enc            : std_logic;
-    signal s_enc_counter      : std_logic_vector(15 downto 0);
     signal tmc2660_clk        : std_logic;
-
+    signal s_enc_initialized  : std_logic := '0';
+    signal s_enc_reference    : std_logic := '0';
 begin
     --****GENERAL****
     -----------------------------------------------------------------------------------------------
@@ -128,6 +127,26 @@ begin
 
     p_tmc2660_enn.enb <= '1';
     p_tmc2660_enn.dat <= not s_moving;
+
+    --****Initialization****
+    InitProcess : process(clk, rst) is
+    begin
+        if rst = '1' then
+            s_enc_initialized <= '0';
+            s_enc_reference   <= '0';
+        elsif rising_edge(clk) then
+            if reg_ctrl_init_out = '1' then
+                s_enc_initialized <= '1';
+                s_enc_reference   <= '1';
+            else
+                s_enc_initialized <= s_enc_initialized;
+                s_enc_reference   <= '0';
+            end if;
+        end if;
+    end process InitProcess;
+
+    p_enc_reference   <= s_enc_reference;
+    p_enc_initialized <= s_enc_initialized;
 
     --****CLOCKING****
     -----------------------------------------------------------------------------------------------
@@ -283,23 +302,6 @@ begin
         end if;
     end process;
 
-    --****Encoder****
-    -----------------------------------------------------------------------------------------------
-    ENCODER : entity work.ENCODER
-        generic map(
-            g_invert_dir       => g_enc_invert,
-            g_enc_internal_bit => g_enc_internal_bit
-        )
-        port map(
-            clk         => clk,
-            rst         => rst_enc,
-            p_channel_a => p_enc_a.dat,
-            p_channel_b => p_enc_b.dat,
-            p_enc_count => s_enc_counter
-        );
-    --User accessible rst to zero encoder acumulator
-    rst_enc <= rst or p_enc_res;
-
     --****MEMORY****
     -----------------------------------------------------------------------------------------------
     MEMORY : entity work.REGISTER_TABLE
@@ -328,7 +330,8 @@ begin
     reg_ctrl_pos_ctl_in       <= reg_ctrl_pos_ctl_out;
     reg_ctrl_sg_in            <= p_tmc2660_sg.dat;
     reg_ctrl_moving_in        <= s_moving;
-    reg_position_in           <= s_enc_counter;
+    reg_ctrl_init_in          <= s_enc_initialized;
+    reg_position_in           <= p_enc_counter;
     reg_velocity_in           <= reg_velocity_out;
     reg_acceleration_in       <= reg_acceleration_out;
     reg_position_slow_down_in <= reg_position_slow_down_out;

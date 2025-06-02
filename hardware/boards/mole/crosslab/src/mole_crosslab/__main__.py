@@ -2,18 +2,16 @@
 
 import argparse
 import asyncio
+import os
 from json import JSONDecoder
 from typing import Dict, Optional
-from mole_crosslab.hal import HAL
-import os
 
 from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
 from crosslab.soa_services.electrical import ElectricalConnectionService
 from crosslab.soa_services.electrical.signal_interfaces.gpio import (
-    GPIOInterface,
-    ConstractableGPIOInterface,
-)
+    ConstractableGPIOInterface, GPIOInterface)
+from mole_crosslab.hal import HAL
 
 # import logging
 # logging.basicConfig(level='DEBUG')
@@ -42,7 +40,7 @@ def userError(message: str):
 
 
 def newSensorInterface(interface):
-    global hal
+    global hal  # noqa: F824
 
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
