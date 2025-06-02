@@ -38,7 +38,7 @@ RUN apt-get update \
 # licence update (change build hash)
 COPY diamond/lattice.dat /usr/local/diamond/3.12/license/license.dat
 
-RUN echo "sudo ip link add bond0 type dummy && sudo ifconfig bond0 hw ether 08:00:27:3a:52:9f || true" >> $DIAMOND_DIR/bin/lin64/diamond_env
+RUN echo "sudo ifconfig eth0 hw ether 08:00:27:3a:52:9f || true" >> $DIAMOND_DIR/bin/lin64/diamond_env
 
 # YOCTO
 RUN apt-get update \
