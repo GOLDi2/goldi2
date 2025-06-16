@@ -1,4 +1,6 @@
 {
+    "python.defaultInterpreterPath": "venv/bin/python",
+    "python.analysis.typeCheckingMode": "basic",
     "files.exclude": {
         //begin generated
         "**/*.egg-info": true,
@@ -12,7 +14,6 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "fpga/build": true,
         //end generated
     },
     "files.watcherExclude": {
@@ -29,7 +30,6 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "fpga/build": true,
         //end generated
     }
 }

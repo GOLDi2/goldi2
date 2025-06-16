@@ -13,12 +13,15 @@
         "**/.packages": true,
         //begin generated
         "frontend-services/.vscode": true,
+        "frontend-services/edge_devices/.vscode": true,
         "hardware/.vscode": true,
         "hardware/boards/.vscode": true,
         "hardware/boards/axis_portal_v1/.vscode": true,
         "hardware/boards/axis_portal_v1/fpga/build": true,
         "hardware/boards/axis_portal_v2/.vscode": true,
         "hardware/boards/axis_portal_v2/fpga/build": true,
+        "hardware/boards/microcontroller/.vscode": true,
+        "hardware/boards/microcontroller/fpga/build": true,
         "hardware/boards/mole/.vscode": true,
         "hardware/boards/mole/fpga/build": true,
         "hardware/boards/test_board/.vscode": true,
@@ -43,6 +46,7 @@
         //begin generated
         "hardware/boards/axis_portal_v1/fpga/build": true,
         "hardware/boards/axis_portal_v2/fpga/build": true,
+        "hardware/boards/microcontroller/fpga/build": true,
         "hardware/boards/mole/fpga/build": true,
         "hardware/os/meta-openembedded": true,
         "hardware/os/meta-raspberrypi": true,

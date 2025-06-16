@@ -1,5 +1,6 @@
 {
     "files.exclude": {
+        "build": true,
         //begin generated
         "**/*.egg-info": true,
         "**/.mypy_cache": true,
@@ -12,10 +13,10 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "fpga/build": true,
         //end generated
     },
     "files.watcherExclude": {
+        "build": true,
         //begin generated
         "**/*.egg-info": true,
         "**/.mypy_cache": true,
@@ -29,7 +30,6 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
-        "fpga/build": true,
         //end generated
     }
 }

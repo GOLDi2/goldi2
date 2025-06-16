@@ -1,0 +1,2 @@
+sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r src/goldi_microcontroller root@${IP}:/usr/lib/python3.10/site-packages
+sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${IP} systemctl restart goldi-crosslab

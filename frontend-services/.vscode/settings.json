@@ -12,6 +12,7 @@
         "**/lib": true,
         "**/node_modules": true,
         "**/venv": true,
+        "edge_devices/.vscode": true,
         //end generated
     },
     "files.watcherExclude": {

@@ -144,6 +144,19 @@ hardware/boards/mole/crosslab:
     dependencies:
       - hardware/boards/mole/crosslab:build
 
+
+hardware/boards/microcontroller/fpga:
+  - script: build
+  - script: test
+
+hardware/boards/microcontroller/crosslab:
+  - script: build
+    dependencies:
+      - hardware/common/spi-driver:build
+  - script: lint
+    dependencies:
+      - hardware/boards/microcontroller/crosslab:build
+
 hardware/os:
   - script: build_sstate_ipk
     tags:
@@ -172,3 +185,9 @@ hardware/os:
       - hardware/common/spi-driver:build
       - hardware/boards/mole/fpga:build
       - hardware/boards/mole/crosslab:build
+  - script: build_microcontroller
+    dependencies:
+      - hardware/common/config-interface:build
+      - hardware/common/spi-driver:build
+      - hardware/boards/microcontroller/fpga:build
+      - hardware/boards/microcontroller/crosslab:build
