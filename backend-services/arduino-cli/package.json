@@ -1,0 +1,32 @@
+{
+  "type": "module",
+  "name": "@goldi2/arduino-cli-compilation-service",
+  "description": "A compilation service using the arduino-cli compiler.",
+  "bin": {
+    "arduino-cli-compilation-service": "./app/index.js"
+  },
+  "files": [
+    "app"
+  ],
+  "dockerName": "arduino-cli-compilation-service",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.mjs"
+  },
+  "author": "Pierre Helbing",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@cross-lab-project/abstract-messaging-channel": "file:../../crosslab/helper/abstract-messaging-channel",
+    "@cross-lab-project/soa-service-compilation": "file:../../crosslab/clients/soa_services/compilation/js",
+    "@cross-lab-project/crosslab-messaging-channel": "file:../../crosslab/helper/crosslab-messaging-channel",
+    "@cross-lab-project/filesystem-schemas": "file:../../crosslab/helper/filesystem-schemas",
+    "@cross-lab-project/soa-client": "file:../../crosslab/clients/soa/js",
+    "express": "^4.21.0",
+    "zod": "^3.23.8"
+  }
+}

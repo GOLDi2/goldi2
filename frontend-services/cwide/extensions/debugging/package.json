@@ -1,0 +1,117 @@
+{
+  "name": "@crosslab-ide/crosslab-debugging-extension",
+  "publisher": "crosslab",
+  "displayName": "crosslab-debugging-extension",
+  "description": "An extension adding a crosslab debugging service consumer.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "browser": "./dist/web/extension.js",
+  "contributes": {
+    "breakpoints": [
+      {
+        "language": "cpp"
+      },
+      {
+        "language": "c"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "crosslab",
+        "label": "CrossLab Debugger",
+        "languages": [
+          "cpp",
+          "c"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "properties": {
+              "stopAtBeginningOfMainSubprogram": {
+                "description": "Whether or not to stop the debugger at the beginning of the main subprogram",
+                "default": true,
+                "type": "boolean"
+              },
+              "stopOnEntry": {
+                "description": "Whether or not to stop the debugger on the first line of the first file",
+                "default": true,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "crosslab-debugging-extension.debug",
+        "title": "Debug",
+        "icon": "$(debug)",
+        "shortTitle": "debug",
+        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)"
+      },
+      {
+        "command": "crosslab-debugging-extension.join-debug-session",
+        "title": "Join Debug Session",
+        "icon": "$(plug)",
+        "shortTitle": "join",
+        "enablement": "workbenchState == folder && !crosslab.isDebugging && crosslab.remoteDebugSession && crosslab.canJoinDebugSession"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "crosslab-debugging-extension.debug",
+          "when": "workbenchState == folder && !crosslab.remoteDebugSession",
+          "group": "navigation@3"
+        },
+        {
+          "command": "crosslab-debugging-extension.join-debug-session",
+          "when": "workbenchState == folder && crosslab.remoteDebugSession",
+          "group": "navigation@3"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/extensionTests.js",
+    "pretest": "npm run compile-web",
+    "vscode:prepublish": "npm run package-web",
+    "compile-web": "npm run check-types && npm run lint && node esbuild.js",
+    "watch-web": "npm-run-all -p watch-web:*",
+    "watch-web:esbuild": "node esbuild.js --watch",
+    "watch-web:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package-web": "npm run check-types && npm run lint && node esbuild.js",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "run-in-browser": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ."
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@types/assert": "^1.5.10",
+    "@types/mocha": "^10.0.7",
+    "@types/vscode": "^1.93.0",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "@vscode/test-web": "^0.0.58",
+    "assert": "^2.1.0",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.1",
+    "glob": "^11.0.0",
+    "mocha": "^10.7.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@cross-lab-project/soa-service-collaboration": "file:../../../../crosslab/clients/soa_services/collaboration/js",
+    "@cross-lab-project/soa-service-debugging-adapter": "file:../../../../crosslab/clients/soa_services/debugging-adapter/js",
+    "@cross-lab-project/soa-service-filesystem": "file:../../../../crosslab/clients/soa_services/filesystem/js",
+    "@cross-lab-project/filesystem-schemas": "file:../../../../crosslab/helper/filesystem-schemas",
+    "esbuild-plugin-polyfill-node": "^0.3.0"
+  }
+}
