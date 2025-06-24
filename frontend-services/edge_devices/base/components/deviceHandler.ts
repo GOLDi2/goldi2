@@ -28,7 +28,7 @@ export class DeviceHandler extends SoaDeviceHandler {
     | "connected"
     | "running"
     | "failed"
-    | "closed" = "microphone";
+    | "finished" = "microphone";
   public error?: string;
   public onStateChange?: () => void;
   resolveMicrophone?: () => void = undefined;
@@ -57,24 +57,25 @@ export class DeviceHandler extends SoaDeviceHandler {
           this.state = "running";
           this.onStateChange && this.onStateChange();
         }
-        if (statusUpdate.status === "closed") {
-          this.state = "closed";
+        if (statusUpdate.status === "finished") {
+          this.state = "finished";
           this.onStateChange && this.onStateChange();
         }
       }
     });
 
-    navigator.permissions.query(
-      { name: 'microphone' as PermissionName }
-    ).then((permissionStatus)=>{
-      if (permissionStatus.state === "granted") {
-        this.state = "created";
-        this.resolveMicrophone && this.resolveMicrophone();
-        this.onStateChange && this.onStateChange();
-      }
-    }).catch((e) => {
-      // ignore
-    });
+    navigator.permissions
+      .query({ name: "microphone" as PermissionName })
+      .then((permissionStatus) => {
+        if (permissionStatus.state === "granted") {
+          this.state = "created";
+          this.resolveMicrophone && this.resolveMicrophone();
+          this.onStateChange && this.onStateChange();
+        }
+      })
+      .catch((e) => {
+        // ignore
+      });
   }
 
   async connect(): Promise<void> {
@@ -127,8 +128,8 @@ export class DeviceHandler extends SoaDeviceHandler {
         } else if (statusUpdate.status === "failed") {
           this.state = "failed";
           this.onStateChange && this.onStateChange();
-        } else if (statusUpdate.status === "closed") {
-          this.state = "closed";
+        } else if (statusUpdate.status === "finished") {
+          this.state = "finished";
           this.onStateChange && this.onStateChange();
         }
       });
@@ -151,23 +152,39 @@ export class DeviceHandler extends SoaDeviceHandler {
           <component-dialog open>
             <h1 style="font-size: 1.5rem;">Microphone Permission</h1>
             <p style="margin: 0.5rem 0;">
-              For this site to work, you need to allow access to your microphone. This will also the site to gather your ip address, so that we can connect to other devices directly. We do not actually record any audio. If you deny access, you may experience issues with the site.
+              For this site to work, you need to allow access to your
+              microphone. This will also the site to gather your ip address, so
+              that we can connect to other devices directly. We do not actually
+              record any audio. If you deny access, you may experience issues
+              with the site.
             </p>
             <div style="text-align: center;">
-            <button style="border-radius: 5px; background: #04AA6D; font-size: 1rem; color: #ffffff; padding: 0.7rem 0.9rem; margin: 0.5rem 0;" @click="${() => {
-              navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-                stream.getTracks().forEach((track) => track.stop());
-                this.state = "created";
-                this.resolveMicrophone && this.resolveMicrophone();
-                this.onStateChange && this.onStateChange();
-              });
-            }}">Allow</button>
-            <button style="border-radius: 5px; background: #f44336; font-size: 1rem; color: #ffffff; padding: 0.7rem 0.9rem; margin: 0.5rem 0;" @click="${() => {
-              this.state = "created";
-              this.resolveMicrophone && this.resolveMicrophone();
-              this.onStateChange && this.onStateChange();
-            }
-            }">Deny</button></div>
+              <button
+                style="border-radius: 5px; background: #04AA6D; font-size: 1rem; color: #ffffff; padding: 0.7rem 0.9rem; margin: 0.5rem 0;"
+                @click="${() => {
+                  navigator.mediaDevices
+                    .getUserMedia({ audio: true })
+                    .then((stream) => {
+                      stream.getTracks().forEach((track) => track.stop());
+                      this.state = "created";
+                      this.resolveMicrophone && this.resolveMicrophone();
+                      this.onStateChange && this.onStateChange();
+                    });
+                }}"
+              >
+                Allow
+              </button>
+              <button
+                style="border-radius: 5px; background: #f44336; font-size: 1rem; color: #ffffff; padding: 0.7rem 0.9rem; margin: 0.5rem 0;"
+                @click="${() => {
+                  this.state = "created";
+                  this.resolveMicrophone && this.resolveMicrophone();
+                  this.onStateChange && this.onStateChange();
+                }}"
+              >
+                Deny
+              </button>
+            </div>
           </component-dialog>
         `;
       case "created":
@@ -196,7 +213,7 @@ export class DeviceHandler extends SoaDeviceHandler {
             <p>${this.error}</p>
           </component-dialog>
         `;
-      case "closed":
+      case "finished":
         return html`
           <component-dialog open>
             <h1>Experiemnt finished</h1>
