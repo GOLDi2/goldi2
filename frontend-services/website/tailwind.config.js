@@ -137,6 +137,7 @@ module.exports = {
     },
     fontFamily: {
       body: 'Roboto Flex',
+      mono: 'Roboto Mono'
     },
   },
   plugins: [],
