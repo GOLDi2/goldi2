@@ -3,7 +3,7 @@ FROM node:lts AS build
 
 ARG TARGETARCH
 
-RUN apt update && apt install -y curl clangd-14
+RUN apt update && apt install -y curl clangd-14 dumb-init
 
 RUN wget https://go.dev/dl/go1.23.2.linux-${TARGETARCH}.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.2.linux-${TARGETARCH}.tar.gz

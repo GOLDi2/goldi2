@@ -10,8 +10,8 @@
   ],
   "dockerName": "arduino-cli-compilation-service",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.mjs"
+    "build": "tsc && bash scripts/add-shebang.sh",
+    "start": "node app/index.js"
   },
   "author": "Pierre Helbing",
   "license": "MIT",
