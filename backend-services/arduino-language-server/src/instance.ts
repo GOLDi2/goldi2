@@ -146,6 +146,9 @@ export class ArduinoCliLanguageServerInstance {
       }
     );
     const token = await response.json();
+    if (typeof token !== "string") {
+      throw new Error("Expected websocket token to be a string!");
+    }
     await this._deviceHandler.connect({
       endpoint: configuration.WEBSOCKET_ENDPOINT,
       id: this._instanceUrl,

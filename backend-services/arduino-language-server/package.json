@@ -27,7 +27,7 @@
     "typescript": "^5.7.3"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && bash scripts/add-shebang.sh"
   },
   "author": "Pierre Helbing",
   "license": "MIT"
