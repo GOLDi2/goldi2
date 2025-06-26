@@ -142,7 +142,7 @@
     "@cross-lab-project/abstract-messaging-channel": "file:../../../../crosslab/helper/abstract-messaging-channel",
     "@cross-lab-project/soa-service-collaboration": "file:../../../../crosslab/clients/soa_services/collaboration/js",
     "@cross-lab-project/soa-service-filesystem": "file:../../../../crosslab/clients/soa_services/filesystem/js",
-    "@cross-lab-project/editor-settings": "file:../../editor-settings",
+    "@crosslab-ide/editor-settings": "file:../../editor-settings",
     "@cross-lab-project/filesystem-schemas": "file:../../../../crosslab/helper/filesystem-schemas",
     "@types/uuid": "^10.0.0",
     "async-mutex": "^0.5.0",

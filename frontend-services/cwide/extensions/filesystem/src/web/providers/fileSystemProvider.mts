@@ -5,7 +5,7 @@ import {
   openSettingsDatabase,
   readSetting,
   writeSetting,
-} from "@cross-lab-project/editor-settings";
+} from "@crosslab-ide/editor-settings";
 import { CrossLabFileSystemSubProvider } from "./subproviders/index.mjs";
 
 type CustomFileChangedEvent = vscode.FileChangeEvent & {

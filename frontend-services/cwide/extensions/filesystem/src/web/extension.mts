@@ -12,7 +12,7 @@ import { ProjectViewDataProvider } from "./providers/projectViewDataProvider.mjs
 import {
   openSettingsDatabase,
   writeSetting,
-} from "@cross-lab-project/editor-settings";
+} from "@crosslab-ide/editor-settings";
 import { registerFilesExplorerCopy } from "./filesExplorerActions/copy.mjs";
 import { registerFilesExplorerPaste } from "./filesExplorerActions/paste.mjs";
 import { registerFilesExplorerCut } from "./filesExplorerActions/cut.mjs";
