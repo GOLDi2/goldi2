@@ -1,1 +1,1 @@
-../../../../../crosslab/common/node/scripts/set-scene.sh
+../../../../crosslab/common/node/scripts/set-scene.sh

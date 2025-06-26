@@ -13,6 +13,9 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "files": [
+    "dist-web"
+  ],
   "browser": "./dist/web/extension.js",
   "contributes": {
     "commands": [

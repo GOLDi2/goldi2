@@ -2,6 +2,9 @@
   "name": "@crosslab-ide/editor-settings",
   "description": "A helper library for writing and reading editor settings in indexeddb.",
   "main": "lib/index.mjs",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc"
   },

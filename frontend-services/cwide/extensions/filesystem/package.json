@@ -13,6 +13,9 @@
   "activationEvents": [
     "onFileSystem:crosslabfs"
   ],
+  "files": [
+    "dist-web"
+  ],
   "browser": "./dist/web/extension.js",
   "enabledApiProposals": [
     "fileSearchProvider",
