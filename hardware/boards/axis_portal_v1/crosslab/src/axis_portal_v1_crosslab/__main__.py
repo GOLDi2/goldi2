@@ -193,8 +193,10 @@ async def main_async():
                 if deviceHandler._connections[c].state == "connected"
             ]
         ):
+            os.system("set_led_experiment")
             hal.Light.set(True)
         else:
+            os.system("set_led_no_experiment")
             hal.Light.set(False)
 
     deviceHandler.on("connectionsChanged", lightControl)

@@ -40,13 +40,14 @@ entity LED_SMODULE is
     );
     port(
         --General
-        clk          : in  std_logic;   --! System clock
-        rst          : in  std_logic;   --! Asynchronous reset
+        clk              : in  std_logic; --! System clock
+        rst              : in  std_logic; --! Asynchronous reset
         --BUS slave interface
-        sys_bus_i    : in  sbus_in;     --! BUS input signals [stb,we,adr,dat,tag]
-        sys_bus_o    : out sbus_out;    --! BUS output signal [dat,tag]
+        sys_bus_i        : in  sbus_in; --! BUS input signals [stb,we,adr,dat,tag]
+        sys_bus_o        : out sbus_out; --! BUS output signal [dat,tag]
         --LED signal
-        p_led_output : out io_o         --! LED output signal
+        p_led_output     : out io_o;    --! LED output signal
+        p_raw_led_output : out std_logic --! LED output signal
     );
 end entity LED_SMODULE;
 
@@ -76,6 +77,7 @@ begin
     led_state        <= blinker_state when (led_blink_enb = '1') else led_enb;
     p_led_output.enb <= '1';
     p_led_output.dat <= not led_state when g_inverted else led_state;
+    p_raw_led_output <= not led_state when g_inverted else led_state;
     -----------------------------------------------------------------------------------------------
 
     --****LED BLINKER****
