@@ -37,6 +37,7 @@ signal_names = [
 def panic(message: str):
     print(f"PANIC: {message}")
 
+
 def userError(message: str):
     print(f"USER ERROR: {message}")
 
@@ -48,8 +49,10 @@ def newElectricalInterface(interface):
 
     if isinstance(interface, GPIOInterface):
         name: str = interface.configuration["signals"]["gpio"]
-        isInput = interface.configuration.get("direction", "in") in ["inout", "in"]
-        isOutput = interface.configuration.get("direction", "in") in ["inout", "out"]
+        isInput = interface.configuration.get(
+            "direction", "in") in ["inout", "in"]
+        isOutput = interface.configuration.get(
+            "direction", "in") in ["inout", "out"]
 
         print("name", name)
         print("isInput", isInput)
@@ -78,11 +81,13 @@ def newElectricalInterface(interface):
             hal.gpios[interfaceIdx].setOutput(False)
             hal.gpios[interfaceIdx].on(
                 "change",
-                lambda value: interface.changeDriver("strongH" if value else "strongL"),
+                lambda value: interface.changeDriver(
+                    "strongH" if value else "strongL"),
             )
             interface.changeDriver(
                 "strongH" if hal.gpios[interfaceIdx].value() else "strongL"
             )
+
 
 def lightControl():
     if len(
@@ -96,19 +101,19 @@ def lightControl():
     else:
         os.system("set_led_no_experiment")
 
+
 async def uploadHandler(event: FileServiceEvent):
     # Command to program the ATmega2560 using avrdude
     os.system("set_led_uploading")
     hal.enable_isp.set(True)
     hal.registers.communicate()
 
-    if event["file_type"]=='hex':
-        command = f"avrdude -v -p atmega2560 -c rpi -V -U flash:w:-:i"
-    elif event["file_type"]=='elf':
-        command = f"avrdude -v -p atmega2560 -c rpi -U flash:w:-:e"
+    if event["file_type"] == 'hex':
+        command = "avrdude -v -p atmega2560 -c rpi -V -U flash:w:-:i"
+    elif event["file_type"] == 'elf':
+        command = "avrdude -v -p atmega2560 -c rpi -U flash:w:-:e"
     else:
         raise Exception(f"Unsupported file type: {event['file_type']}")
-
 
     process = await asyncio.create_subprocess_shell(
         command,
@@ -120,17 +125,17 @@ async def uploadHandler(event: FileServiceEvent):
     stdout, stderr = await process.communicate(input=event["content"])
 
     if process.returncode != 0:
-        raise Exception(f"avrdude write failed with return code {process.returncode}: {stderr.decode()}")
+        raise Exception(
+            f"avrdude write failed with return code {process.returncode}: {stderr.decode()}")
     else:
         print(f"avrdude output: {stdout.decode()}")
 
-    if event["file_type"]=='hex':
-        command = f"avrdude -v -p atmega2560 -c rpi -U flash:v:-:i"
-    elif event["file_type"]=='elf':
-        command = f"avrdude -v -p atmega2560 -c rpi -U flash:v:-:e"
+    if event["file_type"] == 'hex':
+        command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:i"
+    elif event["file_type"] == 'elf':
+        command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:e"
     else:
         raise Exception(f"Unsupported file type: {event['file_type']}")
-
 
     process = await asyncio.create_subprocess_shell(
         command,
@@ -142,12 +147,14 @@ async def uploadHandler(event: FileServiceEvent):
     stdout, stderr = await process.communicate(input=event["content"])
 
     if process.returncode != 0:
-        raise Exception(f"avrdude verify failed with return code {process.returncode}: {stderr.decode()}")
+        raise Exception(
+            f"avrdude verify failed with return code {process.returncode}: {stderr.decode()}")
     else:
         print(f"avrdude output: {stdout.decode()}")
 
     hal.enable_isp.set(False)
     lightControl()
+
 
 async def main_async():
     global hal, deviceHandler

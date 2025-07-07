@@ -5,4 +5,4 @@ header:
 local_conf_header:
   io-board: |
     MACHINE_VARIANT = "mole"
-    ALLOW_UNAUTHORIZED_NETWORK_CONFIG = true
+    ALLOW_UNAUTHORIZED_NETWORK_CONFIG = "true"
