@@ -1,10 +1,15 @@
 <!doctype html>
 {%- set
+    navbar = []
+-%}
+{%- if allow_network -%}
+{%- set
     navbar = [
         {name: 'Network Settings', href: '/network'},
         {name: 'Wireless Settings', href: '/wireless'}
     ]
 -%}
+{%- endif -%}
 {%- if authorized -%}
 {%- set
     navbar = [
@@ -21,15 +26,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
 
-    <title>A Basic HTML5 Template</title>
-    <meta name="description" content="A simple HTML5 Template for new projects.">
+    <title>GOLDi2 Configuration Interface</title>
+    <meta name="description" content="GOLDi2 Configuration Interface">
     <meta name="author" content="SitePoint">
-
-    <meta property="og:title" content="A Basic HTML5 Template">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
-    <meta property="og:description" content="A simple HTML5 Template for new projects.">
-    <meta property="og:image" content="image.png">
 
     <link rel="icon" href="/favicon.ico">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">

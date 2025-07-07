@@ -33,6 +33,11 @@ do_install() {
 
     install -d ${D}/${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/goldi-config-interface.service ${D}/${systemd_system_unitdir}
+
+    # if ALLOW_UNAUTHORIZED_NETWORK_CONFIG is set, we need to append --allow-network-settings to the service file
+    if [ -n "${ALLOW_UNAUTHORIZED_NETWORK_CONFIG}" ]; then
+        sed -i "s|index.js|index.js --allow-network-settings|" ${D}/${systemd_system_unitdir}/goldi-config-interface.service
+    fi
 }
 
 inherit systemd

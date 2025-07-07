@@ -16,6 +16,8 @@ import { createProcessInterface } from "./process_interface";
 import { createSSLCertificate, renderPageInit } from "./utils";
 import { WpaSupplicantConfig } from "./wpa_supplicant_config";
 
+const allow_network = process.argv.includes("--allow-network-settings");
+
 const app = express();
 
 app.use(pam_auth("Admin Area"));
@@ -26,7 +28,7 @@ const content_path = path.join(
   __dirname,
   "..",
   config.NODE_ENV === "development" ? "src" : "app",
-  "content"
+  "content",
 );
 const nunjucks_configuration = {
   autoescape: true,
@@ -53,6 +55,7 @@ router.post("/upload_firmware", multipart.single("file"), async (req, res) => {
   firmwareFuns.setProcess(spawn(command, { shell: true }));
   await renderPage(req.path, req.language, res, {
     authorized: req.authorized,
+    allow_network,
   });
 });
 
@@ -65,11 +68,12 @@ router.post("/upload_firmware", multipart.single("file"), async (req, res) => {
 // Network Configuration
 
 router.all("/network", multipart.none(), async (req, res) => {
+  if (!req.authorized && !allow_network) return;
   let network_settings = ini.parse(
     fs
       .readFileSync(config.NETWORK_CONFIG_FILE, "utf-8")
       .replace(/Address=/g, "Address[]=")
-      .replace(/DNS=/g, "DNS[]=")
+      .replace(/DNS=/g, "DNS[]="),
   );
   if (req.body) {
     network_settings = {
@@ -90,7 +94,7 @@ router.all("/network", multipart.none(), async (req, res) => {
       ini
         .stringify(network_settings)
         .replace(/\[\]/g, "")
-        .replace(/^.*=\n/gm, "")
+        .replace(/^.*=\n/gm, ""),
     );
     if (config.NODE_ENV !== "development")
       spawnSync("systemctl restart systemd-networkd.service", { shell: true });
@@ -105,6 +109,7 @@ router.all("/network", multipart.none(), async (req, res) => {
       ? network_settings.Network.DNS.join(";")
       : "",
     authorized: req.authorized,
+    allow_network,
   });
 });
 
@@ -121,18 +126,19 @@ const key_mgmt_security_map = new Map([
   ["WPA-EAP", "enterprise"],
 ]);
 router.all("/wireless", multipart.none(), async (req, res) => {
+  if (!req.authorized && !allow_network) return;
   let network_settings = ini.parse(
     fs
       .readFileSync(config.WIRELESS_NETWORK_CONFIG_FILE, "utf-8")
       .replace(/Address=/g, "Address[]=")
-      .replace(/DNS=/g, "DNS[]=")
+      .replace(/DNS=/g, "DNS[]="),
   );
 
   const wpaConfig = new WpaSupplicantConfig();
 
   const scan_string = spawnSync(
     "wpa_cli scan > /dev/null && wpa_cli scan_results",
-    { shell: true }
+    { shell: true },
   ).stdout.toString();
   const scan_result: { flags: string; ssid: string }[] = [];
   let m: RegExpExecArray | null;
@@ -174,7 +180,7 @@ router.all("/wireless", multipart.none(), async (req, res) => {
       ini
         .stringify(network_settings)
         .replace(/\[\]/g, "")
-        .replace(/^.*=\n/gm, "")
+        .replace(/^.*=\n/gm, ""),
     );
 
     wpaConfig.write();
@@ -182,7 +188,7 @@ router.all("/wireless", multipart.none(), async (req, res) => {
     if (config.NODE_ENV !== "development") {
       spawnSync(
         "wpa_cli reconfigure; systemctl restart systemd-networkd.service",
-        { shell: true }
+        { shell: true },
       );
     }
   }
@@ -203,8 +209,9 @@ router.all("/wireless", multipart.none(), async (req, res) => {
     dns: network_settings.Network.DNS
       ? network_settings.Network.DNS.join(";")
       : "",
-    authorized: req.authorized,
     security: key_mgmt_security_map.get(wpaConfig.network.key_mgmt ?? ""),
+    authorized: req.authorized,
+    allow_network,
   });
 });
 
@@ -216,7 +223,7 @@ router.all("/crosslab", multipart.none(), async (req, res) => {
   let crosslab_settings: any = {};
   try {
     crosslab_settings = JSON.parse(
-      fs.readFileSync(config.CROSSLAB_CONFIG_FILE, "utf-8")
+      fs.readFileSync(config.CROSSLAB_CONFIG_FILE, "utf-8"),
     );
   } catch {
     /* empty */
@@ -230,7 +237,7 @@ router.all("/crosslab", multipart.none(), async (req, res) => {
     };
     fs.writeFileSync(
       config.CROSSLAB_CONFIG_FILE,
-      JSON.stringify(crosslab_settings)
+      JSON.stringify(crosslab_settings),
     );
     spawnSync("systemctl restart goldi-crosslab.service", { shell: true });
   }
@@ -239,6 +246,7 @@ router.all("/crosslab", multipart.none(), async (req, res) => {
     token: crosslab_settings.authToken,
     url: crosslab_settings.url,
     authorized: req.authorized,
+    allow_network,
   });
 });
 
@@ -273,7 +281,7 @@ for (const language of languages) {
       req.language = language;
       next();
     },
-    router
+    router,
   );
 }
 
