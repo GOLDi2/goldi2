@@ -1,27 +1,15 @@
-<!--Momentan tritt hier noch ein Error auf. Wir müssten beim nächsten Mal besprechen, was die Ursache hierfür ist.
-Der Fehler liegt irgendwo in der Definition der Variablen.
-"[Line 4, Column 12] parseAggregate: expected comma after expression"
-Leider kann ich nicht feststellen, wo ein Komma fehlt...-->
 {% import "components/login_wall.html" as login_wall %}
 
 {% set
 text = {
-headline: 'Experiment',
-description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-sadipscing elitr.'
+headline: 'Experiment (Developer)'
 }
 %}
 
 {% if language=='de' %}
 {% set
 text = {
-headline: 'Experiment',
-description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-sadipscing elitr.'
+headline: 'Experiment (Entwickler)'
 }
 %}
 {% endif %}

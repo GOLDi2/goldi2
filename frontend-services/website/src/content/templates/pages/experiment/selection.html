@@ -1,0 +1,104 @@
+{% import "components/login_wall.html" as login_wall %}
+
+{% set
+text = {
+headline: 'Experiment (Developer)',
+controller: 'Controller',
+no_controller: 'No Controller',
+model: 'Modell',
+no_model: 'No Model'
+}
+%}
+
+{% if language=='de' %}
+{% set
+text = {
+headline: 'Experiment (Entwickler)',
+controller: 'Controller',
+no_controller: 'Kein Controller',
+model: 'Modell',
+no_model: 'Kein Modell'
+}
+%}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+    {% call login_wall.wrapper(isLoggedIn) %}
+    <form class="mx-auto p-10 space-y-8" method="POST">
+
+        <!-- Controller Section -->
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">{{text.controller}}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Card Option -->
+            <label class="cursor-pointer group">
+              <input type="radio" name="bpu" value="" class="hidden peer" checked />
+              <div class="rounded-2xl border border-gray-300 peer-checked:border-secondary-300 peer-checked:ring-2 peer-checked:ring-secondary-400 bg-white shadow-sm hover:shadow-md transition-all">
+                <img src="/img/units/noselection.svg" class="rounded-t-2xl w-full h-32 object-contain" />
+                <div class="p-4 text-center">
+                  <h3 class="text-lg font-medium text-gray-700 group-hover:text-blue-600">{{ text.no_controller }}</h3>
+                </div>
+              </div>
+            </label>
+
+            {% for system in bpus %}
+            <label class="cursor-pointer group">
+                <input type="radio" name="bpu" value="{{system.url}}" class="hidden peer" />
+                <div class="rounded-2xl border border-gray-300 peer-checked:border-secondary-300 peer-checked:ring-2 peer-checked:ring-secondary-400 bg-white shadow-sm hover:shadow-md transition-all">
+                  {% if system['x-image'] %}
+                  <img src="{{ system['x-image'] }}" alt="Model 1" class="rounded-t-2xl w-full h-32 object-contain" />
+                  {% else %}
+                  <img src="/img/units/placeholder.svg" alt="Model 1" class="rounded-t-2xl w-full h-32 object-contain" />
+                  {% endif %}
+                  <div class="p-4 text-center">
+                    <h3 class="text-lg font-medium text-gray-700 group-hover:text-green-600">{{system.name}}</h3>
+                  </div>
+                </div>
+              </label>
+            {% endfor %}
+          </div>
+        </section>
+    
+        <!-- Model Section -->
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">{{text.model}}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <label class="cursor-pointer group">
+                <input type="radio" name="pspu" value="" class="hidden peer" checked />
+                <div class="rounded-2xl border border-gray-300 peer-checked:border-secondary-300 peer-checked:ring-2 peer-checked:ring-secondary-400 bg-white shadow-sm hover:shadow-md transition-all">
+                  <img src="/img/units/noselection.svg" class="rounded-t-2xl w-full h-32 object-contain" />
+                  <div class="p-4 text-center">
+                    <h3 class="text-lg font-medium text-gray-700 group-hover:text-blue-600">{{ text.no_model }}</h3>
+                  </div>
+                </div>
+              </label>
+  
+              {% for system in pspus %}
+              <label class="cursor-pointer group">
+                  <input type="radio" name="pspu" value="{{system.url}}" class="hidden peer" />
+                  <div class="rounded-2xl border border-gray-300 peer-checked:border-secondary-300 peer-checked:ring-2 peer-checked:ring-secondary-400 bg-white shadow-sm hover:shadow-md transition-all">
+                    {% if system['x-image'] %}
+                    <img src="{{ system['x-image'] }}" alt="Model 1" class="rounded-t-2xl w-full h-32 object-contain" />
+                    {% else %}
+                    <img src="/img/units/placeholder.svg" alt="Model 1" class="rounded-t-2xl w-full h-32 object-contain" />
+                    {% endif %}
+                    <div class="p-4 text-center">
+                      <h3 class="text-lg font-medium text-gray-700 group-hover:text-green-600">{{system.name}}</h3>
+                    </div>
+                  </div>
+                </label>
+              {% endfor %}
+    
+            <!-- Add more models as needed -->
+          </div>
+        </section>
+    
+        <!-- Submit Button -->
+        <input class="primary-button w-full" type="submit" value="Start Experiment">
+
+
+      </form>
+    {% endcall %}
+    <div class="flex-grow"></div>
+{% endblock %}

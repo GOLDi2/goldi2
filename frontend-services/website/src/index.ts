@@ -67,7 +67,7 @@ for (const language of languages) {
     admin_router(language, renderPage, logger)
   );
   app.use(
-    "/" + language + "/",
+    "/" + language + "/experiment/",
     experiment_router(language, renderPage, logger)
   );
   app.use("/" + language + "/", thk_router(language, renderPage, logger));

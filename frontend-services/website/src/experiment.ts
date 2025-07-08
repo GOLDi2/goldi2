@@ -1,24 +1,92 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 
-import { renderPageType } from "./utils";
-import winston from "winston";
-import asyncHandler from "express-async-handler";
 import {
   DeviceServiceTypes,
   ExperimentServiceTypes,
 } from "@cross-lab-project/api-client";
+import asyncHandler from "express-async-handler";
+import winston from "winston";
+import { renderPageType } from "./utils";
 
 export function experiment_router(
   language: string,
   renderPage: renderPageType,
   _logger: winston.Logger
 ) {
+
+  async function getPspuBpuGroup(req: Request) {
+    const devices = await req.apiClient.listDevices();
+    const deviceGroups = devices.filter((d) => d.type === "group");
+    const pspuGroupUrl = deviceGroups.find(
+      (d) => d.name.toLowerCase() === "pspu"
+    )?.url;
+    const bpuGroupUrl = deviceGroups.find(
+      (d) => d.name.toLowerCase() === "bpu"
+    )?.url;
+    if (!pspuGroupUrl) {
+      throw new Error("Could not find pspu group");
+    }
+    if (!bpuGroupUrl) {
+      throw new Error("Could not find bpu group");
+    }
+    const pspuGroup = await req.apiClient.getDevice(pspuGroupUrl);
+    if (pspuGroup.type !== "group") {
+      throw new Error("Device is not a group");
+    }
+
+    const bpuGroup = await req.apiClient.getDevice(bpuGroupUrl);
+    if (bpuGroup.type !== "group") {
+      throw new Error("Device is not a group");
+    }
+    return { pspuGroup, bpuGroup };
+  }
+
+  async function experimentSelection(req: Request, res: Response, _next: NextFunction) {
+    if (!req.user) {
+      return renderPage("experiment/selection", language, res, req.user);
+    }
+
+    if (req.method === "POST") {
+      const experiment = await buildSimpleExperiment(req);
+      console.log(experiment)
+      experiment.status = "running";
+      const response = await req.apiClient.createExperiment(
+        experiment as ExperimentServiceTypes.Experiment<"request">
+      );
+      console.log(response)
+      if (response.status === "setup" && response.url) {
+        return experimentSetup(req, res, _next, response);
+      }
+    }
+
+    try {
+      const { pspuGroup, bpuGroup } = await getPspuBpuGroup(req);
+      const pspus = await Promise.all(
+        pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
+      );
+      const bpus = await Promise.all(
+        bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
+      );
+      return renderPage("experiment/selection", language, res, req.user, {
+        experiment,
+        pspus,
+        bpus,
+      });
+    } catch {
+      return renderPage("experiment/selection", language, res, req.user, {
+        experiment,
+        pspus: [],
+        bpus: [],
+      });
+    }
+  }
+
   async function experiment(req: Request, res: Response, _next: NextFunction) {
     const templateUrl = req.query.template;
 
     // TODO: maybe check somewhere else and return a specific page experiment_401.html
     if (!req.user) {
-      return renderPage("experiment", language, res, req.user);
+      return renderPage("experiment/developer", language, res, req.user);
     }
 
     let experiment:
@@ -53,51 +121,24 @@ export function experiment_router(
     }
 
     try {
-      const { pspuGroup, bpuGroup } = await getPspuBpuGroup();
+      const { pspuGroup, bpuGroup } = await getPspuBpuGroup(req);
       const pspus = await Promise.all(
         pspuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
       );
       const bpus = await Promise.all(
         bpuGroup.devices.map((d) => req.apiClient.getDevice(d.url))
       );
-      return renderPage("experiment", language, res, req.user, {
+      return renderPage("experiment/developer", language, res, req.user, {
         experiment,
         pspus,
         bpus,
       });
     } catch {
-      return renderPage("experiment", language, res, req.user, {
+      return renderPage("experiment/developer", language, res, req.user, {
         experiment,
         pspus: [],
         bpus: [],
       });
-    }
-
-    async function getPspuBpuGroup() {
-      const devices = await req.apiClient.listDevices();
-      const deviceGroups = devices.filter((d) => d.type === "group");
-      const pspuGroupUrl = deviceGroups.find(
-        (d) => d.name.toLowerCase() === "pspu"
-      )?.url;
-      const bpuGroupUrl = deviceGroups.find(
-        (d) => d.name.toLowerCase() === "bpu"
-      )?.url;
-      if (!pspuGroupUrl) {
-        throw new Error("Could not find pspu group");
-      }
-      if (!bpuGroupUrl) {
-        throw new Error("Could not find bpu group");
-      }
-      const pspuGroup = await req.apiClient.getDevice(pspuGroupUrl);
-      if (pspuGroup.type !== "group") {
-        throw new Error("Device is not a group");
-      }
-
-      const bpuGroup = await req.apiClient.getDevice(bpuGroupUrl);
-      if (bpuGroup.type !== "group") {
-        throw new Error("Device is not a group");
-      }
-      return { pspuGroup, bpuGroup };
     }
   }
 
@@ -107,7 +148,7 @@ export function experiment_router(
     _next: NextFunction,
     experiment: ExperimentServiceTypes.Experiment<"response">
   ) {
-    const display = req.query.display ?? "link";
+    let display = req.query.display ?? "link";
 
     if (experiment.status !== "setup") {
       throw new Error("Experiment is not in setup phase");
@@ -132,30 +173,24 @@ export function experiment_router(
         });
       }
     }
+
+    if (instances.length <= 1){
+      display='iframe';
+    }
+
     //await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
-    return renderPage("experiment-setup", language, res, req.user, {
+    return renderPage("experiment/show", language, res, req.user, {
       experiment,
       instances,
       display
     });
   }
 
-  async function runExperiment(
-    req: Request,
-    res: Response,
-    _next: NextFunction
-  ) {
-    const resp = await req.apiClient.updateExperiment(req.query.url as string, {
-      status: "running",
-    });
-    res.send(resp);
-    //res.redirect(303, '/' + language + '/index.html');
-  }
-
   const router = Router();
-  router.get("/experiment", asyncHandler(experiment));
-  router.post("/experiment", asyncHandler(experiment));
-  router.get("/run-experiment", asyncHandler(runExperiment));
+  router.get("/selection", asyncHandler(experimentSelection));
+  router.post("/selection", asyncHandler(experimentSelection));
+  router.get("/developer", asyncHandler(experiment));
+  router.post("/developer", asyncHandler(experiment));
   return router;
 }
 
