@@ -234,6 +234,7 @@ router.all("/crosslab", multipart.none(), async (req, res) => {
       deviceId: req.body.id,
       authToken: req.body.token,
       url: req.body.url,
+      rotateVideo: req.body.rotate_video,
     };
     fs.writeFileSync(
       config.CROSSLAB_CONFIG_FILE,
@@ -245,6 +246,7 @@ router.all("/crosslab", multipart.none(), async (req, res) => {
     id: crosslab_settings.deviceId,
     token: crosslab_settings.authToken,
     url: crosslab_settings.url,
+    rotate_video: crosslab_settings.rotateVideo || "0",
     authorized: req.authorized,
     allow_network,
   });

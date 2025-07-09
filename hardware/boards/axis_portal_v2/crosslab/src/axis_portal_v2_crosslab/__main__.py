@@ -134,11 +134,13 @@ async def main_async():
         help="URL of the CrossLab instance",
         default=os.environ.get("CROSSLAB_CLI_URL"),
     )
+    parser.add_argument("--rotate-video", help="Rotate the video stream")
     args = parser.parse_args()
 
     auth_token: Optional[str] = None
     device_id: Optional[str] = None
     url: Optional[str] = None
+    rotate_video: Optional[str] = None
 
     try:
         with open(args.config) as f:
@@ -146,6 +148,7 @@ async def main_async():
         auth_token = data["authToken"]
         device_id = data["deviceId"]
         url = data["url"]
+        rotate_video = data["rotateVideo"]
     except FileNotFoundError:
         print(f"Warning: No config file at {args.config} found.")
 
@@ -155,6 +158,8 @@ async def main_async():
         device_id = args.device_id
     if args.url is not None:
         url = args.url
+    if args.rotate_video is not None:
+        rotate_video = args.rotate_video
 
     if auth_token is None:
         print("Error: No auth token provided.")
@@ -165,6 +170,8 @@ async def main_async():
     if url is None:
         print("Error: No url provided.")
         exit(1)
+    if rotate_video is None:
+        rotate_video = "0"
 
     hal = HAL()
 
@@ -188,8 +195,23 @@ async def main_async():
     actuators_service.on("newInterface", newActuatorInterface)
     deviceHandler.add_service(actuators_service)
 
-    webcamService = WebcamService__Producer(WebcamTrack(), "webcam")
+    webcamService = WebcamService__Producer(WebcamTrack(rotate=rotate_video), "webcam")
     deviceHandler.add_service(webcamService)
+
+    def lightControl():
+        if len(
+            [
+                c
+                for c in deviceHandler._connections
+                if deviceHandler._connections[c].state == "connected"
+            ]
+        ):
+            os.system("set_led_experiment")
+            hal.Light.set(True)
+        else:
+            os.system("set_led_no_experiment")
+            hal.Light.set(False)
+    deviceHandler.on("connectionsChanged", lightControl)
 
     async with APIClient(url) as client:
         client.set_auth_token(auth_token)

@@ -6,6 +6,13 @@
     <label class="w-72 inline-block" for="url">API URL</label><input class="mt-1 border-2" type="text" id="url" name="url" value="{{url}}"><br>
     <label class="w-72 inline-block" for="id">Device ID</label><input class="mt-1 border-2" type="text" id="id" name="id" value="{{id}}"><br>
     <label class="w-72 inline-block" for="token">Device Token</label><input class="mt-1 border-2" type="text" id="token" name="token" value="{{token}}"><br>
+    <label class="w-72 inline-block" for="rotate_video">Rotate Video</label>
+    <select class="mt-1 border-2" id="rotate_video" name="rotate_video">
+        <option value="0" {% if rotate_video == "0" %}selected{% endif %}>0°</option>
+        <option value="90" {% if rotate_video == "90" %}selected{% endif %}>90°</option>
+        <option value="180" {% if rotate_video == "180" %}selected{% endif %}>180°</option>
+        <option value="270" {% if rotate_video == "270" %}selected{% endif %}>270°</option>
+    </select><br>
     <button class="bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
 </form>
 
