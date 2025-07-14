@@ -23,9 +23,6 @@ export type PeerconnectionFilterOptions = {
 
 @customElement('apitool-peerconnection-list-view-filter')
 export class PeerconnectionListViewFilter extends LitElement {
-    @state()
-    isOpen: boolean = false;
-
     @query('#url-filter')
     urlFilter!: HTMLInputElement;
 
@@ -220,10 +217,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                 </div>
             </div>
         </apitool-collapsable-element>`;
-    }
-
-    private toggleOpen() {
-        this.isOpen = !this.isOpen;
     }
 
     private updateFilters() {

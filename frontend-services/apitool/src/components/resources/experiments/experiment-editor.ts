@@ -213,6 +213,8 @@ export class ExperimentEditor extends LitElement {
                     status:
                         this.experiment.status === 'setup'
                             ? 'running'
+                            : this.experiment.status === 'failed'
+                            ? 'finished'
                             : this.experiment.status,
                 }
             );

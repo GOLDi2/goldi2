@@ -22,6 +22,35 @@ export class Workspace extends LitElement {
 
         this.router = new Router({
             '/': () => undefined,
+            '/bookings': () => {
+                render(
+                    html`<apitool-booking-list-view
+                        class="w-full h-full flex justify-center"
+                        @update-view=${this.viewUpdatedHandler}
+                    ></apitool-booking-list-view>`,
+                    this.container
+                );
+            },
+            '/bookings/': () => {
+                window.history.replaceState({}, '', '/bookings');
+                this.router.resolve(window.location.pathname);
+            },
+            '/bookings/:booking_id': async (data) => {
+                const booking = await apiClient.getBooking(
+                    apiClient.url + '/bookings/' + data.booking_id
+                );
+
+                // render(html``, this.container);
+
+                render(
+                    html`<apitool-booking-viewer
+                        class="flex justify-center overflow-auto h-full w-full"
+                        @update-view=${this.viewUpdatedHandler}
+                        .booking=${booking}
+                    ></apitool-booking-viewer>`,
+                    this.container
+                );
+            },
             '/devices': () => {
                 render(
                     html`<apitool-device-list-view
