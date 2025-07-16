@@ -70,13 +70,14 @@ export class PeerconnectionListView extends LitElement {
                 peerconnectionOverview.url.includes(filterOptions.url)
             )
             .filter((peerconnectionOverview) => {
-                if (
-                    filterOptions.type.webrtc &&
-                    peerconnectionOverview.type === 'webrtc'
-                )
-                    return true;
+                const typeFilterActive = Object.values(
+                    filterOptions.type
+                ).includes(true);
 
-                return false;
+                return (
+                    !typeFilterActive ||
+                    filterOptions.type[peerconnectionOverview.type]
+                );
             })
             .filter((peerconnectionOverview) => {
                 if (filterOptions.devices.strictDeviceOrder) {
@@ -106,13 +107,14 @@ export class PeerconnectionListView extends LitElement {
                 );
             })
             .filter((peerconnectionOverview) => {
-                if (
-                    peerconnectionOverview.status &&
-                    filterOptions.status[peerconnectionOverview.status]
-                )
-                    return true;
+                const statusFilterActive = Object.values(
+                    filterOptions.status
+                ).includes(true);
 
-                return false;
+                return (
+                    !statusFilterActive ||
+                    filterOptions.status[peerconnectionOverview.status]
+                );
             });
     }
 

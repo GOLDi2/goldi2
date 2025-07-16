@@ -22,7 +22,7 @@ export class BookingListViewItem extends LitElement {
                 ${this.renderInformation()}
                 <button
                     @click=${this.viewBooking}
-                    class="p-2 w-full rounded-lg bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-gray-50"
+                    class="mt-2 p-2 w-full rounded-lg bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-gray-50"
                 >
                     View
                 </button>
@@ -33,45 +33,33 @@ export class BookingListViewItem extends LitElement {
     private renderInformation() {
         return html`<div class="flex flex-col">
             <div class="flex">
-                <p class="w-28 flex-shrink-0">URL:</p>
+                <p class="w-36 flex-shrink-0">URL:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.url}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-28 flex-shrink-0">Status:</p>
+                <p class="w-36 flex-shrink-0">Status:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.status}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-28 flex-shrink-0">Is Locked:</p>
+                <p class="w-36 flex-shrink-0">Is Locked:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.isLocked}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-28 flex-shrink-0">Start:</p>
+                <p class="w-36 flex-shrink-0">Start:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.timeslot.start}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-28 flex-shrink-0">End:</p>
+                <p class="w-36 flex-shrink-0">End:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.timeslot.end}
-                </p>
-            </div>
-            <div class="flex">
-                <p class="w-28 flex-shrink-0">Devices:</p>
-                <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-                    ${JSON.stringify(this.booking.devices)}
-                </p>
-            </div>
-            <div class="flex">
-                <p class="w-28 flex-shrink-0">Selected Devices:</p>
-                <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-                    ${JSON.stringify(this.booking.selectedDevices)}
                 </p>
             </div>
         </div>`;

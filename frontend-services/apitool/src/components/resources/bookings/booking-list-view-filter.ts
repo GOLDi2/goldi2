@@ -60,7 +60,6 @@ export class BookingListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-accepted"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -75,7 +74,6 @@ export class BookingListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-accepted-essential"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -90,7 +88,6 @@ export class BookingListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-rejected"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -105,7 +102,6 @@ export class BookingListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-impossible"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>

@@ -8,6 +8,7 @@ export type ExperimentFilterOptions = {
         booked: boolean;
         setup: boolean;
         running: boolean;
+        failed: boolean;
         finished: boolean;
     };
 };
@@ -31,6 +32,9 @@ export class ExperimentListViewFilter extends LitElement {
 
     @query('#status-filter-finished')
     statusFilterFinished!: HTMLInputElement;
+
+    @query('#status-filter-failed')
+    statusFilterFailed!: HTMLInputElement;
 
     protected createRenderRoot(): Element | ShadowRoot {
         return this;
@@ -64,7 +68,6 @@ export class ExperimentListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-created"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -77,7 +80,6 @@ export class ExperimentListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-booked"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -90,7 +92,6 @@ export class ExperimentListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-setup"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -105,7 +106,18 @@ export class ExperimentListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-running"
                                     type="checkbox"
-                                    checked
+                                    @input=${this.updateFilters}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pr-4">
+                                <label for="status-filter-failed">Failed</label>
+                            </td>
+                            <td>
+                                <input
+                                    id="status-filter-failed"
+                                    type="checkbox"
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -120,7 +132,6 @@ export class ExperimentListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-finished"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -142,6 +153,7 @@ export class ExperimentListViewFilter extends LitElement {
                         booked: this.statusFilterBooked.checked,
                         setup: this.statusFilterSetup.checked,
                         running: this.statusFilterRunning.checked,
+                        failed: this.statusFilterFailed.checked,
                         finished: this.statusFilterFinished.checked,
                     },
                 },

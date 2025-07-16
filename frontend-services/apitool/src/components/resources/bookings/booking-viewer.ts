@@ -19,42 +19,48 @@ export class BookingViewer extends LitElement {
     protected render(): unknown {
         return html`<apitool-editor .type=${'viewer'} @cancel=${this.cancel}>
             <div class="flex">
-                <p class="w-16 flex-shrink-0">URL:</p>
+                <p class="w-20 flex-shrink-0">URL:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.url}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-16 flex-shrink-0">Status:</p>
+                <p class="w-20 flex-shrink-0">Status:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.status}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-16 flex-shrink-0">Is Locked:</p>
+                <p class="w-20 flex-shrink-0">Is Locked:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.isLocked}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-16 flex-shrink-0">Start:</p>
+                <p class="w-20 flex-shrink-0">Start:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.timeslot.start}
                 </p>
             </div>
             <div class="flex">
-                <p class="w-16 flex-shrink-0">End:</p>
+                <p class="w-20 flex-shrink-0">End:</p>
                 <p class="whitespace-nowrap overflow-hidden text-ellipsis">
                     ${this.booking.timeslot.end}
                 </p>
             </div>
-            <apitool-collapsable-element .title=${'Devices'}>
+            <apitool-collapsable-element
+                .title=${'Devices'}
+                class="w-full flex flex-col bg-white p-2 rounded-lg border"
+            >
                 ${map(
                     Object.entries(this.booking.devices),
                     this.renderDevice.bind(this)
                 )}
             </apitool-collapsable-element>
-            <apitool-collapsable-element .title=${'Selected Devices'}>
+            <apitool-collapsable-element
+                .title=${'Selected Devices'}
+                class="w-full flex flex-col bg-white p-2 rounded-lg border"
+            >
                 ${map(
                     Object.entries(this.booking.selectedDevices),
                     this.renderSelectedDevice.bind(this)

@@ -75,7 +75,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-device"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -92,7 +91,6 @@ export class DeviceListViewFilter extends LitElement {
                                     type="checkbox"
                                     class="ml-auto"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -108,7 +106,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-edge-instantiable"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -124,7 +121,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-cloud-instantiable"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>

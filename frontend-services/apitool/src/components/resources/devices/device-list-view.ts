@@ -86,16 +86,13 @@ export class DeviceListView extends LitElement {
                 else return false;
             })
             .filter((deviceOverview) => {
-                switch (deviceOverview.type) {
-                    case 'device':
-                        return filterOptions.type.device;
-                    case 'group':
-                        return filterOptions.type.group;
-                    case 'edge instantiable':
-                        return filterOptions.type['edge instantiable'];
-                    case 'cloud instantiable':
-                        return filterOptions.type['cloud instantiable'];
-                }
+                const typeFilterActive = Object.values(
+                    filterOptions.type
+                ).includes(true);
+
+                return (
+                    !typeFilterActive || filterOptions.type[deviceOverview.type]
+                );
             });
     }
 

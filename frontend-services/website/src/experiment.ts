@@ -291,8 +291,14 @@ async function buildSimpleExperiment(
 ): Promise<ExperimentServiceTypes.Experiment<"request">> {
   const pspu = req.query.pspu as string;
   const bpu = req.query.bpu as string;
-  const ecp =
-    "https://api.goldi-labs.de/devices/cc1de37e-1a6a-4470-affd-12eb41a3231e";
+  const ecp = (await req.apiClient.listDevices()).find(
+    (device) =>
+      device.type === "edge instantiable" && device.name.toLowerCase() === "ecp"
+  )?.url;
+
+  if (!ecp) {
+    throw new Error("Could not find ecp!");
+  }
 
   const devices = [
     { device: pspu, role: "pspu" },

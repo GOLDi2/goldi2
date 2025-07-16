@@ -67,7 +67,13 @@ export class BookingListView extends LitElement {
         this.filteredBookings = this.bookings
             .filter((booking) => booking.url.includes(filterOptions.url))
             .filter((booking) => {
-                return filterOptions.status[booking.status];
+                const statusFilterActive = Object.values(
+                    filterOptions.status
+                ).includes(true);
+
+                return (
+                    !statusFilterActive || filterOptions.status[booking.status]
+                );
             });
     }
 }
