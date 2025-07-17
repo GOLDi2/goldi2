@@ -4,7 +4,7 @@ export type Configuration = {
 };
 
 function loadConfiguration(): Configuration {
-  const PORT = parseInt(process.env["PORT"] ?? "3025");
+  const PORT = parseInt(process.env["PORT"] ?? "3000");
   const WEBSOCKET_ENDPOINT = process.env["WEBSOCKET_ENDPOINT"];
 
   if (!WEBSOCKET_ENDPOINT) {
