@@ -1,17 +1,17 @@
 FROM node:lts-alpine
 
-RUN apk add curl libc6-compat
+RUN apk add dumb-init curl libc6-compat
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 RUN arduino-cli core install arduino:avr
 
+WORKDIR /tmp
+COPY .packages /tmp/packages
+RUN npm install --global /tmp/packages/*
+RUN rm -rf /tmp/packages
+
 WORKDIR /app
-
-COPY app ./dist
-COPY package.json ./package.json
-COPY package-lock.json ./package-lock.json
-
-RUN npm ci --omit=dev
+RUN mkdir db
+RUN chown node:node /app/*
 
 ENV NODE_ENV=production
-
-CMD ["node", "dist/index.js"]
+CMD ["dumb-init", "arduino-cli-compilation-service"]
