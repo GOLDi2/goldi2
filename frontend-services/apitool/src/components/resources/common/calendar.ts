@@ -11,10 +11,13 @@ dayjs.extend(weekday);
 @customElement('apitool-calendar')
 export class Calendar extends LitElement {
     @property({ type: Array })
-    availableTimeslots: DeviceServiceTypes.Availability<'response'> = [];
+    availability: DeviceServiceTypes.Availability<'response'> = [];
 
     @property({ type: Array })
     availabilityRules?: DeviceServiceTypes.AvailabilityRule[];
+
+    @state()
+    availableTimeslots: DeviceServiceTypes.Availability<'response'> = [];
 
     @state()
     date: Date = new Date();
@@ -33,21 +36,33 @@ export class Calendar extends LitElement {
         const date = new Date(this.date.getTime());
         const day = this.parseDay(this.date);
 
-        if (this.availabilityRules)
-            this.availableTimeslots = calculateAvailability(
-                this.availabilityRules,
-                date.setHours(0, 0, 0, 0),
-                date.setHours(23, 59, 59, 999)
-            );
+        this.availableTimeslots = calculateAvailability(
+            [...this.availability, ...(this.availabilityRules ?? [])],
+            date.setHours(0, 0, 0, 0),
+            date.setHours(23, 59, 59, 999)
+        );
 
         return html`<div class="flex flex-row w-full rounded-lg bg-white">
             <div class="w-full flex flex-col">
                 <div class="flex items-center">
                     <button
-                        class="rounded-full w-12 h-12 bg-slate-600 text-white mr-auto"
+                        class="rounded-full w-12 h-12 bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-white mr-auto flex justify-center items-center"
                         @click=${this.previousDay}
                     >
-                        <
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6 w-6 h-6 mr-1"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M15.75 19.5 8.25 12l7.5-7.5"
+                            />
+                        </svg>
                     </button>
                     <div class="flex flex-col justify-center items-center">
                         <p class="w-full text-center">${day}</p>
@@ -60,10 +75,23 @@ export class Calendar extends LitElement {
                         />
                     </div>
                     <button
-                        class="rounded-full w-12 h-12 bg-slate-600 text-white ml-auto"
+                        class="rounded-full w-12 h-12 bg-slate-600 hover:bg-slate-700 active:bg-slate-800 text-white ml-auto flex justify-center items-center"
                         @click=${this.nextDay}
                     >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="size-6 w-6 h-6 ml-1"
                         >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
                     </button>
                 </div>
                 <div

@@ -22,6 +22,12 @@ export class ServiceListItem extends LitElement {
     @query('#select-service-direction')
     selectServiceDirection!: HTMLSelectElement;
 
+    @query('#checkbox-connection-type-webrtc')
+    checkboxConnectionTypeWebrtc!: HTMLInputElement;
+
+    @query('#checkbox-connection-type-websocket')
+    checkboxConnectionTypeWebsocket!: HTMLInputElement;
+
     protected createRenderRoot(): Element | ShadowRoot {
         return this;
     }
@@ -87,6 +93,50 @@ export class ServiceListItem extends LitElement {
                         </option>
                     </select>
                 </div>
+                <apitool-collapsable-element
+                    .title=${'Supported Connection Types'}
+                    class="rounded-lg p-2 border"
+                >
+                    <div class="flex flex-col items-center">
+                        <table>
+                            <tr>
+                                <td class="pr-4">
+                                    <input
+                                        id="checkbox-connection-type-websocket"
+                                        type="checkbox"
+                                        @change=${this.updateService}
+                                        ?checked=${this.service.supportedConnectionTypes?.includes(
+                                            'websocket'
+                                        )}
+                                    />
+                                </td>
+                                <td>
+                                    <label
+                                        for="checkbox-connection-type-websocket"
+                                        >WebSocket</label
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pr-4">
+                                    <input
+                                        id="checkbox-connection-type-webrtc"
+                                        type="checkbox"
+                                        @change=${this.updateService}
+                                        ?checked=${this.service.supportedConnectionTypes?.includes(
+                                            'webrtc'
+                                        )}
+                                    />
+                                </td>
+                                <td>
+                                    <label for="checkbox-connection-type-webrtc"
+                                        >WebRTC</label
+                                    >
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </apitool-collapsable-element>
                 <button
                     @click=${this.deleteService}
                     class="rounded-lg bg-red-600 text-gray-50 hover:bg-red-700 active:bg-red-800 w-full p-2 mt-2"
@@ -113,6 +163,14 @@ export class ServiceListItem extends LitElement {
                         serviceId: this.inputServiceId.value,
                         serviceType: this.inputServiceType.value,
                         serviceDirection: this.selectServiceDirection.value,
+                        supportedConnectionTypes: [
+                            ...(this.checkboxConnectionTypeWebrtc.checked
+                                ? ['webrtc']
+                                : []),
+                            ...(this.checkboxConnectionTypeWebsocket.checked
+                                ? ['websocket']
+                                : []),
+                        ],
                     },
                 }
             );

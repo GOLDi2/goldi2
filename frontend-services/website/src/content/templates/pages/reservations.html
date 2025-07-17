@@ -99,7 +99,8 @@ label_as: 'als'
         const overlayElement = document.getElementById(`overlay-${experimentUrl}`)
         overlayElement.style.display = "flex"
         const experimentElement = document.getElementById(`experiment-${experimentUrl}`)
-        const result = await fetch("/experiment?experimentUrl=" + experimentUrl, {method: "DELETE"})
+        const queryParameters = new URLSearchParams({experimentUrl})
+        const result = await fetch("/{{ language }}/experiment?" + queryParameters.toString(), {method: "DELETE"})
         if (result.status === 204) {
             experimentElement.parentElement.removeChild(experimentElement)
         } else {

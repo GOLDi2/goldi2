@@ -68,12 +68,14 @@ export class ServiceList extends LitElement {
             serviceId: '',
             serviceType: '',
             serviceDirection: 'consumer',
+            supportedConnectionTypes: ['webrtc', 'websocket'],
         });
         this.serviceItems.push({
             value: {
                 serviceId: '',
                 serviceType: '',
                 serviceDirection: 'consumer',
+                supportedConnectionTypes: ['webrtc', 'websocket'],
             },
             key: crypto.randomUUID(),
             shouldOpen: true,

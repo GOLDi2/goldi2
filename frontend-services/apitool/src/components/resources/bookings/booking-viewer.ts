@@ -50,21 +50,25 @@ export class BookingViewer extends LitElement {
             </div>
             <apitool-collapsable-element
                 .title=${'Devices'}
-                class="w-full flex flex-col bg-white p-2 rounded-lg border"
+                class="w-full flex flex-col bg-white p-2 rounded-lg border gap-2"
             >
-                ${map(
-                    Object.entries(this.booking.devices),
-                    this.renderDevice.bind(this)
-                )}
+                <div class="flex flex-col gap-2">
+                    ${map(
+                        Object.entries(this.booking.devices),
+                        this.renderDevice.bind(this)
+                    )}
+                </div>
             </apitool-collapsable-element>
             <apitool-collapsable-element
                 .title=${'Selected Devices'}
-                class="w-full flex flex-col bg-white p-2 rounded-lg border"
+                class="w-full flex flex-col bg-white p-2 rounded-lg border gap-2"
             >
-                ${map(
-                    Object.entries(this.booking.selectedDevices),
-                    this.renderSelectedDevice.bind(this)
-                )}
+                <div class="flex flex-col gap-2">
+                    ${map(
+                        Object.entries(this.booking.selectedDevices),
+                        this.renderSelectedDevice.bind(this)
+                    )}
+                </div>
             </apitool-collapsable-element>
         </apitool-editor>`;
     }

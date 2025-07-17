@@ -9,7 +9,9 @@ export class Footer extends LitElement {
 
     protected render(): unknown {
         return html`<div class="w-full h-16 bg-slate-800 flex items-center p-4">
-            <p class="text-white ml-auto">@CrossLab 2023</p>
+            <p class="text-white ml-auto">
+                @CrossLab ${new Date().getFullYear()}
+            </p>
         </div>`;
     }
 }

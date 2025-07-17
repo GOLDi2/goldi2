@@ -13,6 +13,9 @@ export class DeviceEditor extends LitElement {
     @property({ type: Object })
     device!: DeviceServiceTypes.Device<'response'>;
 
+    @property({ type: Array })
+    availability!: DeviceServiceTypes.Availability;
+
     @query('#input-name')
     inputName!: HTMLInputElement;
 
@@ -24,6 +27,8 @@ export class DeviceEditor extends LitElement {
 
     @query('apitool-editor')
     editor!: Editor;
+
+    availabilityRules: DeviceServiceTypes.AvailabilityRule[] = [];
 
     protected createRenderRoot(): Element | ShadowRoot {
         return this;
@@ -133,8 +138,12 @@ export class DeviceEditor extends LitElement {
             case 'device':
                 return html`<apitool-device-editor-concrete-device
                     .device=${this.device}
+                    .availability=${this.availability}
                     .parent=${this}
                     @update-services=${this.updateServices}
+                    @update-availability-rules=${this.updateAvailabilityRules}
+                    @delete-availability-rules=${this
+                        .deleteAllAvailabilityRules}
                 ></apitool-device-editor-concrete-device>`;
             case 'group':
                 return html`<apitool-device-editor-device-group
@@ -173,21 +182,45 @@ export class DeviceEditor extends LitElement {
         this.device.services = event.detail;
     }
 
+    private updateAvailabilityRules(
+        event: CustomEvent<DeviceServiceTypes.AvailabilityRule[]>
+    ) {
+        this.availabilityRules = event.detail;
+    }
+
+    private async deleteAllAvailabilityRules() {
+        await apiClient.deleteDeviceAvailabilityRules(this.device.url);
+        this.editor.messageField.addMessage(
+            'success',
+            'Device updated successfully!'
+        );
+        await new Promise<void>((resolve) => setTimeout(resolve, 500));
+        window.location.reload();
+    }
+
     private async updateDevice() {
         console.log('trying to update device:', this.device);
         try {
+            if (this.availabilityRules.length > 0) {
+                await apiClient.addDeviceAvailabilityRules(
+                    this.device.url,
+                    this.availabilityRules
+                );
+            }
             const updatedDevice = await apiClient.updateDevice(
                 this.device.url,
                 this.device
             );
 
+            this.editor.messageField.removeAllErrorMessages();
             this.editor.messageField.addMessage(
                 'success',
                 'Device updated successfully!'
             );
 
-            this.device = updatedDevice;
             console.log('device updated successfully:', updatedDevice);
+            await new Promise<void>((resolve) => setTimeout(resolve, 500));
+            window.location.reload();
         } catch (error) {
             this.editor.messageField.addMessage(
                 'error',

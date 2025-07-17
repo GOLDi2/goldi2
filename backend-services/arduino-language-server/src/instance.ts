@@ -22,7 +22,6 @@ type InstanceData = {
   localSrcPath?: string;
   remoteSrcUri?: URI;
   remoteSrcPath?: string;
-  rootPath?: string;
   tmpDirPath?: string;
   buildPath?: string;
   buildSketchRootPath?: string;
@@ -92,20 +91,6 @@ export class ArduinoCliLanguageServerInstance {
           );
         } else if (message.type === "lsp:message") {
           const parsedMessage = JSON.parse(message.content);
-          if (parsedMessage.method === "initialize") {
-            consumerInstanceData.rootPath =
-              parsedMessage.params.rootUri.replace("file://", "") as string;
-            const sketchPath = path.join(
-              consumerInstanceData.rootPath,
-              `${path.basename(consumerInstanceData.rootPath)}.ino`
-            );
-            if (!fs.existsSync(consumerInstanceData.rootPath)) {
-              fs.mkdirSync(consumerInstanceData.rootPath, { recursive: true });
-            }
-            if (!fs.existsSync(sketchPath)) {
-              fs.writeFileSync(sketchPath, "");
-            }
-          }
           consumerInstanceData.queue.push(async () => {
             await this._receiveMessage(
               consumerInstanceData,
@@ -163,7 +148,6 @@ export class ArduinoCliLanguageServerInstance {
     consumerInstanceData.tmpDirPath = undefined;
     consumerInstanceData.localSrcPath = undefined;
     consumerInstanceData.localSrcUri = undefined;
-    consumerInstanceData.rootPath = undefined;
     consumerInstanceData.buildPath = undefined;
     consumerInstanceData.fullBuildPath = undefined;
     consumerInstanceData.buildSketchRootPath = undefined;

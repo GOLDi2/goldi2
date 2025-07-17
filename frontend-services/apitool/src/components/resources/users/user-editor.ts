@@ -83,13 +83,15 @@ export class UserEditor extends LitElement {
                 this.changes
             );
 
+            this.editor.messageField.removeAllErrorMessages();
             this.editor.messageField.addMessage(
                 'success',
                 'User updated successfully!'
             );
 
-            this.user = updatedUser;
             console.log('user updated successfully:', updatedUser);
+            await new Promise<void>((resolve) => setTimeout(resolve, 500));
+            window.location.reload();
         } catch (error) {
             this.editor.messageField.addMessage(
                 'error',

@@ -68,6 +68,10 @@ export class Workspace extends LitElement {
                 const device = await apiClient.getDevice(
                     apiClient.url + '/devices/' + data.device_id
                 );
+                const availability =
+                    device.type === 'device'
+                        ? await apiClient.getDeviceAvailability(device.url)
+                        : [];
 
                 // render(html``, this.container);
 
@@ -76,6 +80,7 @@ export class Workspace extends LitElement {
                         class="flex justify-center overflow-auto h-full w-full"
                         @update-view=${this.viewUpdatedHandler}
                         .device=${device}
+                        .availability=${availability}
                     ></apitool-device-editor>`,
                     this.container
                 );

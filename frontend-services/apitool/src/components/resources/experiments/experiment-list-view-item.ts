@@ -73,6 +73,8 @@ export class ExperimentListViewItem extends LitElement {
                 return this.renderBadge('setup', 'bg-teal-300');
             case 'running':
                 return this.renderBadge('running', 'bg-blue-300');
+            case 'failed':
+                return this.renderBadge('failed', 'bg-red-300');
             case 'finished':
                 return this.renderBadge('finished', 'bg-violet-300');
             default:

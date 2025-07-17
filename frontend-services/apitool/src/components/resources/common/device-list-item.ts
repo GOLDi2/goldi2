@@ -96,14 +96,6 @@ export class DeviceListItem extends LitElement {
                           <div class="w-full flex">
                               <p class="w-28 flex-shrink-0">Is Public:</p>
                               <p>${this.resolvedDevice.isPublic}</p>
-                          </div>
-                          <div class="w-full flex">
-                              <p class="w-28 flex-shrink-0">Owner:</p>
-                              <p
-                                  class="whitespace-nowrap overflow-hidden text-ellipsis"
-                              >
-                                  ${this.resolvedDevice.owner}
-                              </p>
                           </div>`
                     : ''}
                 ${this.possibleRoles

@@ -9,6 +9,9 @@ export class DeviceEditorConcreteDevice extends LitElement {
     @property({ type: Object })
     device!: DeviceServiceTypes.ConcreteDevice<'response'>;
 
+    @property({ type: Array })
+    availability!: DeviceServiceTypes.Availability<'response'>;
+
     @property({ type: Object })
     parent!: DeviceEditor;
 
@@ -89,6 +92,7 @@ export class DeviceEditorConcreteDevice extends LitElement {
             >
                 <div class="flex flex-col gap-2">
                     <apitool-calendar
+                        .availability=${this.availability}
                         .availabilityRules=${this.availabilityRules}
                     ></apitool-calendar>
                     <apitool-availability-rule-list
@@ -101,8 +105,23 @@ export class DeviceEditorConcreteDevice extends LitElement {
                         ) => {
                             this.availabilityRules = [...event.detail];
                             console.log(this.availabilityRules);
+                            this.dispatchEvent(
+                                new CustomEvent('update-availability-rules', {
+                                    detail: this.availabilityRules,
+                                })
+                            );
                         }}
                     ></apitool-availability-rule-list>
+                    <button
+                        class="rounded-lg bg-red-600 text-gray-50 hover:bg-red-700 active:bg-red-800 w-full p-2"
+                        @click=${() => {
+                            this.dispatchEvent(
+                                new CustomEvent('delete-availability-rules')
+                            );
+                        }}
+                    >
+                        Delete all Availability Rules
+                    </button>
                 </div>
             </apitool-collapsable-element>
             <apitool-service-list

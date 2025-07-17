@@ -128,15 +128,15 @@ export class TemplateEditor extends LitElement {
                 this.template
             );
 
+            this.editor.messageField.removeAllErrorMessages();
             this.editor.messageField.addMessage(
                 'success',
                 'Template updated successfully!'
             );
 
-            this.template = updatedTemplate;
-            this.inputName.value = updatedTemplate.name;
-            this.inputDescription.value = updatedTemplate.description ?? '';
             console.log('template updated successfully:', updatedTemplate);
+            await new Promise<void>((resolve) => setTimeout(resolve, 500));
+            window.location.reload();
         } catch (error) {
             this.editor.messageField.addMessage(
                 'error',
