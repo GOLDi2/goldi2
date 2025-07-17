@@ -69,9 +69,7 @@ option_none: 'Nicht ausgewählt'
         </form>
     </div>
     <form method="POST" class="w-2/3 mx-auto flex flex-col gap-2 items-center">
-        <textarea name="experiment" class="w-full h-96 border-2 font-mono">
-            {{ experiment | dump(2) }}
-        </textarea><br>
+        <textarea name="experiment" class="w-full h-96 border-2 font-mono">{{ experiment | dump(2) }}</textarea><br>
         <input class="primary-button mt-4" type="submit" value="{{ text.button_start_experiment }}">
     </form>
     {% endcall %}
