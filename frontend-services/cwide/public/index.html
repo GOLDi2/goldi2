@@ -143,7 +143,7 @@
   <script src="$PATH_PREFIX/vscode-web/out/vs/loader.js"></script>
   <script src="$PATH_PREFIX/vscode-web/out/vs/webPackagePaths.js"></script>
   <script>
-    Object.keys(self.webPackagePaths).forEach(function (key, index) {
+    Object.keys(self.webPackagePaths).forEach((key) => {
       self.webPackagePaths[
         key
       ] = `${window.location.origin}$PATH_PREFIX/vscode-web/node_modules/${key}/${self.webPackagePaths[key]}`;

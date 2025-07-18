@@ -22,4 +22,4 @@ COPY public /usr/share/nginx/html
 COPY --from=build /tmp/build/vscode-web /usr/share/nginx/html/vscode-web
 COPY default.conf.template /etc/nginx/templates/
 ENTRYPOINT [ "/bin/bash", "-c" ]
-CMD [ "echo \"$(envsubst < /usr/share/nginx/html/index.html)\" > /usr/share/nginx/html/index.html && bash /docker-entrypoint.sh nginx -g 'daemon off;'" ]
+CMD [ "echo \"$(envsubst '$PATH_PREFIX $SCHEME $AUTHORITY' < /usr/share/nginx/html/index.html)\" > /usr/share/nginx/html/index.html && bash /docker-entrypoint.sh nginx -g 'daemon off;'" ]
