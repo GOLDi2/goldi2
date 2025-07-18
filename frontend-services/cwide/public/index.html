@@ -144,7 +144,7 @@
   <script src="$PATH_PREFIX/vscode-web/out/vs/webPackagePaths.js"></script>
   <script>
     Object.keys(self.webPackagePaths).map(function (key, index) {
-      self.webPackagePaths[
+      return self.webPackagePaths[
         key
       ] = `${window.location.origin}$PATH_PREFIX/vscode-web/node_modules/${key}/${self.webPackagePaths[key]}`;
     });
