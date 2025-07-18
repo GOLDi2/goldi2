@@ -160,7 +160,7 @@ export class ArduinoCliLanguageServerInstance {
         "-cli",
         "/usr/local/bin/arduino-cli",
         "-cli-config",
-        "/root/.arduino15/arduino-cli.yaml",
+        "~/.arduino15/arduino-cli.yaml",
         "-fqbn",
         "arduino:avr:mega",
         "-log",
