@@ -94,7 +94,7 @@ frontend-services/update:
       - test
 
 frontend-services/cwide:
-  - script: copy-extensions
+  - script: build-docker
     dependencies:
       - frontend-services/cwide/extensions/base:build
       - frontend-services/cwide/extensions/collaboration:build
@@ -103,9 +103,6 @@ frontend-services/cwide:
       - frontend-services/cwide/extensions/filesystem:build
       - frontend-services/cwide/extensions/lsp:build
       - frontend-services/cwide/extensions/testing:build
-  - script: build-docker
-    dependencies:
-      - frontend-services/cwide:copy-extensions
 
 frontend-services/cwide/editor-settings:
   - script: build
