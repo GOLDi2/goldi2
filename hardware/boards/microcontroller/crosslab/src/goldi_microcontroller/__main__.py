@@ -10,6 +10,7 @@ from typing_extensions import Literal
 
 from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
+from crosslab.soa_services.electrical import ElectricalConnectionService
 from crosslab.soa_services.electrical.signal_interfaces.gpio import (
     ConstractableGPIOInterface, GPIOInterface)
 from crosslab.soa_services.file import FileService__Consumer, FileServiceEvent
@@ -133,9 +134,9 @@ async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | b
     else:
         print(f"avrdude output: {stdout.decode()}")
 
-    if file_type== 'hex':
+    if file_type == 'hex':
         command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:i"
-    elif file_type== 'elf':
+    elif file_type == 'elf':
         command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:e"
     else:
         raise Exception(f"Unsupported file type: {file_type}")
@@ -158,6 +159,7 @@ async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | b
     hal.enable_isp.set(False)
     lightControl()
 
+
 async def uploadHandler(event: FileServiceEvent):
     if event["file_type"] == 'hex':
         await program(event["file_type"], event["content"])
@@ -168,14 +170,14 @@ async def uploadHandler(event: FileServiceEvent):
 
 
 async def onProgramRequest(event: ProgramRequestEvent):
-    if event["program"]["type"]== "file":
+    if event["program"]["type"] == "file":
         if event["program"]["name"].endswith(".hex"):
             await program('hex', event["program"]["content"])
         elif event["program"]["name"].endswith(".elf"):
             await program('elf', event["program"]["content"])
         else:
             raise Exception(f"Unsupported file type: {event['program']['name']}")
-    
+
 
 async def main_async():
     global hal, deviceHandler
