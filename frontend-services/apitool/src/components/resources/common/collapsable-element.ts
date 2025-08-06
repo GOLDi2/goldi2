@@ -14,6 +14,9 @@ export class CollapsableElement extends LitElement {
     @property({ type: Object })
     parent?: LitElement;
 
+    @property()
+    titleClasses?: string = '';
+
     @property({ type: Boolean })
     isOpen: boolean = false;
 
@@ -29,7 +32,8 @@ export class CollapsableElement extends LitElement {
                 <p
                     class="w-[calc(100%_-_4rem)] ${this.titleAlign === 'left'
                         ? 'text-left relative'
-                        : 'text-center absolute'} whitespace-nowrap overflow-hidden text-ellipsis"
+                        : 'text-center absolute'} whitespace-nowrap overflow-hidden text-ellipsis ${this
+                        .titleClasses}"
                 >
                     ${this.title}
                 </p>

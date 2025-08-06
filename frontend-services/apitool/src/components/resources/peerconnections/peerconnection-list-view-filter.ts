@@ -5,6 +5,8 @@ export type PeerconnectionFilterOptions = {
     url: string;
     type: {
         webrtc: boolean;
+        websocket: boolean;
+        local: boolean;
     };
     devices: {
         deviceA: string;
@@ -23,14 +25,17 @@ export type PeerconnectionFilterOptions = {
 
 @customElement('apitool-peerconnection-list-view-filter')
 export class PeerconnectionListViewFilter extends LitElement {
-    @state()
-    isOpen: boolean = false;
-
     @query('#url-filter')
     urlFilter!: HTMLInputElement;
 
     @query('#type-filter-webrtc')
     typeFilterWebRTC!: HTMLInputElement;
+
+    @query('#type-filter-websocket')
+    typeFilterWebsocket!: HTMLInputElement;
+
+    @query('#type-filter-local')
+    typeFilterLocal!: HTMLInputElement;
 
     @query('#device-filter-a')
     deviceFilterA!: HTMLInputElement;
@@ -65,8 +70,9 @@ export class PeerconnectionListViewFilter extends LitElement {
 
     protected render(): unknown {
         return html`<apitool-collapsable-element
-            .title=${'Filters'}
-            class="flex p-2 border-2 border-black rounded-lg bg-slate-300 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
+            .title=${'Filter Options'}
+            .titleClasses=${'font-semibold text-xl text-slate-100'}
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-600 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             <div class="flex flex-col gap-2 w-full">
                 <input
@@ -89,7 +95,32 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="type-filter-webrtc"
                                     type="checkbox"
-                                    checked
+                                    @input=${this.updateFilters}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pr-4">
+                                <label for="type-filter-websocket"
+                                    >WebSocket</label
+                                >
+                            </td>
+                            <td>
+                                <input
+                                    id="type-filter-websocket"
+                                    type="checkbox"
+                                    @input=${this.updateFilters}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pr-4">
+                                <label for="type-filter-local">Local</label>
+                            </td>
+                            <td>
+                                <input
+                                    id="type-filter-local"
+                                    type="checkbox"
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -138,7 +169,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-new"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -153,7 +183,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-connecting"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -168,7 +197,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-connected"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -183,7 +211,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-disconnected"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -196,7 +223,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-failed"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -211,7 +237,6 @@ export class PeerconnectionListViewFilter extends LitElement {
                                 <input
                                     id="status-filter-closed"
                                     type="checkbox"
-                                    checked
                                     @input=${this.updateFilters}
                                 />
                             </td>
@@ -222,10 +247,6 @@ export class PeerconnectionListViewFilter extends LitElement {
         </apitool-collapsable-element>`;
     }
 
-    private toggleOpen() {
-        this.isOpen = !this.isOpen;
-    }
-
     private updateFilters() {
         const event = new CustomEvent<PeerconnectionFilterOptions>(
             'filters-updated',
@@ -234,6 +255,8 @@ export class PeerconnectionListViewFilter extends LitElement {
                     url: this.urlFilter.value,
                     type: {
                         webrtc: this.typeFilterWebRTC.checked,
+                        websocket: this.typeFilterWebsocket.checked,
+                        local: this.typeFilterLocal.checked,
                     },
                     devices: {
                         deviceA: this.deviceFilterA.value,

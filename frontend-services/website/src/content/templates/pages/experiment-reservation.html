@@ -1,0 +1,133 @@
+{% import "components/login_wall.html" as login_wall %}
+
+{% set
+text = {
+headline: 'Experiment',
+description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+sadipscing elitr.',
+login_prompt: 'You need an activated user account for this action.',
+account_setup_prompt: 'You don\'t have a user account yet?',
+button_login: 'Login',
+button_register: 'Create user account',
+button_book_experiment: 'Book Experiment',
+button_generate_experiment_description: 'Generate Experiment Description',
+label_choose_system: 'Choose a System to Control',
+label_choose_controller: 'Choose a Controller',
+label_start_time: 'Start Time',
+label_end_time: 'End Time',
+option_none: 'None'
+}
+%}
+
+{% if language=='de' %}
+{% set
+text = {
+headline: 'Experiment',
+description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+sadipscing elitr.',
+login_prompt: 'Für diese Aktion benötigen Sie ein aktiviertes Benutzerkonto.',
+account_setup_prompt: 'Sie haben noch kein Benutzerkonto?',
+button_login: 'Login',
+button_register: 'Benutzerkonto einrichten',
+button_book_experiment: 'Experiment buchen',
+button_generate_experiment_description: 'Experimentbeschreibung generieren',
+label_choose_system: 'Wähle ein zu steuerndes System',
+label_choose_controller: 'Wähle einen Controller',
+label_start_time: 'Beginn',
+label_end_time: 'Ende',
+option_none: 'Nicht ausgewählt'
+}
+%}
+{% endif %}
+
+{% extends "layout.html" %}
+{% block main %}
+    {% call login_wall.wrapper(isLoggedIn) %}
+    <script>
+        function handleSubmit() {
+            const startTimeInput = document.getElementById("start-time-input")
+            const endTimeInput = document.getElementById("end-time-input")
+            const startTimeInputISO = document.getElementById("start-time-input-iso")
+            const endTimeInputISO = document.getElementById("end-time-input-iso")
+
+            startTimeInputISO.value = 
+                (startTimeInput.value 
+                    ? new Date(startTimeInput.value) 
+                    : new Date()).toISOString()
+            endTimeInputISO.value = 
+                (endTimeInput.value 
+                    ? new Date(endTimeInput.value) 
+                    : new Date(Date.parse(startTimeInputISO) + 60 * 60 * 1000)).toISOString() 
+
+            return true
+        }
+    </script>
+    <div class="mx-auto p-8">
+        <form method="GET" class="flex flex-col gap-4 items-center">
+            <div class="flex gap-2">
+                <div class="flex flex-col w-fit justify-center gap-6">
+                    <label for="pspu" class="mr-2">{{ text.label_choose_system }}:</label>
+                    <label for="bpu" class="mr-2">{{ text.label_choose_controller }}:</label>
+                </div>
+                <div class="flex flex-col w-fit items-center gap-2">
+                    <select name="pspu" id="pspu" class="w-full p-2 border-2 bg-white rounded-lg">
+                        <option value="">{{ text.option_none }}</option>
+                        {% for system in pspus %}
+                        <option value="{{system.url}}">{{system.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="bpu" id="bpu" class="w-full p-2 border-2 bg-white rounded-lg">
+                        <option value="">{{ text.option_none }}</option>
+                        {% for system in bpus %}
+                        <option value="{{system.url}}">{{system.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input class="primary-button" type="submit" value="{{ text.button_generate_experiment_description }}">
+        </form>
+    </div>
+    <form method="POST" class="w-2/3 mx-auto flex flex-col gap-8 items-center" onsubmit="handleSubmit()">
+    <textarea name="experiment" class="w-full h-96 border-2 font-mono">{{ experiment | dump(2) }}</textarea>
+    <div class="flex flex-col gap-2">
+        <div class="flex w-full items-center">
+            <label for="start-time-input" class="mr-2">{{ text.label_start_time }}:</label>
+            <input id="start-time-input" type="datetime-local" class="ml-auto border-2 rounded-lg p-2">
+            <input id="start-time-input-iso" name="startTime" type="text" class="!hidden">
+        </div>
+        <div class="flex w-full items-center">
+            <label for="end-time-input" class="mr-2">{{ text.label_end_time }}:</label>
+            <input id="end-time-input" type="datetime-local" class="ml-auto border-2 rounded-lg p-2">
+            <input id="end-time-input-iso" name="endTime" type="text" class="!hidden">
+        </div>
+    </div>
+    <input class="primary-button" type="submit" value="{{ text.button_book_experiment }}">
+    </form>
+    <script>
+        const start = new Date()
+        const end = new Date(start)
+        end.setTime(end.getTime() + 60 * 60 * 1000)
+        const startData = {
+            year: start.getFullYear(),
+            month: start.getMonth().toString().length === 1 ? "0" + (start.getMonth() + 1) : (start.getMonth() + 1),
+            date: start.getDate().toString().length === 1 ? "0" + start.getDate() : start.getDate(),
+            hours: start.getHours().toString().length === 1 ? "0" + start.getHours() : start.getHours(),
+            minutes: start.getMinutes().toString().length === 1 ? "0" + start.getMinutes() : start.getMinutes(),
+        }
+        const endData = {
+            year: end.getFullYear(),
+            month: end.getMonth().toString().length === 1 ? "0" + (end.getMonth() + 1) : (end.getMonth() + 1),
+            date: end.getDate().toString().length === 1 ? "0" + end.getDate() : end.getDate(),
+            hours: end.getHours().toString().length === 1 ? "0" + end.getHours() : end.getHours(),
+            minutes: end.getMinutes().toString().length === 1 ? "0" + end.getMinutes() : end.getMinutes(),
+        }
+        document.getElementById("start-time-input").value = `${startData.year}-${(startData.month)}-${startData.date}T${startData.hours}:${startData.minutes}`
+        document.getElementById("end-time-input").value = `${endData.year}-${(endData.month)}-${endData.date}T${endData.hours}:${endData.minutes}`
+    </script>
+    {% endcall %}
+    <div class="flex-grow"></div>
+{% endblock %}

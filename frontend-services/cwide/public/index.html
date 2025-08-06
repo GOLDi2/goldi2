@@ -1,0 +1,165 @@
+<!-- Copyright (C) Microsoft Corporation. All rights reserved. -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- Mobile tweaks -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Code" />
+    <link rel="apple-touch-icon" href="/code-192.png" />
+
+    <!-- Disable pinch zooming -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+    />
+
+    <!-- Workbench Configuration -->
+    <meta id="vscode-workbench-web-configuration" data-settings="{}" />
+
+    <!-- Builtin Extensions (running out of sources) -->
+    <!-- <meta id="vscode-workbench-builtin-extensions" data-settings="{}"> -->
+
+    <!-- Workbench Icon/Manifest/CSS -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="manifest" href="/manifest.json" />
+    <link
+      data-name="vs/workbench/workbench.web.main"
+      rel="stylesheet"
+      href="$PATH_PREFIX/vscode-web/out/vs/workbench/workbench.web.main.css"
+    />
+  </head>
+
+  <body aria-label=""></body>
+
+  <!-- Helper Script -->
+  <script>
+    const queryParameters = new URLSearchParams(window.location.search);
+    const configuration = {
+      productConfiguration: {
+        nameShort: "Code Web",
+        nameLong: "Code Web",
+        applicationName: "code-web",
+        dataFolderName: ".vscode-web",
+        version: "1.93.0",
+        extensionEnabledApiProposals: {
+          "crosslab.@crosslab-ide/crosslab-filesystem-extension": [
+            "fileSearchProvider",
+            "textSearchProvider",
+          ],
+        },
+      },
+      additionalBuiltinExtensions: [
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/base",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/filesystem",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/compilation",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/debugging",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/lsp",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/testing",
+        },
+        {
+          scheme: "$SCHEME",
+          authority: "$AUTHORITY",
+          path: "$PATH_PREFIX/extensions/collaboration",
+        },
+      ],
+      configurationDefaults: {
+        "crosslab.instanceUrl": queryParameters.get("instanceUrl"),
+        "crosslab.deviceToken": queryParameters.get("deviceToken"),
+        "files.eol": "\n",
+      },
+      folderUri: {
+        scheme: "crosslabfs",
+        path: "/workspace",
+      },
+    };
+    document
+      .getElementById("vscode-workbench-web-configuration")
+      .setAttribute("data-settings", JSON.stringify(configuration));
+    setInterval(async () => {
+      const request = indexedDB.open("crosslab-settings");
+      const db = await new Promise((resolve, reject) => {
+        request.onupgradeneeded = () => {
+          request.result.createObjectStore("settings");
+        };
+        request.onsuccess = async () => {
+          resolve(request.result);
+        };
+        request.onerror = () => {
+          reject(request.error);
+        };
+      });
+
+      const readRequest = db
+        .transaction(["settings"], "readonly")
+        .objectStore("settings")
+        .get("crosslab.current-project-name");
+
+      let project = null;
+      try {
+        project = await new Promise((resolve, reject) => {
+          readRequest.onsuccess = () => {
+            resolve(readRequest.result);
+          };
+          readRequest.onerror = () => {
+            reject(readRequest.error);
+          };
+        });
+      } catch (error) {}
+
+      const element = document.querySelector("h3.title[aria-label^='Explorer Section:']")
+      if (element) {
+        element.textContent = project ? project : "workspace"
+      }
+    }, 200)
+  </script>
+
+  <!-- Startup (do not modify order of script tags!) -->
+  <script src="$PATH_PREFIX/vscode-web/out/vs/loader.js"></script>
+  <script src="$PATH_PREFIX/vscode-web/out/vs/webPackagePaths.js"></script>
+  <script>
+    Object.keys(self.webPackagePaths).forEach((key) => {
+      self.webPackagePaths[
+        key
+      ] = `${window.location.origin}$PATH_PREFIX/vscode-web/node_modules/${key}/${self.webPackagePaths[key]}`;
+    });
+    require.config({
+      baseUrl: `${window.location.origin}$PATH_PREFIX/vscode-web/out`,
+      recordStats: true,
+      trustedTypesPolicy: window.trustedTypes?.createPolicy("amdLoader", {
+        createScriptURL(value) {
+          return value;
+        },
+      }),
+      paths: self.webPackagePaths,
+    });
+  </script>
+  <script src="$PATH_PREFIX/vscode-web/out/nls.messages.js"></script>
+  <script src="$PATH_PREFIX/vscode-web/out/vs/workbench/workbench.web.main.js"></script>
+  <script src="$PATH_PREFIX/vscode-web/out/vs/code/browser/workbench/workbench.js"></script>
+</html>

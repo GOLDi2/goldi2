@@ -111,9 +111,7 @@ export class UserList extends LitElement {
             };
         });
         this.userItems.forEach(async (userItem) => {
-            const resolvedUser = await apiClient.getDevice(
-                userItem.url.replace('users', 'devices')
-            );
+            const resolvedUser = await apiClient.getUser(userItem.url);
             userItem.resolved = resolvedUser;
             this.requestUpdate();
         });

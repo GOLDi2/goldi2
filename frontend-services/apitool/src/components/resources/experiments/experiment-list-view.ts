@@ -77,10 +77,16 @@ export class ExperimentListView extends LitElement {
             .filter((experimentOverview) =>
                 experimentOverview.url.includes(filterOptions.url)
             )
-            .filter(
-                (experimentOverview) =>
+            .filter((experimentOverview) => {
+                const statusFilterActive = Object.values(
+                    filterOptions.status
+                ).includes(true);
+
+                return (
+                    !statusFilterActive ||
                     filterOptions.status[experimentOverview.status]
-            );
+                );
+            });
     }
 
     private createExperiment() {

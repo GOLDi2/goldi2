@@ -18,6 +18,13 @@ export class Sidebar extends LitElement {
                 : 'hidden'}"
         >
             <a
+                @click=${this.openLink('/bookings')}
+                href="${window.configuration.BASE_PATH ?? ''}/bookings"
+                class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"
+            >
+                Bookings
+            </a>
+            <a
                 @click=${this.openLink('/devices')}
                 href="${window.configuration.BASE_PATH ?? ''}/devices"
                 class="z-20 text-center w-[calc(100%-_env(safe-area-inset-left)_-_env(safe-area-inset-right))] p-2 border-black border-b-2 border-x-2 lg:border-x-0 bg-slate-400 hover:bg-slate-300 active:bg-slate-200 lg:block"

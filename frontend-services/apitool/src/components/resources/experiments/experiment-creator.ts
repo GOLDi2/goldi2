@@ -1,4 +1,7 @@
-import { ExperimentServiceTypes } from '@cross-lab-project/api-client';
+import {
+    DeviceServiceTypes,
+    ExperimentServiceTypes,
+} from '@cross-lab-project/api-client';
 import { LitElement, html } from 'lit';
 import { customElement, query, state } from 'lit/decorators.js';
 import { parseDate } from '../helper';
@@ -43,8 +46,8 @@ export class ExperimentCreator extends LitElement {
                     id="select-status"
                     class="p-2 bg-white border rounded-lg"
                     @change=${() => {
-                        this.experiment.status = this.selectStatus
-                            .value as typeof this.experiment.status;
+                        this.experiment.status =
+                            this.selectStatus.value.toLowerCase() as typeof this.experiment.status;
                         this.editor.messageField.removeAllSuccessMessages();
                     }}
                 >
@@ -132,9 +135,15 @@ export class ExperimentCreator extends LitElement {
                 .parent=${this}
                 .possibleRoles=${[...this.experiment.roles]}
                 @update-devices=${(
-                    event: CustomEvent<ExperimentServiceTypes.Device[]>
+                    event: CustomEvent<
+                        (DeviceServiceTypes.DeviceReference<'response'> & {
+                            role?: string;
+                        })[]
+                    >
                 ) => {
-                    this.experiment.devices = event.detail;
+                    this.experiment.devices = event.detail.map((device) => {
+                        return { device: device.url, role: device.role! };
+                    });
                     this.editor.messageField.removeAllSuccessMessages();
                     this.requestUpdate();
                 }}

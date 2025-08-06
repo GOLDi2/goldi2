@@ -41,8 +41,9 @@ export class DeviceListViewFilter extends LitElement {
 
     protected render(): unknown {
         return html`<apitool-collapsable-element
-            .title=${'Filters'}
-            class="bg-slate-300 rounded-lg p-2 flex flex-col border-2 border-black ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
+            .title=${'Filter Options'}
+            .titleClasses=${'font-semibold text-xl text-slate-100'}
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-600 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             <div class="w-full flex flex-col gap-1">
                 <input
@@ -75,7 +76,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-device"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -91,8 +91,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-group"
                                     type="checkbox"
                                     class="ml-auto"
-                                    class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -108,7 +106,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-edge-instantiable"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>
@@ -124,7 +121,6 @@ export class DeviceListViewFilter extends LitElement {
                                     id="type-filter-cloud-instantiable"
                                     type="checkbox"
                                     class="ml-auto"
-                                    checked
                                     @input=${() => this.updateFilters()}
                                 />
                             </td>

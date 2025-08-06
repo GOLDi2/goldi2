@@ -1,4 +1,31 @@
 ################################################################################
+# Backend Services #############################################################
+################################################################################
+
+backend-services/arduino-cli:
+  - script: build
+    dependencies:
+      - crosslab/helper/abstract-messaging-channel:build
+      - crosslab/helper/crosslab-messaging-channel:build
+      - crosslab/helper/filesystem-schemas:build
+      - crosslab/clients/soa_services/compilation/js:build
+      - crosslab/clients/soa/js:build
+  - script: build-docker
+    dependencies:
+      - backend-services/arduino-cli:build
+
+backend-services/arduino-language-server:
+  - script: build
+    dependencies:
+      - crosslab/helper/abstract-messaging-channel:build
+      - crosslab/helper/filesystem-schemas:build
+      - crosslab/clients/soa_services/lsp/js:build
+      - crosslab/clients/soa/js:build
+  - script: build-docker
+    dependencies:
+      - backend-services/arduino-language-server:build
+
+################################################################################
 # Frontend Services ############################################################
 ################################################################################
 
@@ -65,6 +92,68 @@ frontend-services/update:
       - frontend-services/update:build
     tags:
       - test
+
+frontend-services/cwide:
+  - script: build-docker
+    dependencies:
+      - frontend-services/cwide/extensions/base:build
+      - frontend-services/cwide/extensions/collaboration:build
+      - frontend-services/cwide/extensions/compilation:build
+      - frontend-services/cwide/extensions/debugging:build
+      - frontend-services/cwide/extensions/filesystem:build
+      - frontend-services/cwide/extensions/lsp:build
+      - frontend-services/cwide/extensions/testing:build
+
+frontend-services/cwide/editor-settings:
+  - script: build
+
+frontend-services/cwide/extensions/base:
+  - script: build
+    dependencies:
+      - crosslab/clients/soa/js:build
+
+frontend-services/cwide/extensions/collaboration:
+  - script: build
+    dependencies:
+      - crosslab/clients/soa_services/collaboration/js:build
+
+frontend-services/cwide/extensions/compilation:
+  - script: build
+    dependencies:
+      - crosslab/clients/soa_services/collaboration/js:build
+      - crosslab/clients/soa_services/compilation/js:build
+      - crosslab/clients/soa_services/filesystem/js:build
+      - crosslab/clients/soa_services/programming/js:build
+
+frontend-services/cwide/extensions/debugging:
+  - script: build
+    dependencies:
+      - crosslab/helper/filesystem-schemas:build
+      - crosslab/clients/soa_services/collaboration/js:build
+      - crosslab/clients/soa_services/debugging-adapter/js:build
+      - crosslab/clients/soa_services/filesystem/js:build
+
+frontend-services/cwide/extensions/filesystem:
+  - script: build
+    dependencies:
+      - crosslab/helper/abstract-messaging-channel:build
+      - crosslab/helper/filesystem-schemas:build
+      - frontend-services/cwide/editor-settings:build
+      - crosslab/clients/soa_services/collaboration/js:build
+      - crosslab/clients/soa_services/filesystem/js:build
+
+frontend-services/cwide/extensions/lsp:
+  - script: build
+    dependencies:
+      - crosslab/helper/abstract-messaging-channel:build
+      - crosslab/helper/filesystem-schemas:build
+      - crosslab/clients/soa_services/lsp/js:build
+
+frontend-services/cwide/extensions/testing:
+  - script: build
+    dependencies:
+      - crosslab/clients/soa_services/collaboration/js:build
+      - crosslab/clients/soa_services/testing/js:build
 
 ################################################################################
 # Hardware #####################################################################

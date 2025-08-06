@@ -24,8 +24,9 @@ export class UserListViewFilter extends LitElement {
 
     protected render(): unknown {
         return html`<apitool-collapsable-element
-            .title=${'Filters'}
-            class="bg-slate-300 rounded-lg p-2 flex flex-col border-2 border-black ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
+            .title=${'Filter Options'}
+            .titleClasses=${'font-semibold text-xl text-slate-100'}
+            class="flex p-2 border-2 border-black rounded-lg bg-slate-600 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)]"
         >
             <div class="w-full flex flex-col gap-1">
                 <input

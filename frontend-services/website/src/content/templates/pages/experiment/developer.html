@@ -1,15 +1,24 @@
 {% import "components/login_wall.html" as login_wall %}
 
 {% set
-text = {
-headline: 'Experiment (Developer)'
+text = {headline: 'Experiment (Developer)',
+button_start_experiment: 'Start Experiment',
+button_generate_experiment_description: 'Generate Experiment Description',
+label_choose_system: 'Choose a System to Control',
+label_choose_controller: 'Choose a Controller',
+option_none: 'None'
 }
 %}
 
 {% if language=='de' %}
 {% set
 text = {
-headline: 'Experiment (Entwickler)'
+headline: 'Experiment (Entwickler)',
+button_start_experiment: 'Experiment starten',
+button_generate_experiment_description: 'Experimentbeschreibung generieren',
+label_choose_system: 'Wähle ein zu steuerndes System',
+label_choose_controller: 'Wähle einen Controller',
+option_none: 'Nicht ausgewählt'
 }
 %}
 {% endif %}
@@ -17,32 +26,35 @@ headline: 'Experiment (Entwickler)'
 {% extends "layout.html" %}
 {% block main %}
     {% call login_wall.wrapper(isLoggedIn) %}
-        <div class="mx-auto p-10">
-            <form method="GET">
-                <label for="pspu">Choose a System to control:</label>
-                <select name="pspu" id="pspu">
-                    <option value="">None</option>
-                    {% for system in pspus %}
-                    <option value="{{system.url}}">{{system.name}}</option>
-                    {% endfor %}
-                </select><br>
-                <label for="bpu">Choose a Controller:</label>
-                <select name="bpu" id="bpu">
-                    <option value="">None</option>
-                    {% for system in bpus %}
-                    <option value="{{system.url}}">{{system.name}}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-                <input class="primary-button" type="submit" value="Generate Experiment Description">
-            </form>
-        </div>
-        <form method="POST" class="w-2/3 mx-auto">
-        <textarea name="experiment" class="w-full h-96 border-2">
-            {{ experiment | dump(2) }}
-        </textarea><br>
-        <input class="primary-button" type="submit" value="Start Experiment">
+    <div class="mx-auto p-8">
+        <form method="GET" class="flex flex-col gap-4 items-center">
+            <div class="flex gap-2">
+                <div class="flex flex-col w-fit justify-center gap-6">
+                    <label for="pspu" class="mr-2">{{ text.label_choose_system }}:</label>
+                    <label for="bpu" class="mr-2">{{ text.label_choose_controller }}:</label>
+                </div>
+                <div class="flex flex-col w-fit items-center gap-2">
+                    <select name="pspu" id="pspu" class="w-full p-2 border-2 bg-white rounded-lg">
+                        <option value="">{{ text.option_none }}</option>
+                        {% for system in pspus %}
+                        <option value="{{system.url}}">{{system.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="bpu" id="bpu" class="w-full p-2 border-2 bg-white rounded-lg">
+                        <option value="">{{ text.option_none }}</option>
+                        {% for system in bpus %}
+                        <option value="{{system.url}}">{{system.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input class="primary-button" type="submit" value="{{ text.button_generate_experiment_description }}">
         </form>
+    </div>
+    <form method="POST" class="w-2/3 mx-auto flex flex-col gap-2 items-center">
+        <textarea name="experiment" class="w-full h-96 border-2 font-mono">{{ experiment | dump(2) }}</textarea><br>
+        <input class="primary-button mt-4" type="submit" value="{{ text.button_start_experiment }}">
+    </form>
     {% endcall %}
     <div class="flex-grow"></div>
 {% endblock %}

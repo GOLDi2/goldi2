@@ -55,12 +55,6 @@ export class DeviceListViewItem extends LitElement {
                 </p>
             </div>
             <div class="flex">
-                <p class="w-28 flex-shrink-0">Owner:</p>
-                <p class="whitespace-nowrap overflow-hidden text-ellipsis">
-                    ${this.deviceOverview.owner}
-                </p>
-            </div>
-            <div class="flex">
                 <p class="w-28 flex-shrink-0">Type:</p>
                 <p>${this.deviceOverview.type}</p>
             </div>

@@ -213,17 +213,21 @@ export class ExperimentEditor extends LitElement {
                     status:
                         this.experiment.status === 'setup'
                             ? 'running'
+                            : this.experiment.status === 'failed'
+                            ? 'finished'
                             : this.experiment.status,
                 }
             );
 
+            this.editor.messageField.removeAllErrorMessages();
             this.editor.messageField.addMessage(
                 'success',
                 'Experiment updated successfully!'
             );
 
-            this.experiment = updatedExperiment;
             console.log('experiment updated successfully:', updatedExperiment);
+            await new Promise<void>((resolve) => setTimeout(resolve, 500));
+            window.location.reload();
         } catch (error) {
             this.editor.messageField.addMessage(
                 'error',
