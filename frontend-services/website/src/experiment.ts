@@ -175,8 +175,8 @@ export function experiment_router(
       }
     }
 
-    if (instances.length <= 1){
-      display='iframe';
+    if (instances.length <= 1) {
+      display = 'iframe';
     }
 
     //await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
@@ -326,11 +326,77 @@ export function experiment_router(
     return res.status(204).send();
   }
 
+  async function configTool(req: Request, res: Response, _next: NextFunction) {
+    const templateUrl = req.query.template;
+
+    let experiment:
+      | Partial<ExperimentServiceTypes.Experiment<"request">>
+      | undefined;
+    if (typeof templateUrl === "string") {
+      experiment = {
+        ...(await req.apiClient.getTemplate(templateUrl)).configuration,
+      };
+    }
+
+    if (req.method === "POST") {
+      if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
+      if (!experiment) throw new Error("No experiment provided");
+      experiment.status = "running";
+      experiment.devices = experiment.devices ?? experiment.roles?.map((r) => ({
+        device: r.template_device as string,
+        role: r.name,
+      }));
+      console.log(JSON.stringify(experiment, null, 2));
+      const response = await req.apiClient.createExperiment(
+        experiment as ExperimentServiceTypes.Experiment<"request">
+      );
+      if (response.status === "setup" && response.url) {
+        return experimentSetup(req, res, _next, response);
+      }
+    }
+
+    return renderPage("experiment/configtool", language, res, req.user, { token: req.apiClient.accessToken, api: req.apiClient.url, experiment });
+  }
+
+  async function configTool(req: Request, res: Response, _next: NextFunction) {
+    const templateUrl = req.query.template;
+
+    let experiment:
+      | Partial<ExperimentServiceTypes.Experiment<"request">>
+      | undefined;
+    if (typeof templateUrl === "string") {
+      experiment = {
+        ...(await req.apiClient.getTemplate(templateUrl)).configuration,
+      };
+    }
+
+    if (req.method === "POST") {
+      if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
+      if (!experiment) throw new Error("No experiment provided");
+      experiment.status = "running";
+      experiment.devices = experiment.devices ?? experiment.roles?.map((r) => ({
+        device: r.template_device as string,
+        role: r.name,
+      }));
+      console.log(JSON.stringify(experiment, null, 2));
+      const response = await req.apiClient.createExperiment(
+        experiment as ExperimentServiceTypes.Experiment<"request">
+      );
+      if (response.status === "setup" && response.url) {
+        return experimentSetup(req, res, _next, response);
+      }
+    }
+
+    return renderPage("experiment/configtool", language, res, req.user, { token: req.apiClient.accessToken, api: req.apiClient.url, experiment });
+  }
+
   const router = Router();
   router.get("/selection", asyncHandler(experimentSelection));
   router.post("/selection", asyncHandler(experimentSelection));
   router.get("/developer", asyncHandler(experiment));
   router.post("/developer", asyncHandler(experiment));
+  router.get("/configtool", asyncHandler(configTool));
+  router.post("/configtool", asyncHandler(configTool));
   router.delete("/experiment", deleteExperiment);
   router.get("/book-experiment", asyncHandler(bookExperiment));
   router.post("/book-experiment", asyncHandler(bookExperiment));

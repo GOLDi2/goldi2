@@ -6,12 +6,16 @@ import os
 from json import JSONDecoder
 from typing import Dict, Optional
 
+from typing_extensions import Literal
+
 from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
 from crosslab.soa_services.electrical import ElectricalConnectionService
 from crosslab.soa_services.electrical.signal_interfaces.gpio import (
     ConstractableGPIOInterface, GPIOInterface)
 from crosslab.soa_services.file import FileService__Consumer, FileServiceEvent
+from crosslab.soa_services.programming import (ProgrammingService__Producer,
+                                               ProgramRequestEvent)
 from goldi_microcontroller.hal import HAL
 
 interfaces: Dict[str, GPIOInterface] = dict()
@@ -102,18 +106,18 @@ def lightControl():
         os.system("set_led_no_experiment")
 
 
-async def uploadHandler(event: FileServiceEvent):
+async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | bytearray | memoryview):
     # Command to program the ATmega2560 using avrdude
     os.system("set_led_uploading")
     hal.enable_isp.set(True)
     hal.registers.communicate()
 
-    if event["file_type"] == 'hex':
+    if file_type == 'hex':
         command = "avrdude -v -p atmega2560 -c rpi -V -U flash:w:-:i"
-    elif event["file_type"] == 'elf':
+    elif file_type == 'elf':
         command = "avrdude -v -p atmega2560 -c rpi -U flash:w:-:e"
     else:
-        raise Exception(f"Unsupported file type: {event['file_type']}")
+        raise Exception(f"Unsupported file type: {file_type}")
 
     process = await asyncio.create_subprocess_shell(
         command,
@@ -122,7 +126,7 @@ async def uploadHandler(event: FileServiceEvent):
         stderr=asyncio.subprocess.PIPE,
     )
 
-    stdout, stderr = await process.communicate(input=event["content"])
+    stdout, stderr = await process.communicate(input=content)
 
     if process.returncode != 0:
         raise Exception(
@@ -130,12 +134,12 @@ async def uploadHandler(event: FileServiceEvent):
     else:
         print(f"avrdude output: {stdout.decode()}")
 
-    if event["file_type"] == 'hex':
+    if file_type == 'hex':
         command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:i"
-    elif event["file_type"] == 'elf':
+    elif file_type == 'elf':
         command = "avrdude -v -p atmega2560 -c rpi -U flash:v:-:e"
     else:
-        raise Exception(f"Unsupported file type: {event['file_type']}")
+        raise Exception(f"Unsupported file type: {file_type}")
 
     process = await asyncio.create_subprocess_shell(
         command,
@@ -144,7 +148,7 @@ async def uploadHandler(event: FileServiceEvent):
         stderr=asyncio.subprocess.PIPE,
     )
 
-    stdout, stderr = await process.communicate(input=event["content"])
+    stdout, stderr = await process.communicate(input=content)
 
     if process.returncode != 0:
         raise Exception(
@@ -154,6 +158,25 @@ async def uploadHandler(event: FileServiceEvent):
 
     hal.enable_isp.set(False)
     lightControl()
+
+
+async def uploadHandler(event: FileServiceEvent):
+    if event["file_type"] == 'hex':
+        await program(event["file_type"], event["content"])
+    elif event["file_type"] == 'elf':
+        await program(event["file_type"], event["content"])
+    else:
+        raise Exception(f"Unsupported file type: {event['file_type']}")
+
+
+async def onProgramRequest(event: ProgramRequestEvent):
+    if event["program"]["type"] == "file":
+        if event["program"]["name"].endswith(".hex"):
+            await program('hex', event["program"]["content"])
+        elif event["program"]["name"].endswith(".elf"):
+            await program('elf', event["program"]["content"])
+        else:
+            raise Exception(f"Unsupported file type: {event['program']['name']}")
 
 
 async def main_async():
@@ -224,6 +247,10 @@ async def main_async():
     file_service.add_listener("file", uploadHandler)
     deviceHandler.add_service(file_service)
 
+    programming_service = ProgrammingService__Producer("programming")
+    programming_service.on("program:request", onProgramRequest)
+    deviceHandler.add_service(programming_service)
+
     deviceHandler.on("connectionsChanged", lightControl)
 
     async with APIClient(url) as client:
@@ -243,5 +270,7 @@ def main():
     asyncio.run(main_async())
 
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()
