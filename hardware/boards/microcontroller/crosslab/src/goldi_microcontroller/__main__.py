@@ -21,6 +21,7 @@ from goldi_microcontroller.hal import HAL
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
 deviceHandler: DeviceHandler
+programming_service: ProgrammingService__Producer
 
 signal_names = [
     *["PE0", "PE1", "PE2", "PE3", "PE4", "PE5", "PE6", "PE7"],
@@ -170,13 +171,23 @@ async def uploadHandler(event: FileServiceEvent):
 
 
 async def onProgramRequest(event: ProgramRequestEvent):
+    global programming_service  # noqa: F824
+
     if event["program"]["type"] == "file":
         if event["program"]["name"].endswith(".hex"):
             await program('hex', event["program"]["content"])
         elif event["program"]["name"].endswith(".elf"):
             await program('elf', event["program"]["content"])
         else:
-            raise Exception(f"Unsupported file type: {event['program']['name']}")
+            programming_service.sendResponse(
+                {"success": False, "requestId": event["requestId"], "message": f"Unsupported file type: {event['program']['name']}"})
+            raise Exception(
+                f"Unsupported file type: {event['program']['name']}")
+        programming_service.sendResponse(
+            {"success": True, "requestId": event["requestId"], "message": "Microcontroller was programmed successfully!"})
+    else:
+        programming_service.sendResponse(
+            {"success": False, "requestId": event["requestId"], "message": "Expected a file, but got a directory!"})
 
 
 async def main_async():
@@ -236,6 +247,7 @@ async def main_async():
     hal = HAL()
 
     deviceHandler = DeviceHandler()
+    deviceHandler.supportedConnectionTypes = ["webrtc", "websocket"]
 
     signal_service = ElectricalConnectionService("signals")
     signal_interface = ConstractableGPIOInterface(signal_names, "inout")
@@ -270,7 +282,5 @@ def main():
     asyncio.run(main_async())
 
 
-if __name__ == "__main__":
-    main()
 if __name__ == "__main__":
     main()
