@@ -179,15 +179,24 @@ async def onProgramRequest(event: ProgramRequestEvent):
         elif event["program"]["name"].endswith(".elf"):
             await program('elf', event["program"]["content"])
         else:
-            programming_service.sendResponse(
-                {"success": False, "requestId": event["requestId"], "message": f"Unsupported file type: {event['program']['name']}"})
+            programming_service.sendResponse({
+                "success": False,
+                "requestId": event["requestId"],
+                "message": f"Unsupported file type: {event['program']['name']}"
+            })
             raise Exception(
                 f"Unsupported file type: {event['program']['name']}")
-        programming_service.sendResponse(
-            {"success": True, "requestId": event["requestId"], "message": "Microcontroller was programmed successfully!"})
+        programming_service.sendResponse({
+            "success": True,
+            "requestId": event["requestId"],
+            "message": "Microcontroller was programmed successfully!"
+        })
     else:
-        programming_service.sendResponse(
-            {"success": False, "requestId": event["requestId"], "message": "Expected a file, but got a directory!"})
+        programming_service.sendResponse({
+            "success": False,
+            "requestId": event["requestId"],
+            "message": "Expected a file, but got a directory!"
+        })
 
 
 async def main_async():
