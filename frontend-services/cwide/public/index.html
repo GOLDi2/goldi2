@@ -115,7 +115,7 @@
         };
       });
 
-      const readRequest = db
+      const readRequestProjectName = db
         .transaction(["settings"], "readonly")
         .objectStore("settings")
         .get("crosslab.current-project-name");
@@ -123,14 +123,45 @@
       let project = null;
       try {
         project = await new Promise((resolve, reject) => {
-          readRequest.onsuccess = () => {
-            resolve(readRequest.result);
+          readRequestProjectName.onsuccess = () => {
+            resolve(readRequestProjectName.result);
           };
-          readRequest.onerror = () => {
-            reject(readRequest.error);
+          readRequestProjectName.onerror = () => {
+            reject(readRequestProjectName.error);
           };
         });
       } catch (error) {}
+
+      const readRequestDownload = db
+        .transaction(["settings"], "readonly")
+        .objectStore("settings")
+        .get("crosslab.download");
+
+      let download = null
+      try {
+        download = await new Promise((resolve, reject) => {
+          readRequestDownload.onsuccess = () => {
+            resolve(readRequestDownload.result);
+            db.transaction(["settings"], "readwrite")
+              .objectStore("settings")
+              .delete("crosslab.download");
+          };
+          readRequestDownload.onerror = () => {
+            reject(readRequestDownload.error);
+          };
+        });
+      } catch (error) {}
+
+      if (download) {
+        const a = document.createElement('a')
+        const url = window.URL.createObjectURL(download)
+        a.href = url
+        a.download = "cwide-build.zip"
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+      }
 
       const element = document.querySelector("h3.title[aria-label^='Explorer Section:']")
       if (element) {

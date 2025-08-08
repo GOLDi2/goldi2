@@ -124,6 +124,8 @@ frontend-services/cwide/extensions/compilation:
       - crosslab/clients/soa_services/compilation/js:build
       - crosslab/clients/soa_services/filesystem/js:build
       - crosslab/clients/soa_services/programming/js:build
+      - crosslab/helper/filesystem-schemas:build
+      - frontend-services/cwide/editor-settings:build
 
 frontend-services/cwide/extensions/debugging:
   - script: build

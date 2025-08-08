@@ -3,11 +3,31 @@ import { CompilationService__Consumer } from "@cross-lab-project/soa-service-com
 import { FileSystemServiceConsumer } from "@cross-lab-project/soa-service-filesystem";
 import { CollaborationServiceProsumer } from "@cross-lab-project/soa-service-collaboration";
 import { ProgrammingServiceConsumer } from "@cross-lab-project/soa-service-programming";
+import {
+  openSettingsDatabase,
+  writeSetting,
+} from "@crosslab-ide/editor-settings";
+import JSZip from "jszip";
+import { Directory, File } from "@cross-lab-project/filesystem-schemas";
 
 export async function activate(context: vscode.ExtensionContext) {
   console.log(
     'Congratulations, your extension "crosslab-compilation-extension" is now active in the web extension host!'
   );
+
+  await vscode.commands.executeCommand(
+    "setContext",
+    "crosslab.canCompile",
+    false
+  );
+  context.globalState.update("crosslab.canCompile", false);
+
+  await vscode.commands.executeCommand(
+    "setContext",
+    "crosslab.canProgram",
+    false
+  );
+  context.globalState.update("crosslab.canProgram", false);
 
   // check for collaboration extension
   const collaborationExtension = vscode.extensions.all.find(
@@ -66,15 +86,19 @@ export async function activate(context: vscode.ExtensionContext) {
   const programmingTargetId = new Promise<string>((resolve) =>
     programmingService__Consumer.on("new-producer", (producerId) => {
       resolve(producerId);
+      vscode.commands.executeCommand("setContext", "crosslab.canProgram", true);
+      context.globalState.update("crosslab.canProgram", true);
     })
   );
 
   const outputchannel = vscode.window.createOutputChannel("compilation");
 
   const compilationServiceProducerId = new Promise<string>((resolve) => {
-    compilationService__Consumer.once("new-producer", (producerId) =>
-      resolve(producerId)
-    );
+    compilationService__Consumer.once("new-producer", (producerId) => {
+      resolve(producerId);
+      vscode.commands.executeCommand("setContext", "crosslab.canCompile", true);
+      context.globalState.update("crosslab.canCompile", true);
+    });
   });
 
   const fileSystemServiceProducerId = new Promise<string>((resolve) => {
@@ -83,7 +107,7 @@ export async function activate(context: vscode.ExtensionContext) {
     );
   });
 
-  async function compile(upload: boolean = false) {
+  async function compile() {
     awareness?.setLocalStateField("isCompiling", true);
 
     await vscode.commands.executeCommand(
@@ -132,15 +156,6 @@ export async function activate(context: vscode.ExtensionContext) {
         : result.message ?? "Something went wrong during the compilation!"
     );
 
-    if (result.success && result.result.type === "file" && upload) {
-      outputchannel.appendLine("Uploading result!");
-      await programmingService__Consumer.program(
-        await programmingTargetId,
-        result.result
-      );
-      outputchannel.appendLine("Uploaded result!");
-    }
-
     awareness?.setLocalStateField("isCompiling", false);
 
     await vscode.commands.executeCommand(
@@ -148,6 +163,87 @@ export async function activate(context: vscode.ExtensionContext) {
       "crosslab.isCompiling",
       false
     );
+
+    return result;
+  }
+
+  async function upload() {
+    const result = await compile();
+
+    if (result && result.success) {
+      outputchannel.appendLine("Uploading result!");
+      await programmingService__Consumer.program(
+        await programmingTargetId,
+        result.result
+      );
+      outputchannel.appendLine("Uploaded result!");
+    }
+  }
+
+  function addEntryToZip(zip: JSZip, entry: File | Directory) {
+    if (entry.type === "file") {
+      zip.file(entry.name, entry.content);
+    } else {
+      const dirZip = zip.folder(entry.name);
+
+      if (!dirZip) {
+        return;
+      }
+
+      for (const [name, content] of Object.entries(entry.content)) {
+        addEntryToZip(dirZip, { ...content, name });
+      }
+    }
+  }
+
+  async function download() {
+    const canCompile = context.globalState.get("crosslab.canCompile");
+
+    if (canCompile) {
+      const action = await vscode.window.showQuickPick([
+        { label: "Download current project", id: "project" },
+        { label: "Compile current project & download result", id: "compile" },
+      ]);
+
+      if (!action) {
+        return;
+      }
+
+      if (action.id === "compile") {
+        const compilationResponse = await compile();
+
+        if (compilationResponse?.success && compilationResponse.result) {
+          const root = compilationResponse.result;
+          const zip = new JSZip();
+          addEntryToZip(zip, root);
+          return await zip.generateAsync({ type: "blob" });
+        } else {
+          return undefined;
+        }
+      }
+    }
+
+    const workspaceFolder =
+      Array.isArray(vscode.workspace.workspaceFolders) &&
+      vscode.workspace.workspaceFolders.length > 0
+        ? (vscode.workspace.workspaceFolders[0] as vscode.WorkspaceFolder)
+        : undefined;
+
+    if (!workspaceFolder) {
+      vscode.window.showInformationMessage(
+        "Unable to download current project since no workspace folder is open!"
+      );
+      return;
+    }
+
+    const directory = await fileSystemService__Consumer.readDirectory(
+      await fileSystemServiceProducerId,
+      workspaceFolder.uri.path
+    );
+
+    const zip = new JSZip();
+    addEntryToZip(zip, directory);
+    return await zip.generateAsync({ type: "blob" });
   }
 
   const compileDisposable = vscode.commands.registerCommand(
@@ -160,11 +256,27 @@ export async function activate(context: vscode.ExtensionContext) {
   const uploadDisposable = vscode.commands.registerCommand(
     "crosslab-compilation-extension.upload",
     async () => {
-      await compile(true);
+      await upload();
     }
   );
 
-  context.subscriptions.push(compileDisposable, uploadDisposable);
+  const downloadDisposable = vscode.commands.registerCommand(
+    "crosslab-compilation-extension.download",
+    async () => {
+      const zipFile = await download();
+
+      if (!zipFile) return;
+
+      const settingsDatabase = await openSettingsDatabase();
+      await writeSetting(settingsDatabase, "crosslab.download", zipFile);
+    }
+  );
+
+  context.subscriptions.push(
+    compileDisposable,
+    uploadDisposable,
+    downloadDisposable
+  );
 
   return {
     loadCrosslabServices: (_configuration: { [k: string]: unknown }) => {
