@@ -32,19 +32,32 @@
         "shortTitle": "upload",
         "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)",
         "category": "upload"
+      },
+      {
+        "command": "crosslab-compilation-extension.download",
+        "title": "Download",
+        "icon": "$(cloud-download)",
+        "shortTitle": "download",
+        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)",
+        "category": "download"
       }
     ],
     "menus": {
       "editor/title": [
         {
           "command": "crosslab-compilation-extension.compile",
-          "when": "workbenchState == folder",
-          "group": "navigation@1"
+          "when": "workbenchState == folder && crosslab.canCompile",
+          "group": "navigation@2"
         },
         {
           "command": "crosslab-compilation-extension.upload",
+          "when": "workbenchState == folder && crosslab.canProgram",
+          "group": "navigation@3"
+        },
+        {
+          "command": "crosslab-compilation-extension.download",
           "when": "workbenchState == folder",
-          "group": "navigation@2"
+          "group": "navigation@1"
         }
       ]
     }
@@ -80,11 +93,14 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@cross-lab-project/filesystem-schemas": "file:../../../../crosslab/helper/filesystem-schemas",
     "@cross-lab-project/soa-service-collaboration": "file:../../../../crosslab/clients/soa_services/collaboration/js",
     "@cross-lab-project/soa-service-compilation": "file:../../../../crosslab/clients/soa_services/compilation/js",
     "@cross-lab-project/soa-service-filesystem": "file:../../../../crosslab/clients/soa_services/filesystem/js",
     "@cross-lab-project/soa-service-programming": "file:../../../../crosslab/clients/soa_services/programming/js",
+    "@crosslab-ide/editor-settings": "file:../../editor-settings",
     "@koa/router": "^13.0.0",
-    "esbuild-plugin-polyfill-node": "^0.3.0"
+    "esbuild-plugin-polyfill-node": "^0.3.0",
+    "jszip": "^3.10.1"
   }
 }

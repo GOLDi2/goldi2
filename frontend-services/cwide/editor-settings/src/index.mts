@@ -16,7 +16,7 @@ export async function openSettingsDatabase(): Promise<IDBDatabase> {
 export async function writeSetting(
   db: IDBDatabase,
   setting: string,
-  value: string
+  value: unknown
 ): Promise<void> {
   const request = db
     .transaction(["settings"], "readwrite")
