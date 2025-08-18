@@ -154,9 +154,9 @@
 
       if (download) {
         const a = document.createElement('a')
-        const url = window.URL.createObjectURL(download)
+        const url = window.URL.createObjectURL(download.content)
         a.href = url
-        a.download = "cwide-build.zip"
+        a.download = download.name
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)

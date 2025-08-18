@@ -213,10 +213,19 @@ export async function activate(context: vscode.ExtensionContext) {
         const compilationResponse = await compile();
 
         if (compilationResponse?.success && compilationResponse.result) {
+          if (compilationResponse.result.type === "file") {
+            return {
+              name: compilationResponse.result.name,
+              content: new Blob([compilationResponse.result.content]),
+            };
+          }
           const root = compilationResponse.result;
           const zip = new JSZip();
           addEntryToZip(zip, root);
-          return await zip.generateAsync({ type: "blob" });
+          return {
+            name: `${compilationResponse.result.name}.zip`,
+            content: await zip.generateAsync({ type: "blob" }),
+          };
         } else {
           return undefined;
         }
@@ -243,7 +252,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const zip = new JSZip();
     addEntryToZip(zip, directory);
-    return await zip.generateAsync({ type: "blob" });
+    return {
+      name: `${directory.name}.zip`,
+      content: await zip.generateAsync({ type: "blob" }),
+    };
   }
 
   const compileDisposable = vscode.commands.registerCommand(
@@ -263,12 +275,12 @@ export async function activate(context: vscode.ExtensionContext) {
   const downloadDisposable = vscode.commands.registerCommand(
     "crosslab-compilation-extension.download",
     async () => {
-      const zipFile = await download();
+      const file = await download();
 
-      if (!zipFile) return;
+      if (!file) return;
 
       const settingsDatabase = await openSettingsDatabase();
-      await writeSetting(settingsDatabase, "crosslab.download", zipFile);
+      await writeSetting(settingsDatabase, "crosslab.download", file);
     }
   );
 
