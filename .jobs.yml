@@ -194,10 +194,6 @@ hardware/boards/axis_portal_v1/crosslab:
       - crosslab/clients/soa_services/webcam/python:build
       - crosslab/clients/api/python:build
       - crosslab/clients/soa/python:build
-    crosslab_soa_client
-    spi_driver
-    crosslab_soa_service_electrical
-    crosslab_soa_service_webcam
   - script: lint
     dependencies:
       - hardware/boards/axis_portal_v1/crosslab:build
