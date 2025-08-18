@@ -190,6 +190,14 @@ hardware/boards/axis_portal_v1/crosslab:
   - script: build
     dependencies:
       - hardware/common/spi-driver:build
+      - crosslab/clients/soa_services/electricalConnection/python:build
+      - crosslab/clients/soa_services/webcam/python:build
+      - crosslab/clients/api/python:build
+      - crosslab/clients/soa/python:build
+    crosslab_soa_client
+    spi_driver
+    crosslab_soa_service_electrical
+    crosslab_soa_service_webcam
   - script: lint
     dependencies:
       - hardware/boards/axis_portal_v1/crosslab:build
@@ -218,6 +226,10 @@ hardware/boards/axis_portal_v2/crosslab:
   - script: build
     dependencies:
       - hardware/common/spi-driver:build
+      - crosslab/clients/soa_services/electricalConnection/python:build
+      - crosslab/clients/soa_services/webcam/python:build
+      - crosslab/clients/api/python:build
+      - crosslab/clients/soa/python:build
   - script: lint
     dependencies:
       - hardware/boards/axis_portal_v2/crosslab:build
@@ -231,6 +243,10 @@ hardware/boards/mole/crosslab:
   - script: build
     dependencies:
       - hardware/common/spi-driver:build
+      - crosslab/clients/soa_services/electricalConnection/python:build
+      - crosslab/clients/soa_services/webcam/python:build
+      - crosslab/clients/api/python:build
+      - crosslab/clients/soa/python:build
   - script: lint
     dependencies:
       - hardware/boards/mole/crosslab:build
@@ -244,6 +260,11 @@ hardware/boards/microcontroller/crosslab:
   - script: build
     dependencies:
       - hardware/common/spi-driver:build
+      - crosslab/clients/soa_services/electricalConnection/python:build
+      - crosslab/clients/soa_services/file/python:build
+      - crosslab/clients/soa_services/programming/python:build
+      - crosslab/clients/api/python:build
+      - crosslab/clients/soa/python:build
   - script: lint
     dependencies:
       - hardware/boards/microcontroller/crosslab:build
