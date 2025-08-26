@@ -22,7 +22,7 @@
         "title": "Compile",
         "icon": "$(file-code)",
         "shortTitle": "compile",
-        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)",
+        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession) && crosslab.canCompile",
         "category": "compile"
       },
       {
@@ -30,7 +30,7 @@
         "title": "Upload",
         "icon": "$(run)",
         "shortTitle": "upload",
-        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)",
+        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession) && crosslab.canProgram",
         "category": "upload"
       },
       {

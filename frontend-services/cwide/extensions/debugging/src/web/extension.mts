@@ -12,6 +12,13 @@ export async function activate(context: vscode.ExtensionContext) {
     'Congratulations, your extension "crosslab-debugging-extension" is now active in the web extension host!'
   );
 
+  await vscode.commands.executeCommand(
+    "setContext",
+    "crosslab.canDebug",
+    false
+  );
+  context.globalState.update("crosslab.canDebug", false);
+
   // check for collaboration extension
   const collaborationExtension = vscode.extensions.all.find(
     (extension) =>
@@ -245,6 +252,8 @@ export async function activate(context: vscode.ExtensionContext) {
   const producers: string[] = [];
   debuggingAdapterServiceConsumer.on("new-producer", (producerId) => {
     producers.push(producerId);
+    vscode.commands.executeCommand("setContext", "crosslab.canDebug", true);
+    context.globalState.update("crosslab.canDebug", true);
   });
 
   context.subscriptions.push(

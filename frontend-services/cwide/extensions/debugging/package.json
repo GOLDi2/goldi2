@@ -56,26 +56,26 @@
         "title": "Debug",
         "icon": "$(debug)",
         "shortTitle": "debug",
-        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession)"
+        "enablement": "workbenchState == folder && !(crosslab.isCompiling || crosslab.isDebugging || crosslab.isTesting || crosslab.remoteDebugSession) && crosslab.canDebug"
       },
       {
         "command": "crosslab-debugging-extension.join-debug-session",
         "title": "Join Debug Session",
         "icon": "$(plug)",
         "shortTitle": "join",
-        "enablement": "workbenchState == folder && !crosslab.isDebugging && crosslab.remoteDebugSession && crosslab.canJoinDebugSession"
+        "enablement": "workbenchState == folder && !crosslab.isDebugging && crosslab.remoteDebugSession && crosslab.canJoinDebugSession && crosslab.canDebug"
       }
     ],
     "menus": {
       "editor/title": [
         {
           "command": "crosslab-debugging-extension.debug",
-          "when": "workbenchState == folder && !crosslab.remoteDebugSession",
+          "when": "workbenchState == folder && !crosslab.remoteDebugSession && crosslab.canDebug",
           "group": "navigation@4"
         },
         {
           "command": "crosslab-debugging-extension.join-debug-session",
-          "when": "workbenchState == folder && crosslab.remoteDebugSession",
+          "when": "workbenchState == folder && crosslab.remoteDebugSession && crosslab.canDebug",
           "group": "navigation@4"
         }
       ]
