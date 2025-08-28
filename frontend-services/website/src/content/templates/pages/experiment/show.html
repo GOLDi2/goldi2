@@ -9,7 +9,7 @@
 </head>
 <body class="min-h-screen w-full flex">
   {% for i in instances %}
-    <iframe class="flex-grow" src="{{i.codeUrl}}?instanceUrl={{i.instanceUrl}}&deviceToken={{i.deviceToken}}"></iframe>`,
+    <iframe class="flex-grow" src="{{i.codeUrl}}?instanceUrl={{i.instanceUrl}}&deviceToken={{i.deviceToken}}" allow="microphone 'self' https://www.goldi-labs.de https://www.dev.goldi-labs.de"></iframe>`,
   {% endfor %}
 </body>
 </html>
