@@ -171,7 +171,7 @@ export function lti_router(language: string, renderPage: renderPageType) {
         if (impersonate) {
           await req.apiClient.updateLtiExperiment(req.lti.session.experiment_change_uri, {impersonate})
         }else if(mapping.length > 0){
-          await req.apiClient.updateLtiExperiment(req.lti.session.experiment_change_uri, {mapping})
+          await req.apiClient.updateLtiExperiment(req.lti.session.experiment_change_uri, {role_mapping: mapping})
         }
 
         return handle_experiment(req, res, next);
