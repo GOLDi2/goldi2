@@ -76,6 +76,13 @@ def newSensorInterface(interface):
                 "strongH" if hal.gpio[interfaceIdx].value() else "strongL"
             )
 
+def onExperimentStatusChanged(msg):
+    if msg['status'] == "running":
+        os.system("set_led_experiment")
+    else:
+        os.system("set_led_no_experiment")
+    if msg['status'] == "failed" or msg['status']=="finished":
+        exit(0)
 
 async def main_async():
     global hal
@@ -134,6 +141,8 @@ async def main_async():
     hal = HAL()
 
     deviceHandler = DeviceHandler()
+
+    deviceHandler.on("experimentStatusChanged", onExperimentStatusChanged)
 
     signal_service = ElectricalConnectionService("signals")
     signal_gpio_interface = ConstractableGPIOInterface(signal_names, "inout")
