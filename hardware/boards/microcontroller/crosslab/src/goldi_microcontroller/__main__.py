@@ -92,13 +92,15 @@ def newElectricalInterface(interface):
                 "strongH" if hal.gpios[interfaceIdx].value() else "strongL"
             )
 
+
 def onExperimentStatusChanged(msg):
     if msg['status'] == "running":
         os.system("set_led_experiment")
     else:
         os.system("set_led_no_experiment")
-    if msg['status'] == "failed" or msg['status']=="finished":
+    if msg['status'] == "failed" or msg['status'] == "finished":
         exit(0)
+
 
 async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | bytearray | memoryview):
     # Command to program the ATmega2560 using avrdude
