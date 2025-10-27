@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 
 import {
   DeviceServiceTypes,
-  ExperimentServiceTypes
+  ExperimentServiceTypes,
 } from "@cross-lab-project/api-client";
 import asyncHandler from "express-async-handler";
 import winston from "winston";
@@ -13,7 +13,6 @@ export function experiment_router(
   renderPage: renderPageType,
   _logger: winston.Logger
 ) {
-
   async function getPspuBpuGroup(req: Request) {
     const devices = await req.apiClient.listDevices();
     const deviceGroups = devices.filter((d) => d.type === "group");
@@ -41,19 +40,23 @@ export function experiment_router(
     return { pspuGroup, bpuGroup };
   }
 
-  async function experimentSelection(req: Request, res: Response, _next: NextFunction) {
+  async function experimentSelection(
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ) {
     if (!req.user) {
       return renderPage("experiment/selection", language, res, req.user);
     }
 
     if (req.method === "POST") {
       const experiment = await buildSimpleExperiment(req);
-      console.log(experiment)
+      console.log(experiment);
       experiment.status = "running";
       const response = await req.apiClient.createExperiment(
         experiment as ExperimentServiceTypes.Experiment<"request">
       );
-      console.log(response)
+      console.log(response);
       if (response.status === "setup" && response.url) {
         return experimentSetup(req, res, _next, response);
       }
@@ -101,7 +104,16 @@ export function experiment_router(
 
     if (req.method === "GET") {
       try {
-        if (!experiment) experiment = await buildSimpleExperiment(req);
+        if (!experiment) {
+          experiment = await buildSimpleExperiment(req);
+        } else {
+          const response = await req.apiClient.createExperiment(
+            experiment as ExperimentServiceTypes.Experiment<"request">
+          );
+          if (response.status === "setup" && response.url) {
+            return experimentSetup(req, res, _next, response);
+          }
+        }
       } catch (e) {
         //ignore
       }
@@ -175,7 +187,7 @@ export function experiment_router(
     }
 
     if (instances.length <= 1) {
-      display = 'iframe';
+      display = "iframe";
     }
 
     //await req.apiClient.updateExperiment(experiment.url!, { devices: experiment.devices })
@@ -341,10 +353,12 @@ export function experiment_router(
       if (req.body.experiment) experiment = JSON.parse(req.body.experiment);
       if (!experiment) throw new Error("No experiment provided");
       experiment.status = "running";
-      experiment.devices = experiment.devices ?? experiment.roles?.map((r) => ({
-        device: r.template_device as string,
-        role: r.name,
-      }));
+      experiment.devices =
+        experiment.devices ??
+        experiment.roles?.map((r) => ({
+          device: r.template_device as string,
+          role: r.name,
+        }));
       console.log(JSON.stringify(experiment, null, 2));
       const response = await req.apiClient.createExperiment(
         experiment as ExperimentServiceTypes.Experiment<"request">
@@ -354,7 +368,11 @@ export function experiment_router(
       }
     }
 
-    return renderPage("experiment/configtool", language, res, req.user, { token: req.apiClient.accessToken, api: req.apiClient.url, experiment });
+    return renderPage("experiment/configtool", language, res, req.user, {
+      token: req.apiClient.accessToken,
+      api: req.apiClient.url,
+      experiment,
+    });
   }
 
   const router = Router();
@@ -375,7 +393,7 @@ export function experiment_router(
 
 const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
   {
-    serviceType: "http://api.goldi-labs.de/serviceTypes/electrical",
+    serviceType: "https://api.goldi-labs.de/serviceTypes/electrical",
     serviceId: "electrical",
     serviceDirection: "prosumer",
     interfaces: [
@@ -384,7 +402,7 @@ const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
   },
   {
     serviceId: "webcam",
-    serviceType: "http://api.goldi-labs.de/serviceTypes/webcam",
+    serviceType: "https://api.goldi-labs.de/serviceTypes/webcam",
     serviceDirection: "consumer",
   },
   {
@@ -453,7 +471,7 @@ async function buildSimpleExperiment(
       }
     }
     if (participants.length >= 2) {
-      if (serviceType === "http://api.goldi-labs.de/serviceTypes/electrical") {
+      if (serviceType === "https://api.goldi-labs.de/serviceTypes/electrical") {
         const rDI = (s: string) => {
           try {
             return s.replace("#", "");

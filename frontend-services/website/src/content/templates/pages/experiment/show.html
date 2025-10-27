@@ -9,7 +9,7 @@
 </head>
 <body class="min-h-screen w-full flex">
   {% for i in instances %}
-    <iframe class="flex-grow" src="{{i.codeUrl}}?instanceUrl={{i.instanceUrl}}&deviceToken={{i.deviceToken}}"></iframe>`,
+    <iframe class="flex-grow" src="{{i.codeUrl}}?instanceUrl={{i.instanceUrl}}&deviceToken={{i.deviceToken}}" allow="microphone 'self' https://www.goldi-labs.de https://www.dev.goldi-labs.de"></iframe>`,
   {% endfor %}
 </body>
 </html>
@@ -18,20 +18,14 @@
 {% block main %}
 
 <div class="max-w-6xl w-full mx-auto pt-16 font-body flex-grow">
-    <div class="flex flex-column">
-        <div class="p-10">
-            <span class="text-6xl">1.</span>
-        </div>
-        <div class="p-10">
-            Start all devices that were instatiated for you, by clickling the following links:<br>
+    <div class="flex justify-center">
+        <div class="p-10 w-fit text-center gap-4 flex flex-col max-w-full">
+            Start all devices that were instatiated for you, by clickling the following links:
         {% for instance in instances %}
-            <a class="primary-button" href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="_blank">{{ instance.codeUrl }}</a><br>
+            <a class="primary-button text-ellipsis overflow-hidden whitespace-nowrap" href="{{ instance.codeUrl }}?instanceUrl={{ instance.instanceUrl}}&deviceToken={{ instance.deviceToken }}" target="_blank">{{ instance.codeUrl }}</a>
         {% endfor %}
         </div>
     </div>
-    
-    Experiment Status:
-    <div class="w-full flex-grow flex" style="white-space: pre-wrap;">{{ experiment | dump(2) }}</div>
 </div>
 {% endblock %}
 {% endif %}

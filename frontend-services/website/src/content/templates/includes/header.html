@@ -18,10 +18,11 @@ navbar = [
         {name: 'Experiment Config (Developer)', href: '/'+language+'/experiment/developer'}
     ]},
     {name: 'Tools', children: [
-        {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php'},
-        {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html'},
-        {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/'},
-        {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true'}
+        {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php', newwindow:true},
+        {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html', newwindow:true},
+        {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/', newwindow:true},
+        {name: 'WIDE (Legacy)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true', newwindow:true},
+        {name: 'CWIDE (Standalone)', href: CWIDE_STANDALONE_URL, newwindow:true}
     ]},
     {divider: true},
     {name: 'Login', href: '/'+language+'/login.html', loggedIn: false},
@@ -55,7 +56,8 @@ navbar = [
             {name: 'BEAST', href: 'https://goldi-labs.net/BEAST.php', newwindow:true},
             {name: 'GIFT', href: 'https://goldi-labs.net/GIFT/entwurf.html', newwindow:true},
             {name: 'SANE (Beta JS-Application)', href: 'https://goldi-labs.net/SANE/', newwindow:true},
-            {name: 'WIDE (Standalone)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true', newwindow:true}
+            {name: 'WIDE (Legacy)', href: 'https://goldi-labs.net/WIDE/index.html?standalone=true', newwindow:true},
+            {name: 'CWIDE (Standalone)', href: CWIDE_STANDALONE_URL, newwindow:true}
         ]},
         {divider: true},
         {name: 'Login', href: '/'+language+'/login.html?redirect='+page, loggedIn: false},

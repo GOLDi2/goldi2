@@ -6,8 +6,6 @@ import os
 from json import JSONDecoder
 from typing import Dict, Optional
 
-from typing_extensions import Literal
-
 from crosslab.api_client.improved_client import APIClient
 from crosslab.soa_client.device_handler import DeviceHandler
 from crosslab.soa_services.electrical import ElectricalConnectionService
@@ -17,6 +15,7 @@ from crosslab.soa_services.file import FileService__Consumer, FileServiceEvent
 from crosslab.soa_services.programming import (ProgrammingService__Producer,
                                                ProgramRequestEvent)
 from goldi_microcontroller.hal import HAL
+from typing_extensions import Literal
 
 interfaces: Dict[str, GPIOInterface] = dict()
 hal: HAL
@@ -94,17 +93,13 @@ def newElectricalInterface(interface):
             )
 
 
-def lightControl():
-    if len(
-        [
-            c
-            for c in deviceHandler._connections
-            if deviceHandler._connections[c].state == "connected"
-        ]
-    ):
+def onExperimentStatusChanged(msg):
+    if msg['status'] == "running":
         os.system("set_led_experiment")
     else:
         os.system("set_led_no_experiment")
+    if msg['status'] == "failed" or msg['status'] == "finished":
+        exit(0)
 
 
 async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | bytearray | memoryview):
@@ -158,7 +153,7 @@ async def program(file_type: Literal["hex"] | Literal["elf"], content: bytes | b
         print(f"avrdude output: {stdout.decode()}")
 
     hal.enable_isp.set(False)
-    lightControl()
+    os.system("set_led_experiment")
 
 
 async def uploadHandler(event: FileServiceEvent):
@@ -256,6 +251,7 @@ async def main_async():
     hal = HAL()
 
     deviceHandler = DeviceHandler()
+    deviceHandler.on("experimentStatusChanged", onExperimentStatusChanged)
     deviceHandler.supportedConnectionTypes = ["webrtc", "websocket"]
 
     signal_service = ElectricalConnectionService("signals")
@@ -271,8 +267,6 @@ async def main_async():
     programming_service = ProgrammingService__Producer("programming")
     programming_service.on("program:request", onProgramRequest)
     deviceHandler.add_service(programming_service)
-
-    deviceHandler.on("connectionsChanged", lightControl)
 
     async with APIClient(url) as client:
         client.set_auth_token(auth_token)

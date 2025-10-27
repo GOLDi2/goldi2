@@ -112,6 +112,15 @@ def newSensorInterface(interface):
         interface.changeDriver("strongH" if value else "strongL")
 
 
+def onExperimentStatusChanged(msg):
+    if msg['status'] == "running":
+        os.system("set_led_experiment")
+    else:
+        os.system("set_led_no_experiment")
+    if msg['status'] == "failed" or msg['status'] == "finished":
+        exit(0)
+
+
 async def main_async():
     global hal
 
@@ -169,6 +178,8 @@ async def main_async():
     hal = HAL()
 
     deviceHandler = DeviceHandler()
+
+    deviceHandler.on("experimentStatusChanged", onExperimentStatusChanged)
 
     sensor_service = ElectricalConnectionService("sensors")
     sensor_interface = ConstractableGPIOInterface(sensor_names, "out")
