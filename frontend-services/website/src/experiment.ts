@@ -415,8 +415,8 @@ const ecpServiceDescription: DeviceServiceTypes.ServiceDescription[] = [
 async function buildSimpleExperiment(
   req: Request
 ): Promise<ExperimentServiceTypes.Experiment<"request">> {
-  const pspu = req.query.pspu as string;
-  const bpu = req.query.bpu as string;
+  const pspu = req.body.pspu ?? req.query.pspu as string;
+  const bpu = req.body.bpu ?? req.query.bpu as string;
   const ecp = (await req.apiClient.listDevices()).find(
     (device) =>
       device.type === "edge instantiable" && device.name.toLowerCase() === "ecp"
